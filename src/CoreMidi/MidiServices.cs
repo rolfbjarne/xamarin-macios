@@ -301,7 +301,6 @@ namespace CoreMidi {
 
 		/// <param name="property">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public NSData? GetData (IntPtr property)
 		{
@@ -340,7 +339,6 @@ namespace CoreMidi {
 
 		/// <param name="property">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public string? GetString (IntPtr property)
 		{
@@ -379,7 +377,6 @@ namespace CoreMidi {
 		extern static MidiError /* OSStatus = SInt32 */ MIDIObjectRemoveProperty (MidiObjectRef obj, IntPtr str);
 		/// <param name="property">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public MidiError RemoveProperty (string property)
 		{
@@ -485,7 +482,6 @@ namespace CoreMidi {
 		/// <param name="uniqueId">To be added.</param>
 		///         <param name="result">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		static public MidiError FindByUniqueId (int uniqueId, out MidiObject? result)
 		{
@@ -604,7 +600,6 @@ namespace CoreMidi {
 		/// <param name="name">To be added.</param>
 		///         <param name="statusCode">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -632,7 +627,6 @@ namespace CoreMidi {
 		/// <param name="name">To be added.</param>
 		///         <param name="status">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -910,7 +904,6 @@ namespace CoreMidi {
 
 #if !XAMCORE_5_0
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		[Obsolete ("This property may return a pointer to a managed object, and this pointer is never safe to use. Use ByteArray or BytePointer instead.")]
@@ -1253,7 +1246,6 @@ namespace CoreMidi {
 		extern static nint MIDIEntityGetNumberOfDestinations (MidiEntityRef entity);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public nint Destinations {
 			get {
@@ -1265,7 +1257,6 @@ namespace CoreMidi {
 		extern static nint MIDIEntityGetNumberOfSources (MidiEntityRef entity);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public nint Sources {
 			get {
@@ -1277,7 +1268,6 @@ namespace CoreMidi {
 		unsafe extern static int /* OSStatus = SInt32 */ MIDIEntityGetDevice (MidiEntityRef handle, MidiDeviceRef* devRef);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public MidiDevice? Device {
 			get {
@@ -1291,7 +1281,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int AdvanceScheduleTimeMuSec {
 			get {
@@ -1303,7 +1292,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool CanRoute {
 			get {
@@ -1315,7 +1303,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int ConnectionUniqueIDInt {
 			get {
@@ -1327,7 +1314,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSData? ConnectionUniqueIDData {
 			get {
@@ -1341,7 +1327,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int DeviceID {
 			get {
@@ -1353,7 +1338,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? DisplayName {
 			get {
@@ -1367,7 +1351,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? DriverOwner {
 			get {
@@ -1381,7 +1364,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int DriverVersion {
 			get {
@@ -1393,7 +1375,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsBroadcast {
 			get {
@@ -1405,7 +1386,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsDrumMachine {
 			get {
@@ -1414,7 +1394,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsEffectUnit {
 			get {
@@ -1423,7 +1402,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsEmbeddedEntity {
 			get {
@@ -1432,7 +1410,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsMixer {
 			get {
@@ -1441,7 +1418,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsSampler {
 			get {
@@ -1450,7 +1426,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int MaxReceiveChannels {
 			get {
@@ -1462,7 +1437,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int MaxSysExSpeed {
 			get {
@@ -1480,7 +1454,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int MaxTransmitChannels {
 			get {
@@ -1492,7 +1465,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Model {
 			get {
@@ -1506,7 +1478,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Name {
 			get {
@@ -1520,7 +1491,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSDictionary? NameConfiguration {
 			get {
@@ -1534,7 +1504,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool Offline {
 			get {
@@ -1546,7 +1515,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool PanDisruptsStereo {
 			get {
@@ -1558,7 +1526,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool Private {
 			get {
@@ -1570,7 +1537,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool ReceivesBankSelectLSB {
 			get {
@@ -1582,7 +1548,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool ReceivesBankSelectMSB {
 			get {
@@ -1594,7 +1559,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool ReceivesClock {
 			get {
@@ -1606,7 +1570,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool ReceivesMTC {
 			get {
@@ -1618,7 +1581,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool ReceivesNotes {
 			get {
@@ -1630,7 +1592,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool ReceivesProgramChanges {
 			get {
@@ -1642,7 +1603,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool SupportsGeneralMidi {
 			get {
@@ -1654,7 +1614,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool SupportsMMC {
 			get {
@@ -1666,7 +1625,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool SupportsShowControl {
 			get {
@@ -1678,7 +1636,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool TransmitsBankSelectLSB {
 			get {
@@ -1690,7 +1647,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool TransmitsBankSelectMSB {
 			get {
@@ -1702,7 +1658,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool TransmitsClock {
 			get {
@@ -1714,7 +1669,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool TransmitsMTC {
 			get {
@@ -1726,7 +1680,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool TransmitsNotes {
 			get {
@@ -1738,7 +1691,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool TransmitsProgramChanges {
 			get {
@@ -1855,7 +1807,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Image {
 			get {
@@ -1869,7 +1820,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? DriverDeviceEditorApp {
 			get {
@@ -1883,7 +1833,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int SingleRealtimeEntity {
 			get {
@@ -1895,7 +1844,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int UniqueID {
 			get {
@@ -1935,7 +1883,6 @@ namespace CoreMidi {
 
 #if !XAMCORE_5_0 || __MACOS__
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[UnsupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("ios")]
@@ -1965,7 +1912,6 @@ namespace CoreMidi {
 
 #if !XAMCORE_5_0 || __MACOS__
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[UnsupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("ios")]
@@ -2009,7 +1955,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int AdvanceScheduleTimeMuSec {
 			get {
@@ -2021,7 +1966,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool CanRoute {
 			get {
@@ -2033,7 +1977,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int ConnectionUniqueIDInt {
 			get {
@@ -2045,7 +1988,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSData? ConnectionUniqueIDData {
 			get {
@@ -2059,7 +2001,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int DeviceID {
 			get {
@@ -2071,7 +2012,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? DisplayName {
 			get {
@@ -2085,7 +2025,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? DriverOwner {
 			get {
@@ -2099,7 +2038,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int DriverVersion {
 			get {
@@ -2111,7 +2049,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsDrumMachine {
 			get {
@@ -2120,7 +2057,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsEffectUnit {
 			get {
@@ -2129,7 +2065,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsEmbeddedEntity {
 			get {
@@ -2138,7 +2073,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsMixer {
 			get {
@@ -2147,7 +2081,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsSampler {
 			get {
@@ -2156,7 +2089,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Manufacturer {
 			get {
@@ -2170,7 +2102,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int MaxReceiveChannels {
 			get {
@@ -2182,7 +2113,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int MaxSysExSpeed {
 			get {
@@ -2200,7 +2130,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int MaxTransmitChannels {
 			get {
@@ -2212,7 +2141,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Model {
 			get {
@@ -2226,7 +2154,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Name {
 			get {
@@ -2240,7 +2167,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSDictionary? NameConfiguration {
 			get {
@@ -2254,7 +2180,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool Offline {
 			get {
@@ -2266,7 +2191,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool PanDisruptsStereo {
 			get {
@@ -2278,7 +2202,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool Private {
 			get {
@@ -2290,7 +2213,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool ReceivesBankSelectLSB {
 			get {
@@ -2302,7 +2224,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool ReceivesBankSelectMSB {
 			get {
@@ -2314,7 +2235,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool ReceivesClock {
 			get {
@@ -2326,7 +2246,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool ReceivesMTC {
 			get {
@@ -2338,7 +2257,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool ReceivesNotes {
 			get {
@@ -2350,7 +2268,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool ReceivesProgramChanges {
 			get {
@@ -2362,7 +2279,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool SupportsGeneralMidi {
 			get {
@@ -2374,7 +2290,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool SupportsMMC {
 			get {
@@ -2386,7 +2301,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool SupportsShowControl {
 			get {
@@ -2398,7 +2312,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool TransmitsBankSelectLSB {
 			get {
@@ -2410,7 +2323,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool TransmitsBankSelectMSB {
 			get {
@@ -2422,7 +2334,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool TransmitsClock {
 			get {
@@ -2434,7 +2345,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool TransmitsMTC {
 			get {
@@ -2446,7 +2356,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool TransmitsNotes {
 			get {
@@ -2458,7 +2367,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool TransmitsProgramChanges {
 			get {
@@ -2521,7 +2429,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public nuint GetNumberOfDevices ()
 		{
@@ -2538,7 +2445,6 @@ namespace CoreMidi {
 
 		/// <param name="device">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public int Add (MidiDevice device)
 		{
@@ -2609,7 +2515,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string EndpointName { get; private set; }
 
@@ -2711,7 +2616,6 @@ namespace CoreMidi {
 		unsafe extern static int /* OSStatus = SInt32 */ MIDIEndpointGetEntity (MidiEndpointRef endpoint, MidiEntityRef* entity);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public MidiEntity? Entity {
 			get {
@@ -2743,7 +2647,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int AdvanceScheduleTimeMuSec {
 			get {
@@ -2755,7 +2658,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int ConnectionUniqueIDInt {
 			get {
@@ -2767,7 +2669,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSData? ConnectionUniqueIDData {
 			get {
@@ -2781,7 +2682,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? DisplayName {
 			get {
@@ -2795,7 +2695,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? DriverOwner {
 			get {
@@ -2809,7 +2708,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int DriverVersion {
 			get {
@@ -2821,7 +2719,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsBroadcast {
 			get {
@@ -2833,7 +2730,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Manufacturer {
 			get {
@@ -2847,7 +2743,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int MaxSysExSpeed {
 			get {
@@ -2865,7 +2760,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Name {
 			get {
@@ -2879,7 +2773,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSDictionary? NameConfiguration {
 			get {
@@ -2893,7 +2786,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool Offline {
 			get {
@@ -2905,7 +2797,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool Private {
 			get {
@@ -2917,7 +2808,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int ReceiveChannels {
 			get {
@@ -2929,7 +2819,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int TransmitChannels {
 			get {

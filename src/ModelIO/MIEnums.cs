@@ -328,7 +328,7 @@ namespace ModelIO {
 		UInt32 = 4,
 		/// <summary>Indicates that each channel is a 16-bit floating-point number.</summary>
 		Float16 = 258,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates float16 s r.</summary>
 		Float16SR = 770,
 		/// <summary>Indicates that each channel is a 32-bit floating-point number.</summary>
 		Float32 = 260,
@@ -366,35 +366,35 @@ namespace ModelIO {
 	/// <summary>Enumerates camera projections.</summary>
 	[Native]
 	public enum MDLCameraProjection : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates perspective.</summary>
 		Perspective = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates orthographic.</summary>
 		Orthographic = 1,
 	}
 
 	[Native]
 	public enum MDLMaterialFace : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates front.</summary>
 		Front = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates back.</summary>
 		Back,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates double sided.</summary>
 		DoubleSided,
 	}
 
 	[Native]
 	public enum MDLProbePlacement : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates uniform grid.</summary>
 		UniformGrid = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates irradiance distribution.</summary>
 		IrradianceDistribution,
 	}
 
 	[MacCatalyst (13, 1)]
 	public enum MDLNoiseTextureType {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates vector.</summary>
 		Vector,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates cellular.</summary>
 		Cellular,
 	}
 }

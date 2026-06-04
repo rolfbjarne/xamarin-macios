@@ -103,7 +103,6 @@ namespace CoreFoundation {
 
 		/// <param name="cfErrorHandle">The cf error handle.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static CFException FromCFError (IntPtr cfErrorHandle)
 		{
 			return FromCFError (cfErrorHandle, true);
@@ -112,7 +111,6 @@ namespace CoreFoundation {
 		/// <param name="cfErrorHandle">The cf error handle.</param>
 		///         <param name="release">The release.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static CFException FromCFError (IntPtr cfErrorHandle, bool release)
 		{
 			if (cfErrorHandle == IntPtr.Zero)
@@ -140,17 +138,13 @@ namespace CoreFoundation {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public nint Code { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <altmember cref="CoreFoundation.CFErrorDomain" />
 		public NSString? Domain { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public string? FailureReason { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public string? RecoverySuggestion { get; private set; }
 
 		[DllImport (Constants.CoreFoundationLibrary)]

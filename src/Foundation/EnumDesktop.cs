@@ -37,9 +37,9 @@ namespace Foundation {
 	[Native]
 	[NoiOS, NoTV, NoMacCatalyst]
 	public enum NSTaskTerminationReason : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates exit.</summary>
 		Exit = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates uncaught signal.</summary>
 		UncaughtSignal = 2,
 	}
 
@@ -47,66 +47,66 @@ namespace Foundation {
 	[NoiOS, NoTV]
 	[MacCatalyst (13, 1)]
 	public enum AEEventID : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates open application.</summary>
 		OpenApplication = 1868656752, // 'oapp'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates reopen application.</summary>
 		ReopenApplication = 1918988400, //'rapp'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates open documents.</summary>
 		OpenDocuments = 1868853091, // 'odoc'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates print documents.</summary>
 		PrintDocuments = 188563030, // 'pdoc'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates open contents.</summary>
 		OpenContents = 1868787566, // 'ocon'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates quit application.</summary>
 		QuitApplication = 1903520116, // 'quit'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates show preferences.</summary>
 		ShowPreferences = 1886545254, // 'pref'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates application died.</summary>
 		ApplicationDied = 1868720500, // 'obit'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates get url.</summary>
 		GetUrl = 1196773964, // 'GURL'
 	}
 
 	[NoiOS, NoTV]
 	[MacCatalyst (13, 1)]
 	public enum AEEventClass : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates mouse.</summary>
 		Mouse = 1836021107, // 'mous'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates keyboard.</summary>
 		Keyboard = 1801812322, // 'keyb'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates text input.</summary>
 		TextInput = 1952807028, // 'text'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates application.</summary>
 		Application = 1634758764, // 'appl'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates remote apple event.</summary>
 		RemoteAppleEvent = 1701867619,  //'eppc' //remote apple event?
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates menu.</summary>
 		Menu = 1835363957, // 'menu'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates window.</summary>
 		Window = 2003398244, // 'wind'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates control.</summary>
 		Control = 1668183148, // 'cntl'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates command.</summary>
 		Command = 1668113523, // 'cmds'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates tablet.</summary>
 		Tablet = 1952607348, // 'tblt'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates volume.</summary>
 		Volume = 1987013664, // 'vol '
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates appearance.</summary>
 		Appearance = 1634758765, // 'appm'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates service.</summary>
 		Service = 1936028278, // 'serv'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates toolbar.</summary>
 		Toolbar = 1952604530, // 'tbar'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates toolbar item.</summary>
 		ToolbarItem = 1952606580, // 'tbit'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates accessibility.</summary>
 		Accessibility = 1633903461, // 'acce'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates h i object.</summary>
 		HIObject = 1751740258, // 'hiob'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates apple event.</summary>
 		AppleEvent = 1634039412, // 'aevt'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates internet.</summary>
 		Internet = 1196773964, // 'GURL'
 	}
 
@@ -115,15 +115,15 @@ namespace Foundation {
 	[Native]
 	[Advice ("'NSUserNotification' usages should be replaced with 'UserNotifications' framework.")]
 	public enum NSUserNotificationActivationType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates contents clicked.</summary>
 		ContentsClicked = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates action button clicked.</summary>
 		ActionButtonClicked = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates replied.</summary>
 		Replied = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates additional action clicked.</summary>
 		AdditionalActionClicked = 4,
 	}
 
@@ -131,27 +131,27 @@ namespace Foundation {
 	[Native]
 	[Flags]
 	public enum NSAppleEventSendOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates no reply.</summary>
 		NoReply = 0x00000001, // kAENoReply,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates queue reply.</summary>
 		QueueReply = 0x00000002, // kAEQueueReply,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates wait for reply.</summary>
 		WaitForReply = 0x00000003, // kAEWaitReply,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates never interact.</summary>
 		NeverInteract = 0x00000010, // kAENeverInteract,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates can interact.</summary>
 		CanInteract = 0x00000020, // kAECanInteract,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates always interact.</summary>
 		AlwaysInteract = 0x00000030, // kAEAlwaysInteract,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates can switch layer.</summary>
 		CanSwitchLayer = 0x00000040, // kAECanSwitchLayer,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates dont record.</summary>
 		DontRecord = 0x00001000, // kAEDontRecord,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates dont execute.</summary>
 		DontExecute = 0x00002000, // kAEDontExecute,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates dont annotate.</summary>
 		DontAnnotate = 0x00010000, // kAEDoNotAutomaticallyAddAnnotationsToEvent,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates default options.</summary>
 		DefaultOptions = WaitForReply | CanInteract,
 	}
 }

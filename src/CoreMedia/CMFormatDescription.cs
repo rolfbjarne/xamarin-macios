@@ -43,7 +43,6 @@ namespace CoreMedia {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public NSDictionary? GetExtensions ()
 		{
 			var cfDictRef = CMFormatDescriptionGetExtensions (Handle);
@@ -53,10 +52,9 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static /* CFPropertyListRef */ IntPtr CMFormatDescriptionGetExtension (/* CMFormatDescriptionRef */ IntPtr desc, /* CFStringRef */ IntPtr extensionkey);
 
-		/// <param name="extensionKey">To be added.</param>
+		/// <param name="extensionKey">The extension key.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public NSObject? GetExtension (string extensionKey)
 		{
 			var extensionKeyHandle = CFString.CreateNative (extensionKey);
@@ -290,7 +288,6 @@ namespace CoreMedia {
 
 		/// <summary>Audio-media only: Returns the AudioStreamBasicDescritpion object for the audio.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public AudioStreamBasicDescription? AudioStreamBasicDescription {
 			get {
 				var ret = CMAudioFormatDescriptionGetStreamBasicDescription (Handle);
@@ -308,7 +305,6 @@ namespace CoreMedia {
 
 		/// <summary>Audio-media only: describe the channel layout.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public AudioChannelLayout? AudioChannelLayout {
 			get {
 				nint size;
@@ -355,7 +351,6 @@ namespace CoreMedia {
 
 		/// <summary>Audio-media only: magic cookie that might need to be passed to some backends.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public byte []? AudioMagicCookie {
 			get {
 				nint size;
@@ -377,7 +372,6 @@ namespace CoreMedia {
 
 		/// <summary>Audio-media only: returns the most compaible audio format.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public AudioFormat AudioMostCompatibleFormat {
 			get {
 				unsafe {
@@ -394,7 +388,6 @@ namespace CoreMedia {
 
 		/// <summary>Audio-media only: Returns the richest decodable format.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public AudioFormat AudioRichestDecodableFormat {
 			get {
 				unsafe {
@@ -427,7 +420,6 @@ namespace CoreMedia {
 	}
 
 	/// <summary>A <see cref="CoreMedia.CMFormatDescription" /> that describes an audio format.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -443,7 +435,6 @@ namespace CoreMedia {
 	}
 
 	/// <summary>A <see cref="CoreMedia.CMFormatDescription" /> that describes video.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -506,7 +497,6 @@ namespace CoreMedia {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public CMVideoDimensions Dimensions {
 			get {
 				return CMVideoFormatDescriptionGetDimensions (Handle);
@@ -519,11 +509,10 @@ namespace CoreMedia {
 			/* CVImageBufferRef */ IntPtr imageBuffer,
 			/* CMVideoFormatDescriptionRef* */ IntPtr* outDesc);
 
-		/// <param name="imageBuffer">To be added.</param>
-		///         <param name="error">To be added.</param>
+		/// <param name="imageBuffer">The image buffer.</param>
+		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CMVideoFormatDescription? CreateForImageBuffer (CVImageBuffer imageBuffer, out CMFormatDescriptionError error)
 		{
 			if (imageBuffer is null)
@@ -553,12 +542,11 @@ namespace CoreMedia {
 			/* int */ int NALUnitHeaderLength,
 			/* CMFormatDescriptionRef* */ IntPtr* formatDescriptionOut);
 
-		/// <param name="parameterSets">To be added.</param>
-		///         <param name="nalUnitHeaderLength">To be added.</param>
-		///         <param name="error">To be added.</param>
+		/// <param name="parameterSets">The parameter sets.</param>
+		///         <param name="nalUnitHeaderLength">The nal unit header length.</param>
+		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -650,20 +638,18 @@ namespace CoreMedia {
 			return arr;
 		}
 
-		/// <param name="originIsAtTopLeft">To be added.</param>
+		/// <param name="originIsAtTopLeft">The origin is at top left.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CGRect GetCleanAperture (bool originIsAtTopLeft)
 		{
 			return CMVideoFormatDescriptionGetCleanAperture (Handle, originIsAtTopLeft.AsByte ());
 		}
 
-		/// <param name="usePixelAspectRatio">To be added.</param>
-		///         <param name="useCleanAperture">To be added.</param>
+		/// <param name="usePixelAspectRatio">The use pixel aspect ratio.</param>
+		///         <param name="useCleanAperture">The use clean aperture.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CGSize GetPresentationDimensions (bool usePixelAspectRatio, bool useCleanAperture)
 		{
 			return CMVideoFormatDescriptionGetPresentationDimensions (Handle, usePixelAspectRatio.AsByte (), useCleanAperture.AsByte ());
@@ -671,17 +657,15 @@ namespace CoreMedia {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static NSObject? []? GetExtensionKeysCommonWithImageBuffers ()
 		{
 			var arr = CMVideoFormatDescriptionGetExtensionKeysCommonWithImageBuffers ();
 			return CFArray.ArrayFromHandle<NSString> (arr);
 		}
 
-		/// <param name="imageBuffer">To be added.</param>
+		/// <param name="imageBuffer">The image buffer.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public bool VideoMatchesImageBuffer (CVImageBuffer imageBuffer)
 		{
 			if (imageBuffer is null)
@@ -705,13 +689,12 @@ namespace CoreMedia {
 			/* CFDictionaryRef */ IntPtr extensions,
 			/* CMFormatDescriptionRef* */ IntPtr* formatDescriptionOut);
 
-		/// <param name="parameterSets">To be added.</param>
-		///         <param name="nalUnitHeaderLength">To be added.</param>
-		///         <param name="extensions">To be added.</param>
-		///         <param name="error">To be added.</param>
+		/// <param name="parameterSets">The parameter sets.</param>
+		///         <param name="nalUnitHeaderLength">The nal unit header length.</param>
+		///         <param name="extensions">The extensions.</param>
+		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]

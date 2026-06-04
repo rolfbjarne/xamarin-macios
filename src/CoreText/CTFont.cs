@@ -417,7 +417,6 @@ namespace CoreText {
 		public NSDictionary Dictionary { get; private set; }
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Name {
 			get { return Adapter.GetStringValue (Dictionary, CTFontFeatureKey.Name); }
@@ -425,7 +424,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public FontFeatureGroup FeatureGroup {
 			get {
@@ -437,7 +435,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool Exclusive {
 			get {
@@ -452,7 +449,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public IEnumerable<CTFontFeatureSelectors>? Selectors {
 			get {
@@ -585,12 +581,10 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSDictionary Dictionary { get; private set; }
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		protected int FeatureWeak {
 			get {
@@ -602,7 +596,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Name {
 			get { return Adapter.GetStringValue (Dictionary, CTFontFeatureSelectorKey.Name); }
@@ -610,7 +603,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool Default {
 			get {
@@ -625,7 +617,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool Setting {
 			get {
@@ -665,7 +656,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -739,7 +729,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -785,7 +774,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -821,7 +809,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -855,7 +842,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -889,7 +875,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -927,7 +912,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -977,7 +961,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -1013,7 +996,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -1053,7 +1035,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -1089,7 +1070,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -1123,7 +1103,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -1177,7 +1156,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -1231,7 +1209,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -1275,7 +1252,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -1307,7 +1283,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -1347,7 +1322,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -1389,7 +1363,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -1449,7 +1422,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -1483,7 +1455,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -1527,7 +1498,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -1577,7 +1547,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -1629,7 +1598,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -1663,7 +1631,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -1699,7 +1666,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -1741,7 +1707,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -1791,7 +1756,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -1833,7 +1797,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -1875,7 +1838,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -1909,7 +1871,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -1959,7 +1920,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -1997,7 +1957,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -2035,7 +1994,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -2147,7 +2105,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -2189,7 +2146,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -2225,7 +2181,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -2261,7 +2216,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -2299,7 +2253,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Selector Feature {
 			get {
@@ -2324,12 +2277,10 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSDictionary Dictionary { get; private set; }
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public FontFeatureGroup FeatureGroup {
 			get {
@@ -2341,7 +2292,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int FeatureWeak {
 			get {
@@ -2380,12 +2330,10 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSDictionary Dictionary { get; private set; }
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSNumber? Identifier {
 			get { return (NSNumber?) Dictionary [CTFontVariationAxisKey.Identifier]; }
@@ -2393,7 +2341,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSNumber? MinimumValue {
 			get { return (NSNumber?) Dictionary [CTFontVariationAxisKey.MinimumValue]; }
@@ -2401,7 +2348,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSNumber? MaximumValue {
 			get { return (NSNumber?) Dictionary [CTFontVariationAxisKey.MaximumValue]; }
@@ -2409,7 +2355,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSNumber? DefaultValue {
 			get { return (NSNumber?) Dictionary [CTFontVariationAxisKey.DefaultValue]; }
@@ -2417,7 +2362,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Name {
 			get { return Adapter.GetStringValue (Dictionary, CTFontVariationAxisKey.Name); }
@@ -2425,7 +2369,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
@@ -2464,7 +2407,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSDictionary Dictionary { get; private set; }
 	}
@@ -2880,7 +2822,6 @@ namespace CoreText {
 		/// <param name="value">To be added.</param>
 		///         <param name="range">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CTFont? ForString (string value, NSRange range)
 		{
@@ -2933,7 +2874,6 @@ namespace CoreText {
 			/* CTFontRef __nonnull */ IntPtr font);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CTFontDescriptor GetFontDescriptor ()
 		{
@@ -2947,7 +2887,6 @@ namespace CoreText {
 
 		/// <param name="attribute">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public NSObject? GetAttribute (NSString attribute)
 		{
@@ -2983,7 +2922,6 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern CTFontSymbolicTraits CTFontGetSymbolicTraits (IntPtr font);
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CTFontSymbolicTraits SymbolicTraits {
 			get { return CTFontGetSymbolicTraits (Handle); }
@@ -3005,7 +2943,6 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTFontCopyTraits (IntPtr font);
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CTFontTraits? GetTraits ()
 		{
@@ -3021,7 +2958,6 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTFontCopyPostScriptName (IntPtr font);
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? PostScriptName {
 			get { return CFString.FromHandle (CTFontCopyPostScriptName (Handle), releaseHandle: true); }
@@ -3032,7 +2968,6 @@ namespace CoreText {
 			/* CTFontRef __nonnull */ IntPtr font);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? FamilyName {
 			get { return CFString.FromHandle (CTFontCopyFamilyName (Handle), releaseHandle: true); }
@@ -3043,7 +2978,6 @@ namespace CoreText {
 			/* CTFontRef __nonnull */ IntPtr font);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? FullName {
 			get { return CFString.FromHandle (CTFontCopyFullName (Handle), releaseHandle: true); }
@@ -3054,7 +2988,6 @@ namespace CoreText {
 			/* CTFontRef __nonnull */ IntPtr font);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? DisplayName {
 			get { return CFString.FromHandle (CTFontCopyDisplayName (Handle), releaseHandle: true); }
@@ -3064,7 +2997,6 @@ namespace CoreText {
 		static extern IntPtr CTFontCopyName (IntPtr font, IntPtr nameKey);
 		/// <param name="nameKey">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public string? GetName (CTFontNameKey nameKey)
 		{
@@ -3079,7 +3011,6 @@ namespace CoreText {
 
 		/// <param name="nameKey">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public string? GetLocalizedName (CTFontNameKey nameKey)
 		{
@@ -3089,7 +3020,6 @@ namespace CoreText {
 		/// <param name="nameKey">To be added.</param>
 		///         <param name="actualLanguage">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public string? GetLocalizedName (CTFontNameKey nameKey, out string? actualLanguage)
 		{
@@ -3111,7 +3041,6 @@ namespace CoreText {
 			/* CTFontRef __nonnull */ IntPtr font);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSCharacterSet? CharacterSet {
 			get {
@@ -3122,7 +3051,6 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern uint CTFontGetStringEncoding (IntPtr font);
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public uint StringEncoding {
 			get { return CTFontGetStringEncoding (Handle); }
@@ -3131,7 +3059,6 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTFontCopySupportedLanguages (IntPtr font);
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public string? [] GetSupportedLanguages ()
 		{
@@ -3162,7 +3089,6 @@ namespace CoreText {
 		/// <param name="characters">To be added.</param>
 		///         <param name="glyphs">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public bool GetGlyphsForCharacters (char [] characters, CGGlyph [] glyphs)
 		{
@@ -3212,7 +3138,6 @@ namespace CoreText {
 		static extern nfloat CTFontGetAscent (/* CTFontRef __nonnull */ IntPtr font);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public nfloat AscentMetric {
 			get { return CTFontGetAscent (Handle); }
@@ -3222,7 +3147,6 @@ namespace CoreText {
 		static extern nfloat CTFontGetDescent (/* CTFontRef __nonnull */ IntPtr font);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public nfloat DescentMetric {
 			get { return CTFontGetDescent (Handle); }
@@ -3232,7 +3156,6 @@ namespace CoreText {
 		static extern nfloat CTFontGetLeading (/* CTFontRef __nonnull */ IntPtr font);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public nfloat LeadingMetric {
 			get { return CTFontGetLeading (Handle); }
@@ -3241,7 +3164,6 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern uint CTFontGetUnitsPerEm (IntPtr font);
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public uint UnitsPerEmMetric {
 			get { return CTFontGetUnitsPerEm (Handle); }
@@ -3251,7 +3173,6 @@ namespace CoreText {
 		static extern /* CFIndex */ nint CTFontGetGlyphCount (/* CTFontRef __nonnull */ IntPtr font);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public nint GlyphCount {
 			get { return CTFontGetGlyphCount (Handle); }
@@ -3261,7 +3182,6 @@ namespace CoreText {
 		static extern CGRect CTFontGetBoundingBox (/* CTFontRef __nonnull */ IntPtr font);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CGRect BoundingBox {
 			get { return CTFontGetBoundingBox (Handle); }
@@ -3270,7 +3190,6 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern nfloat CTFontGetUnderlinePosition (IntPtr font);
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public nfloat UnderlinePosition {
 			get { return CTFontGetUnderlinePosition (Handle); }
@@ -3279,7 +3198,6 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern nfloat CTFontGetUnderlineThickness (IntPtr font);
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public nfloat UnderlineThickness {
 			get { return CTFontGetUnderlineThickness (Handle); }
@@ -3288,7 +3206,6 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern nfloat CTFontGetSlantAngle (IntPtr font);
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public nfloat SlantAngle {
 			get { return CTFontGetSlantAngle (Handle); }
@@ -3298,7 +3215,6 @@ namespace CoreText {
 		static extern nfloat CTFontGetCapHeight (/* CTFontRef __nonnull */ IntPtr font);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public nfloat CapHeightMetric {
 			get { return CTFontGetCapHeight (Handle); }
@@ -3307,7 +3223,6 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern nfloat CTFontGetXHeight (IntPtr font);
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public nfloat XHeightMetric {
 			get { return CTFontGetXHeight (Handle); }
@@ -3321,7 +3236,6 @@ namespace CoreText {
 
 		/// <param name="glyphName">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CGGlyph GetGlyphWithName (string glyphName)
 		{
@@ -3361,7 +3275,6 @@ namespace CoreText {
 		/// <param name="orientation">To be added.</param>
 		///         <param name="glyphs">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CGRect GetBoundingRects (CTFontOrientation orientation, CGGlyph [] glyphs)
 		{
@@ -3384,7 +3297,6 @@ namespace CoreText {
 		/// <param name="orientation">To be added.</param>
 		///         <param name="glyphs">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public double GetAdvancesForGlyphs (CTFontOrientation orientation, CGGlyph [] glyphs)
 		{
@@ -3406,7 +3318,6 @@ namespace CoreText {
 
 		/// <param name="glyph">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CGPath? GetPathForGlyph (CGGlyph glyph)
 		{
@@ -3424,7 +3335,6 @@ namespace CoreText {
 		/// <param name="glyph">To be added.</param>
 		///         <param name="transform">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CGPath? GetPathForGlyph (CGGlyph glyph, ref CGAffineTransform transform)
 		{
@@ -3483,7 +3393,6 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTFontCopyVariationAxes (IntPtr font);
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CTFontVariationAxes [] GetVariationAxes ()
 		{
@@ -3494,7 +3403,6 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTFontCopyVariation (IntPtr font);
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CTFontVariation? GetVariation ()
 		{
@@ -3512,7 +3420,6 @@ namespace CoreText {
 
 		// Always returns only default features
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CTFontFeatures [] GetFeatures ()
 		{
@@ -3526,7 +3433,6 @@ namespace CoreText {
 			/* CTFontRef __nonnull */ IntPtr font);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CTFontFeatureSettings [] GetFeatureSettings ()
 		{
@@ -3541,7 +3447,6 @@ namespace CoreText {
 		static extern IntPtr CTFontCopyGraphicsFont (IntPtr font, IntPtr attributes);
 		/// <param name="attributes">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CGFont? ToCGFont (CTFontDescriptor? attributes)
 		{
@@ -3553,7 +3458,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CGFont? ToCGFont ()
 		{
@@ -3568,7 +3472,6 @@ namespace CoreText {
 
 		/// <param name="options">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CTFontTable [] GetAvailableTables (CTFontTableOptions options)
 		{
@@ -3583,7 +3486,6 @@ namespace CoreText {
 		/// <param name="table">To be added.</param>
 		///         <param name="options">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public NSData? GetFontTableData (CTFontTable table, CTFontTableOptions options)
 		{
@@ -3599,7 +3501,6 @@ namespace CoreText {
 
 		/// <param name="languages">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CTFontDescriptor? []? GetDefaultCascadeList (string []? languages)
 		{
@@ -3685,7 +3586,6 @@ namespace CoreText {
 
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override string? ToString ()
 		{
@@ -3693,7 +3593,6 @@ namespace CoreText {
 		}
 
 		/// <summary>Type identifier for the CoreText.CTFont type.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>
 		///           <para>The returned token is the CoreFoundation type identifier (CFType) that has been assigned to this class.</para>
 		///           <para>This can be used to determine type identity between different CoreFoundation objects.</para>

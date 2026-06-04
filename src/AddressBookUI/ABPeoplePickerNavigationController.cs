@@ -311,7 +311,7 @@ namespace AddressBookUI {
 			}
 		}
 
-		/// <summary>In iOS8 and above, this event handler is called after a person has been selected by the user.</summary>
+		/// <summary>In iOS8 and above, this event handler is called after APerson has been selected by the user.</summary>
 		public event EventHandler<ABPeoplePickerSelectPerson2EventArgs> SelectPerson2 {
 			add {
 				EnsureEventDelegate<InternalABPeoplePickerNavigationControllerDelegate> ().selectPerson2 += value;
@@ -335,7 +335,7 @@ namespace AddressBookUI {
 			}
 		}
 
-		/// <summary>In iOS8 and above, this event handler will be called after a person has been selected by the user.</summary>
+		/// <summary>In iOS8 and above, this event handler will be called after APerson has been selected by the user.</summary>
 		public event EventHandler<ABPeoplePickerPerformAction2EventArgs> PerformAction2 {
 			add {
 				EnsureEventDelegate<InternalABPeoplePickerNavigationControllerDelegate> ().performAction2 += value;

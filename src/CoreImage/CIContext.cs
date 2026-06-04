@@ -74,7 +74,6 @@ namespace CoreImage {
 	public partial class CIContext {
 		/// <param name="options">The context options to use.</param>
 		///         <summary>Creates a new Core Image context with the specified <paramref name="options" />.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -84,20 +83,18 @@ namespace CoreImage {
 		{
 		}
 
-		/// <param name="ctx">To be added.</param>
-		///         <param name="options">To be added.</param>
+		/// <param name="ctx">The ctx.</param>
+		///         <param name="options">The options to use.</param>
 		///         <summary>Creates a new CIContext from an existing one, along with the provided </summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CIContext FromContext (CGContext ctx, CIContextOptions? options)
 		{
 			return FromContext (ctx, options?.Dictionary);
 		}
 
-		/// <param name="ctx">To be added.</param>
+		/// <param name="ctx">The ctx.</param>
 		///         <summary>Creates a new CIContext from an existing one.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CIContext FromContext (CGContext ctx)
 		{
 			return FromContext (ctx, (NSDictionary?) null);
@@ -108,7 +105,6 @@ namespace CoreImage {
 		///         <param name="options">The desired <see cref="CoreImage.CIContextOptions" />.</param>
 		///         <summary>Creates a <see cref="CoreImage.CIContext" /> based on the <paramref name="eaglContext" />, with the specified <paramref name="options" />.</summary>
 		///         <returns>A new <see cref="CoreImage.CIContext" />.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
@@ -124,11 +120,10 @@ namespace CoreImage {
 		}
 #endif
 
-		/// <param name="device">To be added.</param>
-		///         <param name="options">To be added.</param>
+		/// <param name="device">The device.</param>
+		///         <param name="options">The options to use.</param>
 		///         <summary>Creates a new CIContext from the provided Metal device, along with the specified context.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CIContext FromMetalDevice (IMTLDevice device, CIContextOptions? options)
 		{
 			if (options is null)
@@ -138,7 +133,7 @@ namespace CoreImage {
 		}
 
 #if MONOMAC
-		/// <param name="size">To be added.</param>
+		/// <param name="size">The size.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
@@ -150,22 +145,20 @@ namespace CoreImage {
 			return CreateCGLayer (size, null);
 		}
 #else
-		/// <param name="options">To be added.</param>
+		/// <param name="options">The options to use.</param>
 		///         <summary>Creates a new <see cref="CoreImage.CIContext" /> from the options that are named in <paramref name="options" />.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CIContext FromOptions (CIContextOptions? options)
 		{
 			return FromOptions (options?.Dictionary);
 		}
 
-		/// <param name="image">To be added.</param>
-		///         <param name="fromRect">To be added.</param>
-		///         <param name="ciImageFormat">To be added.</param>
-		///         <param name="colorSpace">To be added.</param>
+		/// <param name="image">The image.</param>
+		///         <param name="fromRect">The from rect.</param>
+		///         <param name="ciImageFormat">The ci image format.</param>
+		///         <param name="colorSpace">The color space.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CGImage? CreateCGImage (CIImage image, CGRect fromRect, CIFormat ciImageFormat, CGColorSpace? colorSpace)
 		{
 			return CreateCGImage (image, fromRect, CIImage.CIFormatToInt (ciImageFormat), colorSpace);

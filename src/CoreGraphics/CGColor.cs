@@ -32,7 +32,6 @@ using CoreFoundation;
 
 namespace CoreGraphics {
 	/// <summary>Color structure.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -121,9 +120,8 @@ namespace CoreGraphics {
 
 		}
 
-		/// <param name="name">To be added.</param>
+		/// <param name="name">The name to use.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CGColor (string name)
 			: base (Create (name), true)
 		{
@@ -218,7 +216,6 @@ namespace CoreGraphics {
 
 		/// <summary>Get the hashcode for this color.</summary>
 		///         <returns>The hashcode.</returns>
-		///         <remarks>To be added.</remarks>
 		public override int GetHashCode ()
 		{
 			// looks weird but it's valid
@@ -231,7 +228,6 @@ namespace CoreGraphics {
 		///         <summary>Determines if the objects are equal.</summary>
 		///         <returns>
 		///           <see langword="true" /> if this color is equal to the specified object.</returns>
-		///         <remarks>To be added.</remarks>
 		public override bool Equals (object? o)
 		{
 			var other = o as CGColor;
@@ -248,7 +244,6 @@ namespace CoreGraphics {
 
 		/// <summary>The number of components in this color.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public nint NumberOfComponents {
 			get {
 				return CGColorGetNumberOfComponents (Handle);
@@ -260,7 +255,6 @@ namespace CoreGraphics {
 
 		/// <summary>The components for this color.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public nfloat [] Components {
 			get {
 				int n = (int) NumberOfComponents;
@@ -281,7 +275,6 @@ namespace CoreGraphics {
 
 		/// <summary>The alpha channel value.</summary>
 		///         <value>A value in the 0.0 to 1.0f range.</value>
-		///         <remarks>To be added.</remarks>
 		public nfloat Alpha {
 			get {
 				return CGColorGetAlpha (Handle);
@@ -293,7 +286,6 @@ namespace CoreGraphics {
 
 		/// <summary>The color's colorspace.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public CGColorSpace? ColorSpace {
 			get {
 				var ptr = CGColorGetColorSpace (Handle);
@@ -305,7 +297,6 @@ namespace CoreGraphics {
 		extern static /* CGPatternRef */ IntPtr CGColorGetPattern (/* CGColorRef */ IntPtr color);
 		/// <summary>If present, the pattern for this color.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public CGPattern? Pattern {
 			get {
 				var h = CGColorGetPattern (Handle);

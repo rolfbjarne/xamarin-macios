@@ -58,12 +58,12 @@ namespace UIKit {
 	///        <see cref="UIKit.UIFont.PreferredSubheadline" /> properties to get the preferred system fonts for the corresponding use case.
 	///   </para>
 	///   <para>
-	///     Use the static <see cref="UIKit.UIFont.FromName(System.String,nfloat)" /> method to create new fonts of a particular font.
+	///     Use the static <see cref="UIKit.UIFont.FromName(System.String,nfloat)" /> method to create new fonts of AParticular font.
 	///   </para>
 	///   <para>
 	///     You can use the <see cref="UIKit.UIFont.FamilyNames" /> property to get a
 	///     list of all family names available and then the <see cref="UIKit.UIFont.FontNamesForFamilyName(System.String)" />
-	///     method to get a list of the fonts available in a particular font family.
+	///     method to get a list of the fonts available in AParticular font family.
 	///   </para>
 	///   <format type="text/html">
 	///     <h2>System Information and Fonts</h2>

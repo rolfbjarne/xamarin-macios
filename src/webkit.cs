@@ -5211,7 +5211,7 @@ namespace WebKit {
 		void CookiesDidChangeInCookieStore (WKHttpCookieStore cookieStore);
 	}
 
-	/// <summary>A frame within a page.</summary>
+	/// <summary>A frame within APage.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/WebKit/Reference/WKFrameInfo_Ref/index.html">Apple documentation for <c>WKFrameInfo</c></related>
 	[MacCatalyst (13, 1)]
@@ -5245,7 +5245,7 @@ namespace WebKit {
 		WKWebView WebView { get; }
 	}
 
-	/// <summary>Tracks the loading progress of a page.</summary>
+	/// <summary>Tracks the loading progress of APage.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/WebKit/Reference/WKNavigation_Ref/index.html">Apple documentation for <c>WKNavigation</c></related>
 	[MacCatalyst (13, 1)]
@@ -5974,7 +5974,7 @@ namespace WebKit {
 
 		/// <param name="webView">To be added.</param>
 		/// <param name="elementInfo">To be added.</param>
-		/// <summary>Method that is called to find out if the element should provide a preview.</summary>
+		/// <summary>Method that is called to find out if the element should provide APreview.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		[NoMac]
@@ -6000,7 +6000,7 @@ namespace WebKit {
 
 		/// <param name="webView">To be added.</param>
 		/// <param name="previewingViewController">To be added.</param>
-		/// <summary>Method that is called to respond when the user pops a preview action.</summary>
+		/// <summary>Method that is called to respond when the user pops APreview action.</summary>
 		/// <remarks>To be added.</remarks>
 		[NoMac]
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Use 'WillCommitContextMenu' instead.")]
@@ -6908,7 +6908,7 @@ namespace WebKit {
 		NSString Share { get; }
 	}
 
-	/// <summary>Contains the URL for a preview action item.</summary>
+	/// <summary>Contains the URL for APreview action item.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/reference/WebKit/WKPreviewElementInfo">Apple documentation for <c>WKPreviewElementInfo</c></related>
 	[NoMac]

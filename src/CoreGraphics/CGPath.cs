@@ -646,7 +646,7 @@ namespace CoreGraphics {
 		/// The element to process.
 		///   	   </param>
 		///     <summary>A function that can make changes to a CGPathElement.</summary>
-		///     <remarks>This is the function signature that is called back from CGPath.Apply for each element in a path. </remarks>
+		///     <remarks>This is the function signature that is called back from CGPath.Apply for each element in APath. </remarks>
 		public delegate void ApplierFunction (CGPathElement element);
 
 		delegate void CGPathApplierFunction (/* void* */ IntPtr info, /* const CGPathElement* */ IntPtr element);

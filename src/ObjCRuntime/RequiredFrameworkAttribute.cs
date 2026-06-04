@@ -30,12 +30,11 @@ namespace ObjCRuntime {
 	/// <summary>To be added.</summary>
 	[AttributeUsage (AttributeTargets.Assembly, AllowMultiple = true)]
 	public class RequiredFrameworkAttribute : Attribute {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the name.</summary>
 		public string Name { get; private set; }
 
 		/// <param name="name">The name to use.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="RequiredFrameworkAttribute" /> instance.</summary>
 		public RequiredFrameworkAttribute (string name)
 		{
 			Name = name;

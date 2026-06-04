@@ -28,17 +28,14 @@ using System.IO;
 namespace ObjCRuntime {
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[AttributeUsage (AttributeTargets.Assembly, AllowMultiple = true)]
 	public class RequiredFrameworkAttribute : Attribute {
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string Name { get; private set; }
 
-		/// <param name="name">To be added.</param>
+		/// <param name="name">The name to use.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public RequiredFrameworkAttribute (string name)
 		{
 			Name = name;

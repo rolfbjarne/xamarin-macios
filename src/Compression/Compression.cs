@@ -83,7 +83,6 @@ namespace Compression {
 		/// <param name="stream">The stream to compress.</param>
 		///         <param name="algorithm">One of the enumeration values that indicates the algorithm to be used.</param>
 		///         <summary>Initializes a new instance of the CompressionStream class by using the specified stream and algorithm.</summary>
-		///         <remarks>To be added.</remarks>
 		public CompressionStream (Stream stream, CompressionAlgorithm algorithm) : this (stream, algorithm, leaveOpen: false)
 		{
 		}
@@ -94,7 +93,6 @@ namespace Compression {
 		///         <param name="leaveOpen">
 		///           <see langword="true" /> to leave the stream object open after disposing the DeflateStream object; otherwise, <see langword="false" /></param>
 		///         <summary>Initializes a new instance of the CompressionStream class by using the specified stream and algorithm, and optionally leaves the stream open.</summary>
-		///         <remarks>To be added.</remarks>
 		public CompressionStream (Stream stream, CompressionAlgorithm algorithm, bool leaveOpen) : this (stream, CompressionMode.Compress, algorithm, leaveOpen)
 		{
 		}
@@ -103,7 +101,6 @@ namespace Compression {
 		///         <param name="mode">One of the enumeration values that indicates whether to compress or decompress the stream.</param>
 		///         <param name="algorithm">One of the enumeration values that indicates the algorithm to be used.</param>
 		///         <summary>Initializes a new instance of the CompressionStream class by using the specified stream, algorithm, and compression mode.</summary>
-		///         <remarks>To be added.</remarks>
 		public CompressionStream (Stream stream, CompressionMode mode, CompressionAlgorithm algorithm) : this (stream, mode, algorithm, leaveOpen: false)
 		{
 		}
@@ -166,7 +163,6 @@ namespace Compression {
 
 		/// <summary>A stream object that represents the underlying stream.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		///         <exception cref="System.ObjectDisposedException">
 		///           The underlying stream is closed.
 		///         </exception>
@@ -175,7 +171,6 @@ namespace Compression {
 		/// <summary>Gets a value indicating whether the stream supports reading while decompressing a file.</summary>
 		///         <value>
 		///           <see langword="true" /> if the CompressionMode value is Decompress, and the underlying stream is opened and supports reading; otherwise, <see langword="false" />.</value>
-		///         <remarks>To be added.</remarks>
 		public override bool CanRead {
 			get {
 				if (_stream is null) {
@@ -189,7 +184,6 @@ namespace Compression {
 		/// <summary>Gets a value indicating whether the stream supports writing.</summary>
 		///         <value>
 		///           <see langword="true" /> if the CompressionMode value is Compress, and the underlying stream supports writing and is not closed; otherwise, <see langword="false" /> .</value>
-		///         <remarks>To be added.</remarks>
 		public override bool CanWrite {
 			get {
 				if (_stream is null) {
@@ -203,26 +197,22 @@ namespace Compression {
 		/// <summary>Gets a value indicating whether the stream supports seeking.</summary>
 		///         <value>
 		///           <see langword="false" /> in all cases.</value>
-		///         <remarks>To be added.</remarks>
 		public override bool CanSeek => false;
 
 		/// <summary>Gets the length in bytes of the stream.</summary>
 		///         <value>A long value representing the length of the stream in bytes.</value>
-		///         <remarks>To be added.</remarks>
 		public override long Length {
 			get { throw new NotSupportedException ("This operation is not supported."); }
 		}
 
 		/// <summary>This property is not supported and always throws a NotSupportedException.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public override long Position {
 			get { throw new NotSupportedException ("This operation is not supported."); }
 			set { throw new NotSupportedException ("This operation is not supported."); }
 		}
 
 		/// <summary>Clears all buffers for this stream and causes any buffered data to be written to the underlying device.</summary>
-		///         <remarks>To be added.</remarks>
 		public override void Flush ()
 		{
 			EnsureNotDisposed ();
@@ -233,7 +223,6 @@ namespace Compression {
 		/// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
 		///         <summary>Asynchronously clears all buffers for this stream and causes any buffered data to be written to the underlying device.</summary>
 		///         <returns>A task that represents the asynchronous flush operation.</returns>
-		///         <remarks>To be added.</remarks>
 		///         <exception cref="System.ObjectDisposedException">
 		///           Either the current stream or the destination stream is disposed.
 		///         </exception>
@@ -273,7 +262,6 @@ namespace Compression {
 		///         <param name="origin">One of the SeekOrigin values.</param>
 		///         <summary>This operation is not supported and always throws a NotSupportedException.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		///         <exception cref="System.NotSupportedException">
 		///           This property is not supported on this stream.
 		///         </exception>
@@ -284,7 +272,6 @@ namespace Compression {
 
 		/// <param name="value">The length of the stream.</param>
 		///         <summary>This operation is not supported and always throws a NotSupportedException.</summary>
-		///         <remarks>To be added.</remarks>
 		public override void SetLength (long value)
 		{
 			throw new NotSupportedException ("This operation is not supported.");
@@ -292,7 +279,6 @@ namespace Compression {
 
 		/// <summary>Reads a byte from the stream and advances the position within the stream by one byte, or returns -1 if at the end of the stream.</summary>
 		///         <returns>The unsigned byte cast to an Int32, or -1 if at the end of the stream.</returns>
-		///         <remarks>To be added.</remarks>
 		///         <exception cref="System.ObjectDisposedException">
 		///           The current stream stream is disposed.
 		///         </exception>
@@ -317,10 +303,9 @@ namespace Compression {
 			return ReadCore (new Span<byte> (array, offset, count));
 		}
 
-		/// <param name="destination">To be added.</param>
+		/// <param name="destination">The destination.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public override int Read (Span<byte> destination)
 		{
 			if (GetType () != typeof (CompressionStream)) {
@@ -425,7 +410,6 @@ namespace Compression {
 		/// <param name="asyncResult">The reference to the pending asynchronous request to finish.</param>
 		///         <summary>Waits for the pending asynchronous read to complete.</summary>
 		///         <returns>The number of bytes read from the stream, between 0 (zero) and the number of bytes you requested. CompressionStream returns 0 only at the end of the stream; otherwise, it blocks until at least one byte is available.</returns>
-		///         <remarks>To be added.</remarks>
 		///         <exception cref="System.InvalidOperationException">
 		///           The end call is invalid because asynchronous read operations for this stream are not yet complete.
 		///         </exception>
@@ -439,11 +423,10 @@ namespace Compression {
 			return ReadAsyncMemory (new Memory<byte> (array, offset, count), cancellationToken).AsTask ();
 		}
 
-		/// <param name="destination">To be added.</param>
-		///         <param name="cancellationToken">To be added.</param>
+		/// <param name="destination">The destination.</param>
+		///         <param name="cancellationToken">A cancellation token.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public override ValueTask<int> ReadAsync (Memory<byte> destination, CancellationToken cancellationToken = default (CancellationToken))
 		{
 			if (GetType () != typeof (CompressionStream)) {
@@ -535,16 +518,14 @@ namespace Compression {
 		///         <param name="offset">The byte offset in array from which the bytes will be read.</param>
 		///         <param name="count">The maximum number of bytes to write.</param>
 		///         <summary>Writes compressed bytes to the underlying stream from the specified byte array.</summary>
-		///         <remarks>To be added.</remarks>
 		public override void Write (byte [] array, int offset, int count)
 		{
 			ValidateParameters (array, offset, count);
 			WriteCore (new ReadOnlySpan<byte> (array, offset, count));
 		}
 
-		/// <param name="source">To be added.</param>
+		/// <param name="source">The source.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public override void Write (ReadOnlySpan<byte> source)
 		{
 			if (GetType () != typeof (CompressionStream)) {
@@ -694,7 +675,6 @@ namespace Compression {
 
 		/// <param name="asyncResult">The reference to the pending asynchronous request to finish.</param>
 		///         <summary>Ends an asynchronous write operation.</summary>
-		///         <remarks>To be added.</remarks>
 		///         <exception cref="System.InvalidOperationException">
 		///           The end call is invalid because asynchronous read operations for this stream are not yet complete.
 		///         </exception>
@@ -706,18 +686,16 @@ namespace Compression {
 		///         <param name="cancellationToken">The token to monitor for cancellation requests.</param>
 		///         <summary>Asynchronously writes compressed bytes to the underlying stream from the specified byte array.</summary>
 		///         <returns>A task that represents the asynchronous write operation.</returns>
-		///         <remarks>To be added.</remarks>
 		public override Task WriteAsync (byte [] array, int offset, int count, CancellationToken cancellationToken)
 		{
 			ValidateParameters (array, offset, count);
 			return WriteAsyncMemory (new ReadOnlyMemory<byte> (array, offset, count), cancellationToken);
 		}
 
-		/// <param name="source">To be added.</param>
-		///         <param name="cancellationToken">To be added.</param>
+		/// <param name="source">The source.</param>
+		///         <param name="cancellationToken">A cancellation token.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public override ValueTask WriteAsync (ReadOnlyMemory<byte> source, CancellationToken cancellationToken)
 		{
 			if (GetType () != typeof (CompressionStream)) {

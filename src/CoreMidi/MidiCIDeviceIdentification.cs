@@ -15,19 +15,19 @@ namespace CoreMidi {
 	[NativeName ("MIDICIDeviceIdentification")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct MidiCIDeviceIdentification {
-		/// <summary>To be added.</summary>
+		/// <summary>The manufacturer system exclusive ID (3 bytes).</summary>
 		[MarshalAs (UnmanagedType.ByValArray, SizeConst = 3)]
 		public byte [] Manufacturer;
-		/// <summary>To be added.</summary>
+		/// <summary>The device family ID (2 bytes).</summary>
 		[MarshalAs (UnmanagedType.ByValArray, SizeConst = 2)]
 		public byte [] Family;
-		/// <summary>To be added.</summary>
+		/// <summary>The model number within the family (2 bytes).</summary>
 		[MarshalAs (UnmanagedType.ByValArray, SizeConst = 2)]
 		public byte [] ModelNumber;
-		/// <summary>To be added.</summary>
+		/// <summary>The revision level of the device (4 bytes).</summary>
 		[MarshalAs (UnmanagedType.ByValArray, SizeConst = 4)]
 		public byte [] RevisionLevel;
-		/// <summary>To be added.</summary>
+		/// <summary>Reserved bytes (5 bytes).</summary>
 		[MarshalAs (UnmanagedType.ByValArray, SizeConst = 5)]
 		public byte [] Reserved;
 	}

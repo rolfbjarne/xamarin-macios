@@ -15,7 +15,7 @@ using CoreFoundation;
 using OS_nw_protocol_definition = System.IntPtr;
 
 namespace Network {
-	/// <summary>To be added.</summary>
+	/// <summary>Defines a network protocol for use with the Network framework.</summary>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
@@ -28,8 +28,8 @@ namespace Network {
 		static extern byte nw_protocol_definition_is_equal (OS_nw_protocol_definition definition1, OS_nw_protocol_definition definition2);
 
 		/// <param name="other">The other.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Determines whether this protocol definition is equal to the specified object.</summary>
+		/// <returns><see langword="true" /> if the objects are equal; otherwise, <see langword="false" />.</returns>
 		public bool Equals (object other)
 		{
 			if (other is null)

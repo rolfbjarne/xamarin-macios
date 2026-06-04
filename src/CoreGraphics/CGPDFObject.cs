@@ -70,21 +70,18 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		unsafe extern static byte CGPDFObjectGetValue (/* CGPDFObjectRef */IntPtr pdfobj, CGPDFObjectType type, /* void* */ IntPtr* value);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the type.</summary>
 		public CGPDFObjectType Type {
 			get { return CGPDFObjectGetType (Handle); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the is null.</summary>
 		public bool IsNull {
 			get { return Type == CGPDFObjectType.Null; }
 		}
 
 		/// <param name="value">The value to set.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Trys get value.</summary>
 		public bool TryGetValue (out bool value)
 		{
 			byte b;
@@ -117,8 +114,7 @@ namespace CoreGraphics {
 		}
 
 		/// <param name="value">The value to set.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Trys get value.</summary>
 		public bool TryGetValue (out string? value)
 		{
 			IntPtr ip;
@@ -131,8 +127,7 @@ namespace CoreGraphics {
 		}
 
 		/// <param name="value">The value to set.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Trys get value.</summary>
 		public bool TryGetValue (out CGPDFArray? value)
 		{
 			IntPtr ip;
@@ -145,8 +140,7 @@ namespace CoreGraphics {
 		}
 
 		/// <param name="value">The value to set.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Trys get value.</summary>
 		public bool TryGetValue (out CGPDFDictionary? value)
 		{
 			IntPtr ip;
@@ -159,8 +153,7 @@ namespace CoreGraphics {
 		}
 
 		/// <param name="value">The value to set.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Trys get value.</summary>
 		public bool TryGetValue (out CGPDFStream? value)
 		{
 			IntPtr ip;
@@ -173,8 +166,7 @@ namespace CoreGraphics {
 		}
 
 		/// <param name="name">The name to use.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Trys get name.</summary>
 		public bool TryGetName (out string? name)
 		{
 			IntPtr ip;

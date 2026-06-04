@@ -17,7 +17,7 @@ using OS_nw_protocol_metadata = System.IntPtr;
 using nw_service_class_t = System.IntPtr;
 
 namespace Network {
-	/// <summary>To be added.</summary>
+	/// <summary>Represents metadata associated with a network protocol.</summary>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]

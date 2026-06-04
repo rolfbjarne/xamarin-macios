@@ -35,13 +35,13 @@ namespace StoreKit {
 		Unknown,
 		/// <summary>Indicates that the client may not perform the operation.</summary>
 		ClientInvalid,
-		/// <summary>Indicates that a payment was cancelled.</summary>
+		/// <summary>Indicates that APayment was cancelled.</summary>
 		PaymentCancelled,
-		/// <summary>Indicates that a payment was invalid.</summary>
+		/// <summary>Indicates that APayment was invalid.</summary>
 		PaymentInvalid,
-		/// <summary>Indicates that a payment was not allowed.</summary>
+		/// <summary>Indicates that APayment was not allowed.</summary>
 		PaymentNotAllowed,
-		/// <summary>Indicates that a product was unavailable.</summary>
+		/// <summary>Indicates that AProduct was unavailable.</summary>
 		ProductNotAvailable,
 		// iOS 9.3
 		/// <summary>Indicates that the cloud service denied permission for the operation.</summary>
@@ -52,7 +52,7 @@ namespace StoreKit {
 		/// <summary>Indicates that the cloud service has been revoked.</summary>
 		CloudServiceRevoked,
 		// iOS 12.2
-		/// <summary>Indicates that a privacy acknowledgement is required before proceeding.</summary>
+		/// <summary>Indicates that APrivacy acknowledgement is required before proceeding.</summary>
 		PrivacyAcknowledgementRequired,
 		/// <summary>Indicates that the request data is unauthorized.</summary>
 		UnauthorizedRequestData,
@@ -135,7 +135,7 @@ namespace StoreKit {
 		AddToCloudMusicLibrary = 1 << 8,
 	}
 
-	/// <summary>Enumerates visibility settings for a promoted product.</summary>
+	/// <summary>Enumerates visibility settings for APromoted product.</summary>
 	[Deprecated (PlatformName.iOS, 18, 0 /* Apple's replacement requires Swift */ )]
 	[Deprecated (PlatformName.MacCatalyst, 18, 0 /* Apple's replacement requires Swift */ )]
 	[Deprecated (PlatformName.MacOSX, 15, 0 /* Apple's replacement requires Swift */ )]

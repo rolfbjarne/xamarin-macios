@@ -6,379 +6,343 @@ using System.Text;
 namespace AppKit {
 	public partial class NSColor {
 
-		/// <param name="red">To be added.</param>
-		/// <param name="green">To be added.</param>
-		/// <param name="blue">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="red">The red component (0.0 to 1.0).</param>
+		/// <param name="green">The green component (0.0 to 1.0).</param>
+		/// <param name="blue">The blue component (0.0 to 1.0).</param>
+		/// <summary>Creates a color from RGB components.</summary>
 		public static NSColor FromRgb (nfloat red, nfloat green, nfloat blue)
 		{
 			return FromRgba (red, green, blue, 1.0f);
 		}
 
-		/// <param name="red">To be added.</param>
-		///         <param name="green">To be added.</param>
-		///         <param name="blue">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="red">The red component (0.0 to 1.0).</param>
+		/// <param name="green">The green component (0.0 to 1.0).</param>
+		/// <param name="blue">The blue component (0.0 to 1.0).</param>
+		/// <summary>Creates a color from RGB components.</summary>
 		public static NSColor FromRgb (byte red, byte green, byte blue)
 		{
 			return FromRgba (red / 255.0f, green / 255.0f, blue / 255.0f, 1.0f);
 		}
 
-		/// <param name="red">To be added.</param>
-		///         <param name="green">To be added.</param>
-		///         <param name="blue">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="red">The red component (0.0 to 1.0).</param>
+		/// <param name="green">The green component (0.0 to 1.0).</param>
+		/// <param name="blue">The blue component (0.0 to 1.0).</param>
+		/// <summary>Creates a color from RGB components.</summary>
 		public static NSColor FromRgb (int red, int green, int blue)
 		{
 			return FromRgb ((byte) red, (byte) green, (byte) blue);
 		}
 
-		/// <param name="red">To be added.</param>
-		///         <param name="green">To be added.</param>
-		///         <param name="blue">To be added.</param>
-		///         <param name="alpha">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="red">The red component (0.0 to 1.0).</param>
+		/// <param name="green">The green component (0.0 to 1.0).</param>
+		/// <param name="blue">The blue component (0.0 to 1.0).</param>
+		/// <param name="alpha">The alpha component (0.0 to 1.0).</param>
+		/// <summary>Creates a color from RGBA components.</summary>
 		public static NSColor FromRgba (byte red, byte green, byte blue, byte alpha)
 		{
 			return FromRgba (red / 255.0f, green / 255.0f, blue / 255.0f, alpha / 255.0f);
 		}
 
-		/// <param name="red">To be added.</param>
-		///         <param name="green">To be added.</param>
-		///         <param name="blue">To be added.</param>
-		///         <param name="alpha">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="red">The red component (0.0 to 1.0).</param>
+		/// <param name="green">The green component (0.0 to 1.0).</param>
+		/// <param name="blue">The blue component (0.0 to 1.0).</param>
+		/// <param name="alpha">The alpha component (0.0 to 1.0).</param>
+		/// <summary>Creates a color from RGBA components.</summary>
 		public static NSColor FromRgba (int red, int green, int blue, int alpha)
 		{
 			return FromRgba ((byte) red, (byte) green, (byte) blue, (byte) alpha);
 		}
 
-		/// <param name="hue">To be added.</param>
-		/// <param name="saturation">To be added.</param>
-		/// <param name="brightness">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="hue">The hue component (0.0 to 1.0).</param>
+		/// <param name="saturation">The saturation component (0.0 to 1.0).</param>
+		/// <param name="brightness">The brightness component (0.0 to 1.0).</param>
+		/// <summary>Creates a color from HSB components.</summary>
 		public static NSColor FromHsb (nfloat hue, nfloat saturation, nfloat brightness)
 		{
 			return FromHsba (hue, saturation, brightness, 1.0f);
 		}
 
-		/// <param name="hue">To be added.</param>
-		///         <param name="saturation">To be added.</param>
-		///         <param name="brightness">To be added.</param>
-		///         <param name="alpha">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="hue">The hue component (0.0 to 1.0).</param>
+		/// <param name="saturation">The saturation component (0.0 to 1.0).</param>
+		/// <param name="brightness">The brightness component (0.0 to 1.0).</param>
+		/// <param name="alpha">The alpha component (0.0 to 1.0).</param>
+		/// <summary>Creates a color from HSBA components.</summary>
 		public static NSColor FromHsba (byte hue, byte saturation, byte brightness, byte alpha)
 		{
 			return FromHsba (hue / 255.0f, saturation / 255.0f, brightness / 255.0f, alpha / 255.0f);
 		}
 
-		/// <param name="hue">To be added.</param>
-		///         <param name="saturation">To be added.</param>
-		///         <param name="brightness">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="hue">The hue component (0.0 to 1.0).</param>
+		/// <param name="saturation">The saturation component (0.0 to 1.0).</param>
+		/// <param name="brightness">The brightness component (0.0 to 1.0).</param>
+		/// <summary>Creates a color from HSB components.</summary>
 		public static NSColor FromHsb (byte hue, byte saturation, byte brightness)
 		{
 			return FromHsba (hue / 255.0f, saturation / 255.0f, brightness / 255.0f, 1.0f);
 		}
 
-		/// <param name="hue">To be added.</param>
-		///         <param name="saturation">To be added.</param>
-		///         <param name="brightness">To be added.</param>
-		///         <param name="alpha">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="hue">The hue component (0.0 to 1.0).</param>
+		/// <param name="saturation">The saturation component (0.0 to 1.0).</param>
+		/// <param name="brightness">The brightness component (0.0 to 1.0).</param>
+		/// <param name="alpha">The alpha component (0.0 to 1.0).</param>
+		/// <summary>Creates a color from HSBA components.</summary>
 		public static NSColor FromHsba (int hue, int saturation, int brightness, int alpha)
 		{
 			return FromHsba ((byte) hue, (byte) saturation, (byte) brightness, (byte) alpha);
 		}
 
-		/// <param name="hue">To be added.</param>
-		///         <param name="saturation">To be added.</param>
-		///         <param name="brightness">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="hue">The hue component (0.0 to 1.0).</param>
+		/// <param name="saturation">The saturation component (0.0 to 1.0).</param>
+		/// <param name="brightness">The brightness component (0.0 to 1.0).</param>
+		/// <summary>Creates a color from HSB components.</summary>
 		public static NSColor FromHsb (int hue, int saturation, int brightness)
 		{
 			return FromHsb ((byte) hue, (byte) saturation, (byte) brightness);
 		}
 
-		/// <param name="red">To be added.</param>
-		/// <param name="green">To be added.</param>
-		/// <param name="blue">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="red">The red component (0.0 to 1.0).</param>
+		/// <param name="green">The green component (0.0 to 1.0).</param>
+		/// <param name="blue">The blue component (0.0 to 1.0).</param>
+		/// <summary>Creates a device RGB color.</summary>
 		public static NSColor FromDeviceRgb (nfloat red, nfloat green, nfloat blue)
 		{
 			return FromDeviceRgba (red, green, blue, 1.0f);
 		}
 
-		/// <param name="red">To be added.</param>
-		///         <param name="green">To be added.</param>
-		///         <param name="blue">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="red">The red component (0.0 to 1.0).</param>
+		/// <param name="green">The green component (0.0 to 1.0).</param>
+		/// <param name="blue">The blue component (0.0 to 1.0).</param>
+		/// <summary>Creates a device RGB color from byte values.</summary>
 		public static NSColor FromDeviceRgb (byte red, byte green, byte blue)
 		{
 			return FromDeviceRgba (red / 255.0f, green / 255.0f, blue / 255.0f, 1.0f);
 		}
 
-		/// <param name="red">To be added.</param>
-		///         <param name="green">To be added.</param>
-		///         <param name="blue">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="red">The red component (0.0 to 1.0).</param>
+		/// <param name="green">The green component (0.0 to 1.0).</param>
+		/// <param name="blue">The blue component (0.0 to 1.0).</param>
+		/// <summary>Creates a device RGB color from integer values.</summary>
 		public static NSColor FromDeviceRgb (int red, int green, int blue)
 		{
 			return FromDeviceRgb ((byte) red, (byte) green, (byte) blue);
 		}
 
-		/// <param name="red">To be added.</param>
-		///         <param name="green">To be added.</param>
-		///         <param name="blue">To be added.</param>
-		///         <param name="alpha">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="red">The red component (0.0 to 1.0).</param>
+		/// <param name="green">The green component (0.0 to 1.0).</param>
+		/// <param name="blue">The blue component (0.0 to 1.0).</param>
+		/// <param name="alpha">The alpha component (0.0 to 1.0).</param>
+		/// <summary>Creates a device RGB color with alpha.</summary>
 		public static NSColor FromDeviceRgba (byte red, byte green, byte blue, byte alpha)
 		{
 			return FromDeviceRgba (red / 255.0f, green / 255.0f, blue / 255.0f, alpha / 255.0f);
 		}
 
-		/// <param name="red">To be added.</param>
-		///         <param name="green">To be added.</param>
-		///         <param name="blue">To be added.</param>
-		///         <param name="alpha">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="red">The red component (0.0 to 1.0).</param>
+		/// <param name="green">The green component (0.0 to 1.0).</param>
+		/// <param name="blue">The blue component (0.0 to 1.0).</param>
+		/// <param name="alpha">The alpha component (0.0 to 1.0).</param>
+		/// <summary>Creates a device RGB color with alpha.</summary>
 		public static NSColor FromDeviceRgba (int red, int green, int blue, int alpha)
 		{
 			return FromDeviceRgba ((byte) red, (byte) green, (byte) blue, (byte) alpha);
 		}
 
-		/// <param name="hue">To be added.</param>
-		/// <param name="saturation">To be added.</param>
-		/// <param name="brightness">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="hue">The hue component (0.0 to 1.0).</param>
+		/// <param name="saturation">The saturation component (0.0 to 1.0).</param>
+		/// <param name="brightness">The brightness component (0.0 to 1.0).</param>
+		/// <summary>Creates a device HSB color.</summary>
 		public static NSColor FromDeviceHsb (nfloat hue, nfloat saturation, nfloat brightness)
 		{
 			return FromDeviceHsba (hue, saturation, brightness, 1.0f);
 		}
 
-		/// <param name="hue">To be added.</param>
-		///         <param name="saturation">To be added.</param>
-		///         <param name="brightness">To be added.</param>
-		///         <param name="alpha">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="hue">The hue component (0.0 to 1.0).</param>
+		/// <param name="saturation">The saturation component (0.0 to 1.0).</param>
+		/// <param name="brightness">The brightness component (0.0 to 1.0).</param>
+		/// <param name="alpha">The alpha component (0.0 to 1.0).</param>
+		/// <summary>Creates a device HSB color with alpha.</summary>
 		public static NSColor FromDeviceHsba (byte hue, byte saturation, byte brightness, byte alpha)
 		{
 			return FromDeviceHsba (hue / 255.0f, saturation / 255.0f, brightness / 255.0f, alpha / 255.0f);
 		}
 
-		/// <param name="hue">To be added.</param>
-		///         <param name="saturation">To be added.</param>
-		///         <param name="brightness">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="hue">The hue component (0.0 to 1.0).</param>
+		/// <param name="saturation">The saturation component (0.0 to 1.0).</param>
+		/// <param name="brightness">The brightness component (0.0 to 1.0).</param>
+		/// <summary>Creates a device HSB color from byte values.</summary>
 		public static NSColor FromDeviceHsb (byte hue, byte saturation, byte brightness)
 		{
 			return FromDeviceHsba (hue / 255.0f, saturation / 255.0f, brightness / 255.0f, 1.0f);
 		}
 
-		/// <param name="hue">To be added.</param>
-		///         <param name="saturation">To be added.</param>
-		///         <param name="brightness">To be added.</param>
-		///         <param name="alpha">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="hue">The hue component (0.0 to 1.0).</param>
+		/// <param name="saturation">The saturation component (0.0 to 1.0).</param>
+		/// <param name="brightness">The brightness component (0.0 to 1.0).</param>
+		/// <param name="alpha">The alpha component (0.0 to 1.0).</param>
+		/// <summary>Creates a device HSB color with alpha.</summary>
 		public static NSColor FromDeviceHsba (int hue, int saturation, int brightness, int alpha)
 		{
 			return FromDeviceHsba ((byte) hue, (byte) saturation, (byte) brightness, (byte) alpha);
 		}
 
-		/// <param name="hue">To be added.</param>
-		///         <param name="saturation">To be added.</param>
-		///         <param name="brightness">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="hue">The hue component (0.0 to 1.0).</param>
+		/// <param name="saturation">The saturation component (0.0 to 1.0).</param>
+		/// <param name="brightness">The brightness component (0.0 to 1.0).</param>
+		/// <summary>Creates a device HSB color from integer values.</summary>
 		public static NSColor FromDeviceHsb (int hue, int saturation, int brightness)
 		{
 			return FromDeviceHsb ((byte) hue, (byte) saturation, (byte) brightness);
 		}
 
-		/// <param name="cyan">To be added.</param>
-		/// <param name="magenta">To be added.</param>
-		/// <param name="yellow">To be added.</param>
-		/// <param name="black">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="cyan">The cyan component (0.0 to 1.0).</param>
+		/// <param name="magenta">The magenta component (0.0 to 1.0).</param>
+		/// <param name="yellow">The yellow component (0.0 to 1.0).</param>
+		/// <param name="black">The black component (0.0 to 1.0).</param>
+		/// <summary>Creates a device CMYK color.</summary>
 		public static NSColor FromDeviceCymk (nfloat cyan, nfloat magenta, nfloat yellow, nfloat black)
 		{
 			return FromDeviceCymka (cyan, magenta, yellow, black, 1.0f);
 		}
 
-		/// <param name="cyan">To be added.</param>
-		///         <param name="magenta">To be added.</param>
-		///         <param name="yellow">To be added.</param>
-		///         <param name="black">To be added.</param>
-		///         <param name="alpha">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="cyan">The cyan component (0.0 to 1.0).</param>
+		/// <param name="magenta">The magenta component (0.0 to 1.0).</param>
+		/// <param name="yellow">The yellow component (0.0 to 1.0).</param>
+		/// <param name="black">The black component (0.0 to 1.0).</param>
+		/// <param name="alpha">The alpha component (0.0 to 1.0).</param>
+		/// <summary>Creates a device CMYK color with alpha.</summary>
 		public static NSColor FromDeviceCymka (byte cyan, byte magenta, byte yellow, byte black, byte alpha)
 		{
 			return FromDeviceCymka (cyan / 255.0f, magenta / 255.0f, yellow / 255.0f, black / 255.0f, alpha / 255.0f);
 		}
 
-		/// <param name="cyan">To be added.</param>
-		///         <param name="magenta">To be added.</param>
-		///         <param name="yellow">To be added.</param>
-		///         <param name="black">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="cyan">The cyan component (0.0 to 1.0).</param>
+		/// <param name="magenta">The magenta component (0.0 to 1.0).</param>
+		/// <param name="yellow">The yellow component (0.0 to 1.0).</param>
+		/// <param name="black">The black component (0.0 to 1.0).</param>
+		/// <summary>Creates a device CMYK color from byte values.</summary>
 		public static NSColor FromDeviceCymk (byte cyan, byte magenta, byte yellow, byte black)
 		{
 			return FromDeviceCymka (cyan / 255.0f, magenta / 255.0f, yellow / 255.0f, black / 255.0f, 1.0f);
 		}
 
-		/// <param name="cyan">To be added.</param>
-		///         <param name="magenta">To be added.</param>
-		///         <param name="yellow">To be added.</param>
-		///         <param name="black">To be added.</param>
-		///         <param name="alpha">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="cyan">The cyan component (0.0 to 1.0).</param>
+		/// <param name="magenta">The magenta component (0.0 to 1.0).</param>
+		/// <param name="yellow">The yellow component (0.0 to 1.0).</param>
+		/// <param name="black">The black component (0.0 to 1.0).</param>
+		/// <param name="alpha">The alpha component (0.0 to 1.0).</param>
+		/// <summary>Creates a device CMYK color with alpha.</summary>
 		public static NSColor FromDeviceCymka (int cyan, int magenta, int yellow, int black, int alpha)
 		{
 			return FromDeviceCymka ((byte) cyan, (byte) magenta, (byte) yellow, (byte) black, (byte) alpha);
 		}
 
-		/// <param name="cyan">To be added.</param>
-		///         <param name="magenta">To be added.</param>
-		///         <param name="yellow">To be added.</param>
-		///         <param name="black">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="cyan">The cyan component (0.0 to 1.0).</param>
+		/// <param name="magenta">The magenta component (0.0 to 1.0).</param>
+		/// <param name="yellow">The yellow component (0.0 to 1.0).</param>
+		/// <param name="black">The black component (0.0 to 1.0).</param>
+		/// <summary>Creates a device CMYK color from integer values.</summary>
 		public static NSColor FromDeviceCymk (int cyan, int magenta, int yellow, int black)
 		{
 			return FromDeviceCymk ((byte) cyan, (byte) magenta, (byte) yellow, (byte) black);
 		}
 
-		/// <param name="red">To be added.</param>
-		/// <param name="green">To be added.</param>
-		/// <param name="blue">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="red">The red component (0.0 to 1.0).</param>
+		/// <param name="green">The green component (0.0 to 1.0).</param>
+		/// <param name="blue">The blue component (0.0 to 1.0).</param>
+		/// <summary>Creates a calibrated RGB color.</summary>
 		public static NSColor FromCalibratedRgb (nfloat red, nfloat green, nfloat blue)
 		{
 			return FromCalibratedRgba (red, green, blue, 1.0f);
 		}
 
-		/// <param name="red">To be added.</param>
-		///         <param name="green">To be added.</param>
-		///         <param name="blue">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="red">The red component (0.0 to 1.0).</param>
+		/// <param name="green">The green component (0.0 to 1.0).</param>
+		/// <param name="blue">The blue component (0.0 to 1.0).</param>
+		/// <summary>Creates a calibrated RGB color from byte values.</summary>
 		public static NSColor FromCalibratedRgb (byte red, byte green, byte blue)
 		{
 			return FromCalibratedRgba (red / 255.0f, green / 255.0f, blue / 255.0f, 1.0f);
 		}
 
-		/// <param name="red">To be added.</param>
-		///         <param name="green">To be added.</param>
-		///         <param name="blue">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="red">The red component (0.0 to 1.0).</param>
+		/// <param name="green">The green component (0.0 to 1.0).</param>
+		/// <param name="blue">The blue component (0.0 to 1.0).</param>
+		/// <summary>Creates a calibrated RGB color from integer values.</summary>
 		public static NSColor FromCalibratedRgb (int red, int green, int blue)
 		{
 			return FromCalibratedRgb ((byte) red, (byte) green, (byte) blue);
 		}
 
-		/// <param name="red">To be added.</param>
-		///         <param name="green">To be added.</param>
-		///         <param name="blue">To be added.</param>
-		///         <param name="alpha">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="red">The red component (0.0 to 1.0).</param>
+		/// <param name="green">The green component (0.0 to 1.0).</param>
+		/// <param name="blue">The blue component (0.0 to 1.0).</param>
+		/// <param name="alpha">The alpha component (0.0 to 1.0).</param>
+		/// <summary>Creates a calibrated RGB color with alpha.</summary>
 		public static NSColor FromCalibratedRgba (byte red, byte green, byte blue, byte alpha)
 		{
 			return FromCalibratedRgba (red / 255.0f, green / 255.0f, blue / 255.0f, alpha / 255.0f);
 		}
 
-		/// <param name="red">To be added.</param>
-		///         <param name="green">To be added.</param>
-		///         <param name="blue">To be added.</param>
-		///         <param name="alpha">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="red">The red component (0.0 to 1.0).</param>
+		/// <param name="green">The green component (0.0 to 1.0).</param>
+		/// <param name="blue">The blue component (0.0 to 1.0).</param>
+		/// <param name="alpha">The alpha component (0.0 to 1.0).</param>
+		/// <summary>Creates a calibrated RGB color with alpha.</summary>
 		public static NSColor FromCalibratedRgba (int red, int green, int blue, int alpha)
 		{
 			return FromCalibratedRgba ((byte) red, (byte) green, (byte) blue, (byte) alpha);
 		}
 
-		/// <param name="hue">To be added.</param>
-		/// <param name="saturation">To be added.</param>
-		/// <param name="brightness">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="hue">The hue component (0.0 to 1.0).</param>
+		/// <param name="saturation">The saturation component (0.0 to 1.0).</param>
+		/// <param name="brightness">The brightness component (0.0 to 1.0).</param>
+		/// <summary>Creates a calibrated HSB color.</summary>
 		public static NSColor FromCalibratedHsb (nfloat hue, nfloat saturation, nfloat brightness)
 		{
 			return FromCalibratedHsba (hue, saturation, brightness, 1.0f);
 		}
 
-		/// <param name="hue">To be added.</param>
-		///         <param name="saturation">To be added.</param>
-		///         <param name="brightness">To be added.</param>
-		///         <param name="alpha">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="hue">The hue component (0.0 to 1.0).</param>
+		/// <param name="saturation">The saturation component (0.0 to 1.0).</param>
+		/// <param name="brightness">The brightness component (0.0 to 1.0).</param>
+		/// <param name="alpha">The alpha component (0.0 to 1.0).</param>
+		/// <summary>Creates a calibrated HSB color with alpha.</summary>
 		public static NSColor FromCalibratedHsba (byte hue, byte saturation, byte brightness, byte alpha)
 		{
 			return FromCalibratedHsba (hue / 255.0f, saturation / 255.0f, brightness / 255.0f, alpha / 255.0f);
 		}
 
-		/// <param name="hue">To be added.</param>
-		///         <param name="saturation">To be added.</param>
-		///         <param name="brightness">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="hue">The hue component (0.0 to 1.0).</param>
+		/// <param name="saturation">The saturation component (0.0 to 1.0).</param>
+		/// <param name="brightness">The brightness component (0.0 to 1.0).</param>
+		/// <summary>Creates a calibrated HSB color from byte values.</summary>
 		public static NSColor FromCalibratedHsb (byte hue, byte saturation, byte brightness)
 		{
 			return FromCalibratedHsba (hue / 255.0f, saturation / 255.0f, brightness / 255.0f, 1.0f);
 		}
 
-		/// <param name="hue">To be added.</param>
-		///         <param name="saturation">To be added.</param>
-		///         <param name="brightness">To be added.</param>
-		///         <param name="alpha">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="hue">The hue component (0.0 to 1.0).</param>
+		/// <param name="saturation">The saturation component (0.0 to 1.0).</param>
+		/// <param name="brightness">The brightness component (0.0 to 1.0).</param>
+		/// <param name="alpha">The alpha component (0.0 to 1.0).</param>
+		/// <summary>Creates a calibrated HSB color with alpha.</summary>
 		public static NSColor FromCalibratedHsba (int hue, int saturation, int brightness, int alpha)
 		{
 			return FromCalibratedHsba ((byte) hue, (byte) saturation, (byte) brightness, (byte) alpha);
 		}
 
-		/// <param name="hue">To be added.</param>
-		///         <param name="saturation">To be added.</param>
-		///         <param name="brightness">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="hue">The hue component (0.0 to 1.0).</param>
+		/// <param name="saturation">The saturation component (0.0 to 1.0).</param>
+		/// <param name="brightness">The brightness component (0.0 to 1.0).</param>
+		/// <summary>Creates a calibrated HSB color from integer values.</summary>
 		public static NSColor FromCalibratedHsb (int hue, int saturation, int brightness)
 		{
 			return FromCalibratedHsb ((byte) hue, (byte) saturation, (byte) brightness);
 		}
 
-		/// <param name="space">To be added.</param>
-		/// <param name="components">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="space">The space.</param>
+		/// <param name="components">The color components.</param>
+		/// <summary>Creates a color in the specified color space.</summary>
 		public static NSColor FromColorSpace (NSColorSpace space, nfloat []? components)
 		{
 			if (components is null)
@@ -391,9 +355,8 @@ namespace AppKit {
 			}
 		}
 
-		/// <param name="components">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="components">The color components.</param>
+		/// <summary>Gets the color components.</summary>
 		public void GetComponents (out nfloat [] components)
 		{
 			components = new nfloat [(int) ComponentCount];
@@ -403,8 +366,7 @@ namespace AppKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns a string representation of this color.</summary>
 		public override string? ToString ()
 		{
 			try {

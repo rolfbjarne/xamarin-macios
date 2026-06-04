@@ -36,8 +36,7 @@ namespace AddressBookUI {
 			this.s = s;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the count.</summary>
 		public int Count {
 			get { return g ()!.Length; }
 		}
@@ -47,7 +46,7 @@ namespace AddressBookUI {
 		}
 
 		/// <param name="item">The item.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Add.</summary>
 		public void Add (ABPersonProperty item)
 		{
 			List<NSNumber> values;
@@ -60,15 +59,14 @@ namespace AddressBookUI {
 			s (values.ToArray ());
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Clear.</summary>
 		public void Clear ()
 		{
 			s (new NSNumber [0]);
 		}
 
 		/// <param name="item">The item.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Contains.</summary>
 		public bool Contains (ABPersonProperty item)
 		{
 			int id = ABPersonPropertyId.ToId (item);
@@ -84,7 +82,7 @@ namespace AddressBookUI {
 
 		/// <param name="array">The array.</param>
 		///         <param name="arrayIndex">The array index.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Copys to.</summary>
 		public void CopyTo (ABPersonProperty [] array, int arrayIndex)
 		{
 			if (array is null)
@@ -102,8 +100,7 @@ namespace AddressBookUI {
 		}
 
 		/// <param name="item">The item.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Remove.</summary>
 		public bool Remove (ABPersonProperty item)
 		{
 			var dp = g ();
@@ -123,14 +120,12 @@ namespace AddressBookUI {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		IEnumerator IEnumerable.GetEnumerator ()
 		{
 			return GetEnumerator ();
 		}
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Gets enumerator.</summary>
 		public IEnumerator<ABPersonProperty> GetEnumerator ()
 		{
 			var values = g ();

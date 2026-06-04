@@ -33,38 +33,37 @@ using CoreFoundation;
 
 namespace AudioToolbox {
 	/// <summary>An enumeration whose values specify various types of errors relating to the <see cref="AudioToolbox.AudioConverter" />.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum AudioConverterError // Impliclty cast to OSStatus in AudioConverter.h
 	{
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
 		/// <summary>One or more of the parameters are invalid.</summary>
 		ParameterError = -50,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates format not supported.</summary>
 		FormatNotSupported = 0x666d743f, // 'fmt?'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates operation not supported.</summary>
 		OperationNotSupported = 0x6f703f3f, // 'op??'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates property not supported.</summary>
 		PropertyNotSupported = 0x70726f70, // 'prop'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid input size.</summary>
 		InvalidInputSize = 0x696e737a, // 'insz'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid output size.</summary>
 		InvalidOutputSize = 0x6f74737a, // 'otsz'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unspecified error.</summary>
 		UnspecifiedError = 0x77686174, // 'what'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bad property size error.</summary>
 		BadPropertySizeError = 0x2173697a, // '!siz'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates requires packet descriptions error.</summary>
 		RequiresPacketDescriptionsError = 0x21706b64, // '!pkd'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates input sample rate out of range.</summary>
 		InputSampleRateOutOfRange = 0x21697372, // '!isr'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates output sample rate out of range.</summary>
 		OutputSampleRateOutOfRange = 0x216f7372, // '!osr'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hardware in use.</summary>
 		HardwareInUse = 0x68776975, // 'hwiu'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates no hardware permission.</summary>
 		NoHardwarePermission = 0x7065726d, // 'perm'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates audio format unsupported.</summary>
 		AudioFormatUnsupported = 0x21646174, // '!dat' From http://lists.apple.com/archives/coreaudio-api/2009/Feb/msg00082.html
 	}
 

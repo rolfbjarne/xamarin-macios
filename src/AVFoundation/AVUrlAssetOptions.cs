@@ -51,7 +51,7 @@ namespace AVFoundation {
 			: base (dictionary)
 		{
 		}
-		/// <summary>Indicates whether the asset should be prepared to indicate a precise duration and provide precise random access by time.</summary>
+		/// <summary>Indicates whether the asset should be prepared to indicate APrecise duration and provide precise random access by time.</summary>
 		///         <value>
 		///         </value>
 		///         <remarks>The property uses constant AVURLAssetPreferPreciseDurationAndTimingKey value to access the underlying dictionary.</remarks>

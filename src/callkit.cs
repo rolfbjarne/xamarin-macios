@@ -557,7 +557,7 @@ namespace CallKit {
 	interface CXProviderDelegate {
 
 		/// <param name="provider">The provider to which the provider delegate belongs.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Called when the provider has been reset.</summary>
 		[Abstract]
 		[Export ("providerDidReset:")]
 		void DidReset (CXProvider provider);

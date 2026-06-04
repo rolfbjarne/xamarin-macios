@@ -34,7 +34,6 @@ using System.Threading;
 namespace CoreFoundation {
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	public partial class DispatchData : DispatchObject {
 #if !COREBUILD
 		[Preserve (Conditional = true)]
@@ -49,10 +48,9 @@ namespace CoreFoundation {
 		// This constructor will do it for now, but we should support a constructor
 		// that allows custom releasing of the buffer
 		//
-		/// <param name="buffer">To be added.</param>
+		/// <param name="buffer">The buffer.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static DispatchData FromByteBuffer (byte [] buffer)
 		{
 			if (buffer is null)
@@ -63,12 +61,11 @@ namespace CoreFoundation {
 			return new DispatchData (dd, owns: true);
 		}
 
-		/// <param name="buffer">To be added.</param>
-		///         <param name="start">To be added.</param>
-		///         <param name="length">To be added.</param>
+		/// <param name="buffer">The buffer.</param>
+		///         <param name="start">The start.</param>
+		///         <param name="length">The length.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static DispatchData FromByteBuffer (byte [] buffer, int start, int length)
 		{
 			if (buffer is null)
@@ -116,7 +113,6 @@ namespace CoreFoundation {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public nuint Size => dispatch_data_get_size (Handle);
 
 		[DllImport (Constants.libcLibrary)]
@@ -137,11 +133,10 @@ namespace CoreFoundation {
 		[DllImport (Constants.libcLibrary)]
 		extern static IntPtr dispatch_data_create_concat (IntPtr h1, IntPtr h2);
 
-		/// <param name="data1">To be added.</param>
-		///         <param name="data2">To be added.</param>
+		/// <param name="data1">The data1.</param>
+		///         <param name="data2">The data2.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static DispatchData Concat (DispatchData data1, DispatchData data2)
 		{
 			if (data1 is null)

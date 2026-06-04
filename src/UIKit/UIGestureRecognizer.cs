@@ -79,7 +79,7 @@ namespace UIKit {
 		/// <related type="externalDocumentation" href="https://developer.apple.com/documentation/uikit/uigesturerecognizer">Apple documentation for <c>UIGestureRecognizer</c></related>
 		[Register ("__UIGestureRecognizerToken")]
 		public class Token : NSObject {
-			/// <summary>To be added.</summary>
+			/// <summary>Creates a new <see cref="Token" /> instance.</summary>
 			public Token ()
 			{
 				IsDirectBinding = false;
@@ -113,7 +113,7 @@ namespace UIKit {
 				this.action = action;
 			}
 
-			/// <summary>To be added.</summary>
+			/// <summary>Activated.</summary>
 			[Export ("target")]
 			[Preserve (Conditional = true)]
 			public void Activated ()
@@ -135,7 +135,7 @@ namespace UIKit {
 			}
 
 			/// <param name="sender">The object that raised the event.</param>
-			///         <summary>To be added.</summary>
+			///         <summary>Activated.</summary>
 			[Export ("target:")]
 			[Preserve (Conditional = true)]
 			public void Activated (UIGestureRecognizer sender)
@@ -194,8 +194,7 @@ namespace UIKit {
 		//
 		// Used to enumerate all the registered handlers for this UIGestureRecognizer
 		//
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Gets targets.</summary>
 		public IEnumerable<Token> GetTargets ()
 		{
 			var keys = recognizers?.Keys;
@@ -208,7 +207,7 @@ namespace UIKit {
 #if !TVOS
 	public partial class UIRotationGestureRecognizer : UIGestureRecognizer {
 		/// <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="UIRotationGestureRecognizer" /> instance.</summary>
 		public UIRotationGestureRecognizer (Action action) : base (action) { }
 		/// <param name="action">Code to invoke when the gesture is recognized.</param>
 		///         <summary>Constructs a gesture recognizer and provides a method to invoke when the gesture is recognized.</summary>
@@ -220,7 +219,7 @@ namespace UIKit {
 
 	public partial class UILongPressGestureRecognizer : UIGestureRecognizer {
 		/// <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="UILongPressGestureRecognizer" /> instance.</summary>
 		public UILongPressGestureRecognizer (Action action) : base (action) { }
 		/// <param name="action">Code to invoke when the gesture is recognized.</param>
 		///         <summary>Constructs a gesture recognizer and provides a method to invoke when the gesture is recognized.</summary>
@@ -231,7 +230,7 @@ namespace UIKit {
 
 	public partial class UITapGestureRecognizer : UIGestureRecognizer {
 		/// <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="UITapGestureRecognizer" /> instance.</summary>
 		public UITapGestureRecognizer (Action action) : base (action) { }
 		/// <param name="action">Code to invoke when the gesture is recognized.</param>
 		///         <summary>Constructs a gesture recognizer and provides a method to invoke when the gesture is recognized.</summary>
@@ -242,7 +241,7 @@ namespace UIKit {
 
 	public partial class UIPanGestureRecognizer : UIGestureRecognizer {
 		/// <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="UIPanGestureRecognizer" /> instance.</summary>
 		public UIPanGestureRecognizer (Action action) : base (action) { }
 		/// <param name="action">Code to invoke when the gesture is recognized.</param>
 		///         <summary>Constructs a gesture recognizer and provides a method to invoke when the gesture is recognized.</summary>
@@ -256,7 +255,7 @@ namespace UIKit {
 #if !TVOS
 	public partial class UIPinchGestureRecognizer : UIGestureRecognizer {
 		/// <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="UIPinchGestureRecognizer" /> instance.</summary>
 		public UIPinchGestureRecognizer (Action action) : base (action) { }
 		/// <param name="action">Code to invoke when the gesture is recognized.</param>
 		///         <summary>Constructs a gesture recognizer and provides a method to invoke when the gesture is recognized.</summary>
@@ -268,7 +267,7 @@ namespace UIKit {
 
 	public partial class UISwipeGestureRecognizer : UIGestureRecognizer {
 		/// <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="UISwipeGestureRecognizer" /> instance.</summary>
 		public UISwipeGestureRecognizer (Action action) : base (action) { }
 		/// <param name="action">Code to invoke when the gesture is recognized.</param>
 		///         <summary>Constructs a gesture recognizer and provides a method to invoke when the gesture is recognized.</summary>

@@ -150,7 +150,7 @@ namespace CoreText {
 
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTLineGetGlyphRuns (IntPtr line);
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the glyph runs that make up this line.</summary>
 		public CTRun [] GetGlyphRuns ()
 		{
 			var cfArrayRef = CTLineGetGlyphRuns (Handle);
@@ -281,7 +281,7 @@ namespace CoreText {
 		///     <param name="charIndex">The char index.</param>
 		///     <param name="leadingEdge">The leading edge.</param>
 		///     <param name="stop">The stop.</param>
-		///     <summary>To be added.</summary>
+	/// <summary>A delegate that is called for each caret edge in a line.</summary>
 		public delegate void CaretEdgeEnumerator (double offset, nint charIndex, bool leadingEdge, ref bool stop);
 
 		[SupportedOSPlatform ("ios")]

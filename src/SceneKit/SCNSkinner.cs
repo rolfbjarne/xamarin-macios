@@ -46,7 +46,7 @@ namespace SceneKit {
 			return nsa;
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the inverse bind transforms for the bones in the skeleton.</summary>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]

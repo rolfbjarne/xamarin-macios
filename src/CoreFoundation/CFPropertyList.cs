@@ -9,7 +9,7 @@
 #nullable enable
 
 namespace CoreFoundation {
-	/// <summary>To be added.</summary>
+	/// <summary>Provides methods for working with Core Foundation property lists.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -77,7 +77,7 @@ namespace CoreFoundation {
 		unsafe extern static /*CFDataRef*/IntPtr CFPropertyListCreateData (IntPtr allocator, IntPtr propertyList, nint format, nuint options, IntPtr* error);
 
 		/// <param name="format">The format.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Serializes this property list to data in the specified format.</summary>
 		public (NSData? Data, NSError? Error) AsData (CFPropertyListFormat format = CFPropertyListFormat.BinaryFormat1)
 		{
 			IntPtr error;
@@ -130,7 +130,7 @@ namespace CoreFoundation {
 		}
 	}
 
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies the format of a property list.</summary>
 	[Native]
 	public enum CFPropertyListFormat : long {
 		/// <summary>Indicates open step.</summary>
@@ -141,7 +141,7 @@ namespace CoreFoundation {
 		BinaryFormat1 = 200,
 	}
 
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies mutability options for property lists.</summary>
 	[Flags]
 	[Native]
 	public enum CFPropertyListMutabilityOptions : ulong {

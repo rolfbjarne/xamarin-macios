@@ -13,7 +13,6 @@
 
 namespace Intents {
 	/// <summary>Enumerates the minimum and maximum values of a price range.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum INPriceRangeOption {
 		/// <summary>The greatest price.</summary>
 		Maximum,
@@ -23,11 +22,10 @@ namespace Intents {
 
 	public partial class INPriceRange {
 
-		/// <param name="option">To be added.</param>
-		///         <param name="price">To be added.</param>
-		///         <param name="currencyCode">To be added.</param>
+		/// <param name="option">The option.</param>
+		///         <param name="price">The price.</param>
+		///         <param name="currencyCode">The currency code.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public INPriceRange (INPriceRangeOption option, NSDecimalNumber price, string currencyCode)
 			: base (NSObjectFlag.Empty)
 		{

@@ -137,14 +137,14 @@ namespace AudioToolbox {
 			throw new Exception ("Unable to create MusicPlayer: " + result);
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Initializes a new instance of the <see cref="MusicPlayer" /> class.</summary>
 		public MusicPlayer ()
 			: base (Create (), true)
 		{
 		}
 
 		/// <param name="OSstatus">The o sstatus.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="MusicPlayer" /> instance and returns the creation status.</summary>
 		static public MusicPlayer? Create (out MusicPlayerStatus OSstatus)
 		{
 			IntPtr handle;
@@ -166,7 +166,7 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus MusicPlayerSetTime (/* MusicPlayer */ IntPtr inPlayer, /* MusicTimeStamp* */ double inTime);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the current playback time in beats.</summary>
 		public double Time {
 			get {
 				double time;
@@ -197,7 +197,7 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus MusicPlayerPreroll (/* MusicPlayer */ IntPtr inPlayer);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Prepares the music player for playback.</summary>
 		public MusicPlayerStatus Preroll ()
 		{
 			return MusicPlayerPreroll (Handle);
@@ -206,7 +206,7 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus MusicPlayerStart (/* MusicPlayer */ IntPtr inPlayer);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Starts playback of the music sequence.</summary>
 		public MusicPlayerStatus Start ()
 		{
 			return MusicPlayerStart (Handle);
@@ -215,7 +215,7 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus MusicPlayerStop (/* MusicPlayer */ IntPtr inPlayer);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Stops playback of the music sequence.</summary>
 		public MusicPlayerStatus Stop ()
 		{
 			return MusicPlayerStop (Handle);
@@ -224,7 +224,7 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		unsafe extern static /* OSStatus */ MusicPlayerStatus MusicPlayerIsPlaying (/* MusicPlayer */ IntPtr inPlayer, /* Boolean* */ byte* outIsPlaying);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets a value indicating whether the music player is currently playing.</summary>
 		public bool IsPlaying {
 			get {
 				byte res;
@@ -241,7 +241,7 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		unsafe extern static /* OSStatus */ MusicPlayerStatus MusicPlayerGetPlayRateScalar (/* MusicPlayer */ IntPtr inPlayer, /* Float64* */ double* outScaleRate);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the playback rate scalar for the music player.</summary>
 		public double PlayRateScalar {
 			get {
 				double rate;
@@ -260,7 +260,7 @@ namespace AudioToolbox {
 
 		/// <param name="beats">The beats.</param>
 		///         <param name="hostTime">The host time.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the host time corresponding to the specified beat position.</summary>
 		public MusicPlayerStatus GetHostTimeForBeats (double beats, out long hostTime)
 		{
 			hostTime = 0;
@@ -276,7 +276,7 @@ namespace AudioToolbox {
 
 		/// <param name="hostTime">The host time.</param>
 		///         <param name="beats">The beats.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the beat position corresponding to the specified host time.</summary>
 		public MusicPlayerStatus GetBeatsForHostTime (long hostTime, out double beats)
 		{
 			beats = 0;
@@ -294,7 +294,7 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus MusicPlayerSetSequence (/* MusicPlayer */ IntPtr inPlayer, IntPtr inSequence);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the music sequence associated with this player.</summary>
 		public MusicSequence? MusicSequence {
 			get {
 				IntPtr seqHandle;

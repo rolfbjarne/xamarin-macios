@@ -23,10 +23,10 @@ namespace NetworkExtension {
 			Protocols = protocols;
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets the packet data.</summary>
 		public NSData [] Packets { get; set; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets the protocol numbers associated with each packet.</summary>
 		public NSNumber [] Protocols { get; set; }
 #endif
 	}

@@ -145,7 +145,7 @@ namespace ContactsUI {
 
 		/// <param name="picker">The picker.</param>
 		///         <param name="contactProperty">The contact property.</param>
-		///         <summary>Called after the user selects a property of the contact.</summary>
+		///         <summary>Called after the user selects AProperty of the contact.</summary>
 		[Export ("contactPicker:didSelectContactProperty:")]
 		void DidSelectContactProperty (CNContactPickerViewController picker, CNContactProperty contactProperty);
 

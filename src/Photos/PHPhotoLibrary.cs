@@ -28,10 +28,9 @@ namespace Photos {
 			}
 		}
 
-		/// <param name="changeObserver">To be added.</param>
+		/// <param name="changeObserver">The change observer.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public object RegisterChangeObserver (Action<PHChange> changeObserver)
 		{
 			var token = new __phlib_observer (changeObserver);
@@ -39,9 +38,8 @@ namespace Photos {
 			return token;
 		}
 
-		/// <param name="registeredToken">To be added.</param>
+		/// <param name="registeredToken">The registered token.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void UnregisterChangeObserver (object registeredToken)
 		{
 			if (registeredToken is __phlib_observer observer)

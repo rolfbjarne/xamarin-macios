@@ -78,7 +78,7 @@ namespace UIKit {
 		SecureTextInput,
 		/// <summary>Allows the user to enter text.</summary>
 		PlainTextInput,
-		/// <summary>Allows the user to enter a login id and a password.</summary>
+		/// <summary>Allows the user to enter a login id and APassword.</summary>
 		LoginAndPasswordInput,
 	}
 
@@ -232,7 +232,7 @@ namespace UIKit {
 		Motion,
 		/// <summary>A remote-control event originating from a headset or external accessory, for the purpose of controlling multimedia.</summary>
 		RemoteControl,
-		/// <summary>Indicates that a physical button was pressed.</summary>
+		/// <summary>Indicates that APhysical button was pressed.</summary>
 		[MacCatalyst (13, 1)]
 		Presses,
 		[iOS (13, 4), TV (13, 4)]
@@ -630,7 +630,7 @@ namespace UIKit {
 	// NSInteger -> UIDocument.h
 	/// <summary>An enumeration indicating whether the <see cref="UIKit.UIDocument" /> is being saved for the first time or should overwrite an existing save.</summary>
 	///     <remarks>
-	///       <para>One of these enumerated values is used as a parameter to <see cref="UIKit.UIDocument" />s various save-oriented functions (e.g., <see cref="UIKit.UIDocument.Save(Foundation.NSUrl,UIKit.UIDocumentSaveOperation,UIKit.UIOperationHandler)" />, <see cref="UIKit.UIDocument.GetFileAttributesToWrite(Foundation.NSUrl,UIKit.UIDocumentSaveOperation,out Foundation.NSError)" />, etc.).</para>
+	///       <para>One of these enumerated values is used as AParameter to <see cref="UIKit.UIDocument" />s various save-oriented functions (e.g., <see cref="UIKit.UIDocument.Save(Foundation.NSUrl,UIKit.UIDocumentSaveOperation,UIKit.UIOperationHandler)" />, <see cref="UIKit.UIDocument.GetFileAttributesToWrite(Foundation.NSUrl,UIKit.UIDocumentSaveOperation,out Foundation.NSError)" />, etc.).</para>
 	///     </remarks>
 	[Native]
 	[NoTV]
@@ -1146,7 +1146,7 @@ namespace UIKit {
 	[Native ("UITableViewCellAccessoryType")]
 	[MacCatalyst (13, 1)]
 	public enum UITableViewCellAccessory : long {
-		/// <summary>No accessory is displayed. This is the default. Use this value to remove a previously-assigned accessory.</summary>
+		/// <summary>No accessory is displayed. This is the default. Use this value to remove APreviously-assigned accessory.</summary>
 		None,
 		/// <summary>A chevron (right-pointing arrow) is displayed on the right side of the cell. This accessory does not track touches.</summary>
 		DisclosureIndicator,
@@ -1315,7 +1315,7 @@ namespace UIKit {
 		/// <summary>Detects calendar events.</summary>
 		CalendarEvent = 1 << 3,
 
-		/// <summary>A tracking number for a parcel.</summary>
+		/// <summary>A tracking number for AParcel.</summary>
 		[MacCatalyst (13, 1)]
 		ShipmentTrackingNumber = 1 << 4,
 		/// <summary>An airplane flight identifier.</summary>
@@ -1536,7 +1536,7 @@ namespace UIKit {
 		OverFullScreen,
 		/// <summary>Display the modal content over only the parent view controller's content area.</summary>
 		OverCurrentContext,
-		/// <summary>Display the modal content in a popover view for horizontally regular environments, and in full screen mode for horizontally compact environments.</summary>
+		/// <summary>Display the modal content in APopover view for horizontally regular environments, and in full screen mode for horizontally compact environments.</summary>
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		Popover,
@@ -2010,7 +2010,7 @@ namespace UIKit {
 		Word,
 		/// <summary>The unit of text is a sentence.</summary>
 		Sentence,
-		/// <summary>The unit of text is a paragraph.</summary>
+		/// <summary>The unit of text is AParagraph.</summary>
 		Paragraph,
 		/// <summary>The unit of text is a line.</summary>
 		Line,
@@ -3043,7 +3043,7 @@ namespace UIKit {
 		Default,
 		/// <summary>Indicates the style for a selected peek action.</summary>
 		Selected,
-		/// <summary>Indicates the style for a peek action that is destructive.</summary>
+		/// <summary>Indicates the style for APeek action that is destructive.</summary>
 		Destructive,
 	}
 
@@ -3052,13 +3052,13 @@ namespace UIKit {
 	///       <para>
 	///         <see cref="UIKit.UIPress" /> objects model not just digital presses but, for instance, trackpads, so a <see cref="UIKit.UIPress" /> may have both location and force data. Additionally, the system may cancel tracking of a button press at any time. This leads to the following state-machine:</para>
 	///       <para>
-	///         <img href="~/xml/UIKit/_images/UIKit.UIPressPhase_States.png" alt="Statechart showing states and transitions occurring during a press" />
+	///         <img href="~/xml/UIKit/_images/UIKit.UIPressPhase_States.png" alt="Statechart showing states and transitions occurring during APress" />
 	///       </para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum UIPressPhase : long {
-		/// <summary>The initial state of a button. Indicates that a press has begun.</summary>
+		/// <summary>The initial state of a button. Indicates that APress has begun.</summary>
 		Began,
 		/// <summary>Indicates that either the location of the button press or it's <see cref="UIKit.UIPress.Force" /> has changed.</summary>
 		Changed,
@@ -3162,7 +3162,7 @@ namespace UIKit {
 		InvokeDefaultAction,
 		/// <summary>The user should be presented a list of possible actions.</summary>
 		PresentActions,
-		/// <summary>The user wishes to see a preview of the action.</summary>
+		/// <summary>The user wishes to see APreview of the action.</summary>
 		Preview,
 	}
 

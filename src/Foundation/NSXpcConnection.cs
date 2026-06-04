@@ -24,7 +24,7 @@
 namespace Foundation {
 	public partial class NSXpcConnection : NSObject {
 		/// <summary>
-		/// Creates a proxy object for the remote object exposed by the connection.
+		/// Creates AProxy object for the remote object exposed by the connection.
 		/// </summary>
 		/// <typeparam name="TProtocol">The protocol interface type that the remote object conforms to.</typeparam>
 		/// <returns>A proxy object that conforms to the specified protocol.</returns>
@@ -36,7 +36,7 @@ namespace Foundation {
 		}
 
 		/// <summary>
-		/// Creates a proxy object for the remote object exposed by the connection with an error handler.
+		/// Creates AProxy object for the remote object exposed by the connection with an error handler.
 		/// </summary>
 		/// <typeparam name="TProtocol">The protocol interface type that the remote object conforms to.</typeparam>
 		/// <param name="errorHandler">A handler that is called when an error occurs during the communication with the remote object.</param>

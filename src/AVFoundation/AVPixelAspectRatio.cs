@@ -45,7 +45,6 @@ namespace AVFoundation {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override string ToString ()
 		{
 			return String.Format ("(horizontalSpacing={0}, verticalSpacing={1})", HorizontalSpacing, VerticalSpacing);
@@ -62,7 +61,6 @@ namespace AVFoundation {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override int GetHashCode ()
 		{
 			return HashCode.Combine (HorizontalSpacing, VerticalSpacing);
@@ -70,7 +68,6 @@ namespace AVFoundation {
 
 		/// <param name="other">The other.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override bool Equals (object? other)
 		{
 			if (other is AVPixelAspectRatio) {

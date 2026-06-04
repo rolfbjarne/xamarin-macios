@@ -105,7 +105,7 @@ namespace CoreBluetooth {
 		// base class Equals is good enough
 		// this fixes a compiler warning: CS0660: `CoreBluetooth.CBUUID' defines operator == or operator != but does not override Object.Equals(object o)
 		/// <param name="obj">The obj.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Determines whether this CBUUID is equal to the specified object.</summary>
 		public override bool Equals (object? obj)
 		{
 			return base.Equals (obj);

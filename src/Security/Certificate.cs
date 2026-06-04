@@ -162,15 +162,13 @@ namespace Security {
 				return data.ToArray ();
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Converts this certificate to an X509Certificate.</summary>
 		public X509Certificate ToX509Certificate ()
 		{
 			return X509CertificateLoader.LoadCertificate (GetRawData ());
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Converts this certificate to an X509Certificate.</summary>
 		public X509Certificate2 ToX509Certificate2 ()
 		{
 			return X509CertificateLoader.LoadCertificate (GetRawData ());
@@ -212,9 +210,8 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static /* CFDictionaryRef */ IntPtr SecCertificateCopyValues (/* SecCertificateRef */ IntPtr certificate, /* CFArrayRef */ IntPtr keys, /* CFErrorRef _Nullable * */ IntPtr error);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the public key from the certificate.</summary>
 		///         <returns>The return type is <see cref="Security.SecKey" /> on iOS and <see cref="Foundation.NSData" /> on MacOS.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("tvos")]
@@ -270,8 +267,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		static extern IntPtr /* SecKeyRef* */ SecCertificateCopyKey (IntPtr /* SecKeyRef* */ key);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the key associated with this certificate.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -289,8 +285,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		unsafe static extern /* OSStatus */ int SecCertificateCopyCommonName (IntPtr /* SecCertificateRef */ certificate, IntPtr* /* CFStringRef * __nonnull CF_RETURNS_RETAINED */ commonName);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the common name of the certificate.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -312,8 +307,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		unsafe static extern /* OSStatus */ int SecCertificateCopyEmailAddresses (IntPtr /* SecCertificateRef */ certificate, IntPtr* /* CFArrayRef * __nonnull CF_RETURNS_RETAINED */ emailAddresses);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the email addresses from the certificate.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -335,8 +329,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		static extern /* __nullable CFDataRef */ IntPtr SecCertificateCopyNormalizedIssuerSequence (IntPtr /* SecCertificateRef */ certificate);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the normalized issuer sequence.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -354,8 +347,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		static extern /* __nullable CFDataRef */ IntPtr SecCertificateCopyNormalizedSubjectSequence (IntPtr /* SecCertificateRef */ certificate);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the normalized subject sequence.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -381,7 +373,6 @@ namespace Security {
 		static extern /* __nullable CFDataRef */ IntPtr SecCertificateCopySerialNumber (IntPtr /* SecCertificateRef */ certificate);
 #endif
 		/// <summary>Developers should not use this deprecated method. Developers should use 'GetSerialNumber(out NSError)' instead.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -407,9 +398,8 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		unsafe static extern /* __nullable CFDataRef */ IntPtr SecCertificateCopySerialNumberData (IntPtr /* SecCertificateRef */ certificate, IntPtr* /* CFErrorRef * */ error);
 
-		/// <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="error">The error.</param>
+		/// <summary>Gets the serial number of the certificate.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
@@ -469,7 +459,6 @@ namespace Security {
 	}
 
 	/// <summary>Encapsulate a security identity. A security identity comprises a certificate and its private key.</summary>
-	///     <remarks>To be added.</remarks>
 	public partial class SecIdentity : NativeObject {
 		[Preserve (Conditional = true)]
 		internal SecIdentity (NativeHandle handle, bool owns)
@@ -493,8 +482,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		unsafe extern static /* OSStatus */ SecStatusCode SecIdentityCopyCertificate (/* SecIdentityRef */ IntPtr identityRef,  /* SecCertificateRef* */ IntPtr* certificateRef);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the certificate for this identity.</summary>
 		public SecCertificate Certificate {
 			get {
 				SecStatusCode result;
@@ -605,9 +593,8 @@ namespace Security {
 			}
 		}
 
-		/// <param name="certificate">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="certificate">The certificate.</param>
+		/// <summary>Imports an identity from an X509Certificate2.</summary>
 		public static SecIdentity Import (X509Certificate2 certificate)
 		{
 			if (certificate is null)
@@ -627,7 +614,6 @@ namespace Security {
 	}
 
 	/// <summary>Encapsulates a security key, one half of APublic-private key-pair.</summary>
-	///     <remarks>To be added.</remarks>
 	public partial class SecKey : NativeObject {
 		[Preserve (Conditional = true)]
 		internal SecKey (NativeHandle handle, bool owns)
@@ -666,7 +652,6 @@ namespace Security {
 		///         <param name="privateKey">A location to store the private key.</param>
 		///         <summary>Generates a key pair from the provided values.</summary>
 		///         <returns>A status code for the operation.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -741,7 +726,6 @@ namespace Security {
 		///         <param name="privateKey">A location to store the private key.</param>
 		///         <summary>Generates a key pair from the provided values.</summary>
 		///         <returns>A status code for the operation.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
@@ -772,7 +756,6 @@ namespace Security {
 		extern static /* size_t */ nint SecKeyGetBlockSize (IntPtr handle);
 
 		/// <summary>Gets the block size of the key.</summary>
-		///         <remarks>To be added.</remarks>
 		public int BlockSize {
 			get {
 				return (int) SecKeyGetBlockSize (GetCheckedHandle ());
@@ -795,12 +778,11 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		unsafe extern static SecStatusCode SecKeyRawSign (IntPtr handle, SecPadding padding, IntPtr dataToSign, nint dataToSignLen, IntPtr sig, nint* sigLen);
 
-		/// <param name="padding">To be added.</param>
-		///         <param name="dataToSign">To be added.</param>
-		///         <param name="dataToSignLen">To be added.</param>
-		///         <param name="result">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="padding">The padding.</param>
+		/// <param name="dataToSign">The dataToSign.</param>
+		/// <param name="dataToSignLen">The dataToSignLen.</param>
+		/// <param name="result">The result.</param>
+		///         <summary>Signs raw data using the specified padding.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 #if XAMCORE_5_0
@@ -821,11 +803,10 @@ namespace Security {
 			return _RawSign (padding, dataToSign, dataToSignLen, out result);
 		}
 
-		/// <param name="padding">To be added.</param>
-		///         <param name="dataToSign">To be added.</param>
-		///         <param name="result">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="padding">The padding.</param>
+		/// <param name="dataToSign">The dataToSign.</param>
+		/// <param name="result">The result.</param>
+		///         <summary>Signs data using the specified padding.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 #if XAMCORE_5_0
@@ -881,13 +862,12 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static SecStatusCode SecKeyRawVerify (IntPtr handle, SecPadding padding, IntPtr signedData, nint signedLen, IntPtr sign, nint signLen);
 
-		/// <param name="padding">To be added.</param>
-		///         <param name="signedData">To be added.</param>
-		///         <param name="signedDataLen">To be added.</param>
-		///         <param name="signature">To be added.</param>
-		///         <param name="signatureLen">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="padding">The padding.</param>
+		/// <param name="signedData">The signedData.</param>
+		/// <param name="signedDataLen">The signedDataLen.</param>
+		/// <param name="signature">The signature.</param>
+		/// <param name="signatureLen">The signatureLen.</param>
+		///         <summary>Verifies a raw signature using the specified padding.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 #if XAMCORE_5_0
@@ -905,11 +885,10 @@ namespace Security {
 			return SecKeyRawVerify (GetCheckedHandle (), padding, signedData, (nint) signedDataLen, signature, (nint) signatureLen);
 		}
 
-		/// <param name="padding">To be added.</param>
-		///         <param name="signedData">To be added.</param>
-		///         <param name="signature">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="padding">The padding.</param>
+		/// <param name="signedData">The signedData.</param>
+		/// <param name="signature">The signature.</param>
+		///         <summary>Verifies a signature using the specified padding.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 #if XAMCORE_5_0
@@ -969,11 +948,10 @@ namespace Security {
 				return SecKeyEncrypt (GetCheckedHandle (), padding, plainText, plainTextLen, cipherText, cipherTextLenPtr);
 		}
 
-		/// <param name="padding">To be added.</param>
-		///         <param name="plainText">To be added.</param>
-		///         <param name="cipherText">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="padding">The padding.</param>
+		/// <param name="plainText">The plainText.</param>
+		/// <param name="cipherText">The cipherText.</param>
+		///         <summary>Encrypts data using the specified padding.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 #if XAMCORE_5_0
@@ -1001,11 +979,10 @@ namespace Security {
 			}
 		}
 
-		/// <param name="padding">To be added.</param>
-		///         <param name="plainText">To be added.</param>
-		///         <param name="cipherText">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="padding">The padding.</param>
+		/// <param name="plainText">The plainText.</param>
+		/// <param name="cipherText">The cipherText.</param>
+		///         <summary>Encrypts data using the specified padding.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 #if XAMCORE_5_0
@@ -1084,11 +1061,10 @@ namespace Security {
 			}
 		}
 
-		/// <param name="padding">To be added.</param>
-		///         <param name="cipherText">To be added.</param>
-		///         <param name="plainText">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="padding">The padding.</param>
+		/// <param name="cipherText">The cipherText.</param>
+		/// <param name="plainText">The plainText.</param>
+		///         <summary>Decrypts data using the specified padding.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 #if XAMCORE_5_0
@@ -1119,7 +1095,6 @@ namespace Security {
 		///         <param name="error">A location in which to write codes for any errors that occur.</param>
 		///         <summary>Creates and returns a new key pair.</summary>
 		///         <returns>A new key pair.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -1140,12 +1115,11 @@ namespace Security {
 		}
 
 		/// <param name="keyType">Whether to create a DSA elliptic curve or RSA key.</param>
-		///         <param name="keySizeInBits">To be added.</param>
+		/// <param name="keySizeInBits">The keySizeInBits.</param>
 		///         <param name="parameters">A dictionary of <see cref="Security.SecKeyGenerationParameters" /> values, keyed by keys from <see cref="Security.SecKeyParameters" />.</param>
 		///         <param name="error">A location in which to write codes for any errors that occur.</param>
 		///         <summary>Creates and returns a new key pair.</summary>
 		///         <returns>A new key pair.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -1164,7 +1138,6 @@ namespace Security {
 		///         <param name="error">A location in which to write codes for any errors that occur.</param>
 		///         <summary>Creates and returns a new key pair.</summary>
 		///         <returns>A new key pair.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -1188,11 +1161,10 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		unsafe static extern IntPtr /* SecKeyRef _Nullable */ SecKeyCreateWithData (IntPtr /* CFDataRef* */ keyData, IntPtr /* CFDictionaryRef* */ attributes, IntPtr* /* CFErrorRef** */ error);
 
-		/// <param name="keyData">To be added.</param>
-		///         <param name="parameters">To be added.</param>
-		///         <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="keyData">The keyData.</param>
+		/// <param name="parameters">The parameters.</param>
+		/// <param name="error">The error.</param>
+		/// <summary>Creates a key from raw data with the specified parameters.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -1215,14 +1187,13 @@ namespace Security {
 			return key == IntPtr.Zero ? null : new SecKey (key, true);
 		}
 
-		/// <param name="keyData">To be added.</param>
-		///         <param name="keyType">To be added.</param>
-		///         <param name="keyClass">To be added.</param>
-		///         <param name="keySizeInBits">To be added.</param>
-		///         <param name="parameters">To be added.</param>
-		///         <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="keyData">The keyData.</param>
+		/// <param name="keyType">The keyType.</param>
+		/// <param name="keyClass">The keyClass.</param>
+		/// <param name="keySizeInBits">The keySizeInBits.</param>
+		/// <param name="parameters">The parameters.</param>
+		/// <param name="error">The error.</param>
+		/// <summary>Creates a key from raw data with the specified type and class.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -1245,9 +1216,8 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		unsafe static extern IntPtr /* CFDataRef _Nullable */ SecKeyCopyExternalRepresentation (IntPtr /* SecKeyRef* */ key, IntPtr* /* CFErrorRef** */ error);
 
-		/// <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="error">The error.</param>
+		/// <summary>Gets the external representation of the key.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -1263,8 +1233,7 @@ namespace Security {
 			return Runtime.GetNSObject<NSData> (data, true);
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the external representation of the key.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -1286,8 +1255,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		static extern IntPtr /* CFDictionaryRef _Nullable */ SecKeyCopyAttributes (IntPtr /* SecKeyRef* */ key);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the attributes of the key.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -1305,8 +1273,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		static extern IntPtr /* SecKeyRef* */ SecKeyCopyPublicKey (IntPtr /* SecKeyRef* */ key);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the public key from the certificate.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -1324,10 +1291,9 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		static extern byte /* Boolean */ SecKeyIsAlgorithmSupported (IntPtr /* SecKeyRef* */ key, /* SecKeyOperationType */ nint operation, IntPtr /* SecKeyAlgorithm* */ algorithm);
 
-		/// <param name="operation">To be added.</param>
-		///         <param name="algorithm">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="operation">The operation.</param>
+		/// <param name="algorithm">The algorithm.</param>
+		/// <summary>Determines whether the specified algorithm is supported.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -1344,11 +1310,10 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		unsafe static extern /* CFDataRef _Nullable */ IntPtr SecKeyCreateSignature (/* SecKeyRef */ IntPtr key, /* SecKeyAlgorithm */ IntPtr algorithm, /* CFDataRef */ IntPtr dataToSign, /* CFErrorRef* */ IntPtr* error);
 
-		/// <param name="algorithm">To be added.</param>
-		///         <param name="dataToSign">To be added.</param>
-		///         <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="algorithm">The algorithm.</param>
+		/// <param name="dataToSign">The dataToSign.</param>
+		/// <param name="error">The error.</param>
+		/// <summary>Creates a digital signature.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -1375,12 +1340,11 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		unsafe static extern /* Boolean */ byte SecKeyVerifySignature (/* SecKeyRef */ IntPtr key, /* SecKeyAlgorithm */ IntPtr algorithm, /* CFDataRef */ IntPtr signedData, /* CFDataRef */ IntPtr signature, /* CFErrorRef* */ IntPtr* error);
 
-		/// <param name="algorithm">To be added.</param>
-		///         <param name="signedData">To be added.</param>
-		///         <param name="signature">To be added.</param>
-		///         <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="algorithm">The algorithm.</param>
+		/// <param name="signedData">The signedData.</param>
+		/// <param name="signature">The signature.</param>
+		/// <param name="error">The error.</param>
+		/// <summary>Verifies a digital signature.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -1410,11 +1374,10 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		unsafe static extern /* CFDataRef _Nullable */ IntPtr SecKeyCreateEncryptedData (/* SecKeyRef */ IntPtr key, /* SecKeyAlgorithm */ IntPtr algorithm, /* CFDataRef */ IntPtr plaintext, /* CFErrorRef* */ IntPtr* error);
 
-		/// <param name="algorithm">To be added.</param>
-		///         <param name="plaintext">To be added.</param>
-		///         <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="algorithm">The algorithm.</param>
+		/// <param name="plaintext">The plaintext.</param>
+		/// <param name="error">The error.</param>
+		/// <summary>Encrypts data with this key.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -1441,11 +1404,10 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		unsafe static extern /* CFDataRef _Nullable */ IntPtr SecKeyCreateDecryptedData (/* SecKeyRef */ IntPtr key, /* SecKeyAlgorithm */ IntPtr algorithm, /* CFDataRef */ IntPtr ciphertext, /* CFErrorRef* */ IntPtr* error);
 
-		/// <param name="algorithm">To be added.</param>
-		///         <param name="ciphertext">To be added.</param>
-		///         <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="algorithm">The algorithm.</param>
+		/// <param name="ciphertext">The ciphertext.</param>
+		/// <param name="error">The error.</param>
+		/// <summary>Decrypts data with this key.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -1472,12 +1434,11 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		unsafe static extern /* CFDataRef _Nullable */ IntPtr SecKeyCopyKeyExchangeResult (/* SecKeyRef */ IntPtr privateKey, /* SecKeyAlgorithm */ IntPtr algorithm, /* SecKeyRef */ IntPtr publicKey, /* CFDictionaryRef */ IntPtr parameters, /* CFErrorRef* */ IntPtr* error);
 
-		/// <param name="algorithm">To be added.</param>
-		///         <param name="publicKey">To be added.</param>
-		///         <param name="parameters">To be added.</param>
-		///         <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="algorithm">The algorithm.</param>
+		/// <param name="publicKey">The publicKey.</param>
+		/// <param name="parameters">The parameters.</param>
+		/// <param name="error">The error.</param>
+		/// <summary>Performs a key exchange operation.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -1500,12 +1461,11 @@ namespace Security {
 			return Runtime.GetNSObject<NSData> (data, true);
 		}
 
-		/// <param name="algorithm">To be added.</param>
-		///         <param name="publicKey">To be added.</param>
-		///         <param name="parameters">To be added.</param>
-		///         <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="algorithm">The algorithm.</param>
+		/// <param name="publicKey">The publicKey.</param>
+		/// <param name="parameters">The parameters.</param>
+		/// <param name="error">The error.</param>
+		/// <summary>Performs a key exchange operation with the specified parameters.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]

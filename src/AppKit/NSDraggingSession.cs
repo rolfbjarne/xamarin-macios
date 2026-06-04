@@ -13,13 +13,12 @@ namespace AppKit {
 			nsa_classArray.Dispose ();
 		}
 
-		/// <param name="enumOpts">To be added.</param>
-		///         <param name="view">To be added.</param>
-		///         <param name="classArray">To be added.</param>
-		///         <param name="searchOptions">To be added.</param>
-		///         <param name="enumerator">To be added.</param>
+		/// <param name="enumOpts">The enum opts.</param>
+		///         <param name="view">The view.</param>
+		///         <param name="classArray">The class array.</param>
+		///         <param name="searchOptions">The search options.</param>
+		///         <param name="enumerator">The enumerator.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void EnumerateDraggingItems (NSDraggingItemEnumerationOptions enumOpts, NSView view, NSArray classArray, NSDictionary searchOptions, NSDraggingEnumerator enumerator)
 		{
 			EnumerateDraggingItems (enumOpts, view, classArray.Handle, searchOptions, enumerator);

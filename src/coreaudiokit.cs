@@ -31,11 +31,11 @@ namespace CoreAudioKit {
 	[NoMacCatalyst]
 	[Flags]
 	public enum AUGenericViewDisplayFlags : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates title display.</summary>
 		TitleDisplay = 1u << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates properties display.</summary>
 		PropertiesDisplay = 1u << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates parameters display.</summary>
 		ParametersDisplay = 1u << 2,
 	}
 
@@ -53,7 +53,6 @@ namespace CoreAudioKit {
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <summary>Creates a new audio unit view controller from the nib file in <paramref name="bundle" />.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
 		NativeHandle Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);
@@ -62,11 +61,10 @@ namespace CoreAudioKit {
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
 	interface AUAudioUnitViewConfiguration : NSSecureCoding {
-		/// <param name="width">To be added.</param>
-		/// <param name="height">To be added.</param>
-		/// <param name="hostHasController">To be added.</param>
+		/// <param name="width">The width.</param>
+		/// <param name="height">The height.</param>
+		/// <param name="hostHasController">The host has controller.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithWidth:height:hostHasController:")]
 		NativeHandle Constructor (nfloat width, nfloat height, bool hostHasController);
 
@@ -84,16 +82,14 @@ namespace CoreAudioKit {
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (AUAudioUnit))]
 	interface AUAudioUnitViewControllerExtensions {
-		/// <param name="availableViewConfigurations">To be added.</param>
+		/// <param name="availableViewConfigurations">The available view configurations.</param>
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
 		[Export ("supportedViewConfigurations:")]
 		NSIndexSet GetSupportedViewConfigurations (AUAudioUnitViewConfiguration [] availableViewConfigurations);
 
-		/// <param name="viewConfiguration">To be added.</param>
+		/// <param name="viewConfiguration">The view configuration.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("selectViewConfiguration:")]
 		void SelectViewConfiguration (AUAudioUnitViewConfiguration viewConfiguration);
 	}
@@ -105,7 +101,6 @@ namespace CoreAudioKit {
 
 		/// <summary>To be added.</summary>
 		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("customViewPersistentData", ArgumentSemantic.Assign)]
 		NSDictionary<NSString, NSObject> CustomViewPersistentData { get; set; }
@@ -149,9 +144,8 @@ namespace CoreAudioKit {
 	[BaseType (typeof (NSWindowController), Name = "CABTLEMIDIWindowController")]
 	interface CABtleMidiWindowController {
 
-		/// <param name="window">To be added.</param>
+		/// <param name="window">The window.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithWindow:")]
 		NativeHandle Constructor ([NullAllowed] NSWindow window);
 	}
@@ -161,10 +155,9 @@ namespace CoreAudioKit {
 	[BaseType (typeof (NSViewController))]
 	interface CAInterDeviceAudioViewController {
 
-		/// <param name="nibNameOrNull">To be added.</param>
-		/// <param name="nibBundleOrNull">To be added.</param>
+		/// <param name="nibNameOrNull">The nib name or null.</param>
+		/// <param name="nibBundleOrNull">The nib bundle or null.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithNibName:bundle:")]
 		NativeHandle Constructor ([NullAllowed] string nibNameOrNull, [NullAllowed] NSBundle nibBundleOrNull);
 	}
@@ -175,9 +168,8 @@ namespace CoreAudioKit {
 	[BaseType (typeof (NSWindowController))]
 	interface CANetworkBrowserWindowController {
 
-		/// <param name="window">To be added.</param>
+		/// <param name="window">The window.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithWindow:")]
 		NativeHandle Constructor ([NullAllowed] NSWindow window);
 
@@ -204,14 +196,12 @@ namespace CoreAudioKit {
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <summary>Creates and returns a new <see cref="CoreAudioKit.CABTMidiCentralViewController" /> from the specified <paramref name="nibName" /> in the specified <paramref name="bundle" />.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
 		NativeHandle Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);
 
-		/// <param name="withStyle">To be added.</param>
+		/// <param name="withStyle">The with style.</param>
 		/// <summary>Creates a new <see cref="CoreAudioKit.CABTMidiCentralViewController" /> with the specified style.</summary>
-		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithStyle:")]
 		NativeHandle Constructor (UITableViewStyle withStyle);
@@ -233,7 +223,6 @@ namespace CoreAudioKit {
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <summary>Creates and returns a new <see cref="CoreAudioKit.CABTMidiLocalPeripheralViewController" /> from the specified <paramref name="nibName" /> in the specified <paramref name="bundle" />.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
 		NativeHandle Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);
@@ -259,7 +248,6 @@ namespace CoreAudioKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("showingAppNames")]
 		bool ShowingAppNames { [Bind ("isShowingAppNames")] get; set; }
 
@@ -290,25 +278,21 @@ namespace CoreAudioKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("enabled")]
 		bool Enabled { [Bind ("isEnabled")] get; set; }
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("playing")]
 		bool Playing { [Bind ("isPlaying")] get; }
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("recording")]
 		bool Recording { [Bind ("isRecording")] get; }
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("connected")]
 		bool Connected { [Bind ("isConnected")] get; }
 

@@ -5,32 +5,32 @@ namespace Foundation {
 	// Utility enum, ObjC uses NSString
 	/// <summary>An enumeration of known document types. Used with the <see cref="Foundation.NSAttributedStringDocumentAttributes.DocumentType" /> property.</summary>
 	public enum NSDocumentType {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates plain text.</summary>
 		PlainText,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates r t f.</summary>
 		RTF,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates r t f d.</summary>
 		RTFD,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates h t m l.</summary>
 		HTML,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates mac simple text.</summary>
 		[NoiOS, NoTV, NoMacCatalyst]
 		MacSimpleText,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates doc format.</summary>
 		[NoiOS, NoTV, NoMacCatalyst]
 		DocFormat,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates word m l.</summary>
 		[NoiOS, NoTV, NoMacCatalyst]
 		WordML,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates office open xml.</summary>
 		[NoiOS, NoTV, NoMacCatalyst]
 		OfficeOpenXml,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates web archive.</summary>
 		[NoiOS, NoTV, NoMacCatalyst]
 		WebArchive,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates open document.</summary>
 		[NoiOS, NoTV, NoMacCatalyst]
 		OpenDocument,
 	}
@@ -39,9 +39,9 @@ namespace Foundation {
 	// Utility enum, ObjC uses NSString
 	/// <summary>An enumeration that specifies how a document is being viewed. Used with the <see cref="Foundation.NSAttributedStringDocumentAttributes.ViewMode" /> property.</summary>
 	public enum NSDocumentViewMode {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates normal.</summary>
 		Normal,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates page layout.</summary>
 		PageLayout,
 
 	}
@@ -59,15 +59,15 @@ namespace Foundation {
 		Common,
 
 #if MONOMAC
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates connection reply.</summary>
 		[Field ("NSConnectionReplyMode")]
 		ConnectionReply = 2,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates modal panel.</summary>
 		[Field ("NSModalPanelRunLoopMode", "AppKit")]
 		ModalPanel,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates event tracking.</summary>
 		[Field ("NSEventTrackingRunLoopMode", "AppKit")]
 		EventTracking,
 #else
@@ -77,7 +77,7 @@ namespace Foundation {
 		UITracking = 100,
 #endif
 		// If it is not part of these enumerations
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates other.</summary>
 		[Field (null)]
 		Other = 1000,
 	}
@@ -85,86 +85,86 @@ namespace Foundation {
 	/// <summary>Enumerates download status values.</summary>
 	[MacCatalyst (13, 1)]
 	public enum NSItemDownloadingStatus {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		[Field (null)]
 		Unknown = -1,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates current.</summary>
 		[Field ("NSMetadataUbiquitousItemDownloadingStatusCurrent")]
 		Current,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates downloaded.</summary>
 		[Field ("NSMetadataUbiquitousItemDownloadingStatusDownloaded")]
 		Downloaded,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates not downloaded.</summary>
 		[Field ("NSMetadataUbiquitousItemDownloadingStatusNotDownloaded")]
 		NotDownloaded,
 	}
 
 	[MacCatalyst (13, 1)]
 	public enum NSStringTransform {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates latin to katakana.</summary>
 		[Field ("NSStringTransformLatinToKatakana")]
 		LatinToKatakana,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates latin to hiragana.</summary>
 		[Field ("NSStringTransformLatinToHiragana")]
 		LatinToHiragana,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates latin to hangul.</summary>
 		[Field ("NSStringTransformLatinToHangul")]
 		LatinToHangul,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates latin to arabic.</summary>
 		[Field ("NSStringTransformLatinToArabic")]
 		LatinToArabic,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates latin to hebrew.</summary>
 		[Field ("NSStringTransformLatinToHebrew")]
 		LatinToHebrew,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates latin to thai.</summary>
 		[Field ("NSStringTransformLatinToThai")]
 		LatinToThai,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates latin to cyrillic.</summary>
 		[Field ("NSStringTransformLatinToCyrillic")]
 		LatinToCyrillic,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates latin to greek.</summary>
 		[Field ("NSStringTransformLatinToGreek")]
 		LatinToGreek,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates to latin.</summary>
 		[Field ("NSStringTransformToLatin")]
 		ToLatin,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates mandarin to latin.</summary>
 		[Field ("NSStringTransformMandarinToLatin")]
 		MandarinToLatin,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hiragana to katakana.</summary>
 		[Field ("NSStringTransformHiraganaToKatakana")]
 		HiraganaToKatakana,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates fullwidth to halfwidth.</summary>
 		[Field ("NSStringTransformFullwidthToHalfwidth")]
 		FullwidthToHalfwidth,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates to xml hex.</summary>
 		[Field ("NSStringTransformToXMLHex")]
 		ToXmlHex,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates to unicode name.</summary>
 		[Field ("NSStringTransformToUnicodeName")]
 		ToUnicodeName,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates strip combining marks.</summary>
 		[Field ("NSStringTransformStripCombiningMarks")]
 		StripCombiningMarks,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates strip diacritics.</summary>
 		[Field ("NSStringTransformStripDiacritics")]
 		StripDiacritics,
 	}
@@ -173,13 +173,13 @@ namespace Foundation {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NSUrlSessionMultipathServiceType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates handover.</summary>
 		Handover = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates interactive.</summary>
 		Interactive = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates aggregate.</summary>
 		Aggregate = 3,
 	}
 

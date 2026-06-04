@@ -24,7 +24,7 @@ namespace AddressBookUI {
 	[UnsupportedOSPlatform ("tvos")]
 	public class ABPeoplePickerSelectPersonEventArgs : EventArgs {
 
-		/// <param name="person">To be added.</param>
+		/// <param name="person">The person.</param>
 		///         <summary>Initializes a new instance of the ABPeoplePickerSelectPersonEventArgs class.</summary>
 		///         <remarks>
 		///         </remarks>
@@ -35,12 +35,10 @@ namespace AddressBookUI {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public ABPerson Person { get; private set; }
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool Continue { get; set; }
 	}
 
@@ -56,9 +54,9 @@ namespace AddressBookUI {
 	[UnsupportedOSPlatform ("tvos")]
 	public class ABPeoplePickerPerformActionEventArgs : ABPeoplePickerSelectPersonEventArgs {
 
-		/// <param name="person">To be added.</param>
-		///         <param name="property">To be added.</param>
-		///         <param name="identifier">To be added.</param>
+		/// <param name="person">The person.</param>
+		///         <param name="property">The property.</param>
+		///         <param name="identifier">The identifier to use.</param>
 		///         <summary>Initializes a new instance of the ABPeoplePickerPerformActionEventArgs class.</summary>
 		///         <remarks>
 		///         </remarks>
@@ -71,11 +69,9 @@ namespace AddressBookUI {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public ABPersonProperty Property { get; private set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public int? Identifier { get; private set; }
 	}
 
@@ -90,7 +86,7 @@ namespace AddressBookUI {
 	[UnsupportedOSPlatform ("tvos")]
 	public class ABPeoplePickerSelectPerson2EventArgs : EventArgs {
 
-		/// <param name="person">To be added.</param>
+		/// <param name="person">The person.</param>
 		///         <summary>Initializes a new instance of the ABPeoplePickerSelectPerson2EventArgs class.</summary>
 		///         <remarks>
 		///         </remarks>
@@ -101,7 +97,6 @@ namespace AddressBookUI {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public ABPerson Person { get; private set; }
 	}
 
@@ -116,9 +111,9 @@ namespace AddressBookUI {
 	[UnsupportedOSPlatform ("tvos")]
 	public class ABPeoplePickerPerformAction2EventArgs : ABPeoplePickerSelectPerson2EventArgs {
 
-		/// <param name="person">To be added.</param>
-		///         <param name="property">To be added.</param>
-		///         <param name="identifier">To be added.</param>
+		/// <param name="person">The person.</param>
+		///         <param name="property">The property.</param>
+		///         <param name="identifier">The identifier to use.</param>
 		///         <summary>Initializes a new instance of the ABPeoplePickerPerformAction2EventArgs class.</summary>
 		///         <remarks>
 		///         </remarks>
@@ -131,11 +126,9 @@ namespace AddressBookUI {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public ABPersonProperty Property { get; private set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public int? Identifier { get; private set; }
 	}
 
@@ -222,7 +215,6 @@ namespace AddressBookUI {
 		DisplayedPropertiesCollection? displayedProperties;
 		/// <summary>Gets the list of properties that the <see cref="AddressBookUI.ABPeoplePickerNavigationController" /> displays.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public DisplayedPropertiesCollection? DisplayedProperties {
 			get {
 				if (displayedProperties is null) {
@@ -238,7 +230,6 @@ namespace AddressBookUI {
 		ABAddressBook? addressBook;
 		/// <summary>Gets or sets the <see cref="AddressBook.ABAddressBook" /> that contains the list of contacts.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public ABAddressBook? AddressBook {
 			get {
 				MarkDirty ();
@@ -260,9 +251,8 @@ namespace AddressBookUI {
 			return d;
 		}
 
-		/// <param name="e">To be added.</param>
+		/// <param name="e">The event arguments.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		protected internal virtual void OnSelectPerson (ABPeoplePickerSelectPersonEventArgs e)
 		{
 			var h = EnsureEventDelegate<InternalABPeoplePickerNavigationControllerDelegate> ().selectPerson;
@@ -270,9 +260,8 @@ namespace AddressBookUI {
 				h (this, e);
 		}
 
-		/// <param name="e">To be added.</param>
+		/// <param name="e">The event arguments.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		protected internal virtual void OnSelectPerson2 (ABPeoplePickerSelectPerson2EventArgs e)
 		{
 			var h = EnsureEventDelegate<InternalABPeoplePickerNavigationControllerDelegate> ().selectPerson2;
@@ -280,9 +269,8 @@ namespace AddressBookUI {
 				h (this, e);
 		}
 
-		/// <param name="e">To be added.</param>
+		/// <param name="e">The event arguments.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		protected internal virtual void OnPerformAction (ABPeoplePickerPerformActionEventArgs e)
 		{
 			var h = EnsureEventDelegate<InternalABPeoplePickerNavigationControllerDelegate> ().performAction;
@@ -290,9 +278,8 @@ namespace AddressBookUI {
 				h (this, e);
 		}
 
-		/// <param name="e">To be added.</param>
+		/// <param name="e">The event arguments.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		protected internal virtual void OnPerformAction2 (ABPeoplePickerPerformAction2EventArgs e)
 		{
 			var h = EnsureEventDelegate<InternalABPeoplePickerNavigationControllerDelegate> ().performAction2;
@@ -300,9 +287,8 @@ namespace AddressBookUI {
 				h (this, e);
 		}
 
-		/// <param name="e">To be added.</param>
+		/// <param name="e">The event arguments.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		protected internal virtual void OnCancelled (EventArgs e)
 		{
 			var h = EnsureEventDelegate<InternalABPeoplePickerNavigationControllerDelegate> ().cancelled;
@@ -326,7 +312,6 @@ namespace AddressBookUI {
 		}
 
 		/// <summary>In iOS8 and above, this event handler is called after a person has been selected by the user.</summary>
-		/// <remarks>To be added.</remarks>
 		public event EventHandler<ABPeoplePickerSelectPerson2EventArgs> SelectPerson2 {
 			add {
 				EnsureEventDelegate<InternalABPeoplePickerNavigationControllerDelegate> ().selectPerson2 += value;
@@ -351,7 +336,6 @@ namespace AddressBookUI {
 		}
 
 		/// <summary>In iOS8 and above, this event handler will be called after a person has been selected by the user.</summary>
-		/// <remarks>To be added.</remarks>
 		public event EventHandler<ABPeoplePickerPerformAction2EventArgs> PerformAction2 {
 			add {
 				EnsureEventDelegate<InternalABPeoplePickerNavigationControllerDelegate> ().performAction2 += value;

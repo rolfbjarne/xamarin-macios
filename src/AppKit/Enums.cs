@@ -30,33 +30,33 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSRunResponse : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Stopped.</summary>
 		Stopped = -1000,
-		/// <summary>To be added.</summary>
+		/// <summary>Aborted.</summary>
 		Aborted = -1001,
-		/// <summary>To be added.</summary>
+		/// <summary>Continues.</summary>
 		Continues = -1002,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSApplicationActivationOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Default.</summary>
 		Default = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Activate All Windows.</summary>
 		ActivateAllWindows = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Activate Ignoring Other Windows.</summary>
 		ActivateIgnoringOtherWindows = 2,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSApplicationActivationPolicy : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Regular.</summary>
 		Regular,
-		/// <summary>To be added.</summary>
+		/// <summary>Accessory.</summary>
 		Accessory,
-		/// <summary>To be added.</summary>
+		/// <summary>Prohibited.</summary>
 		Prohibited,
 	}
 
@@ -64,34 +64,34 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSApplicationPresentationOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Default.</summary>
 		Default = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Auto Hide Dock.</summary>
 		AutoHideDock = (1 << 0),
-		/// <summary>To be added.</summary>
+		/// <summary>Hide Dock.</summary>
 		HideDock = (1 << 1),
 
-		/// <summary>To be added.</summary>
+		/// <summary>Auto Hide Menu Bar.</summary>
 		AutoHideMenuBar = (1 << 2),
-		/// <summary>To be added.</summary>
+		/// <summary>Hide Menu Bar.</summary>
 		HideMenuBar = (1 << 3),
 
-		/// <summary>To be added.</summary>
+		/// <summary>Disable Apple Menu.</summary>
 		DisableAppleMenu = (1 << 4),
-		/// <summary>To be added.</summary>
+		/// <summary>Disable Process Switching.</summary>
 		DisableProcessSwitching = (1 << 5),
-		/// <summary>To be added.</summary>
+		/// <summary>Disable Force Quit.</summary>
 		DisableForceQuit = (1 << 6),
-		/// <summary>To be added.</summary>
+		/// <summary>Disable Session Termination.</summary>
 		DisableSessionTermination = (1 << 7),
-		/// <summary>To be added.</summary>
+		/// <summary>Disable Hide Application.</summary>
 		DisableHideApplication = (1 << 8),
-		/// <summary>To be added.</summary>
+		/// <summary>Disable Menu Bar Transparency.</summary>
 		DisableMenuBarTransparency = (1 << 9),
 
-		/// <summary>To be added.</summary>
+		/// <summary>Full Screen.</summary>
 		FullScreen = (1 << 10),
-		/// <summary>To be added.</summary>
+		/// <summary>Auto Hide Toolbar.</summary>
 		AutoHideToolbar = (1 << 11),
 		DisableCursorLocationAssistance = (1 << 12),
 	}
@@ -99,184 +99,184 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSApplicationDelegateReply : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Success.</summary>
 		Success,
-		/// <summary>To be added.</summary>
+		/// <summary>Cancel.</summary>
 		Cancel,
-		/// <summary>To be added.</summary>
+		/// <summary>Failure.</summary>
 		Failure,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSRequestUserAttentionType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Critical Request.</summary>
 		CriticalRequest = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Informational Request.</summary>
 		InformationalRequest = 10,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSApplicationTerminateReply : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Cancel.</summary>
 		Cancel,
-		/// <summary>To be added.</summary>
+		/// <summary>Now.</summary>
 		Now,
-		/// <summary>To be added.</summary>
+		/// <summary>Later.</summary>
 		Later,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSApplicationPrintReply : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Cancelled.</summary>
 		Cancelled,
-		/// <summary>To be added.</summary>
+		/// <summary>Success.</summary>
 		Success,
-		/// <summary>To be added.</summary>
+		/// <summary>Failure.</summary>
 		Failure,
-		/// <summary>To be added.</summary>
+		/// <summary>Reply Later.</summary>
 		ReplyLater,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSImageInterpolation : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Default.</summary>
 		Default,
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Low.</summary>
 		Low,
-		/// <summary>To be added.</summary>
+		/// <summary>Medium.</summary>
 		Medium,
-		/// <summary>To be added.</summary>
+		/// <summary>High.</summary>
 		High,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSComposite : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Clear.</summary>
 		Clear,
-		/// <summary>To be added.</summary>
+		/// <summary>Copy.</summary>
 		Copy,
-		/// <summary>To be added.</summary>
+		/// <summary>Source Over.</summary>
 		SourceOver,
-		/// <summary>To be added.</summary>
+		/// <summary>Source In.</summary>
 		SourceIn,
-		/// <summary>To be added.</summary>
+		/// <summary>Source Out.</summary>
 		SourceOut,
-		/// <summary>To be added.</summary>
+		/// <summary>Source Atop.</summary>
 		SourceAtop,
-		/// <summary>To be added.</summary>
+		/// <summary>Destination Over.</summary>
 		DestinationOver,
-		/// <summary>To be added.</summary>
+		/// <summary>Destination In.</summary>
 		DestinationIn,
-		/// <summary>To be added.</summary>
+		/// <summary>Destination Out.</summary>
 		DestinationOut,
-		/// <summary>To be added.</summary>
+		/// <summary>Destination Atop.</summary>
 		DestinationAtop,
-		/// <summary>To be added.</summary>
+		/// <summary>X O R.</summary>
 		XOR,
-		/// <summary>To be added.</summary>
+		/// <summary>Plus Darker.</summary>
 		PlusDarker,
-		/// <summary>To be added.</summary>
+		/// <summary>Highlight.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 10, message: "Use NSCompositeSourceOver instead.")]
 		Highlight,
-		/// <summary>To be added.</summary>
+		/// <summary>Plus Lighter.</summary>
 		PlusLighter,
-		/// <summary>To be added.</summary>
+		/// <summary>Multiply.</summary>
 		Multiply,
-		/// <summary>To be added.</summary>
+		/// <summary>Screen.</summary>
 		Screen,
-		/// <summary>To be added.</summary>
+		/// <summary>Overlay.</summary>
 		Overlay,
-		/// <summary>To be added.</summary>
+		/// <summary>Darken.</summary>
 		Darken,
-		/// <summary>To be added.</summary>
+		/// <summary>Lighten.</summary>
 		Lighten,
-		/// <summary>To be added.</summary>
+		/// <summary>Color Dodge.</summary>
 		ColorDodge,
-		/// <summary>To be added.</summary>
+		/// <summary>Color Burn.</summary>
 		ColorBurn,
-		/// <summary>To be added.</summary>
+		/// <summary>Soft Light.</summary>
 		SoftLight,
-		/// <summary>To be added.</summary>
+		/// <summary>Hard Light.</summary>
 		HardLight,
-		/// <summary>To be added.</summary>
+		/// <summary>Difference.</summary>
 		Difference,
-		/// <summary>To be added.</summary>
+		/// <summary>Exclusion.</summary>
 		Exclusion,
-		/// <summary>To be added.</summary>
+		/// <summary>Hue.</summary>
 		Hue,
-		/// <summary>To be added.</summary>
+		/// <summary>Saturation.</summary>
 		Saturation,
-		/// <summary>To be added.</summary>
+		/// <summary>Color.</summary>
 		Color,
-		/// <summary>To be added.</summary>
+		/// <summary>Luminosity.</summary>
 		Luminosity,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSBackingStore : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Retained.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use 'Buffered' instead.")]
 		Retained,
-		/// <summary>To be added.</summary>
+		/// <summary>Nonretained.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use 'Buffered' instead.")]
 		Nonretained,
-		/// <summary>To be added.</summary>
+		/// <summary>Buffered.</summary>
 		Buffered,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSWindowOrderingMode : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Below.</summary>
 		Below = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Out.</summary>
 		Out,
-		/// <summary>To be added.</summary>
+		/// <summary>Above.</summary>
 		Above,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSFocusRingPlacement : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Ring Only.</summary>
 		RingOnly,
-		/// <summary>To be added.</summary>
+		/// <summary>Ring Below.</summary>
 		RingBelow,
-		/// <summary>To be added.</summary>
+		/// <summary>Ring Above.</summary>
 		RingAbove,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSFocusRingType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Default.</summary>
 		Default,
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Exterior.</summary>
 		Exterior,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSColorRenderingIntent : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Default.</summary>
 		Default,
-		/// <summary>To be added.</summary>
+		/// <summary>Absolute Colorimetric.</summary>
 		AbsoluteColorimetric,
-		/// <summary>To be added.</summary>
+		/// <summary>Relative Colorimetric.</summary>
 		RelativeColorimetric,
-		/// <summary>To be added.</summary>
+		/// <summary>Perceptual.</summary>
 		Perceptual,
-		/// <summary>To be added.</summary>
+		/// <summary>Saturation.</summary>
 		Saturation,
 
 	}
@@ -284,22 +284,22 @@ namespace AppKit {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NSRectEdge : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Min X Edge.</summary>
 		MinXEdge,
-		/// <summary>To be added.</summary>
+		/// <summary>Min Y Edge.</summary>
 		MinYEdge,
-		/// <summary>To be added.</summary>
+		/// <summary>Max X Edge.</summary>
 		MaxXEdge,
-		/// <summary>To be added.</summary>
+		/// <summary>Max Y Edge.</summary>
 		MaxYEdge,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSUserInterfaceLayoutDirection : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Left To Right.</summary>
 		LeftToRight,
-		/// <summary>To be added.</summary>
+		/// <summary>Right To Left.</summary>
 		RightToLeft,
 	}
 
@@ -307,21 +307,21 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSColorSpaceModel : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Unknown.</summary>
 		Unknown = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Gray.</summary>
 		Gray,
-		/// <summary>To be added.</summary>
+		/// <summary>R G B.</summary>
 		RGB,
-		/// <summary>To be added.</summary>
+		/// <summary>C M Y K.</summary>
 		CMYK,
-		/// <summary>To be added.</summary>
+		/// <summary>L A B.</summary>
 		LAB,
-		/// <summary>To be added.</summary>
+		/// <summary>Device N.</summary>
 		DeviceN,
-		/// <summary>To be added.</summary>
+		/// <summary>Indexed.</summary>
 		Indexed,
-		/// <summary>To be added.</summary>
+		/// <summary>Pattern.</summary>
 		Pattern,
 	}
 	#endregion
@@ -333,30 +333,30 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTextTabType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Left.</summary>
 		Left,
-		/// <summary>To be added.</summary>
+		/// <summary>Right.</summary>
 		Right,
-		/// <summary>To be added.</summary>
+		/// <summary>Center.</summary>
 		Center,
-		/// <summary>To be added.</summary>
+		/// <summary>Decimal.</summary>
 		Decimal,
 	}
 
 	[Native]
 	[NoMacCatalyst]
 	public enum NSLineBreakMode : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>By Word Wrapping.</summary>
 		ByWordWrapping,
-		/// <summary>To be added.</summary>
+		/// <summary>Char Wrapping.</summary>
 		CharWrapping,
-		/// <summary>To be added.</summary>
+		/// <summary>Clipping.</summary>
 		Clipping,
-		/// <summary>To be added.</summary>
+		/// <summary>Truncating Head.</summary>
 		TruncatingHead,
-		/// <summary>To be added.</summary>
+		/// <summary>Truncating Tail.</summary>
 		TruncatingTail,
-		/// <summary>To be added.</summary>
+		/// <summary>Truncating Middle.</summary>
 		TruncatingMiddle,
 	}
 
@@ -367,97 +367,97 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSCellType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Null.</summary>
 		Null,
-		/// <summary>To be added.</summary>
+		/// <summary>Text.</summary>
 		Text,
-		/// <summary>To be added.</summary>
+		/// <summary>Image.</summary>
 		Image,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSCellAttribute : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Cell Disabled.</summary>
 		CellDisabled,
-		/// <summary>To be added.</summary>
+		/// <summary>Cell State.</summary>
 		CellState,
-		/// <summary>To be added.</summary>
+		/// <summary>Push In Cell.</summary>
 		PushInCell,
-		/// <summary>To be added.</summary>
+		/// <summary>Cell Editable.</summary>
 		CellEditable,
-		/// <summary>To be added.</summary>
+		/// <summary>Change Gray Cell.</summary>
 		ChangeGrayCell,
-		/// <summary>To be added.</summary>
+		/// <summary>Cell Highlighted.</summary>
 		CellHighlighted,
-		/// <summary>To be added.</summary>
+		/// <summary>Cell Lights By Contents.</summary>
 		CellLightsByContents,
-		/// <summary>To be added.</summary>
+		/// <summary>Cell Lights By Gray.</summary>
 		CellLightsByGray,
-		/// <summary>To be added.</summary>
+		/// <summary>Change Background Cell.</summary>
 		ChangeBackgroundCell,
-		/// <summary>To be added.</summary>
+		/// <summary>Cell Lights By Background.</summary>
 		CellLightsByBackground,
-		/// <summary>To be added.</summary>
+		/// <summary>Cell Is Bordered.</summary>
 		CellIsBordered,
-		/// <summary>To be added.</summary>
+		/// <summary>Cell Has Overlapping Image.</summary>
 		CellHasOverlappingImage,
-		/// <summary>To be added.</summary>
+		/// <summary>Cell Has Image Horizontal.</summary>
 		CellHasImageHorizontal,
-		/// <summary>To be added.</summary>
+		/// <summary>Cell Has Image On Left Or Bottom.</summary>
 		CellHasImageOnLeftOrBottom,
-		/// <summary>To be added.</summary>
+		/// <summary>Cell Changes Contents.</summary>
 		CellChangesContents,
-		/// <summary>To be added.</summary>
+		/// <summary>Cell Is Inset Button.</summary>
 		CellIsInsetButton,
-		/// <summary>To be added.</summary>
+		/// <summary>Cell Allows Mixed State.</summary>
 		CellAllowsMixedState,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSCellImagePosition : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>No Image.</summary>
 		NoImage,
-		/// <summary>To be added.</summary>
+		/// <summary>Image Only.</summary>
 		ImageOnly,
-		/// <summary>To be added.</summary>
+		/// <summary>Image Left.</summary>
 		ImageLeft,
-		/// <summary>To be added.</summary>
+		/// <summary>Image Right.</summary>
 		ImageRight,
-		/// <summary>To be added.</summary>
+		/// <summary>Image Below.</summary>
 		ImageBelow,
-		/// <summary>To be added.</summary>
+		/// <summary>Image Above.</summary>
 		ImageAbove,
-		/// <summary>To be added.</summary>
+		/// <summary>Image Overlaps.</summary>
 		ImageOverlaps,
-		/// <summary>To be added.</summary>
+		/// <summary>Image Leading.</summary>
 		ImageLeading,
-		/// <summary>To be added.</summary>
+		/// <summary>Image Trailing.</summary>
 		ImageTrailing,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSImageScale : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Proportionally Down.</summary>
 		ProportionallyDown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Axes Independently.</summary>
 		AxesIndependently,
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Proportionally Up Or Down.</summary>
 		ProportionallyUpOrDown,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSCellStateValue : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Mixed.</summary>
 		Mixed = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Off.</summary>
 		Off,
-		/// <summary>To be added.</summary>
+		/// <summary>On.</summary>
 		On,
 	}
 
@@ -465,15 +465,15 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSCellStyleMask : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>No Cell.</summary>
 		NoCell = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Contents Cell.</summary>
 		ContentsCell = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Push In Cell.</summary>
 		PushInCell = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Change Gray Cell.</summary>
 		ChangeGrayCell = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Change Background Cell.</summary>
 		ChangeBackgroundCell = 1 << 3,
 	}
 
@@ -481,37 +481,37 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSCellHit : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Content Area.</summary>
 		ContentArea = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Editable Text Area.</summary>
 		EditableTextArea = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Trackable Arae.</summary>
 		TrackableArae = 4,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSControlTint : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Default.</summary>
 		Default = 0,    // system 'default'
-		/// <summary>To be added.</summary>
+		/// <summary>Blue.</summary>
 		Blue = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Graphite.</summary>
 		Graphite = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Clear.</summary>
 		Clear = 7,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSControlSize : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Regular.</summary>
 		Regular = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Small.</summary>
 		Small = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Mini.</summary>
 		Mini = 2,
 		Large = 3,
 		[Mac (26, 0)]
@@ -521,19 +521,19 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSBackgroundStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Normal.</summary>
 		Normal = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Light.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'Normal' instead.")]
 		Light = Normal,
-		/// <summary>To be added.</summary>
+		/// <summary>Emphasized.</summary>
 		Emphasized,
-		/// <summary>To be added.</summary>
+		/// <summary>Dark.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'Emphasized' instead.")]
 		Dark = Emphasized,
-		/// <summary>To be added.</summary>
+		/// <summary>Raised.</summary>
 		Raised,
-		/// <summary>To be added.</summary>
+		/// <summary>Lowered.</summary>
 		Lowered,
 	}
 	#endregion
@@ -543,37 +543,37 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSImageLoadStatus : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Completed.</summary>
 		Completed,
-		/// <summary>To be added.</summary>
+		/// <summary>Cancelled.</summary>
 		Cancelled,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Data.</summary>
 		InvalidData,
-		/// <summary>To be added.</summary>
+		/// <summary>Unexpected E O F.</summary>
 		UnexpectedEOF,
-		/// <summary>To be added.</summary>
+		/// <summary>Read Error.</summary>
 		ReadError,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSImageCacheMode : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Default.</summary>
 		Default,
-		/// <summary>To be added.</summary>
+		/// <summary>Always.</summary>
 		Always,
-		/// <summary>To be added.</summary>
+		/// <summary>By Size.</summary>
 		BySize,
-		/// <summary>To be added.</summary>
+		/// <summary>Never.</summary>
 		Never,
 	}
 
 	[NoMacCatalyst]
 	[Native (ConvertToNative = "NSImageResizingModeExtensions.ToNative", ConvertToManaged = "NSImageResizingModeExtensions.ToManaged")]
 	public enum NSImageResizingMode : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Stretch.</summary>
 		Stretch,
-		/// <summary>To be added.</summary>
+		/// <summary>Tile.</summary>
 		Tile,
 	}
 
@@ -583,26 +583,26 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSAlertStyle : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Warning.</summary>
 		Warning,
-		/// <summary>To be added.</summary>
+		/// <summary>Informational.</summary>
 		Informational,
-		/// <summary>To be added.</summary>
+		/// <summary>Critical.</summary>
 		Critical,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSModalResponse : long {
-		/// <summary>To be added.</summary>
+		/// <summary>O K.</summary>
 		OK = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Cancel.</summary>
 		Cancel = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Stop.</summary>
 		Stop = -1000,
-		/// <summary>To be added.</summary>
+		/// <summary>Abort.</summary>
 		Abort = -1001,
-		/// <summary>To be added.</summary>
+		/// <summary>Continue.</summary>
 		Continue = -1002,
 	}
 	#endregion
@@ -611,76 +611,76 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSEventType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Left Mouse Down.</summary>
 		LeftMouseDown = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Left Mouse Up.</summary>
 		LeftMouseUp = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Right Mouse Down.</summary>
 		RightMouseDown = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Right Mouse Up.</summary>
 		RightMouseUp = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Mouse Moved.</summary>
 		MouseMoved = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Left Mouse Dragged.</summary>
 		LeftMouseDragged = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Right Mouse Dragged.</summary>
 		RightMouseDragged = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Mouse Entered.</summary>
 		MouseEntered = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Mouse Exited.</summary>
 		MouseExited = 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Key Down.</summary>
 		KeyDown = 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Key Up.</summary>
 		KeyUp = 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Flags Changed.</summary>
 		FlagsChanged = 12,
-		/// <summary>To be added.</summary>
+		/// <summary>App Kit Defined.</summary>
 		AppKitDefined = 13,
-		/// <summary>To be added.</summary>
+		/// <summary>System Defined.</summary>
 		SystemDefined = 14,
-		/// <summary>To be added.</summary>
+		/// <summary>Application Defined.</summary>
 		ApplicationDefined = 15,
-		/// <summary>To be added.</summary>
+		/// <summary>Periodic.</summary>
 		Periodic = 16,
-		/// <summary>To be added.</summary>
+		/// <summary>Cursor Update.</summary>
 		CursorUpdate = 17,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Scroll Wheel.</summary>
 		ScrollWheel = 22,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Tablet Point.</summary>
 		TabletPoint = 23,
-		/// <summary>To be added.</summary>
+		/// <summary>Tablet Proximity.</summary>
 		TabletProximity = 24,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Other Mouse Down.</summary>
 		OtherMouseDown = 25,
-		/// <summary>To be added.</summary>
+		/// <summary>Other Mouse Up.</summary>
 		OtherMouseUp = 26,
-		/// <summary>To be added.</summary>
+		/// <summary>Other Mouse Dragged.</summary>
 		OtherMouseDragged = 27,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gesture.</summary>
 		Gesture = 29,
-		/// <summary>To be added.</summary>
+		/// <summary>Magnify.</summary>
 		Magnify = 30,
-		/// <summary>To be added.</summary>
+		/// <summary>Swipe.</summary>
 		Swipe = 31,
-		/// <summary>To be added.</summary>
+		/// <summary>Rotate.</summary>
 		Rotate = 18,
-		/// <summary>To be added.</summary>
+		/// <summary>Begin Gesture.</summary>
 		BeginGesture = 19,
-		/// <summary>To be added.</summary>
+		/// <summary>End Gesture.</summary>
 		EndGesture = 20,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Smart Magnify.</summary>
 		SmartMagnify = 32,
-		/// <summary>To be added.</summary>
+		/// <summary>Quick Look.</summary>
 		QuickLook = 33,
-		/// <summary>To be added.</summary>
+		/// <summary>Pressure.</summary>
 		Pressure = 34, // 10.10.3, 64-bit-only
-		/// <summary>To be added.</summary>
+		/// <summary>Direct Touch.</summary>
 		DirectTouch = 37, // 10.10
 		ChangeMode = 38,
 		[Mac (26, 0)]
@@ -690,74 +690,74 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Flags]
 	public enum NSEventMask : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Left Mouse Down.</summary>
 		LeftMouseDown = 1UL << (int) NSEventType.LeftMouseDown,
-		/// <summary>To be added.</summary>
+		/// <summary>Left Mouse Up.</summary>
 		LeftMouseUp = 1UL << (int) NSEventType.LeftMouseUp,
-		/// <summary>To be added.</summary>
+		/// <summary>Right Mouse Down.</summary>
 		RightMouseDown = 1UL << (int) NSEventType.RightMouseDown,
-		/// <summary>To be added.</summary>
+		/// <summary>Right Mouse Up.</summary>
 		RightMouseUp = 1UL << (int) NSEventType.RightMouseUp,
-		/// <summary>To be added.</summary>
+		/// <summary>Mouse Moved.</summary>
 		MouseMoved = 1UL << (int) NSEventType.MouseMoved,
-		/// <summary>To be added.</summary>
+		/// <summary>Left Mouse Dragged.</summary>
 		LeftMouseDragged = 1UL << (int) NSEventType.LeftMouseDragged,
-		/// <summary>To be added.</summary>
+		/// <summary>Right Mouse Dragged.</summary>
 		RightMouseDragged = 1UL << (int) NSEventType.RightMouseDragged,
-		/// <summary>To be added.</summary>
+		/// <summary>Mouse Entered.</summary>
 		MouseEntered = 1UL << (int) NSEventType.MouseEntered,
-		/// <summary>To be added.</summary>
+		/// <summary>Mouse Exited.</summary>
 		MouseExited = 1UL << (int) NSEventType.MouseExited,
-		/// <summary>To be added.</summary>
+		/// <summary>Key Down.</summary>
 		KeyDown = 1UL << (int) NSEventType.KeyDown,
-		/// <summary>To be added.</summary>
+		/// <summary>Key Up.</summary>
 		KeyUp = 1UL << (int) NSEventType.KeyUp,
-		/// <summary>To be added.</summary>
+		/// <summary>Flags Changed.</summary>
 		FlagsChanged = 1UL << (int) NSEventType.FlagsChanged,
-		/// <summary>To be added.</summary>
+		/// <summary>App Kit Defined.</summary>
 		AppKitDefined = 1UL << (int) NSEventType.AppKitDefined,
-		/// <summary>To be added.</summary>
+		/// <summary>System Defined.</summary>
 		SystemDefined = 1UL << (int) NSEventType.SystemDefined,
-		/// <summary>To be added.</summary>
+		/// <summary>Application Defined.</summary>
 		ApplicationDefined = 1UL << (int) NSEventType.ApplicationDefined,
-		/// <summary>To be added.</summary>
+		/// <summary>Periodic.</summary>
 		Periodic = 1UL << (int) NSEventType.Periodic,
-		/// <summary>To be added.</summary>
+		/// <summary>Cursor Update.</summary>
 		CursorUpdate = 1UL << (int) NSEventType.CursorUpdate,
-		/// <summary>To be added.</summary>
+		/// <summary>Scroll Wheel.</summary>
 		ScrollWheel = 1UL << (int) NSEventType.ScrollWheel,
-		/// <summary>To be added.</summary>
+		/// <summary>Tablet Point.</summary>
 		TabletPoint = 1UL << (int) NSEventType.TabletPoint,
-		/// <summary>To be added.</summary>
+		/// <summary>Tablet Proximity.</summary>
 		TabletProximity = 1UL << (int) NSEventType.TabletProximity,
-		/// <summary>To be added.</summary>
+		/// <summary>Other Mouse Down.</summary>
 		OtherMouseDown = 1UL << (int) NSEventType.OtherMouseDown,
-		/// <summary>To be added.</summary>
+		/// <summary>Other Mouse Up.</summary>
 		OtherMouseUp = 1UL << (int) NSEventType.OtherMouseUp,
-		/// <summary>To be added.</summary>
+		/// <summary>Other Mouse Dragged.</summary>
 		OtherMouseDragged = 1UL << (int) NSEventType.OtherMouseDragged,
-		/// <summary>To be added.</summary>
+		/// <summary>Event Gesture.</summary>
 		EventGesture = 1UL << (int) NSEventType.Gesture,
-		/// <summary>To be added.</summary>
+		/// <summary>Event Magnify.</summary>
 		EventMagnify = 1UL << (int) NSEventType.Magnify,
-		/// <summary>To be added.</summary>
+		/// <summary>Event Swipe.</summary>
 		EventSwipe = 1UL << (int) NSEventType.Swipe,
-		/// <summary>To be added.</summary>
+		/// <summary>Event Rotate.</summary>
 		EventRotate = 1UL << (int) NSEventType.Rotate,
-		/// <summary>To be added.</summary>
+		/// <summary>Event Begin Gesture.</summary>
 		EventBeginGesture = 1UL << (int) NSEventType.BeginGesture,
-		/// <summary>To be added.</summary>
+		/// <summary>Event End Gesture.</summary>
 		EventEndGesture = 1UL << (int) NSEventType.EndGesture,
-		/// <summary>To be added.</summary>
+		/// <summary>Smart Magnify.</summary>
 		SmartMagnify = 1UL << (int) NSEventType.SmartMagnify,
-		/// <summary>To be added.</summary>
+		/// <summary>Pressure.</summary>
 		Pressure = 1UL << (int) NSEventType.Pressure, // 10.10.3, 64-bit-only
-		/// <summary>To be added.</summary>
+		/// <summary>Direct Touch.</summary>
 		DirectTouch = 1UL << (int) NSEventType.DirectTouch, // 10.10
 		ChangeMode = 1UL << (int) NSEventType.ChangeMode,
 		[Mac (26, 0)]
 		MouseCancelled = 1UL << (int) NSEventType.MouseCancelled,
-		/// <summary>To be added.</summary>
+		/// <summary>Any Event.</summary>
 		AnyEvent = unchecked((ulong) UInt64.MaxValue),
 	}
 
@@ -765,36 +765,36 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSEventModifierMask : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Alpha Shift Key Mask.</summary>
 		AlphaShiftKeyMask = 1 << 16,
-		/// <summary>To be added.</summary>
+		/// <summary>Shift Key Mask.</summary>
 		ShiftKeyMask = 1 << 17,
-		/// <summary>To be added.</summary>
+		/// <summary>Control Key Mask.</summary>
 		ControlKeyMask = 1 << 18,
-		/// <summary>To be added.</summary>
+		/// <summary>Alternate Key Mask.</summary>
 		AlternateKeyMask = 1 << 19,
-		/// <summary>To be added.</summary>
+		/// <summary>Command Key Mask.</summary>
 		CommandKeyMask = 1 << 20,
-		/// <summary>To be added.</summary>
+		/// <summary>Numeric Pad Key Mask.</summary>
 		NumericPadKeyMask = 1 << 21,
-		/// <summary>To be added.</summary>
+		/// <summary>Help Key Mask.</summary>
 		HelpKeyMask = 1 << 22,
-		/// <summary>To be added.</summary>
+		/// <summary>Function Key Mask.</summary>
 		FunctionKeyMask = 1 << 23,
-		/// <summary>To be added.</summary>
+		/// <summary>Device Independent Modifier Flags Mask.</summary>
 		DeviceIndependentModifierFlagsMask = 0xffff0000,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSPointingDeviceType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Unknown.</summary>
 		Unknown,
-		/// <summary>To be added.</summary>
+		/// <summary>Pen.</summary>
 		Pen,
-		/// <summary>To be added.</summary>
+		/// <summary>Cursor.</summary>
 		Cursor,
-		/// <summary>To be added.</summary>
+		/// <summary>Eraser.</summary>
 		Eraser,
 	}
 
@@ -802,11 +802,11 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSEventButtonMask : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Pen.</summary>
 		Pen = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Pen Lower.</summary>
 		PenLower = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Pen Upper.</summary>
 		PenUpper = 4,
 	}
 
@@ -814,405 +814,405 @@ namespace AppKit {
 	// It represents values that may be returned by NSEvent.KeyCode (which isn't typed as 'NSKey' because it may be many other values as well).
 	[NoMacCatalyst]
 	public enum NSKey {
-		/// <summary>To be added.</summary>
+		/// <summary>A.</summary>
 		A = 0x00,
-		/// <summary>To be added.</summary>
+		/// <summary>S.</summary>
 		S = 0x01,
-		/// <summary>To be added.</summary>
+		/// <summary>D.</summary>
 		D = 0x02,
-		/// <summary>To be added.</summary>
+		/// <summary>F.</summary>
 		F = 0x03,
-		/// <summary>To be added.</summary>
+		/// <summary>H.</summary>
 		H = 0x04,
-		/// <summary>To be added.</summary>
+		/// <summary>G.</summary>
 		G = 0x05,
-		/// <summary>To be added.</summary>
+		/// <summary>Z.</summary>
 		Z = 0x06,
-		/// <summary>To be added.</summary>
+		/// <summary>X.</summary>
 		X = 0x07,
-		/// <summary>To be added.</summary>
+		/// <summary>C.</summary>
 		C = 0x08,
-		/// <summary>To be added.</summary>
+		/// <summary>V.</summary>
 		V = 0x09,
-		/// <summary>To be added.</summary>
+		/// <summary>B.</summary>
 		B = 0x0B,
-		/// <summary>To be added.</summary>
+		/// <summary>Q.</summary>
 		Q = 0x0C,
-		/// <summary>To be added.</summary>
+		/// <summary>W.</summary>
 		W = 0x0D,
-		/// <summary>To be added.</summary>
+		/// <summary>E.</summary>
 		E = 0x0E,
-		/// <summary>To be added.</summary>
+		/// <summary>R.</summary>
 		R = 0x0F,
-		/// <summary>To be added.</summary>
+		/// <summary>Y.</summary>
 		Y = 0x10,
-		/// <summary>To be added.</summary>
+		/// <summary>T.</summary>
 		T = 0x11,
-		/// <summary>To be added.</summary>
+		/// <summary>D1.</summary>
 		D1 = 0x12,
-		/// <summary>To be added.</summary>
+		/// <summary>D2.</summary>
 		D2 = 0x13,
-		/// <summary>To be added.</summary>
+		/// <summary>D3.</summary>
 		D3 = 0x14,
-		/// <summary>To be added.</summary>
+		/// <summary>D4.</summary>
 		D4 = 0x15,
-		/// <summary>To be added.</summary>
+		/// <summary>D6.</summary>
 		D6 = 0x16,
-		/// <summary>To be added.</summary>
+		/// <summary>D5.</summary>
 		D5 = 0x17,
-		/// <summary>To be added.</summary>
+		/// <summary>Equal.</summary>
 		Equal = 0x18,
-		/// <summary>To be added.</summary>
+		/// <summary>D9.</summary>
 		D9 = 0x19,
-		/// <summary>To be added.</summary>
+		/// <summary>D7.</summary>
 		D7 = 0x1A,
-		/// <summary>To be added.</summary>
+		/// <summary>Minus.</summary>
 		Minus = 0x1B,
-		/// <summary>To be added.</summary>
+		/// <summary>D8.</summary>
 		D8 = 0x1C,
-		/// <summary>To be added.</summary>
+		/// <summary>D0.</summary>
 		D0 = 0x1D,
-		/// <summary>To be added.</summary>
+		/// <summary>Right Bracket.</summary>
 		RightBracket = 0x1E,
-		/// <summary>To be added.</summary>
+		/// <summary>O.</summary>
 		O = 0x1F,
-		/// <summary>To be added.</summary>
+		/// <summary>U.</summary>
 		U = 0x20,
-		/// <summary>To be added.</summary>
+		/// <summary>Left Bracket.</summary>
 		LeftBracket = 0x21,
-		/// <summary>To be added.</summary>
+		/// <summary>I.</summary>
 		I = 0x22,
-		/// <summary>To be added.</summary>
+		/// <summary>P.</summary>
 		P = 0x23,
-		/// <summary>To be added.</summary>
+		/// <summary>L.</summary>
 		L = 0x25,
-		/// <summary>To be added.</summary>
+		/// <summary>J.</summary>
 		J = 0x26,
-		/// <summary>To be added.</summary>
+		/// <summary>Quote.</summary>
 		Quote = 0x27,
-		/// <summary>To be added.</summary>
+		/// <summary>K.</summary>
 		K = 0x28,
-		/// <summary>To be added.</summary>
+		/// <summary>Semicolon.</summary>
 		Semicolon = 0x29,
-		/// <summary>To be added.</summary>
+		/// <summary>Backslash.</summary>
 		Backslash = 0x2A,
-		/// <summary>To be added.</summary>
+		/// <summary>Comma.</summary>
 		Comma = 0x2B,
-		/// <summary>To be added.</summary>
+		/// <summary>Slash.</summary>
 		Slash = 0x2C,
-		/// <summary>To be added.</summary>
+		/// <summary>N.</summary>
 		N = 0x2D,
-		/// <summary>To be added.</summary>
+		/// <summary>M.</summary>
 		M = 0x2E,
-		/// <summary>To be added.</summary>
+		/// <summary>Period.</summary>
 		Period = 0x2F,
-		/// <summary>To be added.</summary>
+		/// <summary>Grave.</summary>
 		Grave = 0x32,
-		/// <summary>To be added.</summary>
+		/// <summary>Keypad Decimal.</summary>
 		KeypadDecimal = 0x41,
-		/// <summary>To be added.</summary>
+		/// <summary>Keypad Multiply.</summary>
 		KeypadMultiply = 0x43,
-		/// <summary>To be added.</summary>
+		/// <summary>Keypad Plus.</summary>
 		KeypadPlus = 0x45,
-		/// <summary>To be added.</summary>
+		/// <summary>Keypad Clear.</summary>
 		KeypadClear = 0x47,
-		/// <summary>To be added.</summary>
+		/// <summary>Keypad Divide.</summary>
 		KeypadDivide = 0x4B,
-		/// <summary>To be added.</summary>
+		/// <summary>Keypad Enter.</summary>
 		KeypadEnter = 0x4C,
-		/// <summary>To be added.</summary>
+		/// <summary>Keypad Minus.</summary>
 		KeypadMinus = 0x4E,
-		/// <summary>To be added.</summary>
+		/// <summary>Keypad Equals.</summary>
 		KeypadEquals = 0x51,
-		/// <summary>To be added.</summary>
+		/// <summary>Keypad0.</summary>
 		Keypad0 = 0x52,
-		/// <summary>To be added.</summary>
+		/// <summary>Keypad1.</summary>
 		Keypad1 = 0x53,
-		/// <summary>To be added.</summary>
+		/// <summary>Keypad2.</summary>
 		Keypad2 = 0x54,
-		/// <summary>To be added.</summary>
+		/// <summary>Keypad3.</summary>
 		Keypad3 = 0x55,
-		/// <summary>To be added.</summary>
+		/// <summary>Keypad4.</summary>
 		Keypad4 = 0x56,
-		/// <summary>To be added.</summary>
+		/// <summary>Keypad5.</summary>
 		Keypad5 = 0x57,
-		/// <summary>To be added.</summary>
+		/// <summary>Keypad6.</summary>
 		Keypad6 = 0x58,
-		/// <summary>To be added.</summary>
+		/// <summary>Keypad7.</summary>
 		Keypad7 = 0x59,
-		/// <summary>To be added.</summary>
+		/// <summary>Keypad8.</summary>
 		Keypad8 = 0x5B,
-		/// <summary>To be added.</summary>
+		/// <summary>Keypad9.</summary>
 		Keypad9 = 0x5C,
-		/// <summary>To be added.</summary>
+		/// <summary>Return.</summary>
 		Return = 0x24,
-		/// <summary>To be added.</summary>
+		/// <summary>Tab.</summary>
 		Tab = 0x30,
-		/// <summary>To be added.</summary>
+		/// <summary>Space.</summary>
 		Space = 0x31,
-		/// <summary>To be added.</summary>
+		/// <summary>Delete.</summary>
 		Delete = 0x33,
-		/// <summary>To be added.</summary>
+		/// <summary>Escape.</summary>
 		Escape = 0x35,
-		/// <summary>To be added.</summary>
+		/// <summary>Command.</summary>
 		Command = 0x37,
-		/// <summary>To be added.</summary>
+		/// <summary>Shift.</summary>
 		Shift = 0x38,
-		/// <summary>To be added.</summary>
+		/// <summary>Caps Lock.</summary>
 		CapsLock = 0x39,
-		/// <summary>To be added.</summary>
+		/// <summary>Option.</summary>
 		Option = 0x3A,
-		/// <summary>To be added.</summary>
+		/// <summary>Control.</summary>
 		Control = 0x3B,
 		RightCommand = 0x36,
-		/// <summary>To be added.</summary>
+		/// <summary>Right Shift.</summary>
 		RightShift = 0x3C,
-		/// <summary>To be added.</summary>
+		/// <summary>Right Option.</summary>
 		RightOption = 0x3D,
-		/// <summary>To be added.</summary>
+		/// <summary>Right Control.</summary>
 		RightControl = 0x3E,
-		/// <summary>To be added.</summary>
+		/// <summary>Function.</summary>
 		Function = 0x3F,
 		F17 = 0x40,
-		/// <summary>To be added.</summary>
+		/// <summary>Volume Up.</summary>
 		VolumeUp = 0x48,
-		/// <summary>To be added.</summary>
+		/// <summary>Volume Down.</summary>
 		VolumeDown = 0x49,
-		/// <summary>To be added.</summary>
+		/// <summary>Mute.</summary>
 		Mute = 0x4A,
-		/// <summary>To be added.</summary>
+		/// <summary>Forward Delete.</summary>
 		ForwardDelete = 0x75,
-		/// <summary>To be added.</summary>
+		/// <summary>I S O Section.</summary>
 		ISOSection = 0x0A,
-		/// <summary>To be added.</summary>
+		/// <summary>J I S Yen.</summary>
 		JISYen = 0x5D,
-		/// <summary>To be added.</summary>
+		/// <summary>J I S Underscore.</summary>
 		JISUnderscore = 0x5E,
-		/// <summary>To be added.</summary>
+		/// <summary>J I S Keypad Comma.</summary>
 		JISKeypadComma = 0x5F,
-		/// <summary>To be added.</summary>
+		/// <summary>J I S Eisu.</summary>
 		JISEisu = 0x66,
-		/// <summary>To be added.</summary>
+		/// <summary>J I S Kana.</summary>
 		JISKana = 0x68,
-		/// <summary>To be added.</summary>
+		/// <summary>F18.</summary>
 		F18 = 0x4F,
-		/// <summary>To be added.</summary>
+		/// <summary>F19.</summary>
 		F19 = 0x50,
-		/// <summary>To be added.</summary>
+		/// <summary>F20.</summary>
 		F20 = 0x5A,
-		/// <summary>To be added.</summary>
+		/// <summary>F5.</summary>
 		F5 = 0x60,
-		/// <summary>To be added.</summary>
+		/// <summary>F6.</summary>
 		F6 = 0x61,
-		/// <summary>To be added.</summary>
+		/// <summary>F7.</summary>
 		F7 = 0x62,
-		/// <summary>To be added.</summary>
+		/// <summary>F3.</summary>
 		F3 = 0x63,
-		/// <summary>To be added.</summary>
+		/// <summary>F8.</summary>
 		F8 = 0x64,
-		/// <summary>To be added.</summary>
+		/// <summary>F9.</summary>
 		F9 = 0x65,
-		/// <summary>To be added.</summary>
+		/// <summary>F11.</summary>
 		F11 = 0x67,
-		/// <summary>To be added.</summary>
+		/// <summary>F13.</summary>
 		F13 = 0x69,
-		/// <summary>To be added.</summary>
+		/// <summary>F16.</summary>
 		F16 = 0x6A,
-		/// <summary>To be added.</summary>
+		/// <summary>F14.</summary>
 		F14 = 0x6B,
-		/// <summary>To be added.</summary>
+		/// <summary>F10.</summary>
 		F10 = 0x6D,
-		/// <summary>To be added.</summary>
+		/// <summary>F12.</summary>
 		F12 = 0x6F,
-		/// <summary>To be added.</summary>
+		/// <summary>F15.</summary>
 		F15 = 0x71,
-		/// <summary>To be added.</summary>
+		/// <summary>Help.</summary>
 		Help = 0x72,
-		/// <summary>To be added.</summary>
+		/// <summary>Home.</summary>
 		Home = 0x73,
-		/// <summary>To be added.</summary>
+		/// <summary>Page Up.</summary>
 		PageUp = 0x74,
-		/// <summary>To be added.</summary>
+		/// <summary>F4.</summary>
 		F4 = 0x76,
-		/// <summary>To be added.</summary>
+		/// <summary>End.</summary>
 		End = 0x77,
-		/// <summary>To be added.</summary>
+		/// <summary>F2.</summary>
 		F2 = 0x78,
-		/// <summary>To be added.</summary>
+		/// <summary>Page Down.</summary>
 		PageDown = 0x79,
-		/// <summary>To be added.</summary>
+		/// <summary>F1.</summary>
 		F1 = 0x7A,
-		/// <summary>To be added.</summary>
+		/// <summary>Left Arrow.</summary>
 		LeftArrow = 0x7B,
-		/// <summary>To be added.</summary>
+		/// <summary>Right Arrow.</summary>
 		RightArrow = 0x7C,
-		/// <summary>To be added.</summary>
+		/// <summary>Down Arrow.</summary>
 		DownArrow = 0x7D,
-		/// <summary>To be added.</summary>
+		/// <summary>Up Arrow.</summary>
 		UpArrow = 0x7E,
 	}
 
 	// This is an untyped enum in AppKit's NSEvent.h
 	[NoMacCatalyst]
 	public enum NSFunctionKey : int {
-		/// <summary>To be added.</summary>
+		/// <summary>Up Arrow.</summary>
 		UpArrow = 0xF700,
-		/// <summary>To be added.</summary>
+		/// <summary>Down Arrow.</summary>
 		DownArrow = 0xF701,
-		/// <summary>To be added.</summary>
+		/// <summary>Left Arrow.</summary>
 		LeftArrow = 0xF702,
-		/// <summary>To be added.</summary>
+		/// <summary>Right Arrow.</summary>
 		RightArrow = 0xF703,
-		/// <summary>To be added.</summary>
+		/// <summary>F1.</summary>
 		F1 = 0xF704,
-		/// <summary>To be added.</summary>
+		/// <summary>F2.</summary>
 		F2 = 0xF705,
-		/// <summary>To be added.</summary>
+		/// <summary>F3.</summary>
 		F3 = 0xF706,
-		/// <summary>To be added.</summary>
+		/// <summary>F4.</summary>
 		F4 = 0xF707,
-		/// <summary>To be added.</summary>
+		/// <summary>F5.</summary>
 		F5 = 0xF708,
-		/// <summary>To be added.</summary>
+		/// <summary>F6.</summary>
 		F6 = 0xF709,
-		/// <summary>To be added.</summary>
+		/// <summary>F7.</summary>
 		F7 = 0xF70A,
-		/// <summary>To be added.</summary>
+		/// <summary>F8.</summary>
 		F8 = 0xF70B,
-		/// <summary>To be added.</summary>
+		/// <summary>F9.</summary>
 		F9 = 0xF70C,
-		/// <summary>To be added.</summary>
+		/// <summary>F10.</summary>
 		F10 = 0xF70D,
-		/// <summary>To be added.</summary>
+		/// <summary>F11.</summary>
 		F11 = 0xF70E,
-		/// <summary>To be added.</summary>
+		/// <summary>F12.</summary>
 		F12 = 0xF70F,
-		/// <summary>To be added.</summary>
+		/// <summary>F13.</summary>
 		F13 = 0xF710,
-		/// <summary>To be added.</summary>
+		/// <summary>F14.</summary>
 		F14 = 0xF711,
-		/// <summary>To be added.</summary>
+		/// <summary>F15.</summary>
 		F15 = 0xF712,
-		/// <summary>To be added.</summary>
+		/// <summary>F16.</summary>
 		F16 = 0xF713,
-		/// <summary>To be added.</summary>
+		/// <summary>F17.</summary>
 		F17 = 0xF714,
-		/// <summary>To be added.</summary>
+		/// <summary>F18.</summary>
 		F18 = 0xF715,
-		/// <summary>To be added.</summary>
+		/// <summary>F19.</summary>
 		F19 = 0xF716,
-		/// <summary>To be added.</summary>
+		/// <summary>F20.</summary>
 		F20 = 0xF717,
-		/// <summary>To be added.</summary>
+		/// <summary>F21.</summary>
 		F21 = 0xF718,
-		/// <summary>To be added.</summary>
+		/// <summary>F22.</summary>
 		F22 = 0xF719,
-		/// <summary>To be added.</summary>
+		/// <summary>F23.</summary>
 		F23 = 0xF71A,
-		/// <summary>To be added.</summary>
+		/// <summary>F24.</summary>
 		F24 = 0xF71B,
-		/// <summary>To be added.</summary>
+		/// <summary>F25.</summary>
 		F25 = 0xF71C,
-		/// <summary>To be added.</summary>
+		/// <summary>F26.</summary>
 		F26 = 0xF71D,
-		/// <summary>To be added.</summary>
+		/// <summary>F27.</summary>
 		F27 = 0xF71E,
-		/// <summary>To be added.</summary>
+		/// <summary>F28.</summary>
 		F28 = 0xF71F,
-		/// <summary>To be added.</summary>
+		/// <summary>F29.</summary>
 		F29 = 0xF720,
-		/// <summary>To be added.</summary>
+		/// <summary>F30.</summary>
 		F30 = 0xF721,
-		/// <summary>To be added.</summary>
+		/// <summary>F31.</summary>
 		F31 = 0xF722,
-		/// <summary>To be added.</summary>
+		/// <summary>F32.</summary>
 		F32 = 0xF723,
-		/// <summary>To be added.</summary>
+		/// <summary>F33.</summary>
 		F33 = 0xF724,
-		/// <summary>To be added.</summary>
+		/// <summary>F34.</summary>
 		F34 = 0xF725,
-		/// <summary>To be added.</summary>
+		/// <summary>F35.</summary>
 		F35 = 0xF726,
-		/// <summary>To be added.</summary>
+		/// <summary>Insert.</summary>
 		Insert = 0xF727,
-		/// <summary>To be added.</summary>
+		/// <summary>Delete.</summary>
 		Delete = 0xF728,
-		/// <summary>To be added.</summary>
+		/// <summary>Home.</summary>
 		Home = 0xF729,
-		/// <summary>To be added.</summary>
+		/// <summary>Begin.</summary>
 		Begin = 0xF72A,
-		/// <summary>To be added.</summary>
+		/// <summary>End.</summary>
 		End = 0xF72B,
-		/// <summary>To be added.</summary>
+		/// <summary>Page Up.</summary>
 		PageUp = 0xF72C,
-		/// <summary>To be added.</summary>
+		/// <summary>Page Down.</summary>
 		PageDown = 0xF72D,
-		/// <summary>To be added.</summary>
+		/// <summary>Print Screen.</summary>
 		PrintScreen = 0xF72E,
-		/// <summary>To be added.</summary>
+		/// <summary>Scroll Lock.</summary>
 		ScrollLock = 0xF72F,
-		/// <summary>To be added.</summary>
+		/// <summary>Pause.</summary>
 		Pause = 0xF730,
-		/// <summary>To be added.</summary>
+		/// <summary>Sys Req.</summary>
 		SysReq = 0xF731,
-		/// <summary>To be added.</summary>
+		/// <summary>Break.</summary>
 		Break = 0xF732,
-		/// <summary>To be added.</summary>
+		/// <summary>Reset.</summary>
 		Reset = 0xF733,
-		/// <summary>To be added.</summary>
+		/// <summary>Stop.</summary>
 		Stop = 0xF734,
-		/// <summary>To be added.</summary>
+		/// <summary>Menu.</summary>
 		Menu = 0xF735,
-		/// <summary>To be added.</summary>
+		/// <summary>User.</summary>
 		User = 0xF736,
-		/// <summary>To be added.</summary>
+		/// <summary>System.</summary>
 		System = 0xF737,
-		/// <summary>To be added.</summary>
+		/// <summary>Print.</summary>
 		Print = 0xF738,
-		/// <summary>To be added.</summary>
+		/// <summary>Clear Line.</summary>
 		ClearLine = 0xF739,
-		/// <summary>To be added.</summary>
+		/// <summary>Clear Display.</summary>
 		ClearDisplay = 0xF73A,
-		/// <summary>To be added.</summary>
+		/// <summary>Insert Line.</summary>
 		InsertLine = 0xF73B,
-		/// <summary>To be added.</summary>
+		/// <summary>Delete Line.</summary>
 		DeleteLine = 0xF73C,
-		/// <summary>To be added.</summary>
+		/// <summary>Insert Char.</summary>
 		InsertChar = 0xF73D,
-		/// <summary>To be added.</summary>
+		/// <summary>Delete Char.</summary>
 		DeleteChar = 0xF73E,
-		/// <summary>To be added.</summary>
+		/// <summary>Prev.</summary>
 		Prev = 0xF73F,
-		/// <summary>To be added.</summary>
+		/// <summary>Next.</summary>
 		Next = 0xF740,
-		/// <summary>To be added.</summary>
+		/// <summary>Select.</summary>
 		Select = 0xF741,
-		/// <summary>To be added.</summary>
+		/// <summary>Execute.</summary>
 		Execute = 0xF742,
-		/// <summary>To be added.</summary>
+		/// <summary>Undo.</summary>
 		Undo = 0xF743,
-		/// <summary>To be added.</summary>
+		/// <summary>Redo.</summary>
 		Redo = 0xF744,
-		/// <summary>To be added.</summary>
+		/// <summary>Find.</summary>
 		Find = 0xF745,
-		/// <summary>To be added.</summary>
+		/// <summary>Help.</summary>
 		Help = 0xF746,
-		/// <summary>To be added.</summary>
+		/// <summary>Mode Switch.</summary>
 		ModeSwitch = 0xF747,
 	}
 
 	[NoMacCatalyst]
 	public enum NSEventSubtype : short {
 		/* event subtypes for NSEventTypeAppKitDefined events */
-		/// <summary>To be added.</summary>
+		/// <summary>Window Exposed.</summary>
 		WindowExposed = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Application Activated.</summary>
 		ApplicationActivated = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Application Deactivated.</summary>
 		ApplicationDeactivated = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Window Moved.</summary>
 		WindowMoved = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Screen Changed.</summary>
 		ScreenChanged = 8,
 		/* event subtypes for NSEventTypeSystemDefined events */
 		/* the value is repeated from above */
@@ -1233,54 +1233,54 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSViewResizingMask : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Not Sizable.</summary>
 		NotSizable = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Min X Margin.</summary>
 		MinXMargin = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Width Sizable.</summary>
 		WidthSizable = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Max X Margin.</summary>
 		MaxXMargin = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Min Y Margin.</summary>
 		MinYMargin = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Height Sizable.</summary>
 		HeightSizable = 16,
-		/// <summary>To be added.</summary>
+		/// <summary>Max Y Margin.</summary>
 		MaxYMargin = 32,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSBorderType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>No Border.</summary>
 		NoBorder,
-		/// <summary>To be added.</summary>
+		/// <summary>Line Border.</summary>
 		LineBorder,
-		/// <summary>To be added.</summary>
+		/// <summary>Bezel Border.</summary>
 		BezelBorder,
-		/// <summary>To be added.</summary>
+		/// <summary>Groove Border.</summary>
 		GrooveBorder,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTextFieldBezelStyle : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Square.</summary>
 		Square,
-		/// <summary>To be added.</summary>
+		/// <summary>Rounded.</summary>
 		Rounded,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSViewLayerContentsRedrawPolicy : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Never.</summary>
 		Never,
-		/// <summary>To be added.</summary>
+		/// <summary>On Set Needs Display.</summary>
 		OnSetNeedsDisplay,
-		/// <summary>To be added.</summary>
+		/// <summary>During View Resize.</summary>
 		DuringViewResize,
-		/// <summary>To be added.</summary>
+		/// <summary>Before View Resize.</summary>
 		BeforeViewResize,
 		Crossfade = 4,
 	}
@@ -1288,29 +1288,29 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSViewLayerContentsPlacement : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Scale Axes Independently.</summary>
 		ScaleAxesIndependently,
-		/// <summary>To be added.</summary>
+		/// <summary>Scale Proportionally To Fit.</summary>
 		ScaleProportionallyToFit,
-		/// <summary>To be added.</summary>
+		/// <summary>Scale Proportionally To Fill.</summary>
 		ScaleProportionallyToFill,
-		/// <summary>To be added.</summary>
+		/// <summary>Center.</summary>
 		Center,
-		/// <summary>To be added.</summary>
+		/// <summary>Top.</summary>
 		Top,
-		/// <summary>To be added.</summary>
+		/// <summary>Top Right.</summary>
 		TopRight,
-		/// <summary>To be added.</summary>
+		/// <summary>Right.</summary>
 		Right,
-		/// <summary>To be added.</summary>
+		/// <summary>Bottom Right.</summary>
 		BottomRight,
-		/// <summary>To be added.</summary>
+		/// <summary>Bottom.</summary>
 		Bottom,
-		/// <summary>To be added.</summary>
+		/// <summary>Bottom Left.</summary>
 		BottomLeft,
-		/// <summary>To be added.</summary>
+		/// <summary>Left.</summary>
 		Left,
-		/// <summary>To be added.</summary>
+		/// <summary>Top Left.</summary>
 		TopLeft,
 	}
 
@@ -1321,43 +1321,43 @@ namespace AppKit {
 	[Flags]
 	[Native ("NSWindowStyleMask")]
 	public enum NSWindowStyle : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Borderless.</summary>
 		Borderless = 0 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Titled.</summary>
 		Titled = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Closable.</summary>
 		Closable = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Miniaturizable.</summary>
 		Miniaturizable = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Resizable.</summary>
 		Resizable = 1 << 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Utility.</summary>
 		Utility = 1 << 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Doc Modal.</summary>
 		DocModal = 1 << 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Nonactivating Panel.</summary>
 		NonactivatingPanel = 1 << 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Textured Background.</summary>
 		[Deprecated (PlatformName.MacOSX, 11, 0, message: "Don't use 'TexturedBackground' anymore.")]
 		TexturedBackground = 1 << 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Unified Title And Toolbar.</summary>
 		UnifiedTitleAndToolbar = 1 << 12,
-		/// <summary>To be added.</summary>
+		/// <summary>Hud.</summary>
 		Hud = 1 << 13,
-		/// <summary>To be added.</summary>
+		/// <summary>Full Screen Window.</summary>
 		FullScreenWindow = 1 << 14,
-		/// <summary>To be added.</summary>
+		/// <summary>Full Size Content View.</summary>
 		FullSizeContentView = 1 << 15,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSWindowSharingType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Read Only.</summary>
 		ReadOnly,
-		/// <summary>To be added.</summary>
+		/// <summary>Read Write.</summary>
 		[Deprecated (PlatformName.MacOSX, 15, 0, message: "Use 'ReadOnly' instead.")]
 		ReadWrite,
 	}
@@ -1365,11 +1365,11 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSWindowBackingLocation : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Default.</summary>
 		Default,
-		/// <summary>To be added.</summary>
+		/// <summary>Video Memory.</summary>
 		VideoMemory,
-		/// <summary>To be added.</summary>
+		/// <summary>Main Memory.</summary>
 		MainMemory,
 	}
 
@@ -1377,31 +1377,31 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSWindowCollectionBehavior : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Default.</summary>
 		Default = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Can Join All Spaces.</summary>
 		CanJoinAllSpaces = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Move To Active Space.</summary>
 		MoveToActiveSpace = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Managed.</summary>
 		Managed = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Transient.</summary>
 		Transient = 1 << 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Stationary.</summary>
 		Stationary = 1 << 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Participates In Cycle.</summary>
 		ParticipatesInCycle = 1 << 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Ignores Cycle.</summary>
 		IgnoresCycle = 1 << 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Full Screen Primary.</summary>
 		FullScreenPrimary = 1 << 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Full Screen Auxiliary.</summary>
 		FullScreenAuxiliary = 1 << 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Full Screen None.</summary>
 		FullScreenNone = 1 << 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Full Screen Allows Tiling.</summary>
 		FullScreenAllowsTiling = 1 << 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Full Screen Disallows Tiling.</summary>
 		FullScreenDisallowsTiling = 1 << 12,
 		Primary = 1 << 16,
 		Auxiliary = 1 << 17,
@@ -1412,39 +1412,39 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSWindowNumberListOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>All Application.</summary>
 		AllApplication = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>All Spaces.</summary>
 		AllSpaces = 1 << 4,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSSelectionDirection : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Direct.</summary>
 		Direct = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Next.</summary>
 		Next,
-		/// <summary>To be added.</summary>
+		/// <summary>Previous.</summary>
 		Previous,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSWindowButton : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Close Button.</summary>
 		CloseButton,
-		/// <summary>To be added.</summary>
+		/// <summary>Miniaturize Button.</summary>
 		MiniaturizeButton,
-		/// <summary>To be added.</summary>
+		/// <summary>Zoom Button.</summary>
 		ZoomButton,
-		/// <summary>To be added.</summary>
+		/// <summary>Toolbar Button.</summary>
 		ToolbarButton,
-		/// <summary>To be added.</summary>
+		/// <summary>Document Icon Button.</summary>
 		DocumentIconButton,
-		/// <summary>To be added.</summary>
+		/// <summary>Document Versions Button.</summary>
 		DocumentVersionsButton = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Full Screen Button.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 12, message: "The standard window button for FullScreenButton is always null; use ZoomButton instead.")]
 		FullScreenButton,
 	}
@@ -1453,20 +1453,20 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSTouchPhase : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Began.</summary>
 		Began = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Moved.</summary>
 		Moved = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Stationary.</summary>
 		Stationary = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Ended.</summary>
 		Ended = 1 << 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Cancelled.</summary>
 		Cancelled = 1 << 4,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touching.</summary>
 		Touching = Began | Moved | Stationary,
-		/// <summary>To be added.</summary>
+		/// <summary>Any.</summary>
 		Any = unchecked((ulong) UInt64.MaxValue),
 	}
 	#endregion
@@ -1475,24 +1475,24 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSAnimationCurve : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Ease In Out.</summary>
 		EaseInOut,
-		/// <summary>To be added.</summary>
+		/// <summary>Ease In.</summary>
 		EaseIn,
-		/// <summary>To be added.</summary>
+		/// <summary>Ease Out.</summary>
 		EaseOut,
-		/// <summary>To be added.</summary>
+		/// <summary>Linear.</summary>
 		Linear,
 	};
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSAnimationBlockingMode : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Blocking.</summary>
 		Blocking,
-		/// <summary>To be added.</summary>
+		/// <summary>Nonblocking.</summary>
 		Nonblocking,
-		/// <summary>To be added.</summary>
+		/// <summary>Nonblocking Threaded.</summary>
 		NonblockingThreaded,
 	};
 	#endregion
@@ -1502,36 +1502,36 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTitlePosition : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>No Title.</summary>
 		NoTitle,
-		/// <summary>To be added.</summary>
+		/// <summary>Above Top.</summary>
 		AboveTop,
-		/// <summary>To be added.</summary>
+		/// <summary>At Top.</summary>
 		AtTop,
-		/// <summary>To be added.</summary>
+		/// <summary>Below Top.</summary>
 		BelowTop,
-		/// <summary>To be added.</summary>
+		/// <summary>Above Bottom.</summary>
 		AboveBottom,
-		/// <summary>To be added.</summary>
+		/// <summary>At Bottom.</summary>
 		AtBottom,
-		/// <summary>To be added.</summary>
+		/// <summary>Below Bottom.</summary>
 		BelowBottom,
 	};
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSBoxType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>N S Box Primary.</summary>
 		NSBoxPrimary,
-		/// <summary>To be added.</summary>
+		/// <summary>N S Box Secondary.</summary>
 		[Obsoleted (PlatformName.MacOSX, 10, 15, message: "Identical to 'NSBoxPrimary'.")]
 		NSBoxSecondary,
-		/// <summary>To be added.</summary>
+		/// <summary>N S Box Separator.</summary>
 		NSBoxSeparator,
-		/// <summary>To be added.</summary>
+		/// <summary>N S Box Old Style.</summary>
 		[Obsoleted (PlatformName.MacOSX, 10, 15, message: "'NSBoxOldStyle' is discouraged. Use 'NSBoxPrimary' or 'NSBoxCustom'.")]
 		NSBoxOldStyle,
-		/// <summary>To be added.</summary>
+		/// <summary>N S Box Custom.</summary>
 		NSBoxCustom,
 	};
 	#endregion
@@ -1540,25 +1540,25 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSButtonType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Momentary Light Button.</summary>
 		MomentaryLightButton,
-		/// <summary>To be added.</summary>
+		/// <summary>Push On Push Off.</summary>
 		PushOnPushOff,
-		/// <summary>To be added.</summary>
+		/// <summary>Toggle.</summary>
 		Toggle,
-		/// <summary>To be added.</summary>
+		/// <summary>Switch.</summary>
 		Switch,
-		/// <summary>To be added.</summary>
+		/// <summary>Radio.</summary>
 		Radio,
-		/// <summary>To be added.</summary>
+		/// <summary>Momentary Change.</summary>
 		MomentaryChange,
-		/// <summary>To be added.</summary>
+		/// <summary>On Off.</summary>
 		OnOff,
-		/// <summary>To be added.</summary>
+		/// <summary>Momentary Push In.</summary>
 		MomentaryPushIn,
-		/// <summary>To be added.</summary>
+		/// <summary>Accelerator, // 10.10.3.</summary>
 		Accelerator, // 10.10.3
-		/// <summary>To be added.</summary>
+		/// <summary>Multi Level Accelerator, // 10.10.3.</summary>
 		MultiLevelAccelerator, // 10.10.3
 	}
 
@@ -1568,13 +1568,13 @@ namespace AppKit {
 		Automatic = 0,
 		Push = 1,
 		FlexiblePush = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Disclosure.</summary>
 		Disclosure = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Circular.</summary>
 		Circular = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Help Button.</summary>
 		HelpButton = 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Small Square.</summary>
 		SmallSquare = 10,
 		Toolbar = 11,
 		AccessoryBarAction = 12,
@@ -1584,37 +1584,37 @@ namespace AppKit {
 		[Mac (20, 0)]
 		Glass = 16,
 #if !XAMCORE_5_0
-		/// <summary>To be added.</summary>
+		/// <summary>Rounded.</summary>
 		[Obsoleted (PlatformName.MacOSX, 10, 14, message: "Use 'Push' instead.")]
 		Rounded = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Regular Square.</summary>
 		[Obsoleted (PlatformName.MacOSX, 10, 14, message: "Use 'FlexiblePush' instead.")]
 		RegularSquare = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Thick Square.</summary>
 		[Obsoleted (PlatformName.MacOSX, 10, 12, message: "Use 'FlexiblePush' instead.")]
 		ThickSquare = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Thicker Square.</summary>
 		[Obsoleted (PlatformName.MacOSX, 10, 12, message: "Use 'FlexiblePush' instead.")]
 		ThickerSquare = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Shadowless Square.</summary>
 		[Obsoleted (PlatformName.MacOSX, 10, 14, message: "Use 'SmallSquare' instead.")]
 		ShadowlessSquare = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Textured Square.</summary>
 		[Obsoleted (PlatformName.MacOSX, 10, 14, message: "Use 'SmallSquare' instead.")]
 		TexturedSquare = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Textured Rounded.</summary>
 		[Obsoleted (PlatformName.MacOSX, 10, 14, message: "Use 'Toolbar' instead.")]
 		TexturedRounded = 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Round Rect.</summary>
 		[Obsoleted (PlatformName.MacOSX, 10, 14, message: "Use 'AccessoryBarAction' instead.")]
 		RoundRect = 12,
-		/// <summary>To be added.</summary>
+		/// <summary>Recessed.</summary>
 		[Obsoleted (PlatformName.MacOSX, 10, 14, message: "Use 'AccessoryBar' instead.")]
 		Recessed = 13,
-		/// <summary>To be added.</summary>
+		/// <summary>Rounded Disclosure.</summary>
 		[Obsoleted (PlatformName.MacOSX, 10, 14, message: "Use 'PushDisclosure' instead.")]
 		RoundedDisclosure = 14,
-		/// <summary>To be added.</summary>
+		/// <summary>Inline.</summary>
 		[Obsoleted (PlatformName.MacOSX, 10, 14, message: "Use 'Badge' instead.")]
 		Inline = 15,
 #endif // !XAMCORE_5_0
@@ -1624,15 +1624,15 @@ namespace AppKit {
 	[Native]
 	[Deprecated (PlatformName.MacOSX, 10, 12, message: "The GradientType property is unused, and setting it has no effect.")]
 	public enum NSGradientType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Concave Weak.</summary>
 		ConcaveWeak,
-		/// <summary>To be added.</summary>
+		/// <summary>Concave Strong.</summary>
 		ConcaveStrong,
-		/// <summary>To be added.</summary>
+		/// <summary>Convex Weak.</summary>
 		ConvexWeak,
-		/// <summary>To be added.</summary>
+		/// <summary>Convex Strong.</summary>
 		ConvexStrong,
 	}
 
@@ -1642,84 +1642,84 @@ namespace AppKit {
 	[NoMacCatalyst]
 	// NSGraphics.h:typedef int NSWindowDepth;
 	public enum NSWindowDepth : int {
-		/// <summary>To be added.</summary>
+		/// <summary>Twentyfour Bit Rgb.</summary>
 		TwentyfourBitRgb = 0x208,
-		/// <summary>To be added.</summary>
+		/// <summary>Sixtyfour Bit Rgb.</summary>
 		SixtyfourBitRgb = 0x210,
-		/// <summary>To be added.</summary>
+		/// <summary>One Hundred Twenty Eight Bit Rgb.</summary>
 		OneHundredTwentyEightBitRgb = 0x220,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSCompositingOperation : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Clear.</summary>
 		Clear,
-		/// <summary>To be added.</summary>
+		/// <summary>Copy.</summary>
 		Copy,
-		/// <summary>To be added.</summary>
+		/// <summary>Source Over.</summary>
 		SourceOver,
-		/// <summary>To be added.</summary>
+		/// <summary>Source In.</summary>
 		SourceIn,
-		/// <summary>To be added.</summary>
+		/// <summary>Source Out.</summary>
 		SourceOut,
-		/// <summary>To be added.</summary>
+		/// <summary>Source Atop.</summary>
 		SourceAtop,
-		/// <summary>To be added.</summary>
+		/// <summary>Destination Over.</summary>
 		DestinationOver,
-		/// <summary>To be added.</summary>
+		/// <summary>Destination In.</summary>
 		DestinationIn,
-		/// <summary>To be added.</summary>
+		/// <summary>Destination Out.</summary>
 		DestinationOut,
-		/// <summary>To be added.</summary>
+		/// <summary>Destination Atop.</summary>
 		DestinationAtop,
-		/// <summary>To be added.</summary>
+		/// <summary>Xor.</summary>
 		Xor,
-		/// <summary>To be added.</summary>
+		/// <summary>Plus Darker.</summary>
 		PlusDarker,
-		/// <summary>To be added.</summary>
+		/// <summary>Highlight.</summary>
 		Highlight,
-		/// <summary>To be added.</summary>
+		/// <summary>Plus Lighter.</summary>
 		PlusLighter,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Multiply.</summary>
 		Multiply,
-		/// <summary>To be added.</summary>
+		/// <summary>Screen.</summary>
 		Screen,
-		/// <summary>To be added.</summary>
+		/// <summary>Overlay.</summary>
 		Overlay,
-		/// <summary>To be added.</summary>
+		/// <summary>Darken.</summary>
 		Darken,
-		/// <summary>To be added.</summary>
+		/// <summary>Lighten.</summary>
 		Lighten,
-		/// <summary>To be added.</summary>
+		/// <summary>Color Dodge.</summary>
 		ColorDodge,
-		/// <summary>To be added.</summary>
+		/// <summary>Color Burn.</summary>
 		ColorBurn,
-		/// <summary>To be added.</summary>
+		/// <summary>Soft Light.</summary>
 		SoftLight,
-		/// <summary>To be added.</summary>
+		/// <summary>Hard Light.</summary>
 		HardLight,
-		/// <summary>To be added.</summary>
+		/// <summary>Difference.</summary>
 		Difference,
-		/// <summary>To be added.</summary>
+		/// <summary>Exclusion.</summary>
 		Exclusion,
-		/// <summary>To be added.</summary>
+		/// <summary>Hue.</summary>
 		Hue,
-		/// <summary>To be added.</summary>
+		/// <summary>Saturation.</summary>
 		Saturation,
-		/// <summary>To be added.</summary>
+		/// <summary>Color.</summary>
 		Color,
-		/// <summary>To be added.</summary>
+		/// <summary>Luminosity.</summary>
 		Luminosity,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSAnimationEffect : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Dissapearing Item Default.</summary>
 		DissapearingItemDefault = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Effect Poof.</summary>
 		EffectPoof = 10,
 	}
 	#endregion
@@ -1728,13 +1728,13 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSMatrixMode : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Radio.</summary>
 		Radio,
-		/// <summary>To be added.</summary>
+		/// <summary>Highlight.</summary>
 		Highlight,
-		/// <summary>To be added.</summary>
+		/// <summary>List.</summary>
 		List,
-		/// <summary>To be added.</summary>
+		/// <summary>Track.</summary>
 		Track,
 	}
 	#endregion
@@ -1743,20 +1743,20 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSBrowserColumnResizingType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Auto.</summary>
 		Auto,
-		/// <summary>To be added.</summary>
+		/// <summary>User.</summary>
 		User,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSBrowserDropOperation : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>On.</summary>
 		On,
-		/// <summary>To be added.</summary>
+		/// <summary>Above.</summary>
 		Above,
 	}
 	#endregion
@@ -1765,23 +1765,23 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSColorPanelMode : long {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Gray.</summary>
 		Gray = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>R G B.</summary>
 		RGB,
-		/// <summary>To be added.</summary>
+		/// <summary>C M Y K.</summary>
 		CMYK,
-		/// <summary>To be added.</summary>
+		/// <summary>H S B.</summary>
 		HSB,
-		/// <summary>To be added.</summary>
+		/// <summary>Custom Palette.</summary>
 		CustomPalette,
-		/// <summary>To be added.</summary>
+		/// <summary>Color List.</summary>
 		ColorList,
-		/// <summary>To be added.</summary>
+		/// <summary>Wheel.</summary>
 		Wheel,
-		/// <summary>To be added.</summary>
+		/// <summary>Crayon.</summary>
 		Crayon,
 	};
 
@@ -1789,23 +1789,23 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSColorPanelFlags : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Gray.</summary>
 		Gray = 0x00000001,
-		/// <summary>To be added.</summary>
+		/// <summary>R G B.</summary>
 		RGB = 0x00000002,
-		/// <summary>To be added.</summary>
+		/// <summary>C M Y K.</summary>
 		CMYK = 0x00000004,
-		/// <summary>To be added.</summary>
+		/// <summary>H S B.</summary>
 		HSB = 0x00000008,
-		/// <summary>To be added.</summary>
+		/// <summary>Custom Palette.</summary>
 		CustomPalette = 0x00000010,
-		/// <summary>To be added.</summary>
+		/// <summary>Color List.</summary>
 		ColorList = 0x00000020,
-		/// <summary>To be added.</summary>
+		/// <summary>Wheel.</summary>
 		Wheel = 0x00000040,
-		/// <summary>To be added.</summary>
+		/// <summary>Crayon.</summary>
 		Crayon = 0x00000080,
-		/// <summary>To be added.</summary>
+		/// <summary>All.</summary>
 		All = 0x0000ffff,
 	}
 
@@ -1816,38 +1816,38 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSDocumentChangeType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Done.</summary>
 		Done,
-		/// <summary>To be added.</summary>
+		/// <summary>Undone.</summary>
 		Undone,
-		/// <summary>To be added.</summary>
+		/// <summary>Cleared.</summary>
 		Cleared,
-		/// <summary>To be added.</summary>
+		/// <summary>Read Other Contents.</summary>
 		ReadOtherContents,
-		/// <summary>To be added.</summary>
+		/// <summary>Autosaved.</summary>
 		Autosaved,
-		/// <summary>To be added.</summary>
+		/// <summary>Redone.</summary>
 		Redone,
-		/// <summary>To be added.</summary>
+		/// <summary>Discardable.</summary>
 		Discardable = 256, /* New in Lion */
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSSaveOperationType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Save.</summary>
 		Save,
-		/// <summary>To be added.</summary>
+		/// <summary>Save As.</summary>
 		SaveAs,
-		/// <summary>To be added.</summary>
+		/// <summary>Save To.</summary>
 		SaveTo,
-		/// <summary>To be added.</summary>
+		/// <summary>Autosave.</summary>
 		Autosave = 3,   /* Deprecated name in Lion */
-		/// <summary>To be added.</summary>
+		/// <summary>Elsewhere.</summary>
 		Elsewhere = 3,  /* New Lion name */
-		/// <summary>To be added.</summary>
+		/// <summary>In Place.</summary>
 		InPlace = 4,    /* New in Lion */
-		/// <summary>To be added.</summary>
+		/// <summary>Auto Save As.</summary>
 		AutoSaveAs = 5, /* New in Mountain Lion */
 	}
 
@@ -1858,44 +1858,44 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSLineCapStyle : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Butt.</summary>
 		Butt,
-		/// <summary>To be added.</summary>
+		/// <summary>Round.</summary>
 		Round,
-		/// <summary>To be added.</summary>
+		/// <summary>Square.</summary>
 		Square,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSLineJoinStyle : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Miter.</summary>
 		Miter,
-		/// <summary>To be added.</summary>
+		/// <summary>Round.</summary>
 		Round,
-		/// <summary>To be added.</summary>
+		/// <summary>Bevel.</summary>
 		Bevel,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSWindingRule : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Non Zero.</summary>
 		NonZero,
-		/// <summary>To be added.</summary>
+		/// <summary>Even Odd.</summary>
 		EvenOdd,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSBezierPathElement : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Move To.</summary>
 		MoveTo,
-		/// <summary>To be added.</summary>
+		/// <summary>Line To.</summary>
 		LineTo,
-		/// <summary>To be added.</summary>
+		/// <summary>Curve To.</summary>
 		CurveTo,
-		/// <summary>To be added.</summary>
+		/// <summary>Close Path.</summary>
 		ClosePath,
 		[Mac (14, 0)]
 		QuadraticCurveTo,
@@ -1906,9 +1906,9 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSRulerOrientation : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Horizontal.</summary>
 		Horizontal,
-		/// <summary>To be added.</summary>
+		/// <summary>Vertical.</summary>
 		Vertical,
 	}
 	#endregion
@@ -1917,19 +1917,19 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSGestureRecognizerState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Possible.</summary>
 		Possible,
-		/// <summary>To be added.</summary>
+		/// <summary>Began.</summary>
 		Began,
-		/// <summary>To be added.</summary>
+		/// <summary>Changed.</summary>
 		Changed,
-		/// <summary>To be added.</summary>
+		/// <summary>Ended.</summary>
 		Ended,
-		/// <summary>To be added.</summary>
+		/// <summary>Cancelled.</summary>
 		Cancelled,
-		/// <summary>To be added.</summary>
+		/// <summary>Failed.</summary>
 		Failed,
-		/// <summary>To be added.</summary>
+		/// <summary>Recognized.</summary>
 		Recognized = NSGestureRecognizerState.Ended,
 	}
 	#endregion
@@ -1938,35 +1938,35 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSUserInterfaceLayoutOrientation : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Horizontal.</summary>
 		Horizontal = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Vertical.</summary>
 		Vertical = 1,
 	}
 
 	// NSStackView.h:typedef float NSStackViewVisibilityPriority
 	[NoMacCatalyst]
 	public enum NSStackViewVisibilityPriority : int {
-		/// <summary>To be added.</summary>
+		/// <summary>Must Hold.</summary>
 		MustHold = 1000,
-		/// <summary>To be added.</summary>
+		/// <summary>Detach Only If Necessary.</summary>
 		DetachOnlyIfNecessary = 900,
-		/// <summary>To be added.</summary>
+		/// <summary>Not Visible.</summary>
 		NotVisible = 0,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSStackViewGravity : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Top.</summary>
 		Top = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Leading.</summary>
 		Leading = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Center.</summary>
 		Center = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Bottom.</summary>
 		Bottom = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Trailing.</summary>
 		Trailing = 3,
 	}
 	#endregion
@@ -1974,17 +1974,17 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSStackViewDistribution : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Gravity Areas.</summary>
 		GravityAreas = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Fill.</summary>
 		Fill = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Fill Equally.</summary>
 		FillEqually,
-		/// <summary>To be added.</summary>
+		/// <summary>Fill Proportionally.</summary>
 		FillProportionally,
-		/// <summary>To be added.</summary>
+		/// <summary>Equal Spacing.</summary>
 		EqualSpacing,
-		/// <summary>To be added.</summary>
+		/// <summary>Equal Centering.</summary>
 		EqualCentering,
 	}
 
@@ -1992,61 +1992,61 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSDragOperation : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Copy.</summary>
 		Copy = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Link.</summary>
 		Link = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Generic.</summary>
 		Generic = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Private.</summary>
 		Private = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>All Obsolete.</summary>
 		AllObsolete = 15,
-		/// <summary>To be added.</summary>
+		/// <summary>Move.</summary>
 		Move = 16,
-		/// <summary>To be added.</summary>
+		/// <summary>Delete.</summary>
 		Delete = 32,
-		/// <summary>To be added.</summary>
+		/// <summary>All.</summary>
 		All = ulong.MaxValue,
 	}
 
 	[NoMacCatalyst]
 	[Native (ConvertToNative = "NSTextAlignmentExtensions.ToNative", ConvertToManaged = "NSTextAlignmentExtensions.ToManaged")]
 	public enum NSTextAlignment : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Left.</summary>
 		Left = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Right.</summary>
 		Right = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Center.</summary>
 		Center = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Justified.</summary>
 		Justified = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Natural.</summary>
 		Natural = 4,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTextMovement : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Other.</summary>
 		Other = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Return.</summary>
 		Return = 0x10,
-		/// <summary>To be added.</summary>
+		/// <summary>Tab.</summary>
 		Tab = 0x11,
-		/// <summary>To be added.</summary>
+		/// <summary>Backtab.</summary>
 		Backtab = 0x12,
-		/// <summary>To be added.</summary>
+		/// <summary>Left.</summary>
 		Left = 0x13,
-		/// <summary>To be added.</summary>
+		/// <summary>Right.</summary>
 		Right = 0x14,
-		/// <summary>To be added.</summary>
+		/// <summary>Up.</summary>
 		Up = 0x15,
-		/// <summary>To be added.</summary>
+		/// <summary>Down.</summary>
 		Down = 0x16,
-		/// <summary>To be added.</summary>
+		/// <summary>Cancel.</summary>
 		Cancel = 0x17,
 	}
 
@@ -2054,30 +2054,30 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSMenuProperty : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Title.</summary>
 		Title = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Attributed Title.</summary>
 		AttributedTitle = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Key Equivalent.</summary>
 		KeyEquivalent = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Image.</summary>
 		Image = 1 << 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Enabled.</summary>
 		Enabled = 1 << 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Accessibility Description.</summary>
 		AccessibilityDescription = 1 << 5,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSFontRenderingMode : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Default.</summary>
 		Default,
-		/// <summary>To be added.</summary>
+		/// <summary>Antialiased.</summary>
 		Antialiased,
-		/// <summary>To be added.</summary>
+		/// <summary>Integer Advancements.</summary>
 		IntegerAdvancements,
-		/// <summary>To be added.</summary>
+		/// <summary>Antialiased Integer Advancements.</summary>
 		AntialiasedIntegerAdvancements,
 	}
 
@@ -2085,48 +2085,48 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSPasteboardReadingOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>As Data.</summary>
 		AsData = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>As String.</summary>
 		AsString = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>As Property List.</summary>
 		AsPropertyList = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>As Keyed Archive.</summary>
 		AsKeyedArchive = 4,
 	}
 
 	// Convenience enum, untyped in ObjC
 	[NoMacCatalyst]
 	public enum NSUnderlinePattern : int {
-		/// <summary>To be added.</summary>
+		/// <summary>Solid.</summary>
 		Solid = 0x0000,
-		/// <summary>To be added.</summary>
+		/// <summary>Dot.</summary>
 		Dot = 0x0100,
-		/// <summary>To be added.</summary>
+		/// <summary>Dash.</summary>
 		Dash = 0x0200,
-		/// <summary>To be added.</summary>
+		/// <summary>Dash Dot.</summary>
 		DashDot = 0x0300,
-		/// <summary>To be added.</summary>
+		/// <summary>Dash Dot Dot.</summary>
 		DashDotDot = 0x0400,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSSelectionAffinity : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Upstream.</summary>
 		Upstream,
-		/// <summary>To be added.</summary>
+		/// <summary>Downstream.</summary>
 		Downstream,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSSelectionGranularity : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Character.</summary>
 		Character,
-		/// <summary>To be added.</summary>
+		/// <summary>Word.</summary>
 		Word,
-		/// <summary>To be added.</summary>
+		/// <summary>Paragraph.</summary>
 		Paragraph,
 	}
 
@@ -2135,25 +2135,25 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSTrackingAreaOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Mouse Entered And Exited.</summary>
 		MouseEnteredAndExited = 0x01,
-		/// <summary>To be added.</summary>
+		/// <summary>Mouse Moved.</summary>
 		MouseMoved = 0x02,
-		/// <summary>To be added.</summary>
+		/// <summary>Cursor Update.</summary>
 		CursorUpdate = 0x04,
-		/// <summary>To be added.</summary>
+		/// <summary>Active When First Responder.</summary>
 		ActiveWhenFirstResponder = 0x10,
-		/// <summary>To be added.</summary>
+		/// <summary>Active In Key Window.</summary>
 		ActiveInKeyWindow = 0x20,
-		/// <summary>To be added.</summary>
+		/// <summary>Active In Active App.</summary>
 		ActiveInActiveApp = 0x40,
-		/// <summary>To be added.</summary>
+		/// <summary>Active Always.</summary>
 		ActiveAlways = 0x80,
-		/// <summary>To be added.</summary>
+		/// <summary>Assume Inside.</summary>
 		AssumeInside = 0x100,
-		/// <summary>To be added.</summary>
+		/// <summary>In Visible Rect.</summary>
 		InVisibleRect = 0x200,
-		/// <summary>To be added.</summary>
+		/// <summary>Enabled During Mouse Drag.</summary>
 		EnabledDuringMouseDrag = 0x400,
 	}
 	#endregion
@@ -2161,52 +2161,52 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSLineSweepDirection : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>N S Line Sweep Left.</summary>
 		NSLineSweepLeft,
-		/// <summary>To be added.</summary>
+		/// <summary>N S Line Sweep Right.</summary>
 		NSLineSweepRight,
-		/// <summary>To be added.</summary>
+		/// <summary>N S Line Sweep Down.</summary>
 		NSLineSweepDown,
-		/// <summary>To be added.</summary>
+		/// <summary>N S Line Sweep Up.</summary>
 		NSLineSweepUp,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSLineMovementDirection : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Left.</summary>
 		Left,
-		/// <summary>To be added.</summary>
+		/// <summary>Right.</summary>
 		Right,
-		/// <summary>To be added.</summary>
+		/// <summary>Down.</summary>
 		Down,
-		/// <summary>To be added.</summary>
+		/// <summary>Up.</summary>
 		Up,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTiffCompression : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Ccitt Fax3.</summary>
 		CcittFax3 = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Ccitt Fax4.</summary>
 		CcittFax4 = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Lzw.</summary>
 		Lzw = 5,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Jpeg.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 7)]
 		Jpeg = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Next.</summary>
 		Next = 32766,
-		/// <summary>To be added.</summary>
+		/// <summary>Pack Bits.</summary>
 		PackBits = 32773,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Old Jpeg.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 7)]
 		OldJpeg = 32865,
 	}
@@ -2214,34 +2214,34 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSBitmapImageFileType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Tiff.</summary>
 		Tiff,
-		/// <summary>To be added.</summary>
+		/// <summary>Bmp.</summary>
 		Bmp,
-		/// <summary>To be added.</summary>
+		/// <summary>Gif.</summary>
 		Gif,
-		/// <summary>To be added.</summary>
+		/// <summary>Jpeg.</summary>
 		Jpeg,
-		/// <summary>To be added.</summary>
+		/// <summary>Png.</summary>
 		Png,
-		/// <summary>To be added.</summary>
+		/// <summary>Jpeg2000.</summary>
 		Jpeg2000,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSImageRepLoadStatus : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Unknown Type.</summary>
 		UnknownType = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Reading Header.</summary>
 		ReadingHeader = -2,
-		/// <summary>To be added.</summary>
+		/// <summary>Will Need All Data.</summary>
 		WillNeedAllData = -3,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Data.</summary>
 		InvalidData = -4,
-		/// <summary>To be added.</summary>
+		/// <summary>Unexpected E O F.</summary>
 		UnexpectedEOF = -5,
-		/// <summary>To be added.</summary>
+		/// <summary>Completed.</summary>
 		Completed = -6,
 	}
 
@@ -2249,51 +2249,51 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSBitmapFormat : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Alpha First.</summary>
 		AlphaFirst = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Alpha Nonpremultiplied.</summary>
 		AlphaNonpremultiplied = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Floating Point Samples.</summary>
 		FloatingPointSamples = 4,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Little Endian16 Bit.</summary>
 		LittleEndian16Bit = 1 << 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Little Endian32 Bit.</summary>
 		LittleEndian32Bit = 1 << 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Big Endian16 Bit.</summary>
 		BigEndian16Bit = 1 << 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Big Endian32 Bit.</summary>
 		BigEndian32Bit = 1 << 11,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSPrintingOrientation : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Portrait.</summary>
 		Portrait,
-		/// <summary>To be added.</summary>
+		/// <summary>Landscape.</summary>
 		Landscape,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSPrintingPaginationMode : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Auto.</summary>
 		Auto,
-		/// <summary>To be added.</summary>
+		/// <summary>Fit.</summary>
 		Fit,
-		/// <summary>To be added.</summary>
+		/// <summary>Clip.</summary>
 		Clip,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSPrinterTableStatus : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Ok.</summary>
 		Ok,
-		/// <summary>To be added.</summary>
+		/// <summary>Not Found.</summary>
 		NotFound,
-		/// <summary>To be added.</summary>
+		/// <summary>Error.</summary>
 		Error,
 	}
 
@@ -2301,46 +2301,46 @@ namespace AppKit {
 	[Native]
 	[Deprecated (PlatformName.MacOSX, 10, 14)]
 	public enum NSScrollArrowPosition : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Max End.</summary>
 		MaxEnd = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Min End.</summary>
 		MinEnd = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Default Setting.</summary>
 		DefaultSetting = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 2,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSUsableScrollerParts : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>No Scroller.</summary>
 		NoScroller,
-		/// <summary>To be added.</summary>
+		/// <summary>Only Arrows.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 14)]
 		OnlyArrows,
-		/// <summary>To be added.</summary>
+		/// <summary>All.</summary>
 		All,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSScrollerPart : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Decrement Page.</summary>
 		DecrementPage,
-		/// <summary>To be added.</summary>
+		/// <summary>Knob.</summary>
 		Knob,
-		/// <summary>To be added.</summary>
+		/// <summary>Increment Page.</summary>
 		IncrementPage,
-		/// <summary>To be added.</summary>
+		/// <summary>Decrement Line.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 14)]
 		DecrementLine,
-		/// <summary>To be added.</summary>
+		/// <summary>Increment Line.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 14)]
 		IncrementLine,
-		/// <summary>To be added.</summary>
+		/// <summary>Knob Slot.</summary>
 		KnobSlot,
 	}
 
@@ -2348,22 +2348,22 @@ namespace AppKit {
 	[Native]
 	[Deprecated (PlatformName.MacOSX, 10, 14)]
 	public enum NSScrollerArrow : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Increment Arrow.</summary>
 		IncrementArrow,
-		/// <summary>To be added.</summary>
+		/// <summary>Decrement Arrow.</summary>
 		DecrementArrow,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSPrintingPageOrder : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Descending.</summary>
 		Descending = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Special.</summary>
 		Special,
-		/// <summary>To be added.</summary>
+		/// <summary>Ascending.</summary>
 		Ascending,
-		/// <summary>To be added.</summary>
+		/// <summary>Unknown.</summary>
 		Unknown,
 	}
 
@@ -2371,129 +2371,129 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSPrintPanelOptions : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Shows Copies.</summary>
 		ShowsCopies = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Shows Page Range.</summary>
 		ShowsPageRange = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Shows Paper Size.</summary>
 		ShowsPaperSize = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Shows Orientation.</summary>
 		ShowsOrientation = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Shows Scaling.</summary>
 		ShowsScaling = 16,
-		/// <summary>To be added.</summary>
+		/// <summary>Shows Print Selection.</summary>
 		ShowsPrintSelection = 32,
-		/// <summary>To be added.</summary>
+		/// <summary>Shows Page Setup Accessory.</summary>
 		ShowsPageSetupAccessory = 256,
-		/// <summary>To be added.</summary>
+		/// <summary>Shows Preview.</summary>
 		ShowsPreview = 131072,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTextBlockValueType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Absolute.</summary>
 		Absolute,
-		/// <summary>To be added.</summary>
+		/// <summary>Percentage.</summary>
 		Percentage,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTextBlockDimension : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Width.</summary>
 		Width = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Minimum Width.</summary>
 		MinimumWidth = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Maximum Width.</summary>
 		MaximumWidth = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Height.</summary>
 		Height = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Minimum Height.</summary>
 		MinimumHeight = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Maximum Height.</summary>
 		MaximumHeight = 6,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTextBlockLayer : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Padding.</summary>
 		Padding = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Border.</summary>
 		Border,
-		/// <summary>To be added.</summary>
+		/// <summary>Margin.</summary>
 		Margin,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTextBlockVerticalAlignment : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Top.</summary>
 		Top,
-		/// <summary>To be added.</summary>
+		/// <summary>Middle.</summary>
 		Middle,
-		/// <summary>To be added.</summary>
+		/// <summary>Bottom.</summary>
 		Bottom,
-		/// <summary>To be added.</summary>
+		/// <summary>Baseline.</summary>
 		Baseline,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTextTableLayoutAlgorithm : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Automatic.</summary>
 		Automatic,
-		/// <summary>To be added.</summary>
+		/// <summary>Fixed.</summary>
 		Fixed,
 	}
 
 	[NoMacCatalyst]
 	[Flags]
 	public enum NSFontSymbolicTraits : int { // uint32_t NSFontSymbolicTraits
-		/// <summary>To be added.</summary>
+		/// <summary>Italic Trait.</summary>
 		ItalicTrait = (1 << 0),
-		/// <summary>To be added.</summary>
+		/// <summary>Bold Trait.</summary>
 		BoldTrait = (1 << 1),
-		/// <summary>To be added.</summary>
+		/// <summary>Expanded Trait.</summary>
 		ExpandedTrait = (1 << 5),
-		/// <summary>To be added.</summary>
+		/// <summary>Condensed Trait.</summary>
 		CondensedTrait = (1 << 6),
-		/// <summary>To be added.</summary>
+		/// <summary>Mono Space Trait.</summary>
 		MonoSpaceTrait = (1 << 10),
-		/// <summary>To be added.</summary>
+		/// <summary>Vertical Trait.</summary>
 		VerticalTrait = (1 << 11),
-		/// <summary>To be added.</summary>
+		/// <summary>U I Optimized Trait.</summary>
 		UIOptimizedTrait = (1 << 12),
-		/// <summary>To be added.</summary>
+		/// <summary>Trait Tight Leading.</summary>
 		TraitTightLeading = 1 << 15,
-		/// <summary>To be added.</summary>
+		/// <summary>Trait Loose Leading.</summary>
 		TraitLooseLeading = 1 << 16,
 		TraitEmphasized = BoldTrait,
-		/// <summary>To be added.</summary>
+		/// <summary>Unknown Class.</summary>
 		UnknownClass = 0 << 28,
-		/// <summary>To be added.</summary>
+		/// <summary>Old Style Serifs Class.</summary>
 		OldStyleSerifsClass = 1 << 28,
-		/// <summary>To be added.</summary>
+		/// <summary>Transitional Serifs Class.</summary>
 		TransitionalSerifsClass = 2 << 28,
-		/// <summary>To be added.</summary>
+		/// <summary>Modern Serifs Class.</summary>
 		ModernSerifsClass = 3 << 28,
-		/// <summary>To be added.</summary>
+		/// <summary>Clarendon Serifs Class.</summary>
 		ClarendonSerifsClass = 4 << 28,
-		/// <summary>To be added.</summary>
+		/// <summary>Slab Serifs Class.</summary>
 		SlabSerifsClass = 5 << 28,
-		/// <summary>To be added.</summary>
+		/// <summary>Freeform Serifs Class.</summary>
 		FreeformSerifsClass = 7 << 28,
-		/// <summary>To be added.</summary>
+		/// <summary>Sans Serif Class.</summary>
 		SansSerifClass = 8 << 28,
-		/// <summary>To be added.</summary>
+		/// <summary>Ornamentals Class.</summary>
 		OrnamentalsClass = 9 << 28,
-		/// <summary>To be added.</summary>
+		/// <summary>Scripts Class.</summary>
 		ScriptsClass = 10 << 28,
-		/// <summary>To be added.</summary>
+		/// <summary>Symbolic Class.</summary>
 		SymbolicClass = 12 << 28,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Family Class Mask.</summary>
 		FamilyClassMask = (int) -268435456,
 	}
 
@@ -2501,29 +2501,29 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSFontTraitMask : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Italic.</summary>
 		Italic = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Bold.</summary>
 		Bold = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Unbold.</summary>
 		Unbold = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Non Standard Character Set.</summary>
 		NonStandardCharacterSet = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Narrow.</summary>
 		Narrow = 0x10,
-		/// <summary>To be added.</summary>
+		/// <summary>Expanded.</summary>
 		Expanded = 0x20,
-		/// <summary>To be added.</summary>
+		/// <summary>Condensed.</summary>
 		Condensed = 0x40,
-		/// <summary>To be added.</summary>
+		/// <summary>Small Caps.</summary>
 		SmallCaps = 0x80,
-		/// <summary>To be added.</summary>
+		/// <summary>Poster.</summary>
 		Poster = 0x100,
-		/// <summary>To be added.</summary>
+		/// <summary>Compressed.</summary>
 		Compressed = 0x200,
-		/// <summary>To be added.</summary>
+		/// <summary>Fixed Pitch.</summary>
 		FixedPitch = 0x400,
-		/// <summary>To be added.</summary>
+		/// <summary>Unitalic.</summary>
 		Unitalic = 0x1000000,
 	}
 
@@ -2531,59 +2531,59 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSPasteboardWritingOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Writing Promised.</summary>
 		WritingPromised = 1 << 9,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NSToolbarDisplayMode : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Default.</summary>
 		Default,
-		/// <summary>To be added.</summary>
+		/// <summary>Icon And Label.</summary>
 		IconAndLabel,
-		/// <summary>To be added.</summary>
+		/// <summary>Icon.</summary>
 		Icon,
-		/// <summary>To be added.</summary>
+		/// <summary>Label.</summary>
 		Label,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NSToolbarSizeMode : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Default.</summary>
 		Default,
-		/// <summary>To be added.</summary>
+		/// <summary>Regular.</summary>
 		Regular,
-		/// <summary>To be added.</summary>
+		/// <summary>Small.</summary>
 		Small,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTableViewColumnAutoresizingStyle : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Uniform.</summary>
 		Uniform,
-		/// <summary>To be added.</summary>
+		/// <summary>Sequential.</summary>
 		Sequential,
-		/// <summary>To be added.</summary>
+		/// <summary>Reverse Sequential.</summary>
 		ReverseSequential,
-		/// <summary>To be added.</summary>
+		/// <summary>Last Column Only.</summary>
 		LastColumnOnly,
-		/// <summary>To be added.</summary>
+		/// <summary>First Column Only.</summary>
 		FirstColumnOnly,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTableViewSelectionHighlightStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Regular.</summary>
 		Regular = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Source List.</summary>
 		[Deprecated (PlatformName.MacOSX, 11, 0, message: "Set 'NSTableView.Style' to 'NSTableViewStyle.SourceList' instead.")]
 		SourceList = 1,
 	}
@@ -2591,11 +2591,11 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTableViewDraggingDestinationFeedbackStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Regular.</summary>
 		Regular = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Source List.</summary>
 		SourceList = 1,
 		FeedbackStyleGap = 2,
 	}
@@ -2603,9 +2603,9 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTableViewDropOperation : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>On.</summary>
 		On,
-		/// <summary>To be added.</summary>
+		/// <summary>Above.</summary>
 		Above,
 	}
 
@@ -2613,11 +2613,11 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSTableColumnResizing : long {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Autoresizing.</summary>
 		Autoresizing = (1 << 0),
-		/// <summary>To be added.</summary>
+		/// <summary>User Resizing Mask.</summary>
 		UserResizingMask = (1 << 1),
 	}
 
@@ -2625,13 +2625,13 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSTableViewGridStyle : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Solid Vertical Line.</summary>
 		SolidVerticalLine = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Solid Horizontal Line.</summary>
 		SolidHorizontalLine = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Dashed Horizontal Grid Line.</summary>
 		DashedHorizontalGridLine = 1 << 3,
 	}
 
@@ -2639,82 +2639,82 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSGradientDrawingOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Before Starting Location.</summary>
 		BeforeStartingLocation = (1 << 0),
-		/// <summary>To be added.</summary>
+		/// <summary>After Ending Location.</summary>
 		AfterEndingLocation = (1 << 1),
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSImageAlignment : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Center.</summary>
 		Center = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Top.</summary>
 		Top,
-		/// <summary>To be added.</summary>
+		/// <summary>Top Left.</summary>
 		TopLeft,
-		/// <summary>To be added.</summary>
+		/// <summary>Top Right.</summary>
 		TopRight,
-		/// <summary>To be added.</summary>
+		/// <summary>Left.</summary>
 		Left,
-		/// <summary>To be added.</summary>
+		/// <summary>Bottom.</summary>
 		Bottom,
-		/// <summary>To be added.</summary>
+		/// <summary>Bottom Left.</summary>
 		BottomLeft,
-		/// <summary>To be added.</summary>
+		/// <summary>Bottom Right.</summary>
 		BottomRight,
-		/// <summary>To be added.</summary>
+		/// <summary>Right.</summary>
 		Right,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSImageFrameStyle : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Photo.</summary>
 		Photo,
-		/// <summary>To be added.</summary>
+		/// <summary>Gray Bezel.</summary>
 		GrayBezel,
-		/// <summary>To be added.</summary>
+		/// <summary>Groove.</summary>
 		Groove,
-		/// <summary>To be added.</summary>
+		/// <summary>Button.</summary>
 		Button,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSSpeechBoundary : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Immediate.</summary>
 		Immediate = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Word.</summary>
 		Word = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Sentence.</summary>
 		Sentence,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSSplitViewDividerStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Thick.</summary>
 		Thick = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Thin.</summary>
 		Thin = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Pane Splitter.</summary>
 		PaneSplitter = 3,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSSplitViewItemBehavior : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Default.</summary>
 		Default,
-		/// <summary>To be added.</summary>
+		/// <summary>Sidebar.</summary>
 		Sidebar,
-		/// <summary>To be added.</summary>
+		/// <summary>Content List.</summary>
 		ContentList,
 		[Mac (14, 0)]
 		Inspector,
@@ -2723,84 +2723,84 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSImageScaling : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Proportionally Down.</summary>
 		ProportionallyDown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Axes Independently.</summary>
 		AxesIndependently,
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Proportionally Up Or Down.</summary>
 		ProportionallyUpOrDown,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSSegmentStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Automatic.</summary>
 		Automatic = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Rounded.</summary>
 		Rounded = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Textured Rounded.</summary>
 		TexturedRounded = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Round Rect.</summary>
 		RoundRect = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Textured Square.</summary>
 		TexturedSquare = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Capsule.</summary>
 		Capsule = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Small Square.</summary>
 		SmallSquare = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Separated.</summary>
 		Separated = 8,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSSegmentSwitchTracking : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Select One.</summary>
 		SelectOne = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Select Any.</summary>
 		SelectAny = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Momentary.</summary>
 		Momentary = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Momentary Accelerator, // 10.10.3.</summary>
 		MomentaryAccelerator, // 10.10.3
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTickMarkPosition : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Below.</summary>
 		Below,
-		/// <summary>To be added.</summary>
+		/// <summary>Above.</summary>
 		Above,
-		/// <summary>To be added.</summary>
+		/// <summary>Left.</summary>
 		Left,
-		/// <summary>To be added.</summary>
+		/// <summary>Right.</summary>
 		Right,
-		/// <summary>To be added.</summary>
+		/// <summary>Leading.</summary>
 		Leading = Left,
-		/// <summary>To be added.</summary>
+		/// <summary>Trailing.</summary>
 		Trailing = Right,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSSliderType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Linear.</summary>
 		Linear = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Circular.</summary>
 		Circular = 1,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTokenStyle : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Default.</summary>
 		Default,
-		/// <summary>To be added.</summary>
+		/// <summary>Plain Text.</summary>
 		PlainText,
-		/// <summary>To be added.</summary>
+		/// <summary>Rounded.</summary>
 		Rounded,
 		Squared = 3,
 		PlainSquared = 4,
@@ -2811,28 +2811,28 @@ namespace AppKit {
 	[Native]
 	[Deprecated (PlatformName.MacOSX, 11, 0)]
 	public enum NSWorkspaceLaunchOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Print.</summary>
 		Print = 2,
 		WithErrorPresentation = 0x40,
-		/// <summary>To be added.</summary>
+		/// <summary>Inhibiting Background Only.</summary>
 		InhibitingBackgroundOnly = 0x80,
-		/// <summary>To be added.</summary>
+		/// <summary>Without Adding To Recents.</summary>
 		WithoutAddingToRecents = 0x100,
-		/// <summary>To be added.</summary>
+		/// <summary>Without Activation.</summary>
 		WithoutActivation = 0x200,
-		/// <summary>To be added.</summary>
+		/// <summary>Async.</summary>
 		Async = 0x10000,
-		/// <summary>To be added.</summary>
+		/// <summary>Allowing Classic Startup.</summary>
 		AllowingClassicStartup = 0x20000,
-		/// <summary>To be added.</summary>
+		/// <summary>Preferring Classic.</summary>
 		PreferringClassic = 0x40000,
-		/// <summary>To be added.</summary>
+		/// <summary>New Instance.</summary>
 		NewInstance = 0x80000,
-		/// <summary>To be added.</summary>
+		/// <summary>Hide.</summary>
 		Hide = 0x100000,
-		/// <summary>To be added.</summary>
+		/// <summary>Hide Others.</summary>
 		HideOthers = 0x200000,
-		/// <summary>To be added.</summary>
+		/// <summary>Default.</summary>
 		Default = Async | AllowingClassicStartup,
 	}
 
@@ -2840,77 +2840,77 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSWorkspaceIconCreationOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>N S Exclude Quick Draw Elements.</summary>
 		NSExcludeQuickDrawElements = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>N S Exclude10_4 Elements.</summary>
 		NSExclude10_4Elements = 1 << 2,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSPathStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Standard.</summary>
 		Standard,
-		/// <summary>To be added.</summary>
+		/// <summary>Navigation Bar.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 7)]
 		NavigationBar,
-		/// <summary>To be added.</summary>
+		/// <summary>Pop Up.</summary>
 		PopUp,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTabViewType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>N S Top Tabs Bezel Border.</summary>
 		NSTopTabsBezelBorder,
-		/// <summary>To be added.</summary>
+		/// <summary>N S Left Tabs Bezel Border.</summary>
 		NSLeftTabsBezelBorder,
-		/// <summary>To be added.</summary>
+		/// <summary>N S Bottom Tabs Bezel Border.</summary>
 		NSBottomTabsBezelBorder,
-		/// <summary>To be added.</summary>
+		/// <summary>N S Right Tabs Bezel Border.</summary>
 		NSRightTabsBezelBorder,
-		/// <summary>To be added.</summary>
+		/// <summary>N S No Tabs Bezel Border.</summary>
 		NSNoTabsBezelBorder,
-		/// <summary>To be added.</summary>
+		/// <summary>N S No Tabs Line Border.</summary>
 		NSNoTabsLineBorder,
-		/// <summary>To be added.</summary>
+		/// <summary>N S No Tabs No Border.</summary>
 		NSNoTabsNoBorder,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTabState : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Selected.</summary>
 		Selected,
-		/// <summary>To be added.</summary>
+		/// <summary>Background.</summary>
 		Background,
-		/// <summary>To be added.</summary>
+		/// <summary>Pressed.</summary>
 		Pressed,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTabViewControllerTabStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Segmented Control On Top.</summary>
 		SegmentedControlOnTop = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Segmented Control On Bottom.</summary>
 		SegmentedControlOnBottom,
-		/// <summary>To be added.</summary>
+		/// <summary>Toolbar.</summary>
 		Toolbar,
-		/// <summary>To be added.</summary>
+		/// <summary>Unspecified.</summary>
 		Unspecified = -1,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSLevelIndicatorStyle : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Relevancy.</summary>
 		Relevancy,
-		/// <summary>To be added.</summary>
+		/// <summary>Continuous Capacity.</summary>
 		ContinuousCapacity,
-		/// <summary>To be added.</summary>
+		/// <summary>Discrete Capacity.</summary>
 		DiscreteCapacity,
-		/// <summary>To be added.</summary>
+		/// <summary>Rating Level.</summary>
 		RatingLevel,
 	}
 
@@ -2918,7 +2918,7 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSFontCollectionOptions : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Application Only Mask.</summary>
 		ApplicationOnlyMask = 1,
 	}
 
@@ -2933,9 +2933,9 @@ namespace AppKit {
 #endif
 	[Native]
 	public enum NSCollectionViewDropOperation : long {
-		/// <summary>To be added.</summary>
+		/// <summary>On.</summary>
 		On = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Before.</summary>
 		Before = 1,
 	}
 
@@ -2950,13 +2950,13 @@ namespace AppKit {
 #endif
 	[Native]
 	public enum NSCollectionViewItemHighlightState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>For Selection.</summary>
 		ForSelection = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>For Deselection.</summary>
 		ForDeselection = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>As Drop Target.</summary>
 		AsDropTarget = 3,
 	}
 
@@ -2972,84 +2972,84 @@ namespace AppKit {
 	[Native]
 	[Flags]
 	public enum NSCollectionViewScrollPosition : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Top.</summary>
 		Top = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Centered Vertically.</summary>
 		CenteredVertically = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Bottom.</summary>
 		Bottom = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Nearest Horizontal Edge.</summary>
 		NearestHorizontalEdge = 1 << 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Left.</summary>
 		Left = 1 << 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Centered Horizontally.</summary>
 		CenteredHorizontally = 1 << 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Right.</summary>
 		Right = 1 << 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Leading Edge.</summary>
 		LeadingEdge = 1 << 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Trailing Edge.</summary>
 		TrailingEdge = 1 << 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Nearest Vertical Edge.</summary>
 		NearestVerticalEdge = 1 << 8,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NSCollectionElementCategory : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Item.</summary>
 		Item,
-		/// <summary>To be added.</summary>
+		/// <summary>Supplementary View.</summary>
 		SupplementaryView,
-		/// <summary>To be added.</summary>
+		/// <summary>Decoration View.</summary>
 		DecorationView,
-		/// <summary>To be added.</summary>
+		/// <summary>Inter Item Gap.</summary>
 		InterItemGap,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSCollectionUpdateAction : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Insert.</summary>
 		Insert,
-		/// <summary>To be added.</summary>
+		/// <summary>Delete.</summary>
 		Delete,
-		/// <summary>To be added.</summary>
+		/// <summary>Reload.</summary>
 		Reload,
-		/// <summary>To be added.</summary>
+		/// <summary>Move.</summary>
 		Move,
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NSCollectionViewScrollDirection : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Vertical.</summary>
 		Vertical,
-		/// <summary>To be added.</summary>
+		/// <summary>Horizontal.</summary>
 		Horizontal,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSDatePickerStyle : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Text Field And Stepper.</summary>
 		TextFieldAndStepper,
-		/// <summary>To be added.</summary>
+		/// <summary>Clock And Calendar.</summary>
 		ClockAndCalendar,
-		/// <summary>To be added.</summary>
+		/// <summary>Text Field.</summary>
 		TextField,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSDatePickerMode : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Single.</summary>
 		Single,
-		/// <summary>To be added.</summary>
+		/// <summary>Range.</summary>
 		Range,
 	}
 
@@ -3057,18 +3057,18 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSDatePickerElementFlags : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Hour Minute.</summary>
 		HourMinute = 0xc,
-		/// <summary>To be added.</summary>
+		/// <summary>Hour Minute Second.</summary>
 		HourMinuteSecond = 0xe,
-		/// <summary>To be added.</summary>
+		/// <summary>Time Zone.</summary>
 		TimeZone = 0x10,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Year Month Date.</summary>
 		YearMonthDate = 0xc0,
-		/// <summary>To be added.</summary>
+		/// <summary>Year Month Date Day.</summary>
 		YearMonthDateDay = 0xe0,
-		/// <summary>To be added.</summary>
+		/// <summary>Era.</summary>
 		Era = 0x100,
 	}
 
@@ -3076,145 +3076,145 @@ namespace AppKit {
 	[Native]
 	[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'Metal' Framework instead.")]
 	public enum NSOpenGLContextParameter : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Swap Rectangle.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 7)]
 		SwapRectangle = 200,
-		/// <summary>To be added.</summary>
+		/// <summary>Swap Rectangle Enable.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 7)]
 		SwapRectangleEnable = 201,
-		/// <summary>To be added.</summary>
+		/// <summary>Rasterization Enable.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 7)]
 		RasterizationEnable = 221,
-		/// <summary>To be added.</summary>
+		/// <summary>State Validation.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 7)]
 		StateValidation = 301,
-		/// <summary>To be added.</summary>
+		/// <summary>Surface Surface Volatile.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 7)]
 		SurfaceSurfaceVolatile = 306,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Swap Interval.</summary>
 		SwapInterval = 222,
-		/// <summary>To be added.</summary>
+		/// <summary>Surface Order.</summary>
 		SurfaceOrder = 235,
-		/// <summary>To be added.</summary>
+		/// <summary>Surface Opacity.</summary>
 		SurfaceOpacity = 236,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Surface Backing Size.</summary>
 		SurfaceBackingSize = 304,
-		/// <summary>To be added.</summary>
+		/// <summary>Reclaim Resources.</summary>
 		ReclaimResources = 308,
-		/// <summary>To be added.</summary>
+		/// <summary>Current Renderer I D.</summary>
 		CurrentRendererID = 309,
-		/// <summary>To be added.</summary>
+		/// <summary>Gpu Vertex Processing.</summary>
 		GpuVertexProcessing = 310,
-		/// <summary>To be added.</summary>
+		/// <summary>Gpu Fragment Processing.</summary>
 		GpuFragmentProcessing = 311,
-		/// <summary>To be added.</summary>
+		/// <summary>Has Drawable.</summary>
 		HasDrawable = 314,
-		/// <summary>To be added.</summary>
+		/// <summary>Mps Swaps In Flight.</summary>
 		MpsSwapsInFlight = 315,
 	}
 
 	[NoMacCatalyst]
 	public enum NSSurfaceOrder {
-		/// <summary>To be added.</summary>
+		/// <summary>Above Window.</summary>
 		AboveWindow = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Below Window.</summary>
 		BelowWindow = -1,
 	}
 
 	[NoMacCatalyst]
 	[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'Metal' Framework instead.")]
 	public enum NSOpenGLPixelFormatAttribute : uint { // uint32_t NSOpenGLPixelFormatAttribute
-		/// <summary>To be added.</summary>
+		/// <summary>All Renderers.</summary>
 		AllRenderers = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Double Buffer.</summary>
 		DoubleBuffer = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Triple Buffer.</summary>
 		TripleBuffer = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Stereo.</summary>
 		Stereo = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Aux Buffers.</summary>
 		AuxBuffers = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Color Size.</summary>
 		ColorSize = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Alpha Size.</summary>
 		AlphaSize = 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Depth Size.</summary>
 		DepthSize = 12,
-		/// <summary>To be added.</summary>
+		/// <summary>Stencil Size.</summary>
 		StencilSize = 13,
-		/// <summary>To be added.</summary>
+		/// <summary>Accum Size.</summary>
 		AccumSize = 14,
-		/// <summary>To be added.</summary>
+		/// <summary>Minimum Policy.</summary>
 		MinimumPolicy = 51,
-		/// <summary>To be added.</summary>
+		/// <summary>Maximum Policy.</summary>
 		MaximumPolicy = 52,
-		/// <summary>To be added.</summary>
+		/// <summary>Off Screen.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 7)]
 		OffScreen = 53,
-		/// <summary>To be added.</summary>
+		/// <summary>Full Screen.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 6)]
 		FullScreen = 54,
-		/// <summary>To be added.</summary>
+		/// <summary>Sample Buffers.</summary>
 		SampleBuffers = 55,
-		/// <summary>To be added.</summary>
+		/// <summary>Samples.</summary>
 		Samples = 56,
-		/// <summary>To be added.</summary>
+		/// <summary>Aux Depth Stencil.</summary>
 		AuxDepthStencil = 57,
-		/// <summary>To be added.</summary>
+		/// <summary>Color Float.</summary>
 		ColorFloat = 58,
-		/// <summary>To be added.</summary>
+		/// <summary>Multisample.</summary>
 		Multisample = 59,
-		/// <summary>To be added.</summary>
+		/// <summary>Supersample.</summary>
 		Supersample = 60,
-		/// <summary>To be added.</summary>
+		/// <summary>Sample Alpha.</summary>
 		SampleAlpha = 61,
-		/// <summary>To be added.</summary>
+		/// <summary>Renderer I D.</summary>
 		RendererID = 70,
-		/// <summary>To be added.</summary>
+		/// <summary>Single Renderer.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 9)]
 		SingleRenderer = 71,
-		/// <summary>To be added.</summary>
+		/// <summary>No Recovery.</summary>
 		NoRecovery = 72,
-		/// <summary>To be added.</summary>
+		/// <summary>Accelerated.</summary>
 		Accelerated = 73,
-		/// <summary>To be added.</summary>
+		/// <summary>Closest Policy.</summary>
 		ClosestPolicy = 74,
-		/// <summary>To be added.</summary>
+		/// <summary>Backing Store.</summary>
 		BackingStore = 76,
-		/// <summary>To be added.</summary>
+		/// <summary>Window.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 9)]
 		Window = 80,
-		/// <summary>To be added.</summary>
+		/// <summary>Compliant.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 9)]
 		Compliant = 83,
-		/// <summary>To be added.</summary>
+		/// <summary>Screen Mask.</summary>
 		ScreenMask = 84,
-		/// <summary>To be added.</summary>
+		/// <summary>Pixel Buffer.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 7)]
 		PixelBuffer = 90,
-		/// <summary>To be added.</summary>
+		/// <summary>Remote Pixel Buffer.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 7)]
 		RemotePixelBuffer = 91,
-		/// <summary>To be added.</summary>
+		/// <summary>Allow Offline Renderers.</summary>
 		AllowOfflineRenderers = 96,
-		/// <summary>To be added.</summary>
+		/// <summary>Accelerated Compute.</summary>
 		AcceleratedCompute = 97,
 
 		// Specify the profile
-		/// <summary>To be added.</summary>
+		/// <summary>Open G L Profile.</summary>
 		OpenGLProfile = 99,
-		/// <summary>To be added.</summary>
+		/// <summary>Virtual Screen Count.</summary>
 		VirtualScreenCount = 128,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Robust.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 5)]
 		Robust = 75,
-		/// <summary>To be added.</summary>
+		/// <summary>M P Safe.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 5)]
 		MPSafe = 78,
-		/// <summary>To be added.</summary>
+		/// <summary>Multi Screen.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 5)]
 		MultiScreen = 81,
 	}
@@ -3222,37 +3222,37 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'Metal' Framework instead.")]
 	public enum NSOpenGLProfile : int {
-		/// <summary>To be added.</summary>
+		/// <summary>Version Legacy.</summary>
 		VersionLegacy = 0x1000, // Legacy
-		/// <summary>To be added.</summary>
+		/// <summary>Version3_2 Core.</summary>
 		Version3_2Core = 0x3200,  // 3.2 or better
-		/// <summary>To be added.</summary>
+		/// <summary>Version4_1 Core.</summary>
 		Version4_1Core = 0x4100,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSAlertButtonReturn : long {
-		/// <summary>To be added.</summary>
+		/// <summary>First.</summary>
 		First = 1000,
-		/// <summary>To be added.</summary>
+		/// <summary>Second.</summary>
 		Second = 1001,
-		/// <summary>To be added.</summary>
+		/// <summary>Third.</summary>
 		Third = 1002,
 	}
 
 	[NoMacCatalyst]
 	[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'Metal' Framework instead.")]
 	public enum NSOpenGLGlobalOption : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Format Cache Size.</summary>
 		FormatCacheSize = 501,
-		/// <summary>To be added.</summary>
+		/// <summary>Clear Format Cache.</summary>
 		ClearFormatCache = 502,
-		/// <summary>To be added.</summary>
+		/// <summary>Retain Renderers.</summary>
 		RetainRenderers = 503,
-		/// <summary>To be added.</summary>
+		/// <summary>Use Build Cache.</summary>
 		UseBuildCache = 506,
-		/// <summary>To be added.</summary>
+		/// <summary>Reset Library.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 4)]
 		ResetLibrary = 504,
 	}
@@ -3260,52 +3260,52 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'Metal' Framework instead.")]
 	public enum NSGLTextureTarget : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>T2 D.</summary>
 		T2D = 0x0de1,
-		/// <summary>To be added.</summary>
+		/// <summary>Cube Map.</summary>
 		CubeMap = 0x8513,
-		/// <summary>To be added.</summary>
+		/// <summary>Rectangle Ext.</summary>
 		RectangleExt = 0x84F5,
 	}
 
 	[NoMacCatalyst]
 	[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'Metal' Framework instead.")]
 	public enum NSGLFormat : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>R G B.</summary>
 		RGB = 0x1907,
-		/// <summary>To be added.</summary>
+		/// <summary>R G B A.</summary>
 		RGBA = 0x1908,
-		/// <summary>To be added.</summary>
+		/// <summary>Depth Component.</summary>
 		DepthComponent = 0x1902,
 	}
 
 	[NoMacCatalyst]
 	[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'Metal' Framework instead.")]
 	public enum NSGLTextureCubeMap : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Positive X.</summary>
 		PositiveX = 0x8515,
-		/// <summary>To be added.</summary>
+		/// <summary>Positive Y.</summary>
 		PositiveY = 0x8517,
-		/// <summary>To be added.</summary>
+		/// <summary>Positive Z.</summary>
 		PositiveZ = 0x8519,
-		/// <summary>To be added.</summary>
+		/// <summary>Negative X.</summary>
 		NegativeX = 0x8516,
-		/// <summary>To be added.</summary>
+		/// <summary>Negative Y.</summary>
 		NegativeY = 0x8517,
-		/// <summary>To be added.</summary>
+		/// <summary>Negative Z.</summary>
 		NegativeZ = 0x851A,
 	}
 
 	[NoMacCatalyst]
 	[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'Metal' Framework instead.")]
 	public enum NSGLColorBuffer : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Front.</summary>
 		Front = 0x0404,
-		/// <summary>To be added.</summary>
+		/// <summary>Back.</summary>
 		Back = 0x0405,
-		/// <summary>To be added.</summary>
+		/// <summary>Aux0.</summary>
 		Aux0 = 0x0409,
 	}
 
@@ -3313,33 +3313,33 @@ namespace AppKit {
 	[Native]
 	[Deprecated (PlatformName.MacOSX, 10, 14)]
 	public enum NSProgressIndicatorThickness : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Small.</summary>
 		Small = 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Regular.</summary>
 		Regular = 14,
-		/// <summary>To be added.</summary>
+		/// <summary>Aqua.</summary>
 		Aqua = 12,
-		/// <summary>To be added.</summary>
+		/// <summary>Large.</summary>
 		Large = 18,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSProgressIndicatorStyle : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Bar.</summary>
 		Bar,
-		/// <summary>To be added.</summary>
+		/// <summary>Spinning.</summary>
 		Spinning,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSPopUpArrowPosition : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Center.</summary>
 		Center,
-		/// <summary>To be added.</summary>
+		/// <summary>Bottom.</summary>
 		Bottom,
 	}
 
@@ -3535,61 +3535,61 @@ namespace AppKit {
 	[Native]
 	[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use 'NSSplitViewController' instead.")]
 	public enum NSDrawerState : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Closed.</summary>
 		Closed = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Opening.</summary>
 		Opening = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Open.</summary>
 		Open = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Closing.</summary>
 		Closing = 3,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSWindowLevel : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Normal.</summary>
 		Normal = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Dock.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 13)]
 		Dock = 20,
-		/// <summary>To be added.</summary>
+		/// <summary>Floating.</summary>
 		Floating = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Main Menu.</summary>
 		MainMenu = 24,
-		/// <summary>To be added.</summary>
+		/// <summary>Modal Panel.</summary>
 		ModalPanel = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Pop Up Menu.</summary>
 		PopUpMenu = 101,
-		/// <summary>To be added.</summary>
+		/// <summary>Screen Saver.</summary>
 		ScreenSaver = 1000,
-		/// <summary>To be added.</summary>
+		/// <summary>Status.</summary>
 		Status = 25,
-		/// <summary>To be added.</summary>
+		/// <summary>Submenu.</summary>
 		Submenu = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Torn Off Menu.</summary>
 		TornOffMenu = 3,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSRuleEditorRowType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Simple.</summary>
 		Simple = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Compound.</summary>
 		Compound,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSRuleEditorNestingMode : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Single.</summary>
 		Single,
-		/// <summary>To be added.</summary>
+		/// <summary>List.</summary>
 		List,
-		/// <summary>To be added.</summary>
+		/// <summary>Compound.</summary>
 		Compound,
-		/// <summary>To be added.</summary>
+		/// <summary>Simple.</summary>
 		Simple,
 	}
 
@@ -3597,32 +3597,32 @@ namespace AppKit {
 	[Native]
 	[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'NSGlyphProperty' instead.")]
 	public enum NSGlyphInscription : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Base.</summary>
 		Base,
-		/// <summary>To be added.</summary>
+		/// <summary>Below.</summary>
 		Below,
-		/// <summary>To be added.</summary>
+		/// <summary>Above.</summary>
 		Above,
-		/// <summary>To be added.</summary>
+		/// <summary>Overstrike.</summary>
 		Overstrike,
-		/// <summary>To be added.</summary>
+		/// <summary>Over Below.</summary>
 		OverBelow,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTypesetterBehavior : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Latest.</summary>
 		Latest = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Original.</summary>
 		Original = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Specific_10_2_ With Compatibility.</summary>
 		Specific_10_2_WithCompatibility = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Specific_10_2.</summary>
 		Specific_10_2 = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Specific_10_3.</summary>
 		Specific_10_3 = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Specific_10_4.</summary>
 		Specific_10_4 = 4,
 
 	}
@@ -3631,55 +3631,55 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSRemoteNotificationType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Badge.</summary>
 		Badge = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Sound.</summary>
 		Sound = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Alert.</summary>
 		Alert = 1 << 2,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSScrollViewFindBarPosition : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Above Horizontal Ruler.</summary>
 		AboveHorizontalRuler = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Above Content.</summary>
 		AboveContent,
-		/// <summary>To be added.</summary>
+		/// <summary>Below Content.</summary>
 		BelowContent,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSScrollerStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Legacy.</summary>
 		Legacy = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Overlay.</summary>
 		Overlay,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSScrollElasticity : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Automatic.</summary>
 		Automatic = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Allowed.</summary>
 		Allowed,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSScrollerKnobStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Default.</summary>
 		Default = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Dark.</summary>
 		Dark = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Light.</summary>
 		Light = 2,
 	}
 
@@ -3687,19 +3687,19 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSEventPhase : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Began.</summary>
 		Began = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Stationary.</summary>
 		Stationary = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Changed.</summary>
 		Changed = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Ended.</summary>
 		Ended = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Cancelled.</summary>
 		Cancelled = 16,
-		/// <summary>To be added.</summary>
+		/// <summary>May Begin.</summary>
 		MayBegin = 32,
 	}
 
@@ -3707,100 +3707,100 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSEventSwipeTrackingOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Lock Direction.</summary>
 		LockDirection = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Clamp Gesture Amount.</summary>
 		ClampGestureAmount = 2,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSEventGestureAxis : long {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Horizontal.</summary>
 		Horizontal,
-		/// <summary>To be added.</summary>
+		/// <summary>Vertical.</summary>
 		Vertical,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSLayoutConstraintOrientation : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Horizontal.</summary>
 		Horizontal,
-		/// <summary>To be added.</summary>
+		/// <summary>Vertical.</summary>
 		Vertical,
 	}
 
 	[NoMacCatalyst]
 	public enum NSLayoutPriority : int /*float*/ {
-		/// <summary>To be added.</summary>
+		/// <summary>Required.</summary>
 		Required = 1000,
-		/// <summary>To be added.</summary>
+		/// <summary>Default High.</summary>
 		DefaultHigh = 750,
-		/// <summary>To be added.</summary>
+		/// <summary>Drag That Can Resize Window.</summary>
 		DragThatCanResizeWindow = 510,
-		/// <summary>To be added.</summary>
+		/// <summary>Window Size Stay Put.</summary>
 		WindowSizeStayPut = 500,
-		/// <summary>To be added.</summary>
+		/// <summary>Drag That Cannot Resize Window.</summary>
 		DragThatCannotResizeWindow = 490,
-		/// <summary>To be added.</summary>
+		/// <summary>Default Low.</summary>
 		DefaultLow = 250,
-		/// <summary>To be added.</summary>
+		/// <summary>Fitting Size Compression.</summary>
 		FittingSizeCompression = 50,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSPopoverAppearance : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Minimal.</summary>
 		Minimal,
-		/// <summary>To be added.</summary>
+		/// <summary>H U D.</summary>
 		HUD,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSPopoverBehavior : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Application Defined.</summary>
 		ApplicationDefined,
-		/// <summary>To be added.</summary>
+		/// <summary>Transient.</summary>
 		Transient,
-		/// <summary>To be added.</summary>
+		/// <summary>Semitransient.</summary>
 		Semitransient,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTableViewRowSizeStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Default.</summary>
 		Default = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Custom.</summary>
 		Custom = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Small.</summary>
 		Small,
-		/// <summary>To be added.</summary>
+		/// <summary>Medium.</summary>
 		Medium,
-		/// <summary>To be added.</summary>
+		/// <summary>Large.</summary>
 		Large,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTableRowActionEdge : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Leading.</summary>
 		Leading,
-		/// <summary>To be added.</summary>
+		/// <summary>Trailing.</summary>
 		Trailing,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTableViewRowActionStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Regular.</summary>
 		Regular,
-		/// <summary>To be added.</summary>
+		/// <summary>Destructive.</summary>
 		Destructive,
 	}
 
@@ -3808,19 +3808,19 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSTableViewAnimation : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Fade.</summary>
 		Fade = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Gap.</summary>
 		Gap = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Slide Up.</summary>
 		SlideUp = 0x10,
-		/// <summary>To be added.</summary>
+		/// <summary>Slide Down.</summary>
 		SlideDown = 0x20,
-		/// <summary>To be added.</summary>
+		/// <summary>Slide Left.</summary>
 		SlideLeft = 0x30,
-		/// <summary>To be added.</summary>
+		/// <summary>Slide Right.</summary>
 		SlideRight = 0x40,
 	}
 
@@ -3828,79 +3828,79 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSDraggingItemEnumerationOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Concurrent.</summary>
 		Concurrent = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Clear Nonenumerated Images.</summary>
 		ClearNonenumeratedImages = 1 << 16,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSDraggingFormation : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Default.</summary>
 		Default,
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Pile.</summary>
 		Pile,
-		/// <summary>To be added.</summary>
+		/// <summary>List.</summary>
 		List,
-		/// <summary>To be added.</summary>
+		/// <summary>Stack.</summary>
 		Stack,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSDraggingContext : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Outside Application.</summary>
 		OutsideApplication,
-		/// <summary>To be added.</summary>
+		/// <summary>Within Application.</summary>
 		WithinApplication,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSWindowAnimationBehavior : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Default.</summary>
 		Default = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Document Window.</summary>
 		DocumentWindow,
-		/// <summary>To be added.</summary>
+		/// <summary>Utility Window.</summary>
 		UtilityWindow,
-		/// <summary>To be added.</summary>
+		/// <summary>Alert Panel.</summary>
 		AlertPanel,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTextFinderAction : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Show Find Interface.</summary>
 		ShowFindInterface = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Next Match.</summary>
 		NextMatch = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Previous Match.</summary>
 		PreviousMatch = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Replace All.</summary>
 		ReplaceAll = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Replace.</summary>
 		Replace = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Replace And Find.</summary>
 		ReplaceAndFind = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Set Search String.</summary>
 		SetSearchString = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Replace All In Selection.</summary>
 		ReplaceAllInSelection = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Select All.</summary>
 		SelectAll = 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Select All In Selection.</summary>
 		SelectAllInSelection = 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Hide Find Interface.</summary>
 		HideFindInterface = 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Show Replace Interface.</summary>
 		ShowReplaceInterface = 12,
-		/// <summary>To be added.</summary>
+		/// <summary>Hide Replace Interface.</summary>
 		HideReplaceInterface = 13,
 	}
 
@@ -3908,27 +3908,27 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSFontPanelMode : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Face Mask.</summary>
 		FaceMask = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Size Mask.</summary>
 		SizeMask = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Collection Mask.</summary>
 		CollectionMask = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Underline Effect Mask.</summary>
 		UnderlineEffectMask = 1 << 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Strikethrough Effect Mask.</summary>
 		StrikethroughEffectMask = 1 << 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Text Color Effect Mask.</summary>
 		TextColorEffectMask = 1 << 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Document Color Effect Mask.</summary>
 		DocumentColorEffectMask = 1 << 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Shadow Effect Mask.</summary>
 		ShadowEffectMask = 1 << 12,
-		/// <summary>To be added.</summary>
+		/// <summary>All Effects Mask.</summary>
 		AllEffectsMask = 0XFFF00,
-		/// <summary>To be added.</summary>
+		/// <summary>Standard Mask.</summary>
 		StandardMask = 0xFFFF,
-		/// <summary>To be added.</summary>
+		/// <summary>All Modes Mask.</summary>
 		AllModesMask = unchecked((ulong) UInt32.MaxValue),
 	}
 
@@ -3936,22 +3936,22 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSFontCollectionVisibility : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Process.</summary>
 		Process = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>User.</summary>
 		User = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Computer.</summary>
 		Computer = 1 << 2,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSSharingContentScope : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Item.</summary>
 		Item,
-		/// <summary>To be added.</summary>
+		/// <summary>Partial.</summary>
 		Partial,
-		/// <summary>To be added.</summary>
+		/// <summary>Full.</summary>
 		Full,
 	}
 
@@ -3959,37 +3959,37 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSTypesetterControlCharacterAction : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Zero Advancement.</summary>
 		ZeroAdvancement = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Whitespace.</summary>
 		Whitespace = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Horizontal Tab.</summary>
 		HorizontalTab = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Line Break.</summary>
 		LineBreak = 1 << 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Paragraph Break.</summary>
 		ParagraphBreak = 1 << 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Container Break.</summary>
 		ContainerBreak = 1 << 5,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSPageControllerTransitionStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Stack History.</summary>
 		StackHistory,
-		/// <summary>To be added.</summary>
+		/// <summary>Stack Book.</summary>
 		StackBook,
-		/// <summary>To be added.</summary>
+		/// <summary>Horizontal Strip.</summary>
 		HorizontalStrip,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSWindowTitleVisibility : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Visible.</summary>
 		Visible = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Hidden.</summary>
 		Hidden = 1,
 	}
 
@@ -3997,23 +3997,23 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSViewControllerTransitionOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0x0,
-		/// <summary>To be added.</summary>
+		/// <summary>Crossfade.</summary>
 		Crossfade = 0x1,
-		/// <summary>To be added.</summary>
+		/// <summary>Slide Up.</summary>
 		SlideUp = 0x10,
-		/// <summary>To be added.</summary>
+		/// <summary>Slide Down.</summary>
 		SlideDown = 0x20,
-		/// <summary>To be added.</summary>
+		/// <summary>Slide Left.</summary>
 		SlideLeft = 0x40,
-		/// <summary>To be added.</summary>
+		/// <summary>Slide Right.</summary>
 		SlideRight = 0x80,
-		/// <summary>To be added.</summary>
+		/// <summary>Slide Forward.</summary>
 		SlideForward = 0x140,
-		/// <summary>To be added.</summary>
+		/// <summary>Slide Backward.</summary>
 		SlideBackward = 0x180,
-		/// <summary>To be added.</summary>
+		/// <summary>Allow User Interaction.</summary>
 		AllowUserInteraction = 0x1000,
 	}
 
@@ -4021,7 +4021,7 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSApplicationOcclusionState : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Visible.</summary>
 		Visible = 1 << 1,
 	}
 
@@ -4029,7 +4029,7 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSWindowOcclusionState : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Visible.</summary>
 		Visible = 1 << 1,
 	}
 
@@ -4039,68 +4039,68 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSVisualEffectMaterial : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Appearance Based.</summary>
 		[Advice ("Use a specific material instead.")]
 		AppearanceBased,
-		/// <summary>To be added.</summary>
+		/// <summary>Light.</summary>
 		[Advice ("Use a semantic material instead.")]
 		Light,
-		/// <summary>To be added.</summary>
+		/// <summary>Dark.</summary>
 		[Advice ("Use a semantic material instead.")]
 		Dark,
-		/// <summary>To be added.</summary>
+		/// <summary>Titlebar.</summary>
 		Titlebar,
-		/// <summary>To be added.</summary>
+		/// <summary>Selection.</summary>
 		Selection,
-		/// <summary>To be added.</summary>
+		/// <summary>Menu.</summary>
 		Menu,
-		/// <summary>To be added.</summary>
+		/// <summary>Popover.</summary>
 		Popover,
-		/// <summary>To be added.</summary>
+		/// <summary>Sidebar.</summary>
 		Sidebar,
-		/// <summary>To be added.</summary>
+		/// <summary>Medium Light.</summary>
 		[Advice ("Use a semantic material instead.")]
 		MediumLight,
-		/// <summary>To be added.</summary>
+		/// <summary>Ultra Dark.</summary>
 		[Advice ("Use a semantic material instead.")]
 		UltraDark,
-		/// <summary>To be added.</summary>
+		/// <summary>Header View.</summary>
 		HeaderView = 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Sheet.</summary>
 		Sheet = 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Window Background.</summary>
 		WindowBackground = 12,
-		/// <summary>To be added.</summary>
+		/// <summary>Hud Window.</summary>
 		HudWindow = 13,
-		/// <summary>To be added.</summary>
+		/// <summary>Full Screen U I.</summary>
 		FullScreenUI = 15,
-		/// <summary>To be added.</summary>
+		/// <summary>Tool Tip.</summary>
 		ToolTip = 17,
-		/// <summary>To be added.</summary>
+		/// <summary>Content Background.</summary>
 		ContentBackground = 18,
-		/// <summary>To be added.</summary>
+		/// <summary>Under Window Background.</summary>
 		UnderWindowBackground = 21,
-		/// <summary>To be added.</summary>
+		/// <summary>Under Page Background.</summary>
 		UnderPageBackground = 22,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSVisualEffectBlendingMode : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Behind Window.</summary>
 		BehindWindow,
-		/// <summary>To be added.</summary>
+		/// <summary>Within Window.</summary>
 		WithinWindow,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSVisualEffectState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Follows Window Active State.</summary>
 		FollowsWindowActiveState,
-		/// <summary>To be added.</summary>
+		/// <summary>Active.</summary>
 		Active,
-		/// <summary>To be added.</summary>
+		/// <summary>Inactive.</summary>
 		Inactive,
 	}
 	#endregion
@@ -4108,52 +4108,52 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSPressureBehavior : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Unknown.</summary>
 		Unknown = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Primary Default.</summary>
 		PrimaryDefault = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Primary Click.</summary>
 		PrimaryClick = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Primary Generic.</summary>
 		PrimaryGeneric = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Primary Accelerator.</summary>
 		PrimaryAccelerator = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Primary Deep Click.</summary>
 		PrimaryDeepClick = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Primary Deep Drag.</summary>
 		PrimaryDeepDrag = 6,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSHapticFeedbackPattern : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Generic.</summary>
 		Generic = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Alignment.</summary>
 		Alignment,
-		/// <summary>To be added.</summary>
+		/// <summary>Level Change.</summary>
 		LevelChange,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSHapticFeedbackPerformanceTime : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Default.</summary>
 		Default = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Now.</summary>
 		Now,
-		/// <summary>To be added.</summary>
+		/// <summary>Draw Completed.</summary>
 		DrawCompleted,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSSpringLoadingHighlight : long {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Standard.</summary>
 		Standard,
-		/// <summary>To be added.</summary>
+		/// <summary>Emphasized.</summary>
 		Emphasized,
 	}
 
@@ -4161,13 +4161,13 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSSpringLoadingOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Disabled.</summary>
 		Disabled = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Enabled.</summary>
 		Enabled = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Continuous Activation.</summary>
 		ContinuousActivation = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>No Hover.</summary>
 		NoHover = 1 << 3,
 	}
 
@@ -4175,83 +4175,83 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSWindowListOptions : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Ordered Front To Back.</summary>
 		OrderedFrontToBack = (1 << 0),
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSStatusItemBehavior : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Removal Allowed.</summary>
 		RemovalAllowed = (1 << 1),
-		/// <summary>To be added.</summary>
+		/// <summary>Termination On Removal.</summary>
 		TerminationOnRemoval = (1 << 2),
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSWindowTabbingMode : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Automatic.</summary>
 		Automatic,
-		/// <summary>To be added.</summary>
+		/// <summary>Preferred.</summary>
 		Preferred,
-		/// <summary>To be added.</summary>
+		/// <summary>Disallowed.</summary>
 		Disallowed,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSWindowUserTabbingPreference : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Manual.</summary>
 		Manual,
-		/// <summary>To be added.</summary>
+		/// <summary>Always.</summary>
 		Always,
-		/// <summary>To be added.</summary>
+		/// <summary>In Full Screen.</summary>
 		InFullScreen,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSGridCellPlacement : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Inherited.</summary>
 		Inherited = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Leading.</summary>
 		Leading,
-		/// <summary>To be added.</summary>
+		/// <summary>Top.</summary>
 		Top = Leading,
-		/// <summary>To be added.</summary>
+		/// <summary>Trailing.</summary>
 		Trailing,
-		/// <summary>To be added.</summary>
+		/// <summary>Bottom.</summary>
 		Bottom = Trailing,
-		/// <summary>To be added.</summary>
+		/// <summary>Center.</summary>
 		Center,
-		/// <summary>To be added.</summary>
+		/// <summary>Fill.</summary>
 		Fill,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSGridRowAlignment : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Inherited.</summary>
 		Inherited = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>First Baseline.</summary>
 		FirstBaseline,
-		/// <summary>To be added.</summary>
+		/// <summary>Last Baseline.</summary>
 		LastBaseline,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSImageLayoutDirection : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Unspecified.</summary>
 		Unspecified = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Left To Right.</summary>
 		LeftToRight = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Right To Left.</summary>
 		RightToLeft = 3,
 	}
 
@@ -4259,66 +4259,66 @@ namespace AppKit {
 	[Native]
 	[Flags]
 	public enum NSCloudKitSharingServiceOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Standard.</summary>
 		Standard = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Allow Public.</summary>
 		AllowPublic = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Allow Private.</summary>
 		AllowPrivate = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Allow Read Only.</summary>
 		AllowReadOnly = 1 << 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Allow Read Write.</summary>
 		AllowReadWrite = 1 << 5,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSDisplayGamut : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Srgb.</summary>
 		Srgb = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>P3.</summary>
 		P3,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTabPosition : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Top.</summary>
 		Top,
-		/// <summary>To be added.</summary>
+		/// <summary>Left.</summary>
 		Left,
-		/// <summary>To be added.</summary>
+		/// <summary>Bottom.</summary>
 		Bottom,
-		/// <summary>To be added.</summary>
+		/// <summary>Right.</summary>
 		Right,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTabViewBorderType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Line.</summary>
 		Line,
-		/// <summary>To be added.</summary>
+		/// <summary>Bezel.</summary>
 		Bezel,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSPasteboardContentsOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Current Host Only.</summary>
 		CurrentHostOnly = 1,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTouchType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Direct.</summary>
 		Direct,
-		/// <summary>To be added.</summary>
+		/// <summary>Indirect.</summary>
 		Indirect,
 	}
 
@@ -4326,108 +4326,108 @@ namespace AppKit {
 	[Native]
 	[Flags]
 	public enum NSTouchTypeMask : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Direct.</summary>
 		Direct = (1 << (int) NSTouchType.Direct),
-		/// <summary>To be added.</summary>
+		/// <summary>Indirect.</summary>
 		Indirect = (1 << (int) NSTouchType.Indirect),
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSScrubberMode : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Fixed.</summary>
 		Fixed = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Free.</summary>
 		Free,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSScrubberAlignment : long {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Leading.</summary>
 		Leading,
-		/// <summary>To be added.</summary>
+		/// <summary>Trailing.</summary>
 		Trailing,
-		/// <summary>To be added.</summary>
+		/// <summary>Center.</summary>
 		Center,
 	}
 
 	[NoMacCatalyst]
 	public enum NSFontError : int {
-		/// <summary>To be added.</summary>
+		/// <summary>Asset Download Error.</summary>
 		AssetDownloadError = 66304,
-		/// <summary>To be added.</summary>
+		/// <summary>Error Minimum.</summary>
 		ErrorMinimum = 66304,
-		/// <summary>To be added.</summary>
+		/// <summary>Error Maximum.</summary>
 		ErrorMaximum = 66335,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSAccessibilityAnnotationPosition : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Full Range.</summary>
 		FullRange,
-		/// <summary>To be added.</summary>
+		/// <summary>Start.</summary>
 		Start,
-		/// <summary>To be added.</summary>
+		/// <summary>End.</summary>
 		End,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSAccessibilityCustomRotorSearchDirection : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Previous.</summary>
 		Previous,
-		/// <summary>To be added.</summary>
+		/// <summary>Next.</summary>
 		Next,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSAccessibilityCustomRotorType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Custom.</summary>
 		Custom = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Any.</summary>
 		Any = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Annotation.</summary>
 		Annotation,
-		/// <summary>To be added.</summary>
+		/// <summary>Bold Text.</summary>
 		BoldText,
-		/// <summary>To be added.</summary>
+		/// <summary>Heading.</summary>
 		Heading,
-		/// <summary>To be added.</summary>
+		/// <summary>Heading Level1.</summary>
 		HeadingLevel1,
-		/// <summary>To be added.</summary>
+		/// <summary>Heading Level2.</summary>
 		HeadingLevel2,
-		/// <summary>To be added.</summary>
+		/// <summary>Heading Level3.</summary>
 		HeadingLevel3,
-		/// <summary>To be added.</summary>
+		/// <summary>Heading Level4.</summary>
 		HeadingLevel4,
-		/// <summary>To be added.</summary>
+		/// <summary>Heading Level5.</summary>
 		HeadingLevel5,
-		/// <summary>To be added.</summary>
+		/// <summary>Heading Level6.</summary>
 		HeadingLevel6,
-		/// <summary>To be added.</summary>
+		/// <summary>Image.</summary>
 		Image,
-		/// <summary>To be added.</summary>
+		/// <summary>Italic Text.</summary>
 		ItalicText,
-		/// <summary>To be added.</summary>
+		/// <summary>Landmark.</summary>
 		Landmark,
-		/// <summary>To be added.</summary>
+		/// <summary>Link.</summary>
 		Link,
-		/// <summary>To be added.</summary>
+		/// <summary>List.</summary>
 		List,
-		/// <summary>To be added.</summary>
+		/// <summary>Misspelled Word.</summary>
 		MisspelledWord,
-		/// <summary>To be added.</summary>
+		/// <summary>Table.</summary>
 		Table,
-		/// <summary>To be added.</summary>
+		/// <summary>Text Field.</summary>
 		TextField,
-		/// <summary>To be added.</summary>
+		/// <summary>Underlined Text.</summary>
 		UnderlinedText,
-		/// <summary>To be added.</summary>
+		/// <summary>Visited Link.</summary>
 		VisitedLink,
 		Audiograph,
 	}
@@ -4435,11 +4435,11 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSColorType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Component Based.</summary>
 		ComponentBased,
-		/// <summary>To be added.</summary>
+		/// <summary>Pattern.</summary>
 		Pattern,
-		/// <summary>To be added.</summary>
+		/// <summary>Catalog.</summary>
 		Catalog,
 	}
 
@@ -4447,7 +4447,7 @@ namespace AppKit {
 	[Native]
 	[Flags]
 	public enum NSFontAssetRequestOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Uses Standard U I.</summary>
 		UsesStandardUI = 1 << 0,
 	}
 
@@ -4455,77 +4455,77 @@ namespace AppKit {
 	[Native]
 	[Flags]
 	public enum NSFontPanelModeMask : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Face.</summary>
 		Face = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Size.</summary>
 		Size = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Collection.</summary>
 		Collection = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Underline Effect.</summary>
 		UnderlineEffect = 1 << 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Strikethrough Effect.</summary>
 		StrikethroughEffect = 1 << 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Text Color Effect.</summary>
 		TextColorEffect = 1 << 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Document Color Effect.</summary>
 		DocumentColorEffect = 1 << 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Shadow Effect.</summary>
 		ShadowEffect = 1 << 12,
-		/// <summary>To be added.</summary>
+		/// <summary>All Effects.</summary>
 		AllEffects = (ulong) 0XFFF00,
-		/// <summary>To be added.</summary>
+		/// <summary>Standard Modes.</summary>
 		StandardModes = (ulong) 0XFFFF,
-		/// <summary>To be added.</summary>
+		/// <summary>All Modes.</summary>
 		AllModes = (ulong) 0XFFFFFFFF,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSLevelIndicatorPlaceholderVisibility : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Automatic.</summary>
 		Automatic = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Always.</summary>
 		Always = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>While Editing.</summary>
 		WhileEditing = 2,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSSegmentDistribution : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Fit.</summary>
 		Fit = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Fill.</summary>
 		Fill,
-		/// <summary>To be added.</summary>
+		/// <summary>Fill Equally.</summary>
 		FillEqually,
-		/// <summary>To be added.</summary>
+		/// <summary>Fill Proportionally.</summary>
 		FillProportionally,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSColorSystemEffect : long {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Pressed.</summary>
 		Pressed,
-		/// <summary>To be added.</summary>
+		/// <summary>Deep Pressed.</summary>
 		DeepPressed,
-		/// <summary>To be added.</summary>
+		/// <summary>Disabled.</summary>
 		Disabled,
-		/// <summary>To be added.</summary>
+		/// <summary>Rollover.</summary>
 		Rollover,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSWorkspaceAuthorizationType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Create Symbolic Link.</summary>
 		CreateSymbolicLink,
-		/// <summary>To be added.</summary>
+		/// <summary>Set Attributes.</summary>
 		SetAttributes,
-		/// <summary>To be added.</summary>
+		/// <summary>Replace File.</summary>
 		ReplaceFile,
 	}
 

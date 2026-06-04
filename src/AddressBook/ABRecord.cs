@@ -73,7 +73,7 @@ namespace AddressBook {
 		///         </remarks>
 		public const int InvalidRecordId = -1;
 		/// <summary>
-		///           An invalid value for a property id.
+		///           An invalid value for AProperty id.
 		///         </summary>
 		///         <remarks>
 		///         </remarks>

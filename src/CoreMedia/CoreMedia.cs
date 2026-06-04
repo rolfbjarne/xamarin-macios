@@ -22,11 +22,11 @@ namespace CoreMedia {
 	[SupportedOSPlatform ("tvos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct CMSampleTimingInfo {
-		/// <summary>To be added.</summary>
+	/// <summary>The duration of the sample.</summary>
 		public CMTime Duration;
-		/// <summary>To be added.</summary>
+	/// <summary>The presentation time stamp of the sample.</summary>
 		public CMTime PresentationTimeStamp;
-		/// <summary>To be added.</summary>
+	/// <summary>The decode time stamp of the sample.</summary>
 		public CMTime DecodeTimeStamp;
 	}
 
@@ -38,31 +38,31 @@ namespace CoreMedia {
 	[SupportedOSPlatform ("tvos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct CMTimeRange {
-		/// <summary>To be added.</summary>
+	/// <summary>The start time of the range.</summary>
 		public CMTime Start;
-		/// <summary>To be added.</summary>
+	/// <summary>The duration of the range.</summary>
 		public CMTime Duration;
 #if !COREBUILD
-		/// <summary>To be added.</summary>
+	/// <summary>A time range with zero start and zero duration.</summary>
 		public static readonly CMTimeRange Zero;
-		/// <summary>To be added.</summary>
+	/// <summary>An invalid time range.</summary>
 		public static readonly CMTimeRange InvalidRange;
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the key for the time mapping source in a dictionary representation.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
 		public static readonly CMTimeRange InvalidMapping;
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the key for the time mapping target in a dictionary representation.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
 		public static NSString? TimeMappingSourceKey { get; private set; }
 
-		/// <summary>To be added.</summary>
+	/// <summary>An invalid time mapping.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -104,7 +104,7 @@ namespace CoreMedia {
 #if !COREBUILD
 		/// <param name="source">The source.</param>
 		///         <param name="target">The target.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a time mapping from the specified source and target time ranges.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -115,7 +115,7 @@ namespace CoreMedia {
 		}
 
 		/// <param name="target">The target.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates an empty time mapping for the specified target time range.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -126,7 +126,7 @@ namespace CoreMedia {
 		}
 
 		/// <param name="dict">The dict.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a time mapping from a dictionary representation.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -138,7 +138,7 @@ namespace CoreMedia {
 			return result;
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Returns a dictionary representation of this time mapping.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -148,7 +148,7 @@ namespace CoreMedia {
 			return new NSDictionary (CMTimeMappingCopyAsDictionary (this, IntPtr.Zero), true);
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets a string description of this time mapping.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -204,15 +204,15 @@ namespace CoreMedia {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct CMTimeScale {
 		// CMTime.h
-		/// <summary>To be added.</summary>
+	/// <summary>The maximum valid time scale value.</summary>
 		public static readonly CMTimeScale MaxValue = new CMTimeScale (0x7fffffff);
 
 		// int32_t -> CMTime.h
-		/// <summary>To be added.</summary>
+	/// <summary>The underlying time scale value.</summary>
 		public int Value;
 
 		/// <param name="value">The value to set.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Initializes a new time scale with the specified value.</summary>
 		public CMTimeScale (int value)
 		{
 			if (value < 0 || value > 0x7fffffff)

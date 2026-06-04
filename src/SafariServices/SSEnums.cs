@@ -17,7 +17,7 @@ namespace SafariServices {
 	[Native ("SSReadingListErrorCode")]
 	[ErrorDomain ("SSReadingListErrorDomain")]
 	public enum SSReadingListError : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates url scheme not allowed.</summary>
 		UrlSchemeNotAllowed = 1,
 	}
 
@@ -28,13 +28,13 @@ namespace SafariServices {
 	[Native]
 	[ErrorDomain ("SFContentBlockerErrorDomain")]
 	public enum SFContentBlockerErrorCode : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates ok.</summary>
 		Ok = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates no extension found.</summary>
 		NoExtensionFound = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates no attachment found.</summary>
 		NoAttachmentFound = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates loading interrupted.</summary>
 		LoadingInterrupted = 3,
 	}
 
@@ -63,11 +63,11 @@ namespace SafariServices {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum SFSafariViewControllerDismissButtonStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates done.</summary>
 		Done,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates close.</summary>
 		Close,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates cancel.</summary>
 		Cancel,
 	}
 
@@ -78,7 +78,7 @@ namespace SafariServices {
 	[MacCatalyst (13, 1)]
 	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'ASWebAuthenticationSessionErrorCode' instead.")]
 	public enum SFAuthenticationError : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates canceled login.</summary>
 		CanceledLogin = 1,
 	}
 }

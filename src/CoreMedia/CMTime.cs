@@ -52,7 +52,7 @@ namespace CoreMedia {
 		public readonly static CMTime Indefinite = new CMTime (kIndefinite);
 
 		const Flags kPositive = Flags.Valid | Flags.PositiveInfinity;
-		/// <summary>Constant that contains a positive infinity CMTime.</summary>
+		/// <summary>Constant that contains APositive infinity CMTime.</summary>
 		///         <remarks>To be added.</remarks>
 		public readonly static CMTime PositiveInfinity = new CMTime (kPositive);
 

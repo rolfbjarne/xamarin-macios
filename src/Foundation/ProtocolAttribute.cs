@@ -69,7 +69,6 @@ namespace Foundation {
 		public Type? WrapperType { get; set; }
 		/// <summary>The name of the protocol.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? Name { get; set; }
 		/// <summary>Whether the Objective-C protocol is an informal protocol.</summary>
 		///         <value>To be added.</value>
@@ -80,7 +79,6 @@ namespace Foundation {
 		string? informal_until;
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? FormalSince {
 			get {
 				return informal_until;
@@ -103,73 +101,56 @@ namespace Foundation {
 	}
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[AttributeUsage (AttributeTargets.Interface, AllowMultiple = true)]
 	public sealed class ProtocolMemberAttribute : Attribute {
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public ProtocolMemberAttribute () { }
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool IsRequired { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool IsProperty { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool IsStatic { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? Name { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? Selector { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public Type? ReturnType { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public Type? ReturnTypeDelegateProxy { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public Type []? ParameterType { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool []? ParameterByRef { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public Type? []? ParameterBlockProxy { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool IsVariadic { get; set; }
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public Type? PropertyType { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? GetterSelector { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? SetterSelector { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public ArgumentSemantic ArgumentSemantic { get; set; }
 	}
 

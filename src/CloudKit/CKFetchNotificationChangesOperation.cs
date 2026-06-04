@@ -39,9 +39,9 @@ namespace CloudKit {
 		}
 
 		/// <param name="previousServerChangeToken">
-		///           <para>To be added.</para>
-		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
-		///         </param>
+		///   <para>The previous server change token, used to fetch only changes since that point.</para>
+		///   <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		/// </param>
 		///         <summary>Creates a new <see cref="CKFetchNotificationChangesOperation" /> instance.</summary>
 		public CKFetchNotificationChangesOperation (CKServerChangeToken? previousServerChangeToken)
 			: base (NSObjectFlag.Empty)

@@ -418,11 +418,11 @@ namespace CoreGraphics {
 	[MacCatalyst (13, 1)]
 	[StrongDictionary ("CGColorConversionInfo")]
 	interface CGColorConversionOptions {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets whether black point compensation is enabled.</summary>
+		/// <value><see langword="true" /> if black point compensation is enabled; otherwise, <see langword="false" />.</value>
 		bool BlackPointCompensation { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the TRC size.</summary>
+		/// <value>The TRC size.</value>
 		CGSize TrcSize { get; set; }
 	}
 

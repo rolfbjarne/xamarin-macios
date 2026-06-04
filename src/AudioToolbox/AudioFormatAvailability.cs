@@ -39,7 +39,6 @@ namespace AudioToolbox {
 	public static class AudioFormatAvailability {
 		/// <param name="format">The format.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static AudioValueRange []? GetAvailableEncodeBitRates (AudioFormatType format)
 		{
 			return GetAvailable<AudioValueRange> (AudioFormatProperty.AvailableEncodeBitRates, format);
@@ -47,7 +46,6 @@ namespace AudioToolbox {
 
 		/// <param name="format">The format.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static AudioValueRange []? GetAvailableEncodeSampleRates (AudioFormatType format)
 		{
 			return GetAvailable<AudioValueRange> (AudioFormatProperty.AvailableEncodeSampleRates, format);
@@ -55,7 +53,6 @@ namespace AudioToolbox {
 
 		/// <param name="format">The format.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static AudioClassDescription []? GetDecoders (AudioFormatType format)
 		{
 			return GetAvailable<AudioClassDescription> (AudioFormatProperty.Decoders, format);
@@ -63,7 +60,6 @@ namespace AudioToolbox {
 
 		/// <param name="format">The format.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static AudioClassDescription []? GetEncoders (AudioFormatType format)
 		{
 			return GetAvailable<AudioClassDescription> (AudioFormatProperty.Encoders, format);

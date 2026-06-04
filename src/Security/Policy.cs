@@ -45,9 +45,9 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static IntPtr /* SecPolicyRef */ SecPolicyCreateSSL (byte server, IntPtr /* CFStringRef */ hostname);
 
-		/// <summary>Create a policy instance that represents the SSL/TLS profile.</summary>
+		/// <summary>Create APolicy instance that represents the SSL/TLS profile.</summary>
 		/// <param name="server">Indicate if the policy is for a server (true) or client (false) certificate.</param>
-		/// <param name="hostName">The server host name on which the policy will be applied, or <see langword="null" /> to create a policy without a specific host name (disables host name validation).</param>
+		/// <param name="hostName">The server host name on which the policy will be applied, or <see langword="null" /> to create APolicy without a specific host name (disables host name validation).</param>
 		/// <returns>A SecPolicy instance that can be used to validate a SecCertificate using SecTrust.</returns>
 		static public SecPolicy CreateSslPolicy (bool server, string? hostName)
 		{
@@ -62,7 +62,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static IntPtr /* SecPolicyRef */ SecPolicyCreateBasicX509 ();
 
-		/// <summary>Create a policy instance that represent the basic X.509 certificate profile.</summary>
+		/// <summary>Create APolicy instance that represent the basic X.509 certificate profile.</summary>
 		///         <returns>A SecPolicy instance that can be used to validate a SecCertificate using SecTrust.</returns>
 		///         <remarks>
 		///         </remarks>

@@ -56,16 +56,14 @@ namespace AddressBook {
 			AddressBook = addressbook;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the name.</summary>
 		public string? Name {
 			get { return PropertyToString (ABSourcePropertyId.Name); }
 			set { SetValue (ABSourcePropertyId.Name, value); }
 		}
 
 		// Type is already a property in ABRecord
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the source type.</summary>
 		public ABSourceType SourceType {
 			get { return (ABSourceType) (int) PropertyTo<NSNumber> (ABSourcePropertyId.Type); }
 			set { SetValue (ABSourcePropertyId.Type, new NSNumber ((int) value)); }

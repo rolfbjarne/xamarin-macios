@@ -5,7 +5,7 @@ namespace HomeKit {
 	partial class HMEventTrigger {
 		/// <param name="significantEvent">The significant event.</param>
 		///         <param name="offset">The offset.</param>
-		///         <summary>Creates a predicate that causes a trigger to evaluate <paramref name="offset" /> before the specified significant event.</summary>
+		///         <summary>Creates APredicate that causes a trigger to evaluate <paramref name="offset" /> before the specified significant event.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("tvos")]

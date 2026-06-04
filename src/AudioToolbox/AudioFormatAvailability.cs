@@ -38,28 +38,28 @@ namespace AudioToolbox {
 	[SupportedOSPlatform ("tvos")]
 	public static class AudioFormatAvailability {
 		/// <param name="format">The format.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the available encode bit rates for the specified audio format.</summary>
 		public static AudioValueRange []? GetAvailableEncodeBitRates (AudioFormatType format)
 		{
 			return GetAvailable<AudioValueRange> (AudioFormatProperty.AvailableEncodeBitRates, format);
 		}
 
 		/// <param name="format">The format.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the available encode sample rates for the specified audio format.</summary>
 		public static AudioValueRange []? GetAvailableEncodeSampleRates (AudioFormatType format)
 		{
 			return GetAvailable<AudioValueRange> (AudioFormatProperty.AvailableEncodeSampleRates, format);
 		}
 
 		/// <param name="format">The format.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the available decoders for the specified audio format.</summary>
 		public static AudioClassDescription []? GetDecoders (AudioFormatType format)
 		{
 			return GetAvailable<AudioClassDescription> (AudioFormatProperty.Decoders, format);
 		}
 
 		/// <param name="format">The format.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the available encoders for the specified audio format.</summary>
 		public static AudioClassDescription []? GetEncoders (AudioFormatType format)
 		{
 			return GetAvailable<AudioClassDescription> (AudioFormatProperty.Encoders, format);

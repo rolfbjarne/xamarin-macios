@@ -30,13 +30,12 @@ namespace WebKit {
 	[SupportedOSPlatform ("macos")]
 	public class DomEventArgs : EventArgs {
 		/// <param name="evt">The evt.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="DomEventArgs" /> instance.</summary>
 		public DomEventArgs (DomEvent evt)
 		{
 			Event = evt;
 		}
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the event.</summary>
 		public DomEvent Event { get; set; }
 	}
 
@@ -80,8 +79,7 @@ namespace WebKit {
 		/// <param name="type">The type.</param>
 		///         <param name="handler">The completion handler to call when the operation completes.</param>
 		///         <param name="useCapture">The use capture.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Adds event listener.</summary>
 		public IDomEventListener AddEventListener (string type, DomEventListenerHandler handler, bool useCapture)
 		{
 			if (handler is null)
@@ -94,8 +92,7 @@ namespace WebKit {
 		/// <param name="type">The type.</param>
 		///         <param name="callback">The callback to invoke.</param>
 		///         <param name="useCapture">The use capture.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Adds event listener.</summary>
 		public IDomEventListener AddEventListener (string type, Action<DomEvent> callback, bool useCapture)
 		{
 			if (callback is null)

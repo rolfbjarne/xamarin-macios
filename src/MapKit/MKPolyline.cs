@@ -6,7 +6,7 @@ namespace MapKit {
 
 	public partial class MKPolyline {
 
-		/// <param name="points">To be added.</param>
+		/// <param name="points">The points.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>
@@ -25,7 +25,7 @@ namespace MapKit {
 			}
 		}
 
-		/// <param name="coords">To be added.</param>
+		/// <param name="coords">The coords.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>

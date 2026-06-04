@@ -100,7 +100,6 @@ namespace AddressBook {
 		///           Constructs and initializes a
 		///           <see cref="AddressBook.ABGroup" /> instance.
 		///         </summary>
-		///         <remarks>To be added.</remarks>
 		public ABGroup ()
 			: base (ABGroupCreate (), true)
 		{
@@ -110,9 +109,8 @@ namespace AddressBook {
 		[DllImport (Constants.AddressBookLibrary)]
 		extern static IntPtr ABGroupCreateInSource (IntPtr source);
 
-		/// <param name="source">To be added.</param>
+		/// <param name="source">The source.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public ABGroup (ABRecord source)
 			: base (IntPtr.Zero, true)
 		{
@@ -153,7 +151,6 @@ namespace AddressBook {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public ABRecord? Source {
 			get {
 				var h = ABGroupCopySource (Handle);

@@ -101,7 +101,7 @@ class ConsoleToTaskWriter : TextWriter {
 			}
 			if (originalStderr is not null) {
 				Console.SetError (originalStderr);
-				originalStderr =  null;
+				originalStderr = null;
 			}
 		}
 	}

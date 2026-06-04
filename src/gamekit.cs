@@ -1554,7 +1554,7 @@ namespace GameKit {
 		/// <param name="match">To be added.</param>
 		/// <param name="data">To be added.</param>
 		/// <param name="player">To be added.</param>
-		/// <summary>Method that is called when data is received from a player.</summary>
+		/// <summary>Method that is called when data is received from APlayer.</summary>
 		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("match:didReceiveData:fromRemotePlayer:"), EventArgs ("GKMatchReceivedDataFromRemotePlayer", XmlDocs = """
@@ -1566,7 +1566,7 @@ namespace GameKit {
 		/// <param name="match">To be added.</param>
 		/// <param name="player">To be added.</param>
 		/// <param name="state">To be added.</param>
-		/// <summary>Method that is called when a player's connection state changes.</summary>
+		/// <summary>Method that is called when APlayer's connection state changes.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("match:player:didChangeConnectionState:"), EventArgs ("GKMatchConnectionChanged", XmlDocs = """
 			<summary>Event raised by the object.</summary>
@@ -1576,7 +1576,7 @@ namespace GameKit {
 
 		/// <param name="match">To be added.</param>
 		/// <param name="player">To be added.</param>
-		/// <summary>Method that is called when a player is disconnected from a two-player match.</summary>
+		/// <summary>Method that is called when APlayer is disconnected from a two-player match.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
@@ -1652,7 +1652,7 @@ namespace GameKit {
 		//void SetPlayerStateUpdateHandler (GKPlayerStateUpdateHandler handler);
 
 		/// <param name="handler">To be added.</param>
-		///         <summary>Sets the handler that is run when a player's voice chat status changes.</summary>
+		///         <summary>Sets the handler that is run when APlayer's voice chat status changes.</summary>
 		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("setPlayerVoiceChatStateDidChangeHandler:", ArgumentSemantic.Copy)]

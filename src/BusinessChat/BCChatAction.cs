@@ -4,12 +4,10 @@ using System.Collections.Generic;
 
 namespace BusinessChat {
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	public partial class BCChatAction {
-		/// <param name="businessIdentifier">To be added.</param>
-		///         <param name="intentParameters">To be added.</param>
+		/// <param name="businessIdentifier">The business identifier.</param>
+		///         <param name="intentParameters">The intent parameters.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public static void OpenTranscript (string businessIdentifier, Dictionary<BCParameterName, string> intentParameters)
 		{
 			var keys = new NSString [intentParameters.Keys.Count];

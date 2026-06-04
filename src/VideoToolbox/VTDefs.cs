@@ -13,71 +13,71 @@ namespace VideoToolbox {
 	// untyped enum -> VTErrors.h
 	/// <summary>Possible VideoToolbox API errors.</summary>
 	public enum VTStatus {
-		/// <summary>To be added.</summary>
+		/// <summary>No error.</summary>
 		Ok,
-		/// <summary>To be added.</summary>
+		/// <summary>The property is not supported.</summary>
 		PropertyNotSupported = -12900,
-		/// <summary>To be added.</summary>
+		/// <summary>The property is read-only.</summary>
 		PropertyReadOnly = -12901,
-		/// <summary>To be added.</summary>
+		/// <summary>An invalid parameter was passed.</summary>
 		Parameter = -12902,
-		/// <summary>To be added.</summary>
+		/// <summary>The session is invalid.</summary>
 		InvalidSession = -12903,
-		/// <summary>To be added.</summary>
+		/// <summary>Memory allocation failed.</summary>
 		AllocationFailed = -12904,
-		/// <summary>To be added.</summary>
+		/// <summary>Pixel transfer is not supported.</summary>
 		PixelTransferNotSupported = -12905,
-		/// <summary>To be added.</summary>
+		/// <summary>A suitable video decoder could not be found.</summary>
 		CouldNotFindVideoDecoder = -12906,
-		/// <summary>To be added.</summary>
+		/// <summary>Could not create an instance.</summary>
 		CouldNotCreateInstance = -12907,
-		/// <summary>To be added.</summary>
+		/// <summary>A suitable video encoder could not be found.</summary>
 		CouldNotFindVideoEncoder = -12908,
-		/// <summary>To be added.</summary>
+		/// <summary>The video decoder received bad data.</summary>
 		VideoDecoderBadData = -12909,
-		/// <summary>To be added.</summary>
+		/// <summary>The video decoder does not support the data format.</summary>
 		VideoDecoderUnsupportedDataFormat = -12910,
-		/// <summary>To be added.</summary>
+		/// <summary>The video decoder malfunctioned.</summary>
 		VideoDecoderMalfunction = -12911,
-		/// <summary>To be added.</summary>
+		/// <summary>The video encoder malfunctioned.</summary>
 		VideoEncoderMalfunction = -12912,
-		/// <summary>To be added.</summary>
+		/// <summary>The video decoder is not available now.</summary>
 		VideoDecoderNotAvailableNow = -12913,
-		/// <summary>To be added.</summary>
+		/// <summary>Image rotation is not supported.</summary>
 		[Obsolete ("Use PixelRotationNotSupported enum value instead.")]
 		ImageRotationNotSupported = -12914,
 		PixelRotationNotSupported = -12914,
-		/// <summary>To be added.</summary>
+		/// <summary>The video encoder is not available now.</summary>
 		VideoEncoderNotAvailableNow = -12915,
-		/// <summary>To be added.</summary>
+		/// <summary>Format description change is not supported.</summary>
 		FormatDescriptionChangeNotSupported = -12916,
-		/// <summary>To be added.</summary>
+		/// <summary>Insufficient source color data.</summary>
 		InsufficientSourceColorData = -12917,
-		/// <summary>To be added.</summary>
+		/// <summary>Could not create color correction data.</summary>
 		CouldNotCreateColorCorrectionData = -12918,
-		/// <summary>To be added.</summary>
+		/// <summary>ColorSync transform conversion failed.</summary>
 		ColorSyncTransformConvertFailed = -12919,
-		/// <summary>To be added.</summary>
+		/// <summary>Video decoder authorization failed.</summary>
 		VideoDecoderAuthorization = -12210,
-		/// <summary>To be added.</summary>
+		/// <summary>Video encoder authorization failed.</summary>
 		VideoEncoderAuthorization = -12211,
-		/// <summary>To be added.</summary>
+		/// <summary>Color correction pixel transfer failed.</summary>
 		ColorCorrectionPixelTransferFailed = -12212,
-		/// <summary>To be added.</summary>
+		/// <summary>Multi-pass storage identifier mismatch.</summary>
 		MultiPassStorageIdentifierMismatch = -12913,
-		/// <summary>To be added.</summary>
+		/// <summary>Multi-pass storage is invalid.</summary>
 		MultiPassStorageInvalid = -12214,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid timestamp in frame silo.</summary>
 		FrameSiloInvalidTimeStamp = -12215,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid time range in frame silo.</summary>
 		FrameSiloInvalidTimeRange = -12216,
-		/// <summary>To be added.</summary>
+		/// <summary>Could not find a temporal filter.</summary>
 		CouldNotFindTemporalFilter = -12217,
-		/// <summary>To be added.</summary>
+		/// <summary>Pixel transfer is not permitted.</summary>
 		PixelTransferNotPermitted = -12218,
-		/// <summary>To be added.</summary>
+		/// <summary>Color correction image rotation failed.</summary>
 		ColorCorrectionImageRotationFailed = -12219,
-		/// <summary>To be added.</summary>
+		/// <summary>The video decoder was removed.</summary>
 		VideoDecoderRemoved = -17690,
 		SessionMalfunction = -17691,
 		[MacCatalyst (13, 1)]
@@ -103,13 +103,13 @@ namespace VideoToolbox {
 	[Flags]
 	public enum VTDecodeFrameFlags : uint {
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Enable asynchronous decompression.</summary>
 		EnableAsynchronousDecompression = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Do not output the decoded frame.</summary>
 		DoNotOutputFrame = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Hint that this is for one-time real-time playback.</summary>
 		OneTimeRealTimePlayback = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Enable temporal processing.</summary>
 		EnableTemporalProcessing = 1 << 3,
 	}
 
@@ -118,11 +118,11 @@ namespace VideoToolbox {
 	[Flags]
 	public enum VTDecodeInfoFlags : uint {
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>The frame was decoded asynchronously.</summary>
 		Asynchronous = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>The frame was dropped.</summary>
 		FrameDropped = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>The image buffer is modifiable.</summary>
 		ImageBufferModifiable = 1 << 2,
 		SkippedLeadingFrameDropped = 1 << 3,
 		[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
@@ -133,9 +133,9 @@ namespace VideoToolbox {
 	/// <summary>Encoding status flags.</summary>
 	[Flags]
 	public enum VTEncodeInfoFlags : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>The frame was decoded asynchronously.</summary>
 		Asynchronous = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>The frame was dropped.</summary>
 		FrameDropped = 1 << 1,
 	}
 
@@ -143,7 +143,7 @@ namespace VideoToolbox {
 	/// <summary>Flags to control encoder in multIPass compression sessions</summary>
 	[Flags]
 	public enum VTCompressionSessionOptionFlags : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Begin the final encoding pass.</summary>
 		BeginFinalPass = 1 << 0,
 	}
 
@@ -248,10 +248,10 @@ namespace VideoToolbox {
 		H263Profile0Level45,
 		/// <summary>The H.263 compression format, profile 3, level 4.5.</summary>
 		H263Profile3Level45,
-		/// <summary>To be added.</summary>
+		/// <summary>The HEVC compression format, main profile. Determine the level automatically.</summary>
 		[MacCatalyst (13, 1)]
 		HevcMainAutoLevel,
-		/// <summary>To be added.</summary>
+		/// <summary>The HEVC compression format, main 10 profile. Determine the level automatically.</summary>
 		[MacCatalyst (13, 1)]
 		HevcMain10AutoLevel,
 	}
@@ -259,143 +259,143 @@ namespace VideoToolbox {
 	// Strongly Typed VTH264EntropyModeKeys
 	/// <summary>Strongly typed set of options used by <see cref="VideoToolbox.VTCompressionProperties.H264EntropyMode" />.</summary>
 	public enum VTH264EntropyMode {
-		/// <summary>To be added.</summary>
+		/// <summary>The value is not set.</summary>
 		Unset,
-		/// <summary>To be added.</summary>
+		/// <summary>CAVLC (Context-Adaptive Variable-Length Coding) entropy mode.</summary>
 		Cavlc,
-		/// <summary>To be added.</summary>
+		/// <summary>CABAC (Context-Adaptive Binary Arithmetic Coding) entropy mode.</summary>
 		Cabac,
 	}
 
 	// Strongly Typed kVTCompressionPropertyKey_FieldCount
 	/// <summary>Frame encoding options.</summary>
 	public enum VTFieldCount {
-		/// <summary>To be added.</summary>
+		/// <summary>Progressive (non-interlaced) encoding.</summary>
 		Progressive = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Interlaced encoding.</summary>
 		Interlaced = 2,
 	}
 
 	// Strongly Typed kVTCompressionPropertyKey_FieldDetail
 	/// <summary>Field ordering options.</summary>
 	public enum VTFieldDetail {
-		/// <summary>To be added.</summary>
+		/// <summary>The value is not set.</summary>
 		Unset,
-		/// <summary>To be added.</summary>
+		/// <summary>Temporal top field first.</summary>
 		TemporalTopFirst,
-		/// <summary>To be added.</summary>
+		/// <summary>Temporal bottom field first.</summary>
 		TemporalBottomFirst,
-		/// <summary>To be added.</summary>
+		/// <summary>Spatial first line early.</summary>
 		SpatialFirstLineEarly,
-		/// <summary>To be added.</summary>
+		/// <summary>Spatial first line late.</summary>
 		SpatialFirstLineLate,
 	}
 
 	// Strongly Typed kVTCompressionPropertyKey_ColorPrimaries
 	/// <summary>Represents color primaries in compressed sample buffers</summary>
 	public enum VTColorPrimaries {
-		/// <summary>To be added.</summary>
+		/// <summary>The value is not set.</summary>
 		Unset,
-		/// <summary>To be added.</summary>
+		/// <summary>ITU-R BT.709-2 color primaries.</summary>
 		ItuR7092,
-		/// <summary>To be added.</summary>
+		/// <summary>EBU Tech. 3213 color primaries.</summary>
 		Ebu3213,
-		/// <summary>To be added.</summary>
+		/// <summary>SMPTE C color primaries.</summary>
 		SmpteC,
-		/// <summary>To be added.</summary>
+		/// <summary>P22 color primaries.</summary>
 		P22,
 	}
 
 	// Strongly Typed kVTCompressionPropertyKey_TransferFunction
 	/// <summary>Strongly typed set of options used by <see cref="VideoToolbox.VTCompressionProperties.TransferFunction" />.</summary>
 	public enum VTTransferFunction {
-		/// <summary>To be added.</summary>
+		/// <summary>The value is not set.</summary>
 		Unset,
-		/// <summary>To be added.</summary>
+		/// <summary>ITU-R BT.709-2 color primaries.</summary>
 		ItuR7092,
-		/// <summary>To be added.</summary>
+		/// <summary>SMPTE 240M-1955 transfer function.</summary>
 		Smpte240M1955,
-		/// <summary>To be added.</summary>
+		/// <summary>Use gamma transfer function.</summary>
 		UseGamma,
 	}
 
 	// Strongly Typed kVTCompressionPropertyKey_YCbCrMatrix
 	/// <summary>Colorimetry for compressed content.</summary>
 	public enum VTYCbCrMatrix {
-		/// <summary>To be added.</summary>
+		/// <summary>The value is not set.</summary>
 		Unset,
-		/// <summary>To be added.</summary>
+		/// <summary>ITU-R BT.709-2 color primaries.</summary>
 		ItuR7092,
-		/// <summary>To be added.</summary>
+		/// <summary>ITU-R BT.601-4 YCbCr matrix.</summary>
 		ItuR6014,
-		/// <summary>To be added.</summary>
+		/// <summary>SMPTE 240M-1955 transfer function.</summary>
 		Smpte240M1955,
 	}
 
 	// Strongly Typed kVTDecompressionPropertyKey_FieldMode
 	/// <summary>Decoder field mode options.</summary>
 	public enum VTFieldMode {
-		/// <summary>To be added.</summary>
+		/// <summary>The value is not set.</summary>
 		Unset,
-		/// <summary>To be added.</summary>
+		/// <summary>Output both fields.</summary>
 		BothFields,
-		/// <summary>To be added.</summary>
+		/// <summary>Output only the top field.</summary>
 		TopFieldOnly,
-		/// <summary>To be added.</summary>
+		/// <summary>Output only the bottom field.</summary>
 		BottomFieldOnly,
-		/// <summary>To be added.</summary>
+		/// <summary>Output a single field.</summary>
 		SingleField,
-		/// <summary>To be added.</summary>
+		/// <summary>Deinterlace both fields.</summary>
 		DeinterlaceFields,
 	}
 
 	// Strongly Typed kVTDecompressionPropertyKey_DeinterlaceMode
 	/// <summary>Deinterlacing techniques.</summary>
 	public enum VTDeinterlaceMode {
-		/// <summary>To be added.</summary>
+		/// <summary>The value is not set.</summary>
 		Unset,
-		/// <summary>To be added.</summary>
+		/// <summary>Vertical filter deinterlacing.</summary>
 		VerticalFilter,
-		/// <summary>To be added.</summary>
+		/// <summary>Temporal deinterlacing.</summary>
 		Temporal,
 	}
 
 	// Strongly Typed kVTDecompressionPropertyKey_OnlyTheseFrames
 	/// <summary>Strongly typed set of options used by <see cref="VideoToolbox.VTDecompressionProperties.OnlyTheseFrames" />.</summary>
 	public enum VTOnlyTheseFrames {
-		/// <summary>To be added.</summary>
+		/// <summary>The value is not set.</summary>
 		Unset,
-		/// <summary>To be added.</summary>
+		/// <summary>Decode all frames.</summary>
 		AllFrames,
-		/// <summary>To be added.</summary>
+		/// <summary>Decode only non-droppable frames.</summary>
 		NonDroppableFrames,
-		/// <summary>To be added.</summary>
+		/// <summary>Decode only I-frames.</summary>
 		IFrames,
-		/// <summary>To be added.</summary>
+		/// <summary>Decode only key frames.</summary>
 		KeyFrames,
 	}
 
 	// Strongly Typed kVTPropertyTypeKey
 	/// <summary>Strongly typed set of options.</summary>
 	public enum VTPropertyType {
-		/// <summary>To be added.</summary>
+		/// <summary>The value is not set.</summary>
 		Unset,
-		/// <summary>To be added.</summary>
+		/// <summary>An enumeration property type.</summary>
 		Enumeration,
-		/// <summary>To be added.</summary>
+		/// <summary>A boolean property type.</summary>
 		Boolean,
-		/// <summary>To be added.</summary>
+		/// <summary>A number property type.</summary>
 		Number,
 	}
 
 	// Strongly Typed kVTPropertyReadWriteStatusKey
 	/// <summary>Strongly typed set of options used by <see cref="VideoToolbox.VTPropertyOptions.ReadWriteStatus" />.</summary>
 	public enum VTReadWriteStatus {
-		/// <summary>To be added.</summary>
+		/// <summary>The value is not set.</summary>
 		Unset,
-		/// <summary>To be added.</summary>
+		/// <summary>The property is read-only.</summary>
 		ReadOnly,
-		/// <summary>To be added.</summary>
+		/// <summary>The property is read-write.</summary>
 		ReadWrite,
 	}
 
@@ -413,26 +413,26 @@ namespace VideoToolbox {
 	/// <summary>Image scaling options.</summary>
 	[MacCatalyst (13, 1)]
 	public enum VTScalingMode {
-		/// <summary>To be added.</summary>
+		/// <summary>The value is not set.</summary>
 		Unset,
-		/// <summary>To be added.</summary>
+		/// <summary>Normal scaling.</summary>
 		Normal,
-		/// <summary>To be added.</summary>
+		/// <summary>Crop the source to the clean aperture.</summary>
 		CropSourceToCleanAperture,
-		/// <summary>To be added.</summary>
+		/// <summary>Letterbox the content.</summary>
 		Letterbox,
-		/// <summary>To be added.</summary>
+		/// <summary>Trim the content.</summary>
 		Trim,
 	}
 
 	/// <summary>Chroma downsampling techniques.</summary>
 	[MacCatalyst (13, 1)]
 	public enum VTDownsamplingMode {
-		/// <summary>To be added.</summary>
+		/// <summary>The value is not set.</summary>
 		Unset,
-		/// <summary>To be added.</summary>
+		/// <summary>Decimate downsampling.</summary>
 		Decimate,
-		/// <summary>To be added.</summary>
+		/// <summary>Average downsampling.</summary>
 		Average,
 	}
 

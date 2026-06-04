@@ -108,12 +108,12 @@ namespace AVKit {
 		bool PictureInPicturePossible { [Bind ("isPictureInPicturePossible")] get; }
 
 		/// <summary>Gets a value that tells whether Picture in Picture is currently displayed.</summary>
-		///         <value>To be added.</value>
+		/// <value><see langword="true" /> if Picture in Picture is active; otherwise, <see langword="false" />.</value>
 		[Export ("pictureInPictureActive")]
 		bool PictureInPictureActive { [Bind ("isPictureInPictureActive")] get; }
 
 		/// <summary>Gets a value that tells whether Picture in Picture playback has been paused and moved off the screen by another application.</summary>
-		///         <value>To be added.</value>
+		/// <value><see langword="true" /> if Picture in Picture is suspended; otherwise, <see langword="false" />.</value>
 		[Export ("pictureInPictureSuspended")]
 		bool PictureInPictureSuspended { [Bind ("isPictureInPictureSuspended")] get; }
 

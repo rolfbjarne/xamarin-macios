@@ -14,7 +14,6 @@ using System.Net.Sockets;
 
 namespace Security {
 	/// <summary>Class that represents an SSL connection.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -28,7 +27,6 @@ namespace Security {
 		GCHandle handle;
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		protected SslConnection ()
 		{
 			handle = GCHandle.Alloc (this);
@@ -60,7 +58,6 @@ namespace Security {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public IntPtr ConnectionId { get; private set; }
 
 		unsafe internal delegate* unmanaged<IntPtr, IntPtr, nint*, SslStatus> ReadFunc { get { return &Read; } }
@@ -87,7 +84,6 @@ namespace Security {
 
 
 	/// <summary>Class that allows reading and writing to an SSL stream connection.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -97,9 +93,8 @@ namespace Security {
 
 		byte [] buffer;
 
-		/// <param name="stream">To be added.</param>
+		/// <param name="stream">The stream.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public SslStreamConnection (Stream stream)
 		{
 			if (stream is null)
@@ -111,7 +106,6 @@ namespace Security {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public Stream InnerStream { get; private set; }
 
 		public override SslStatus Read (IntPtr data, ref nint dataLength)

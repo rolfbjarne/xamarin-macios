@@ -628,7 +628,7 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTFontDescriptorCreateCopyWithAttributes (IntPtr original, IntPtr attributes);
 		/// <param name="attributes">The attributes.</param>
-		///         <summary>Withs attributes.</summary>
+		///         <summary>Creates a copy of this font descriptor with the specified attributes.</summary>
 		public CTFontDescriptor? WithAttributes (NSDictionary attributes)
 		{
 			if (attributes is null)

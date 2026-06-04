@@ -6,12 +6,12 @@ using Intents;
 namespace Intents {
 
 	public partial class INSetSeatSettingsInCarIntent {
-		/// <param name="enableHeating">To be added.</param>
-		///         <param name="enableCooling">To be added.</param>
-		///         <param name="enableMassage">To be added.</param>
-		///         <param name="seat">To be added.</param>
-		///         <param name="level">To be added.</param>
-		///         <param name="relativeLevelSetting">To be added.</param>
+		/// <param name="enableHeating">The enable heating.</param>
+		///         <param name="enableCooling">The enable cooling.</param>
+		///         <param name="enableMassage">The enable massage.</param>
+		///         <param name="seat">The seat.</param>
+		///         <param name="level">The level.</param>
+		///         <param name="relativeLevelSetting">The relative level setting.</param>
 		///         <summary>To be added.</summary>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]

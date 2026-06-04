@@ -42,14 +42,14 @@ namespace AVFoundation {
 	// Should be called AVAudioSetting but AVAudioSetting has been already used by keys class
 	public class AudioSettings : DictionaryContainer {
 #if !COREBUILD
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="AudioSettings" /> instance.</summary>
 		public AudioSettings ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
 		/// <param name="dictionary">The dictionary.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="AudioSettings" /> instance.</summary>
 		public AudioSettings (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -200,7 +200,7 @@ namespace AVFoundation {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets the encoder bit depth hint.</summary>
 		///         <value>Value in range between 8 and 32.</value>
 		///         <remarks>The property uses constant AVEncoderBitDepthHintKey value to access the underlying dictionary.</remarks>
 		public int? EncoderBitDepthHint {
@@ -215,8 +215,7 @@ namespace AVFoundation {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the bit rate strategy.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -258,8 +257,7 @@ namespace AVFoundation {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the sample rate converter algorithm.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -291,8 +289,7 @@ namespace AVFoundation {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the encoder audio quality for v b r.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]

@@ -32,15 +32,13 @@ namespace Foundation {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public static NSHost? Current {
 			get { return CheckNull (_Current); }
 		}
 
-		/// <param name="address">To be added.</param>
+		/// <param name="address">The address.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static NSHost? FromAddress (string? address)
 		{
 			if (address is null)
@@ -48,10 +46,9 @@ namespace Foundation {
 			return CheckNull (_FromAddress (address));
 		}
 
-		/// <param name="name">To be added.</param>
+		/// <param name="name">The name to use.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static NSHost? FromName (string? name)
 		{
 			if (name is null)
@@ -85,10 +82,9 @@ namespace Foundation {
 			return FromIPHostEntry (hostEntry);
 		}
 
-		/// <param name="hostEntry">To be added.</param>
+		/// <param name="hostEntry">The host entry.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static NSHost? FromIPHostEntry (IPHostEntry? hostEntry)
 		{
 			if (hostEntry is null)
@@ -121,7 +117,6 @@ namespace Foundation {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public IPHostEntry ToIPHostEntry ()
 		{
 			return new IPHostEntry {
@@ -131,10 +126,9 @@ namespace Foundation {
 			};
 		}
 
-		/// <param name="address">To be added.</param>
+		/// <param name="address">The address.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static NSHost? FromAddress (IPAddress? address)
 		{
 			if (address is null)
@@ -144,7 +138,6 @@ namespace Foundation {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public IPAddress? Address {
 			get {
 				var address = _Address;
@@ -156,7 +149,6 @@ namespace Foundation {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public IPAddress [] Addresses {
 			get {
 				var addrs = new IPAddress [_Addresses.Length];
@@ -168,16 +160,14 @@ namespace Foundation {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public override int GetHashCode ()
 		{
 			return (int) _Hash;
 		}
 
-		/// <param name="obj">To be added.</param>
+		/// <param name="obj">The obj.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public override bool Equals (object? obj)
 		{
 			if (obj == this)
@@ -192,7 +182,6 @@ namespace Foundation {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public IEnumerator<IPAddress> GetEnumerator ()
 		{
 			foreach (var address in Addresses)
@@ -201,7 +190,6 @@ namespace Foundation {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		IEnumerator IEnumerable.GetEnumerator ()
 		{
 			return GetEnumerator ();

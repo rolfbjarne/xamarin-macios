@@ -640,7 +640,7 @@ namespace Foundation {
 		}
 
 		/// <param name="filename">Path of the file to probe.</param>
-		///         <param name="error">The error will be set to null if there was no error, or it will point to an instance of NSError if there was a problem.</param>
+		///         <param name="error">The error will be set to null if there was no error, or it will point to an instance of NSError if there was AProblem.</param>
 		///         <summary>Returns the status of the SkipBackup to iCloud attribute is set on the file.</summary>
 		///         <returns>true if the extended attribute is set.</returns>
 		///         <remarks>This returns true if the file is marked not to be backed up by iCloud, otherwise it will return false.

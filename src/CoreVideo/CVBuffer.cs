@@ -68,7 +68,7 @@ namespace CoreVideo {
 		[DllImport (Constants.CoreVideoLibrary)]
 		extern static void CVBufferRemoveAllAttachments (/* CVBufferRef */ IntPtr buffer);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Removes all attachments.</summary>
 		public void RemoveAllAttachments ()
 		{
 			CVBufferRemoveAllAttachments (Handle);
@@ -78,7 +78,7 @@ namespace CoreVideo {
 		extern static void CVBufferRemoveAttachment (/* CVBufferRef */ IntPtr buffer, /* CFStringRef */ IntPtr key);
 
 		/// <param name="key">The key to use.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Removes attachment.</summary>
 		public void RemoveAttachment (NSString key)
 		{
 			if (key is null)
@@ -138,8 +138,7 @@ namespace CoreVideo {
 		/// <typeparam name="T">To be added.</typeparam>
 		///         <param name="key">The key to use.</param>
 		///         <param name="attachmentMode">The attachment mode.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets attachment.</summary>
 		public T? GetAttachment<T> (NSString key, out CVAttachmentMode attachmentMode) where T : class, INativeObject
 		{
 			if (key is null)
@@ -195,8 +194,7 @@ namespace CoreVideo {
 		extern static /* CFDictionaryRef */ IntPtr CVBufferCopyAttachments (/* CVBufferRef */ IntPtr buffer, CVAttachmentMode attachmentMode);
 
 		/// <param name="attachmentMode">The attachment mode.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets attachments.</summary>
 		public NSDictionary? GetAttachments (CVAttachmentMode attachmentMode)
 		{
 			if (!SystemVersion.IsAtLeastXcode13)
@@ -210,7 +208,6 @@ namespace CoreVideo {
 		///         <typeparam name="TValue">To be added.</typeparam>
 		///         <param name="attachmentMode">The attachment mode.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public NSDictionary<TKey, TValue>? GetAttachments<TKey, TValue> (CVAttachmentMode attachmentMode)
 			where TKey : class, INativeObject
 			where TValue : class, INativeObject
@@ -224,7 +221,7 @@ namespace CoreVideo {
 		extern static void CVBufferPropagateAttachments (/* CVBufferRef */ IntPtr sourceBuffer, /* CVBufferRef */ IntPtr destinationBuffer);
 
 		/// <param name="destinationBuffer">The destination buffer.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Propogates attachments.</summary>
 		public void PropogateAttachments (CVBuffer destinationBuffer)
 		{
 			if (destinationBuffer is null)
@@ -240,7 +237,7 @@ namespace CoreVideo {
 		/// <param name="key">The key to use.</param>
 		///         <param name="value">The value to set.</param>
 		///         <param name="attachmentMode">The attachment mode.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Sets attachment.</summary>
 		public void SetAttachment (NSString key, INativeObject @value, CVAttachmentMode attachmentMode)
 		{
 			if (key is null)
@@ -257,7 +254,7 @@ namespace CoreVideo {
 
 		/// <param name="theAttachments">The the attachments.</param>
 		///         <param name="attachmentMode">The attachment mode.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Sets attachments.</summary>
 		public void SetAttachments (NSDictionary theAttachments, CVAttachmentMode attachmentMode)
 		{
 			if (theAttachments is null)

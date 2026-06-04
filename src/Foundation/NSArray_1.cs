@@ -17,8 +17,8 @@ namespace Foundation {
 	public delegate bool NSOrderedCollectionDifferenceEquivalenceTest<TValue> (TValue? first, TValue? second);
 	internal delegate bool NSOrderedCollectionDifferenceEquivalenceTestProxy (IntPtr blockLiteral, /* NSObject */ IntPtr first, /* NSObject */ IntPtr second);
 #endif
-	/// <typeparam name="TKey">To be added.</typeparam>
-	///     <summary>To be added.</summary>
+	/// <typeparam name="TKey">The type of elements in the array.</typeparam>
+	/// <summary>A strongly-typed wrapper around <see cref="NSArray" /> that constrains elements to the specified type.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -48,7 +48,7 @@ namespace Foundation {
 		}
 
 		/// <param name="items">The items.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a new array from the specified items.</summary>
 		static public NSArray<TKey> FromNSObjects (params TKey [] items)
 		{
 			if (items is null)
@@ -59,7 +59,7 @@ namespace Foundation {
 
 		/// <param name="count">The count.</param>
 		///         <param name="items">The items.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a new array from the specified number of items.</summary>
 		static public NSArray<TKey> FromNSObjects (int count, params TKey [] items)
 		{
 			if (items is null)
@@ -94,7 +94,7 @@ namespace Foundation {
 		#endregion
 
 		#region IEnumerable implementation
-		/// <summary>To be added.</summary>
+		/// <summary>Returns a non-generic enumerator that iterates through the array.</summary>
 		IEnumerator IEnumerable.GetEnumerator ()
 		{
 			return new NSFastEnumerator<TKey> (this);

@@ -19,9 +19,9 @@ namespace PhotosUI {
 	[NoMacCatalyst]
 	[Native]
 	public enum PHLivePhotoViewContentMode : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates aspect fit.</summary>
 		AspectFit,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates aspect fill.</summary>
 		AspectFill,
 	}
 #else
@@ -43,25 +43,25 @@ namespace PhotosUI {
 	[NoTV]
 	[NoMacCatalyst]
 	public enum PHProjectCategory {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates book.</summary>
 		[Field ("PHProjectCategoryBook")]
 		Book,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates calendar.</summary>
 		[Field ("PHProjectCategoryCalendar")]
 		Calendar,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates card.</summary>
 		[Field ("PHProjectCategoryCard")]
 		Card,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates prints.</summary>
 		[Field ("PHProjectCategoryPrints")]
 		Prints,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates slideshow.</summary>
 		[Field ("PHProjectCategorySlideshow")]
 		Slideshow,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates wall decor.</summary>
 		[Field ("PHProjectCategoryWallDecor")]
 		WallDecor,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates other.</summary>
 		[Field ("PHProjectCategoryOther")]
 		Other,
 		[NoMacCatalyst]

@@ -24,21 +24,18 @@ namespace MediaAccessibility {
 	interface MAMediaCharacteristic {
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("MAMediaCharacteristicDescribesMusicAndSoundForAccessibility")]
 		NSString DescribesMusicAndSoundForAccessibility { get; }
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("MAMediaCharacteristicDescribesVideoForAccessibility")]
 		NSString DescribesVideoForAccessibility { get; }
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("MAMediaCharacteristicTranscribesSpokenDialogForAccessibility")]
 		NSString TranscribesSpokenDialogForAccessibility { get; }

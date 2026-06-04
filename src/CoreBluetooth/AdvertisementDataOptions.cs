@@ -42,14 +42,14 @@ namespace CoreBluetooth {
 	[SupportedOSPlatform ("tvos")]
 	public class StartAdvertisingOptions : DictionaryContainer {
 #if !COREBUILD
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new empty <see cref="StartAdvertisingOptions" /> instance.</summary>
 		public StartAdvertisingOptions ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
 		/// <param name="dictionary">The dictionary.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="StartAdvertisingOptions" /> instance from the specified dictionary.</summary>
 		public StartAdvertisingOptions (NSDictionary dictionary)
 			: base (dictionary)
 		{

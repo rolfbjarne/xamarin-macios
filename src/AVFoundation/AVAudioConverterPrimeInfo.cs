@@ -33,14 +33,14 @@ namespace AVFoundation {
 	[SupportedOSPlatform ("tvos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AVAudioConverterPrimeInfo {
-		/// <summary>To be added.</summary>
+		/// <summary>The leading frames.</summary>
 		public uint LeadingFrames;
-		/// <summary>To be added.</summary>
+		/// <summary>The trailing frames.</summary>
 		public uint TrailingFrames;
 
 		/// <param name="leadingFrames">The leading frames.</param>
 		///         <param name="trailingFrames">The trailing frames.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="AVAudioConverterPrimeInfo" /> instance.</summary>
 		public AVAudioConverterPrimeInfo (uint leadingFrames, uint trailingFrames)
 		{
 			LeadingFrames = leadingFrames;
@@ -48,7 +48,6 @@ namespace AVFoundation {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override string ToString ()
 		{
 			return $"({LeadingFrames}:{TrailingFrames})";
@@ -66,7 +65,6 @@ namespace AVFoundation {
 
 		/// <param name="obj">The obj.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override bool Equals (object? obj)
 		{
 			if (!(obj is AVAudioConverterPrimeInfo))
@@ -76,15 +74,13 @@ namespace AVFoundation {
 		}
 
 		/// <param name="other">The other.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Equals.</summary>
 		public bool Equals (AVAudioConverterPrimeInfo other)
 		{
 			return LeadingFrames == other.LeadingFrames && TrailingFrames == other.TrailingFrames;
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override int GetHashCode ()
 		{
 			return HashCode.Combine (LeadingFrames, TrailingFrames);

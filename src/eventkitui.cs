@@ -81,8 +81,8 @@ namespace EventKitUI {
 	[Protocol]
 	interface EKEventViewDelegate {
 		/// <param name="controller">The controller.</param>
-		///         <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
+		/// <param name="action">The action to perform.</param>
+		/// <summary>Called when the user has completed viewing the event.</summary>
 		[Abstract]
 		[Export ("eventViewController:didCompleteWithAction:"), EventArgs ("EKEventView", XmlDocs = """
 			<summary>Event raised by the object.</summary>

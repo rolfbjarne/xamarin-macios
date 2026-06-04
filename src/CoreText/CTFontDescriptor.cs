@@ -40,13 +40,12 @@ namespace CoreText {
 
 	// defined as uint32_t - /System/Library/Frameworks/CoreText.framework/Headers/CTFontDescriptor.h
 	/// <summary>An enumeration whose values specify the orientation of a <see cref="CoreText.CTFont" />.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum CTFontOrientation : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates default.</summary>
 		Default = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates horizontal.</summary>
 		Horizontal = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates vertical.</summary>
 		Vertical = 2,
 	}
 
@@ -71,43 +70,41 @@ namespace CoreText {
 
 	// defined as uint32_t - /System/Library/Frameworks/CoreText.framework/Headers/CTFontDescriptor.h
 	/// <summary>An enumeration whose values specify the priority of a <see cref="CoreText.CTFont" />.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum CTFontPriority : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates system.</summary>
 		System = 10000,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates network.</summary>
 		Network = 20000,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates computer.</summary>
 		Computer = 30000,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates user.</summary>
 		User = 40000,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates dynamic.</summary>
 		Dynamic = 50000,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates process.</summary>
 		Process = 60000,
 	}
 
 	// defined as uint32_t - /System/Library/Frameworks/CoreText.framework/Headers/CTFontDescriptor.h
 	/// <summary>An enumeration whose values can be used as parameters for the <see cref="CoreText.CTFontDescriptor.MatchFontDescriptors(CoreText.CTFontDescriptor[],Foundation.NSSet,System.Func{CoreText.CTFontDescriptorMatchingState,System.IntPtr,System.Boolean})" /> method.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum CTFontDescriptorMatchingState : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates started.</summary>
 		Started,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates finished.</summary>
 		Finished,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates will begin querying.</summary>
 		WillBeginQuerying,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates stalled.</summary>
 		Stalled,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates will begin downloading.</summary>
 		WillBeginDownloading,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates downloading.</summary>
 		Downloading,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates downloading finished.</summary>
 		DownloadingFinished,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates matched.</summary>
 		Matched,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates failed with error.</summary>
 		FailedWithError,
 	}
 
@@ -630,10 +627,9 @@ namespace CoreText {
 
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTFontDescriptorCreateCopyWithAttributes (IntPtr original, IntPtr attributes);
-		/// <param name="attributes">To be added.</param>
+		/// <param name="attributes">The attributes.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CTFontDescriptor? WithAttributes (NSDictionary attributes)
 		{
 			if (attributes is null)
@@ -650,7 +646,7 @@ namespace CoreText {
 			return new CTFontDescriptor (h, true);
 		}
 
-		/// <param name="attributes">To be added.</param>
+		/// <param name="attributes">The attributes.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>
@@ -1031,10 +1027,9 @@ namespace CoreText {
 
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTFontDescriptorCreateMatchingFontDescriptors (IntPtr descriptor, IntPtr mandatoryAttributes);
-		/// <param name="mandatoryAttributes">To be added.</param>
+		/// <param name="mandatoryAttributes">The mandatory attributes.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CTFontDescriptor [] GetMatchingFontDescriptors (NSSet? mandatoryAttributes)
 		{
 			var cfArrayRef = CTFontDescriptorCreateMatchingFontDescriptors (Handle, mandatoryAttributes.GetHandle ());
@@ -1044,10 +1039,9 @@ namespace CoreText {
 			return CFArray.ArrayFromHandleFunc (cfArrayRef, fd => new CTFontDescriptor (cfArrayRef, false), true)!;
 		}
 
-		/// <param name="mandatoryAttributes">To be added.</param>
+		/// <param name="mandatoryAttributes">The mandatory attributes.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CTFontDescriptor? []? GetMatchingFontDescriptors (params NSString [] mandatoryAttributes)
 		{
 			NSSet attrs = NSSet.MakeNSObjectSet (mandatoryAttributes);
@@ -1056,7 +1050,6 @@ namespace CoreText {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CTFontDescriptor? []? GetMatchingFontDescriptors ()
 		{
 			NSSet? attrs = null;
@@ -1065,10 +1058,9 @@ namespace CoreText {
 
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTFontDescriptorCreateMatchingFontDescriptor (IntPtr descriptor, IntPtr mandatoryAttributes);
-		/// <param name="mandatoryAttributes">To be added.</param>
+		/// <param name="mandatoryAttributes">The mandatory attributes.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CTFontDescriptor? GetMatchingFontDescriptor (NSSet? mandatoryAttributes)
 		{
 			CTFontDescriptor? result = CreateDescriptor (CTFontDescriptorCreateMatchingFontDescriptors (Handle, mandatoryAttributes.GetHandle ()));
@@ -1076,10 +1068,9 @@ namespace CoreText {
 			return result;
 		}
 
-		/// <param name="mandatoryAttributes">To be added.</param>
+		/// <param name="mandatoryAttributes">The mandatory attributes.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CTFontDescriptor? GetMatchingFontDescriptor (params NSString [] mandatoryAttributes)
 		{
 			NSSet attrs = NSSet.MakeNSObjectSet (mandatoryAttributes);
@@ -1088,7 +1079,6 @@ namespace CoreText {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CTFontDescriptor? GetMatchingFontDescriptor ()
 		{
 			NSSet? attrs = null;
@@ -1208,8 +1198,8 @@ namespace CoreText {
 		}
 
 #if !XAMCORE_5_0
-		/// <param name="descriptors">To be added.</param>
-		///         <param name="mandatoryAttributes">To be added.</param>
+		/// <param name="descriptors">The descriptors.</param>
+		///         <param name="mandatoryAttributes">The mandatory attributes.</param>
 		///         <param name="progressHandler">To be added.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>

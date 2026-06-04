@@ -58,7 +58,6 @@ namespace AudioToolbox {
 
 		/// <param name="formatList">The format list.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public unsafe static AudioFormat? GetFirstPlayableFormat (AudioFormat [] formatList)
 		{
 			if (formatList is null)
@@ -77,7 +76,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>Returns a human-readable reprensetation of the tuple.</summary>
-		///         <returns>To be added.</returns>
 		public override string ToString ()
 		{
 			return AudioChannelLayoutTag + ":" + AudioStreamBasicDescription.ToString ();
@@ -153,20 +151,15 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public float LeftRightBalance { get; set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public float BackFrontFade { get; set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public AudioBalanceFadeType Type { get; set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public AudioChannelLayout ChannelLayout { get; private set; }
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public unsafe float []? GetBalanceFade ()
 		{
 			var type_size = sizeof (Layout);
@@ -247,23 +240,17 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public PanningMode PanningMode { get; set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public AudioChannelFlags CoordinateFlags { get; set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public float [] Coordinates { get; private set; } = Array.Empty<float> ();
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public float GainScale { get; set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public AudioChannelLayout OutputChannelMap { get; private set; }
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public unsafe float []? GetPanningMatrix ()
 		{
 			var type_size = sizeof (Layout);

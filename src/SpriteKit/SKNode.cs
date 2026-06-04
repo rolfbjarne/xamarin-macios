@@ -16,7 +16,7 @@ using CoreFoundation;
 
 namespace SpriteKit {
 	public partial class SKNode : IEnumerable, IEnumerable<SKNode> {
-		/// <typeparam name="T">To be added.</typeparam>
+		/// <typeparam name="T">The type of node to create from the file.</typeparam>
 		///         <param name="file">
 		///
 		/// Filename containing the SpriteKit assets, without the extension.</param>

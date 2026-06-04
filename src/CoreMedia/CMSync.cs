@@ -33,7 +33,6 @@ namespace CoreMedia {
 		extern static /* CMClockRef */ IntPtr CMClockGetHostTimeClock ();
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public static CMClock HostTimeClock {
 			get {
@@ -45,7 +44,6 @@ namespace CoreMedia {
 		extern static CMTime CMClockGetTime (/* CMClockRef */ IntPtr clock);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CMTime CurrentTime {
 			get {
@@ -64,7 +62,6 @@ namespace CoreMedia {
 
 		/// <param name="clockError">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static CMClock? CreateAudioClock (out CMClockError clockError)
 		{
@@ -82,7 +79,6 @@ namespace CoreMedia {
 		/// <param name="clockTime">To be added.</param>
 		///         <param name="referenceClockTime">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CMClockError GetAnchorTime (out CMTime clockTime, out CMTime referenceClockTime)
 		{
@@ -100,7 +96,6 @@ namespace CoreMedia {
 
 		/// <param name="otherClock">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public bool MightDrift (CMClock otherClock)
 		{
@@ -124,14 +119,12 @@ namespace CoreMedia {
 
 		/// <param name="hostTime">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[DllImport (Constants.CoreMediaLibrary, EntryPoint = "CMClockConvertHostTimeToSystemUnits")]
 		public extern static /* uint64_t */ ulong ConvertHostTimeToSystemUnits (CMTime hostTime);
 
 		/// <param name="hostTime">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[DllImport (Constants.CoreMediaLibrary, EntryPoint = "CMClockMakeHostTimeFromSystemUnits")]
 		public extern static CMTime CreateHostTimeFromSystemUnits (/* uint64_t */ ulong hostTime);
@@ -332,7 +325,6 @@ namespace CoreMedia {
 		extern static /* Float64 */ double CMTimebaseGetEffectiveRate (/* CMTimebaseRef */ IntPtr timebase);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public double EffectiveRate {
 			get {
@@ -347,7 +339,6 @@ namespace CoreMedia {
 		extern static /* OSStatus */ CMTimebaseError CMTimebaseSetRate (/* CMTimebaseRef */ IntPtr timebase, /* Float64 */ double rate);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public double Rate {
 			get {
@@ -367,7 +358,6 @@ namespace CoreMedia {
 		extern static /* OSStatus */ CMTimebaseError CMTimebaseSetTime (/* CMTimebaseRef */ IntPtr timebase, CMTime time);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public new CMTime Time {
 			get {
@@ -392,7 +382,6 @@ namespace CoreMedia {
 		extern static /* CMTimebaseRef */ IntPtr CMTimebaseGetMasterTimebase (/* CMTimebaseRef */ IntPtr timebase);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -423,7 +412,6 @@ namespace CoreMedia {
 		extern static /* CMClockRef */ IntPtr CMTimebaseGetMasterClock (/* CMTimebaseRef */ IntPtr timebase);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -454,7 +442,6 @@ namespace CoreMedia {
 		extern static /* CMClockOrTimebaseRef */ IntPtr CMTimebaseGetMaster (/* CMTimebaseRef */ IntPtr timebase);
 
 		/// <summary>Developers should not use this deprecated method. Developers should use 'CopyMaster' instead.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -485,7 +472,6 @@ namespace CoreMedia {
 		extern static /* CMClockRef */ IntPtr CMTimebaseGetUltimateMasterClock (/* CMTimebaseRef */ IntPtr timebase);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -510,7 +496,6 @@ namespace CoreMedia {
 		/// <param name="timeScale">To be added.</param>
 		///         <param name="roundingMethod">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CMTime GetTime (CMTimeScale timeScale, CMTimeRoundingMethod roundingMethod)
 		{
@@ -523,7 +508,6 @@ namespace CoreMedia {
 		/// <param name="timebaseTime">To be added.</param>
 		///         <param name="immediateMasterTime">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CMTimebaseError SetAnchorTime (CMTime timebaseTime, CMTime immediateMasterTime)
 		{
@@ -536,7 +520,6 @@ namespace CoreMedia {
 		/// <param name="time">To be added.</param>
 		///         <param name="rate">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CMTimebaseError GetTimeAndRate (out CMTime time, out double rate)
 		{
@@ -558,7 +541,6 @@ namespace CoreMedia {
 		///         <param name="timebaseTime">To be added.</param>
 		///         <param name="immediateMasterTime">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CMTimebaseError SetRateAndAnchorTime (double rate, CMTime timebaseTime, CMTime immediateMasterTime)
 		{
@@ -569,7 +551,6 @@ namespace CoreMedia {
 		extern static /* OSStatus */ CMTimebaseError CMTimebaseNotificationBarrier (/* CMTimebaseRef */ IntPtr timebase);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CMTimebaseError NotificationBarrier ()
 		{
@@ -587,7 +568,6 @@ namespace CoreMedia {
 		/// <param name="timer">To be added.</param>
 		///         <param name="runloop">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CMTimebaseError AddTimer (NSTimer timer, NSRunLoop runloop)
 		{
@@ -609,7 +589,6 @@ namespace CoreMedia {
 
 		/// <param name="timer">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CMTimebaseError RemoveTimer (NSTimer timer)
 		{
@@ -627,7 +606,6 @@ namespace CoreMedia {
 		/// <param name="timer">To be added.</param>
 		///         <param name="fireTime">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CMTimebaseError SetTimerNextFireTime (NSTimer timer, CMTime fireTime)
 		{
@@ -644,7 +622,6 @@ namespace CoreMedia {
 
 		/// <param name="timer">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CMTimebaseError SetTimerToFireImmediately (NSTimer timer)
 		{
@@ -716,7 +693,6 @@ namespace CoreMedia {
 
 #if !COREBUILD
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -735,7 +711,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -754,7 +729,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -773,7 +747,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CMClockOrTimebase? CopySource ()
 		{
@@ -875,7 +848,6 @@ namespace CoreMedia {
 		extern static CMTime CMSyncGetTime (/* CMClockOrTimebaseRef */ IntPtr clockOrTimebase);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CMTime Time {
 			get {
@@ -889,7 +861,6 @@ namespace CoreMedia {
 		/// <param name="clockOrTimebaseA">To be added.</param>
 		///         <param name="clockOrTimebaseB">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static double GetRelativeRate (CMClockOrTimebase clockOrTimebaseA, CMClockOrTimebase clockOrTimebaseB)
 		{
@@ -919,7 +890,6 @@ namespace CoreMedia {
 		///         <param name="timeA">To be added.</param>
 		///         <param name="timeB">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static CMSyncError GetRelativeRateAndAnchorTime (CMClockOrTimebase clockOrTimebaseA, CMClockOrTimebase clockOrTimebaseB, out double relativeRate, out CMTime timeA, out CMTime timeB)
 		{
@@ -956,7 +926,6 @@ namespace CoreMedia {
 		///         <param name="from">To be added.</param>
 		///         <param name="to">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static CMTime ConvertTime (CMTime time, CMClockOrTimebase from, CMClockOrTimebase to)
 		{
@@ -977,7 +946,6 @@ namespace CoreMedia {
 		/// <param name="clockOrTimebaseA">To be added.</param>
 		///         <param name="clockOrTimebaseB">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static bool MightDrift (CMClockOrTimebase clockOrTimebaseA, CMClockOrTimebase clockOrTimebaseB)
 		{

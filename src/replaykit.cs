@@ -271,14 +271,14 @@ namespace ReplayKit {
 	interface RPBroadcastActivityViewController {
 		// inlined
 		/// <param name="nibName">
-		///           <para>To be added.</para>
-		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
-		///         </param>
+		///   <para>The name of the nib file, or <see langword="null" />.</para>
+		///   <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		/// </param>
 		/// <param name="bundle">
-		///           <para>To be added.</para>
-		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
-		///         </param>
-		/// <summary>To be added.</summary>
+		///   <para>The bundle in which to search for the nib file, or <see langword="null" />.</para>
+		///   <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		/// </param>
+		/// <summary>Creates a new <see cref="ReplayKit.RPBroadcastActivityViewController" /> with the specified nib name and bundle.</summary>
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
 		NativeHandle Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);
@@ -290,7 +290,7 @@ namespace ReplayKit {
 			<remarks>
 			          <para>The LoadBroadcastActivityViewControllerAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
 			          <para copied="true">The LoadBroadcastActivityViewControllerAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
+			          <para copied="true">Returns a task representing the asynchronous operation.</para>
 			        </remarks>
 			""")]
 		[Export ("loadBroadcastActivityViewControllerWithHandler:")]
@@ -303,9 +303,9 @@ namespace ReplayKit {
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Async (XmlDocs = """
-			<param name="preferredExtension">To be added.</param>
+			<param name="preferredExtension">The preferred extension identifier, or <see langword="null" />.</param>
 			<summary>Asynchronously presents the UI for choosing a broadcast activity view controller, attempts to load the user's choice.</summary>
-			<remarks>To be added.</remarks>
+			
 			""")]
 		[Export ("loadBroadcastActivityViewControllerWithPreferredExtension:handler:")]
 		void LoadBroadcastActivityViewController ([NullAllowed] string preferredExtension, Action<RPBroadcastActivityViewController, NSError> handler);

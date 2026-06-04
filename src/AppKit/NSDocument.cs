@@ -7,8 +7,8 @@ namespace AppKit {
 
 	public partial class NSDocument {
 		/// <param name="document">The document.</param>
-		///     <param name="didDuplicate">The did duplicate.</param>
-		///     <summary>To be added.</summary>
+		/// <param name="didDuplicate">Whether the document was duplicated successfully.</param>
+		/// <summary>A callback invoked when a document duplication operation completes.</summary>
 		public delegate void DuplicateCallback (NSDocument document, bool didDuplicate);
 
 		[Register ("__NSDocumentDuplicateCallback")]
@@ -34,7 +34,7 @@ namespace AppKit {
 		}
 
 		/// <param name="callback">The callback to invoke.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Duplicates the document and invokes the callback when done.</summary>
 		public void DuplicateDocument (DuplicateCallback? callback)
 		{
 			if (callback is null) {

@@ -60,8 +60,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGPDFDocumentRef */ IntPtr CGPDFPageGetDocument (/* CGPDFPageRef */ IntPtr page);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the document.</summary>
 		public CGPDFDocument Document {
 			get {
 				return new CGPDFDocument (CGPDFPageGetDocument (Handle), false);
@@ -71,8 +70,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* size_t */ nint CGPDFPageGetPageNumber (/* CGPDFPageRef */ IntPtr page);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the page number.</summary>
 		public nint PageNumber {
 			get {
 				return CGPDFPageGetPageNumber (Handle);
@@ -83,8 +81,7 @@ namespace CoreGraphics {
 		extern static CGRect CGPDFPageGetBoxRect (/* CGPDFPageRef */ IntPtr page, CGPDFBox box);
 
 		/// <param name="box">The box.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets box rect.</summary>
 		public CGRect GetBoxRect (CGPDFBox box)
 		{
 			return CGPDFPageGetBoxRect (Handle, box);
@@ -93,8 +90,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* int */ int CGPDFPageGetRotationAngle (/* CGPDFPageRef */ IntPtr page);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the rotation angle.</summary>
 		public int RotationAngle {
 			get {
 				return CGPDFPageGetRotationAngle (Handle);
@@ -108,8 +104,7 @@ namespace CoreGraphics {
 		///         <param name="rect">The rect.</param>
 		///         <param name="rotate">The rotate.</param>
 		///         <param name="preserveAspectRatio">The preserve aspect ratio.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets drawing transform.</summary>
 		public CGAffineTransform GetDrawingTransform (CGPDFBox box, CGRect rect, int rotate, bool preserveAspectRatio)
 		{
 			return CGPDFPageGetDrawingTransform (Handle, box, rect, rotate, preserveAspectRatio.AsByte ());
@@ -118,8 +113,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGPDFDictionaryRef */ IntPtr CGPDFPageGetDictionary (/* CGPDFPageRef */ IntPtr page);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the dictionary.</summary>
 		public CGPDFDictionary Dictionary {
 			get {
 				return new CGPDFDictionary (CGPDFPageGetDictionary (Handle));

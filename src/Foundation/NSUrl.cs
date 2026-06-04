@@ -33,7 +33,7 @@ namespace Foundation {
 
 		/// <param name="path">The path.</param>
 		///         <param name="relativeToUrl">The relative to url.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSUrl" /> instance.</summary>
 		public NSUrl (string path, string relativeToUrl)
 			: this (path, new NSUrl (relativeToUrl))
 		{
@@ -41,8 +41,7 @@ namespace Foundation {
 
 		// but NSUrl has it's own isEqual: selector, which we re-expose in a more .NET-ish way
 		/// <param name="url">The URL to use.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Equals.</summary>
 		public bool Equals (NSUrl? url)
 		{
 			if (url is null)
@@ -84,8 +83,7 @@ namespace Foundation {
 		}
 
 		/// <param name="url">The URL to use.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Makes relative.</summary>
 		public NSUrl MakeRelative (string url)
 		{
 			return _FromStringRelative (url, this);
@@ -104,8 +102,7 @@ namespace Foundation {
 		/// <param name="nsUrlResourceKey">The ns url resource key.</param>
 		///         <param name="value">The value to set.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Trys get resource.</summary>
 		public bool TryGetResource (NSString nsUrlResourceKey, out NSObject value, out NSError error)
 		{
 			return GetResourceValue (out value, nsUrlResourceKey, out error);
@@ -113,8 +110,7 @@ namespace Foundation {
 
 		/// <param name="nsUrlResourceKey">The ns url resource key.</param>
 		///         <param name="value">The value to set.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Trys get resource.</summary>
 		public bool TryGetResource (NSString nsUrlResourceKey, out NSObject value)
 		{
 			NSError error;
@@ -124,8 +120,7 @@ namespace Foundation {
 		/// <param name="nsUrlResourceKey">The ns url resource key.</param>
 		///         <param name="value">The value to set.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Sets resource.</summary>
 		public bool SetResource (NSString nsUrlResourceKey, NSObject value, out NSError error)
 		{
 			return SetResourceValue (value, nsUrlResourceKey, out error);
@@ -133,16 +128,14 @@ namespace Foundation {
 
 		/// <param name="nsUrlResourceKey">The ns url resource key.</param>
 		///         <param name="value">The value to set.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Sets resource.</summary>
 		public bool SetResource (NSString nsUrlResourceKey, NSObject value)
 		{
 			NSError error;
 			return SetResourceValue (value, nsUrlResourceKey, out error);
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the port.</summary>
 		public int Port {
 			get {
 				return (int) (this.PortNumber ?? -1);

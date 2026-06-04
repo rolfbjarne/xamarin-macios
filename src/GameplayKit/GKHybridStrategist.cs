@@ -5,7 +5,6 @@ using System.ComponentModel;
 #if !XAMCORE_5_0 && !__MACOS__
 namespace GameplayKit {
 	/// <summary>A <see cref="GameplayKit.IGKStrategist" /> that combines Monte Carlo Tree Search and local search via MinMax.</summary>
-	///     <remarks>To be added.</remarks>
 	[Register ("GKHybridStrategist", SkipRegistration = true)]
 	[UnsupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -24,39 +23,33 @@ namespace GameplayKit {
 		protected internal GKHybridStrategist (NativeHandle handle) : base (handle) => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public virtual IGKGameModelUpdate GetBestMoveForActivePlayer () => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public virtual nuint Budget {
 			get => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 			set => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 		}
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public virtual nuint ExplorationParameter {
 			get => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 			set => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 		}
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public virtual IGKGameModel? GameModel {
 			get => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 			set => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 		}
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public virtual nuint MaxLookAheadDepth {
 			get => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 			set => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 		}
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public virtual IGKRandom? RandomSource {
 			get => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 			set => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);

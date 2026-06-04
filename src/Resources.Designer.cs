@@ -503,7 +503,7 @@ namespace bgen {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The property {0} on class {1} is hiding a property from a parent class {2} but the selectors do not match..
+        ///   Looks up a localized string similar to The property {0} on class {1} is hiding AProperty from AParent class {2} but the selectors do not match..
         /// </summary>
         internal static string BI1035 {
             get {
@@ -1070,7 +1070,7 @@ namespace bgen {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interface &apos;{0}&apos; on &apos;{1}&apos; is being ignored as it is not a protocol. Did you mean &apos;{2}&apos; instead?.
+        ///   Looks up a localized string similar to Interface &apos;{0}&apos; on &apos;{1}&apos; is being ignored as it is not AProtocol. Did you mean &apos;{2}&apos; instead?.
         /// </summary>
         internal static string BI1111 {
             get {

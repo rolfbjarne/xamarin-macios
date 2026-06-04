@@ -15,7 +15,7 @@ using OS_nw_advertise_descriptor = System.IntPtr;
 using OS_nw_txt_record = System.IntPtr;
 
 namespace Network {
-	/// <summary>To be added.</summary>
+	/// <summary>Describes a Bonjour service to advertise on the network.</summary>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]

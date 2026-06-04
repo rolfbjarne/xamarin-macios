@@ -89,7 +89,6 @@ namespace AppKit {
 
 		/// <param name="depth">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static bool PlanarFromDepth (NSWindowDepth depth)
 		{
@@ -101,7 +100,6 @@ namespace AppKit {
 
 		/// <param name="depth">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSString ColorSpaceFromDepth (NSWindowDepth depth)
 		{
@@ -110,14 +108,12 @@ namespace AppKit {
 
 		/// <param name="depth">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[DllImport (Constants.AppKitLibrary, EntryPoint = "NSBitsPerSampleFromDepth")]
 		public extern static nint BitsPerSampleFromDepth (NSWindowDepth depth);
 
 		/// <param name="depth">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[DllImport (Constants.AppKitLibrary, EntryPoint = "NSBitsPerPixelFromDepth")]
 		public extern static nint BitsPerPixelFromDepth (NSWindowDepth depth);
@@ -127,7 +123,6 @@ namespace AppKit {
 
 		/// <param name="colorspaceName">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static nint NumberOfColorComponents (NSString colorspaceName)
 		{
@@ -142,7 +137,6 @@ namespace AppKit {
 		extern static IntPtr NSAvailableWindowDepths ();
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public static NSWindowDepth [] AvailableWindowDepths {
 			get {

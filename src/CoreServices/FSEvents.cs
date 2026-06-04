@@ -237,8 +237,8 @@ namespace CoreServices {
 		/// A list of directory paths, signifying the root of a filesystem hierarchy to be watched
 		/// for modifications. If <see cref="DeviceToWatch"/> is set, the list of paths should be
 		/// relative to the root of the device. For example, if a volume "MyData" is mounted at
-		/// "/Volumes/MyData" and you want to watch "/Volumes/MyData/Pictures/July", specify a path
-		/// string of "Pictures/July". To watch the root of a volume pass a path of "" (the empty string).
+		/// "/Volumes/MyData" and you want to watch "/Volumes/MyData/Pictures/July", specify APath
+		/// string of "Pictures/July". To watch the root of a volume pass APath of "" (the empty string).
 		/// </summary>
 		public IReadOnlyList<string>? PathsToWatch { get; set; }
 

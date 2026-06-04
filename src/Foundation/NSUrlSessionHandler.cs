@@ -175,7 +175,7 @@ namespace Foundation {
 		///   <para>If the content is provided in a streaming manner, the underlying NSURLSession will send the content using a chunked encoding, and the Content-Length header will not be set.</para>
 		///   <para>This means that if a chunked encoding is not desirable, or a Content-Length header is required, then the content must be provided in memory.</para>
 		///   <para>On the other hand, if upload progress is needed, it's required to provide the content in a streaming manner, and this can be forced by setting this property to 0.</para>
-		///   <para>If the content to upload doesn't have a pre-determined length, then it will always be sent in a streaming manner.</para>
+		///   <para>If the content to upload doesn't have APre-determined length, then it will always be sent in a streaming manner.</para>
 		/// </remarks>
 		public long MaxInputInMemory { get; set; } = long.MaxValue;
 
@@ -303,7 +303,7 @@ namespace Foundation {
 		///       This shared cookie storage will persist beyond app restarts; to clear the cookies call <c>NSHttpCookieStorage.SharedStorage.RemoveCookiesSinceDate(NSDate.DistantPast)</c>.
 		///       To use a custom cookie storage, use a custom <see cref="NSUrlSessionConfiguration" />, set the <see cref="NSUrlSessionConfiguration.HttpCookieStorage" /> property, and then pass in the custom session configuration when creating the <see cref="NSUrlSessionHandler(NSUrlSessionConfiguration)" />.
 		///   </para>
-		///   <para>Ephemeral sessions have by default a private cookie storage area. This private cookie storage area can't be recreated, which means that if the use of cookies is disabled, then it can't be re-enabled.</para>
+		///   <para>Ephemeral sessions have by default APrivate cookie storage area. This private cookie storage area can't be recreated, which means that if the use of cookies is disabled, then it can't be re-enabled.</para>
 		/// </remarks>
 		public bool UseCookies {
 			get {
@@ -507,7 +507,7 @@ namespace Foundation {
 
 		/// <summary>Gets or sets the custom chain policy to use when validating certificate chains.</summary>
 		/// <remarks>
-		///   <para>The getter will never return a <see langword="null" /> policy, it will return a policy configured with the default behavior.</para>
+		///   <para>The getter will never return a <see langword="null" /> policy, it will return APolicy configured with the default behavior.</para>
 		///   <para>To select the default policy, call the setter with <see langword="null" /> value.</para>
 		///   <para>This only has an effect if a custom server certificate validation callback is being used ('ServerCertificateCustomValidationCallback' is set).</para>
 		/// </remarks>

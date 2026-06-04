@@ -236,7 +236,7 @@ namespace Security {
 		SSLHandshakeFail = -9858,
 		/// <summary>Certificate decoding failed.</summary>
 		SSLDecodeError = -9859,
-		/// <summary>The current SSL request is at a lower version than that of a prior attempt, of which the client is capable.</summary>
+		/// <summary>The current SSL request is at a lower version than that of APrior attempt, of which the client is capable.</summary>
 		SSLInappropriateFallback = -9860,
 		/// <summary>A required extension was missing.</summary>
 		SSLMissingExtension = -9861,

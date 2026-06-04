@@ -59,14 +59,12 @@ namespace CoreFoundation {
 		/// <summary>Represents the value associated with the constant kCFRunLoopDefaultMode</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("kCFRunLoopDefaultMode")]
 		NSString ModeDefault { get; }
 
 		/// <summary>Represents the value associated with the constant kCFRunLoopCommonModes</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("kCFRunLoopCommonModes")]
 		NSString ModeCommon { get; }
 	}
@@ -84,73 +82,72 @@ namespace CoreFoundation {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("kCFErrorDomainCFNetwork", "CFNetwork")]
 		NSString ErrorDomain { get; }
 	}
 
 	enum CFStringTransform {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates strip combining marks.</summary>
 		[Field ("kCFStringTransformStripCombiningMarks")]
 		StripCombiningMarks,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates to latin.</summary>
 		[Field ("kCFStringTransformToLatin")]
 		ToLatin,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates fullwidth halfwidth.</summary>
 		[Field ("kCFStringTransformFullwidthHalfwidth")]
 		FullwidthHalfwidth,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates latin katakana.</summary>
 		[Field ("kCFStringTransformLatinKatakana")]
 		LatinKatakana,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates latin hiragana.</summary>
 		[Field ("kCFStringTransformLatinHiragana")]
 		LatinHiragana,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hiragana katakana.</summary>
 		[Field ("kCFStringTransformHiraganaKatakana")]
 		HiraganaKatakana,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates mandarin latin.</summary>
 		[Field ("kCFStringTransformMandarinLatin")]
 		MandarinLatin,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates latin hangul.</summary>
 		[Field ("kCFStringTransformLatinHangul")]
 		LatinHangul,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates latin arabic.</summary>
 		[Field ("kCFStringTransformLatinArabic")]
 		LatinArabic,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates latin hebrew.</summary>
 		[Field ("kCFStringTransformLatinHebrew")]
 		LatinHebrew,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates latin thai.</summary>
 		[Field ("kCFStringTransformLatinThai")]
 		LatinThai,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates latin cyrillic.</summary>
 		[Field ("kCFStringTransformLatinCyrillic")]
 		LatinCyrillic,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates latin greek.</summary>
 		[Field ("kCFStringTransformLatinGreek")]
 		LatinGreek,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates to xml hex.</summary>
 		[Field ("kCFStringTransformToXMLHex")]
 		ToXmlHex,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates to unicode name.</summary>
 		[Field ("kCFStringTransformToUnicodeName")]
 		ToUnicodeName,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates strip diacritics.</summary>
 		[Field ("kCFStringTransformStripDiacritics")]
 		StripDiacritics,
 	}

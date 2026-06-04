@@ -94,45 +94,45 @@ namespace FinderSync {
 	[Protocol (Name = "FIFinderSync")]
 	interface FIFinderSyncProtocol {
 		/// <param name="menuKind">The menu kind.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Returns the menu for the specified menu kind.</summary>
+		/// <returns>The menu, or <see langword="null" />.</returns>
 		[Export ("menuForMenuKind:")]
 		[return: NullAllowed]
 		NSMenu GetMenu (FIMenuKind menuKind);
 
 		/// <param name="url">The URL to use.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Called when the extension begins observing the directory at the specified URL.</summary>
 		[Export ("beginObservingDirectoryAtURL:")]
 		void BeginObservingDirectory (NSUrl url);
 
 		/// <param name="url">The URL to use.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Called when the extension stops observing the directory at the specified URL.</summary>
 		[Export ("endObservingDirectoryAtURL:")]
 		void EndObservingDirectory (NSUrl url);
 
 		/// <param name="url">The URL to use.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Requests a badge identifier for the item at the specified URL.</summary>
 		[Export ("requestBadgeIdentifierForURL:")]
 		void RequestBadgeIdentifier (NSUrl url);
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
+		/// <summary>Gets the toolbar item name.</summary>
+		/// <value>The name of the toolbar item.</value>
 		[Export ("toolbarItemName")]
 		string ToolbarItemName { get; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
+		/// <summary>Gets the toolbar item image.</summary>
+		/// <value>The image of the toolbar item.</value>
 		[Export ("toolbarItemImage", ArgumentSemantic.Copy)]
 		NSImage ToolbarItemImage { get; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
+		/// <summary>Gets the toolbar item tooltip.</summary>
+		/// <value>The tooltip of the toolbar item.</value>
 		[Export ("toolbarItemToolTip")]
 		string ToolbarItemToolTip { get; }
 
 		/// <param name="itemUrl">The item url.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Returns the supported service names for the item at the specified URL.</summary>
+		/// <returns>An array of supported service names.</returns>
 		[Export ("supportedServiceNamesForItemWithURL:")]
 		string [] SupportedServiceNames (NSUrl itemUrl);
 
@@ -144,7 +144,7 @@ namespace FinderSync {
 		/// <param name="attributes">The attributes.</param>
 		/// <param name="itemUrl">The item url.</param>
 		/// <param name="completion">The completion.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the values for the specified attributes of the item at the specified URL.</summary>
 		[Async, Export ("valuesForAttributes:forItemWithURL:completion:")]
 		void GetValues (string [] attributes, NSUrl itemUrl, GetValuesCompletionHandler completion);
 	}

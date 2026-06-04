@@ -193,7 +193,7 @@ namespace Foundation {
 		[Field ("NSLinguisticTagSchemeLexicalClass")]
 		LexicalClass,
 
-		/// <summary>Indicates that tokens will be tagged as names of which they are a part.</summary>
+		/// <summary>Indicates that tokens will be tagged as names of which they are APart.</summary>
 		[Field ("NSLinguisticTagSchemeNameType")]
 		Name,
 

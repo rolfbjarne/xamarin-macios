@@ -45,7 +45,7 @@ namespace ImageIO {
 		///         <param name="name">The name to use.</param>
 		///         <param name="type">The type.</param>
 		///         <param name="value">The value to set.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CGImageMetadataTag" /> instance.</summary>
 		public CGImageMetadataTag (NSString xmlns, NSString? prefix, NSString name, CGImageMetadataType type, NSObject? value) :
 			this (xmlns, prefix, name, type, value.GetHandle ())
 		{
@@ -58,7 +58,7 @@ namespace ImageIO {
 		///         <param name="name">The name to use.</param>
 		///         <param name="type">The type.</param>
 		///         <param name="value">The value to set.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CGImageMetadataTag" /> instance.</summary>
 		public CGImageMetadataTag (NSString xmlns, NSString? prefix, NSString name, CGImageMetadataType type, bool value) :
 			this (xmlns, prefix, name, type, value ? CFBoolean.TrueHandle : CFBoolean.FalseHandle)
 		{
@@ -81,7 +81,6 @@ namespace ImageIO {
 		}
 
 		/// <summary>Type identifier for the ImageIO.CGImageMetadataTag type.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>
 		///           <para>The returned token is the CoreFoundation type identifier (CFType) that has been assigned to this class.</para>
 		///           <para>This can be used to determine type identity between different CoreFoundation objects.</para>
@@ -98,8 +97,7 @@ namespace ImageIO {
 		extern static /* CFStringRef __nullable */ IntPtr CGImageMetadataTagCopyNamespace (
 			/* CGImageMetadataTagRef __nonnull */ IntPtr tag);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the namespace.</summary>
 		public NSString? Namespace {
 			get {
 				var result = CGImageMetadataTagCopyNamespace (Handle);
@@ -111,8 +109,7 @@ namespace ImageIO {
 		extern static /* CFStringRef __nullable */ IntPtr CGImageMetadataTagCopyPrefix (
 			/* CGImageMetadataTagRef __nonnull */ IntPtr tag);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the prefix.</summary>
 		public NSString? Prefix {
 			get {
 				var result = CGImageMetadataTagCopyPrefix (Handle);
@@ -124,8 +121,7 @@ namespace ImageIO {
 		extern static /* CFStringRef __nullable */ IntPtr CGImageMetadataTagCopyName (
 			/* CGImageMetadataTagRef __nonnull */ IntPtr tag);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the name.</summary>
 		public NSString? Name {
 			get {
 				var result = CGImageMetadataTagCopyName (Handle);
@@ -138,8 +134,7 @@ namespace ImageIO {
 			/* CGImageMetadataTagRef __nonnull */ IntPtr tag);
 
 		// a boolean is returned as a NSString, i.e. type CGImageMetadataType.String, so NSObject is fine
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the value.</summary>
 		public NSObject? Value {
 			get { return Runtime.GetNSObject<NSObject> (CGImageMetadataTagCopyValue (Handle), true); }
 		}
@@ -148,8 +143,7 @@ namespace ImageIO {
 		[DllImport (Constants.ImageIOLibrary)]
 		extern static CGImageMetadataType CGImageMetadataTagGetType (/* CGImageMetadataTagRef __nonnull */ IntPtr tag);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the type.</summary>
 		public CGImageMetadataType Type {
 			get { return CGImageMetadataTagGetType (Handle); }
 		}
@@ -159,7 +153,6 @@ namespace ImageIO {
 			/* CGImageMetadataTagRef __nonnull */ IntPtr tag);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public CGImageMetadataTag? []? GetQualifiers ()
 		{
 			IntPtr result = CGImageMetadataTagCopyQualifiers (Handle);

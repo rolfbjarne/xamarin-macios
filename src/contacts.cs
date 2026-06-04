@@ -18,7 +18,7 @@ namespace Contacts {
 	interface CNKeyDescriptor : NSObjectProtocol, NSSecureCoding, NSCopying {
 	}
 
-	/// <summary>Represents a contact such as a person or business and holds their data, such as name, phone numbers, etc.</summary>
+	/// <summary>Represents a contact such as APerson or business and holds their data, such as name, phone numbers, etc.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/Contacts/Reference/CNContact_Class/index.html">Apple documentation for <c>CNContact</c></related>
 	[MacCatalyst (13, 1)]
@@ -144,7 +144,7 @@ namespace Contacts {
 		[Export ("isUnifiedWithContactWithIdentifier:")]
 		bool IsUnifiedWithContact (string contactIdentifier);
 
-		/// <summary>Used as the name of an exception thrown when attempting to read a property that has not been fetched.</summary>
+		/// <summary>Used as the name of an exception thrown when attempting to read AProperty that has not been fetched.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[Field ("CNContactPropertyNotFetchedExceptionName")]

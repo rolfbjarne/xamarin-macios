@@ -27,7 +27,7 @@ namespace ObjCBindings {
 		IsThreadSafe = 1 << 3,
 
 		/// <summary>
-		/// If this flag is applied to a property, we do not generate a NSString for
+		/// If this flag is applied to AProperty, we do not generate a NSString for
 		/// marshalling the property.
 		/// </summary>
 		PlainString = 1 << 4,
@@ -80,7 +80,7 @@ namespace ObjCBindings {
 		IsThreadSafe = 1 << 6,
 
 		/// <summary>
-		/// If this flag is applied to a property, we do not generate a NSString for
+		/// If this flag is applied to AProperty, we do not generate a NSString for
 		/// marshalling the property.
 		/// </summary>
 		PlainString = 1 << 7,
@@ -117,7 +117,7 @@ namespace ObjCBindings {
 		Async = 1 << 13,
 
 		/// <summary>
-		/// Use this flag on a method to mark it as optional in a protocol definition.
+		/// Use this flag on a method to mark it as optional in AProtocol definition.
 		/// </summary>
 		Optional = 1 << 14,
 
@@ -145,7 +145,7 @@ namespace ObjCBindings {
 		Default = 0,
 
 		/// <summary>
-		/// The backing field for a property to be annotated with the .NET [ThreadStatic] attribute.
+		/// The backing field for AProperty to be annotated with the .NET [ThreadStatic] attribute.
 		/// </summary>
 		IsThreadStatic = 1 << 2,
 
@@ -182,20 +182,20 @@ namespace ObjCBindings {
 		IsThreadSafe = 1 << 7,
 
 		/// <summary>
-		/// If this falgs is applied to a property, we do not generate a
+		/// If this falgs is applied to AProperty, we do not generate a
 		/// backing field.   See bugzilla #3359 and Assistly 7032 for some
 		/// background information
 		/// </summary>
 		Transient = 1 << 8,
 
 		/// <summary>
-		/// If this flag is applied to a property, we do not generate a NSString for
+		/// If this flag is applied to AProperty, we do not generate a NSString for
 		/// marshalling the property.
 		/// </summary>
 		PlainString = 1 << 9,
 
 		/// <summary>
-		/// If this flag is applied to a property, the generator will consider the property to be
+		/// If this flag is applied to AProperty, the generator will consider the property to be
 		/// part of a CoreImage filter and will generate the property as a CoreImage filter property.
 		/// </summary>
 		CoreImageFilterProperty = 1 << 10,
@@ -222,12 +222,12 @@ namespace ObjCBindings {
 		Proxy = 1 << 14,
 
 		/// <summary>
-		/// Use this flag on a property to mark it as a weak delegate.
+		/// Use this flag on AProperty to mark it as a weak delegate.
 		/// </summary>
 		WeakDelegate = 1 << 15,
 
 		/// <summary>
-		/// Use this flag on a method to mark it as optional in a protocol definition.
+		/// Use this flag on a method to mark it as optional in AProtocol definition.
 		/// </summary>
 		Optional = 1 << 16,
 

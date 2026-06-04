@@ -38,14 +38,13 @@ namespace Foundation {
 		Inherited = false, AllowMultiple = true)]
 	public class AdviceAttribute : Attribute {
 		/// <param name="message">The message.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a new advice attribute with the specified message.</summary>
 		public AdviceAttribute (string message)
 		{
 			Message = message;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the advice message.</summary>
 		public string Message { get; private set; }
 	}
 }

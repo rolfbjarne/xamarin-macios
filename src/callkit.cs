@@ -671,7 +671,6 @@ namespace CallKit {
 			<returns>A task that represents the asynchronous ReportNewIncomingCall operation</returns>
 			<remarks>
 			          <para copied="true">The ReportNewIncomingCallAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
 			        </remarks>
 			""")]
 		[Export ("reportNewIncomingCallWithUUID:update:completion:")]

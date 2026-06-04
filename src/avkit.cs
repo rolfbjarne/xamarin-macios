@@ -214,14 +214,14 @@ namespace AVKit {
 	[BaseType (typeof (UIViewController))]
 	interface AVPlayerViewController {
 		/// <param name="nibName">
-		///           <para>To be added.</para>
-		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
-		///         </param>
+		///   <para>The name of the NIB file to load.</para>
+		///   <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		/// </param>
 		/// <param name="bundle">
-		///           <para>To be added.</para>
-		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
-		///         </param>
-		/// <summary>Creates a new <see cref="AVKit.AVPlayerViewController" /> for the specified NIB name and bundle.</summary>
+		///   <para>The bundle in which to search for the NIB file.</para>
+		///   <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		/// </param>
+		/// <summary>Creates a new <see cref="T:AVKit.AVPlayerViewController" /> for the specified NIB name and bundle.</summary>
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
 		NativeHandle Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);
@@ -236,8 +236,8 @@ namespace AVKit {
 		[Export ("videoGravity")]
 		NSString WeakVideoGravity { get; set; }
 
-		/// <summary>Gets a value that tells whether the first frame of vido is ready to display.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets a value that tells whether the first frame of video is ready to display.</summary>
+		/// <value><see langword="true" /> if the player view controller is ready to display video; otherwise, <see langword="false" />.</value>
 		[Export ("readyForDisplay")]
 		bool ReadyForDisplay { [Bind ("isReadyForDisplay")] get; }
 

@@ -17,7 +17,7 @@ using CoreLocation;
 namespace MapKit {
 
 	// MKTileOverlay.h
-	/// <summary>Encapsulates the index values of a particular <see cref="MapKit.MKTileOverlay" />.</summary>
+	/// <summary>Encapsulates the index values of AParticular <see cref="MapKit.MKTileOverlay" />.</summary>
 	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -465,7 +465,7 @@ namespace MapKit {
 		}
 
 		// MKMapRectIsEmpty
-		/// <summary>Whether the <see cref="MapKit.MKMapRect" /> has a positive area.</summary>
+		/// <summary>Whether the <see cref="MapKit.MKMapRect" /> has APositive area.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsEmpty {

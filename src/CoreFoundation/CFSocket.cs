@@ -38,59 +38,55 @@ using CoreFoundation;
 namespace CoreFoundation {
 
 	/// <summary>An enumeration whose values can be used with the <see cref="CoreFoundation.CFSocket.DisableCallBacks(CoreFoundation.CFSocketCallBackType)" /> and <see cref="CoreFoundation.CFSocket.EnableCallBacks(CoreFoundation.CFSocketCallBackType)" /> methods.</summary>
-	///     <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	// defined as CFOptionFlags (unsigned long [long] = nuint) - System/Library/Frameworks/CoreFoundation.framework/Headers/CFSocket.h
 	public enum CFSocketCallBackType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates no call back.</summary>
 		NoCallBack = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates read call back.</summary>
 		ReadCallBack = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates accept call back.</summary>
 		AcceptCallBack = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates data call back.</summary>
 		DataCallBack = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates connect call back.</summary>
 		ConnectCallBack = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates write call back.</summary>
 		WriteCallBack = 8,
 	}
 
 	// defined as CFIndex (long [long] = nint) - System/Library/Frameworks/CoreFoundation.framework/Headers/CFSocket.h
 	/// <summary>An enumeration whose values specify errors relating to <see cref="CoreFoundation.CFSocket" />s.</summary>
-	///     <remarks>To be added.</remarks>
 	[Native]
 	public enum CFSocketError : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates success.</summary>
 		Success = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates error.</summary>
 		Error = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates timeout.</summary>
 		Timeout = -2,
 	}
 
 	/// <summary>An enumeration whose values can be used with the <see cref="CoreFoundation.CFSocket.GetSocketFlags" /> and <see cref="CoreFoundation.CFSocket.SetSocketFlags(CoreFoundation.CFSocketFlags)" /> methods.</summary>
-	///     <remarks>To be added.</remarks>
 	[Flags]
 	// anonymous and typeless native enum - System/Library/Frameworks/CoreFoundation.framework/Headers/CFSocket.h
 	public enum CFSocketFlags {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates automatically reenable read call back.</summary>
 		AutomaticallyReenableReadCallBack = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates automatically reenable accept call back.</summary>
 		AutomaticallyReenableAcceptCallBack = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates automatically reenable data call back.</summary>
 		AutomaticallyReenableDataCallBack = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates automatically reenable write call back.</summary>
 		AutomaticallyReenableWriteCallBack = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates leave errors.</summary>
 		LeaveErrors = 64,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates close on invalidate.</summary>
 		CloseOnInvalidate = 128,
 	}
 
 	/// <summary>Type for the platform-specific native socket handle.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -106,7 +102,6 @@ namespace CoreFoundation {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{
 			return string.Format ("[CFSocketNativeHandle {0}]", handle);
@@ -114,7 +109,6 @@ namespace CoreFoundation {
 	}
 
 	/// <summary>An <see cref="System.Exception" /> that is raised by various methods of the <see cref="CoreFoundation.CFSocket" /> class.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -122,15 +116,13 @@ namespace CoreFoundation {
 	public class CFSocketException : Exception {
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public CFSocketError Error {
 			get;
 			private set;
 		}
 
-		/// <param name="error">To be added.</param>
+		/// <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CFSocketException (CFSocketError error)
 		{
 			this.Error = error;
@@ -471,14 +463,13 @@ namespace CoreFoundation {
 																	   delegate* unmanaged<IntPtr, nuint, IntPtr, IntPtr, IntPtr, void> callout,
 																	   CFSocketContext* context, double timeout);
 
-		/// <param name="family">To be added.</param>
-		///         <param name="type">To be added.</param>
-		///         <param name="proto">To be added.</param>
-		///         <param name="endpoint">To be added.</param>
+		/// <param name="family">The family.</param>
+		///         <param name="type">The type.</param>
+		///         <param name="proto">The proto.</param>
+		///         <param name="endpoint">The endpoint.</param>
 		///         <param name="timeout">Time to wait for the operation to complete.   If the value is negative, no wait takes place, and instead the operation takes place in the background.</param>
 		///         <summary>Creates a connected socket by specifying an address family, socket type, protocol type as well as the endpoint to connect to.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CFSocket CreateConnectedToSocketSignature (AddressFamily family, SocketType type,
 																 ProtocolType proto, IPEndPoint endpoint,
 																 double timeout)
@@ -500,18 +491,16 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static nint CFSocketSetAddress (IntPtr handle, IntPtr address);
 
-		/// <param name="address">To be added.</param>
-		///         <param name="port">To be added.</param>
+		/// <param name="address">The address.</param>
+		///         <param name="port">The port.</param>
 		///         <summary>Sets the listening address for this socket (equivalent to the BSD bind call).</summary>
-		///         <remarks>To be added.</remarks>
 		public void SetAddress (IPAddress address, int port)
 		{
 			SetAddress (new IPEndPoint (address, port));
 		}
 
-		/// <param name="endpoint">To be added.</param>
+		/// <param name="endpoint">The endpoint.</param>
 		///         <summary>Sets the listening address for this socket (equivalent to the BSD bind call).</summary>
-		///         <remarks>To be added.</remarks>
 		public void SetAddress (IPEndPoint endpoint)
 		{
 			EnableCallBacks (CFSocketCallBackType.AcceptCallBack);
@@ -551,7 +540,6 @@ namespace CoreFoundation {
 
 		/// <summary>Returns the set of CFSocket-specific flags.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CFSocketFlags GetSocketFlags ()
 		{
 			return CFSocketGetSocketFlags (Handle);
@@ -560,9 +548,8 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static void CFSocketSetSocketFlags (IntPtr handle, nuint /* CFOptionFlags */ flags);
 
-		/// <param name="flags">To be added.</param>
+		/// <param name="flags">The flags.</param>
 		///         <summary>Sets the CFSocket-specific flags.</summary>
-		///         <remarks>To be added.</remarks>
 		public void SetSocketFlags (CFSocketFlags flags)
 		{
 			CFSocketSetSocketFlags (Handle, (nuint) (ulong) flags);
@@ -571,9 +558,8 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static void CFSocketDisableCallBacks (IntPtr handle, nuint /* CFOptionFlags */ types);
 
-		/// <param name="types">To be added.</param>
+		/// <param name="types">The types.</param>
 		///         <summary>Disables a set of events from being raised.</summary>
-		///         <remarks>To be added.</remarks>
 		public void DisableCallBacks (CFSocketCallBackType types)
 		{
 			CFSocketDisableCallBacks (Handle, (nuint) (ulong) types);
@@ -582,9 +568,8 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static void CFSocketEnableCallBacks (IntPtr handle, nuint /* CFOptionFlags */ types);
 
-		/// <param name="types">To be added.</param>
+		/// <param name="types">The types.</param>
 		///         <summary>Enables a set of events to be raised.</summary>
-		///         <remarks>To be added.</remarks>
 		public void EnableCallBacks (CFSocketCallBackType types)
 		{
 			CFSocketEnableCallBacks (Handle, (nuint) (ulong) types);
@@ -593,7 +578,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static nint CFSocketSendData (IntPtr handle, IntPtr address, IntPtr data, double timeout);
 
-		/// <param name="data">To be added.</param>
+		/// <param name="data">The data to use.</param>
 		///         <param name="timeout">Time to wait for the operation to complete.  </param>
 		///         <summary>Sends data over the socket.</summary>
 		///         <remarks>This method raises an exception <see cref="CoreFoundation.CFSocketException" /> if the sending buffer is full, or the timeout expires before the data is sent.</remarks>
@@ -608,7 +593,6 @@ namespace CoreFoundation {
 
 		/// <summary>
 		///       <see cref="System.EventArgs" /> for the <see cref="CoreFoundation.CFSocket.AcceptEvent" /> event.</summary>
-		///     <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -621,16 +605,14 @@ namespace CoreFoundation {
 
 			/// <summary>The remote end points that connected</summary>
 			///         <value>To be added.</value>
-			///         <remarks>To be added.</remarks>
 			public IPEndPoint RemoteEndPoint {
 				get;
 				private set;
 			}
 
-			/// <param name="handle">To be added.</param>
-			///         <param name="remote">To be added.</param>
+			/// <param name="handle">The handle.</param>
+			///         <param name="remote">The remote.</param>
 			///         <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
 			public CFSocketAcceptEventArgs (CFSocketNativeHandle handle, IPEndPoint remote)
 			{
 				this.SocketHandle = handle;
@@ -647,7 +629,6 @@ namespace CoreFoundation {
 
 			/// <summary>Human readable description of the event arguments.</summary>
 			///         <returns>To be added.</returns>
-			///         <remarks>To be added.</remarks>
 			public override string ToString ()
 			{
 				return string.Format ("[CFSocketAcceptEventArgs: RemoteEndPoint={0}]", RemoteEndPoint);
@@ -656,7 +637,6 @@ namespace CoreFoundation {
 
 		/// <summary>
 		///       <see cref="System.EventArgs" /> for the <see cref="CoreFoundation.CFSocket.ConnectEvent" /> event.</summary>
-		///     <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -664,15 +644,13 @@ namespace CoreFoundation {
 		public class CFSocketConnectEventArgs : EventArgs {
 			/// <summary>To be added.</summary>
 			///         <value>To be added.</value>
-			///         <remarks>To be added.</remarks>
 			public CFSocketError Result {
 				get;
 				private set;
 			}
 
-			/// <param name="result">To be added.</param>
+			/// <param name="result">The result.</param>
 			///         <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
 			public CFSocketConnectEventArgs (CFSocketError result)
 			{
 				this.Result = result;
@@ -680,7 +658,6 @@ namespace CoreFoundation {
 
 			/// <summary>Human readable description of the event arguments.</summary>
 			///         <returns>To be added.</returns>
-			///         <remarks>To be added.</remarks>
 			public override string ToString ()
 			{
 				return string.Format ("[CFSocketConnectEventArgs: Result={0}]", Result);
@@ -688,7 +665,6 @@ namespace CoreFoundation {
 		}
 
 		/// <summary>Arguments for socket data events.</summary>
-		///     <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -737,26 +713,22 @@ namespace CoreFoundation {
 		}
 
 		/// <summary>Arguments for socket read events.</summary>
-		///     <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 		public class CFSocketReadEventArgs : EventArgs {
 			/// <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
 			public CFSocketReadEventArgs () { }
 		}
 
 		/// <summary>Arguments for socket write events.</summary>
-		///     <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 		public class CFSocketWriteEventArgs : EventArgs {
 			/// <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
 			public CFSocketWriteEventArgs () { }
 		}
 
@@ -799,8 +771,8 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static nint CFSocketConnectToAddress (IntPtr handle, IntPtr address, double timeout);
 
-		/// <param name="address">To be added.</param>
-		///         <param name="port">To be added.</param>
+		/// <param name="address">The address.</param>
+		///         <param name="port">The port.</param>
 		///         <param name="timeout">Time to wait for the operation to complete.   If the value is negative, no wait takes place, and instead the operation takes place in the background.</param>
 		///         <summary>Connects the socket to the specified IP address and port.</summary>
 		///         <remarks>This method throws a <see cref="CoreFoundation.CFSocketException" /> if the timeout expires before being able to complete the operation.</remarks>
@@ -809,7 +781,7 @@ namespace CoreFoundation {
 			Connect (new IPEndPoint (address, port), timeout);
 		}
 
-		/// <param name="endpoint">To be added.</param>
+		/// <param name="endpoint">The endpoint.</param>
 		///         <param name="timeout">Time to wait for the operation to complete.   If the value is negative, no wait takes place, and instead the operation takes place in the background.</param>
 		///         <summary>Connects the socket to the specified endpoint.</summary>
 		///         <remarks>This method throws a <see cref="CoreFoundation.CFSocketException" /> if the timeout expires before being able to complete the operation.</remarks>

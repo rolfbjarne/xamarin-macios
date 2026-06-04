@@ -20,7 +20,7 @@ namespace AppKit {
 		internal static Selector ParametrizedSelector = new Selector ("target:");
 
 		/// <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSGestureRecognizer" /> instance.</summary>
 		public NSGestureRecognizer (Action action) : this (tsel, new ParameterlessDispatch (action))
 		{
 		}
@@ -30,7 +30,7 @@ namespace AppKit {
 		//
 		/// <param name="sel">The sel.</param>
 		///         <param name="token">The token.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSGestureRecognizer" /> instance.</summary>
 		public NSGestureRecognizer (Selector sel, Token token) : this (token, sel)
 		{
 			recognizers = token;
@@ -43,7 +43,7 @@ namespace AppKit {
 		[Register ("__NSGestureRecognizerToken")]
 		[Preserve (Conditional = true)]
 		public class Token : NSObject {
-			/// <summary>To be added.</summary>
+			/// <summary>Creates a new <see cref="Token" /> instance.</summary>
 			public Token ()
 			{
 				IsDirectBinding = false;
@@ -63,7 +63,7 @@ namespace AppKit {
 				this.action = action;
 			}
 
-			/// <summary>To be added.</summary>
+			/// <summary>Activated.</summary>
 			[Export ("target")]
 			[Preserve (Conditional = true)]
 			public void Activated ()
@@ -86,7 +86,7 @@ namespace AppKit {
 			}
 
 			/// <param name="sender">The object that raised the event.</param>
-			///         <summary>To be added.</summary>
+			///         <summary>Activated.</summary>
 			[Export ("target:")]
 			[Preserve (Conditional = true)]
 			public void Activated (NSGestureRecognizer sender)
@@ -98,10 +98,10 @@ namespace AppKit {
 
 	public partial class NSClickGestureRecognizer : NSGestureRecognizer {
 		/// <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSClickGestureRecognizer" /> instance.</summary>
 		public NSClickGestureRecognizer (Action action) : base (action) { }
 		/// <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSClickGestureRecognizer" /> instance.</summary>
 		public NSClickGestureRecognizer (Action<NSClickGestureRecognizer> action) : base (NSGestureRecognizer.ParametrizedSelector, new Callback (action)) { }
 
 		[Register ("__NSClickGestureRecognizer")]
@@ -125,10 +125,10 @@ namespace AppKit {
 
 	public partial class NSMagnificationGestureRecognizer : NSGestureRecognizer {
 		/// <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSMagnificationGestureRecognizer" /> instance.</summary>
 		public NSMagnificationGestureRecognizer (Action action) : base (action) { }
 		/// <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSMagnificationGestureRecognizer" /> instance.</summary>
 		public NSMagnificationGestureRecognizer (Action<NSMagnificationGestureRecognizer> action) : base (NSGestureRecognizer.ParametrizedSelector, new Callback (action)) { }
 
 		[Register ("__NSMagnificationGestureRecognizer")]
@@ -152,10 +152,10 @@ namespace AppKit {
 
 	public partial class NSPanGestureRecognizer : NSGestureRecognizer {
 		/// <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSPanGestureRecognizer" /> instance.</summary>
 		public NSPanGestureRecognizer (Action action) : base (action) { }
 		/// <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSPanGestureRecognizer" /> instance.</summary>
 		public NSPanGestureRecognizer (Action<NSPanGestureRecognizer> action) : base (NSGestureRecognizer.ParametrizedSelector, new Callback (action)) { }
 
 		[Register ("__NSPanGestureRecognizer")]
@@ -179,10 +179,10 @@ namespace AppKit {
 
 	public partial class NSPressGestureRecognizer : NSGestureRecognizer {
 		/// <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSPressGestureRecognizer" /> instance.</summary>
 		public NSPressGestureRecognizer (Action action) : base (action) { }
 		/// <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSPressGestureRecognizer" /> instance.</summary>
 		public NSPressGestureRecognizer (Action<NSPressGestureRecognizer> action) : base (NSGestureRecognizer.ParametrizedSelector, new Callback (action)) { }
 
 		[Register ("__NSPressGestureRecognizer")]
@@ -206,10 +206,10 @@ namespace AppKit {
 
 	public partial class NSRotationGestureRecognizer : NSGestureRecognizer {
 		/// <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSRotationGestureRecognizer" /> instance.</summary>
 		public NSRotationGestureRecognizer (Action action) : base (action) { }
 		/// <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSRotationGestureRecognizer" /> instance.</summary>
 		public NSRotationGestureRecognizer (Action<NSRotationGestureRecognizer> action) : base (NSGestureRecognizer.ParametrizedSelector, new Callback (action)) { }
 
 		[Register ("__NSRotationGestureRecognizer")]

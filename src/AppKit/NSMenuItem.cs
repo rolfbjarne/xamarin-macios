@@ -39,7 +39,7 @@ namespace AppKit {
 
 		/// <param name="title">The title.</param>
 		///         <param name="handler">The completion handler to call when the operation completes.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSMenuItem" /> instance.</summary>
 		public NSMenuItem (string title, EventHandler handler) : this (title, "", handler)
 		{
 		}
@@ -47,7 +47,7 @@ namespace AppKit {
 		/// <param name="title">The title.</param>
 		///         <param name="charCode">The char code.</param>
 		///         <param name="handler">The completion handler to call when the operation completes.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSMenuItem" /> instance.</summary>
 		public NSMenuItem (string title, string charCode, EventHandler handler) : this (title, null, charCode)
 		{
 			Activated += handler;
@@ -57,7 +57,7 @@ namespace AppKit {
 		///         <param name="charCode">The char code.</param>
 		///         <param name="handler">The completion handler to call when the operation completes.</param>
 		///         <param name="validator">The validator.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSMenuItem" /> instance.</summary>
 		public NSMenuItem (string title, string charCode, EventHandler handler, Func<NSMenuItem, bool> validator) : this (title, null, charCode)
 		{
 			Activated += handler;
@@ -66,13 +66,13 @@ namespace AppKit {
 
 		/// <param name="title">The title.</param>
 		///         <param name="charCode">The char code.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSMenuItem" /> instance.</summary>
 		public NSMenuItem (string title, string charCode) : this (title, null, charCode)
 		{
 		}
 
 		/// <param name="title">The title.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSMenuItem" /> instance.</summary>
 		public NSMenuItem (string title) : this (title, null, "")
 		{
 		}
@@ -95,8 +95,7 @@ namespace AppKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the validate menu item.</summary>
 		[Advice ("The 'Activated' event must be set before setting 'ValidateMenuItem'.")]
 		public Func<NSMenuItem, bool>? ValidateMenuItem {
 			get {

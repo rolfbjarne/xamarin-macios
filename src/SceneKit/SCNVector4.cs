@@ -989,7 +989,7 @@ namespace SceneKit {
 		}
 
 		/// <summary>
-		/// Returns a pointer to the first element of the specified instance.
+		/// Returns APointer to the first element of the specified instance.
 		/// </summary>
 		/// <param name="v">The instance.</param>
 		/// <returns>A pointer to the first element of v.</returns>
@@ -1000,7 +1000,7 @@ namespace SceneKit {
 		}
 
 		/// <summary>
-		/// Returns a pointer to the first element of the specified instance.
+		/// Returns APointer to the first element of the specified instance.
 		/// </summary>
 		/// <param name="v">The instance.</param>
 		/// <returns>A pointer to the first element of v.</returns>

@@ -23,7 +23,6 @@ namespace CoreVideo {
 	public partial class CVPixelBuffer : CVImageBuffer {
 #if !COREBUILD
 		/// <summary>Type identifier for the CoreVideo.CVPixelBuffer type.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>
 		///           <para>The returned token is the CoreFoundation type identifier (CFType) that has been assigned to this class.</para>
 		///           <para>This can be used to determine type identity between different CoreFoundation objects.</para>
@@ -111,7 +110,6 @@ namespace CoreVideo {
 
 		/// <param name="attributes">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public NSDictionary? GetAttributes (NSDictionary []? attributes)
 		{
@@ -181,7 +179,6 @@ namespace CoreVideo {
 		/// <param name="bytesPerRow">To be added.</param>
 		/// <param name="pixelBufferAttributes">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static CVPixelBuffer? Create (nint width, nint height, CVPixelFormatType pixelFormatType, byte [] data, nint bytesPerRow, CVPixelBufferAttributes pixelBufferAttributes)
 		{
@@ -197,7 +194,6 @@ namespace CoreVideo {
 		/// <param name="pixelBufferAttributes">To be added.</param>
 		/// <param name="status">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static CVPixelBuffer? Create (nint width, nint height, CVPixelFormatType pixelFormatType, byte [] data, nint bytesPerRow, CVPixelBufferAttributes pixelBufferAttributes, out CVReturn status)
 		{
@@ -288,7 +284,6 @@ namespace CoreVideo {
 		/// <param name="planeBytesPerRow">To be added.</param>
 		/// <param name="pixelBufferAttributes">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static CVPixelBuffer? Create (nint width, nint height, CVPixelFormatType pixelFormatType, byte [] [] planes, nint [] planeWidths, nint [] planeHeights, nint [] planeBytesPerRow, CVPixelBufferAttributes pixelBufferAttributes)
 		{
@@ -306,7 +301,6 @@ namespace CoreVideo {
 		/// <param name="pixelBufferAttributes">To be added.</param>
 		/// <param name="status">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static CVPixelBuffer? Create (nint width, nint height, CVPixelFormatType pixelFormatType, byte [] [] planes, nint [] planeWidths, nint [] planeHeights, nint [] planeBytesPerRow, CVPixelBufferAttributes pixelBufferAttributes, out CVReturn status)
 		{
@@ -408,7 +402,6 @@ namespace CoreVideo {
 		extern static CVReturn CVPixelBufferFillExtendedPixels (/* CVPixelBufferRef __nonnull */ IntPtr pixelBuffer);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CVReturn FillExtendedPixels ()
 		{
@@ -433,7 +426,6 @@ namespace CoreVideo {
 			/* CVPixelBufferRef __nonnull */ IntPtr pixelBuffer);
 
 		/// <summary>The number of bytes per row in the pixel buffer.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public nint BytesPerRow {
 			get {
@@ -446,7 +438,6 @@ namespace CoreVideo {
 			/* CVPixelBufferRef __nonnull */ IntPtr pixelBuffer);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public nint DataSize {
 			get {
@@ -458,7 +449,6 @@ namespace CoreVideo {
 		extern static /* size_t */ nint CVPixelBufferGetHeight (/* CVPixelBufferRef __nonnull */ IntPtr pixelBuffer);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public nint Height {
 			get {
@@ -470,7 +460,6 @@ namespace CoreVideo {
 		extern static /* size_t */ nint CVPixelBufferGetWidth (/* CVPixelBufferRef __nonnull */ IntPtr pixelBuffer);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public nint Width {
 			get {
@@ -483,7 +472,6 @@ namespace CoreVideo {
 			/* CVPixelBufferRef __nonnull */ IntPtr pixelBuffer);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public nint PlaneCount {
 			get {
@@ -495,7 +483,6 @@ namespace CoreVideo {
 		extern static /* Boolean */ byte CVPixelBufferIsPlanar (/* CVPixelBufferRef __nonnull */ IntPtr pixelBuffer);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsPlanar {
 			get {
@@ -508,7 +495,6 @@ namespace CoreVideo {
 			/* CVPixelBufferRef __nonnull */ IntPtr pixelBuffer);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CVPixelFormatType PixelFormatType {
 			get {
@@ -522,7 +508,6 @@ namespace CoreVideo {
 
 		/// <param name="planeIndex">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public IntPtr GetBaseAddress (nint planeIndex)
 		{
@@ -535,7 +520,6 @@ namespace CoreVideo {
 
 		/// <param name="planeIndex">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public nint GetBytesPerRowOfPlane (nint planeIndex)
 		{
@@ -548,7 +532,6 @@ namespace CoreVideo {
 
 		/// <param name="planeIndex">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public nint GetHeightOfPlane (nint planeIndex)
 		{
@@ -561,7 +544,6 @@ namespace CoreVideo {
 
 		/// <param name="planeIndex">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public nint GetWidthOfPlane (nint planeIndex)
 		{
@@ -587,7 +569,6 @@ namespace CoreVideo {
 
 		/// <param name="unlockFlags">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CVReturn Unlock (CVPixelBufferLock unlockFlags)
 		{

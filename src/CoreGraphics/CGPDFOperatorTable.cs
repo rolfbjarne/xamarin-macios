@@ -32,7 +32,7 @@ namespace CoreGraphics {
 		// CGPDFOperatorCallback
 		delegate void CGPDFOperatorCallback (/* CGPDFScannerRef */ IntPtr scanner, /* void* */ IntPtr info);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new PDF operator table.</summary>
 		public CGPDFOperatorTable ()
 			: base (CGPDFOperatorTableCreate (), true)
 		{
@@ -68,9 +68,9 @@ namespace CoreGraphics {
 			CGPDFOperatorTableSetCallback (Handle, namePtr, callback);
 		}
 
-		/// <param name="gchandle">The gchandle.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <param name="gchandle">The GC handle.</param>
+		/// <summary>Gets the PDF scanner from the specified GC handle.</summary>
+		/// <returns>The PDF scanner, or <see langword="null" /> if it could not be retrieved.</returns>
 		static public CGPDFScanner? GetScannerFromInfo (IntPtr gchandle)
 		{
 			return GCHandle.FromIntPtr (gchandle).Target as CGPDFScanner;

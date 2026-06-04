@@ -39,7 +39,7 @@ namespace MetalPerformanceShaders {
 		// Using 'NSArray<MPSState>' instead of `MPSState[]` because array 'Handle' matters.
 		/// <param name="stateBatch">The state batch.</param>
 		///         <param name="commandBuffer">The command buffer.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Synchronize.</summary>
 		public static void Synchronize (NSArray<MPSState> stateBatch, IMTLCommandBuffer commandBuffer)
 		{
 			if (stateBatch is null)
@@ -61,8 +61,7 @@ namespace MetalPerformanceShaders {
 
 		// Using 'NSArray<MPSState>' instead of `MPSState[]` because array 'Handle' matters.
 		/// <param name="stateBatch">The state batch.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets resource size.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]

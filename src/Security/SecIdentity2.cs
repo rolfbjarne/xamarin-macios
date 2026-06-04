@@ -19,7 +19,6 @@ using CoreFoundation;
 
 namespace Security {
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
@@ -32,9 +31,8 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static IntPtr sec_identity_create (IntPtr secidentityHandle);
 
-		/// <param name="identity">To be added.</param>
+		/// <param name="identity">The identity.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public SecIdentity2 (SecIdentity identity)
 		{
 			if (identity is null)
@@ -47,10 +45,9 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static IntPtr sec_identity_create_with_certificates (IntPtr secidentityHandle, IntPtr arrayHandle);
 
-		/// <param name="identity">To be added.</param>
-		///         <param name="certificates">To be added.</param>
+		/// <param name="identity">The identity.</param>
+		///         <param name="certificates">The certificates.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public SecIdentity2 (SecIdentity identity, params SecCertificate [] certificates)
 		{
 			if (identity is null)
@@ -69,7 +66,6 @@ namespace Security {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public SecIdentity Identity => new SecIdentity (sec_identity_copy_ref (GetCheckedHandle ()), owns: true);
 
 		[DllImport (Constants.SecurityLibrary)]
@@ -77,7 +73,6 @@ namespace Security {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public SecCertificate []? Certificates {
 			get {
 				var certArray = sec_identity_copy_certificates_ref (GetCheckedHandle ());

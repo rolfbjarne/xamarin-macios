@@ -35,7 +35,7 @@ using System.Security.Cryptography.X509Certificates;
 using CoreFoundation;
 
 namespace Security {
-	/// <summary>A trust level. A trust object combines a certificate with a policy or policies. </summary>
+	/// <summary>A trust level. A trust object combines a certificate with APolicy or policies. </summary>
 	public partial class SecTrust : NativeObject {
 		[Preserve (Conditional = true)]
 		internal SecTrust (NativeHandle handle, bool owns)
@@ -66,7 +66,7 @@ namespace Security {
 
 		/// <param name="certificate">The certificate to be evaluated.</param>
 		///         <param name="policy">The policy to be used to evaluate the trust.</param>
-		///         <summary>Create a new instance based on the certificate, to be evaluated, and a policy, to be applied.</summary>
+		///         <summary>Create a new instance based on the certificate, to be evaluated, and APolicy, to be applied.</summary>
 		///         <remarks>
 		///         </remarks>
 		public SecTrust (X509Certificate certificate, SecPolicy? policy)
@@ -82,7 +82,7 @@ namespace Security {
 
 		/// <param name="certificate">The certificate to be evaluated.</param>
 		///         <param name="policy">The policy to be used to evaluate the trust.</param>
-		///         <summary>Create a new instance based on the certificate, to be evaluated, and a policy, to be applied</summary>
+		///         <summary>Create a new instance based on the certificate, to be evaluated, and APolicy, to be applied</summary>
 		///         <remarks>
 		///         </remarks>
 		public SecTrust (X509Certificate2 certificate, SecPolicy? policy)
@@ -98,7 +98,7 @@ namespace Security {
 
 		/// <param name="certificates">A collection of X.509 certificates</param>
 		///         <param name="policy">The policy to be used to evaluate the trust.</param>
-		///         <summary>Create a new instance based on the certificate, to be evaluated, and a policy, to be applied.</summary>
+		///         <summary>Create a new instance based on the certificate, to be evaluated, and APolicy, to be applied.</summary>
 		///         <remarks>The first certificate (in the collection) is the one to be evaluated, the others will be used to build a chain of trust.</remarks>
 		public SecTrust (X509CertificateCollection certificates, SecPolicy? policy)
 		{
@@ -114,7 +114,7 @@ namespace Security {
 
 		/// <param name="certificates">A collection of X.509 certificates</param>
 		///         <param name="policy">The policy to be used to evaluate the trust.</param>
-		///         <summary>Create a new instance based on the certificate, to be evaluated, and a policy, to be applied.</summary>
+		///         <summary>Create a new instance based on the certificate, to be evaluated, and APolicy, to be applied.</summary>
 		///         <remarks>The first certificate (in the collection) is the one to be evaluated, the others will be used to build a chain of trust.</remarks>
 		public SecTrust (X509Certificate2Collection certificates, SecPolicy? policy)
 		{

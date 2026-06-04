@@ -107,7 +107,7 @@ namespace AudioUnit {
 		/// <summary>Indicates system.</summary>
 		System = 0x73797320, // 'sys'
 #endif
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates remote.</summary>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -126,7 +126,7 @@ namespace AudioUnit {
 		/// <summary>Indicates sampler.</summary>
 		Sampler = 0x73616d70, // 'samp'
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates midi synth.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -199,7 +199,7 @@ namespace AudioUnit {
 		/// <summary>Indicates delay.</summary>
 		Delay = 0x64656c79, // 'dely'
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates sample delay.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -234,7 +234,7 @@ namespace AudioUnit {
 		[UnsupportedOSPlatform ("maccatalyst")]
 		AUiPodEQ = 0x69706571, // 'ipeq'
 #endif
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates reverb2.</summary>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
@@ -342,12 +342,12 @@ namespace AudioUnit {
 		public int ComponentSubType;
 #endif
 
-		/// <summary>To be added.</summary>
+		/// <summary>The component manufacturer.</summary>
 		public AudioComponentManufacturerType ComponentManufacturer;
 
-		/// <summary>To be added.</summary>
+		/// <summary>The component flags.</summary>
 		public AudioComponentFlag ComponentFlags;
-		/// <summary>To be added.</summary>
+		/// <summary>The component flags mask.</summary>
 		public int ComponentFlagsMask;
 
 		internal AudioComponentDescription (AudioComponentType type, int subType)
@@ -366,7 +366,6 @@ namespace AudioUnit {
 		/// <param name="type">The type.</param>
 		///         <param name="subType">The sub type.</param>
 		///         <summary>Initializes an <see cref="AudioComponentDescription" /> with the given type and given subtype.   This method is here for cases where you might want to create a component description that is not covered by the built-in enumerations for component subtypes.</summary>
-		///         <returns>To be added.</returns>
 		public static AudioComponentDescription CreateGeneric (AudioComponentType type, int subType)
 		{
 			return new AudioComponentDescription (type, subType);
@@ -390,7 +389,6 @@ namespace AudioUnit {
 
 		/// <param name="converter">The converter.</param>
 		///         <summary>Creates an audio converter component description.</summary>
-		///         <returns>To be added.</returns>
 		public static AudioComponentDescription CreateConverter (AudioTypeConverter converter)
 		{
 			return new AudioComponentDescription (AudioComponentType.FormatConverter, (int) converter);
@@ -429,7 +427,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>Returns a debugging message showing the component type and subtype for this description.</summary>
-		///         <returns>To be added.</returns>
 		public override string ToString ()
 		{
 			const string fmt = "[componentType={0}, subType={1}]";

@@ -184,7 +184,7 @@ namespace AudioUnit {
 		HighShelfFilter = 0x68736866, // 'hshf'
 		/// <summary>Indicates low shelf filter.</summary>
 		LowShelfFilter = 0x6c736866, // 'lshf'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates DC filter.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -194,7 +194,7 @@ namespace AudioUnit {
 		[ObsoletedOSPlatform ("tvos9.0")]
 		[ObsoletedOSPlatform ("macos10.9")]
 		DCFilter = 0x6463666c, // 'dcfl'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates parametric equalizer.</summary>
 		ParametricEQ = 0x706d6571, // 'pmeq'
 		/// <summary>Indicates delay.</summary>
 		Delay = 0x64656c79, // 'dely'
@@ -225,7 +225,7 @@ namespace AudioUnit {
 		/// <summary>Indicates roger beep.</summary>
 		RogerBeep = 0x726f6772, // 'rogr'
 #else
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates iPod equalizer.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("macos")]
@@ -255,7 +255,7 @@ namespace AudioUnit {
 #if MONOMAC
 		/// <summary>Indicates stereo.</summary>
 		Stereo = 0x736d7872, // 'smxr'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates 3D mixer.</summary>
 		[UnsupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("tvos")]

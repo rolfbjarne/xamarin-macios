@@ -114,16 +114,16 @@ namespace QuickLook {
 	[MacCatalyst (13, 1)]
 	interface QLPreviewControllerDataSource {
 		/// <param name="controller">The controller.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Returns the number of preview items in the controller.</summary>
+		/// <returns>The number of items available for preview.</returns>
 		[Abstract]
 		[Export ("numberOfPreviewItemsInPreviewController:")]
 		nint PreviewItemCount (QLPreviewController controller);
 
 		/// <param name="controller">The controller.</param>
 		/// <param name="index">The zero-based index.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Returns the preview item at the specified index.</summary>
+		/// <returns>The preview item at the specified index.</returns>
 		[Abstract]
 		[Export ("previewController:previewItemAtIndex:")]
 		IQLPreviewItem GetPreviewItem (QLPreviewController controller, nint index);

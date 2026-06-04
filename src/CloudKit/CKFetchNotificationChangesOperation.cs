@@ -7,7 +7,6 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace CloudKit {
 	/// <summary>A <see cref="CloudKit.CKOperation" /> that ret../../summary_set.sh CKFetchNotificationChangesOperation A</summary>
-	///     <remarks>To be added.</remarks>
 	[Register ("CKFetchNotificationChangesOperation", SkipRegistration = true)]
 	[UnsupportedOSPlatform ("ios", "Use 'CKDatabaseSubscription', 'CKFetchDatabaseChangesOperation' and 'CKFetchRecordZoneChangesOperation' instead.")]
 	[UnsupportedOSPlatform ("macos", "Use 'CKDatabaseSubscription', 'CKFetchDatabaseChangesOperation' and 'CKFetchRecordZoneChangesOperation' instead.")]
@@ -44,7 +43,6 @@ namespace CloudKit {
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CKFetchNotificationChangesOperation (CKServerChangeToken? previousServerChangeToken)
 			: base (NSObjectFlag.Empty)
 		{
@@ -56,7 +54,6 @@ namespace CloudKit {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		public unsafe virtual global::System.Action<CKServerChangeToken, NSError>? Completed {
 			get {
 				throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
@@ -68,7 +65,6 @@ namespace CloudKit {
 
 		/// <summary>Gets whether more notifications are waiting for delivery.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public virtual bool MoreComing {
 			get {
 				throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
@@ -80,7 +76,6 @@ namespace CloudKit {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		public unsafe virtual global::System.Action<CKNotification>? NotificationChanged {
 			get {
 				throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
@@ -95,7 +90,6 @@ namespace CloudKit {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		public virtual CKServerChangeToken? PreviousServerChangeToken {
 			get {
 				throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
@@ -107,7 +101,6 @@ namespace CloudKit {
 
 		/// <summary>Gets or sets the maximum number of results to fetch.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public virtual nuint ResultsLimit {
 			get {
 				throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);

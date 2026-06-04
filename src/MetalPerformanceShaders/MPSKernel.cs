@@ -330,7 +330,7 @@ namespace MetalPerformanceShaders {
 		///         <param name="kernelWeights">The kernel weights.</param>
 		///         <param name="biasTerms">The bias terms.</param>
 		///         <param name="flags">The flags.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a fully connected neural network layer with the specified parameters.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
@@ -412,7 +412,7 @@ namespace MetalPerformanceShaders {
 		}
 	}
 
-	/// <summary>To be added.</summary>
+	/// <summary>Provides a Laplacian pyramid image filter.</summary>
 	public partial class MPSImageLaplacianPyramid {
 		[DesignatedInitializer]
 		public MPSImageLaplacianPyramid (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, float [] kernelWeights) : base (NSObjectFlag.Empty)
@@ -429,7 +429,7 @@ namespace MetalPerformanceShaders {
 		}
 	}
 
-	/// <summary>To be added.</summary>
+	/// <summary>Provides a Laplacian pyramid subtraction image filter.</summary>
 	public partial class MPSImageLaplacianPyramidSubtract {
 		[DesignatedInitializer]
 		public MPSImageLaplacianPyramidSubtract (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, float [] kernelWeights) : base (NSObjectFlag.Empty)
@@ -446,7 +446,7 @@ namespace MetalPerformanceShaders {
 		}
 	}
 
-	/// <summary>To be added.</summary>
+	/// <summary>Provides a Laplacian pyramid addition image filter.</summary>
 	public partial class MPSImageLaplacianPyramidAdd {
 		[DesignatedInitializer]
 		public MPSImageLaplacianPyramidAdd (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, float [] kernelWeights) : base (NSObjectFlag.Empty)

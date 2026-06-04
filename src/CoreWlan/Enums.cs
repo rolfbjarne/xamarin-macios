@@ -53,9 +53,9 @@ namespace CoreWlan {
 		InvalidGroupCipher = -3918,
 		/// <summary>Indicates invalid pairwise cipher.</summary>
 		InvalidPairwiseCipher = -3919,
-		/// <summary>Indicates invalid a k m p.</summary>
+		/// <summary>Indicates invalid AKMP.</summary>
 		InvalidAKMP = -3920,
-		/// <summary>Indicates unsupported r s n version.</summary>
+		/// <summary>Indicates unsupported RSN version.</summary>
 		UnsupportedRSNVersion = -3921,
 		/// <summary>Indicates invalid r s n capabilities.</summary>
 		InvalidRSNCapabilities = -3922,

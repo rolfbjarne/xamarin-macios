@@ -34,7 +34,7 @@ namespace AppKit {
 	public partial class NSApplication {
 		/// <param name="sheet">The sheet.</param>
 		///         <param name="docWindow">The doc window.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Begins sheet.</summary>
 		public void BeginSheet (NSWindow sheet, NSWindow docWindow)
 		{
 			BeginSheet (sheet, docWindow, null, null, IntPtr.Zero);
@@ -43,7 +43,7 @@ namespace AppKit {
 		/// <param name="sheet">The sheet.</param>
 		///         <param name="docWindow">The doc window.</param>
 		///         <param name="onEnded">The on ended.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Begins sheet.</summary>
 		public void BeginSheet (NSWindow sheet, NSWindow docWindow, Action onEnded)
 		{
 			var obj = new NSAsyncActionDispatcher (onEnded);
@@ -56,7 +56,7 @@ namespace AppKit {
 		///         <param name="fileName">The file name.</param>
 		///         <param name="fileTypes">The file types.</param>
 		///         <param name="modalForWindow">The modal for window.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Begins sheet.</summary>
 		public void BeginSheet (string directory, string fileName, string [] fileTypes, NSWindow modalForWindow)
 		{
 			BeginSheet (directory, fileName, fileTypes, modalForWindow, null, null, IntPtr.Zero);
@@ -67,7 +67,7 @@ namespace AppKit {
 		///         <param name="fileTypes">The file types.</param>
 		///         <param name="modalForWindow">The modal for window.</param>
 		///         <param name="onEnded">The on ended.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Begins sheet.</summary>
 		public void BeginSheet (string directory, string fileName, string [] fileTypes, NSWindow modalForWindow, Action onEnded)
 		{
 			var obj = new NSAsyncActionDispatcher (onEnded);
@@ -78,7 +78,7 @@ namespace AppKit {
 	public partial class NSPageLayout {
 		/// <param name="printInfo">The print info.</param>
 		///         <param name="docWindow">The doc window.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Begins sheet.</summary>
 		public void BeginSheet (NSPrintInfo printInfo, NSWindow docWindow)
 		{
 			BeginSheet (printInfo, docWindow, null, null, IntPtr.Zero);
@@ -87,7 +87,7 @@ namespace AppKit {
 		/// <param name="printInfo">The print info.</param>
 		///         <param name="docWindow">The doc window.</param>
 		///         <param name="onEnded">The on ended.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Begins sheet.</summary>
 		public void BeginSheet (NSPrintInfo printInfo, NSWindow docWindow, Action onEnded)
 		{
 			var obj = new NSAsyncActionDispatcher (onEnded);

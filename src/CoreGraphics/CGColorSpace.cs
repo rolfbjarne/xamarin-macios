@@ -90,7 +90,7 @@ namespace CoreGraphics {
 		}
 
 		/// <param name="propertyList">The property list.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a new color space from the specified property list.</summary>
 		public CGColorSpace (CFPropertyList propertyList)
 			: base (Create (propertyList), true)
 		{
@@ -472,7 +472,7 @@ namespace CoreGraphics {
 		}
 
 		/// <param name="data">The data to use.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a color space from ICC profile data.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -485,7 +485,7 @@ namespace CoreGraphics {
 		}
 
 		/// <param name="provider">The provider.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a color space from an ICC profile data provider.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -631,7 +631,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		static extern IntPtr CGColorSpaceCreateWithPropertyList (IntPtr plist);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets a property list representation of this color space.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]

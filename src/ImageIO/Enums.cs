@@ -15,56 +15,56 @@ namespace ImageIO {
 	/// <summary>Enumeration of errors relating to metadata manipulation.</summary>
 	[ErrorDomain ("kCFErrorDomainCGImageMetadata")]
 	public enum CGImageMetadataErrors {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unsupported format.</summary>
 		UnsupportedFormat = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bad argument.</summary>
 		BadArgument = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates conflicting arguments.</summary>
 		ConflictingArguments = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates prefix conflict.</summary>
 		PrefixConflict = 4,
 	}
 
 	// untyped enum -> CGImageMetadata.h
 	/// <summary>Enumerates the type-forms of image metadata.</summary>
 	public enum CGImageMetadataType {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid.</summary>
 		Invalid = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates default.</summary>
 		Default = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates string.</summary>
 		String = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates array unordered.</summary>
 		ArrayUnordered = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates array ordered.</summary>
 		ArrayOrdered = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates alternate array.</summary>
 		AlternateArray = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates alternate text.</summary>
 		AlternateText = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates structure.</summary>
 		Structure = 6,
 	}
 
 	/// <summary>Enumerates orientation values.</summary>
 	public enum CGImagePropertyOrientation {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates up.</summary>
 		Up = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates up mirrored.</summary>
 		UpMirrored,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates down.</summary>
 		Down,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates down mirrored.</summary>
 		DownMirrored,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates left mirrored.</summary>
 		LeftMirrored,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates right.</summary>
 		Right,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates right mirrored.</summary>
 		RightMirrored,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates left.</summary>
 		Left,
 	}
 
@@ -74,17 +74,17 @@ namespace ImageIO {
 	[MacCatalyst (13, 1)]
 	[Flags]
 	public enum CGImagePropertyPngFilters {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates no.</summary>
 		No = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0x08,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates sub.</summary>
 		Sub = 0x10,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates up.</summary>
 		Up = 0x20,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates average.</summary>
 		Average = 0x40,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates paeth.</summary>
 		Paeth = 0x80,
 	}
 

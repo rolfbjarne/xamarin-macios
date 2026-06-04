@@ -383,24 +383,24 @@ namespace ContactsUI {
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	interface CNContactPicker {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the displayed keys.</summary>
+		/// <value>An array of key strings.</value>
 		[Export ("displayedKeys", ArgumentSemantic.Copy)]
 		string [] DisplayedKeys { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the delegate.</summary>
+		/// <value>The delegate, or <see langword="null" />.</value>
 		[NullAllowed, Export ("delegate", ArgumentSemantic.Weak)]
 		ICNContactPickerDelegate Delegate { get; set; }
 
 		/// <param name="positioningRect">The positioning rect.</param>
 		///         <param name="positioningView">The positioning view.</param>
 		///         <param name="preferredEdge">The preferred edge.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Shows the contact picker relative to the specified rect and view.</summary>
 		[Export ("showRelativeToRect:ofView:preferredEdge:")]
 		void Show (CGRect positioningRect, NSView positioningView, NSRectEdge preferredEdge);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Closes the contact picker.</summary>
 		[Export ("close")]
 		void Close ();
 	}

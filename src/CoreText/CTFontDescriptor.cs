@@ -646,7 +646,7 @@ namespace CoreText {
 		}
 
 		/// <param name="attributes">The attributes.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a new font descriptor with the specified attributes.</summary>
 		///         <remarks>
 		///           <example>
 		///             <code lang="csharp lang-csharp"><![CDATA[
@@ -1026,7 +1026,7 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTFontDescriptorCreateMatchingFontDescriptors (IntPtr descriptor, IntPtr mandatoryAttributes);
 		/// <param name="mandatoryAttributes">The mandatory attributes.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets font descriptors that match this descriptor with the specified mandatory attributes.</summary>
 		public CTFontDescriptor [] GetMatchingFontDescriptors (NSSet? mandatoryAttributes)
 		{
 			var cfArrayRef = CTFontDescriptorCreateMatchingFontDescriptors (Handle, mandatoryAttributes.GetHandle ());
@@ -1037,14 +1037,14 @@ namespace CoreText {
 		}
 
 		/// <param name="mandatoryAttributes">The mandatory attributes.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets font descriptors that match this descriptor with the specified mandatory attributes.</summary>
 		public CTFontDescriptor? []? GetMatchingFontDescriptors (params NSString [] mandatoryAttributes)
 		{
 			NSSet attrs = NSSet.MakeNSObjectSet (mandatoryAttributes);
 			return GetMatchingFontDescriptors (attrs);
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets font descriptors that match this descriptor.</summary>
 		public CTFontDescriptor? []? GetMatchingFontDescriptors ()
 		{
 			NSSet? attrs = null;
@@ -1192,10 +1192,8 @@ namespace CoreText {
 #if !XAMCORE_5_0
 		/// <param name="descriptors">The descriptors.</param>
 		///         <param name="mandatoryAttributes">The mandatory attributes.</param>
-		///         <param name="progressHandler">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="progressHandler">A handler that is called with progress updates.</param>
+		/// <summary>Matches font descriptors asynchronously with progress reporting.</summary>
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		[Obsolete ("Use 'MatchFontDescriptors (CTFontDescriptor[], NSSet, CTFontDescriptorProgressHandler)' instead.")]
 		public static bool MatchFontDescriptors (CTFontDescriptor [] descriptors, NSSet? mandatoryAttributes, Func<CTFontDescriptorMatchingState, IntPtr, bool> progressHandler)

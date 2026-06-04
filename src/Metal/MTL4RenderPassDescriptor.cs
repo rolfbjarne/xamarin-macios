@@ -11,7 +11,7 @@ namespace Metal {
 		/// <summary>Get or set the custom sample positions.</summary>
 		/// <remarks>
 		///   The getter supports a maximum of 128 sample positions. If there are more sample positions,
-		///   use <see cref="GetSamplePositions(MTLSamplePosition[])" /> with a pre-allocated array instead.
+		///   use <see cref="GetSamplePositions(MTLSamplePosition[])" /> with APre-allocated array instead.
 		/// </remarks>
 		public MTLSamplePosition []? SamplePositions {
 			get {

@@ -8,11 +8,10 @@ namespace UIKit {
 		[DllImport (Constants.UIKitLibrary)]
 		static extern nint /* NSComparisonResult */ UIContentSizeCategoryCompareToCategory (IntPtr /* NSString */ lhs, IntPtr /* NSString */ rhs);
 
-		/// <param name="category1">To be added.</param>
-		///         <param name="category2">To be added.</param>
+		/// <param name="category1">The category1.</param>
+		///         <param name="category2">The category2.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -38,10 +37,9 @@ namespace UIKit {
 		[DllImport (Constants.UIKitLibrary)]
 		static extern byte UIContentSizeCategoryIsAccessibilityCategory (IntPtr /* NSString */ category);
 
-		/// <param name="self">To be added.</param>
+		/// <param name="self">The self.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("maccatalyst")]

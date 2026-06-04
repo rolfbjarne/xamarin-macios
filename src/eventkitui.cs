@@ -157,8 +157,8 @@ namespace EventKitUI {
 	[Protocol]
 	interface EKEventEditViewDelegate {
 		/// <param name="controller">The controller.</param>
-		///         <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
+		/// <param name="action">The action to perform.</param>
+		/// <summary>Called when the user has completed editing the event.</summary>
 		[Abstract]
 		[Export ("eventEditViewController:didCompleteWithAction:"), EventArgs ("EKEventEdit", XmlDocs = """
 			<summary>Event raised by the object.</summary>
@@ -167,8 +167,8 @@ namespace EventKitUI {
 		void Completed (EKEventEditViewController controller, EKEventEditViewAction action);
 
 		/// <param name="controller">The controller.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Returns the default calendar for new events.</summary>
+		/// <returns>The default calendar for new events.</returns>
 		[EventArgs ("", XmlDocs = """
 			<summary>Delegate invoked by the object to get a value.</summary>
 			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakEditViewDelegate property to an internal handler that maps delegates to events.</remarks>

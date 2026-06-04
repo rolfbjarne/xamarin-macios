@@ -12,7 +12,7 @@
 #nullable enable
 
 namespace AppKit {
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies the length of a status item.</summary>
 	public enum NSStatusItemLength {
 		/// <summary>Indicates variable.</summary>
 		Variable = -1,
@@ -22,8 +22,8 @@ namespace AppKit {
 
 	public partial class NSStatusBar {
 		/// <param name="length">The length.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Creates a new status item with the specified length.</summary>
+		/// <returns>A new status item.</returns>
 		public NSStatusItem CreateStatusItem (NSStatusItemLength length)
 		{
 			return CreateStatusItem ((float) length);

@@ -124,12 +124,10 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSDictionary Dictionary { get; private set; }
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CTFont? Font {
 			get {
@@ -140,7 +138,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool ForegroundColorFromContext {
 			get {
@@ -156,7 +153,6 @@ namespace CoreText {
 
 		// Header says 'Value must be a CFNumberRef float' - System/Library/Frameworks/CoreText.framework/Headers/CTStringAttributes.h
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? KerningAdjustment {
 			get { return Adapter.GetSingleValue (Dictionary, CTStringAttributeKey.KerningAdjustment); }
@@ -165,7 +161,6 @@ namespace CoreText {
 
 		// Documentation says this must be 'CFNumber', doesn't specify exact type (but implies it's an integer value)
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CTLigatureFormation? LigatureFormation {
 			get {
@@ -179,7 +174,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CGColor? ForegroundColor {
 			get {
@@ -190,7 +184,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
@@ -216,7 +209,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CTParagraphStyle? ParagraphStyle {
 			get {
@@ -228,7 +220,6 @@ namespace CoreText {
 
 		// Documentation says this must be 'CFNumber', doesn't specify exact type (but implies it's a floating point value)
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? StrokeWidth {
 			get { return Adapter.GetSingleValue (Dictionary, CTStringAttributeKey.StrokeWidth); }
@@ -236,7 +227,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CGColor? StrokeColor {
 			get {
@@ -257,7 +247,6 @@ namespace CoreText {
 
 		// Documentation says this must be 'CFNumber', doesn't specify exact type
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int? UnderlineStyleValue {
 			get { return Adapter.GetInt32Value (Dictionary, CTStringAttributeKey.UnderlineStyle); }
@@ -268,7 +257,6 @@ namespace CoreText {
 		const int UnderlineStyleModifiersMask = 0x0700;
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CTUnderlineStyle? UnderlineStyle {
 			get {
@@ -284,7 +272,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CTUnderlineStyleModifiers? UnderlineStyleModifiers {
 			get {
@@ -300,7 +287,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CTSuperscriptStyle? Superscript {
 			get {
@@ -314,7 +300,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CGColor? UnderlineColor {
 			get {
@@ -325,7 +310,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool VerticalForms {
 			get {
@@ -340,7 +324,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
@@ -359,7 +342,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
@@ -371,7 +353,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CTGlyphInfo? GlyphInfo {
 			get {
@@ -382,7 +363,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int? CharacterShape {
 			get { return Adapter.GetInt32Value (Dictionary, CTStringAttributeKey.CharacterShape); }
@@ -390,7 +370,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CTRunDelegate? RunDelegate {
 			get {
@@ -401,7 +380,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CTBaselineClass? BaselineClass {
 			get {

@@ -69,7 +69,6 @@ namespace CoreLocation {
 		static extern /* BOOL */ byte CLLocationCoordinate2DIsValid (CLLocationCoordinate2D cord);
 
 		/// <summary>Whether the coordinate is valid.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>
 		///           <para>This method will return false if the latitude is greater than 90 or less than -90. It will also return false if longitude is greater than 180 or less than -180.</para>
 		///         </remarks>
@@ -79,7 +78,6 @@ namespace CoreLocation {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override string ToString ()
 		{
 			return $"(Latitude={Latitude}, Longitude={Longitude}";
@@ -94,7 +92,6 @@ namespace CoreLocation {
 		///         <param name="name">The name to use.</param>
 		///         <param name="postalAddress">The postal address.</param>
 		///         <summary>Creates a new placemark from the given name, location, and postal address.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("tvos")]

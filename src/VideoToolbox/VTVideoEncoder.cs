@@ -23,7 +23,7 @@ namespace VideoToolbox {
 			/* CFDictionaryRef */ IntPtr options,   // documented to accept NULL (no other thing)
 			/* CFArrayRef* */ IntPtr* listOfVideoEncodersOut);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the list of available video encoders.</summary>
 		static public VTVideoEncoder []? GetEncoderList ()
 		{
 			IntPtr array;

@@ -86,54 +86,54 @@ namespace Twitter {
 	[BaseType (typeof (UIViewController))]
 	interface TWTweetComposeViewController {
 		/// <param name="nibName">
-		///           <para>To be added.</para>
-		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
-		///         </param>
+		///   <para>The name of the nib file, or <see langword="null" />.</para>
+		///   <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		/// </param>
 		/// <param name="bundle">
-		///           <para>To be added.</para>
-		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
-		///         </param>
-		/// <summary>To be added.</summary>
+		///   <para>The bundle in which to search for the nib file, or <see langword="null" />.</para>
+		///   <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		/// </param>
+		/// <summary>Creates a new <see cref="Twitter.TWTweetComposeViewController" /> with the specified nib name and bundle.</summary>
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
 		NativeHandle Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the completion handler.</summary>
+		/// <value>The completion handler.</value>
 		[Export ("completionHandler")]
 		Action<TWTweetComposeViewControllerResult> CompletionHandler { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets a value that indicates whether the user can send a tweet.</summary>
+		/// <value><see langword="true" /> if a tweet can be sent; otherwise, <see langword="false" />.</value>
 		[Static]
 		[Export ("canSendTweet")]
 		bool CanSendTweet { get; }
 
 		/// <param name="text">The text.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Sets the initial text of the tweet.</summary>
+		/// <returns><see langword="true" /> if the text was set; otherwise, <see langword="false" />.</returns>
 		[Export ("setInitialText:")]
 		bool SetInitialText (string text);
 
 		/// <param name="image">The image.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Adds an image to the tweet.</summary>
+		/// <returns><see langword="true" /> if the image was added; otherwise, <see langword="false" />.</returns>
 		[Export ("addImage:")]
 		bool AddImage (UIImage image);
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Removes all images from the tweet.</summary>
+		/// <returns><see langword="true" /> if the images were removed; otherwise, <see langword="false" />.</returns>
 		[Export ("removeAllImages")]
 		bool RemoveAllImages ();
 
 		/// <param name="url">The URL to use.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Adds a URL to the tweet.</summary>
+		/// <returns><see langword="true" /> if the URL was added; otherwise, <see langword="false" />.</returns>
 		[Export ("addURL:")]
 		bool AddUrl (NSUrl url);
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Removes all URLs from the tweet.</summary>
+		/// <returns><see langword="true" /> if the URLs were removed; otherwise, <see langword="false" />.</returns>
 		[Export ("removeAllURLs")]
 		bool RemoveAllUrls ();
 	}

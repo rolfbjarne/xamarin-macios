@@ -8,7 +8,6 @@ using CoreFoundation;
 
 namespace CoreGraphics {
 	/// <summary>Structure defining a 2D point.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -19,7 +18,6 @@ namespace CoreGraphics {
 		nfloat y;
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public static readonly CGPoint Empty;
 
 #if !COREBUILD
@@ -64,21 +62,19 @@ namespace CoreGraphics {
 			return new Point ((int) point.X, (int) point.Y);
 		}
 
-		/// <param name="point">To be added.</param>
-		///         <param name="size">To be added.</param>
+		/// <param name="point">The point.</param>
+		///         <param name="size">The size.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CGPoint Add (CGPoint point, CGSize size)
 		{
 			return point + size;
 		}
 
-		/// <param name="point">To be added.</param>
-		///         <param name="size">To be added.</param>
+		/// <param name="point">The point.</param>
+		///         <param name="size">The size.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CGPoint Subtract (CGPoint point, CGSize size)
 		{
 			return point - size;
@@ -86,7 +82,6 @@ namespace CoreGraphics {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public nfloat X {
 			get { return x; }
 			set { x = value; }
@@ -94,7 +89,6 @@ namespace CoreGraphics {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public nfloat Y {
 			get { return y; }
 			set { y = value; }
@@ -102,7 +96,6 @@ namespace CoreGraphics {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool IsEmpty {
 			get { return x == 0.0 && y == 0.0; }
 		}
@@ -115,29 +108,26 @@ namespace CoreGraphics {
 		}
 
 #if !COREBUILD
-		/// <param name="x">To be added.</param>
-		///         <param name="y">To be added.</param>
+		/// <param name="x">The x.</param>
+		///         <param name="y">The y.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CGPoint (double x, double y)
 		{
 			this.x = (nfloat) x;
 			this.y = (nfloat) y;
 		}
 
-		/// <param name="x">To be added.</param>
-		///         <param name="y">To be added.</param>
+		/// <param name="x">The x.</param>
+		///         <param name="y">The y.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CGPoint (float x, float y)
 		{
 			this.x = x;
 			this.y = y;
 		}
 
-		/// <param name="point">To be added.</param>
+		/// <param name="point">The point.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CGPoint (CGPoint point)
 		{
 			this.x = point.x;
@@ -192,19 +182,17 @@ namespace CoreGraphics {
 		}
 #endif // !COREBUILD
 
-		/// <param name="obj">To be added.</param>
+		/// <param name="obj">The obj.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public override bool Equals (object? obj)
 		{
 			return (obj is CGPoint t) && Equals (t);
 		}
 
-		/// <param name="point">To be added.</param>
+		/// <param name="point">The point.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public bool Equals (CGPoint point)
 		{
 			return point.x == x && point.y == y;
@@ -212,7 +200,6 @@ namespace CoreGraphics {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public override int GetHashCode ()
 		{
 			return HashCode.Combine (x, y);
@@ -227,7 +214,6 @@ namespace CoreGraphics {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public override string? ToString ()
 		{
 			return CFString.FromHandle (NSStringFromCGPoint (this));

@@ -77,7 +77,7 @@ namespace AppKit {
 		{
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Occurs when the menu item is activated.</summary>
 		public event EventHandler Activated {
 			add {
 				target = ActionDispatcher.SetupAction (Target, value);

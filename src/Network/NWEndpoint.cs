@@ -31,7 +31,6 @@ namespace Network {
 		extern static NWEndpointType nw_endpoint_get_type (OS_nw_endpoint handle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public NWEndpointType Type => nw_endpoint_get_type (GetCheckedHandle ());
 
 		[DllImport (Constants.NetworkLibrary)]
@@ -40,7 +39,6 @@ namespace Network {
 		/// <param name="hostname">The hostname.</param>
 		///         <param name="port">The port.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static NWEndpoint? Create (string hostname, string port)
 		{
 			if (hostname is null)
@@ -59,7 +57,6 @@ namespace Network {
 		static extern IntPtr nw_endpoint_get_hostname (OS_nw_endpoint endpoint);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public string? Hostname => Marshal.PtrToStringAnsi (nw_endpoint_get_hostname (GetCheckedHandle ()));
 
 		[DllImport (Constants.NetworkLibrary, EntryPoint = "nw_endpoint_copy_port_string")]
@@ -72,14 +69,12 @@ namespace Network {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public string Port => nw_endpoint_copy_port_string (GetCheckedHandle ());
 
 		[DllImport (Constants.NetworkLibrary)]
 		static extern ushort nw_endpoint_get_port (OS_nw_endpoint endpoint);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public ushort PortNumber => nw_endpoint_get_port (GetCheckedHandle ());
 
 		[DllImport (Constants.NetworkLibrary)]
@@ -99,7 +94,6 @@ namespace Network {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public string Address => nw_endpoint_copy_address_string (GetCheckedHandle ());
 
 #if false
@@ -116,7 +110,6 @@ namespace Network {
 		///         <param name="serviceType">The service type.</param>
 		///         <param name="domain">The domain.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static NWEndpoint? CreateBonjourService (string name, string serviceType, string domain)
 		{
 			if (serviceType is null)
@@ -134,21 +127,18 @@ namespace Network {
 		static extern unsafe IntPtr nw_endpoint_get_bonjour_service_name (OS_nw_endpoint endpoint);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public string? BonjourServiceName => Marshal.PtrToStringAnsi (nw_endpoint_get_bonjour_service_name (GetCheckedHandle ()));
 
 		[DllImport (Constants.NetworkLibrary)]
 		static extern IntPtr nw_endpoint_get_bonjour_service_type (OS_nw_endpoint endpoint);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public string? BonjourServiceType => Marshal.PtrToStringAnsi (nw_endpoint_get_bonjour_service_type (GetCheckedHandle ()));
 
 		[DllImport (Constants.NetworkLibrary)]
 		static extern IntPtr nw_endpoint_get_bonjour_service_domain (OS_nw_endpoint endpoint);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public string? BonjourServiceDomain => Marshal.PtrToStringAnsi (nw_endpoint_get_bonjour_service_domain (GetCheckedHandle ()));
 
 		[SupportedOSPlatform ("tvos13.0")]

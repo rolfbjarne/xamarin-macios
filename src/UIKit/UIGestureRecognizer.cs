@@ -23,7 +23,6 @@ namespace UIKit {
 
 		/// <param name="action">Code to invoke when the gesture is recognized.</param>
 		///         <summary>Initalizes a gesture recognizer.</summary>
-		///         <remarks>To be added.</remarks>
 		[DesignatedInitializer]
 		public UIGestureRecognizer (Action action) : this (Selector.GetHandle (tsel), new ParameterlessDispatch (action))
 		{
@@ -57,7 +56,6 @@ namespace UIKit {
 		/// <param name="sel">A selector that specifies the method that is implemented by the target to handle the gesture that is recognized by the receiver.</param>
 		///         <param name="token">String constant to be used as a token.</param>
 		///         <summary>Initalizes a gesture recognizer.</summary>
-		///         <remarks>To be added.</remarks>
 		public UIGestureRecognizer (Selector sel, Token token) : this (token, sel)
 		{
 			recognizers [token] = sel.Handle;
@@ -82,7 +80,6 @@ namespace UIKit {
 		[Register ("__UIGestureRecognizerToken")]
 		public class Token : NSObject {
 			/// <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
 			public Token ()
 			{
 				IsDirectBinding = false;
@@ -105,7 +102,6 @@ namespace UIKit {
 		}
 
 		/// <summary>Subtype of <see cref="UIKit.UIGestureRecognizer.Token" />, which is returned by <see cref="UIKit.UIView.AddGestureRecognizer(UIKit.UIGestureRecognizer)" />.</summary>
-		///     <remarks>To be added.</remarks>
 		///     <altmember cref="UIKit.UIGestureRecognizer.ParametrizedDispatch" />
 		/// <related type="externalDocumentation" href="https://developer.apple.com/documentation/uikit/uigesturerecognizer">Apple documentation for <c>UIGestureRecognizer</c></related>
 		[Register ("__UIGestureRecognizerParameterlessToken")]
@@ -118,7 +114,6 @@ namespace UIKit {
 			}
 
 			/// <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
 			[Export ("target")]
 			[Preserve (Conditional = true)]
 			public void Activated ()
@@ -128,7 +123,6 @@ namespace UIKit {
 		}
 
 		/// <summary>Subtype of <see cref="UIKit.UIGestureRecognizer.Token" />.</summary>
-		///     <remarks>To be added.</remarks>
 		///     <altmember cref="UIKit.UIGestureRecognizer.ParameterlessDispatch" />
 		/// <related type="externalDocumentation" href="https://developer.apple.com/documentation/uikit/uigesturerecognizer">Apple documentation for <c>UIGestureRecognizer</c></related>
 		[Register ("__UIGestureRecognizerParametrizedToken")]
@@ -140,9 +134,8 @@ namespace UIKit {
 				this.action = action;
 			}
 
-			/// <param name="sender">To be added.</param>
+			/// <param name="sender">The object that raised the event.</param>
 			///         <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
 			[Export ("target:")]
 			[Preserve (Conditional = true)]
 			public void Activated (UIGestureRecognizer sender)
@@ -154,7 +147,6 @@ namespace UIKit {
 		/// <param name="action">The method to invoke when the gesture has been recognized.</param>
 		///         <summary>Registers a new callback for when the gesture has been recognized.</summary>
 		///         <returns>The returned token can be used later to remove this particular action from being invoked by the gesture recognizer.</returns>
-		///         <remarks>To be added.</remarks>
 		public Token AddTarget (Action action)
 		{
 			if (action is null)
@@ -189,7 +181,6 @@ namespace UIKit {
 
 		/// <param name="token">A Token returned by the AddTarget method.</param>
 		///         <summary>Removes the callback method for the specified gesture being recognized, based on the token that was returned by AddTarget.</summary>
-		///         <remarks>To be added.</remarks>
 		public void RemoveTarget (Token token)
 		{
 			if (token is null)
@@ -205,7 +196,6 @@ namespace UIKit {
 		//
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public IEnumerable<Token> GetTargets ()
 		{
 			var keys = recognizers?.Keys;
@@ -217,9 +207,8 @@ namespace UIKit {
 
 #if !TVOS
 	public partial class UIRotationGestureRecognizer : UIGestureRecognizer {
-		/// <param name="action">To be added.</param>
+		/// <param name="action">The action to perform.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public UIRotationGestureRecognizer (Action action) : base (action) { }
 		/// <param name="action">Code to invoke when the gesture is recognized.</param>
 		///         <summary>Constructs a gesture recognizer and provides a method to invoke when the gesture is recognized.</summary>
@@ -230,9 +219,8 @@ namespace UIKit {
 #endif
 
 	public partial class UILongPressGestureRecognizer : UIGestureRecognizer {
-		/// <param name="action">To be added.</param>
+		/// <param name="action">The action to perform.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public UILongPressGestureRecognizer (Action action) : base (action) { }
 		/// <param name="action">Code to invoke when the gesture is recognized.</param>
 		///         <summary>Constructs a gesture recognizer and provides a method to invoke when the gesture is recognized.</summary>
@@ -242,9 +230,8 @@ namespace UIKit {
 	}
 
 	public partial class UITapGestureRecognizer : UIGestureRecognizer {
-		/// <param name="action">To be added.</param>
+		/// <param name="action">The action to perform.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public UITapGestureRecognizer (Action action) : base (action) { }
 		/// <param name="action">Code to invoke when the gesture is recognized.</param>
 		///         <summary>Constructs a gesture recognizer and provides a method to invoke when the gesture is recognized.</summary>
@@ -254,9 +241,8 @@ namespace UIKit {
 	}
 
 	public partial class UIPanGestureRecognizer : UIGestureRecognizer {
-		/// <param name="action">To be added.</param>
+		/// <param name="action">The action to perform.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public UIPanGestureRecognizer (Action action) : base (action) { }
 		/// <param name="action">Code to invoke when the gesture is recognized.</param>
 		///         <summary>Constructs a gesture recognizer and provides a method to invoke when the gesture is recognized.</summary>
@@ -269,9 +255,8 @@ namespace UIKit {
 
 #if !TVOS
 	public partial class UIPinchGestureRecognizer : UIGestureRecognizer {
-		/// <param name="action">To be added.</param>
+		/// <param name="action">The action to perform.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public UIPinchGestureRecognizer (Action action) : base (action) { }
 		/// <param name="action">Code to invoke when the gesture is recognized.</param>
 		///         <summary>Constructs a gesture recognizer and provides a method to invoke when the gesture is recognized.</summary>
@@ -282,9 +267,8 @@ namespace UIKit {
 #endif
 
 	public partial class UISwipeGestureRecognizer : UIGestureRecognizer {
-		/// <param name="action">To be added.</param>
+		/// <param name="action">The action to perform.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public UISwipeGestureRecognizer (Action action) : base (action) { }
 		/// <param name="action">Code to invoke when the gesture is recognized.</param>
 		///         <summary>Constructs a gesture recognizer and provides a method to invoke when the gesture is recognized.</summary>
@@ -297,11 +281,9 @@ namespace UIKit {
 	public partial class UIScreenEdgePanGestureRecognizer : UIPanGestureRecognizer {
 		/// <param name="action">Code to invoke when the screen edge pan gesture is recognized.</param>
 		///         <summary>Initalizes a screen edge pan gesture recognizer.</summary>
-		///         <remarks>To be added.</remarks>
 		public UIScreenEdgePanGestureRecognizer (Action action) : base (action) { }
 		/// <param name="action">Code to invoke when the screen edge pan gesture is recognized.</param>
 		///         <summary>Initializes a designated screen edge pan gesture recognizer.</summary>
-		///         <remarks>To be added.</remarks>
 		public UIScreenEdgePanGestureRecognizer (Action<UIScreenEdgePanGestureRecognizer> action) : base (Selector.GetHandle (UIGestureRecognizer.parametrized_selector), new Callback<UIScreenEdgePanGestureRecognizer> (action)) { }
 
 	}

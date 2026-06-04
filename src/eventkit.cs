@@ -739,8 +739,8 @@ namespace EventKit {
 		[NullAllowed]
 		NSDateComponents DueDateComponents { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets a value that indicates whether the reminder is completed.</summary>
+		/// <value><see langword="true" /> if the reminder is completed; otherwise, <see langword="false" />.</value>
 		[Export ("completed")]
 		bool Completed { [Bind ("isCompleted")] get; set; }
 

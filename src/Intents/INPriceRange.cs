@@ -12,7 +12,7 @@
 #nullable enable
 
 namespace Intents {
-	/// <summary>Enumerates the minimum and maximum values of a price range.</summary>
+	/// <summary>Enumerates the minimum and maximum values of APrice range.</summary>
 	public enum INPriceRangeOption {
 		/// <summary>The greatest price.</summary>
 		Maximum,

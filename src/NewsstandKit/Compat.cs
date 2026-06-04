@@ -76,7 +76,7 @@ namespace NewsstandKit {
 		}
 	} /* class NKAssetDownload */
 
-	/// <summary>A named and dated Newsstand product (e.g., an issue of a particular magazine).</summary>
+	/// <summary>A named and dated Newsstand product (e.g., an issue of AParticular magazine).</summary>
 	///     <remarks>To be added.</remarks>
 	[EditorBrowsable (EditorBrowsableState.Never)]
 	[Obsolete ("The NewsstandKit framework has been removed from iOS.")]

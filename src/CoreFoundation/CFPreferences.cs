@@ -47,7 +47,6 @@ namespace CoreFoundation {
 
 		/// <param name="key">To be added.</param>
 		///         <summary>Gets the preference value that is identified by <paramref name="key" />, for the current application.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static object? GetAppValue (string key)
 		{
@@ -59,7 +58,6 @@ namespace CoreFoundation {
 		/// <param name="key">To be added.</param>
 		///         <param name="applicationId">To be added.</param>
 		///         <summary>Gets the preference value that is identified by <paramref name="key" />, for the specified application.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static object? GetAppValue (string key, string applicationId)
 		{
@@ -75,7 +73,6 @@ namespace CoreFoundation {
 		/// <param name="key">To be added.</param>
 		///         <param name="applicationId">To be added.</param>
 		///         <summary>Gets the preference value that is identified by <paramref name="key" />, for the specified application.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static object? GetAppValue (string key, NSString applicationId)
 		{
@@ -216,7 +213,6 @@ namespace CoreFoundation {
 
 		/// <param name="key">To be added.</param>
 		///         <summary>Gets the preference Boolean value that is identified by <paramref name="key" />, for the current application.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static bool GetAppBooleanValue (string key)
 		{
@@ -228,7 +224,6 @@ namespace CoreFoundation {
 		/// <param name="key">To be added.</param>
 		///         <param name="applicationId">To be added.</param>
 		///         <summary>Gets the preference Boolean value that is identified by <paramref name="key" />, for the specified application.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static bool GetAppBooleanValue (string key, string applicationId)
 		{
@@ -244,7 +239,6 @@ namespace CoreFoundation {
 		/// <param name="key">To be added.</param>
 		///         <param name="applicationId">To be added.</param>
 		///         <summary>Gets the preference Boolean value that is identified by <paramref name="key" />, for the specified application.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static bool GetAppBooleanValue (string key, NSString applicationId)
 		{
@@ -267,7 +261,6 @@ namespace CoreFoundation {
 
 		/// <param name="key">To be added.</param>
 		///         <summary>Gets the preference integer value that is identified by <paramref name="key" />, for the current application.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static nint GetAppIntegerValue (string key)
 		{
@@ -279,7 +272,6 @@ namespace CoreFoundation {
 		/// <param name="key">To be added.</param>
 		///         <param name="applicationId">To be added.</param>
 		///         <summary>Gets the preference integer value that is identified by <paramref name="key" />, for the specified application.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static nint GetAppIntegerValue (string key, string applicationId)
 		{
@@ -295,7 +287,6 @@ namespace CoreFoundation {
 		/// <param name="key">To be added.</param>
 		///         <param name="applicationId">To be added.</param>
 		///         <summary>Gets the preference integer value that is identified by <paramref name="key" />, for the specified application.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static nint GetAppIntegerValue (string key, NSString applicationId)
 		{
@@ -410,7 +401,6 @@ namespace CoreFoundation {
 		static extern byte CFPreferencesAppSynchronize (IntPtr applicationId);
 
 		/// <summary>For the current application, writes all newly set preferences to permanent storage and then loads all existing preferences.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static bool AppSynchronize ()
 		{
@@ -421,7 +411,6 @@ namespace CoreFoundation {
 
 		/// <param name="applicationId">To be added.</param>
 		///         <summary>For the application that is identified by <paramref name="applicationId" />, writes all newly set preferences to permanent storage and then loads all existing preferences.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static bool AppSynchronize (string applicationId)
 		{
@@ -436,7 +425,6 @@ namespace CoreFoundation {
 
 		/// <param name="applicationId">To be added.</param>
 		///         <summary>For the application that is identified by <paramref name="applicationId" />, writes all newly set preferences to permanent storage and then loads all existing preferences.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static bool AppSynchronize (NSString applicationId)
 		{
@@ -454,7 +442,6 @@ namespace CoreFoundation {
 
 		/// <param name="key">To be added.</param>
 		///         <summary>Returns <see langword="true" /> if the user cannot change the preference that is identified by <paramref name="key" />, for the current application. Otherwise false.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static bool AppValueIsForced (string key)
 		{
@@ -466,7 +453,6 @@ namespace CoreFoundation {
 		/// <param name="key">To be added.</param>
 		///         <param name="applicationId">To be added.</param>
 		///         <summary>Returns <see langword="true" /> if the user cannot change the preference that is identified by <paramref name="key" />, for the application that is identified by <paramref name="applicationId" />. Otherwise false.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static bool AppValueIsForced (string key, string applicationId)
 		{
@@ -482,7 +468,6 @@ namespace CoreFoundation {
 		/// <param name="key">To be added.</param>
 		///         <param name="applicationId">To be added.</param>
 		///         <summary>Returns <see langword="true" /> if the user cannot change the preference that is identified by <paramref name="key" />, for the application that is identified by <paramref name="applicationId" />. Otherwise false.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static bool AppValueIsForced (string key, NSString applicationId)
 		{

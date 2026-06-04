@@ -141,7 +141,7 @@ namespace AudioToolbox {
 	public enum AudioSessionProperty { // typedef UInt32 AudioSessionPropertyID
 		/// <summary>Indicates preferred hardware sample rate.</summary>
 		PreferredHardwareSampleRate = 0x68777372,
-		/// <summary>Indicates preferred hardware i o buffer duration.</summary>
+		/// <summary>Indicates preferred hardware I/O buffer duration.</summary>
 		PreferredHardwareIOBufferDuration = 0x696f6264,
 		/// <summary>Indicates audio category.</summary>
 		AudioCategory = 0x61636174, // 'acat'
@@ -165,7 +165,7 @@ namespace AudioToolbox {
 		CurrentHardwareInputLatency = 0x63696c74,
 		/// <summary>Indicates current hardware output latency.</summary>
 		CurrentHardwareOutputLatency = 0x636f6c74,
-		/// <summary>Indicates current hardware i o buffer duration.</summary>
+		/// <summary>Indicates current hardware I/O buffer duration.</summary>
 		CurrentHardwareIOBufferDuration = 0x63686264,
 		/// <summary>Indicates other audio is playing.</summary>
 		OtherAudioIsPlaying = 0x6f746872,
@@ -271,7 +271,7 @@ namespace AudioToolbox {
 		LineOut,
 		/// <summary>Indicates headphones.</summary>
 		Headphones,
-		/// <summary>Indicates bluetooth h f p.</summary>
+		/// <summary>Indicates bluetooth HFP.</summary>
 		BluetoothHFP,
 		/// <summary>Indicates bluetooth a2 d p.</summary>
 		BluetoothA2DP,

@@ -2,13 +2,13 @@
 #nullable enable
 
 namespace Darwin {
-	/// <summary>To be added.</summary>
+	/// <summary>Represents a POSIX time specification with seconds and nanoseconds.</summary>
 	[StructLayout (LayoutKind.Sequential)]
 	[NativeName ("timespec")]
 	public struct TimeSpec {
-		/// <summary>To be added.</summary>
+		/// <summary>The number of seconds.</summary>
 		public nint Seconds;
-		/// <summary>To be added.</summary>
+		/// <summary>The number of nanoseconds.</summary>
 		public nint NanoSeconds;
 	}
 }

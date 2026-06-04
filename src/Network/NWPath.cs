@@ -15,7 +15,6 @@ using CoreFoundation;
 
 namespace Network {
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
@@ -29,7 +28,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NWPathStatus Status => nw_path_get_status (GetCheckedHandle ());
 
 		[DllImport (Constants.NetworkLibrary)]
@@ -37,7 +35,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool IsExpensive => nw_path_is_expensive (GetCheckedHandle ()) != 0;
 
 		[DllImport (Constants.NetworkLibrary)]
@@ -45,7 +42,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool HasIPV4 => nw_path_has_ipv4 (GetCheckedHandle ()) != 0;
 
 		[DllImport (Constants.NetworkLibrary)]
@@ -53,7 +49,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool HasIPV6 => nw_path_has_ipv6 (GetCheckedHandle ()) != 0;
 
 		[DllImport (Constants.NetworkLibrary)]
@@ -61,16 +56,14 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool HasDns => nw_path_has_dns (GetCheckedHandle ()) != 0;
 
 		[DllImport (Constants.NetworkLibrary)]
 		extern static byte nw_path_uses_interface_type (IntPtr handle, NWInterfaceType type);
 
-		/// <param name="type">To be added.</param>
+		/// <param name="type">The type.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public bool UsesInterfaceType (NWInterfaceType type) => nw_path_uses_interface_type (GetCheckedHandle (), type) != 0;
 
 		[DllImport (Constants.NetworkLibrary)]
@@ -78,7 +71,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NWEndpoint? EffectiveLocalEndpoint {
 			get {
 				var x = nw_path_copy_effective_local_endpoint (GetCheckedHandle ());
@@ -93,7 +85,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NWEndpoint? EffectiveRemoteEndpoint {
 			get {
 				var x = nw_path_copy_effective_remote_endpoint (GetCheckedHandle ());
@@ -106,10 +97,9 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		extern static byte nw_path_is_equal (IntPtr p1, IntPtr p2);
 
-		/// <param name="other">To be added.</param>
+		/// <param name="other">The other.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public bool EqualsTo (NWPath other)
 		{
 			if (other is null)

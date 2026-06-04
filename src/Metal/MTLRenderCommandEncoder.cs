@@ -4,16 +4,14 @@ using System.ComponentModel;
 
 namespace Metal {
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public static class IMTLRenderCommandEncoder_Extensions {
-		/// <param name="This">To be added.</param>
-		///         <param name="viewports">To be added.</param>
+		/// <param name="This">The this.</param>
+		///         <param name="viewports">The viewports.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("ios")]
@@ -24,10 +22,9 @@ namespace Metal {
 				This.SetViewports ((IntPtr) handle, (nuint) (viewports?.Length ?? 0));
 		}
 
-		/// <param name="This">To be added.</param>
-		///         <param name="scissorRects">To be added.</param>
+		/// <param name="This">The this.</param>
+		///         <param name="scissorRects">The scissor rects.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("ios")]

@@ -62,7 +62,6 @@ namespace AppKit {
 
 		/// <param name="windowRef">The window ref.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		static public NSWindow FromWindowRef (IntPtr windowRef)
 		{
 			return new NSWindow (windowRef);
@@ -96,7 +95,7 @@ namespace AppKit {
 			DangerousReleasedWhenClosed = value;
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Close.</summary>
 		public void Close ()
 		{
 			if (TrackReleasedWhenClosed) {
@@ -122,8 +121,7 @@ namespace AppKit {
 		}
 
 		// note: if needed override the protected Get|Set methods
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the frame autosave name.</summary>
 		public string FrameAutosaveName {
 			get { return GetFrameAutosaveName (); }
 			// ignore return value (bool)
@@ -131,8 +129,7 @@ namespace AppKit {
 		}
 
 		/// <param name="mask">The mask.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Nexts event matching mask.</summary>
 		public NSEvent NextEventMatchingMask (NSEventMask mask)
 		{
 			return NextEventMatchingMask ((uint) mask);
@@ -142,8 +139,7 @@ namespace AppKit {
 		///         <param name="expiration">The expiration.</param>
 		///         <param name="mode">The mode.</param>
 		///         <param name="deqFlag">The deq flag.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Nexts event matching mask.</summary>
 		public NSEvent NextEventMatchingMask (NSEventMask mask, NSDate expiration, string mode, bool deqFlag)
 		{
 			return NextEventMatchingMask ((uint) mask, expiration, mode, deqFlag);
@@ -151,7 +147,7 @@ namespace AppKit {
 
 		/// <param name="mask">The mask.</param>
 		///         <param name="beforeLastEvent">The before last event.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Discards events matching mask.</summary>
 		public void DiscardEventsMatchingMask (NSEventMask mask, NSEvent beforeLastEvent)
 		{
 			DiscardEventsMatchingMask ((uint) mask, beforeLastEvent);

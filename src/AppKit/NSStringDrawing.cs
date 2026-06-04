@@ -15,7 +15,7 @@ namespace AppKit {
 		/// <param name="This">The this.</param>
 		///         <param name="point">The point.</param>
 		///         <param name="attributes">The attributes.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Draws at point.</summary>
 		public static void DrawAtPoint (this string This, CGPoint point, NSDictionary? attributes)
 		{
 			using (var self = ((NSString) This))
@@ -25,7 +25,7 @@ namespace AppKit {
 		/// <param name="This">The this.</param>
 		///         <param name="point">The point.</param>
 		///         <param name="attributes">The attributes.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Draws at point.</summary>
 		public static void DrawAtPoint (this string This, CGPoint point, NSStringAttributes? attributes)
 		{
 			This.DrawAtPoint (point, attributes is null ? null : attributes.Dictionary);
@@ -34,7 +34,7 @@ namespace AppKit {
 		/// <param name="This">The this.</param>
 		///         <param name="rect">The rect.</param>
 		///         <param name="attributes">The attributes.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Draws in rect.</summary>
 		public static void DrawInRect (this string This, CGRect rect, NSDictionary? attributes)
 		{
 			using (var self = ((NSString) This))
@@ -44,7 +44,7 @@ namespace AppKit {
 		/// <param name="This">The this.</param>
 		///         <param name="rect">The rect.</param>
 		///         <param name="attributes">The attributes.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Draws in rect.</summary>
 		public static void DrawInRect (this string This, CGRect rect, NSStringAttributes? attributes)
 		{
 			This.DrawInRect (rect, attributes is null ? null : attributes.Dictionary);
@@ -52,8 +52,7 @@ namespace AppKit {
 
 		/// <param name="This">The this.</param>
 		///         <param name="attributes">The attributes.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Strings size.</summary>
 		public static CGSize StringSize (this string This, NSDictionary? attributes)
 		{
 			using (var self = ((NSString) This))
@@ -62,8 +61,7 @@ namespace AppKit {
 
 		/// <param name="This">The this.</param>
 		///         <param name="attributes">The attributes.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Strings size.</summary>
 		public static CGSize StringSize (this string This, NSStringAttributes? attributes)
 		{
 			return This.StringSize (attributes is null ? null : attributes.Dictionary);

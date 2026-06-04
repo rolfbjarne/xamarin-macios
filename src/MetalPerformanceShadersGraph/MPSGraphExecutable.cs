@@ -24,7 +24,7 @@ namespace MetalPerformanceShadersGraph {
 	}
 
 	public partial class MPSGraphExecutable {
-		/// <summary>Create a new MPSGraphExecutable instance from a package url and a compilation descriptor..</summary>
+		/// <summary>Create a new MPSGraphExecutable instance from APackage url and a compilation descriptor..</summary>
 		/// <param name="packageUrl">The url to the package to use.</param>
 		/// <param name="compilationDescriptor">The optional compilation descriptor use.</param>
 		/// <param name="option">Use this option to specify whether the package url points to a CoreML package or an MPSGraph package.</param>

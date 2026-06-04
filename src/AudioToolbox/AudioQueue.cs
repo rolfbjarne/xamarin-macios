@@ -542,11 +542,9 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public IntPtr IntPtrBuffer { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public unsafe AudioQueueBuffer* UnsafeBuffer {
 			get { return (AudioQueueBuffer*) IntPtrBuffer; }
@@ -576,28 +574,23 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public IntPtr IntPtrBuffer { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public unsafe AudioQueueBuffer* UnsafeBuffer {
 			get { return (AudioQueueBuffer*) IntPtrBuffer; }
 			set { IntPtrBuffer = (IntPtr) value; }
 		}
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public unsafe AudioQueueBuffer Buffer {
 			get { return *(AudioQueueBuffer*) IntPtrBuffer; }
 		}
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public AudioTimeStamp TimeStamp { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public AudioStreamPacketDescription []? PacketDescriptions { get; private set; }
 	}
@@ -919,7 +912,6 @@ namespace AudioToolbox {
 		/// <param name="audioQueueBuffer">To be added.</param>
 		///         <param name="desc">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public unsafe AudioQueueStatus EnqueueBuffer (IntPtr audioQueueBuffer, AudioStreamPacketDescription [] desc)
 		{
@@ -1143,7 +1135,6 @@ namespace AudioToolbox {
 
 		/// <param name="requestedStartTime">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioTimeStamp GetNearestStartTime (AudioTimeStamp requestedStartTime)
 		{
@@ -1161,7 +1152,6 @@ namespace AudioToolbox {
 
 		/// <param name="timeToTranslate">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioTimeStamp TranslateTime (AudioTimeStamp timeToTranslate)
 		{
@@ -1203,7 +1193,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float VolumeRampTime {
 			get {
@@ -1225,7 +1214,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float Pan {
 			get {
@@ -1375,7 +1363,6 @@ namespace AudioToolbox {
 		///         <param name="dataSize">To be added.</param>
 		///         <param name="propertyData">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public bool SetProperty (AudioQueueProperty property, int dataSize, IntPtr propertyData)
 		{
@@ -1519,7 +1506,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsRunning {
 			get {
@@ -1528,7 +1514,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public double SampleRate {
 			get {
@@ -1537,7 +1522,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int DeviceChannels {
 			get {
@@ -1603,7 +1587,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>The audio queue channel layout.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>
 		///           <para>
 		/// 	    The ChannelLayout must match the number of channels in the
@@ -1656,7 +1639,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int MaximumOutputPacketSize {
 			get {
@@ -1665,7 +1647,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int DecodeBufferSizeFrames {
 			get {
@@ -1674,7 +1655,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public AudioStreamBasicDescription AudioStreamDescription {
 			get {
@@ -1737,7 +1717,6 @@ namespace AudioToolbox {
 
 #if !MONOMAC
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public AudioQueueHardwareCodecPolicy HardwareCodecPolicy {
 			get {
@@ -1750,7 +1729,6 @@ namespace AudioToolbox {
 
 		/// <param name="channelAssignments">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioQueueStatus SetChannelAssignments (params AudioQueueChannelAssignment [] channelAssignments)
 		{

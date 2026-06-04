@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 
 namespace CoreFoundation {
 
-	/// <summary>To be added.</summary>
+	/// <summary>Represents a mutable Core Foundation string.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

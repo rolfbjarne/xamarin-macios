@@ -60,22 +60,22 @@ namespace NetworkExtension {
 		[Deprecated (PlatformName.MacOSX, 26, 0, "Not supported anymore.")]
 		[Deprecated (PlatformName.MacCatalyst, 26, 0, "Not supported anymore.")]
 		DES = 1,
-		/// <summary>Indicates triple d e s.</summary>
+		/// <summary>Indicates Triple DES.</summary>
 		[NoTV]
 		[Deprecated (PlatformName.iOS, 26, 0, "Not supported anymore.")]
 		[Deprecated (PlatformName.MacOSX, 26, 0, "Not supported anymore.")]
 		[Deprecated (PlatformName.MacCatalyst, 26, 0, "Not supported anymore.")]
 		TripleDES = 2,
-		/// <summary>Indicates AE s128.</summary>
-		AES128 = 3,
-		/// <summary>Indicates AE s256.</summary>
-		AES256 = 4,
-		/// <summary>Indicates AE s128 g c m.</summary>
+		/// <summary>Indicates AES-128.</summary>
+		AES-128 = 3,
+		/// <summary>Indicates AES-256.</summary>
+		AES-256 = 4,
+		/// <summary>Indicates AES-128 GCM.</summary>
 		[MacCatalyst (13, 1)]
-		AES128GCM = 5,
-		/// <summary>Indicates AE s256 g c m.</summary>
+		AES-128GCM = 5,
+		/// <summary>Indicates AES-256 GCM.</summary>
 		[MacCatalyst (13, 1)]
-		AES256GCM = 6,
+		AES-256GCM = 6,
 		[iOS (13, 0)]
 		[MacCatalyst (13, 1)]
 		ChaCha20Poly1305 = 7,
@@ -295,7 +295,7 @@ namespace NetworkExtension {
 		ReadAlreadyPending = 10,
 	}
 
-	/// <summary>Enumerates reasons that a provider extension has stopped.</summary>
+	/// <summary>Enumerates reasons that AProvider extension has stopped.</summary>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NEProviderStopReason : long {

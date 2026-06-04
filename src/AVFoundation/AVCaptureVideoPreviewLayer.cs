@@ -9,7 +9,6 @@ namespace AVFoundation {
 	public partial class AVCaptureVideoPreviewLayer {
 
 		/// <summary>Enumerates values that specify the presence or absence of a capture session connection.</summary>
-		///     <remarks>To be added.</remarks>
 		public enum InitMode {
 			/// <summary>Indicates a connection.</summary>
 			WithConnection,
@@ -20,10 +19,9 @@ namespace AVFoundation {
 			WithNoConnection,
 		}
 
-		/// <param name="session">To be added.</param>
-		///         <param name="mode">To be added.</param>
+		/// <param name="session">The session.</param>
+		///         <param name="mode">The mode.</param>
 		///         <summary>Creates a new preview layer with the supplied capture session and initialization mode.</summary>
-		///         <remarks>To be added.</remarks>
 		public AVCaptureVideoPreviewLayer (AVCaptureSession session, InitMode mode) : base (NSObjectFlag.Empty)
 		{
 			switch (mode) {
@@ -38,9 +36,8 @@ namespace AVFoundation {
 			}
 		}
 
-		/// <param name="session">To be added.</param>
+		/// <param name="session">The session.</param>
 		///         <summary>Creates a new preview layer with the supplied capture session.</summary>
-		///         <remarks>To be added.</remarks>
 		public AVCaptureVideoPreviewLayer (AVCaptureSession session) : this (session, InitMode.WithConnection) { }
 	}
 }

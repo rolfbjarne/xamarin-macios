@@ -77,7 +77,7 @@ namespace CoreLocation {
 			return CLLocationCoordinate2DIsValid (this) != 0;
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Returns a string representation of this location.</summary>
 		public override string ToString ()
 		{
 			return $"(Latitude={Latitude}, Longitude={Longitude}";

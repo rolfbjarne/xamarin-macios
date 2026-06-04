@@ -86,7 +86,6 @@ namespace CoreImage {
 		/// <param name="ctx">The ctx.</param>
 		///         <param name="options">The options to use.</param>
 		///         <summary>Creates a new CIContext from an existing one, along with the provided </summary>
-		///         <returns>To be added.</returns>
 		public static CIContext FromContext (CGContext ctx, CIContextOptions? options)
 		{
 			return FromContext (ctx, options?.Dictionary);
@@ -94,7 +93,6 @@ namespace CoreImage {
 
 		/// <param name="ctx">The ctx.</param>
 		///         <summary>Creates a new CIContext from an existing one.</summary>
-		///         <returns>To be added.</returns>
 		public static CIContext FromContext (CGContext ctx)
 		{
 			return FromContext (ctx, (NSDictionary?) null);
@@ -123,7 +121,6 @@ namespace CoreImage {
 		/// <param name="device">The device.</param>
 		///         <param name="options">The options to use.</param>
 		///         <summary>Creates a new CIContext from the provided Metal device, along with the specified context.</summary>
-		///         <returns>To be added.</returns>
 		public static CIContext FromMetalDevice (IMTLDevice device, CIContextOptions? options)
 		{
 			if (options is null)
@@ -147,7 +144,6 @@ namespace CoreImage {
 #else
 		/// <param name="options">The options to use.</param>
 		///         <summary>Creates a new <see cref="CoreImage.CIContext" /> from the options that are named in <paramref name="options" />.</summary>
-		///         <returns>To be added.</returns>
 		public static CIContext FromOptions (CIContextOptions? options)
 		{
 			return FromOptions (options?.Dictionary);
@@ -157,8 +153,7 @@ namespace CoreImage {
 		///         <param name="fromRect">The from rect.</param>
 		///         <param name="ciImageFormat">The ci image format.</param>
 		///         <param name="colorSpace">The color space.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Creates c g image.</summary>
 		public CGImage? CreateCGImage (CIImage image, CGRect fromRect, CIFormat ciImageFormat, CGColorSpace? colorSpace)
 		{
 			return CreateCGImage (image, fromRect, CIImage.CIFormatToInt (ciImageFormat), colorSpace);

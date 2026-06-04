@@ -20,16 +20,16 @@ namespace QuickLookUI {
 	[Protocol, Model]
 	interface QLPreviewPanelDataSource {
 		/// <param name="panel">The panel.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Returns the number of preview items in the panel.</summary>
+		/// <returns>The number of preview items.</returns>
 		[Export ("numberOfPreviewItemsInPreviewPanel:")]
 		[Abstract]
 		nint NumberOfPreviewItemsInPreviewPanel (QLPreviewPanel panel);
 
 		/// <param name="panel">The panel.</param>
 		/// <param name="index">The zero-based index.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Returns the preview item at the specified index.</summary>
+		/// <returns>The preview item at the specified index.</returns>
 		[Export ("previewPanel:previewItemAtIndex:")]
 		[Abstract]
 		IQLPreviewItem PreviewItemAtIndex (QLPreviewPanel panel, nint index);

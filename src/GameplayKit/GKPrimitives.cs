@@ -48,7 +48,7 @@ namespace GameplayKit {
 		Vector3 point1;
 		Vector3 point2;
 		Vector3 point3;
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the three points of the triangle.</summary>
 		public Vector3 [] Points {
 			get {
 				return new Vector3 [] { point1, point2, point3 };

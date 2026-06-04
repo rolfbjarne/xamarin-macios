@@ -43,7 +43,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public new NSButtonCell Cell {
 			get { return (NSButtonCell) base.Cell; }
 			set { base.Cell = value; }
@@ -52,8 +51,7 @@ namespace AppKit {
 		/// <param name="title">The title.</param>
 		///         <param name="image">The image.</param>
 		///         <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Creates button.</summary>
 		public static NSButton CreateButton (string title, NSImage image, Action action)
 		{
 			var dispatcher = new NSActionDispatcher (action);
@@ -64,8 +62,7 @@ namespace AppKit {
 
 		/// <param name="title">The title.</param>
 		///         <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Creates button.</summary>
 		public static NSButton CreateButton (string title, Action action)
 		{
 			var dispatcher = new NSActionDispatcher (action);
@@ -76,8 +73,7 @@ namespace AppKit {
 
 		/// <param name="image">The image.</param>
 		///         <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Creates button.</summary>
 		public static NSButton CreateButton (NSImage image, Action action)
 		{
 			var dispatcher = new NSActionDispatcher (action);
@@ -88,8 +84,7 @@ namespace AppKit {
 
 		/// <param name="title">The title.</param>
 		///         <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Creates checkbox.</summary>
 		public static NSButton CreateCheckbox (string title, Action action)
 		{
 			var dispatcher = new NSActionDispatcher (action);
@@ -100,8 +95,7 @@ namespace AppKit {
 
 		/// <param name="title">The title.</param>
 		///         <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Creates radio button.</summary>
 		public static NSButton CreateRadioButton (string title, Action action)
 		{
 			var dispatcher = new NSActionDispatcher (action);

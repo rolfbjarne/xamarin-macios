@@ -88,7 +88,6 @@ namespace GameController {
 			/* GCExtendedGamepadSnapShotDataV100 * __nullable */ GCExtendedGamepadSnapShotDataV100* snapshotData);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public NSData? ToNSData ()
 		{
 			unsafe {
@@ -212,7 +211,6 @@ namespace GameController {
 #endif
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -342,7 +340,6 @@ namespace GameController {
 		/// <param name="data">The data to use.</param>
 		/// <param name="snapshotData">The snapshot data.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -366,7 +363,6 @@ namespace GameController {
 		/// <param name="data">The data to use.</param>
 		///         <param name="snapshotData">The snapshot data.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]

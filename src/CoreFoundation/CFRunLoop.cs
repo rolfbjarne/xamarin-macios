@@ -69,7 +69,6 @@ namespace CoreFoundation {
 	}
 
 	/// <summary>An input source that generates asynchronous events and is intended to be used with a <see cref="CoreFoundation.CFRunLoop" />.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -86,7 +85,6 @@ namespace CoreFoundation {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public nint Order {
 			get {
 				return CFRunLoopSourceGetOrder (Handle);
@@ -97,7 +95,6 @@ namespace CoreFoundation {
 		extern static void CFRunLoopSourceInvalidate (/* CFRunLoopSourceRef */ IntPtr source);
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void Invalidate ()
 		{
 			CFRunLoopSourceInvalidate (Handle);
@@ -108,7 +105,6 @@ namespace CoreFoundation {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool IsValid {
 			get {
 				return CFRunLoopSourceIsValid (Handle) != 0;
@@ -119,7 +115,6 @@ namespace CoreFoundation {
 		extern static void CFRunLoopSourceSignal (/* CFRunLoopSourceRef */ IntPtr source);
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void Signal ()
 		{
 			CFRunLoopSourceSignal (Handle);
@@ -128,7 +123,6 @@ namespace CoreFoundation {
 
 #if !COREBUILD
 	/// <summary>An abstract <see cref="CoreFoundation.CFRunLoop" /> that, when extended, gives the application developer fine-grained control over lifecycle events. </summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -140,7 +134,6 @@ namespace CoreFoundation {
 		unsafe extern static /* CFRunLoopSourceRef */ IntPtr CFRunLoopSourceCreate (/* CFAllocatorRef */ IntPtr allocator, /* CFIndex */ nint order, /* CFRunLoopSourceContext* */ CFRunLoopSourceContext* context);
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		protected CFRunLoopSourceCustom ()
 			: base (IntPtr.Zero, true)
 		{
@@ -173,10 +166,9 @@ namespace CoreFoundation {
 			}
 		}
 
-		/// <param name="loop">To be added.</param>
-		///         <param name="mode">To be added.</param>
+		/// <param name="loop">The loop.</param>
+		///         <param name="mode">The mode.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		protected abstract void OnSchedule (CFRunLoop loop, NSString mode);
 
 		[UnmanagedCallersOnly]
@@ -192,10 +184,9 @@ namespace CoreFoundation {
 			}
 		}
 
-		/// <param name="loop">To be added.</param>
-		///         <param name="mode">To be added.</param>
+		/// <param name="loop">The loop.</param>
+		///         <param name="mode">The mode.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		protected abstract void OnCancel (CFRunLoop loop, NSString mode);
 
 		[UnmanagedCallersOnly]
@@ -209,7 +200,6 @@ namespace CoreFoundation {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		protected abstract void OnPerform ();
 
 		/// <inheritdoc />
@@ -281,7 +271,6 @@ namespace CoreFoundation {
 		extern static void CFRunLoopStop (/* CFRunLoopRef */ IntPtr rl);
 
 		/// <summary>Stops execution of this runloop.</summary>
-		///         <remarks>To be added.</remarks>
 		public void Stop ()
 		{
 			CFRunLoopStop (Handle);
@@ -291,7 +280,6 @@ namespace CoreFoundation {
 		extern static void CFRunLoopWakeUp (/* CFRunLoopRef */ IntPtr rl);
 
 		/// <summary>Wakes up a sleeping runloop.</summary>
-		///         <remarks>To be added.</remarks>
 		public void WakeUp ()
 		{
 			CFRunLoopWakeUp (Handle);
@@ -365,7 +353,6 @@ namespace CoreFoundation {
 		///
 		///
 		///      </returns>
-		///         <remarks>To be added.</remarks>
 		public CFRunLoopExitReason RunInMode (NSString mode, double seconds, bool returnAfterSourceHandled)
 		{
 			if (mode is null)

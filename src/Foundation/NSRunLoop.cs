@@ -27,14 +27,12 @@ namespace Foundation {
 	public partial class NSRunLoop {
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void Stop ()
 		{
 			GetCFRunLoop ().Stop ();
 		}
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void WakeUp ()
 		{
 			GetCFRunLoop ().WakeUp ();
@@ -47,7 +45,6 @@ namespace Foundation {
 		/// <param name="self">The instance on which this method operates.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static NSString [] GetConstants (this NSRunLoopMode [] self)
 		{
 			if (self is null)

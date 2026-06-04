@@ -25,7 +25,7 @@ namespace BusinessChat {
 	[DisableDefaultCtor]
 	interface BCChatButton {
 		/// <param name="style">The style.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new chat button with the specified style.</summary>
 		[Export ("initWithStyle:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (BCChatButtonStyle style);

@@ -279,7 +279,7 @@ namespace CoreFoundation {
 			}
 
 			/// <summary>Retrieves the data that has been posted for this event source.</summary>
-			///         <value>The result of the data posted to the data dispatch source.</value>
+			///         <value>The result of the datAPosted to the data dispatch source.</value>
 			///         <remarks>
 			///           <para>If multiple calls to MergeData are done, the result surfaced by PendingData will depend on whether you created a <see cref="CoreFoundation.DispatchSource.DataAdd" /> which will add the values together or a <see cref="CoreFoundation.DispatchSource.DataOr" /> which will or the values together.</para>
 			///           <para>
@@ -673,7 +673,7 @@ namespace CoreFoundation {
 
 		/// <summary>Sources of this type monitor signals delivered to the current process.</summary>
 		///     <remarks>
-		///       <para>Unlike signal handlers specified via sigaction(), the execution of the event handler block does not interrupt the current thread of execution; therefore the handler block is not limited to the use of signal safe interfaces defined in sigaction(2).  Furthermore, multiple observers of a given signal are supported; thus allowing applications and libraries to cooperate safely. However, a dispatch source does not install a signal handler or otherwise alter the behavior of signal delivery.  Therefore, applications must ignore or at least catch any signal that terminates a process by default. </para>
+		///       <para>Unlike signal handlers specified via sigaction(), the execution of the event handler block does not interrupt the current thread of execution; therefore the handler block is not limited to the use of signal safe interfaces defined in sigaction(2).  Furthermore, multiple observers of a given signal are supported; thus allowing applications and libraries to cooperate safely. However, a dispatch source does not install a signal handler or otherwise alter the behavior of signal delivery.  Therefore, applications must ignore or at least catch any signal that terminates AProcess by default. </para>
 		///       <para />
 		///     </remarks>
 		[SupportedOSPlatform ("ios")]
@@ -693,7 +693,7 @@ namespace CoreFoundation {
 			public SignalMonitor (IntPtr handle) : base (handle, false) { }
 			/// <param name="signalNumber">Signal to monitor</param>
 			///         <param name="queue">The target queue for this dispatch source object.   Pass null to use the default target queue (the default priority global concurrent queue).</param>
-			///         <summary>Creates a process signal monitor</summary>
+			///         <summary>Creates AProcess signal monitor</summary>
 			///         <remarks>
 			///           <para />
 			///         </remarks>

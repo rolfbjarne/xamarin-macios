@@ -46,7 +46,7 @@ namespace VideoToolbox {
 		/// <param name="sourceFrame">The token passed starting the encoding operation.</param>
 		/// <param name="status">Status code indicating if the operation was successful or not.</param>
 		/// <param name="flags">Contains information about the encoding operation.</param>
-		/// <param name="buffer">Contains a pointer to the encoded buffer if successful and the frame was not dropped. A <see langword="null" /> value indicates either an error, or that the frame was dropped.</param>
+		/// <param name="buffer">Contains APointer to the encoded buffer if successful and the frame was not dropped. A <see langword="null" /> value indicates either an error, or that the frame was dropped.</param>
 		/// <remarks>The delegate will be called in the order the frames are decoded, which is not necessarily the same as the display order.</remarks>
 		public delegate void VTCompressionOutputCallback (/* void* */ IntPtr sourceFrame, /* OSStatus */ VTStatus status, VTEncodeInfoFlags flags, CMSampleBuffer? buffer);
 
@@ -474,7 +474,7 @@ namespace VideoToolbox {
 		/// <summary>A delegate that will be called for each compressed frame.</summary>
 		/// <param name="status">Status code indicating if the operation was successful or not.</param>
 		/// <param name="infoFlags">Contains information about the encoding operation.</param>
-		/// <param name="sampleBuffer">Contains a pointer to the encoded buffer if successful and the frame was not dropped. A <see langword="null" /> value indicates either an error, or that the frame was dropped.</param>
+		/// <param name="sampleBuffer">Contains APointer to the encoded buffer if successful and the frame was not dropped. A <see langword="null" /> value indicates either an error, or that the frame was dropped.</param>
 		/// <remarks>The delegate will be called in the order the frames are decoded, which is not necessarily the same as the display order.</remarks>
 		public delegate void VTCompressionOutputHandler (VTStatus status, VTEncodeInfoFlags infoFlags, CMSampleBuffer? sampleBuffer);
 #endif // !__TVOS__

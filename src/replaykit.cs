@@ -408,13 +408,13 @@ namespace ReplayKit {
 		///           <para>The error, if any, that ended the broadcast.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		/// <summary>To be added.</summary>
+		/// <summary>Called when the broadcast finishes.</summary>
 		[Export ("broadcastController:didFinishWithError:")]
 		void DidFinish (RPBroadcastController broadcastController, [NullAllowed] NSError error);
 
 		/// <param name="broadcastController">The broadcast controller.</param>
 		/// <param name="serviceInfo">The service info.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Called when the service info is updated.</summary>
 		[Export ("broadcastController:didUpdateServiceInfo:")]
 		void DidUpdateServiceInfo (RPBroadcastController broadcastController, NSDictionary<NSString, INSCoding> serviceInfo);
 

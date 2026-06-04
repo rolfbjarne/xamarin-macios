@@ -26,7 +26,7 @@ namespace Security {
 
 		/// <param name="certificate">The certificate.</param>
 		///         <param name="policy">The policy.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a trust object for the specified certificate and policy.</summary>
 		public SecTrust (SecCertificate certificate, SecPolicy policy)
 		{
 			if (certificate is null)
@@ -43,7 +43,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		unsafe extern static SecStatusCode /* OSStatus */ SecTrustCopyPolicies (IntPtr /* SecTrustRef */ trust, IntPtr* /* CFArrayRef* */ policies);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the policies associated with this trust object.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -72,7 +72,7 @@ namespace Security {
 		}
 
 		/// <param name="policy">The policy.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Sets the trust evaluation policy.</summary>
 		public void SetPolicy (SecPolicy policy)
 		{
 			if (policy is null)
@@ -83,7 +83,7 @@ namespace Security {
 		}
 
 		/// <param name="policies">The policies.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Sets the trust evaluation policies.</summary>
 		public void SetPolicies (IEnumerable<SecPolicy> policies)
 		{
 			if (policies is null)
@@ -94,7 +94,7 @@ namespace Security {
 		}
 
 		/// <param name="policies">The policies.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Sets the trust evaluation policies from an array.</summary>
 		public void SetPolicies (NSArray policies)
 		{
 			if (policies is null)
@@ -118,7 +118,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static SecStatusCode /* OSStatus */ SecTrustSetNetworkFetchAllowed (IntPtr /* SecTrustRef */ trust, byte /* Boolean */ allowFetch);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets a value indicating whether network fetching is allowed during trust evaluation.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -148,7 +148,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		unsafe extern static SecStatusCode /* OSStatus */ SecTrustCopyCustomAnchorCertificates (IntPtr /* SecTrustRef */ trust, IntPtr* /* CFArrayRef* */ anchors);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the custom anchor certificates used for trust evaluation.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -258,7 +258,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		unsafe extern static SecStatusCode /* OSStatus */ SecTrustGetTrustResult (IntPtr /* SecTrustRef */ trust, SecTrustResult* /* SecTrustResultType */ result);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the trust evaluation result.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -283,7 +283,7 @@ namespace Security {
 		unsafe static extern byte SecTrustEvaluateWithError (/* SecTrustRef */ IntPtr trust, /* CFErrorRef** */ IntPtr* error);
 
 		/// <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Evaluates the trust and returns whether the certificate chain is trusted.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -306,7 +306,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static IntPtr /* CFDictionaryRef */ SecTrustCopyResult (IntPtr /* SecTrustRef */ trust);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the result dictionary containing detailed trust evaluation information.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -336,7 +336,7 @@ namespace Security {
 		}
 
 		/// <param name="ocspResponse">The ocsp response.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Sets the OCSP response data for trust evaluation.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -351,7 +351,7 @@ namespace Security {
 		}
 
 		/// <param name="ocspResponses">The ocsp responses.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Sets the OCSP response data from a collection for trust evaluation.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -366,7 +366,7 @@ namespace Security {
 		}
 
 		/// <param name="ocspResponses">The ocsp responses.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Sets the OCSP response data from an array for trust evaluation.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -388,7 +388,7 @@ namespace Security {
 		static extern SecStatusCode /* OSStatus */ SecTrustSetSignedCertificateTimestamps (/* SecTrustRef* */ IntPtr trust, /* CFArrayRef* */ IntPtr sctArray);
 
 		/// <param name="sct">The sct.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Sets the signed certificate timestamps for Certificate Transparency validation.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
@@ -403,7 +403,7 @@ namespace Security {
 		}
 
 		/// <param name="sct">The sct.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Sets the signed certificate timestamps from an array for Certificate Transparency validation.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]

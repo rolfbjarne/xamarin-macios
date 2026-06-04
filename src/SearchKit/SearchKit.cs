@@ -176,7 +176,6 @@ namespace SearchKit {
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static IntPtr SKDocumentCopyURL (IntPtr h);
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSUrl? Url {
 			get {
@@ -188,7 +187,6 @@ namespace SearchKit {
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static IntPtr SKDocumentGetName (IntPtr h);
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Name {
 			get {
@@ -200,7 +198,6 @@ namespace SearchKit {
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static IntPtr SKDocumentGetParent (IntPtr h);
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public SKDocument? GetParent ()
 		{
@@ -212,7 +209,6 @@ namespace SearchKit {
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static IntPtr SKDocumentGetSchemeName (IntPtr h);
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Scheme {
 			get {
@@ -251,7 +247,6 @@ namespace SearchKit {
 		///         <param name="type">To be added.</param>
 		///         <param name="analysisProperties">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static SKIndex? CreateWithUrl (NSUrl url, string indexName, SKIndexType type, SKTextAnalysis analysisProperties)
 		{
@@ -274,7 +269,6 @@ namespace SearchKit {
 		///         <param name="indexName">To be added.</param>
 		///         <param name="writeAccess">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static SKIndex? FromUrl (NSUrl url, string indexName, bool writeAccess)
 		{
@@ -299,7 +293,6 @@ namespace SearchKit {
 		///         <param name="type">To be added.</param>
 		///         <param name="analysisProperties">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static SKIndex? CreateWithMutableData (NSMutableData data, string indexName, SKIndexType type, SKTextAnalysis analysisProperties)
 		{
@@ -323,7 +316,6 @@ namespace SearchKit {
 		/// <param name="data">To be added.</param>
 		///         <param name="indexName">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static SKIndex? FromMutableData (NSMutableData data, string indexName)
 		{
@@ -346,7 +338,6 @@ namespace SearchKit {
 		/// <param name="data">To be added.</param>
 		///         <param name="indexName">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static SKIndex? FromData (NSData data, string indexName)
 		{
@@ -389,7 +380,6 @@ namespace SearchKit {
 		///         <param name="text">To be added.</param>
 		///         <param name="canReplace">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public bool AddDocumentWithText (SKDocument document, string text, bool canReplace)
 		{
@@ -412,7 +402,6 @@ namespace SearchKit {
 		///         <param name="mimeHint">To be added.</param>
 		///         <param name="canReplace">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public bool AddDocument (SKDocument document, string mimeHint, bool canReplace)
 		{
@@ -436,7 +425,6 @@ namespace SearchKit {
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static byte SKIndexFlush (IntPtr h);
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public bool Flush ()
 		{
@@ -445,7 +433,6 @@ namespace SearchKit {
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static byte SKIndexCompact (IntPtr h);
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public bool Compact ()
 		{
@@ -455,7 +442,6 @@ namespace SearchKit {
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static nint SKIndexGetDocumentCount (IntPtr handle);
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public nint DocumentCount {
 			get {
@@ -467,7 +453,6 @@ namespace SearchKit {
 		extern static nint SKIndexGetMaximumDocumentID (IntPtr handle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public nint MaximumDocumentID {
 			get {
@@ -478,7 +463,6 @@ namespace SearchKit {
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static nint SKIndexGetMaximumTermID (IntPtr handle);
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public nint MaximumTermID {
 			get {
@@ -489,7 +473,6 @@ namespace SearchKit {
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static IntPtr SKIndexGetAnalysisProperties (IntPtr h);
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public SKTextAnalysis AnalysisProperties {
 			get {
@@ -502,7 +485,6 @@ namespace SearchKit {
 		/// <param name="document">To be added.</param>
 		///         <param name="newParent">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public bool MoveDocument (SKDocument document, SKDocument newParent)
 		{
@@ -522,7 +504,6 @@ namespace SearchKit {
 
 		/// <param name="document">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public bool RemoveDocument (SKDocument document)
 		{
@@ -539,7 +520,6 @@ namespace SearchKit {
 		/// <param name="document">To be added.</param>
 		///         <param name="newName">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public bool RenameDocument (SKDocument document, string newName)
 		{
@@ -564,7 +544,6 @@ namespace SearchKit {
 		extern static nint SKIndexGetMaximumBytesBeforeFlush (IntPtr h);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[Advice ("Apple recommends to use Flush instead of setting these parameters.")]
 		public nint MaximumBytesBeforeFlush {
@@ -582,7 +561,6 @@ namespace SearchKit {
 		/// <param name="query">To be added.</param>
 		///         <param name="options">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public SKSearch Search (string query, SKSearchOptions options = SKSearchOptions.Default)
 		{
@@ -640,7 +618,6 @@ namespace SearchKit {
 
 		/// <param name="text">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static SKSummary? Create (string text)
 		{
@@ -659,7 +636,6 @@ namespace SearchKit {
 
 		/// <param name="nsString">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static SKSummary? Create (NSString nsString)
 		{
@@ -758,7 +734,6 @@ namespace SearchKit {
 		extern static nint SKSummaryGetParagraphCount (IntPtr summary);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public nint SentenceCount {
 			get {
@@ -766,7 +741,6 @@ namespace SearchKit {
 			}
 		}
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public nint ParagraphCount {
 			get {

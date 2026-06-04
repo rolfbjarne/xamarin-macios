@@ -107,7 +107,7 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTLineCreateWithAttributedString (IntPtr @string);
 		/// <param name="value">The value to set.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CTLine" /> instance.</summary>
 		public CTLine (NSAttributedString value)
 			: base (CTLineCreateWithAttributedString (value.GetNonNullHandle (nameof (value))), true, true)
 		{
@@ -119,8 +119,7 @@ namespace CoreText {
 		/// <param name="width">The width.</param>
 		///         <param name="truncationType">The truncation type.</param>
 		///         <param name="truncationToken">The truncation token.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets truncated line.</summary>
 		public CTLine? GetTruncatedLine (double width, CTLineTruncation truncationType, CTLine? truncationToken)
 		{
 			var h = CTLineCreateTruncatedLine (Handle, width, truncationType, truncationToken.GetHandle ());
@@ -144,8 +143,7 @@ namespace CoreText {
 		#region Line Access
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern nint CTLineGetGlyphCount (IntPtr line);
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the glyph count.</summary>
 		public nint GlyphCount {
 			get { return CTLineGetGlyphCount (Handle); }
 		}
@@ -153,7 +151,6 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTLineGetGlyphRuns (IntPtr line);
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public CTRun [] GetGlyphRuns ()
 		{
 			var cfArrayRef = CTLineGetGlyphRuns (Handle);
@@ -166,8 +163,7 @@ namespace CoreText {
 
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern NSRange CTLineGetStringRange (IntPtr line);
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the string range.</summary>
 		public NSRange StringRange {
 			get { return CTLineGetStringRange (Handle); }
 		}
@@ -182,7 +178,7 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern void CTLineDraw (IntPtr line, IntPtr context);
 		/// <param name="context">The context to use.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Draw.</summary>
 		public void Draw (CGContext context)
 		{
 			if (context is null)
@@ -198,8 +194,7 @@ namespace CoreText {
 			/* CGContextRef __nullable */ IntPtr context);
 
 		/// <param name="context">The context to use.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets image bounds.</summary>
 		public CGRect GetImageBounds (CGContext? context)
 		{
 			CGRect bounds = CTLineGetImageBounds (Handle, context.GetHandle ());
@@ -252,8 +247,7 @@ namespace CoreText {
 
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern double CTLineGetTrailingWhitespaceWidth (IntPtr line);
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the trailing whitespace width.</summary>
 		public double TrailingWhitespaceWidth {
 			get { return CTLineGetTrailingWhitespaceWidth (Handle); }
 		}
@@ -263,8 +257,7 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern nint CTLineGetStringIndexForPosition (IntPtr line, CGPoint position);
 		/// <param name="position">The position.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets string index for position.</summary>
 		public nint GetStringIndexForPosition (CGPoint position)
 		{
 			return CTLineGetStringIndexForPosition (Handle, position);
@@ -310,7 +303,7 @@ namespace CoreText {
 		}
 
 		/// <param name="enumerator">The enumerator.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Enumerates caret offsets.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]

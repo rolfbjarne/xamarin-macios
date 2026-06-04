@@ -12,7 +12,6 @@ using CoreMedia;
 
 namespace VideoToolbox {
 	/// <summary>Class to fetch available encoders</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -26,7 +25,6 @@ namespace VideoToolbox {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		static public VTVideoEncoder []? GetEncoderList ()
 		{
 			IntPtr array;
@@ -40,23 +38,18 @@ namespace VideoToolbox {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public int CodecType { get; private set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? CodecName { get; private set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? DisplayName { get; private set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? EncoderId { get; private set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? EncoderName { get; private set; }
 
 		[SupportedOSPlatform ("macos")]
@@ -190,13 +183,12 @@ namespace VideoToolbox {
 			/* CFDictionaryRef */ IntPtr* outSupportedProperties
 		);
 
-		/// <param name="width">To be added.</param>
-		///         <param name="height">To be added.</param>
-		///         <param name="codecType">To be added.</param>
-		///         <param name="encoderSpecification">To be added.</param>
+		/// <param name="width">The width.</param>
+		///         <param name="height">The height.</param>
+		///         <param name="codecType">The codec type.</param>
+		///         <param name="encoderSpecification">The encoder specification.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
@@ -230,7 +222,6 @@ namespace VideoToolbox {
 	}
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
@@ -238,11 +229,9 @@ namespace VideoToolbox {
 	public class VTSupportedEncoderProperties {
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? EncoderId { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NSDictionary? SupportedProperties { get; set; }
 	}
 }

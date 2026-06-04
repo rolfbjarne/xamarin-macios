@@ -39,50 +39,49 @@ using AudioToolbox;
 
 namespace AudioUnit {
 	/// <summary>An enumeration whose values indicate various errors relating to <see cref="ExtAudioFile" />s.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum ExtAudioFileError // Implictly cast to OSType
 	{
-		/// <summary>To be added.</summary>
+		/// <summary>The operation completed successfully.</summary>
 		OK = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>The codec was unavailable but input was consumed.</summary>
 		CodecUnavailableInputConsumed = -66559,
-		/// <summary>To be added.</summary>
+		/// <summary>The codec was unavailable and input was not consumed.</summary>
 		CodecUnavailableInputNotConsumed = -66560,
-		/// <summary>To be added.</summary>
+		/// <summary>An invalid property was specified.</summary>
 		InvalidProperty = -66561,
-		/// <summary>To be added.</summary>
+		/// <summary>An invalid property was specified.</summary>
 		InvalidPropertySize = -66562,
-		/// <summary>To be added.</summary>
+		/// <summary>A non-PCM client format was specified.</summary>
 		NonPCMClientFormat = -66563,
-		/// <summary>To be added.</summary>
+		/// <summary>An invalid channel map was specified.</summary>
 		InvalidChannelMap = -66564,
-		/// <summary>To be added.</summary>
+		/// <summary>Operations were called in an invalid order.</summary>
 		InvalidOperationOrder = -66565,
-		/// <summary>To be added.</summary>
+		/// <summary>An invalid data format was specified.</summary>
 		InvalidDataFormat = -66566,
-		/// <summary>To be added.</summary>
+		/// <summary>The maximum packet size is unknown.</summary>
 		MaxPacketSizeUnknown = -66567,
-		/// <summary>To be added.</summary>
+		/// <summary>An invalid seek was attempted.</summary>
 		InvalidSeek = -66568,
-		/// <summary>To be added.</summary>
+		/// <summary>The async write data was too large.</summary>
 		AsyncWriteTooLarge = -66569,
-		/// <summary>To be added.</summary>
+		/// <summary>The async write buffer overflowed.</summary>
 		AsyncWriteBufferOverflow = -66570,
 
 		// Shared error codes
-		/// <summary>To be added.</summary>
+		/// <summary>The file is not open.</summary>
 		NotOpenError = -38,
-		/// <summary>To be added.</summary>
+		/// <summary>The end of the file was reached.</summary>
 		EndOfFileError = -39,
-		/// <summary>To be added.</summary>
+		/// <summary>A position error occurred.</summary>
 		PositionError = -40,
-		/// <summary>To be added.</summary>
+		/// <summary>The file was not found.</summary>
 		FileNotFoundError = -43,
-		/// <summary>To be added.</summary>
+		/// <summary>A bad file path was specified.</summary>
 		BadFilePathError = 0x21707468, // '!pth'
-		/// <summary>To be added.</summary>
+		/// <summary>A file permission error occurred.</summary>
 		FilePermissionError = -54,
-		/// <summary>To be added.</summary>
+		/// <summary>Too many files are open.</summary>
 		TooManyFilesOpenError = -42,
 	}
 
@@ -255,10 +254,9 @@ namespace AudioUnit {
 		// to the actual error code from the native API and we are not allowed to make Breaking Changes
 		// lets reimplement the method in a way to return the actual native value if any
 		// also we can share the underliying implementation so we so not break api and reduce code suplication
-		/// <param name="url">To be added.</param>
-		///         <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="url">The URL of the audio file.</param>
+		///         <param name="error">On return, contains the error code if the operation failed.</param>
+	/// <summary>Opens an extended audio file from the specified URL.</summary>
 		public static ExtAudioFile? OpenUrl (NSUrl url, out ExtAudioFileError error)
 		{
 			if (url is null)
@@ -269,10 +267,9 @@ namespace AudioUnit {
 			return audioFile;
 		}
 
-		/// <param name="url">To be added.</param>
-		///         <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="url">The URL of the audio file.</param>
+		///         <param name="error">On return, contains the error code if the operation failed.</param>
+	/// <summary>Opens an extended audio file from the specified URL.</summary>
 		public static ExtAudioFile? OpenUrl (CFUrl url, out ExtAudioFileError error)
 		{
 			if (url is null)
@@ -283,9 +280,8 @@ namespace AudioUnit {
 			return audioFile;
 		}
 
-		/// <param name="url">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="url">The URL of the audio file.</param>
+	/// <summary>Opens an extended audio file from the specified URL.</summary>
 		public static ExtAudioFile OpenUrl (CFUrl url)
 		{
 			if (url is null)
@@ -320,13 +316,12 @@ namespace AudioUnit {
 		// to the actual error code from the native API and we are not allowed to make Breaking Changes
 		// lets reimplement the method in a way to return the actual native value if any
 		// also we can share the underliying implementation so we so not break api and reduce code suplication
-		/// <param name="url">To be added.</param>
-		///         <param name="fileType">To be added.</param>
-		///         <param name="inStreamDesc">To be added.</param>
-		///         <param name="fileFlags">To be added.</param>
-		///         <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="url">The URL of the audio file.</param>
+		///         <param name="fileType">The type of audio file to create.</param>
+		///         <param name="inStreamDesc">The audio stream description for the file data format.</param>
+		///         <param name="fileFlags">Flags specifying file creation behavior.</param>
+		///         <param name="error">On return, contains the error code if the operation failed.</param>
+	/// <summary>Creates an extended audio file at the specified URL.</summary>
 		public static ExtAudioFile? CreateWithUrl (NSUrl url, AudioFileType fileType, AudioStreamBasicDescription inStreamDesc, AudioFileFlags fileFlags, out ExtAudioFileError error)
 		{
 			if (url is null)
@@ -337,13 +332,12 @@ namespace AudioUnit {
 			return audioFile;
 		}
 
-		/// <param name="url">To be added.</param>
-		///         <param name="fileType">To be added.</param>
-		///         <param name="inStreamDesc">To be added.</param>
-		///         <param name="flag">To be added.</param>
-		///         <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="url">The URL of the audio file.</param>
+		///         <param name="fileType">The type of audio file to create.</param>
+		///         <param name="inStreamDesc">The audio stream description for the file data format.</param>
+		///         <param name="flag">Flags specifying file creation behavior.</param>
+		///         <param name="error">On return, contains the error code if the operation failed.</param>
+	/// <summary>Creates an extended audio file at the specified URL.</summary>
 		public static ExtAudioFile? CreateWithUrl (CFUrl url, AudioFileType fileType, AudioStreamBasicDescription inStreamDesc, AudioFileFlags flag, out ExtAudioFileError error)
 		{
 			if (url is null)
@@ -354,12 +348,11 @@ namespace AudioUnit {
 			return audioFile;
 		}
 
-		/// <param name="url">To be added.</param>
-		///         <param name="fileType">To be added.</param>
-		///         <param name="inStreamDesc">To be added.</param>
-		///         <param name="flag">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="url">The URL of the audio file.</param>
+		///         <param name="fileType">The type of audio file to create.</param>
+		///         <param name="inStreamDesc">The audio stream description for the file data format.</param>
+		///         <param name="flag">Flags specifying file creation behavior.</param>
+	/// <summary>Creates an extended audio file at the specified URL.</summary>
 		public static ExtAudioFile CreateWithUrl (CFUrl url,
 			AudioFileType fileType,
 			AudioStreamBasicDescription inStreamDesc,
@@ -393,11 +386,10 @@ namespace AudioUnit {
 				return new ExtAudioFile (ptr);
 		}
 
-		/// <param name="audioFileID">To be added.</param>
-		///         <param name="forWriting">To be added.</param>
-		///         <param name="outAudioFile">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="audioFileID">The audio file identifier to wrap.</param>
+		///         <param name="forWriting">Whether the file is being opened for writing.</param>
+		///         <param name="outAudioFile">On return, the wrapped extended audio file.</param>
+	/// <summary>Wraps an existing audio file identifier in an extended audio file.</summary>
 		public static ExtAudioFileError WrapAudioFileID (IntPtr audioFileID, bool forWriting, out ExtAudioFile? outAudioFile)
 		{
 			IntPtr ptr;
@@ -415,9 +407,8 @@ namespace AudioUnit {
 			return res;
 		}
 
-		/// <param name="frameOffset">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="frameOffset">The frame position to seek to.</param>
+	/// <summary>Seeks to the specified frame position.</summary>
 		public void Seek (long frameOffset)
 		{
 			int err = ExtAudioFileSeek (_extAudioFile, frameOffset);
@@ -425,8 +416,7 @@ namespace AudioUnit {
 				throw new ArgumentException (String.Format ("Error code:{0}", err));
 			}
 		}
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns the current read/write position in the file.</summary>
 		public long FileTell ()
 		{
 			long frame = 0;
@@ -441,11 +431,10 @@ namespace AudioUnit {
 			return frame;
 		}
 
-		/// <param name="numberFrames">To be added.</param>
-		///         <param name="audioBufferList">To be added.</param>
-		///         <param name="status">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="numberFrames">The number of frames to read or write.</param>
+		///         <param name="audioBufferList">The audio buffer list containing the data.</param>
+		///         <param name="status">On return, contains the result status.</param>
+	/// <summary>Reads audio frames from the file.</summary>
 		public uint Read (uint numberFrames, AudioBuffers audioBufferList, out ExtAudioFileError status)
 		{
 			if (audioBufferList is null)
@@ -457,10 +446,9 @@ namespace AudioUnit {
 			return numberFrames;
 		}
 
-		/// <param name="numberFrames">To be added.</param>
-		///         <param name="audioBufferList">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="numberFrames">The number of frames to read or write.</param>
+		///         <param name="audioBufferList">The audio buffer list containing the data.</param>
+	/// <summary>Writes audio frames to the file asynchronously.</summary>
 		public ExtAudioFileError WriteAsync (uint numberFrames, AudioBuffers audioBufferList)
 		{
 			if (audioBufferList is null)
@@ -469,10 +457,9 @@ namespace AudioUnit {
 			return ExtAudioFileWriteAsync (_extAudioFile, numberFrames, (IntPtr) audioBufferList);
 		}
 
-		/// <param name="numberFrames">To be added.</param>
-		///         <param name="audioBufferList">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="numberFrames">The number of frames to read or write.</param>
+		///         <param name="audioBufferList">The audio buffer list containing the data.</param>
+	/// <summary>Writes audio frames to the file.</summary>
 		public ExtAudioFileError Write (uint numberFrames, AudioBuffers audioBufferList)
 		{
 			if (audioBufferList is null)
@@ -481,8 +468,7 @@ namespace AudioUnit {
 			return ExtAudioFileWrite (_extAudioFile, numberFrames, (IntPtr) audioBufferList);
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Synchronizes the audio converter with the file data format.</summary>
 		public ExtAudioFileError SynchronizeAudioConverter ()
 		{
 			IntPtr value = IntPtr.Zero;

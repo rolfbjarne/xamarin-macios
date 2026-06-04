@@ -34,7 +34,7 @@ using CoreFoundation;
 using CoreGraphics;
 
 namespace QuickLook {
-	/// <summary>To be added.</summary>
+	/// <summary>Provides methods for generating Quick Look thumbnail images.</summary>
 	public static partial class QLThumbnailImage {
 
 		// QuickLook.framework/Versions/A/Headers/QLThumbnailImage.h
@@ -50,9 +50,9 @@ namespace QuickLook {
 		/// <param name="url">The URL to use.</param>
 		///         <param name="maxThumbnailSize">The max thumbnail size.</param>
 		///         <param name="scaleFactor">The scale factor.</param>
-		///         <param name="iconMode">The icon mode.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <param name="iconMode">The icon mode.</param>
+		/// <summary>Creates a thumbnail image for the specified URL.</summary>
+		/// <returns>A thumbnail image, or <see langword="null" /> if one could not be created.</returns>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("tvos")]

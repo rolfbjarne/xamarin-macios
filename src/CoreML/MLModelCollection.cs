@@ -19,7 +19,7 @@ partial class MLModelCollection : NSObject {
 	}
 
 	public static partial class Notifications {
-		/// <summary>This method does nothing, and only returns a placeholder instance.</summary>
+		/// <summary>This method does nothing, and only returns APlaceholder instance.</summary>
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		[Obsolete ("This method does nothing.")]
 		public static NSObject ObserveDidChange (EventHandler<NSNotificationEventArgs> handler)
@@ -27,7 +27,7 @@ partial class MLModelCollection : NSObject {
 			return new NSObject ();
 		}
 
-		/// <summary>This method does nothing, and only returns a placerholder instance.</summary>
+		/// <summary>This method does nothing, and only returns APlacerholder instance.</summary>
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		[Obsolete ("This method does nothing.")]
 		public static NSObject ObserveDidChange (NSObject objectToObserve, EventHandler<NSNotificationEventArgs> handler)

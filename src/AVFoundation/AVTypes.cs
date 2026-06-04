@@ -30,7 +30,6 @@ namespace AVFoundation {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{
@@ -48,7 +47,6 @@ namespace AVFoundation {
 
 		/// <param name="obj">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override bool Equals (object? obj)
 		{
@@ -60,7 +58,6 @@ namespace AVFoundation {
 
 		/// <param name="other">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public bool Equals (AVAudio3DVectorOrientation other)
 		{
@@ -68,7 +65,6 @@ namespace AVFoundation {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override int GetHashCode ()
 		{
@@ -97,7 +93,6 @@ namespace AVFoundation {
 		public float Roll;
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{
@@ -120,7 +115,6 @@ namespace AVFoundation {
 
 		/// <param name="obj">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override bool Equals (object? obj)
 		{
@@ -132,7 +126,6 @@ namespace AVFoundation {
 
 		/// <param name="other">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public bool Equals (AVAudio3DAngularOrientation other)
 		{
@@ -140,7 +133,6 @@ namespace AVFoundation {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override int GetHashCode ()
 		{
@@ -179,7 +171,6 @@ namespace AVFoundation {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{
@@ -202,7 +193,6 @@ namespace AVFoundation {
 
 		/// <param name="obj">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override bool Equals (object? obj)
 		{
@@ -214,7 +204,6 @@ namespace AVFoundation {
 
 		/// <param name="other">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public bool Equals (AVCaptureWhiteBalanceGains other)
 		{
@@ -222,7 +211,6 @@ namespace AVFoundation {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override int GetHashCode ()
 		{
@@ -256,7 +244,6 @@ namespace AVFoundation {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{
@@ -275,7 +262,6 @@ namespace AVFoundation {
 
 		/// <param name="obj">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override bool Equals (object? obj)
 		{
@@ -287,7 +273,6 @@ namespace AVFoundation {
 
 		/// <param name="other">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public bool Equals (AVCaptureWhiteBalanceChromaticityValues other)
 		{
@@ -295,7 +280,6 @@ namespace AVFoundation {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override int GetHashCode ()
 		{
@@ -328,7 +312,6 @@ namespace AVFoundation {
 			Tint = tint;
 		}
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{
@@ -348,7 +331,6 @@ namespace AVFoundation {
 
 		/// <param name="obj">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override bool Equals (object? obj)
 		{
@@ -360,7 +342,6 @@ namespace AVFoundation {
 
 		/// <param name="other">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public bool Equals (AVCaptureWhiteBalanceTemperatureAndTintValues other)
 		{
@@ -368,7 +349,6 @@ namespace AVFoundation {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override int GetHashCode ()
 		{
@@ -397,7 +377,6 @@ namespace AVFoundation {
 		/// <param name="self">To be added.</param>
 		///         <param name="aspectRatio">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static CGRect WithAspectRatio (this CGRect self, CGSize aspectRatio)
 		{

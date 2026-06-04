@@ -64,10 +64,9 @@ namespace OpenGL {
 		unsafe extern static CGLErrorCode CGLChoosePixelFormat (CGLPixelFormatAttribute* attributes, IntPtr* /* CGLPixelFormatObj* */ pix, int* /* GLint* */ npix);
 
 #if !COREBUILD
-		/// <param name="attributes">To be added.</param>
-		///         <param name="npix">To be added.</param>
+		/// <param name="attributes">The attributes.</param>
+		///         <param name="npix">The npix.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CGLPixelFormat (CGLPixelFormatAttribute [] attributes, out int npix)
 			: base (Create (attributes, out npix), true)
 		{
@@ -99,18 +98,16 @@ namespace OpenGL {
 			return pixelFormatOut;
 		}
 
-		/// <param name="attributes">To be added.</param>
+		/// <param name="attributes">The attributes.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CGLPixelFormat (params object [] attributes)
 			: base (Create (ConvertToAttributes (attributes), out _), true)
 		{
 		}
 
-		/// <param name="npix">To be added.</param>
-		///         <param name="attributes">To be added.</param>
+		/// <param name="npix">The npix.</param>
+		///         <param name="attributes">The attributes.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CGLPixelFormat (out int npix, params object [] attributes) : this (ConvertToAttributes (attributes), out npix)
 		{
 		}

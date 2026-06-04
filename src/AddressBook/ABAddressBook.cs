@@ -202,10 +202,9 @@ namespace AddressBook {
 		[DllImport (Constants.AddressBookLibrary)]
 		unsafe extern static IntPtr ABAddressBookCreateWithOptions (IntPtr dictionary, IntPtr* cfError);
 
-		/// <param name="error">To be added.</param>
+		/// <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static ABAddressBook? Create (out NSError? error)
 		{
 			IntPtr e;
@@ -428,10 +427,9 @@ namespace AddressBook {
 		[DllImport (Constants.AddressBookLibrary)]
 		extern static IntPtr ABAddressBookCopyArrayOfAllPeopleInSource (IntPtr addressBook, IntPtr source);
 
-		/// <param name="source">To be added.</param>
+		/// <param name="source">The source.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public ABPerson [] GetPeople (ABRecord source)
 		{
 			if (source is null)
@@ -444,11 +442,10 @@ namespace AddressBook {
 		[DllImport (Constants.AddressBookLibrary)]
 		extern static IntPtr ABAddressBookCopyArrayOfAllPeopleInSourceWithSortOrdering (IntPtr addressBook, IntPtr source, ABPersonSortBy sortOrdering);
 
-		/// <param name="source">To be added.</param>
-		///         <param name="sortOrdering">To be added.</param>
+		/// <param name="source">The source.</param>
+		///         <param name="sortOrdering">The sort ordering.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public ABPerson [] GetPeople (ABRecord source, ABPersonSortBy sortOrdering)
 		{
 			if (source is null)
@@ -496,10 +493,9 @@ namespace AddressBook {
 		[DllImport (Constants.AddressBookLibrary)]
 		extern static IntPtr ABAddressBookCopyArrayOfAllGroupsInSource (IntPtr addressBook, IntPtr source);
 
-		/// <param name="source">To be added.</param>
+		/// <param name="source">The source.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public ABGroup [] GetGroups (ABRecord source)
 		{
 			if (source is null)
@@ -759,7 +755,7 @@ namespace AddressBook {
 
 		[DllImport (Constants.AddressBookLibrary)]
 		extern static IntPtr /* ABRecordRef */ ABAddressBookGetSourceWithRecordID (IntPtr /* ABAddressBookRef */ addressBook, int /* ABRecordID */ sourceID);
-		/// <param name="sourceID">To be added.</param>
+		/// <param name="sourceID">The source i d.</param>
 		///         <summary>Returns a specific addressbook source</summary>
 		///         <returns>
 		///         </returns>

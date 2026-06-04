@@ -16,8 +16,6 @@ namespace CarPlay {
 #if !XAMCORE_5_0 && __IOS__
 	public partial class CPListItem {
 		/// <summary>Gets the maximum dimensions allowable for the <see cref="CarPlay.CPListItem.Image" />.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[ObsoletedOSPlatform ("ios14.0", "Do not use; this API was removed.")]
 		[UnsupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("macos")]

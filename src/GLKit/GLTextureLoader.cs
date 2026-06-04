@@ -38,7 +38,6 @@ namespace GLKit {
 		///         <param name="error">Error result.</param>
 		///         <summary>Loads a cube map synchronously.</summary>
 		///         <returns>On error, this will return null, the details of the error will be stored in the NSError parameter.   Otherwise the instance of the GLKTextureInfo.</returns>
-		///         <remarks>To be added.</remarks>
 		public static GLKTextureInfo? CubeMapFromFiles (string [] files, NSDictionary? textureOperations, out NSError error)
 		{
 			using (var array = NSArray.FromStrings (files))
@@ -50,7 +49,6 @@ namespace GLKit {
 		///         <param name="error">Error result.</param>
 		///         <summary>Loads a cube map synchronously.</summary>
 		///         <returns>On error, this will return null, the details of the error will be stored in the NSError parameter.   Otherwise the instance of the GLKTextureInfo.</returns>
-		///         <remarks>To be added.</remarks>
 		public static GLKTextureInfo? CubeMapFromUrls (NSUrl [] urls, NSDictionary? textureOperations, out NSError error)
 		{
 			using (var array = NSArray.FromNSObjects (urls))
@@ -104,7 +102,6 @@ namespace GLKit {
 		///         <param name="error">Error result.</param>
 		///         <summary>Loads a texture from a file synchronously.</summary>
 		///         <returns>On error, this will return null, the details of the error will be stored in the NSError parameter.   Otherwise the instance of the GLKTextureInfo.</returns>
-		///         <remarks>To be added.</remarks>
 		public static GLKTextureInfo? FromFile (string path, GLKTextureOperations? textureOperations, out NSError error)
 		{
 			return FromFile (path, textureOperations?.Dictionary, out error);
@@ -115,7 +112,6 @@ namespace GLKit {
 		///         <param name="error">Error result.</param>
 		///         <summary>Loads a texture from a file pointed to by the url.</summary>
 		///         <returns>On error, this will return null, the details of the error will be stored in the NSError parameter.   Otherwise the instance of the GLKTextureInfo.</returns>
-		///         <remarks>To be added.</remarks>
 		public static GLKTextureInfo? FromUrl (NSUrl url, GLKTextureOperations? textureOperations, out NSError error)
 		{
 			return FromUrl (url, textureOperations?.Dictionary, out error);
@@ -126,7 +122,6 @@ namespace GLKit {
 		///         <param name="error">Error result.</param>
 		///         <summary>Loads a texture from an NSData source.</summary>
 		///         <returns>On error, this will return null, the details of the error will be stored in the NSError parameter.   Otherwise the instance of the GLKTextureInfo.</returns>
-		///         <remarks>To be added.</remarks>
 		public static GLKTextureInfo? FromData (NSData data, GLKTextureOperations? textureOperations, out NSError error)
 		{
 			return FromData (data, textureOperations?.Dictionary, out error);
@@ -137,7 +132,6 @@ namespace GLKit {
 		///         <param name="error">Error result.</param>
 		///         <summary>Loads a texture from a CGImage.</summary>
 		///         <returns>On error, this will return null, the details of the error will be stored in the NSError parameter.   Otherwise the instance of the GLKTextureInfo.</returns>
-		///         <remarks>To be added.</remarks>
 		public static GLKTextureInfo? FromImage (CGImage cgImage, GLKTextureOperations? textureOperations, out NSError error)
 		{
 			return FromImage (cgImage, textureOperations?.Dictionary, out error);
@@ -148,7 +142,6 @@ namespace GLKit {
 		///         <param name="error">Error result.</param>
 		///         <summary>Loads a cube map synchronously.</summary>
 		///         <returns>On error, this will return null, the details of the error will be stored in the NSError parameter.   Otherwise the instance of the GLKTextureInfo.</returns>
-		///         <remarks>To be added.</remarks>
 		public static GLKTextureInfo? CubeMapFromFiles (string [] files, GLKTextureOperations? textureOperations, out NSError error)
 		{
 			using (var array = NSArray.FromStrings (files))
@@ -160,7 +153,6 @@ namespace GLKit {
 		///         <param name="error">Error result.</param>
 		///         <summary>Loads a cube map synchronously.</summary>
 		///         <returns>On error, this will return null, the details of the error will be stored in the NSError parameter.   Otherwise the instance of the GLKTextureInfo.</returns>
-		///         <remarks>To be added.</remarks>
 		public static GLKTextureInfo? CubeMapFromUrls (NSUrl [] urls, GLKTextureOperations? textureOperations, out NSError error)
 		{
 			using (var array = NSArray.FromNSObjects (urls))
@@ -172,7 +164,6 @@ namespace GLKit {
 		///         <param name="error">Error result.</param>
 		///         <summary>Loads a cube map synchronously.</summary>
 		///         <returns>On error, this will return null, the details of the error will be stored in the NSError parameter.   Otherwise the instance of the GLKTextureInfo.</returns>
-		///         <remarks>To be added.</remarks>
 		public static GLKTextureInfo? CubeMapFromFile (string path, GLKTextureOperations? textureOperations, out NSError error)
 		{
 			return CubeMapFromFile (path, textureOperations?.Dictionary, out error);
@@ -183,7 +174,6 @@ namespace GLKit {
 		///         <param name="error">Error result.</param>
 		///         <summary>Loads a cube map synchronously.</summary>
 		///         <returns>On error, this will return null, the details of the error will be stored in the NSError parameter.   Otherwise the instance of the GLKTextureInfo.</returns>
-		///         <remarks>To be added.</remarks>
 		public static GLKTextureInfo? CubeMapFromUrl (NSUrl url, GLKTextureOperations? textureOperations, out NSError error)
 		{
 			return CubeMapFromUrl (url, textureOperations?.Dictionary, out error);
@@ -451,7 +441,6 @@ namespace GLKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]

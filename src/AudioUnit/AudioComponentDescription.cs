@@ -96,16 +96,15 @@ namespace AudioUnit {
 	}
 
 	/// <summary>An enumeration whose values specify the type of audio output.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum AudioTypeOutput { // OSType in AudioComponentDescription
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates generic.</summary>
 		Generic = 0x67656e72, // 'genr'
 #if MONOMAC
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates h a l.</summary>
 		HAL = 0x6168616c, // 'ahal'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates default.</summary>
 		Default = 0x64656620, // 'def'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates system.</summary>
 		System = 0x73797320, // 'sys'
 #endif
 		/// <summary>To be added.</summary>
@@ -114,18 +113,17 @@ namespace AudioUnit {
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
 		Remote = 0x72696f63, // 'rioc'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates voice processing i o.</summary>
 		VoiceProcessingIO = 0x7670696f, // 'vpio'
 	}
 
 	/// <summary>An enumeration whose values specify whether an audio music device is a sampler or not.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum AudioTypeMusicDevice { // OSType in AudioComponentDescription
 #if MONOMAC
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates dls synth.</summary>
 		DlsSynth = 0x646c7320, // 'dls '
 #endif
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates sampler.</summary>
 		Sampler = 0x73616d70, // 'samp'
 
 		/// <summary>To be added.</summary>
@@ -137,7 +135,6 @@ namespace AudioUnit {
 	}
 
 	/// <summary>An enumeration whose values specify different audio unit format converters.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum AudioTypeConverter { // OSType in AudioComponentDescription
 		/// <summary>Indicates a converter that does linear PCM conversions.</summary>
 		AU = 0x636f6e76, // 'conv'
@@ -158,7 +155,7 @@ namespace AudioUnit {
 		/// <summary>Indicates an audio unit that splits its input to more than two outputs.</summary>
 		MultiSplitter = 0x6d73706c, // 'mspl'
 #if MONOMAC
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates time pitch.</summary>
 		TimePitch = 0x746d7074, // 'tmpt'
 #else
 		/// <summary>Indicates an iPhone audio unit that provides basic control over playback.</summary>
@@ -174,19 +171,18 @@ namespace AudioUnit {
 	}
 
 	/// <summary>An enumeration whose values specify different types of audio effects.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum AudioTypeEffect { // OSType in AudioComponentDescription
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates peak limiter.</summary>
 		PeakLimiter = 0x6c6d7472, // 'lmtr'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates dynamics processor.</summary>
 		DynamicsProcessor = 0x64636d70, // 'dcmp'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates low pass filter.</summary>
 		LowPassFilter = 0x6c706173, // 'lpas'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates high pass filter.</summary>
 		HighPassFilter = 0x68706173, // 'hpas'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates high shelf filter.</summary>
 		HighShelfFilter = 0x68736866, // 'hshf'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates low shelf filter.</summary>
 		LowShelfFilter = 0x6c736866, // 'lshf'
 		/// <summary>To be added.</summary>
 		[SupportedOSPlatform ("ios")]
@@ -200,7 +196,7 @@ namespace AudioUnit {
 		DCFilter = 0x6463666c, // 'dcfl'
 		/// <summary>To be added.</summary>
 		ParametricEQ = 0x706d6571, // 'pmeq'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates delay.</summary>
 		Delay = 0x64656c79, // 'dely'
 
 		/// <summary>To be added.</summary>
@@ -209,24 +205,24 @@ namespace AudioUnit {
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 		SampleDelay = 0x73646c79, // 'sdly'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates distortion.</summary>
 		Distortion = 0x64697374, // 'dist'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates band pass filter.</summary>
 		BandPassFilter = 0x62706173, // 'bpas'
 #if MONOMAC
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates graphic e q.</summary>
 		GraphicEQ = 0x67726571, // 'greq'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates multi band compressor.</summary>
 		MultiBandCompressor = 0x6d636d70, // 'mcmp'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates matrix reverb.</summary>
 		MatrixReverb = 0x6d726576, // 'mrev'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates pitch.</summary>
 		Pitch = 0x70697463, // 'pitc'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates a u filter.</summary>
 		AUFilter = 0x66696c74, // 'filt'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates net send.</summary>
 		NetSend = 0x6e736e64, // 'nsnd'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates roger beep.</summary>
 		RogerBeep = 0x726f6772, // 'rogr'
 #else
 		/// <summary>To be added.</summary>
@@ -244,21 +240,20 @@ namespace AudioUnit {
 		[SupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 		Reverb2 = 0x72766232, // 'rvb2'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates n band eq.</summary>
 		NBandEq = 0x6e626571, // 'nbeq'
 	}
 
 	/// <summary>An enumeration whose values specify whether the type of an audio mixer.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum AudioTypeMixer { // OSType in AudioComponentDescription
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates multi channel.</summary>
 		MultiChannel = 0x6d636d78, // 'mcmx'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates matrix.</summary>
 		Matrix = 0x6d786d78, // 'mxmx'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates spacial.</summary>
 		Spacial = 0x3364656d, // Same as Embedded3D
 #if MONOMAC
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates stereo.</summary>
 		Stereo = 0x736d7872, // 'smxr'
 		/// <summary>To be added.</summary>
 		[UnsupportedOSPlatform ("ios")]
@@ -279,55 +274,51 @@ namespace AudioUnit {
 	}
 
 	/// <summary>An unimplemented enumeration.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum AudioTypePanner { // OSType in AudioComponentDescription
 #if MONOMAC
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates spherical head.</summary>
 		SphericalHead = 0x73706872, // 'sphr'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates vector.</summary>
 		Vector = 0x76626173, // 'vbas'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates sound field.</summary>
 		SoundField = 0x616d6269, // 'ambi'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates r h r t f.</summary>
 		rHRTF = 0x68727466, // 'hrtf'
 #endif
 	}
 
 	/// <summary>An enumeration whose values specify whether an audio generator is a file player or a scheduled sound player.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum AudioTypeGenerator { // OSType in AudioComponentDescription
 #if MONOMAC
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates net receive.</summary>
 		NetReceive = 0x6e726376, // 'nrcv'
 #endif
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates scheduled sound player.</summary>
 		ScheduledSoundPlayer = 0x7373706c, // 'sspl'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates audio file player.</summary>
 		AudioFilePlayer = 0x6166706c, // 'afpl'
 	}
 
 	/// <summary>An enumeration that specifies that an audio component was manufactured by Apple.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum AudioComponentManufacturerType : uint // OSType in AudioComponentDescription
 	{
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates apple.</summary>
 		Apple = 0x6170706c, // little endian 0x6c707061 //'appl'
 	}
 
 	/// <summary>A flagging enumeration whose value specifies whether an audio component is searchable. Used with <see cref="AudioComponentDescription.ComponentFlags" /></summary>
-	///     <remarks>To be added.</remarks>
 	[Flags]
 	public enum AudioComponentFlag // UInt32 in AudioComponentDescription
 	{
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unsearchable.</summary>
 		Unsearchable = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates sandbox safe.</summary>
 		SandboxSafe = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates is v3 audio unit.</summary>
 		IsV3AudioUnit = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates requires async instantiation.</summary>
 		RequiresAsyncInstantiation = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates can load in process.</summary>
 		CanLoadInProcess = 0x10,
 	}
 
@@ -352,14 +343,11 @@ namespace AudioUnit {
 #endif
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public AudioComponentManufacturerType ComponentManufacturer;
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public AudioComponentFlag ComponentFlags;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public int ComponentFlagsMask;
 
 		internal AudioComponentDescription (AudioComponentType type, int subType)
@@ -375,74 +363,66 @@ namespace AudioUnit {
 			ComponentFlagsMask = 0;
 		}
 
-		/// <param name="type">To be added.</param>
-		///         <param name="subType">To be added.</param>
+		/// <param name="type">The type.</param>
+		///         <param name="subType">The sub type.</param>
 		///         <summary>Initializes an <see cref="AudioComponentDescription" /> with the given type and given subtype.   This method is here for cases where you might want to create a component description that is not covered by the built-in enumerations for component subtypes.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static AudioComponentDescription CreateGeneric (AudioComponentType type, int subType)
 		{
 			return new AudioComponentDescription (type, subType);
 		}
 
-		/// <param name="outputType">To be added.</param>
+		/// <param name="outputType">The output type.</param>
 		///         <summary>Creates an output component description.</summary>
 		///         <returns>An initialized AudioComponentDescription with the <see cref="AudioComponentDescription.ComponentType" /> set to <see cref="AudioComponentType.Output" /> and the specified output type.</returns>
-		///         <remarks>To be added.</remarks>
 		public static AudioComponentDescription CreateOutput (AudioTypeOutput outputType)
 		{
 			return new AudioComponentDescription (AudioComponentType.Output, (int) outputType);
 		}
 
-		/// <param name="musicDevice">To be added.</param>
+		/// <param name="musicDevice">The music device.</param>
 		///         <summary>Creates a music effect component description.</summary>
 		///         <returns>An initialized AudioComponentDescription with the <see cref="AudioComponentDescription.ComponentType" /> set to <see cref="AudioComponentType.MusicDevice" /> and the specified device.</returns>
-		///         <remarks>To be added.</remarks>
 		public static AudioComponentDescription CreateMusicDevice (AudioTypeMusicDevice musicDevice)
 		{
 			return new AudioComponentDescription (AudioComponentType.MusicDevice, (int) musicDevice);
 		}
 
-		/// <param name="converter">To be added.</param>
+		/// <param name="converter">The converter.</param>
 		///         <summary>Creates an audio converter component description.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static AudioComponentDescription CreateConverter (AudioTypeConverter converter)
 		{
 			return new AudioComponentDescription (AudioComponentType.FormatConverter, (int) converter);
 		}
 
-		/// <param name="effect">To be added.</param>
+		/// <param name="effect">The effect.</param>
 		///         <summary>Creates an audio effect component description.</summary>
 		///         <returns>An initialized AudioComponentDescription with the <see cref="AudioComponentDescription.ComponentType" /> set to <see cref="AudioComponentType.Effect" /> and the specified effect.</returns>
-		///         <remarks>To be added.</remarks>
 		public static AudioComponentDescription CreateEffect (AudioTypeEffect effect)
 		{
 			return new AudioComponentDescription (AudioComponentType.Effect, (int) effect);
 		}
 
-		/// <param name="mixer">To be added.</param>
+		/// <param name="mixer">The mixer.</param>
 		///         <summary>Creates an audio mixer component description.</summary>
 		///         <returns>An initialized AudioComponentDescription with the <see cref="AudioComponentDescription.ComponentType" /> set to <see cref="AudioComponentType.Mixer" /> and the specified mixer.</returns>
-		///         <remarks>To be added.</remarks>
 		public static AudioComponentDescription CreateMixer (AudioTypeMixer mixer)
 		{
 			return new AudioComponentDescription (AudioComponentType.Mixer, (int) mixer);
 		}
 
-		/// <param name="panner">To be added.</param>
+		/// <param name="panner">The panner.</param>
 		///         <summary>Creates a panner component description.</summary>
 		///         <returns>An initialized AudioComponentDescription with the <see cref="AudioComponentDescription.ComponentType" /> set to <see cref="AudioComponentType.Panner" /> and the specified panner.</returns>
-		///         <remarks>To be added.</remarks>
 		public static AudioComponentDescription CreatePanner (AudioTypePanner panner)
 		{
 			return new AudioComponentDescription (AudioComponentType.Panner, (int) panner);
 		}
 
-		/// <param name="generator">To be added.</param>
+		/// <param name="generator">The generator.</param>
 		///         <summary>Creates an audio generator component description.</summary>
 		///         <returns>An initialized AudioComponentDescription with the <see cref="AudioComponentDescription.ComponentType" /> set to <see cref="AudioComponentType.Generator" /> and the specified generator.</returns>
-		///         <remarks>To be added.</remarks>
 		public static AudioComponentDescription CreateGenerator (AudioTypeGenerator generator)
 		{
 			return new AudioComponentDescription (AudioComponentType.Generator, (int) generator);
@@ -450,7 +430,6 @@ namespace AudioUnit {
 
 		/// <summary>Returns a debugging message showing the component type and subtype for this description.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{
 			const string fmt = "[componentType={0}, subType={1}]";

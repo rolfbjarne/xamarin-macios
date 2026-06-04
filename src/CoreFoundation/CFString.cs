@@ -91,7 +91,7 @@ namespace CoreFoundation {
 			this.len = len;
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Returns a string representation of this range.</summary>
 		public override string ToString ()
 		{
 			return string.Format ("CFRange [Location: {0} Length: {1}]", loc, len);
@@ -142,7 +142,7 @@ namespace CoreFoundation {
 #if !COREBUILD
 		internal string? str;
 
-		/// <summary>To be added.</summary>
+		/// <summary>Initializes a new instance of the <see cref="CFString" /> class.</summary>
 		protected CFString () { }
 
 		[DllImport (Constants.CoreFoundationLibrary, CharSet = CharSet.Unicode)]
@@ -359,7 +359,7 @@ namespace CoreFoundation {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Returns the string value of this CFString.</summary>
 		public override string ToString ()
 		{
 			if (str is null)

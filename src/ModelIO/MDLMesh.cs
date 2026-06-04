@@ -21,11 +21,10 @@ namespace ModelIO {
 	partial class MDLMesh {
 
 		/// <summary>To be added.</summary>
-		///     <remarks>To be added.</remarks>
 		public enum MDLMeshVectorType {
-			/// <summary>To be added.</summary>
+			/// <summary>Indicates dimensions.</summary>
 			Dimensions,
-			/// <summary>To be added.</summary>
+			/// <summary>Indicates extent.</summary>
 			Extent,
 		}
 
@@ -83,7 +82,7 @@ namespace ModelIO {
 		}
 
 		/// <summary>Creates a right rectangular box from the <paramref name="vector" />, with the specified number of segments and geometry kind.</summary>
-		/// <param name="vector">To be added.</param>
+		/// <param name="vector">The vector.</param>
 		/// <param name="segments">The number of divisions to create in each dimension.</param>
 		/// <param name="geometryType">Whether to create triangles, quadrilaterals, or lines.</param>
 		/// <param name="inwardNormals">Whether to generate inward-pointing normals.</param>
@@ -135,7 +134,6 @@ namespace ModelIO {
 		///         </param>
 		/// <summary>Creates a cylinder from the specified parameters.</summary>
 		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
@@ -172,7 +170,6 @@ namespace ModelIO {
 		///         </param>
 		/// <summary>Creates a planar region centered at the origin, aligned with the X-Z plane, with the specified dimensions.</summary>
 		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
@@ -191,7 +188,6 @@ namespace ModelIO {
 		///         </param>
 		/// <summary>Creates a regular icosahedron from the specified parameters.</summary>
 		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
@@ -201,16 +197,15 @@ namespace ModelIO {
 			return new MDLMesh (extent, inwardNormals, geometryType, allocator);
 		}
 
-		/// <param name="mesh">To be added.</param>
-		///         <param name="submeshIndex">To be added.</param>
-		///         <param name="subdivisionLevels">To be added.</param>
+		/// <param name="mesh">The mesh.</param>
+		///         <param name="submeshIndex">The submesh index.</param>
+		///         <param name="subdivisionLevels">The subdivision levels.</param>
 		///         <param name="allocator">
 		///           <para>The allocator to use instead of the default, internal allocator.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static MDLMesh CreateSubdividedMesh (MDLMesh mesh, int submeshIndex, uint subdivisionLevels, IMDLMeshBufferAllocator allocator)
 		{
 			return new MDLMesh (mesh, submeshIndex, subdivisionLevels, allocator);
@@ -218,7 +213,6 @@ namespace ModelIO {
 
 		/// <summary>Gets the visual anisotropy of the surface, if present. This data is associated with the <see cref="ModelIO.MDLVertexAttributes.Anisotropy" /> key.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MDLVertexAttributeData? AnisotropyVertexData {
 			get {
 				return GetVertexAttributeDataForAttribute (MDLVertexAttributes.Anisotropy);
@@ -227,7 +221,6 @@ namespace ModelIO {
 
 		/// <summary>Gets the binormal data at each vertex. These data are associated with the <see cref="ModelIO.MDLVertexAttributes.Binormal" /> key.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MDLVertexAttributeData? BinormalVertexData {
 			get {
 				return GetVertexAttributeDataForAttribute (MDLVertexAttributes.Binormal);
@@ -236,7 +229,6 @@ namespace ModelIO {
 
 		/// <summary>Gets the bitangent vectors for each vertex. These data are associated with the <see cref="ModelIO.MDLVertexAttributes.Bitangent" /> key.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MDLVertexAttributeData? BitangentVertexData {
 			get {
 				return GetVertexAttributeDataForAttribute (MDLVertexAttributes.Bitangent);
@@ -245,7 +237,6 @@ namespace ModelIO {
 
 		/// <summary>Gets color data for each vertex. These data are associated with the <see cref="ModelIO.MDLVertexAttributes.Color" /> key.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MDLVertexAttributeData? ColorVertexData {
 			get {
 				return GetVertexAttributeDataForAttribute (MDLVertexAttributes.Color);
@@ -254,7 +245,6 @@ namespace ModelIO {
 
 		/// <summary>Gets data that describe which edges that should not be modified when subdividing the surface. These data are associated with the <see cref="ModelIO.MDLVertexAttributes.EdgeCrease" /> key.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MDLVertexAttributeData? EdgeCreaseVertexData {
 			get {
 				return GetVertexAttributeDataForAttribute (MDLVertexAttributes.EdgeCrease);
@@ -263,7 +253,6 @@ namespace ModelIO {
 
 		/// <summary>Gets bone and joint indices. These data are associated with the <see cref="ModelIO.MDLVertexAttributes.JointIndices" /> key.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MDLVertexAttributeData? JointIndicesVertexData {
 			get {
 				return GetVertexAttributeDataForAttribute (MDLVertexAttributes.JointIndices);
@@ -272,7 +261,6 @@ namespace ModelIO {
 
 		/// <summary>Gets bone and joint weight information that is used to render a mesh that is associated with a skeleton. These data are associated with the <see cref="ModelIO.MDLVertexAttributes.JointWeights" /> key.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MDLVertexAttributeData? JointWeightsVertexData {
 			get {
 				return GetVertexAttributeDataForAttribute (MDLVertexAttributes.JointWeights);
@@ -281,7 +269,6 @@ namespace ModelIO {
 
 		/// <summary>Gets normal vectors for the mesh vertices. These data are associated with the <see cref="ModelIO.MDLVertexAttributes.Normal" /> key.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MDLVertexAttributeData? NormalVertexData {
 			get {
 				return GetVertexAttributeDataForAttribute (MDLVertexAttributes.Normal);
@@ -290,7 +277,6 @@ namespace ModelIO {
 
 		/// <summary>Gets occlusion data for the mesh vertices. These data are associated with the <see cref="ModelIO.MDLVertexAttributes.OcclusionValue" /> key.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MDLVertexAttributeData? OcclusionValueVertexData {
 			get {
 				return GetVertexAttributeDataForAttribute (MDLVertexAttributes.OcclusionValue);
@@ -299,7 +285,6 @@ namespace ModelIO {
 
 		/// <summary>Gets the positions of the mesh vertices. These data are associated with the <see cref="ModelIO.MDLVertexAttributes.Position" /> key.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MDLVertexAttributeData? PositionVertexData {
 			get {
 				return GetVertexAttributeDataForAttribute (MDLVertexAttributes.Position);
@@ -308,7 +293,6 @@ namespace ModelIO {
 
 		/// <summary>Gets the U basis vectors that are used for shading. These data are associated with the <see cref="ModelIO.MDLVertexAttributes.ShadingBasisU" /> key.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MDLVertexAttributeData? ShadingBasisUVertexData {
 			get {
 				return GetVertexAttributeDataForAttribute (MDLVertexAttributes.ShadingBasisU);
@@ -317,7 +301,6 @@ namespace ModelIO {
 
 		/// <summary>Gets the V basis vectors that are used for shading. These data are associated with the <see cref="ModelIO.MDLVertexAttributes.ShadingBasisV" /> key.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MDLVertexAttributeData? ShadingBasisVVertexData {
 			get {
 				return GetVertexAttributeDataForAttribute (MDLVertexAttributes.ShadingBasisV);
@@ -326,7 +309,6 @@ namespace ModelIO {
 
 		/// <summary>Gets the data that decide which neighboring vertices are used for subdivision calculations. These data are associated with the <see cref="ModelIO.MDLVertexAttributes.SubdivisionStencil" /> key.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MDLVertexAttributeData? SubdivisionStencilVertexData {
 			get {
 				return GetVertexAttributeDataForAttribute (MDLVertexAttributes.SubdivisionStencil);
@@ -335,7 +317,6 @@ namespace ModelIO {
 
 		/// <summary>Gets the vertex tangent data. These data are associated with the <see cref="ModelIO.MDLVertexAttributes.Tangent" /> key.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MDLVertexAttributeData? TangentVertexData {
 			get {
 				return GetVertexAttributeDataForAttribute (MDLVertexAttributes.Tangent);
@@ -344,7 +325,6 @@ namespace ModelIO {
 
 		/// <summary>Gets the coordinate system for texture operations on vertices. These data are associated with the <see cref="ModelIO.MDLVertexAttributes.TextureCoordinate" /> key.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MDLVertexAttributeData? TextureCoordinateVertexData {
 			get {
 				return GetVertexAttributeDataForAttribute (MDLVertexAttributes.TextureCoordinate);

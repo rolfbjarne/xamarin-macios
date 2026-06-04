@@ -37,7 +37,7 @@ namespace UIKit {
 		static extern byte UIContentSizeCategoryIsAccessibilityCategory (IntPtr /* NSString */ category);
 
 		/// <param name="self">The self.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets a value indicating whether the content size category is an accessibility category.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("maccatalyst")]

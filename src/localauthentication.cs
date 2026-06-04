@@ -47,9 +47,9 @@ namespace LocalAuthentication {
 		string LocalizedFallbackTitle { get; set; }
 
 		/// <param name="policy">The policy.</param>
-		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>Preflights <paramref name="policy" />, and reports any errors in the <paramref name="error" /><see langword="out" /> parameter.</summary>
-		///         <returns>To be added.</returns>
+		/// <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
+		/// <summary>Preflights <paramref name="policy" />, and reports any errors in the <paramref name="error" /><see langword="out" /> parameter.</summary>
+		/// <returns><see langword="true" /> if the policy can be evaluated; otherwise, <see langword="false" />.</returns>
 		[Export ("canEvaluatePolicy:error:")]
 		bool CanEvaluatePolicy (LAPolicy policy, [NullAllowed] out NSError error);
 
@@ -58,15 +58,14 @@ namespace LocalAuthentication {
 		///         <param name="reply">The reply.</param>
 		///         <summary>Evaluates the specified access control <paramref name="policy" />.</summary>
 		[Async (XmlDocs = """
-			<param name="policy">To be added.</param>
-			<param name="localizedReason">To be added.</param>
+			<param name="policy">The policy to evaluate.</param>
+			<param name="localizedReason">The localized reason to display to the user.</param>
 			<summary>Evaluates the specified access control <paramref name="policy" />.</summary>
 			<returns>
 			          <para>A task that represents the asynchronous EvaluatePolicy operation.   The value of the TResult parameter is a LocalAuthentication.LAContextReplyHandler.</para>
 			        </returns>
 			<remarks>
 			          <para copied="true">The EvaluatePolicyAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
 			        </remarks>
 			""")]
 		[Export ("evaluatePolicy:localizedReason:reply:")]
@@ -78,20 +77,20 @@ namespace LocalAuthentication {
 		void Invalidate ();
 
 		/// <param name="credential">
-		///           <para>To be added.</para>
-		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
-		///         </param>
-		///         <param name="type">The type.</param>
-		///         <summary>Attempts to set the specified credential <paramref name="type" /> to the specified <paramref name="credential" />, and returns <see langword="true" /> if it succeeds. </summary>
-		///         <returns>To be added.</returns>
+		///   <para>The credential data to set.</para>
+		///   <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		/// </param>
+		/// <param name="type">The type.</param>
+		/// <summary>Attempts to set the specified credential <paramref name="type" /> to the specified <paramref name="credential" />, and returns <see langword="true" /> if it succeeds. </summary>
+		/// <returns><see langword="true" /> if the credential was successfully set; otherwise, <see langword="false" />.</returns>
 		[MacCatalyst (13, 1)]
 		[Export ("setCredential:type:")]
 		bool SetCredentialType ([NullAllowed] NSData credential, LACredentialType type);
 
 
 		/// <param name="type">The type.</param>
-		///         <summary>Returns <see langword="true" /> if the specified credential <paramref name="type" /> is set.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Returns <see langword="true" /> if the specified credential <paramref name="type" /> is set.</summary>
+		/// <returns><see langword="true" /> if the credential type is set; otherwise, <see langword="false" />.</returns>
 		[MacCatalyst (13, 1)]
 		[Export ("isCredentialSet:")]
 		bool IsCredentialSet (LACredentialType type);
@@ -129,13 +128,13 @@ namespace LocalAuthentication {
 		string LocalizedCancelTitle { get; set; }
 
 		/// <summary>Represents the value that is associated with the LATouchIDAuthenticationMaximumAllowableReuseDuration constant.</summary>
-		///         <value>To be added.</value>
+		/// <value>The maximum allowable reuse duration for Touch ID authentication.</value>
 		[MacCatalyst (13, 1)]
 		[Field ("LATouchIDAuthenticationMaximumAllowableReuseDuration")]
 		double /* NSTimeInterval */ TouchIdAuthenticationMaximumAllowableReuseDuration { get; }
 
 		/// <summary>Gets or sets the time, in seconds, after a successful Touch ID authentication for which a user will not be challenged for another.</summary>
-		///         <value>To be added.</value>
+		/// <value>The allowable reuse duration in seconds.</value>
 		[MacCatalyst (13, 1)]
 		[Export ("touchIDAuthenticationAllowableReuseDuration")]
 		double /* NSTimeInterval */ TouchIdAuthenticationAllowableReuseDuration { get; set; }
@@ -153,22 +152,22 @@ namespace LocalAuthentication {
 		[Export ("maxBiometryFailures")]
 		NSNumber MaxBiometryFailures { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the localized reason for requesting authentication.</summary>
+		/// <value>A string explaining why authentication is being requested.</value>
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("localizedReason")]
 		string LocalizedReason { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets a Boolean value indicating whether user interaction is not allowed.</summary>
+		/// <value><see langword="true" /> if interaction is not allowed; otherwise, <see langword="false" />.</value>
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("interactionNotAllowed")]
 		bool InteractionNotAllowed { get; set; }
 
 		/// <summary>Gets a value that tells what kind of biometric authentication is supported by the device.</summary>
-		///         <value>To be added.</value>
+		/// <value>The type of biometric authentication supported by the device.</value>
 		[MacCatalyst (13, 1)]
 		[Export ("biometryType")]
 		LABiometryType BiometryType { get; }

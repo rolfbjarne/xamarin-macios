@@ -140,7 +140,7 @@ namespace VideoToolbox {
 	}
 
 	// uint32_t -> VTCompressionSession.h
-	/// <summary>Flags to control encoder in multi pass compression sessions</summary>
+	/// <summary>Flags to control encoder in multIPass compression sessions</summary>
 	[Flags]
 	public enum VTCompressionSessionOptionFlags : uint {
 		/// <summary>To be added.</summary>

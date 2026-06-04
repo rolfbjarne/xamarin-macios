@@ -102,7 +102,7 @@ namespace Foundation {
 		}
 
 		/// <param name="range">The range.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the indexes in the specified range.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]

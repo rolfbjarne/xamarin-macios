@@ -18,19 +18,15 @@ namespace Foundation {
 	// but derived classes would then override the property
 	//
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[AttributeUsage (AttributeTargets.Method, AllowMultiple = false)]
 	public class NotImplementedAttribute : Attribute {
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public NotImplementedAttribute () { }
-		/// <param name="message">To be added.</param>
+		/// <param name="message">The message.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public NotImplementedAttribute (string message) { Message = message; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? Message { get; set; }
 	}
 }

@@ -245,7 +245,7 @@ namespace Foundation {
 
 		#region ICollection
 		/// <summary>
-		/// Copies the elements of the dictionary to an <see cref="Array"/>, starting at a particular index.
+		/// Copies the elements of the dictionary to an <see cref="Array"/>, starting at AParticular index.
 		/// </summary>
 		/// <param name="array">The one-dimensional <see cref="Array"/> that is the destination of the elements.</param>
 		/// <param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param>

@@ -47,7 +47,6 @@ namespace SceneKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -61,8 +60,7 @@ namespace SceneKit {
 		///         <param name="boneInverseBindTransforms">The bone inverse bind transforms.</param>
 		///         <param name="boneWeights">The bone weights.</param>
 		///         <param name="boneIndices">The bone indices.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Create.</summary>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]

@@ -47,22 +47,20 @@ namespace CoreVideo {
 			/* CFDictionaryRef __nullable */ IntPtr pixelBufferAttributes,
 			/* CVPixelBufferRef __nullable * __nonnull */ IntPtr* pixelBufferOut);
 
-		/// <param name="width">To be added.</param>
-		/// <param name="height">To be added.</param>
-		/// <param name="pixelFormat">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="width">The width in pixels.</param>
+		/// <param name="height">The height in pixels.</param>
+		/// <param name="pixelFormat">The pixel format type.</param>
+		/// <summary>Creates a pixel buffer with the specified dimensions and format.</summary>
 		public CVPixelBuffer (nint width, nint height, CVPixelFormatType pixelFormat)
 			: this (width, height, pixelFormat, (NSDictionary?) null)
 		{
 		}
 
-		/// <param name="width">To be added.</param>
-		/// <param name="height">To be added.</param>
-		/// <param name="pixelFormatType">To be added.</param>
-		/// <param name="attributes">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="width">The width in pixels.</param>
+		/// <param name="height">The height in pixels.</param>
+		/// <param name="pixelFormatType">The pixel format type.</param>
+		/// <param name="attributes">The pixel buffer attributes.</param>
+		/// <summary>Creates a pixel buffer with the specified dimensions, format, and attributes.</summary>
 		public CVPixelBuffer (nint width, nint height, CVPixelFormatType pixelFormatType, CVPixelBufferAttributes? attributes)
 			: this (width, height, pixelFormatType, attributes?.Dictionary)
 		{
@@ -108,9 +106,8 @@ namespace CoreVideo {
 			/* CFArrayRef __nullable */ IntPtr attributes,
 			/* CFDictionaryRef __nullable * __nonnull */ IntPtr* resolvedDictionaryOut);
 
-		/// <param name="attributes">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="attributes">The pixel buffer attributes.</param>
+		/// <summary>Gets the attributes dictionary for the pixel buffer.</summary>
 		public NSDictionary? GetAttributes (NSDictionary []? attributes)
 		{
 			CVReturn ret;
@@ -172,29 +169,27 @@ namespace CoreVideo {
 			/* CFDictionaryRef CV_NULLABLE */ IntPtr pixelBufferAttributes,
 			/* CV_RETURNS_RETAINED_PARAMETER CVPixelBufferRef CV_NULLABLE * CV_NONNULL */ IntPtr* pixelBufferOut);// __OSX_AVAILABLE_STARTING(__MAC_10_4,__IPHONE_4_0);
 
-		/// <param name="width">To be added.</param>
-		/// <param name="height">To be added.</param>
-		/// <param name="pixelFormatType">To be added.</param>
-		/// <param name="data">To be added.</param>
-		/// <param name="bytesPerRow">To be added.</param>
-		/// <param name="pixelBufferAttributes">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="width">The width in pixels.</param>
+		/// <param name="height">The height in pixels.</param>
+		/// <param name="pixelFormatType">The pixel format type.</param>
+		/// <param name="data">A pointer to the base address of the pixel data.</param>
+		/// <param name="bytesPerRow">The number of bytes per row.</param>
+		/// <param name="pixelBufferAttributes">The pixel buffer attributes.</param>
+		/// <summary>Creates a pixel buffer from a byte array.</summary>
 		public static CVPixelBuffer? Create (nint width, nint height, CVPixelFormatType pixelFormatType, byte [] data, nint bytesPerRow, CVPixelBufferAttributes pixelBufferAttributes)
 		{
 			CVReturn status;
 			return Create (width, height, pixelFormatType, data, bytesPerRow, pixelBufferAttributes, out status);
 		}
 
-		/// <param name="width">To be added.</param>
-		/// <param name="height">To be added.</param>
-		/// <param name="pixelFormatType">To be added.</param>
-		/// <param name="data">To be added.</param>
-		/// <param name="bytesPerRow">To be added.</param>
-		/// <param name="pixelBufferAttributes">To be added.</param>
-		/// <param name="status">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="width">The width in pixels.</param>
+		/// <param name="height">The height in pixels.</param>
+		/// <param name="pixelFormatType">The pixel format type.</param>
+		/// <param name="data">A pointer to the base address of the pixel data.</param>
+		/// <param name="bytesPerRow">The number of bytes per row.</param>
+		/// <param name="pixelBufferAttributes">The pixel buffer attributes.</param>
+		/// <param name="status">On return, the result status.</param>
+		/// <summary>Creates a pixel buffer from a byte array, returning the status.</summary>
 		public static CVPixelBuffer? Create (nint width, nint height, CVPixelFormatType pixelFormatType, byte [] data, nint bytesPerRow, CVPixelBufferAttributes pixelBufferAttributes, out CVReturn status)
 		{
 			IntPtr handle;
@@ -275,33 +270,31 @@ namespace CoreVideo {
 			/* CFDictionaryRef CV_NULLABLE */ IntPtr pixelBufferAttributes,
 			/* CV_RETURNS_RETAINED_PARAMETER CVPixelBufferRef CV_NULLABLE * CV_NONNULL */ IntPtr* pixelBufferOut); // __OSX_AVAILABLE_STARTING(__MAC_10_4,__IPHONE_4_0);
 
-		/// <param name="width">To be added.</param>
-		/// <param name="height">To be added.</param>
-		/// <param name="pixelFormatType">To be added.</param>
-		/// <param name="planes">To be added.</param>
-		/// <param name="planeWidths">To be added.</param>
-		/// <param name="planeHeights">To be added.</param>
-		/// <param name="planeBytesPerRow">To be added.</param>
-		/// <param name="pixelBufferAttributes">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="width">The width in pixels.</param>
+		/// <param name="height">The height in pixels.</param>
+		/// <param name="pixelFormatType">The pixel format type.</param>
+		/// <param name="planes">The byte arrays for each plane.</param>
+		/// <param name="planeWidths">The widths of each plane.</param>
+		/// <param name="planeHeights">The heights of each plane.</param>
+		/// <param name="planeBytesPerRow">The bytes per row for each plane.</param>
+		/// <param name="pixelBufferAttributes">The pixel buffer attributes.</param>
+		/// <summary>Creates a planar pixel buffer from plane data arrays.</summary>
 		public static CVPixelBuffer? Create (nint width, nint height, CVPixelFormatType pixelFormatType, byte [] [] planes, nint [] planeWidths, nint [] planeHeights, nint [] planeBytesPerRow, CVPixelBufferAttributes pixelBufferAttributes)
 		{
 			CVReturn status;
 			return Create (width, height, pixelFormatType, planes, planeWidths, planeHeights, planeBytesPerRow, pixelBufferAttributes, out status);
 		}
 
-		/// <param name="width">To be added.</param>
-		/// <param name="height">To be added.</param>
-		/// <param name="pixelFormatType">To be added.</param>
-		/// <param name="planes">To be added.</param>
-		/// <param name="planeWidths">To be added.</param>
-		/// <param name="planeHeights">To be added.</param>
-		/// <param name="planeBytesPerRow">To be added.</param>
-		/// <param name="pixelBufferAttributes">To be added.</param>
-		/// <param name="status">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="width">The width in pixels.</param>
+		/// <param name="height">The height in pixels.</param>
+		/// <param name="pixelFormatType">The pixel format type.</param>
+		/// <param name="planes">The byte arrays for each plane.</param>
+		/// <param name="planeWidths">The widths of each plane.</param>
+		/// <param name="planeHeights">The heights of each plane.</param>
+		/// <param name="planeBytesPerRow">The bytes per row for each plane.</param>
+		/// <param name="pixelBufferAttributes">The pixel buffer attributes.</param>
+		/// <param name="status">On return, the result status.</param>
+		/// <summary>Creates a planar pixel buffer from plane data arrays, returning the status.</summary>
 		public static CVPixelBuffer? Create (nint width, nint height, CVPixelFormatType pixelFormatType, byte [] [] planes, nint [] planeWidths, nint [] planeHeights, nint [] planeBytesPerRow, CVPixelBufferAttributes pixelBufferAttributes, out CVReturn status)
 		{
 			IntPtr handle;
@@ -378,12 +371,11 @@ namespace CoreVideo {
 			/* size_t* */ nuint* extraColumnsOnLeft, /* size_t* */ nuint* extraColumnsOnRight,
 			/* size_t* */ nuint* extraRowsOnTop, /* size_t* */ nuint* extraRowsOnBottom);
 
-		/// <param name="extraColumnsOnLeft">To be added.</param>
-		/// <param name="extraColumnsOnRight">To be added.</param>
-		/// <param name="extraRowsOnTop">To be added.</param>
-		/// <param name="extraRowsOnBottom">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="extraColumnsOnLeft">The extra columns on the left.</param>
+		/// <param name="extraColumnsOnRight">The extra columns on the right.</param>
+		/// <param name="extraRowsOnTop">The extra rows on top.</param>
+		/// <param name="extraRowsOnBottom">The extra rows on bottom.</param>
+		/// <summary>Gets the extended pixel borders around the buffer.</summary>
 		public void GetExtendedPixels (ref nuint extraColumnsOnLeft, ref nuint extraColumnsOnRight,
 			ref nuint extraRowsOnTop, ref nuint extraRowsOnBottom)
 		{
@@ -401,8 +393,7 @@ namespace CoreVideo {
 		[DllImport (Constants.CoreVideoLibrary)]
 		extern static CVReturn CVPixelBufferFillExtendedPixels (/* CVPixelBufferRef __nonnull */ IntPtr pixelBuffer);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Fills the extended pixels of the buffer.</summary>
 		public CVReturn FillExtendedPixels ()
 		{
 			return CVPixelBufferFillExtendedPixels (Handle);
@@ -414,7 +405,6 @@ namespace CoreVideo {
 
 		/// <summary>Pointers to the base address storing the pixels.   Must call <see cref="CoreVideo.CVPixelBuffer.Lock" /> to to lock the base address</summary>
 		///         <value>Pointer to the base address storing the pixels, or <see cref="System.IntPtr.Zero" /> if the pixel buffer is not locked.</value>
-		///         <remarks>To be added.</remarks>
 		public IntPtr BaseAddress {
 			get {
 				return CVPixelBufferGetBaseAddress (Handle);
@@ -426,7 +416,6 @@ namespace CoreVideo {
 			/* CVPixelBufferRef __nonnull */ IntPtr pixelBuffer);
 
 		/// <summary>The number of bytes per row in the pixel buffer.</summary>
-		///         <remarks>To be added.</remarks>
 		public nint BytesPerRow {
 			get {
 				return CVPixelBufferGetBytesPerRow (Handle);
@@ -437,8 +426,7 @@ namespace CoreVideo {
 		extern static /* size_t */ nint CVPixelBufferGetDataSize (
 			/* CVPixelBufferRef __nonnull */ IntPtr pixelBuffer);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the total data size of the pixel buffer in bytes.</summary>
 		public nint DataSize {
 			get {
 				return CVPixelBufferGetDataSize (Handle);
@@ -448,8 +436,7 @@ namespace CoreVideo {
 		[DllImport (Constants.CoreVideoLibrary)]
 		extern static /* size_t */ nint CVPixelBufferGetHeight (/* CVPixelBufferRef __nonnull */ IntPtr pixelBuffer);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the height of the pixel buffer in pixels.</summary>
 		public nint Height {
 			get {
 				return CVPixelBufferGetHeight (Handle);
@@ -459,8 +446,7 @@ namespace CoreVideo {
 		[DllImport (Constants.CoreVideoLibrary)]
 		extern static /* size_t */ nint CVPixelBufferGetWidth (/* CVPixelBufferRef __nonnull */ IntPtr pixelBuffer);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the width of the pixel buffer in pixels.</summary>
 		public nint Width {
 			get {
 				return CVPixelBufferGetWidth (Handle);
@@ -471,8 +457,7 @@ namespace CoreVideo {
 		extern static /* size_t */ nint CVPixelBufferGetPlaneCount (
 			/* CVPixelBufferRef __nonnull */ IntPtr pixelBuffer);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the number of planes in the pixel buffer.</summary>
 		public nint PlaneCount {
 			get {
 				return CVPixelBufferGetPlaneCount (Handle);
@@ -482,8 +467,7 @@ namespace CoreVideo {
 		[DllImport (Constants.CoreVideoLibrary)]
 		extern static /* Boolean */ byte CVPixelBufferIsPlanar (/* CVPixelBufferRef __nonnull */ IntPtr pixelBuffer);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets whether the pixel buffer is planar.</summary>
 		public bool IsPlanar {
 			get {
 				return CVPixelBufferIsPlanar (Handle) != 0;
@@ -494,8 +478,7 @@ namespace CoreVideo {
 		extern static CVPixelFormatType CVPixelBufferGetPixelFormatType (
 			/* CVPixelBufferRef __nonnull */ IntPtr pixelBuffer);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the pixel format type.</summary>
 		public CVPixelFormatType PixelFormatType {
 			get {
 				return CVPixelBufferGetPixelFormatType (Handle);
@@ -506,9 +489,8 @@ namespace CoreVideo {
 		extern static /* void * __nullable */ IntPtr CVPixelBufferGetBaseAddressOfPlane (
 			/* CVPixelBufferRef __nonnull */ IntPtr pixelBuffer, /* size_t */ nint planeIndex);
 
-		/// <param name="planeIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="planeIndex">The plane index.</param>
+		/// <summary>Gets the base address of the specified plane.</summary>
 		public IntPtr GetBaseAddress (nint planeIndex)
 		{
 			return CVPixelBufferGetBaseAddressOfPlane (Handle, planeIndex);
@@ -518,9 +500,8 @@ namespace CoreVideo {
 		extern static /* size_t */ nint CVPixelBufferGetBytesPerRowOfPlane (
 			/* CVPixelBufferRef __nonnull */ IntPtr pixelBuffer, /* size_t */ nint planeIndex);
 
-		/// <param name="planeIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="planeIndex">The plane index.</param>
+		/// <summary>Gets the bytes per row of the specified plane.</summary>
 		public nint GetBytesPerRowOfPlane (nint planeIndex)
 		{
 			return CVPixelBufferGetBytesPerRowOfPlane (Handle, planeIndex);
@@ -530,9 +511,8 @@ namespace CoreVideo {
 		extern static /* size_t */ nint CVPixelBufferGetHeightOfPlane (
 			/* CVPixelBufferRef __nonnull */ IntPtr pixelBuffer, /* size_t */ nint planeIndex);
 
-		/// <param name="planeIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="planeIndex">The plane index.</param>
+		/// <summary>Gets the height of the specified plane.</summary>
 		public nint GetHeightOfPlane (nint planeIndex)
 		{
 			return CVPixelBufferGetHeightOfPlane (Handle, planeIndex);
@@ -542,9 +522,8 @@ namespace CoreVideo {
 		extern static /* size_t */ nint CVPixelBufferGetWidthOfPlane (
 			/* CVPixelBufferRef __nonnull */ IntPtr pixelBuffer, /* size_t */ nint planeIndex);
 
-		/// <param name="planeIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="planeIndex">The plane index.</param>
+		/// <summary>Gets the width of the specified plane.</summary>
 		public nint GetWidthOfPlane (nint planeIndex)
 		{
 			return CVPixelBufferGetWidthOfPlane (Handle, planeIndex);
@@ -567,9 +546,8 @@ namespace CoreVideo {
 		extern static CVReturn CVPixelBufferUnlockBaseAddress (
 			/* CVPixelBufferRef __nonnull */ IntPtr pixelBuffer, CVPixelBufferLock unlockFlags);
 
-		/// <param name="unlockFlags">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="unlockFlags">The flags for the unlock.</param>
+		/// <summary>Unlocks the pixel buffer base address.</summary>
 		public CVReturn Unlock (CVPixelBufferLock unlockFlags)
 		{
 			return CVPixelBufferUnlockBaseAddress (Handle, unlockFlags);

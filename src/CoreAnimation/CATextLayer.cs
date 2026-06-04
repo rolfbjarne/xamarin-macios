@@ -106,7 +106,7 @@ namespace CoreAnimation {
 
 #if MONOMAC
 		/// <param name="font">The font.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Sets the font for this text layer.</summary>
 		public void SetFont (NSFont font)
 		{
 			if (font is null)
@@ -117,7 +117,6 @@ namespace CoreAnimation {
 #endif
 
 		/// <summary>Gets or sets a weak reference to the font.</summary>
-		///         <value>To be added.</value>
 		public object? WeakFont {
 			get {
 				var handle = _Font;

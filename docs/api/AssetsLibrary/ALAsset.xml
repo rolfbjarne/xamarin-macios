@@ -51,7 +51,7 @@ public UIView (CGRect frame) : base (NSObjectFlag.Empty)
         </remarks>
       </Docs>
   <Docs DocId="M:AssetsLibrary.ALAsset.SetVideoAtPathAsync(Foundation.NSUrl)">
-        <param name="videoPathURL">To be added.</param>
+        <param name="videoPathURL">The URL of the video file to set on this asset.</param>
         <summary>Modifies the <see cref="AssetsLibrary.ALAsset" /> to refer to the <paramref name="videoPathURL" />.</summary>
         <returns>
           <para>A task that represents the asynchronous SetVideoAtPath operation. The value of the TResult parameter is a <see cref="NSUrl" />.</para>
@@ -59,7 +59,6 @@ public UIView (CGRect frame) : base (NSObjectFlag.Empty)
         <remarks>
           <para>Application developers should check the <see cref="AssetsLibrary.ALAsset.Editable" /> property prior to calling this method.</para>
           <para copied="true">The SetVideoAtPathAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-          <para copied="true">To be added.</para>
         </remarks>
       </Docs>
 </Documentation>

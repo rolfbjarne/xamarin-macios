@@ -89,7 +89,6 @@ namespace CoreMedia {
 		///         <param name="packetDescriptions">To be added.</param>
 		///         <param name="error">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static CMSampleBuffer? CreateWithPacketDescriptions (CMBlockBuffer? dataBuffer, CMFormatDescription formatDescription, int samplesCount,
 			CMTime sampleTimestamp, AudioStreamPacketDescription [] packetDescriptions, out CMSampleBufferError error)
@@ -193,7 +192,6 @@ namespace CoreMedia {
 
 		/// <param name="callback">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CMSampleBufferError CallForEachSample (Func<CMSampleBuffer, int, CMSampleBufferError> callback)
 		{
@@ -262,7 +260,6 @@ namespace CoreMedia {
 		///         <param name="sampleTiming">To be added.</param>
 		///         <param name="error">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static CMSampleBuffer? CreateForImageBuffer (CVImageBuffer imageBuffer, bool dataReady, CMVideoFormatDescription formatDescription, CMSampleTimingInfo sampleTiming, out CMSampleBufferError error)
 		{
@@ -294,7 +291,6 @@ namespace CoreMedia {
 		extern static /* Boolean */ byte CMSampleBufferDataIsReady (/* CMSampleBufferRef */ IntPtr sbuf);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool DataIsReady {
 			get {
@@ -333,7 +329,6 @@ namespace CoreMedia {
 		extern static /* CMBlockBufferRef */ IntPtr CMSampleBufferGetDataBuffer (/* CMSampleBufferRef */ IntPtr sbuf);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CMBlockBuffer? GetDataBuffer ()
 		{
@@ -349,7 +344,6 @@ namespace CoreMedia {
 		extern static CMTime CMSampleBufferGetDecodeTimeStamp (/* CMSampleBufferRef */ IntPtr sbuf);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CMTime DecodeTimeStamp {
 			get {
@@ -361,7 +355,6 @@ namespace CoreMedia {
 		extern static CMTime CMSampleBufferGetDuration (/* CMSampleBufferRef */ IntPtr sbuf);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CMTime Duration {
 			get {
@@ -373,7 +366,6 @@ namespace CoreMedia {
 		extern static /* CMFormatDescriptionRef */ IntPtr CMSampleBufferGetFormatDescription (/* CMSampleBufferRef */ IntPtr sbuf);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CMAudioFormatDescription? GetAudioFormatDescription ()
 		{
@@ -385,7 +377,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CMVideoFormatDescription? GetVideoFormatDescription ()
 		{
@@ -400,7 +391,6 @@ namespace CoreMedia {
 		extern static /* CVImageBufferRef */ IntPtr CMSampleBufferGetImageBuffer (/* CMSampleBufferRef */ IntPtr sbuf);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CVImageBuffer? GetImageBuffer ()
 		{
@@ -418,7 +408,6 @@ namespace CoreMedia {
 		extern static /* CMItemCount */ nint CMSampleBufferGetNumSamples (/* CMSampleBufferRef */ IntPtr sbuf);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public nint NumSamples {
 			get {
@@ -430,7 +419,6 @@ namespace CoreMedia {
 		extern static CMTime CMSampleBufferGetOutputDecodeTimeStamp (/* CMSampleBufferRef */ IntPtr sbuf);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CMTime OutputDecodeTimeStamp {
 			get {
@@ -442,7 +430,6 @@ namespace CoreMedia {
 		extern static CMTime CMSampleBufferGetOutputDuration (/* CMSampleBufferRef */ IntPtr sbuf);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CMTime OutputDuration {
 			get {
@@ -454,7 +441,6 @@ namespace CoreMedia {
 		extern static CMTime CMSampleBufferGetOutputPresentationTimeStamp (/* CMSampleBufferRef */ IntPtr sbuf);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CMTime OutputPresentationTimeStamp {
 			get {
@@ -477,7 +463,6 @@ namespace CoreMedia {
 		extern static CMTime CMSampleBufferGetPresentationTimeStamp (/* CMSampleBufferRef */ IntPtr sbuf);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CMTime PresentationTimeStamp {
 			get {
@@ -495,7 +480,6 @@ namespace CoreMedia {
 
 		/// <param name="createIfNecessary">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CMSampleBufferAttachmentSettings? [] GetSampleAttachments (bool createIfNecessary)
 		{
@@ -597,7 +581,6 @@ namespace CoreMedia {
 		extern static /* size_t */ nuint CMSampleBufferGetTotalSampleSize (/* CMSampleBufferRef */ IntPtr sbuf);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public nuint TotalSampleSize {
 			get {
@@ -609,7 +592,6 @@ namespace CoreMedia {
 		extern static /* CFTypeID */ nint CMSampleBufferGetTypeID ();
 
 		/// <summary>Type identifier for the CoreMedia.CMSampleBuffer type.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>
 		///           <para>The returned token is the CoreFoundation type identifier (CFType) that has been assigned to this class.</para>
 		///           <para>This can be used to determine type identity between different CoreFoundation objects.</para>
@@ -627,7 +609,6 @@ namespace CoreMedia {
 		extern static /* OSStatus */ CMSampleBufferError CMSampleBufferInvalidate (/* CMSampleBufferRef */ IntPtr sbuf);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CMSampleBufferError Invalidate ()
 		{
@@ -638,7 +619,6 @@ namespace CoreMedia {
 		extern static /* Boolean */ byte CMSampleBufferIsValid (/* CMSampleBufferRef */ IntPtr sbuf);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsValid {
 			get {
@@ -650,7 +630,6 @@ namespace CoreMedia {
 		extern static /* OSStatus */ CMSampleBufferError CMSampleBufferMakeDataReady (IntPtr handle);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CMSampleBufferError MakeDataReady ()
 		{
@@ -662,7 +641,6 @@ namespace CoreMedia {
 
 		/// <param name="dataBuffer">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CMSampleBufferError SetDataBuffer (CMBlockBuffer dataBuffer)
 		{
@@ -684,7 +662,6 @@ namespace CoreMedia {
 		extern static /* OSStatus */ CMSampleBufferError CMSampleBufferSetDataReady (/* CMSampleBufferRef */ IntPtr sbuf);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CMSampleBufferError SetDataReady ()
 		{
@@ -717,7 +694,6 @@ namespace CoreMedia {
 
 		/// <param name="invalidateHandler">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CMSampleBufferError SetInvalidateCallback (Action<CMSampleBuffer> invalidateHandler)
 		{
@@ -746,7 +722,6 @@ namespace CoreMedia {
 
 		/// <param name="bufferToTrack">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CMSampleBufferError TrackDataReadiness (CMSampleBuffer bufferToTrack)
 		{
@@ -766,7 +741,6 @@ namespace CoreMedia {
 		///         <param name="numFrames">To be added.</param>
 		///         <param name="bufferList">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
@@ -801,7 +775,6 @@ namespace CoreMedia {
 		///         <param name="packetDescriptions">To be added.</param>
 		///         <param name="error">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
@@ -914,7 +887,6 @@ namespace CoreMedia {
 		///         <param name="sampleTiming">To be added.</param>
 		///         <param name="error">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
@@ -959,7 +931,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool? NotSync {
 			get {
@@ -971,7 +942,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool? PartialSync {
 			get {
@@ -983,7 +953,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool? RedundantCoding {
 			get {
@@ -995,7 +964,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool? DependedOnByOthers {
 			get {
@@ -1007,7 +975,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool? DependsOnOthers {
 			get {
@@ -1019,7 +986,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool? EarlierDisplayTimesAllowed {
 			get {
@@ -1031,7 +997,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool? DisplayImmediately {
 			get {
@@ -1043,7 +1008,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool? DoNotDisplay {
 			get {
@@ -1055,7 +1019,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool? ResetDecoderBeforeDecoding {
 			get {
@@ -1067,7 +1030,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool? DrainAfterDecoding {
 			get {
@@ -1079,7 +1041,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool? Reverse {
 			get {
@@ -1091,7 +1052,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool? FillDiscontinuitiesWithSilence {
 			get {
@@ -1103,7 +1063,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool? EmptyMedia {
 			get {
@@ -1115,7 +1074,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool? PermanentEmptyMedia {
 			get {
@@ -1127,7 +1085,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool? DisplayEmptyMediaImmediately {
 			get {
@@ -1139,7 +1096,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool? EndsPreviousSampleDuration {
 			get {
@@ -1152,7 +1108,6 @@ namespace CoreMedia {
 
 #if !MONOMAC
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -1165,7 +1120,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]

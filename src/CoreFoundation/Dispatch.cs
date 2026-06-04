@@ -595,7 +595,6 @@ namespace CoreFoundation {
 
 		/// <param name="key">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public object? GetSpecific (IntPtr key)
 		{
@@ -605,7 +604,6 @@ namespace CoreFoundation {
 
 		/// <param name="relative_priority">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -620,7 +618,6 @@ namespace CoreFoundation {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -738,12 +735,10 @@ namespace CoreFoundation {
 		///     <remarks>To be added.</remarks>
 		public class Attributes {
 			/// <summary>To be added.</summary>
-			///         <value>To be added.</value>
 			///         <remarks>To be added.</remarks>
 			public bool Concurrent { get; set; }
 
 			/// <summary>To be added.</summary>
-			///         <value>To be added.</value>
 			///         <remarks>To be added.</remarks>
 			[SupportedOSPlatform ("macos")]
 			[SupportedOSPlatform ("maccatalyst")]
@@ -752,7 +747,6 @@ namespace CoreFoundation {
 			public bool IsInitiallyInactive { get; set; }
 
 			/// <summary>To be added.</summary>
-			///         <value>To be added.</value>
 			///         <remarks>To be added.</remarks>
 			[SupportedOSPlatform ("macos")]
 			[SupportedOSPlatform ("maccatalyst")]
@@ -761,7 +755,6 @@ namespace CoreFoundation {
 			public AutoreleaseFrequency? AutoreleaseFrequency { get; set; }
 
 			/// <summary>To be added.</summary>
-			///         <value>To be added.</value>
 			///         <remarks>To be added.</remarks>
 			[SupportedOSPlatform ("macos")]
 			[SupportedOSPlatform ("ios")]
@@ -770,7 +763,6 @@ namespace CoreFoundation {
 			public int RelativePriority { get; set; }
 
 			/// <summary>To be added.</summary>
-			///         <value>To be added.</value>
 			///         <remarks>To be added.</remarks>
 			[SupportedOSPlatform ("macos")]
 			[SupportedOSPlatform ("ios")]
@@ -1031,7 +1023,6 @@ namespace CoreFoundation {
 
 		/// <param name="timeout">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public bool Wait (TimeSpan timeout)
 		{

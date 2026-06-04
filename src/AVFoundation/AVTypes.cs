@@ -8,7 +8,6 @@ using CoreMedia;
 
 namespace AVFoundation {
 	/// <summary>Defines the listener's position in 3D space as orthogonal 'Up' and 'Forward' vectors.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -16,11 +15,9 @@ namespace AVFoundation {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AVAudio3DVectorOrientation {
 #if !COREBUILD
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the forward direction vector.</summary>
 		public Vector3 Forward;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the up direction vector.</summary>
 		public Vector3 Up;
 
 		public AVAudio3DVectorOrientation (Vector3 forward, Vector3 up)
@@ -29,8 +26,7 @@ namespace AVFoundation {
 			Up = up;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns a string representation of this instance.</summary>
 		public override string ToString ()
 		{
 			return String.Format ("({0}:{1})", Forward, Up);
@@ -45,9 +41,8 @@ namespace AVFoundation {
 			return !left.Equals (right);
 		}
 
-		/// <param name="obj">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="obj">The obj.</param>
+		/// <summary>Determines whether the specified object is equal to this instance.</summary>
 		public override bool Equals (object? obj)
 		{
 			if (!(obj is AVAudio3DVectorOrientation))
@@ -56,16 +51,14 @@ namespace AVFoundation {
 			return this.Equals ((AVAudio3DVectorOrientation) obj);
 		}
 
-		/// <param name="other">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="other">The other.</param>
+		/// <summary>Determines whether the specified orientation is equal to this instance.</summary>
 		public bool Equals (AVAudio3DVectorOrientation other)
 		{
 			return Forward == other.Forward && Up == other.Up;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns a hash code for this instance.</summary>
 		public override int GetHashCode ()
 		{
 			return HashCode.Combine (Forward, Up);
@@ -74,7 +67,6 @@ namespace AVFoundation {
 	}
 
 	/// <summary>Holds the angular orientation of the listener in 3D space.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -82,18 +74,14 @@ namespace AVFoundation {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AVAudio3DAngularOrientation {
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Y coordinate.</summary>
 		public float Yaw;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the pitch angle.</summary>
 		public float Pitch;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the roll angle.</summary>
 		public float Roll;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns a string representation of this instance.</summary>
 		public override string ToString ()
 		{
 			return String.Format ("(Yaw={0},Pitch={1},Roll={2})", Yaw, Pitch, Roll);
@@ -113,9 +101,8 @@ namespace AVFoundation {
 
 		}
 
-		/// <param name="obj">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="obj">The obj.</param>
+		/// <summary>Determines whether the specified object is equal to this instance.</summary>
 		public override bool Equals (object? obj)
 		{
 			if (!(obj is AVAudio3DAngularOrientation))
@@ -124,16 +111,14 @@ namespace AVFoundation {
 			return this.Equals ((AVAudio3DAngularOrientation) obj);
 		}
 
-		/// <param name="other">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="other">The other.</param>
+		/// <summary>Determines whether the specified orientation is equal to this instance.</summary>
 		public bool Equals (AVAudio3DAngularOrientation other)
 		{
 			return this == other;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns a hash code for this instance.</summary>
 		public override int GetHashCode ()
 		{
 			return HashCode.Combine (Yaw, Pitch, Roll);
@@ -141,28 +126,23 @@ namespace AVFoundation {
 	}
 
 	/// <summary>Contains RGB gain values for white balance.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AVCaptureWhiteBalanceGains {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the red gain.</summary>
 		public float RedGain;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the green gain.</summary>
 		public float GreenGain;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the blue gain.</summary>
 		public float BlueGain;
 
-		/// <param name="redGain">To be added.</param>
-		///         <param name="greenGain">To be added.</param>
-		///         <param name="blueGain">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="redGain">The redGain.</param>
+		/// <param name="greenGain">The greenGain.</param>
+		/// <param name="blueGain">The blueGain.</param>
+		/// <summary>Creates a new white balance gains value with the specified RGB gains.</summary>
 		public AVCaptureWhiteBalanceGains (float redGain, float greenGain, float blueGain)
 		{
 			RedGain = redGain;
@@ -170,8 +150,7 @@ namespace AVFoundation {
 			BlueGain = blueGain;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns a string representation of this instance.</summary>
 		public override string ToString ()
 		{
 			return String.Format ("(RedGain={0},GreenGain={1},BlueGain={2})", RedGain, GreenGain, BlueGain);
@@ -191,9 +170,8 @@ namespace AVFoundation {
 				left.BlueGain != right.BlueGain);
 		}
 
-		/// <param name="obj">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="obj">The obj.</param>
+		/// <summary>Determines whether the specified object is equal to this instance.</summary>
 		public override bool Equals (object? obj)
 		{
 			if (!(obj is AVCaptureWhiteBalanceGains))
@@ -202,16 +180,14 @@ namespace AVFoundation {
 			return this.Equals ((AVCaptureWhiteBalanceGains) obj);
 		}
 
-		/// <param name="other">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="other">The other.</param>
+		/// <summary>Determines whether the specified gains are equal to this instance.</summary>
 		public bool Equals (AVCaptureWhiteBalanceGains other)
 		{
 			return this == other;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns a hash code for this instance.</summary>
 		public override int GetHashCode ()
 		{
 			return HashCode.Combine (RedGain, GreenGain, BlueGain);
@@ -219,32 +195,27 @@ namespace AVFoundation {
 	}
 
 	/// <summary>Structure holding CIE 1931 xy chromaticity values.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AVCaptureWhiteBalanceChromaticityValues {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the X coordinate.</summary>
 		public float X;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Y coordinate.</summary>
 		public float Y;
 
-		/// <param name="x">To be added.</param>
-		///         <param name="y">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="x">The x.</param>
+		/// <param name="y">The y.</param>
+		/// <summary>Creates a new chromaticity value with the specified x and y coordinates.</summary>
 		public AVCaptureWhiteBalanceChromaticityValues (float x, float y)
 		{
 			X = x;
 			Y = y;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns a string representation of this instance.</summary>
 		public override string ToString ()
 		{
 			return String.Format ("({0},{1})", X, Y);
@@ -260,9 +231,8 @@ namespace AVFoundation {
 			return left.X != right.X || left.Y != right.Y;
 		}
 
-		/// <param name="obj">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="obj">The obj.</param>
+		/// <summary>Determines whether the specified object is equal to this instance.</summary>
 		public override bool Equals (object? obj)
 		{
 			if (!(obj is AVCaptureWhiteBalanceChromaticityValues))
@@ -271,16 +241,14 @@ namespace AVFoundation {
 			return this.Equals ((AVCaptureWhiteBalanceChromaticityValues) obj);
 		}
 
-		/// <param name="other">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="other">The other.</param>
+		/// <summary>Determines whether the specified values are equal to this instance.</summary>
 		public bool Equals (AVCaptureWhiteBalanceChromaticityValues other)
 		{
 			return this == other;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns a hash code for this instance.</summary>
 		public override int GetHashCode ()
 		{
 			return HashCode.Combine (X, Y);
@@ -288,31 +256,26 @@ namespace AVFoundation {
 	}
 
 	/// <summary>Values used for white-balancing; including correlated temperatures and tints.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AVCaptureWhiteBalanceTemperatureAndTintValues {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the color temperature.</summary>
 		public float Temperature;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the tint value.</summary>
 		public float Tint;
 
-		/// <param name="temperature">To be added.</param>
-		///         <param name="tint">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="temperature">The temperature.</param>
+		/// <param name="tint">The tint.</param>
+		/// <summary>Creates a new temperature and tint value.</summary>
 		public AVCaptureWhiteBalanceTemperatureAndTintValues (float temperature, float tint)
 		{
 			Temperature = temperature;
 			Tint = tint;
 		}
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns a string representation of this instance.</summary>
 		public override string ToString ()
 		{
 			return String.Format ("(Temperature={0},Tint={1})", Temperature, Tint);
@@ -329,9 +292,8 @@ namespace AVFoundation {
 
 		}
 
-		/// <param name="obj">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="obj">The obj.</param>
+		/// <summary>Determines whether the specified object is equal to this instance.</summary>
 		public override bool Equals (object? obj)
 		{
 			if (!(obj is AVCaptureWhiteBalanceTemperatureAndTintValues))
@@ -340,16 +302,14 @@ namespace AVFoundation {
 			return this.Equals ((AVCaptureWhiteBalanceTemperatureAndTintValues) obj);
 		}
 
-		/// <param name="other">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="other">The other.</param>
+		/// <summary>Determines whether the specified values are equal to this instance.</summary>
 		public bool Equals (AVCaptureWhiteBalanceTemperatureAndTintValues other)
 		{
 			return this == other;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns a hash code for this instance.</summary>
 		public override int GetHashCode ()
 		{
 			return HashCode.Combine (Temperature, Tint);
@@ -358,13 +318,11 @@ namespace AVFoundation {
 
 #if !COREBUILD
 	/// <summary>AV metadata identifiers.</summary>
-	///     <remarks>To be added.</remarks>
 	public static partial class AVMetadataIdentifiers {
 	}
 #endif
 
 	/// <summary>Defines an extension method for <see cref="CGRect" /> that generates another rectangle with a specified aspect ratio.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -374,10 +332,9 @@ namespace AVFoundation {
 		[DllImport (Constants.AVFoundationLibrary)]
 		static extern /* CGRect */ CGRect AVMakeRectWithAspectRatioInsideRect (/* CGSize */ CGSize aspectRatio, /* CGRect */ CGRect boundingRect);
 
-		/// <param name="self">To be added.</param>
-		///         <param name="aspectRatio">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="self">The self.</param>
+		/// <param name="aspectRatio">The aspectRatio.</param>
+		/// <summary>Returns a rectangle fitting within this rectangle with the specified aspect ratio.</summary>
 		public static CGRect WithAspectRatio (this CGRect self, CGSize aspectRatio)
 		{
 			return AVMakeRectWithAspectRatioInsideRect (aspectRatio, self);
@@ -385,7 +342,6 @@ namespace AVFoundation {
 	}
 
 	/// <summary>Contains media sample synchronization attributes.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("ios15.0")]
@@ -414,19 +370,16 @@ namespace AVFoundation {
 #else
 		/// <summary>
 		///           <see langword="true" /> if the sample is an Instantaneous Decoder Refresh sample and the developer can rely on it, by itself, to resynchronize a decoder.</summary>
-		///         <remarks>To be added.</remarks>
 		[MarshalAs (UnmanagedType.I1)]
 		public bool IsFullSync;
 
 		/// <summary>
 		///           <see langword="true" /> if the sample is not Instantaneous Decoder Refresh sample.</summary>
-		///         <remarks>To be added.</remarks>
 		[MarshalAs (UnmanagedType.I1)]
 		public bool IsPartialSync;
 
 		/// <summary>
 		///           <see langword="true" /> if the sample can be dropped.</summary>
-		///         <remarks>To be added.</remarks>
 		[MarshalAs (UnmanagedType.I1)]
 		public bool IsDroppable;
 #endif
@@ -473,7 +426,6 @@ namespace AVFoundation {
 #endif // !XAMCORE_5_0
 
 	/// <summary>Contains media sample interdependency data for a sample and other samples in the sequence.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("ios15.0")]
@@ -520,37 +472,31 @@ namespace AVFoundation {
 #else
 		/// <summary>
 		///           <see langword="true" /> if and only if the sample indicates whether other samples in the sequence depend on the sample.</summary>
-		///         <remarks>To be added.</remarks>
 		[MarshalAs (UnmanagedType.I1)]
 		public bool IndicatesWhetherItHasDependentSamples;
 
 		/// <summary>
 		///           <see langword="true" /> if and only if the sample has dependent samples.</summary>
-		///         <remarks>To be added.</remarks>
 		[MarshalAs (UnmanagedType.I1)]
 		public bool HasDependentSamples;
 
 		/// <summary>
 		///           <see langword="true" /> if and only if the sample indicates whether it depends on other samples in the sequence.</summary>
-		///         <remarks>To be added.</remarks>
 		[MarshalAs (UnmanagedType.I1)]
 		public bool IndicatesWhetherItDependsOnOthers;
 
 		/// <summary>
 		///           <see langword="true" /> if and only if the sample depends on other samples in the sequence.</summary>
-		///         <remarks>To be added.</remarks>
 		[MarshalAs (UnmanagedType.I1)]
 		public bool DependsOnOthers;
 
 		/// <summary>
 		///           <see langword="true" /> if and only if the sample indicates whether it has redundant coding.</summary>
-		///         <remarks>To be added.</remarks>
 		[MarshalAs (UnmanagedType.I1)]
 		public bool IndicatesWhetherItHasRedundantCoding;
 
 		/// <summary>
 		///           <see langword="true" /> if and only if the sample has redundant coding.</summary>
-		///         <remarks>To be added.</remarks>
 		[MarshalAs (UnmanagedType.I1)]
 		public bool HasRedundantCoding;
 #endif
@@ -619,7 +565,6 @@ namespace AVFoundation {
 #endif // !XAMCORE_5_0
 
 	/// <summary>Contains the location and size of a media sample or chunk.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("ios15.0")]
@@ -627,15 +572,12 @@ namespace AVFoundation {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AVSampleCursorStorageRange {
 		/// <summary>The location of the first byte.</summary>
-		///         <remarks>To be added.</remarks>
 		public long Offset;
 		/// <summary>The number of bytes in the sample or chunk.</summary>
-		///         <remarks>To be added.</remarks>
 		public long Length;
 	}
 
 	/// <summary>Contains media sample chunk metadata.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("ios15.0")]
@@ -643,7 +585,6 @@ namespace AVFoundation {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AVSampleCursorChunkInfo {
 		/// <summary>The number of samples present.</summary>
-		///         <remarks>To be added.</remarks>
 		public long SampleCount;
 
 #if XAMCORE_5_0
@@ -668,19 +609,16 @@ namespace AVFoundation {
 #else
 		/// <summary>
 		///           <see langword="true" /> if and only if every chunk has the same sample size.</summary>
-		///         <remarks>To be added.</remarks>
 		[MarshalAs (UnmanagedType.I1)]
 		public bool HasUniformSampleSizes;
 
 		/// <summary>
 		///           <see langword="true" /> if and only if every chunk has the same duration.</summary>
-		///         <remarks>To be added.</remarks>
 		[MarshalAs (UnmanagedType.I1)]
 		public bool HasUniformSampleDurations;
 
 		/// <summary>
 		///           <see langword="true" /> if and only if every chunk has the same format description.</summary>
-		///         <remarks>To be added.</remarks>
 		[MarshalAs (UnmanagedType.I1)]
 		public bool HasUniformFormatDescriptions;
 

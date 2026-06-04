@@ -19,7 +19,6 @@ using nw_protocol_options_t = System.IntPtr;
 
 namespace Network {
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
@@ -31,9 +30,8 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		static extern void nw_protocol_stack_prepend_application_protocol (nw_protocol_stack_t stack, nw_protocol_options_t options);
 
-		/// <param name="options">To be added.</param>
+		/// <param name="options">The options to use.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void PrependApplicationProtocol (NWProtocolOptions options)
 		{
 			if (options is null)
@@ -46,7 +44,6 @@ namespace Network {
 		static extern void nw_protocol_stack_clear_application_protocols (nw_protocol_stack_t stack);
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void ClearApplicationProtocols ()
 		{
 			nw_protocol_stack_clear_application_protocols (GetCheckedHandle ());
@@ -86,9 +83,8 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		unsafe extern static void nw_protocol_stack_iterate_application_protocols (nw_protocol_stack_t stack, BlockLiteral* completion);
 
-		/// <param name="callback">To be added.</param>
+		/// <param name="callback">The callback to invoke.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public void IterateProtocols (Action<NWProtocolOptions> callback)
 		{
@@ -107,7 +103,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NWProtocolOptions? TransportProtocol {
 			get {
 				var pHandle = nw_protocol_stack_copy_transport_protocol (GetCheckedHandle ());
@@ -142,7 +137,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("tvos13.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios13.0")]

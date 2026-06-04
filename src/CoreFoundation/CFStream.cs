@@ -480,7 +480,6 @@ namespace CoreFoundation {
 		#region Stream API
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public abstract CFException? GetError ();
 
@@ -508,7 +507,6 @@ namespace CoreFoundation {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		protected abstract bool DoOpen ();
 
@@ -540,7 +538,6 @@ namespace CoreFoundation {
 		protected abstract void DoClose ();
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CFStreamStatus GetStatus ()
 		{
@@ -549,7 +546,6 @@ namespace CoreFoundation {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		protected abstract CFStreamStatus DoGetStatus ();
 
@@ -561,14 +557,12 @@ namespace CoreFoundation {
 
 		/// <param name="name">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		protected abstract IntPtr DoGetProperty (NSString name);
 
 		/// <param name="name">To be added.</param>
 		///         <param name="value">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		protected abstract bool DoSetProperty (NSString name, INativeObject? value);
 
@@ -594,7 +588,6 @@ namespace CoreFoundation {
 		[SupportedOSPlatform ("tvos")]
 		public class StreamEventArgs : EventArgs {
 			/// <summary>To be added.</summary>
-			///         <value>To be added.</value>
 			///         <remarks>To be added.</remarks>
 			public CFStreamEventType EventType {
 				get;
@@ -610,7 +603,6 @@ namespace CoreFoundation {
 			}
 
 			/// <summary>To be added.</summary>
-			///         <returns>To be added.</returns>
 			///         <remarks>To be added.</remarks>
 			public override string ToString ()
 			{
@@ -829,7 +821,6 @@ namespace CoreFoundation {
 		extern static /* dispatch_queue_t */ IntPtr CFWriteStreamCopyDispatchQueue (/* CFWriteStreamRef */ IntPtr stream);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
@@ -846,7 +837,6 @@ namespace CoreFoundation {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]

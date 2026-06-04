@@ -21,7 +21,7 @@ namespace Security {
 	public delegate void SecTrustCallback (SecTrust? trust, SecTrustResult trustResult);
 	public delegate void SecTrustWithErrorCallback (SecTrust? trust, bool result, NSError? /* CFErrorRef _Nullable */ error);
 
-	/// <summary>A trust level. A trust object combines a certificate with a policy or policies. </summary>
+	/// <summary>A trust level. A trust object combines a certificate with APolicy or policies. </summary>
 	public partial class SecTrust {
 
 		/// <param name="certificate">The certificate.</param>

@@ -18,7 +18,7 @@ namespace AppKit {
 		///         <param name="classArray">The class array.</param>
 		///         <param name="searchOptions">The search options.</param>
 		///         <param name="enumerator">The enumerator.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Enumerates the dragging items matching the specified options.</summary>
 		public void EnumerateDraggingItems (NSDraggingItemEnumerationOptions enumOpts, NSView view, NSArray classArray, NSDictionary searchOptions, NSDraggingEnumerator enumerator)
 		{
 			EnumerateDraggingItems (enumOpts, view, classArray.Handle, searchOptions, enumerator);

@@ -155,13 +155,13 @@ namespace MapKit {
 	public enum MKUserTrackingMode : ulong {
 		/// <summary>Indicates none.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates the map follows the user location.</summary>
 		Follow,
 #if !XAMCORE_5_0 && !(IOS || MACCATALYST)
 		[Obsolete ("This is only available on iOS and MacCatalyst.")]
 		FollowWithHeading,
 #elif IOS || MACCATALYST
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates the map follows the user location and heading.</summary>
 		FollowWithHeading,
 #endif
 	}

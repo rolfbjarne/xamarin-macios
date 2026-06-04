@@ -66,7 +66,7 @@
   <Docs DocId="M:CoreImage.CIFilter.FromName(System.String)">
     <param name="name">The name of the CoreImage filter to instantiate.</param>
     <summary>Returns a CIFilter for the specific effect.</summary>
-    <returns>To be added.</returns>
+    <returns>A <see cref="T:CoreImage.CIFilter" /> instance for the specified filter name, or <see langword="null" /> if no filter with that name exists.</returns>
     <remarks>
       <para>
             On iOS 5.0, the following are the built-in filters:

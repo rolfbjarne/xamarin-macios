@@ -23,7 +23,6 @@ namespace CoreVideo {
 		);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -55,8 +54,7 @@ namespace CoreVideo {
 		/// <param name="surface">The surface.</param>
 		///         <param name="result">The result.</param>
 		///         <param name="pixelBufferAttributes">The pixel buffer attributes.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Create.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -87,8 +85,7 @@ namespace CoreVideo {
 
 		/// <param name="surface">The surface.</param>
 		///         <param name="pixelBufferAttributes">The pixel buffer attributes.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Create.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]

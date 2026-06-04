@@ -120,9 +120,7 @@ namespace VideoToolbox {
 			return Runtime.GetNSObject<NSDictionary> (ret, true);
 		}
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the supported properties for this session.</summary>
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		public NSDictionary? GetSupportedProperties ()
 		{

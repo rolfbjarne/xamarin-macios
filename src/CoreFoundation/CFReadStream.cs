@@ -52,7 +52,6 @@ namespace CoreFoundation {
 		extern static /* CFErrorRef */ IntPtr CFReadStreamCopyError (/* CFReadStreamRef */ IntPtr stream);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override CFException? GetError ()
 		{
 			var error = CFReadStreamCopyError (Handle);
@@ -65,7 +64,6 @@ namespace CoreFoundation {
 		extern static /* Boolean */ byte CFReadStreamOpen (/* CFReadStreamRef */ IntPtr stream);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		protected override bool DoOpen ()
 		{
 			return CFReadStreamOpen (Handle) != 0;
@@ -84,7 +82,6 @@ namespace CoreFoundation {
 		extern static /* CFStreamStatus -> CFIndex */ nint CFReadStreamGetStatus (/* CFReadStreamRef */ IntPtr stream);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		protected override CFStreamStatus DoGetStatus ()
 		{
 			return (CFStreamStatus) (long) CFReadStreamGetStatus (Handle);
@@ -93,8 +90,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* Boolean */ byte CFReadStreamHasBytesAvailable (/* CFReadStreamRef */ IntPtr stream);
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Hass bytes available.</summary>
 		public bool HasBytesAvailable ()
 		{
 			return CFReadStreamHasBytesAvailable (Handle) != 0;
@@ -157,8 +153,7 @@ namespace CoreFoundation {
 		extern static /* CFIndex */ nint CFReadStreamRead (/* CFReadStreamRef */ IntPtr handle, /* UInt8* */ IntPtr buffer, /* CFIndex */ nint count);
 
 		/// <param name="buffer">The buffer.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Read.</summary>
 		public nint Read (byte [] buffer)
 		{
 			if (buffer is null)
@@ -169,8 +164,7 @@ namespace CoreFoundation {
 		/// <param name="buffer">The buffer.</param>
 		///         <param name="offset">The offset.</param>
 		///         <param name="count">The count.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Read.</summary>
 		public unsafe nint Read (byte [] buffer, int offset, int count)
 		{
 			if (buffer is null)
@@ -191,7 +185,6 @@ namespace CoreFoundation {
 
 		/// <param name="name">The name to use.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		protected override IntPtr DoGetProperty (NSString name)
 		{
 			if (name is null)
@@ -207,7 +200,6 @@ namespace CoreFoundation {
 		/// <param name="name">The name to use.</param>
 		///         <param name="value">The value to set.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		protected override bool DoSetProperty (NSString name, INativeObject? value)
 		{
 			if (name is null)

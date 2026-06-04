@@ -41,34 +41,32 @@ namespace CoreFoundation {
 	// The native constants are defined in usr/include/dispatch/queue.h, but since they're
 	// not in any enum, they're untyped.
 	/// <summary>An enumeration whose values define priorities available to <see cref="CoreFoundation.DispatchQueue" />s.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum DispatchQueuePriority : int {
-		/// <summary>To be added.</summary>
+		/// <summary>High priority.</summary>
 		High = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Default priority.</summary>
 		Default = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Low priority.</summary>
 		Low = -2,
-		/// <summary>To be added.</summary>
+		/// <summary>Background priority.</summary>
 		Background = Int16.MinValue,
 	}
 
 	// dispatch_qos_class_t is defined in usr/include/dispatch/queue.h, but redirects to qos_class_t
 	// the qos_class_t enum is defined in usr/include/sys/qos.h (typed as 'unsigned int')
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Specifies the quality of service for a dispatch queue.</summary>
 	public enum DispatchQualityOfService : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>User-interactive quality of service.</summary>
 		UserInteractive = 0x21,
-		/// <summary>To be added.</summary>
+		/// <summary>User-initiated quality of service.</summary>
 		UserInitiated = 0x19,
-		/// <summary>To be added.</summary>
+		/// <summary>Default quality of service.</summary>
 		Default = 0x15,
-		/// <summary>To be added.</summary>
+		/// <summary>Utility quality of service.</summary>
 		Utility = 0x11,
-		/// <summary>To be added.</summary>
+		/// <summary>Background quality of service.</summary>
 		Background = 0x09,
-		/// <summary>To be added.</summary>
+		/// <summary>Unspecified quality of service.</summary>
 		Unspecified = 0x00,
 	}
 
@@ -98,15 +96,13 @@ namespace CoreFoundation {
 		[DllImport (Constants.libcLibrary)]
 		extern static IntPtr dispatch_retain (IntPtr o);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Retains the dispatch object.</summary>
 		protected internal override void Retain ()
 		{
 			dispatch_retain (Handle);
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Releases the dispatch object.</summary>
 		protected internal override void Release ()
 		{
 			dispatch_release (Handle);
@@ -115,9 +111,8 @@ namespace CoreFoundation {
 		[DllImport (Constants.libcLibrary)]
 		extern static void dispatch_set_target_queue (/* dispatch_object_t */ IntPtr queue, /* dispatch_queue_t */ IntPtr target);
 
-		/// <param name="queue">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="queue">The dispatch queue.</param>
+		/// <summary>Sets the target queue for this dispatch object.</summary>
 		public void SetTargetQueue (DispatchQueue queue)
 		{
 			// note: null is allowed because DISPATCH_TARGET_QUEUE_DEFAULT is defined as NULL (dispatch/queue.h)
@@ -132,8 +127,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.libcLibrary)]
 		internal extern static void dispatch_suspend (IntPtr o);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Activates the dispatch object.</summary>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
@@ -202,11 +196,10 @@ namespace CoreFoundation {
 				throw new Exception ("Error creating dispatch queue");
 		}
 
-		/// <param name="label">To be added.</param>
-		///         <param name="attributes">To be added.</param>
-		///         <param name="target">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="label">The label for the queue.</param>
+		/// <param name="attributes">The queue attributes.</param>
+		/// <param name="target">The target queue.</param>
+		/// <summary>Creates a dispatch queue with the specified label, attributes, and target.</summary>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
@@ -286,7 +279,6 @@ namespace CoreFoundation {
 		///         <value>The current dispatch queue if invoked from code that
 		///         was queued into a DispatchQueue, otherwise it returns the same
 		///         queue as <see cref="CoreFoundation.DispatchQueue.MainQueue" />.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -427,9 +419,8 @@ namespace CoreFoundation {
 			GCHandle.FromIntPtr (context).Free ();
 		}
 
-		/// <param name="action">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="action">The action to execute.</param>
+		///         <summary>Submits an action for asynchronous execution on this queue.</summary>
 		public void DispatchAsync (Action action)
 		{
 			if (action is null)
@@ -439,9 +430,8 @@ namespace CoreFoundation {
 			}
 		}
 
-		/// <param name="block">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="block">The dispatch block to execute.</param>
+		///         <summary>Submits a dispatch block for asynchronous execution on this queue.</summary>
 		public void DispatchAsync (DispatchBlock block)
 		{
 			if (block is null)
@@ -451,9 +441,8 @@ namespace CoreFoundation {
 			GC.KeepAlive (block);
 		}
 
-		/// <param name="action">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="action">The action to execute.</param>
+		///         <summary>Submits an action for synchronous execution on this queue.</summary>
 		public void DispatchSync (Action action)
 		{
 			if (action is null)
@@ -464,9 +453,8 @@ namespace CoreFoundation {
 			}
 		}
 
-		/// <param name="block">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="block">The dispatch block to execute.</param>
+		///         <summary>Submits a dispatch block for synchronous execution on this queue.</summary>
 		public void DispatchSync (DispatchBlock block)
 		{
 			if (block is null)
@@ -505,9 +493,8 @@ namespace CoreFoundation {
 			}
 		}
 
-		/// <param name="block">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="block">The dispatch block to execute.</param>
+		/// <summary>Submits a barrier block for asynchronous execution.</summary>
 		public void DispatchBarrierAsync (DispatchBlock block)
 		{
 			if (block is null)
@@ -517,9 +504,8 @@ namespace CoreFoundation {
 			GC.KeepAlive (block);
 		}
 
-		/// <param name="action">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="action">The action to execute.</param>
+		/// <summary>Submits a barrier action for synchronous execution.</summary>
 		public void DispatchBarrierSync (Action action)
 		{
 			if (action is null)
@@ -530,9 +516,8 @@ namespace CoreFoundation {
 			}
 		}
 
-		/// <param name="block">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="block">The dispatch block to execute.</param>
+		/// <summary>Submits a barrier block for synchronous execution.</summary>
 		public void DispatchBarrierSync (DispatchBlock block)
 		{
 			if (block is null)
@@ -546,7 +531,6 @@ namespace CoreFoundation {
 		///         <param name="action">Code block to execute at some time in the
 		/// 	future.</param>
 		///         <summary>Executes this time on or after the specified time.</summary>
-		///         <remarks>To be added.</remarks>
 		public void DispatchAfter (DispatchTime when, Action action)
 		{
 			if (action is null)
@@ -556,10 +540,9 @@ namespace CoreFoundation {
 			}
 		}
 
-		/// <param name="when">To be added.</param>
-		///         <param name="block">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="when">The time at which to dispatch.</param>
+		/// <param name="block">The dispatch block to execute.</param>
+		/// <summary>Schedules a block for execution after a delay.</summary>
 		public void DispatchAfter (DispatchTime when, DispatchBlock block)
 		{
 			if (block is null)
@@ -569,10 +552,9 @@ namespace CoreFoundation {
 			GC.KeepAlive (block);
 		}
 
-		/// <param name="action">To be added.</param>
-		///         <param name="times">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="action">The action to execute.</param>
+		/// <param name="times">The number of times to execute the action.</param>
+		///         <summary>Submits an action to be executed the specified number of times.</summary>
 		public void Submit (Action<int> action, long times)
 		{
 			if (action is null)
@@ -582,10 +564,9 @@ namespace CoreFoundation {
 			}
 		}
 
-		/// <param name="key">To be added.</param>
-		///         <param name="context">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="key">The context key.</param>
+		/// <param name="context">The context value.</param>
+		/// <summary>Sets a key-value pair on the queue.</summary>
 		public void SetSpecific (IntPtr key, object context)
 		{
 			unsafe {
@@ -593,18 +574,16 @@ namespace CoreFoundation {
 			}
 		}
 
-		/// <param name="key">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="key">The context key.</param>
+		///         <summary>Gets the value associated with the specified key.</summary>
 		public object? GetSpecific (IntPtr key)
 		{
 			GCHandle gchandle = (GCHandle) dispatch_queue_get_specific (GetCheckedHandle (), key);
 			return gchandle.Target;
 		}
 
-		/// <param name="relative_priority">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="relative_priority">The relative priority within the QoS class.</param>
+		/// <summary>Gets the quality of service class and relative priority.</summary>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -617,8 +596,7 @@ namespace CoreFoundation {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the quality of service class for this queue.</summary>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -723,47 +701,40 @@ namespace CoreFoundation {
 		[DllImport (Constants.libcLibrary)]
 		static extern IntPtr dispatch_main ();
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Executes blocks that have been submitted to the main queue.</summary>
 		public static void MainIteration ()
 		{
 			dispatch_main ();
 		}
 #endif
 
-		/// <summary>To be added.</summary>
-		///     <remarks>To be added.</remarks>
+		/// <summary>Specifies attributes for creating a dispatch queue.</summary>
 		public class Attributes {
-			/// <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <summary>Gets or sets whether the queue is concurrent.</summary>
 			public bool Concurrent { get; set; }
 
-			/// <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <summary>Gets or sets whether the queue is initially inactive.</summary>
 			[SupportedOSPlatform ("macos")]
 			[SupportedOSPlatform ("maccatalyst")]
 			[SupportedOSPlatform ("ios")]
 			[SupportedOSPlatform ("tvos")]
 			public bool IsInitiallyInactive { get; set; }
 
-			/// <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <summary>Gets or sets the autorelease frequency.</summary>
 			[SupportedOSPlatform ("macos")]
 			[SupportedOSPlatform ("maccatalyst")]
 			[SupportedOSPlatform ("ios")]
 			[SupportedOSPlatform ("tvos")]
 			public AutoreleaseFrequency? AutoreleaseFrequency { get; set; }
 
-			/// <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <summary>Gets or sets the relative priority.</summary>
 			[SupportedOSPlatform ("macos")]
 			[SupportedOSPlatform ("ios")]
 			[SupportedOSPlatform ("tvos")]
 			[SupportedOSPlatform ("maccatalyst")]
 			public int RelativePriority { get; set; }
 
-			/// <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <summary>Gets or sets the quality of service.</summary>
 			[SupportedOSPlatform ("macos")]
 			[SupportedOSPlatform ("ios")]
 			[SupportedOSPlatform ("tvos")]
@@ -807,8 +778,7 @@ namespace CoreFoundation {
 			static extern /* dispatch_queue_attr_t */ IntPtr dispatch_queue_attr_make_with_qos_class (/* dispatch_queue_attr_t _Nullable */ IntPtr attr, /* dispatch_qos_class_t */ DispatchQualityOfService qos_class, int relative_priority);
 		}
 
-		/// <summary>To be added.</summary>
-		///     <remarks>To be added.</remarks>
+		/// <summary>Specifies when autorelease pools are drained for a dispatch queue.</summary>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
@@ -816,11 +786,11 @@ namespace CoreFoundation {
 		[Native]
 		public enum AutoreleaseFrequency : ulong /* unsigned long */
 		{
-			/// <summary>To be added.</summary>
+			/// <summary>Inherit the autorelease frequency from the target queue.</summary>
 			Inherit = 0,
-			/// <summary>To be added.</summary>
+			/// <summary>Drain the autorelease pool after each work item.</summary>
 			WorkItem = 1,
-			/// <summary>To be added.</summary>
+			/// <summary>Never automatically drain the autorelease pool.</summary>
 			Never = 2,
 		}
 #endif // !COREBUILD
@@ -875,7 +845,6 @@ namespace CoreFoundation {
 		/// <param name="when">Reference dispatch time.</param>
 		///         <param name="delta">Timespan to add to the dispatch time.</param>
 		///         <summary>Creates a new dispatch time instance based on an existing dispatch time and a the specified delta.</summary>
-		///         <remarks>To be added.</remarks>
 		public DispatchTime (DispatchTime when, TimeSpan delta) : this ()
 		{
 			Nanoseconds = dispatch_time (when.Nanoseconds, delta.Ticks * 100);
@@ -924,8 +893,7 @@ namespace CoreFoundation {
 		{
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a new dispatch group.</summary>
 		public DispatchGroup ()
 			: base (dispatch_group_create (), true)
 		{
@@ -962,10 +930,9 @@ namespace CoreFoundation {
 			}
 		}
 
-		/// <param name="queue">To be added.</param>
-		///         <param name="block">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="queue">The dispatch queue.</param>
+		/// <param name="block">The dispatch block to execute.</param>
+		/// <summary>Schedules a block to be submitted when the group completes.</summary>
 		public void Notify (DispatchQueue queue, DispatchBlock block)
 		{
 			if (queue is null)
@@ -1021,9 +988,8 @@ namespace CoreFoundation {
 			return dispatch_group_wait (GetCheckedHandle (), timeout.Nanoseconds) == 0;
 		}
 
-		/// <param name="timeout">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="timeout">The timeout duration.</param>
+		/// <summary>Waits for all blocks in the group to complete within the specified timeout.</summary>
 		public bool Wait (TimeSpan timeout)
 		{
 			return Wait (new DispatchTime (DispatchTime.Now, timeout));

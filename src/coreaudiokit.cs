@@ -169,7 +169,7 @@ namespace CoreAudioKit {
 	interface CANetworkBrowserWindowController {
 
 		/// <param name="window">The window.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="CoreAudioKit.CANetworkBrowserWindowController" /> with the specified window.</summary>
 		[Export ("initWithWindow:")]
 		NativeHandle Constructor ([NullAllowed] NSWindow window);
 

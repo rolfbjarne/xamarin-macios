@@ -15,7 +15,7 @@ using CoreFoundation;
 using CoreMedia;
 
 namespace VideoToolbox {
-	/// <summary>Sample buffers storage object, used in conjuction of a multi pass compression session</summary>
+	/// <summary>Sample buffers storage object, used in conjuction of a multIPass compression session</summary>
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]

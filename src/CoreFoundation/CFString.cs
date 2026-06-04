@@ -47,33 +47,29 @@ namespace CoreFoundation {
 		nint loc; // defined as 'long' in native code
 		nint len; // defined as 'long' in native code
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the location.</summary>
 		public int Location {
 			get { return (int) loc; }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the length.</summary>
 		public int Length {
 			get { return (int) len; }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the long location.</summary>
 		public long LongLocation {
 			get { return (long) loc; }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the long length.</summary>
 		public long LongLength {
 			get { return (long) len; }
 		}
 
 		/// <param name="loc">The loc.</param>
 		///         <param name="len">The len.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CFRange" /> instance.</summary>
 		public CFRange (int loc, int len)
 		{
 			this.loc = loc;
@@ -82,7 +78,7 @@ namespace CoreFoundation {
 
 		/// <param name="l">The l.</param>
 		///         <param name="len">The len.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CFRange" /> instance.</summary>
 		public CFRange (long l, long len)
 		{
 			this.loc = (nint) l;
@@ -96,7 +92,6 @@ namespace CoreFoundation {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override string ToString ()
 		{
 			return string.Format ("CFRange [Location: {0} Length: {1}]", loc, len);
@@ -252,7 +247,6 @@ namespace CoreFoundation {
 		}
 
 		/// <summary>Type identifier for the CoreFoundation.CFString type.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>
 		///           <para>The returned token is the CoreFoundation type identifier (CFType) that has been assigned to this class.</para>
 		///           <para>This can be used to determine type identity between different CoreFoundation objects.</para>
@@ -344,7 +338,6 @@ namespace CoreFoundation {
 		}
 
 		/// <summary>String length.</summary>
-		///         <value>To be added.</value>
 		public int Length {
 			get {
 				if (str is not null)
@@ -367,7 +360,6 @@ namespace CoreFoundation {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override string ToString ()
 		{
 			if (str is null)

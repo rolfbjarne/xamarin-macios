@@ -2078,7 +2078,7 @@ namespace HealthKit {
 	interface HKUserAnnotatedMedicationType {
 	}
 
-	/// <summary>An <see cref="HealthKit.HKObjectType" /> that specifies a permanent aspect of the user.</summary>
+	/// <summary>An <see cref="HealthKit.HKObjectType" /> that specifies APermanent aspect of the user.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/HealthKit/Reference/HKCharacteristicType_Class/index.html">Apple documentation for <c>HKCharacteristicType</c></related>
 	[Mac (13, 0)]
@@ -2339,7 +2339,7 @@ namespace HealthKit {
 
 		/// <param name="operatorType">To be added.</param>
 		/// <param name="value">To be added.</param>
-		/// <summary> Creates and returns a predicate that can be used to check the value of a category sample.</summary>
+		/// <summary> Creates and returns APredicate that can be used to check the value of a category sample.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		[Static]
@@ -2424,7 +2424,7 @@ namespace HealthKit {
 		NSPredicate GetPredicateForClinicalRecords (NSString resourceType);
 
 		/// <param name="resourceType">The resource type for which to generate a query predicate.</param>
-		///         <summary>Creates and returns a predicate for a Fast Healthcare Interoperability Resources record of the specified resource type.</summary>
+		///         <summary>Creates and returns APredicate for a Fast Healthcare Interoperability Resources record of the specified resource type.</summary>
 		///         <returns>A predicate for a Fast Healthcare Interoperability Resources record of the specified resource type.</returns>
 		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
@@ -2440,7 +2440,7 @@ namespace HealthKit {
 		/// <param name="source">The HealthKit source for the predicate.</param>
 		///         <param name="resourceType">The resource type for which to generate a query predicate.</param>
 		///         <param name="identifier">The record identifier.</param>
-		///         <summary>Creates and returns a predicate for a Fast Healthcare Interoperability Resources record for the specified query parameters.</summary>
+		///         <summary>Creates and returns APredicate for a Fast Healthcare Interoperability Resources record for the specified query parameters.</summary>
 		///         <returns>A predicate for a Fast Healthcare Interoperability Resources record oor the specified query parameters.</returns>
 		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
@@ -2684,7 +2684,7 @@ namespace HealthKit {
 		NativeHandle Constructor (HKQueryDescriptor [] queryDescriptors, nint limit, NSSortDescriptor [] sortDescriptors, HKSampleQueryResultsHandler resultsHandler);
 	}
 
-	/// <summary>A provider of health data, such as a particular sensor or application.</summary>
+	/// <summary>A provider of health data, such as AParticular sensor or application.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/HealthKit/Reference/HKSource_Class/index.html">Apple documentation for <c>HKSource</c></related>
 	[Mac (13, 0)]
@@ -2968,7 +2968,7 @@ namespace HealthKit {
 		[Field ("HKQuantityTypeIdentifierForcedExpiratoryVolume1")]
 		ForcedExpiratoryVolume1,
 
-		/// <summary>Indicates a peak expiratory flow rate.</summary>
+		/// <summary>Indicates APeak expiratory flow rate.</summary>
 		[Field ("HKQuantityTypeIdentifierPeakExpiratoryFlowRate")]
 		PeakExpiratoryFlowRate,
 
@@ -4164,7 +4164,7 @@ namespace HealthKit {
 		HKUnit AppleEffortScoreUnit { get; }
 	}
 
-	/// <summary>An <see cref="HealthKit.HKSample" /> that represents a physical workout.</summary>
+	/// <summary>An <see cref="HealthKit.HKSample" /> that represents APhysical workout.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/HealthKit/Reference/HKWorkout_Class/index.html">Apple documentation for <c>HKWorkout</c></related>
 	[Mac (13, 0)]
@@ -4704,7 +4704,7 @@ namespace HealthKit {
 		NSOperatingSystemVersion AnyOperatingSystem { get; }
 	}
 
-	/// <summary>Represents the most recent sample that was returned by a previous anchored object query.</summary>
+	/// <summary>Represents the most recent sample that was returned by APrevious anchored object query.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/reference/HealthKit/HKQueryAnchor">Apple documentation for <c>HKQueryAnchor</c></related>
 	[Mac (13, 0)]

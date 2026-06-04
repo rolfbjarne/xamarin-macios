@@ -14,7 +14,7 @@ using Vector3 = global::CoreGraphics.NVector3;
 namespace ARKit {
 	public partial class ARPointCloud {
 
-		/// <summary>A set of positions in the world coordinate system. Image-processing tentatively believes that the position is a point on a real-world surface.</summary>
+		/// <summary>A set of positions in the world coordinate system. Image-processing tentatively believes that the position is APoint on a real-world surface.</summary>
 		/// <value>An array of 3D points in world coordinates.</value>
 		public unsafe Vector3 [] Points {
 			get {

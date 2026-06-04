@@ -7,11 +7,11 @@ namespace CoreTelephony {
 	// in header file this is used inside a CTError structure where the domain is a SInt32
 	/// <summary>An enumeration whose values specify an error domain.</summary>
 	public enum CTErrorDomain {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates no error.</summary>
 		NoError = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates posix.</summary>
 		Posix = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates mach.</summary>
 		Mach = 2,
 	}
 
@@ -19,22 +19,22 @@ namespace CoreTelephony {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum CTCellularDataRestrictedState : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates restricted.</summary>
 		Restricted,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates not restricted.</summary>
 		NotRestricted,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum CTCellularPlanProvisioningAddPlanResult : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates fail.</summary>
 		Fail,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates success.</summary>
 		Success,
 		[iOS (17, 0)]
 		Cancel,

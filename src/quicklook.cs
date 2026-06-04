@@ -151,7 +151,7 @@ namespace QuickLook {
 	[Protocol]
 	interface QLPreviewControllerDelegate {
 		/// <param name="controller">The controller.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Called when the preview controller is about to be dismissed.</summary>
 		[EventArgs ("", XmlDocs = """
 			<summary>Event raised by the object.</summary>
 			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
@@ -160,7 +160,7 @@ namespace QuickLook {
 		void WillDismiss (QLPreviewController controller);
 
 		/// <param name="controller">The controller.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Called when the preview controller has been dismissed.</summary>
 		[EventArgs ("", XmlDocs = """
 			<summary>Event raised by the object.</summary>
 			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
@@ -171,8 +171,8 @@ namespace QuickLook {
 		/// <param name="controller">The controller.</param>
 		/// <param name="url">The URL to use.</param>
 		/// <param name="item">The item.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Called to determine whether the preview controller should open the specified URL.</summary>
+		/// <returns><see langword="true" /> if the URL should be opened; otherwise, <see langword="false" />.</returns>
 		[EventArgs ("", XmlDocs = """
 			<summary>Delegate invoked by the object to get a value.</summary>
 			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
@@ -186,8 +186,8 @@ namespace QuickLook {
 		/// <param name="controller">The controller.</param>
 		/// <param name="item">The item.</param>
 		/// <param name="view">The view.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Returns the frame for the preview item in the source view.</summary>
+		/// <returns>The frame rectangle for the preview item.</returns>
 		[EventArgs ("", XmlDocs = """
 			<summary>Delegate invoked by the object to get a value.</summary>
 			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
@@ -198,8 +198,8 @@ namespace QuickLook {
 		/// <param name="controller">The controller.</param>
 		/// <param name="item">The item.</param>
 		/// <param name="contentRect">The content rect.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Returns a transition image for the preview item.</summary>
+		/// <returns>The transition image, or <see langword="null" />.</returns>
 		[EventArgs ("", XmlDocs = """
 			<summary>Delegate invoked by the object to get a value.</summary>
 			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
@@ -210,8 +210,8 @@ namespace QuickLook {
 
 		/// <param name="controller">The controller.</param>
 		/// <param name="item">The item.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Returns a transition view for the preview item.</summary>
+		/// <returns>The transition view, or <see langword="null" />.</returns>
 		[EventArgs ("", XmlDocs = """
 			<summary>Delegate invoked by the object to get a value.</summary>
 			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>

@@ -34,7 +34,7 @@ namespace PassKit {
 		DidCancelAddPasses,
 	}
 
-	/// <summary>Enumeration of pass types (whether a pass is a barcode or presents a payment card).</summary>
+	/// <summary>Enumeration of pass types (whether APass is a barcode or presents APayment card).</summary>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum PKPassType : ulong {
@@ -260,7 +260,7 @@ namespace PassKit {
 	public enum PKAutomaticPassPresentationSuppressionResult : ulong {
 		/// <summary>Suppression is not supported on this device.</summary>
 		NotSupported = 0,
-		/// <summary>System is already presenting a pass and cannot be suppressed.</summary>
+		/// <summary>System is already presenting APass and cannot be suppressed.</summary>
 		AlreadyPresenting,
 		/// <summary>The user denied the ability to suppress presentation.</summary>
 		Denied,
@@ -287,7 +287,7 @@ namespace PassKit {
 		EMoney,
 	}
 
-	/// <summary>Enumerates whether a payment associated with a <see cref="PassKit.PKShippingMethod" /> is pending or final.</summary>
+	/// <summary>Enumerates whether APayment associated with a <see cref="PassKit.PKShippingMethod" /> is pending or final.</summary>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum PKPaymentSummaryItemType : ulong {

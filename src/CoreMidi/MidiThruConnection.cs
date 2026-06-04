@@ -24,7 +24,7 @@ namespace CoreMidi {
 		const MidiThruConnectionRef InvalidRef = 0;
 
 		/// <param name="handle">The handle.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Initializes a new instance from the specified handle.</summary>
 		protected internal MidiThruConnection (MidiThruConnectionRef handle)
 		{
 			this.handle = handle;
@@ -166,7 +166,7 @@ namespace CoreMidi {
 
 		/// <param name="persistentOwnerID">The persistent owner i d.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Finds MIDI thru connections owned by the specified persistent owner.</summary>
 		public static MidiThruConnection []? Find (string persistentOwnerID, out MidiError error)
 		{
 			if (persistentOwnerID is null)
@@ -198,7 +198,7 @@ namespace CoreMidi {
 		}
 
 		/// <param name="persistentOwnerID">The persistent owner i d.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Finds MIDI thru connections owned by the specified persistent owner.</summary>
 		public static MidiThruConnection []? Find (string persistentOwnerID)
 		{
 			MidiError error;

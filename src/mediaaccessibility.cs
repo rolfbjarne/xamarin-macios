@@ -22,20 +22,20 @@ namespace MediaAccessibility {
 
 	[Static]
 	interface MAMediaCharacteristic {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the media characteristic for describing music and sound for accessibility.</summary>
+		/// <value>The <see cref="T:Foundation.NSString" /> constant representing this media characteristic.</value>
 		[MacCatalyst (13, 1)]
 		[Field ("MAMediaCharacteristicDescribesMusicAndSoundForAccessibility")]
 		NSString DescribesMusicAndSoundForAccessibility { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the media characteristic for describing video for accessibility.</summary>
+		/// <value>The <see cref="T:Foundation.NSString" /> constant representing this media characteristic.</value>
 		[MacCatalyst (13, 1)]
 		[Field ("MAMediaCharacteristicDescribesVideoForAccessibility")]
 		NSString DescribesVideoForAccessibility { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the media characteristic for transcribing spoken dialog for accessibility.</summary>
+		/// <value>The <see cref="T:Foundation.NSString" /> constant representing this media characteristic.</value>
 		[MacCatalyst (13, 1)]
 		[Field ("MAMediaCharacteristicTranscribesSpokenDialogForAccessibility")]
 		NSString TranscribesSpokenDialogForAccessibility { get; }

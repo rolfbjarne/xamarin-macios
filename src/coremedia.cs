@@ -1026,26 +1026,26 @@ namespace CoreMedia {
 	[StrongDictionary ("CMHevcTemporalLevelInfoKeys")]
 	interface CMHevcTemporalLevelInfoSettings {
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the temporal level.</summary>
+		/// <value>The temporal level value.</value>
 		int TemporalLevel { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the profile space.</summary>
+		/// <value>The profile space value.</value>
 		int ProfileSpace { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the tier flag.</summary>
+		/// <value>The tier flag value.</value>
 		int TierFlag { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the profile index.</summary>
+		/// <value>The profile index value.</value>
 		int ProfileIndex { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the profile compatibility flags.</summary>
+		/// <value>The profile compatibility flags data.</value>
 		NSData ProfileCompatibilityFlags { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the constraint indicator flags.</summary>
+		/// <value>The constraint indicator flags data.</value>
 		NSData ConstraintIndicatorFlags { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the level index.</summary>
+		/// <value>The level index value.</value>
 		int LevelIndex { get; set; }
 	}
 

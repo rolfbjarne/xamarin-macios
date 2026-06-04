@@ -41,86 +41,83 @@ using AudioFileStreamID = System.IntPtr;
 namespace AudioToolbox {
 
 	/// <summary>An enumeration whose values flag whether a <see cref="AudioToolbox.AudioFileStreamProperty" /> is cached.</summary>
-	///     <remarks>To be added.</remarks>
 	[Flags]
 	public enum AudioFileStreamPropertyFlag { // UInt32 in AudioFileStream_PropertyListenerProc
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates property is cached.</summary>
 		PropertyIsCached = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates cache property.</summary>
 		CacheProperty = 2,
 	}
 
 	/// <summary>An enumeration whose values indicate the status following calls to the <see cref="AudioToolbox.AudioFileStream.Seek(System.Int64,out System.Int64,out System.Boolean)" /> or <see cref="AudioToolbox.AudioFileStream.ParseBytes(System.Byte[],System.Int32,System.Int32,System.Boolean)" /> methods.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum AudioFileStreamStatus { // Implictly cast to OSType
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates ok.</summary>
 		Ok = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unsupported file type.</summary>
 		UnsupportedFileType = 0x7479703f,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unsupported data format.</summary>
 		UnsupportedDataFormat = 0x666d743f,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unsupported property.</summary>
 		UnsupportedProperty = 0x7074793f,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bad property size.</summary>
 		BadPropertySize = 0x2173697a,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates not optimized.</summary>
 		NotOptimized = 0x6f70746d,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid packet offset.</summary>
 		InvalidPacketOffset = 0x70636b3f,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid file.</summary>
 		InvalidFile = 0x6474613f,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates value unknown.</summary>
 		ValueUnknown = 0x756e6b3f,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates data unavailable.</summary>
 		DataUnavailable = 0x6d6f7265,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates illegal operation.</summary>
 		IllegalOperation = 0x6e6f7065,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unspecified error.</summary>
 		UnspecifiedError = 0x7768743f,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates discontinuity cant recover.</summary>
 		DiscontinuityCantRecover = 0x64736321,
 	}
 
 	/// <summary>An enumeration whose values represent properties of <see cref="AudioToolbox.AudioFileStream" />.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum AudioFileStreamProperty { // UInt32 AudioFileStreamPropertyID
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates ready to produce packets.</summary>
 		ReadyToProducePackets = 0x72656479,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates file format.</summary>
 		FileFormat = 0x66666d74,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates data format.</summary>
 		DataFormat = 0x64666d74,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates format list.</summary>
 		FormatList = 0x666c7374,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates magic cookie data.</summary>
 		MagicCookieData = 0x6d676963,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates audio data byte count.</summary>
 		AudioDataByteCount = 0x62636e74,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates audio data packet count.</summary>
 		AudioDataPacketCount = 0x70636e74,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates maximum packet size.</summary>
 		MaximumPacketSize = 0x70737a65,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates data offset.</summary>
 		DataOffset = 0x646f6666,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates channel layout.</summary>
 		ChannelLayout = 0x636d6170,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates packet to frame.</summary>
 		PacketToFrame = 0x706b6672,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates frame to packet.</summary>
 		FrameToPacket = 0x6672706b,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates packet to byte.</summary>
 		PacketToByte = 0x706b6279,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates byte to packet.</summary>
 		ByteToPacket = 0x6279706b,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates packet table info.</summary>
 		PacketTableInfo = 0x706e666f,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates packet size upper bound.</summary>
 		PacketSizeUpperBound = 0x706b7562,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates average bytes per packet.</summary>
 		AverageBytesPerPacket = 0x61627070,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bit rate.</summary>
 		BitRate = 0x62726174,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates info dictionary.</summary>
 		InfoDictionary = 0x696e666f,
 	}
 
@@ -133,8 +130,8 @@ namespace AudioToolbox {
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public class PropertyFoundEventArgs : EventArgs {
-		/// <param name="propertyID">To be added.</param>
-		///         <param name="ioFlags">To be added.</param>
+		/// <param name="propertyID">The property i d.</param>
+		///         <param name="ioFlags">The io flags.</param>
 		///         <summary>Initializes a new instance of the PropertyFoundEventArgs class.</summary>
 		///         <remarks>
 		///         </remarks>
@@ -146,16 +143,13 @@ namespace AudioToolbox {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public AudioFileStreamProperty Property { get; private set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public AudioFileStreamPropertyFlag Flags { get; set; }
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{
 			return String.Format ("AudioFileStreamProperty ({0})", Property);
@@ -171,9 +165,9 @@ namespace AudioToolbox {
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public class PacketReceivedEventArgs : EventArgs {
-		/// <param name="numberOfBytes">To be added.</param>
-		///         <param name="inputData">To be added.</param>
-		///         <param name="packetDescriptions">To be added.</param>
+		/// <param name="numberOfBytes">The number of bytes.</param>
+		///         <param name="inputData">The input data.</param>
+		///         <param name="packetDescriptions">The packet descriptions.</param>
 		///         <summary>Initializes a new instance of the PacketReceivedEventArgs class.</summary>
 		///         <remarks>
 		///         </remarks>
@@ -185,20 +179,16 @@ namespace AudioToolbox {
 		}
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public int Bytes { get; private set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public IntPtr InputData { get; private set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public AudioStreamPacketDescription []? PacketDescriptions { get; private set; }
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{
 			return String.Format ("Packet (Bytes={0} InputData={1} PacketDescriptions={2}", Bytes, InputData, PacketDescriptions?.Length ?? -1);
@@ -305,7 +295,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>This event is raised when a packet has been decoded.</summary>
-		///         <remarks>To be added.</remarks>
 		public EventHandler<PacketReceivedEventArgs>? PacketDecoded;
 		/// <param name="numberOfBytes">The number of bytes available in the decoded packet.</param>
 		///         <param name="inputData">Pointer to the decoded data.</param>
@@ -349,7 +338,6 @@ namespace AudioToolbox {
 
 		/// <param name="fileTypeHint">Hint about the audio file type.</param>
 		///         <summary>Creates a new instance of this object.</summary>
-		///         <remarks>To be added.</remarks>
 		public AudioFileStream (AudioFileType fileTypeHint)
 		{
 			IntPtr h;

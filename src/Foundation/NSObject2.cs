@@ -1039,7 +1039,7 @@ namespace Foundation {
 		/// <param name="handle">A handle to the value to set.</param>
 		/// <param name="keyPath">A key path of the form relationship.property (with one or more relationships); for example "department.name" or "department.manager.lastName".</param>
 		/// <remarks>
-		/// This method is useful for setting a value for a property that can be reached by following a key path.
+		/// This method is useful for setting a value for AProperty that can be reached by following a key path.
 		/// The key path is a series of property names separated by periods.
 		/// </remarks>
 		public void SetValueForKeyPath (NativeHandle handle, NSString keyPath)

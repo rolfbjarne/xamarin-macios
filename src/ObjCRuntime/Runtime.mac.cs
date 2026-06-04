@@ -43,14 +43,12 @@ namespace ObjCRuntime {
 		internal const string ProductName = "Microsoft.macOS";
 		internal const string AssemblyName = "Microsoft.macOS.dll";
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the frameworks path.</summary>
 		public static string? FrameworksPath {
 			get; set;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the resources path.</summary>
 		public static string? ResourcesPath {
 			get; set;
 		}

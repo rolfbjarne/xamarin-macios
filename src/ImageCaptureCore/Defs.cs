@@ -292,7 +292,7 @@ namespace ImageCaptureCore {
 		TcpIp,
 		[Field ("ICTransportTypeMassStorage")]
 		MassStorage,
-		/// <summary>Represents a proximity transport type for devices.</summary>
+		/// <summary>Represents AProximity transport type for devices.</summary>
 		[Mac (14, 0)]
 		[Field ("ICTransportTypeProximity")]
 		Proximity,

@@ -5,9 +5,8 @@
       <para>The arguments passed to the processing function.</para>
       <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
     </param>
-    <param name="outputRect">To be added.</param>
-    <summary>Developers can override this method to return the region of interest for a specific <see cref="CoreImage.ICIImageProcessorInput" />.</summary>
-    <returns>To be added.</returns>
-    <remarks>To be added.</remarks>
+    <param name="outputRect">The rectangle in the output image for which the region of interest is being calculated.</param>
+    <summary>Developers can override this method to return the region of interest for a specific <see cref="T:CoreImage.ICIImageProcessorInput" />.</summary>
+    <returns>The region of interest rectangle in the input image that corresponds to the specified <paramref name="outputRect" />.</returns>
   </Docs>
 </Documentation>

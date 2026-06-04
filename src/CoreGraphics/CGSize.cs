@@ -67,7 +67,6 @@ namespace CoreGraphics {
 		/// <param name="size1">The size1.</param>
 		///         <param name="size2">The size2.</param>
 		///         <summary>Adds two CGSize objects and returns the result.</summary>
-		///         <returns>To be added.</returns>
 		public static CGSize Add (CGSize size1, CGSize size2)
 		{
 			return size1 + size2;
@@ -75,29 +74,25 @@ namespace CoreGraphics {
 
 		/// <param name="size1">The size1.</param>
 		///         <param name="size2">The size2.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Subtract.</summary>
 		public static CGSize Subtract (CGSize size1, CGSize size2)
 		{
 			return size1 - size2;
 		}
 
 		/// <summary>The Width component of the CGSize.</summary>
-		///         <value>To be added.</value>
 		public nfloat Width {
 			get { return width; }
 			set { width = value; }
 		}
 
 		/// <summary>The height component of the CGSize.</summary>
-		///         <value>To be added.</value>
 		public nfloat Height {
 			get { return height; }
 			set { height = value; }
 		}
 
 		/// <summary>Returns true if the size is empty</summary>
-		///         <value>To be added.</value>
 		public bool IsEmpty {
 			get { return width == 0.0 && height == 0.0; }
 		}
@@ -112,7 +107,7 @@ namespace CoreGraphics {
 #if !COREBUILD
 		/// <param name="width">The width.</param>
 		///         <param name="height">The height.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CGSize" /> instance.</summary>
 		public CGSize (double width, double height)
 		{
 			this.width = (nfloat) width;
@@ -121,7 +116,7 @@ namespace CoreGraphics {
 
 		/// <param name="width">The width.</param>
 		///         <param name="height">The height.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CGSize" /> instance.</summary>
 		public CGSize (float width, float height)
 		{
 			this.width = width;
@@ -194,7 +189,6 @@ namespace CoreGraphics {
 
 		/// <param name="obj">The obj.</param>
 		///         <summary>Compares the CGSize with another object.</summary>
-		///         <returns>To be added.</returns>
 		public override bool Equals (object? obj)
 		{
 			return (obj is CGSize t) && Equals (t);
@@ -202,14 +196,12 @@ namespace CoreGraphics {
 
 		/// <param name="size">The size.</param>
 		///         <summary>Compares the size with the specified size.</summary>
-		///         <returns>To be added.</returns>
 		public bool Equals (CGSize size)
 		{
 			return size.width == width && size.height == height;
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override int GetHashCode ()
 		{
 			return HashCode.Combine (width, height);
@@ -222,22 +214,19 @@ namespace CoreGraphics {
 			height = Height;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Tos rounded c g size.</summary>
 		public CGSize ToRoundedCGSize ()
 		{
 			return new CGSize ((nfloat) Math.Round (width), (nfloat) Math.Round (height));
 		}
 
 		/// <summary>Converts the CGSize to a CGPOint.</summary>
-		///         <returns>To be added.</returns>
 		public CGPoint ToCGPoint ()
 		{
 			return (CGPoint) this;
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override string? ToString ()
 		{
 			return CFString.FromHandle (NSStringFromCGSize (this));

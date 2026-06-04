@@ -151,12 +151,12 @@ namespace WebKit {
 		DHTML = 1,
 		/// <summary>Indicates image.</summary>
 		Image = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates link.</summary>
 		Link = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates selection.</summary>
 		[Obsolete ("This API is not available on this platform.")]
 		Selection = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates any element type.</summary>
 		Any = UInt64.MaxValue,
 	}
 

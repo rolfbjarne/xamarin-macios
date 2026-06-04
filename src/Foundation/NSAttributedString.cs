@@ -208,7 +208,7 @@ namespace Foundation {
 		public NSAttributedString (NSData data, out NSError error)
 		: this (data, new NSDictionary (), out var _, out error) { }
 #else
-		/// <param name="url">To be added.</param>
+		/// <param name="url">The URL to use.</param>
 		///         <param name="documentAttributes">To be added.</param>
 		///         <param name="error">To be added.</param>
 		///         <summary>To be added.</summary>
@@ -218,7 +218,7 @@ namespace Foundation {
 		public NSAttributedString (NSUrl url, NSAttributedStringDocumentAttributes documentAttributes, ref NSError error)
 		: this (url, documentAttributes, out var _, ref error) { }
 
-		/// <param name="data">To be added.</param>
+		/// <param name="data">The data to use.</param>
 		///         <param name="documentAttributes">To be added.</param>
 		///         <param name="error">To be added.</param>
 		///         <summary>To be added.</summary>
@@ -248,10 +248,9 @@ namespace Foundation {
 #endif
 
 #if __MACOS__
-		/// <param name="str">To be added.</param>
-		///         <param name="attributes">To be added.</param>
+		/// <param name="str">The str.</param>
+		///         <param name="attributes">The attributes.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public NSAttributedString (string str, NSStringAttributes? attributes)
 			: this (str, attributes?.Dictionary)
 		{
@@ -270,11 +269,10 @@ namespace Foundation {
 			}
 		}
 
-		/// <param name="location">To be added.</param>
-		/// <param name="effectiveRange">To be added.</param>
+		/// <param name="location">The location.</param>
+		/// <param name="effectiveRange">The effective range.</param>
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
 		public NSDictionary? GetAttributes (nint location, out NSRange effectiveRange)
 		{
 			return Runtime.GetNSObject<NSDictionary> (LowLevelGetAttributes (location, out effectiveRange));
@@ -300,66 +298,60 @@ namespace Foundation {
 		{
 		}
 
-		/// <param name="location">To be added.</param>
-		/// <param name="effectiveRange">To be added.</param>
+		/// <param name="location">The location.</param>
+		/// <param name="effectiveRange">The effective range.</param>
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
 		public CTStringAttributes? GetCoreTextAttributes (nint location, out NSRange effectiveRange)
 		{
 			var attr = GetAttributes (location, out effectiveRange);
 			return attr is null ? null : new CTStringAttributes (attr);
 		}
 
-		/// <param name="location">To be added.</param>
-		/// <param name="longestEffectiveRange">To be added.</param>
-		/// <param name="rangeLimit">To be added.</param>
+		/// <param name="location">The location.</param>
+		/// <param name="longestEffectiveRange">The longest effective range.</param>
+		/// <param name="rangeLimit">The range limit.</param>
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
 		public CTStringAttributes? GetCoreTextAttributes (nint location, out NSRange longestEffectiveRange, NSRange rangeLimit)
 		{
 			var attr = GetAttributes (location, out longestEffectiveRange, rangeLimit);
 			return attr is null ? null : new CTStringAttributes (attr);
 		}
 
-		/// <param name="start">To be added.</param>
-		/// <param name="len">To be added.</param>
+		/// <param name="start">The start.</param>
+		/// <param name="len">The len.</param>
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
 		public NSAttributedString Substring (nint start, nint len)
 		{
 			return Substring (new NSRange (start, len));
 		}
 
 #if !MONOMAC
-		/// <param name="str">To be added.</param>
-		///         <param name="attributes">To be added.</param>
+		/// <param name="str">The str.</param>
+		///         <param name="attributes">The attributes.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public NSAttributedString (string str, UIStringAttributes? attributes)
 			: this (str, attributes?.Dictionary)
 		{
 		}
 
-		/// <param name="location">To be added.</param>
-		/// <param name="effectiveRange">To be added.</param>
+		/// <param name="location">The location.</param>
+		/// <param name="effectiveRange">The effective range.</param>
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
 		public UIStringAttributes? GetUIKitAttributes (nint location, out NSRange effectiveRange)
 		{
 			var attr = GetAttributes (location, out effectiveRange);
 			return attr is null ? null : new UIStringAttributes (attr);
 		}
 
-		/// <param name="location">To be added.</param>
-		/// <param name="longestEffectiveRange">To be added.</param>
-		/// <param name="rangeLimit">To be added.</param>
+		/// <param name="location">The location.</param>
+		/// <param name="longestEffectiveRange">The longest effective range.</param>
+		/// <param name="rangeLimit">The range limit.</param>
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
 		public UIStringAttributes? GetUIKitAttributes (nint location, out NSRange longestEffectiveRange, NSRange rangeLimit)
 		{
 			var attr = GetAttributes (location, out longestEffectiveRange, rangeLimit);

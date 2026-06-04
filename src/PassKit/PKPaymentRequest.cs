@@ -5,7 +5,7 @@ namespace PassKit {
 	public partial class PKContactFieldsExtensions {
 
 		/// <param name="set">The set.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the contact fields value from the specified set.</summary>
 		static public PKContactFields GetValue (NSSet set)
 		{
 			if (set is null)
@@ -14,7 +14,7 @@ namespace PassKit {
 		}
 
 		/// <param name="values">The values.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the set representation of the specified contact fields.</summary>
 		static public NSSet GetSet (PKContactFields values)
 		{
 			return new NSMutableSet (values.ToArray ());

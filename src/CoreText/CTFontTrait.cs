@@ -93,36 +93,34 @@ namespace CoreText {
 
 	// defined as uint32_t - /System/Library/Frameworks/CoreText.framework/Headers/CTFontTraits.h
 	/// <summary>An enumeration whose values specify the serif style of a <see cref="CoreText.CTFont" />.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum CTFontStylisticClass : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown = ((uint) 0 << CTFontTraits.ClassMaskShift),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates old style serifs.</summary>
 		OldStyleSerifs = ((uint) 1 << CTFontTraits.ClassMaskShift),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates transitional serifs.</summary>
 		TransitionalSerifs = ((uint) 2 << CTFontTraits.ClassMaskShift),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates modern serifs.</summary>
 		ModernSerifs = ((uint) 3 << CTFontTraits.ClassMaskShift),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates clarendon serifs.</summary>
 		ClarendonSerifs = ((uint) 4 << CTFontTraits.ClassMaskShift),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates slab serifs.</summary>
 		SlabSerifs = ((uint) 5 << CTFontTraits.ClassMaskShift),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates freeform serifs.</summary>
 		FreeformSerifs = ((uint) 7 << CTFontTraits.ClassMaskShift),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates sans serif.</summary>
 		SansSerif = ((uint) 8 << CTFontTraits.ClassMaskShift),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates ornamentals.</summary>
 		Ornamentals = ((uint) 9 << CTFontTraits.ClassMaskShift),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates scripts.</summary>
 		Scripts = ((uint) 10 << CTFontTraits.ClassMaskShift),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates symbolic.</summary>
 		Symbolic = ((uint) 12 << CTFontTraits.ClassMaskShift),
 	}
 
 	/// <summary>The standard traits for a <see cref="CoreText.CTFontDescriptor" />.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -130,15 +128,13 @@ namespace CoreText {
 	public class CTFontTraits {
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CTFontTraits ()
 			: this (new NSMutableDictionary ())
 		{
 		}
 
-		/// <param name="dictionary">To be added.</param>
+		/// <param name="dictionary">The dictionary.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CTFontTraits (NSDictionary dictionary)
 		{
 			if (dictionary is null)
@@ -148,13 +144,11 @@ namespace CoreText {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NSDictionary Dictionary { get; private set; }
 
 		// CFNumber
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public uint? Symbolic {
 			get { return Adapter.GetUInt32Value (Dictionary, CTFontTraitKey.Symbolic); }
 			set { Adapter.SetValue (Dictionary, CTFontTraitKey.Symbolic!, value); }
@@ -162,7 +156,6 @@ namespace CoreText {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public CTFontSymbolicTraits? SymbolicTraits {
 			get {
 				var v = Symbolic;
@@ -178,7 +171,6 @@ namespace CoreText {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public CTFontStylisticClass? StylisticClass {
 			get {
 				var v = Symbolic;
@@ -195,7 +187,6 @@ namespace CoreText {
 		// CFNumber representing a float value 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public float? Weight {
 			get { return Adapter.GetSingleValue (Dictionary, CTFontTraitKey.Weight); }
 			set { Adapter.SetValue (Dictionary, CTFontTraitKey.Weight!, value); }
@@ -204,7 +195,6 @@ namespace CoreText {
 		// CFNumber representing a float value 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public float? Width {
 			get { return Adapter.GetSingleValue (Dictionary, CTFontTraitKey.Width); }
 			set { Adapter.SetValue (Dictionary, CTFontTraitKey.Width!, value); }
@@ -213,7 +203,6 @@ namespace CoreText {
 		// CFNumber representing a float value 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public float? Slant {
 			get { return Adapter.GetSingleValue (Dictionary, CTFontTraitKey.Slant); }
 			set { Adapter.SetValue (Dictionary, CTFontTraitKey.Slant!, value); }

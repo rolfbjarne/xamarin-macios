@@ -16,17 +16,15 @@ using CoreAnimation;
 
 namespace SceneKit {
 	public partial class SCNNode : IEnumerable, IEnumerable<SCNNode> {
-		/// <param name="node">To be added.</param>
+		/// <param name="node">The node.</param>
 		///         <summary>Adds <paramref name="node" /> as a child of this <see cref="SceneKit.SCNNode" />.</summary>
-		///         <remarks>To be added.</remarks>
 		public void Add (SCNNode node)
 		{
 			AddChildNode (node);
 		}
 
-		/// <param name="nodes">To be added.</param>
+		/// <param name="nodes">The nodes.</param>
 		///         <summary>Adds the specified <paramref name="nodes" /> as children of this <see cref="SceneKit.SCNNode" />.</summary>
-		///         <remarks>To be added.</remarks>
 		public void AddNodes (params SCNNode [] nodes)
 		{
 			if (nodes is null)
@@ -37,7 +35,6 @@ namespace SceneKit {
 
 		/// <summary>Gets an enumerator for iterating over the node's descendants.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public IEnumerator<SCNNode> GetEnumerator ()
 		{
 			foreach (var node in ChildNodes)
@@ -46,16 +43,14 @@ namespace SceneKit {
 
 		/// <summary>Gets an enumerator for the node's children.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		IEnumerator IEnumerable.GetEnumerator ()
 		{
 			return GetEnumerator ();
 		}
 
-		/// <param name="animation">To be added.</param>
-		///         <param name="key">To be added.</param>
+		/// <param name="animation">The animation.</param>
+		///         <param name="key">The key to use.</param>
 		///         <summary>Adds the <paramref name="animation" /> to this <see cref="SceneKit.SCNNode" /> and associates it with the <paramref name="key" />.</summary>
-		///         <remarks>To be added.</remarks>
 		public void AddAnimation (CAAnimation animation, string? key)
 		{
 			if (key is null) {
@@ -66,10 +61,9 @@ namespace SceneKit {
 			}
 		}
 
-		/// <param name="key">To be added.</param>
-		/// <param name="duration">To be added.</param>
+		/// <param name="key">The key to use.</param>
+		/// <param name="duration">The duration.</param>
 		/// <summary>Removes the animation that is identified by the provided <paramref name="key" />, fading it out over <paramref name="duration" /> seconds.</summary>
-		/// <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
@@ -87,9 +81,8 @@ namespace SceneKit {
 				((ISCNAnimatable) this).RemoveAnimation (s, duration);
 		}
 
-		/// <param name="key">To be added.</param>
+		/// <param name="key">The key to use.</param>
 		///         <summary>Removes the animation that is identified by the provided <paramref name="key" />.</summary>
-		///         <remarks>To be added.</remarks>
 		public void RemoveAnimation (string key)
 		{
 			if (string.IsNullOrEmpty (key))

@@ -33,7 +33,6 @@ using CoreFoundation;
 
 namespace CoreGraphics {
 	/// <summary>PDF Document.</summary>
-	///     <remarks>To be added.</remarks>
 	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/QuartzSample/">QuartzSample</related>
 	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/ZoomingPdfViewer/">ZoomingPdfViewer</related>
 	[SupportedOSPlatform ("ios")]
@@ -79,10 +78,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGPDFDocumentRef */ IntPtr CGPDFDocumentCreateWithURL (/* CFURLRef */ IntPtr url);
 
-		/// <param name="str">To be added.</param>
+		/// <param name="str">The str.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CGPDFDocument? FromFile (string str)
 		{
 			using (var url = CFUrl.FromFile (str)) {
@@ -96,10 +94,9 @@ namespace CoreGraphics {
 
 		}
 
-		/// <param name="str">To be added.</param>
+		/// <param name="str">The str.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CGPDFDocument? FromUrl (string str)
 		{
 			using (var url = CFUrl.FromUrlString (str, null)) {
@@ -117,7 +114,6 @@ namespace CoreGraphics {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public nint Pages {
 			get {
 				return CGPDFDocumentGetNumberOfPages (Handle);
@@ -136,10 +132,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		unsafe extern static void CGPDFDocumentGetVersion (/* CGPDFDocumentRef */ IntPtr document, /* int* */ int* majorVersion, /* int* */ int* minorVersion);
 
-		/// <param name="major">To be added.</param>
-		///         <param name="minor">To be added.</param>
+		/// <param name="major">The major.</param>
+		///         <param name="minor">The minor.</param>
 		///         <summary>Gets the version of <c>this</c> <see cref="CoreGraphics.CGPDFDocument" /> object, including the <paramref name="major" /> and <paramref name="minor" /> version numbers.</summary>
-		///         <remarks>To be added.</remarks>
 		public void GetVersion (out int major, out int minor)
 		{
 			major = default;
@@ -156,7 +151,6 @@ namespace CoreGraphics {
 
 		/// <summary>Gets whether <c>this</c> <see cref="CoreGraphics.CGPDFDocument" /> object is encrypted.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool IsEncrypted {
 			get {
 				return CGPDFDocumentIsEncrypted (Handle) != 0;
@@ -166,10 +160,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static byte CGPDFDocumentUnlockWithPassword (/* CGPDFDocumentRef */ IntPtr document, /* const char* */ IntPtr password);
 
-		/// <param name="password">To be added.</param>
+		/// <param name="password">The password.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public bool Unlock (string password)
 		{
 			using var passwordPtr = new TransientString (password);
@@ -181,7 +174,6 @@ namespace CoreGraphics {
 
 		/// <summary>Gets whether the <c>this</c> <see cref="CoreGraphics.CGPDFDocument" /> object is not locked, either because the object is not encrypted or a password has been supplied.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool IsUnlocked {
 			get {
 				return CGPDFDocumentIsUnlocked (Handle) != 0;
@@ -193,7 +185,6 @@ namespace CoreGraphics {
 
 		/// <summary>Gets whether <c>this</c> <see cref="CoreGraphics.CGPDFDocument" /> object allows printing.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool AllowsPrinting {
 			get {
 				return CGPDFDocumentAllowsPrinting (Handle) != 0;
@@ -205,7 +196,6 @@ namespace CoreGraphics {
 
 		/// <summary>Gets whether <c>this</c> <see cref="CoreGraphics.CGPDFDocument" /> object allows copying.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool AllowsCopying {
 			get {
 				return CGPDFDocumentAllowsCopying (Handle) != 0;
@@ -216,7 +206,6 @@ namespace CoreGraphics {
 		extern static /* CGPDFDictionaryRef */ IntPtr CGPDFDocumentGetCatalog (/* CGPDFDocumentRef */ IntPtr document);
 		/// <summary>Gets the catalog for <c>this</c> <see cref="CoreGraphics.CGPDFDocument" /> object.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CGPDFDictionary GetCatalog ()
 		{
 			return new CGPDFDictionary (CGPDFDocumentGetCatalog (Handle));
@@ -227,7 +216,6 @@ namespace CoreGraphics {
 
 		/// <summary>Gets information for <c>this</c> <see cref="CoreGraphics.CGPDFDocument" /> as a <see cref="CoreGraphics.CGPDFDictionary" /> dictionary.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CGPDFDictionary GetInfo ()
 		{
 			return new CGPDFDictionary (CGPDFDocumentGetInfo (Handle));
@@ -240,9 +228,8 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGPDFContextSetOutline (/* CGPDFDocumentRef */ IntPtr document, IntPtr /* dictionary */ outline);
 
-		/// <param name="options">To be added.</param>
+		/// <param name="options">The options to use.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -261,7 +248,6 @@ namespace CoreGraphics {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -281,7 +267,6 @@ namespace CoreGraphics {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]

@@ -851,7 +851,7 @@ namespace SceneKit {
 		SCNCapsule Create (nfloat capRadius, nfloat height);
 	}
 
-	/// <summary>An <see cref="SceneKit.SCNGeometry" /> that is a circular frustum. Or, a party hat.</summary>
+	/// <summary>An <see cref="SceneKit.SCNGeometry" /> that is a circular frustum. Or, AParty hat.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/SceneKit/Reference/SCNCone_Class/index.html">Apple documentation for <c>SCNCone</c></related>
 	[MacCatalyst (13, 1)]
@@ -1797,7 +1797,7 @@ namespace SceneKit {
 		NSString ShadowFarClippingKey { get; }
 	}
 
-	/// <summary>Constants for use with the <see cref="SCNMaterial.LightingModelName" /> property, which defines the way lights and materials combine to produce a particular rendered color.</summary>
+	/// <summary>Constants for use with the <see cref="SCNMaterial.LightingModelName" /> property, which defines the way lights and materials combine to produce AParticular rendered color.</summary>
 	[MacCatalyst (13, 1)]
 	[Static]
 	interface SCNLightingModel {
@@ -1885,7 +1885,7 @@ namespace SceneKit {
 		[Export ("lightingModelName", ArgumentSemantic.Copy)]
 		NSString LightingModelName { get; set; }
 
-		/// <summary>Gets or sets a value that controls whether lighting is performed on a per-pixel or per-vertex basis.</summary>
+		/// <summary>Gets or sets a value that controls whether lighting is performed on APer-pixel or per-vertex basis.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[Export ("litPerPixel")]
@@ -6344,7 +6344,7 @@ namespace SceneKit {
 	[MacCatalyst (13, 1)]
 	delegate void SCNParticleModifierHandler (IntPtr data, IntPtr dataStride, nint start, nint end, float /* float, not CGFloat */ deltaTime);
 
-	/// <summary>Animates a property of the particles emitted by a SCNParticleSystem.</summary>
+	/// <summary>Animates AProperty of the particles emitted by a SCNParticleSystem.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/SceneKit/Reference/SCNParticlePropertyController_Class/index.html">Apple documentation for <c>SCNParticlePropertyController</c></related>
 	[MacCatalyst (13, 1)]

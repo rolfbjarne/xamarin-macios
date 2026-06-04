@@ -197,11 +197,11 @@ namespace CoreMedia {
 			}
 		}
 
-		/// <summary>The font size expressed as a percentage of the current default font size.</summary>
+		/// <summary>The font size expressed as APercentage of the current default font size.</summary>
 		///         <value>Value must be positive.</value>
 		///         <remarks>
 		///           <para>The property uses constant kCMTextMarkupAttribute_RelativeFontSize value to access the underlying dictionary.</para>
-		///           <para>This is a number holding a percentage of the size of the calculated default font size. The value 100 indicates no size
+		///           <para>This is a number holding APercentage of the size of the calculated default font size. The value 100 indicates no size
 		///                 difference and is the default.</para>
 		///         </remarks>
 		public int? RelativeFontSize {

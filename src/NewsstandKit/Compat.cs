@@ -26,10 +26,9 @@ namespace NewsstandKit {
 			throw new InvalidOperationException (Constants.NewsstandKitRemoved);
 		}
 
-		/// <param name="downloadDelegate">To be added.</param>
+		/// <param name="downloadDelegate">The download delegate.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public virtual NSUrlConnection DownloadWithDelegate (INSUrlConnectionDownloadDelegate downloadDelegate)
 		{
 			throw new InvalidOperationException (Constants.NewsstandKitRemoved);
@@ -37,7 +36,6 @@ namespace NewsstandKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public virtual string Identifier {
 			get {
 				throw new InvalidOperationException (Constants.NewsstandKitRemoved);
@@ -46,7 +44,6 @@ namespace NewsstandKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public virtual NKIssue? Issue {
 			get {
 				throw new InvalidOperationException (Constants.NewsstandKitRemoved);
@@ -55,7 +52,6 @@ namespace NewsstandKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public virtual NSUrlRequest UrlRequest {
 			get {
 				throw new InvalidOperationException (Constants.NewsstandKitRemoved);
@@ -64,7 +60,6 @@ namespace NewsstandKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public virtual NSDictionary? UserInfo {
 			get {
 				throw new InvalidOperationException (Constants.NewsstandKitRemoved);
@@ -102,10 +97,9 @@ namespace NewsstandKit {
 			throw new InvalidOperationException (Constants.NewsstandKitRemoved);
 		}
 
-		/// <param name="request">To be added.</param>
+		/// <param name="request">The request.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public virtual NKAssetDownload AddAsset (NSUrlRequest request)
 		{
 			throw new InvalidOperationException (Constants.NewsstandKitRemoved);
@@ -113,7 +107,6 @@ namespace NewsstandKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public virtual NSUrl ContentUrl {
 			get {
 				throw new InvalidOperationException (Constants.NewsstandKitRemoved);
@@ -122,7 +115,6 @@ namespace NewsstandKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public virtual NSDate Date {
 			get {
 				throw new InvalidOperationException (Constants.NewsstandKitRemoved);
@@ -131,7 +123,6 @@ namespace NewsstandKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public virtual NKAssetDownload [] DownloadingAssets {
 			get {
 				throw new InvalidOperationException (Constants.NewsstandKitRemoved);
@@ -140,7 +131,6 @@ namespace NewsstandKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public virtual string Name {
 			get {
 				throw new InvalidOperationException (Constants.NewsstandKitRemoved);
@@ -149,7 +139,6 @@ namespace NewsstandKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public virtual NKIssueContentStatus Status {
 			get {
 				throw new InvalidOperationException (Constants.NewsstandKitRemoved);
@@ -192,9 +181,9 @@ namespace NewsstandKit {
 	public enum NKIssueContentStatus : long {
 		/// <summary>To be added.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates downloading.</summary>
 		Downloading = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates available.</summary>
 		Available = 2,
 	}
 
@@ -219,28 +208,25 @@ namespace NewsstandKit {
 			throw new InvalidOperationException (Constants.NewsstandKitRemoved);
 		}
 
-		/// <param name="name">To be added.</param>
-		///         <param name="date">To be added.</param>
+		/// <param name="name">The name to use.</param>
+		///         <param name="date">The date.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public virtual NKIssue AddIssue (string name, NSDate date)
 		{
 			throw new InvalidOperationException (Constants.NewsstandKitRemoved);
 		}
 
-		/// <param name="name">To be added.</param>
+		/// <param name="name">The name to use.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public virtual NKIssue? GetIssue (string name)
 		{
 			throw new InvalidOperationException (Constants.NewsstandKitRemoved);
 		}
 
-		/// <param name="issue">To be added.</param>
+		/// <param name="issue">The issue.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public virtual void RemoveIssue (NKIssue issue)
 		{
 			throw new InvalidOperationException (Constants.NewsstandKitRemoved);
@@ -248,7 +234,6 @@ namespace NewsstandKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public virtual NKIssue? CurrentlyReadingIssue {
 			get {
 				throw new InvalidOperationException (Constants.NewsstandKitRemoved);
@@ -260,7 +245,6 @@ namespace NewsstandKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public virtual NKAssetDownload [] DownloadingAssets {
 			get {
 				throw new InvalidOperationException (Constants.NewsstandKitRemoved);
@@ -269,7 +253,6 @@ namespace NewsstandKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public virtual NKIssue [] Issues {
 			get {
 				throw new InvalidOperationException (Constants.NewsstandKitRemoved);
@@ -278,7 +261,6 @@ namespace NewsstandKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public static NKLibrary? SharedLibrary {
 			get {
 				throw new InvalidOperationException (Constants.NewsstandKitRemoved);

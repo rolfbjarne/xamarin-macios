@@ -143,7 +143,7 @@ namespace CoreMedia {
 
 		/// <summary>Gets the <see cref="MediaSubType" /> property as a <see cref="CMVideoCodecType" />.</summary>
 		/// <returns>The <see cref="MediaSubType" /> property as a <see cref="CMVideoCodecType" />, if this format descripton's <see cref="MediaType" /> is <see cref="CMMediaType.Video" />, otherwise 0.</returns>
-		/// <remarks>Only applicable if this format descripton's <see cref="MediaType" /> is <see cref="CMMediaType.Video" />, otherwise 0 is returned. If <see cref="MediaSubType" /> is a pixel format, use <see cref="PixelFormatType" /> instead.</remarks>
+		/// <remarks>Only applicable if this format descripton's <see cref="MediaType" /> is <see cref="CMMediaType.Video" />, otherwise 0 is returned. If <see cref="MediaSubType" /> is APixel format, use <see cref="PixelFormatType" /> instead.</remarks>
 		public CMVideoCodecType VideoCodecType {
 			get {
 				return MediaType == CMMediaType.Video ? (CMVideoCodecType) MediaSubType : 0;
@@ -152,7 +152,7 @@ namespace CoreMedia {
 
 		/// <summary>Gets the <see cref="MediaSubType" /> property as a <see cref="CVPixelFormatType" />.</summary>
 		/// <returns>The <see cref="MediaSubType" /> property as a <see cref="CVPixelFormatType" />, if this format descripton's <see cref="MediaType" /> is <see cref="CMMediaType.Video" />, otherwise 0.</returns>
-		/// <remarks>Only applicable if this format descripton's <see cref="MediaType" /> is <see cref="CMMediaType.Video" />, otherwise 0 is returned. If <see cref="MediaSubType" /> property isn't a pixel format, use <see cref="VideoCodecType" /> instead.</remarks>
+		/// <remarks>Only applicable if this format descripton's <see cref="MediaType" /> is <see cref="CMMediaType.Video" />, otherwise 0 is returned. If <see cref="MediaSubType" /> property isn't APixel format, use <see cref="VideoCodecType" /> instead.</remarks>
 		public CVPixelFormatType PixelFormatType {
 			get {
 				return MediaType == CMMediaType.Video ? (CVPixelFormatType) MediaSubType : 0;

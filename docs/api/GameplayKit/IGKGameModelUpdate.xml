@@ -1,7 +1,7 @@
 <Documentation>
   <Docs DocId="P:GameplayKit.IGKGameModelUpdate.Value">
         <summary>Equivalent to the value produced by <see cref="GameplayKit.GKGameModel_Extensions.GetScore(GameplayKit.IGKGameModel,GameplayKit.IGKGameModelPlayer)" />.</summary>
-        <value>To be added.</value>
+        <value>The score value associated with this game model update.</value>
         <remarks>
           <para>
             This property is determined by the <see cref="GameplayKit.GKGameModel_Extensions.GetScore(GameplayKit.IGKGameModel,GameplayKit.IGKGameModelPlayer)" /> when <c>this</c><see cref="GameplayKit.IGKGameModelUpdate" /> is applied to the game state of the <see cref="GameplayKit.IGKGameModel" />.

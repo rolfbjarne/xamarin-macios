@@ -17,7 +17,7 @@ namespace Network {
 	// The content context, there are a few pre-configured content contexts for sending
 	// available as static properties on this class
 	//
-	/// <summary>To be added.</summary>
+/// <summary>Represents the context for content sent or received over a network connection.</summary>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
@@ -42,7 +42,7 @@ namespace Network {
 			return new NWContentContext (handle, owns: true, global: true);
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Releases the underlying native handle unless this is a global context.</summary>
 		protected internal override void Release ()
 		{
 			if (global)
@@ -54,7 +54,7 @@ namespace Network {
 		extern static IntPtr nw_content_context_create (IntPtr contextIdentifier);
 
 		/// <param name="contextIdentifier">The context identifier.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a new content context with the specified identifier.</summary>
 		public NWContentContext (string contextIdentifier)
 		{
 			if (contextIdentifier is null)
@@ -66,7 +66,7 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		extern static IntPtr nw_content_context_get_identifier (IntPtr handle);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the identifier for this content context.</summary>
 		public string? Identifier => Marshal.PtrToStringAnsi (nw_content_context_get_identifier (GetCheckedHandle ()));
 
 		[DllImport (Constants.NetworkLibrary)]
@@ -75,7 +75,7 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		extern static void nw_content_context_set_is_final (IntPtr handle, byte is_final);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets a value indicating whether this is the final message on the connection.</summary>
 		public bool IsFinal {
 			get => nw_content_context_get_is_final (GetCheckedHandle ()) != 0;
 			set => nw_content_context_set_is_final (GetCheckedHandle (), value.AsByte ());
@@ -87,7 +87,7 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		extern static void nw_content_context_set_expiration_milliseconds (IntPtr handle, /* uint64_t */ ulong value);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the expiration time in milliseconds for this content.</summary>
 		public ulong ExpirationMilliseconds {
 			get => nw_content_context_get_expiration_milliseconds (GetCheckedHandle ());
 			set => nw_content_context_set_expiration_milliseconds (GetCheckedHandle (), value);
@@ -99,7 +99,7 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		extern static void nw_content_context_set_relative_priority (IntPtr handle, double value);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the relative priority of this content.</summary>
 		public double RelativePriority {
 			get => nw_content_context_get_relative_priority (GetCheckedHandle ());
 			set => nw_content_context_set_relative_priority (GetCheckedHandle (), value);
@@ -111,7 +111,7 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		extern static void nw_content_context_set_antecedent (IntPtr handle, IntPtr value);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the antecedent content context that must be sent before this one.</summary>
 		public NWContentContext? Antecedent {
 			get {
 				var h = nw_content_context_copy_antecedent (GetCheckedHandle ());
@@ -129,7 +129,7 @@ namespace Network {
 		extern static IntPtr nw_content_context_copy_protocol_metadata (IntPtr handle, IntPtr protocol);
 
 		/// <param name="protocolDefinition">The protocol definition.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the protocol metadata for the specified protocol definition.</summary>
 		public NWProtocolMetadata? GetProtocolMetadata (NWProtocolDefinition protocolDefinition)
 		{
 			if (protocolDefinition is null)
@@ -154,7 +154,7 @@ namespace Network {
 		extern static void nw_content_context_set_metadata_for_protocol (IntPtr handle, IntPtr protocolMetadata);
 
 		/// <param name="protocolMetadata">The protocol metadata.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Sets protocol metadata on this content context.</summary>
 		public void SetMetadata (NWProtocolMetadata protocolMetadata)
 		{
 			if (protocolMetadata is null)
@@ -179,7 +179,7 @@ namespace Network {
 		unsafe static extern void nw_content_context_foreach_protocol_metadata (IntPtr handle, BlockLiteral* callback);
 
 		/// <param name="callback">The callback to invoke.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Iterates over all protocol metadata associated with this content context.</summary>
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public void IterateProtocolMetadata (Action<NWProtocolDefinition?, NWProtocolMetadata?> callback)
 		{
@@ -194,7 +194,7 @@ namespace Network {
 		// Use this as a parameter to NWConnection.Send's with all the default properties
 		// ie: NW_CONNECTION_DEFAULT_MESSAGE_CONTEXT, use this for datagrams
 		static NWContentContext? defaultMessage;
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the default message context for datagram connections.</summary>
 		public static NWContentContext DefaultMessage {
 			get {
 				if (defaultMessage is null)
@@ -207,7 +207,7 @@ namespace Network {
 		// Use this as a parameter to NWConnection.Send's to indicate that no more sends are expected
 		// (ie: NW_CONNECTION_FINAL_MESSAGE_CONTEXT)
 		static NWContentContext? finalMessage;
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the final message context that marks the end of a connection.</summary>
 		public static NWContentContext FinalMessage {
 			get {
 				if (finalMessage is null)
@@ -219,7 +219,7 @@ namespace Network {
 		// This sending context represents the entire connection
 		// ie: NW_CONNECTION_DEFAULT_STREAM_CONTEXT
 		static NWContentContext? defaultStream;
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the default stream context for stream connections.</summary>
 		public static NWContentContext DefaultStream {
 			get {
 				if (defaultStream is null)

@@ -59,11 +59,9 @@ namespace ObjCRuntime {
 
 	/// <summary>To be added.</summary>
 	public class AssemblyRegistrationEventArgs : EventArgs {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the register.</summary>
 		public bool Register { get; set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public System.Reflection.AssemblyName? AssemblyName { get; internal set; }
 	}
 }

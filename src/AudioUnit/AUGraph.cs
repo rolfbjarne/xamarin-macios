@@ -105,7 +105,6 @@ namespace AudioUnit {
 
 		/// <param name="errorCode">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static AUGraph? Create (out int errorCode)
 		{
@@ -121,7 +120,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsInitialized {
 			get {
@@ -133,7 +131,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsOpen {
 			get {
@@ -145,7 +142,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsRunning {
 			get {
@@ -239,7 +235,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public int TryOpen ()
 		{
@@ -268,7 +263,6 @@ namespace AudioUnit {
 
 		/// <param name="node">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AUGraphError RemoveNode (int node)
 		{
@@ -277,7 +271,6 @@ namespace AudioUnit {
 
 		/// <param name="averageCPULoad">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AUGraphError GetCPULoad (out float averageCPULoad)
 		{
@@ -291,7 +284,6 @@ namespace AudioUnit {
 
 		/// <param name="maxCPULoad">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AUGraphError GetMaxCPULoad (out float maxCPULoad)
 		{
@@ -306,7 +298,6 @@ namespace AudioUnit {
 		/// <param name="index">To be added.</param>
 		///         <param name="node">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AUGraphError GetNode (uint index, out int node)
 		{
@@ -320,7 +311,6 @@ namespace AudioUnit {
 
 		/// <param name="count">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AUGraphError GetNodeCount (out int count)
 		{
@@ -334,7 +324,6 @@ namespace AudioUnit {
 
 		/// <param name="node">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioUnit GetNodeInfo (int node)
 		{
@@ -353,7 +342,6 @@ namespace AudioUnit {
 		/// <param name="node">To be added.</param>
 		///         <param name="error">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioUnit? GetNodeInfo (int node, out AUGraphError error)
 		{
@@ -374,7 +362,6 @@ namespace AudioUnit {
 		///         <param name="cd">To be added.</param>
 		///         <param name="error">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioUnit? GetNodeInfo (int node, out AudioComponentDescription cd, out AUGraphError error)
 		{
@@ -394,7 +381,6 @@ namespace AudioUnit {
 
 		/// <param name="interactionsCount">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AUGraphError GetNumberOfInteractions (out uint interactionsCount)
 		{
@@ -409,7 +395,6 @@ namespace AudioUnit {
 		/// <param name="node">To be added.</param>
 		///         <param name="interactionsCount">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AUGraphError GetNumberOfInteractions (int node, out uint interactionsCount)
 		{
@@ -441,7 +426,6 @@ namespace AudioUnit {
 		///         <param name="destNode">To be added.</param>
 		///         <param name="destInputNumber">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AUGraphError ConnnectNodeInput (int sourceNode, uint sourceOutputNumber, int destNode, uint destInputNumber)
 		{
@@ -453,7 +437,6 @@ namespace AudioUnit {
 		/// <param name="destNode">To be added.</param>
 		///         <param name="destInputNumber">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AUGraphError DisconnectNodeInput (int destNode, uint destInputNumber)
 		{
@@ -466,7 +449,6 @@ namespace AudioUnit {
 		///         <param name="destInputNumber">To be added.</param>
 		///         <param name="renderDelegate">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AUGraphError SetNodeInputCallback (int destNode, uint destInputNumber, RenderDelegate renderDelegate)
 		{
@@ -500,7 +482,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AUGraphError ClearConnections ()
 		{
@@ -517,7 +498,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AUGraphError Stop ()
 		{
@@ -525,7 +505,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AUGraphError Initialize ()
 		{

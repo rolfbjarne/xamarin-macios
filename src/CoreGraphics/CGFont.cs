@@ -73,8 +73,8 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGFontRef */ IntPtr CGFontCreateWithDataProvider (/* CGDataProviderRef __nullable */ IntPtr provider);
 
-		/// <summary>Creates a font from a data provider.</summary>
-		/// <param name="provider">Data provider that wraps the font.</param>
+		/// <summary>Creates a font from a datAProvider.</summary>
+		/// <param name="provider">DatAProvider that wraps the font.</param>
 		/// <returns>The constructed font, or <see langword="null" /> in case of failure.</returns>
 		/// <remarks>
 		///   <para>

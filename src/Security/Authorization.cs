@@ -30,7 +30,7 @@
 #if MONOMAC || __MACCATALYST__
 
 namespace Security {
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies the status of an authorization operation.</summary>
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	// Untyped enum in ObjC
@@ -67,7 +67,7 @@ namespace Security {
 		BadAddress = -60033,
 	}
 
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies flags that control the behavior of authorization operations.</summary>
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	// typedef UInt32 AuthorizationFlags;
@@ -136,7 +136,7 @@ namespace Security {
 		public AuthorizationItem* /* AuthorizationItem* */ ptrToAuthorization;
 	}
 
-	/// <summary>To be added.</summary>
+	/// <summary>Provides access to the macOS authorization system for managing privileged operations.</summary>
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	public unsafe class Authorization : DisposableObject {
@@ -162,9 +162,7 @@ namespace Security {
 		/// <param name="pathToTool">The path to tool.</param>
 		///         <param name="flags">The flags.</param>
 		///         <param name="args">The event arguments.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Executes a tool with elevated privileges.</summary>
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("maccatalyst", "Use the Service Management framework or the launchd-launched helper tool instead.")]
@@ -198,7 +196,7 @@ namespace Security {
 
 		/// <param name="flags">The flags.</param>
 		///         <param name="disposing">The disposing.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Releases the authorization resources with the specified flags.</summary>
 		public virtual void Dispose (AuthorizationFlags flags, bool disposing)
 		{
 			if (Handle != IntPtr.Zero && Owns)

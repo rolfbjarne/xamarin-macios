@@ -12,7 +12,7 @@ namespace CloudKit {
 		CouldNotDetermine = 0,
 		/// <summary>The user's account is available.</summary>
 		Available = 1,
-		/// <summary>The user has an account, but a parental control or mobile restriction prevents its use.</summary>
+		/// <summary>The user has an account, but AParental control or mobile restriction prevents its use.</summary>
 		Restricted = 2,
 		/// <summary>The user has no iCloud account.</summary>
 		NoAccount = 3,
@@ -31,7 +31,7 @@ namespace CloudKit {
 	}
 
 	// NSInteger -> CKContainer.h
-	/// <summary>Enumerates the states that an application can have when attempting to obtain a permission.</summary>
+	/// <summary>Enumerates the states that an application can have when attempting to obtain APermission.</summary>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum CKApplicationPermissionStatus : long {
@@ -141,7 +141,7 @@ namespace CloudKit {
 	}
 
 	// NSInteger -> CKNotification.h
-	/// <summary>Enumerates the events that can generate a push notification.</summary>
+	/// <summary>Enumerates the events that can generate APush notification.</summary>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum CKNotificationType : long {
@@ -206,7 +206,7 @@ namespace CloudKit {
 	public enum CKSubscriptionType : long {
 		/// <summary>The subscription tracks data lifecycle events for records that satisfy a query.</summary>
 		Query = 1,
-		/// <summary>The subscription tracks data lifecycle events for records in a particular record zone.</summary>
+		/// <summary>The subscription tracks data lifecycle events for records in AParticular record zone.</summary>
 		RecordZone = 2,
 		/// <summary>Indicates database.</summary>
 		[MacCatalyst (13, 1)]
@@ -219,9 +219,9 @@ namespace CloudKit {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum CKDatabaseScope : long {
-		/// <summary>Indicates a public database.</summary>
+		/// <summary>Indicates APublic database.</summary>
 		Public = 1,
-		/// <summary>Indicates a private database.</summary>
+		/// <summary>Indicates APrivate database.</summary>
 		Private,
 		/// <summary>Indicates a shared database.</summary>
 		Shared,
@@ -265,11 +265,11 @@ namespace CloudKit {
 	public enum CKShareParticipantType : long {
 		/// <summary>Indicates that the participant type is unknown.</summary>
 		Unknown = 0,
-		/// <summary>Indicates that a participant is the share owner.</summary>
+		/// <summary>Indicates that AParticipant is the share owner.</summary>
 		Owner = 1,
-		/// <summary>Indicates that a participant is a credentialed user.</summary>
+		/// <summary>Indicates that AParticipant is a credentialed user.</summary>
 		PrivateUser = 3,
-		/// <summary>Indicates that a participant is an anonymous user.</summary>
+		/// <summary>Indicates that AParticipant is an anonymous user.</summary>
 		PublicUser = 4,
 	}
 

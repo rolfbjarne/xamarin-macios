@@ -35,7 +35,6 @@ namespace AudioToolbox {
 
 	// CoreAudio.framework - CoreAudioTypes.h
 	/// <summary>A class that describes an installed codec.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -43,20 +42,16 @@ namespace AudioToolbox {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AudioClassDescription {
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public AudioCodecComponentType Type;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public AudioFormatType SubType;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public AudioCodecManufacturer Manufacturer;
 
-		/// <param name="type">To be added.</param>
-		///         <param name="subType">To be added.</param>
-		///         <param name="manufacturer">To be added.</param>
+		/// <param name="type">The type.</param>
+		///         <param name="subType">The sub type.</param>
+		///         <param name="manufacturer">The manufacturer.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public AudioClassDescription (AudioCodecComponentType type, AudioFormatType subType, AudioCodecManufacturer manufacturer)
 		{
 			Type = type;
@@ -66,7 +61,6 @@ namespace AudioToolbox {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool IsHardwareCodec {
 			get {
 				return Manufacturer == AudioCodecManufacturer.AppleHardware;

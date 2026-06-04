@@ -12,7 +12,6 @@
           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
         </param>
         <summary>Creates a capsule from the width and radii, with the specified number of segments and geometry kind.</summary>
-        <returns>To be added.</returns>
-        <remarks>To be added.</remarks>
+        <returns>A new <see cref="T:ModelIO.MDLMesh" /> representing the capsule geometry.</returns>
       </Docs>
 </Documentation>

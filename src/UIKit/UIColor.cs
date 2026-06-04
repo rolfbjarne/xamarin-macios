@@ -47,9 +47,9 @@ namespace UIKit {
 			return FromRGBA (red / 255.0f, green / 255.0f, blue / 255.0f, 1.0f);
 		}
 
-		/// <param name="red">To be added.</param>
-		///         <param name="green">To be added.</param>
-		///         <param name="blue">To be added.</param>
+		/// <param name="red">The red.</param>
+		///         <param name="green">The green.</param>
+		///         <param name="blue">The blue.</param>
 		///         <summary>Creates a color from the specified combinated of red, green, and blue components.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>
@@ -77,10 +77,10 @@ namespace UIKit {
 			return FromRGBA (red / 255.0f, green / 255.0f, blue / 255.0f, alpha / 255.0f);
 		}
 
-		/// <param name="red">To be added.</param>
-		///         <param name="green">To be added.</param>
-		///         <param name="blue">To be added.</param>
-		///         <param name="alpha">To be added.</param>
+		/// <param name="red">The red.</param>
+		///         <param name="green">The green.</param>
+		///         <param name="blue">The blue.</param>
+		///         <param name="alpha">The alpha.</param>
 		///         <summary>Creates a color from the specified combination of red, green, and blue elements, with the specified transparency.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>

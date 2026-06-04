@@ -12,7 +12,7 @@ namespace MetalPerformanceShaders {
 		///         <param name="inputScaleTerms">The input scale terms.</param>
 		///         <param name="type">The type.</param>
 		///         <param name="flags">The flags.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a new binary convolution kernel with the specified parameters.</summary>
 		public unsafe MPSCnnBinaryConvolution (IMTLDevice device, IMPSCnnConvolutionDataSource convolutionData, float [] outputBiasTerms, float [] outputScaleTerms, float [] inputBiasTerms, float [] inputScaleTerms, MPSCnnBinaryConvolutionType type, MPSCnnBinaryConvolutionFlags flags)
 			: base (NSObjectFlag.Empty)
 		{
@@ -33,7 +33,7 @@ namespace MetalPerformanceShaders {
 		///         <param name="inputScaleTerms">The input scale terms.</param>
 		///         <param name="type">The type.</param>
 		///         <param name="flags">The flags.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a new binary fully connected layer with the specified parameters.</summary>
 		public unsafe MPSCnnBinaryFullyConnected (IMTLDevice device, IMPSCnnConvolutionDataSource convolutionData, float [] outputBiasTerms, float [] outputScaleTerms, float [] inputBiasTerms, float [] inputScaleTerms, MPSCnnBinaryConvolutionType type, MPSCnnBinaryConvolutionFlags flags)
 			: base (NSObjectFlag.Empty)
 		{

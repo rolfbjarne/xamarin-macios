@@ -32,7 +32,6 @@ using CoreImage;
 
 namespace AudioUnit {
 	/// <summary>Holds key-value pairs on class information. Used with <see cref="AudioUnit.SetClassInfo(ClassInfoDictionary,AudioUnitScopeType,System.UInt32)" /> and <see cref="AudioUnit.GetClassInfo(AudioUnitScopeType,System.UInt32)" />.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -50,15 +49,13 @@ namespace AudioUnit {
 		const string ExternalFileRefs = "file-references";
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public ClassInfoDictionary ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
-		/// <param name="dictionary">To be added.</param>
+		/// <param name="dictionary">The dictionary.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public ClassInfoDictionary (NSDictionary? dictionary)
 			: base (dictionary)
 		{
@@ -66,7 +63,6 @@ namespace AudioUnit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public AudioComponentManufacturerType? Manufacturer {
 			get {
 				using (var key = new NSString (ManufacturerKey))
@@ -76,7 +72,6 @@ namespace AudioUnit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? Name {
 			get {
 				return GetStringValue (NameKey);
@@ -85,7 +80,6 @@ namespace AudioUnit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public AudioComponentType? Type {
 			get {
 				using (var key = new NSString (TypeKey))

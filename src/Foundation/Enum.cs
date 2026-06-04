@@ -32,37 +32,37 @@ namespace Foundation {
 	public enum NSStringEncoding : ulong {
 		/// <summary>ASCII encoding contains, 7-bit of information stored in 8 bits.</summary>
 		ASCIIStringEncoding = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>N E X T S T E P.</summary>
 		NEXTSTEP = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Japanese E U C.</summary>
 		JapaneseEUC = 3,
 		/// <summary>8-bit based variable-length character encoding for Unicode. </summary>
 		UTF8 = 4,
 		/// <summary>8-bit ISO/IEC 8859-1, also knows as Latin1 encoding.</summary>
 		ISOLatin1 = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Symbol.</summary>
 		Symbol = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Non Lossy A S C I I.</summary>
 		NonLossyASCII = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Shift J I S.</summary>
 		ShiftJIS = 8,
 		/// <summary>8-bit ISO/IEC 8859-2, also knows as Latin2 encoding.</summary>
 		ISOLatin2 = 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Unicode.</summary>
 		Unicode = 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Windows C P1251.</summary>
 		WindowsCP1251 = 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Windows C P1252.</summary>
 		WindowsCP1252 = 12,
-		/// <summary>To be added.</summary>
+		/// <summary>Windows C P1253.</summary>
 		WindowsCP1253 = 13,
-		/// <summary>To be added.</summary>
+		/// <summary>Windows C P1254.</summary>
 		WindowsCP1254 = 14,
-		/// <summary>To be added.</summary>
+		/// <summary>Windows C P1250.</summary>
 		WindowsCP1250 = 15,
-		/// <summary>To be added.</summary>
+		/// <summary>I S O2022 J P.</summary>
 		ISO2022JP = 21,
-		/// <summary>To be added.</summary>
+		/// <summary>Mac O S Roman.</summary>
 		MacOSRoman = 30,
 		/// <summary>16 bit-based variable length encoding, blocks are interpreted as big endian.</summary>
 		UTF16BigEndian = 0x90000100,
@@ -77,31 +77,29 @@ namespace Foundation {
 	};
 
 	/// <summary>An enumeration of options available to NSString search and comparison methods.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSStringCompareOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Case Insensitive Search.</summary>
 		CaseInsensitiveSearch = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Literal Search.</summary>
 		LiteralSearch = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Backwards Search.</summary>
 		BackwardsSearch = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Anchored Search.</summary>
 		AnchoredSearch = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Numeric Search.</summary>
 		NumericSearch = 64,
-		/// <summary>To be added.</summary>
+		/// <summary>Diacritic Insensitive Search.</summary>
 		DiacriticInsensitiveSearch = 128,
-		/// <summary>To be added.</summary>
+		/// <summary>Width Insensitive Search.</summary>
 		WidthInsensitiveSearch = 256,
-		/// <summary>To be added.</summary>
+		/// <summary>Forced Ordering Search.</summary>
 		ForcedOrderingSearch = 512,
-		/// <summary>To be added.</summary>
+		/// <summary>Regular Expression Search.</summary>
 		RegularExpressionSearch = 1024,
 	}
 
 	/// <summary>Determines how credentials are persisted.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSUrlCredentialPersistence : ulong {
 		/// <summary>Not persisted.</summary>
@@ -110,7 +108,7 @@ namespace Foundation {
 		ForSession,
 		/// <summary>Permanently.</summary>
 		Permanent,
-		/// <summary>To be added.</summary>
+		/// <summary>Synchronizable.</summary>
 		Synchronizable,
 	}
 
@@ -134,53 +132,49 @@ namespace Foundation {
 #endif
 
 	/// <summary>Comparison result in the Foundation Framework.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSComparisonResult : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Ascending.</summary>
 		Ascending = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Same.</summary>
 		Same,
-		/// <summary>To be added.</summary>
+		/// <summary>Descending.</summary>
 		Descending,
 	}
 
 	/// <summary>NSUrlRequest caching policy.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSUrlRequestCachePolicy : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Use Protocol Cache Policy.</summary>
 		UseProtocolCachePolicy = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Reload Ignoring Local Cache Data.</summary>
 		ReloadIgnoringLocalCacheData = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Reload Ignoring Local And Remote Cache Data.</summary>
 		ReloadIgnoringLocalAndRemoteCacheData = 4, // Unimplemented
-		/// <summary>To be added.</summary>
+		/// <summary>Reload Ignoring Cache Data.</summary>
 		ReloadIgnoringCacheData = ReloadIgnoringLocalCacheData,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Return Cache Data Else Load.</summary>
 		ReturnCacheDataElseLoad = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Return Cache Data Do Not Load.</summary>
 		ReturnCacheDataDoNotLoad = 3,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Reload Revalidating Cache Data.</summary>
 		ReloadRevalidatingCacheData = 5, // Unimplemented
 	}
 
 	/// <summary>An enumeration of values representing valid caching strategies for use with NSUrls.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSUrlCacheStoragePolicy : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Allowed.</summary>
 		Allowed,
-		/// <summary>To be added.</summary>
+		/// <summary>Allowed In Memory Only.</summary>
 		AllowedInMemoryOnly,
-		/// <summary>To be added.</summary>
+		/// <summary>Not Allowed.</summary>
 		NotAllowed,
 	}
 
 	/// <summary>The current status of an NSStream.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSStreamStatus : ulong {
 		/// <summary>The stream is not yet open.</summary>
@@ -202,7 +196,6 @@ namespace Foundation {
 	}
 
 	/// <summary>The format to use during serialization using NSKeyedArchiver.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSPropertyListFormat : ulong {
 		/// <summary>Store in the old OpenStep format.</summary>
@@ -214,151 +207,141 @@ namespace Foundation {
 	}
 
 	/// <summary>An enumeration of values specifying mutability options for property lists.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSPropertyListMutabilityOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Immutable.</summary>
 		Immutable = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Mutable Containers.</summary>
 		MutableContainers = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Mutable Containers And Leaves.</summary>
 		MutableContainersAndLeaves = 2,
 	}
 
 	// Should mirror NSPropertyListMutabilityOptions
 	/// <summary>An enumeration of mutability options for use with property lists.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSPropertyListWriteOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Immutable.</summary>
 		Immutable = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Mutable Containers.</summary>
 		MutableContainers = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Mutable Containers And Leaves.</summary>
 		MutableContainersAndLeaves = 2,
 	}
 
 	// Should mirror NSPropertyListMutabilityOptions, but currently
 	// not implemented (always use Immutable/0)
 	/// <summary>Apple states that functionality related to this class is not implemented.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSPropertyListReadOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Immutable.</summary>
 		Immutable = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Mutable Containers.</summary>
 		MutableContainers = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Mutable Containers And Leaves.</summary>
 		MutableContainersAndLeaves = 2,
 	}
 
 	/// <summary>A flagging enumeration whose values specify options in calls to <see cref="Foundation.NSMachPort.FromMachPort(System.UInt32,Foundation.NSMachPortRights)" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	[Flags]
 	public enum NSMachPortRights : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Send Right.</summary>
 		SendRight = (1 << 0),
-		/// <summary>To be added.</summary>
+		/// <summary>Receive Right.</summary>
 		ReceiveRight = (1 << 1),
 	}
 
 	/// <summary>Status codes for the NSNetService.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSNetServicesStatus : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Unknown Error.</summary>
 		UnknownError = -72000,
-		/// <summary>To be added.</summary>
+		/// <summary>Collision Error.</summary>
 		CollisionError = -72001,
-		/// <summary>To be added.</summary>
+		/// <summary>Not Found Error.</summary>
 		NotFoundError = -72002,
-		/// <summary>To be added.</summary>
+		/// <summary>Activity In Progress.</summary>
 		ActivityInProgress = -72003,
-		/// <summary>To be added.</summary>
+		/// <summary>Bad Argument Error.</summary>
 		BadArgumentError = -72004,
-		/// <summary>To be added.</summary>
+		/// <summary>Cancelled Error.</summary>
 		CancelledError = -72005,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Error.</summary>
 		InvalidError = -72006,
-		/// <summary>To be added.</summary>
+		/// <summary>Timeout Error.</summary>
 		TimeoutError = -72007,
 		MissingRequiredConfigurationError = -72008,
 	}
 
 	/// <summary>NSNetService options.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSNetServiceOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>No Auto Rename.</summary>
 		NoAutoRename = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Listen For Connections.</summary>
 		ListenForConnections = 1 << 1,
 	}
 
 	/// <summary>An enumeration of values that specify different date-format styles.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSDateFormatterStyle : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Short.</summary>
 		Short,
-		/// <summary>To be added.</summary>
+		/// <summary>Medium.</summary>
 		Medium,
-		/// <summary>To be added.</summary>
+		/// <summary>Long.</summary>
 		Long,
-		/// <summary>To be added.</summary>
+		/// <summary>Full.</summary>
 		Full,
 	}
 
 	/// <summary>An enumeration that can specify whether the <see cref="Foundation.NSDateFormatter" /> should behave as it did prior to OS x v10.4</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSDateFormatterBehavior : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Default.</summary>
 		Default = 0,
 		[NoiOS]
 		[NoTV]
 		[NoMacCatalyst]
 		Mode_10_0 = 1000,
-		/// <summary>To be added.</summary>
+		/// <summary>Mode_10_4.</summary>
 		Mode_10_4 = 1040,
 	}
 
 	/// <summary>An enumeration whose values specify valid strategies for accepting <see cref="Foundation.NSHttpCookie" />s.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSHttpCookieAcceptPolicy : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Always.</summary>
 		Always,
-		/// <summary>To be added.</summary>
+		/// <summary>Never.</summary>
 		Never,
-		/// <summary>To be added.</summary>
+		/// <summary>Only From Main Document Domain.</summary>
 		OnlyFromMainDocumentDomain,
 	}
 
 	/// <summary>An enumeration whose values specify calendrical units (e.g., seconds, months, eras).</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSCalendarUnit : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Era.</summary>
 		Era = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Year.</summary>
 		Year = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Month.</summary>
 		Month = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Day.</summary>
 		Day = 16,
-		/// <summary>To be added.</summary>
+		/// <summary>Hour.</summary>
 		Hour = 32,
-		/// <summary>To be added.</summary>
+		/// <summary>Minute.</summary>
 		Minute = 64,
-		/// <summary>To be added.</summary>
+		/// <summary>Second.</summary>
 		Second = 128,
 		/// <summary>Developers should not use this deprecated field. </summary>
 		[Deprecated (PlatformName.MacOSX, 10, 10)]
@@ -366,27 +349,27 @@ namespace Foundation {
 		[Deprecated (PlatformName.TvOS, 9, 0)]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1)]
 		Week = 256,
-		/// <summary>To be added.</summary>
+		/// <summary>Weekday.</summary>
 		Weekday = 512,
-		/// <summary>To be added.</summary>
+		/// <summary>Weekday Ordinal.</summary>
 		WeekdayOrdinal = 1024,
-		/// <summary>To be added.</summary>
+		/// <summary>Quarter.</summary>
 		Quarter = 2048,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Week Of Month.</summary>
 		WeekOfMonth = (1 << 12),
-		/// <summary>To be added.</summary>
+		/// <summary>Week Of Year.</summary>
 		WeekOfYear = (1 << 13),
-		/// <summary>To be added.</summary>
+		/// <summary>Year For Weak Of Year.</summary>
 		YearForWeakOfYear = (1 << 14),
 
-		/// <summary>To be added.</summary>
+		/// <summary>Nanosecond.</summary>
 		Nanosecond = (1 << 15),
 		DayOfYear = (1 << 16),
 
-		/// <summary>To be added.</summary>
+		/// <summary>Calendar.</summary>
 		Calendar = (1 << 20),
-		/// <summary>To be added.</summary>
+		/// <summary>Time Zone.</summary>
 		TimeZone = (1 << 21),
 
 		[TV (26, 0), Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0)]
@@ -427,78 +410,73 @@ namespace Foundation {
 	}
 
 	/// <summary>An enumeration of options to be used when writing <see cref="Foundation.NSData" /> objects.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSDataWritingOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Atomic.</summary>
 		Atomic = 1,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Without Overwriting.</summary>
 		WithoutOverwriting = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>File Protection None.</summary>
 		[MacCatalyst (13, 1)]
 		FileProtectionNone = 0x10000000,
-		/// <summary>To be added.</summary>
+		/// <summary>File Protection Complete.</summary>
 		[MacCatalyst (13, 1)]
 		FileProtectionComplete = 0x20000000,
-		/// <summary>To be added.</summary>
+		/// <summary>File Protection Mask.</summary>
 		[MacCatalyst (13, 1)]
 		FileProtectionMask = 0xf0000000,
-		/// <summary>To be added.</summary>
+		/// <summary>File Protection Complete Unless Open.</summary>
 		[MacCatalyst (13, 1)]
 		FileProtectionCompleteUnlessOpen = 0x30000000,
-		/// <summary>To be added.</summary>
+		/// <summary>File Protection Complete Until First User Authentication.</summary>
 		[MacCatalyst (13, 1)]
 		FileProtectionCompleteUntilFirstUserAuthentication = 0x40000000,
 		[iOS (17, 0), NoMac, MacCatalyst (17, 0), TV (17, 0)]
 		FileProtectionCompleteWhenUserInactive = 0x50000000,
 	}
 
-	/// <param name="obj">To be added.</param>
-	/// <param name="stop">To be added.</param>
+	/// <param name="obj">The object.</param>
+	/// <param name="stop">Set to true to stop enumeration.</param>
 	/// <summary>A delegate that specifies the enumerator used by <see cref="Foundation.NSSet.Enumerate(Foundation.NSSetEnumerator)" />.</summary>
-	/// <remarks>To be added.</remarks>
 	public delegate void NSSetEnumerator (NSObject obj, ref bool stop);
 
 	/// <summary>An enumeration of values that specify the priority of an operation, relative to others, in a <see cref="Foundation.NSOperationQueue" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSOperationQueuePriority : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Very Low.</summary>
 		VeryLow = -8,
-		/// <summary>To be added.</summary>
+		/// <summary>Low.</summary>
 		Low = -4,
-		/// <summary>To be added.</summary>
+		/// <summary>Normal.</summary>
 		Normal = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>High.</summary>
 		High = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Very High.</summary>
 		VeryHigh = 8,
 	}
 
 	/// <summary>An enumeration of ways in which <see cref="Foundation.NSNotification" />s can be coalesced.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSNotificationCoalescing : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>No Coalescing.</summary>
 		NoCoalescing = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Coalescing On Name.</summary>
 		CoalescingOnName = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Coalescing On Sender.</summary>
 		CoalescingOnSender = 2,
 	}
 
 	/// <summary>An enumeration of values that specify when a notification shouldbe posted.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSPostingStyle : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Post When Idle.</summary>
 		PostWhenIdle = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Post A S A P.</summary>
 		PostASAP = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Now.</summary>
 		Now = 3,
 	}
 
@@ -515,214 +493,212 @@ namespace Foundation {
 	}
 
 	/// <summary>An enumeration of valid types for a <see cref="Foundation.NSExpression" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSExpressionType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Constant Value.</summary>
 		ConstantValue = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Evaluated Object.</summary>
 		EvaluatedObject,
-		/// <summary>To be added.</summary>
+		/// <summary>Variable.</summary>
 		Variable,
-		/// <summary>To be added.</summary>
+		/// <summary>Key Path.</summary>
 		KeyPath,
-		/// <summary>To be added.</summary>
+		/// <summary>Function.</summary>
 		Function,
-		/// <summary>To be added.</summary>
+		/// <summary>Union Set.</summary>
 		UnionSet,
-		/// <summary>To be added.</summary>
+		/// <summary>Intersect Set.</summary>
 		IntersectSet,
-		/// <summary>To be added.</summary>
+		/// <summary>Minus Set.</summary>
 		MinusSet,
-		/// <summary>To be added.</summary>
+		/// <summary>Subquery.</summary>
 		Subquery = 13,
-		/// <summary>To be added.</summary>
+		/// <summary>N S Aggregate.</summary>
 		NSAggregate,
-		/// <summary>To be added.</summary>
+		/// <summary>Any Key.</summary>
 		AnyKey = 15,
-		/// <summary>To be added.</summary>
+		/// <summary>Block.</summary>
 		Block = 19,
-		/// <summary>To be added.</summary>
+		/// <summary>Conditional.</summary>
 		Conditional = 20,
 	}
 
 	/// <summary>Enumeration of various errors relating to Cocoa development.</summary>
-	/// <remarks>To be added.</remarks>
 	public enum NSCocoaError : int {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
 
-		/// <summary>To be added.</summary>
+		/// <summary>File No Such File.</summary>
 		FileNoSuchFile = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>File Locking.</summary>
 		FileLocking = 255,
-		/// <summary>To be added.</summary>
+		/// <summary>File Read Unknown.</summary>
 		FileReadUnknown = 256,
-		/// <summary>To be added.</summary>
+		/// <summary>File Read No Permission.</summary>
 		FileReadNoPermission = 257,
-		/// <summary>To be added.</summary>
+		/// <summary>File Read Invalid File Name.</summary>
 		FileReadInvalidFileName = 258,
-		/// <summary>To be added.</summary>
+		/// <summary>File Read Corrupt File.</summary>
 		FileReadCorruptFile = 259,
-		/// <summary>To be added.</summary>
+		/// <summary>File Read No Such File.</summary>
 		FileReadNoSuchFile = 260,
-		/// <summary>To be added.</summary>
+		/// <summary>File Read Inapplicable String Encoding.</summary>
 		FileReadInapplicableStringEncoding = 261,
-		/// <summary>To be added.</summary>
+		/// <summary>File Read Unsupported Scheme.</summary>
 		FileReadUnsupportedScheme = 262,
-		/// <summary>To be added.</summary>
+		/// <summary>File Read Too Large.</summary>
 		FileReadTooLarge = 263,
-		/// <summary>To be added.</summary>
+		/// <summary>File Read Unknown String Encoding.</summary>
 		FileReadUnknownStringEncoding = 264,
-		/// <summary>To be added.</summary>
+		/// <summary>File Write Unknown.</summary>
 		FileWriteUnknown = 512,
-		/// <summary>To be added.</summary>
+		/// <summary>File Write No Permission.</summary>
 		FileWriteNoPermission = 513,
-		/// <summary>To be added.</summary>
+		/// <summary>File Write Invalid File Name.</summary>
 		FileWriteInvalidFileName = 514,
-		/// <summary>To be added.</summary>
+		/// <summary>File Write File Exists.</summary>
 		FileWriteFileExists = 516,
-		/// <summary>To be added.</summary>
+		/// <summary>File Write Inapplicable String Encoding.</summary>
 		FileWriteInapplicableStringEncoding = 517,
-		/// <summary>To be added.</summary>
+		/// <summary>File Write Unsupported Scheme.</summary>
 		FileWriteUnsupportedScheme = 518,
-		/// <summary>To be added.</summary>
+		/// <summary>File Write Out Of Space.</summary>
 		FileWriteOutOfSpace = 640,
-		/// <summary>To be added.</summary>
+		/// <summary>File Write Volume Read Only.</summary>
 		FileWriteVolumeReadOnly = 642,
 
 #if MONOMAC
-		/// <summary>To be added.</summary>
+		/// <summary>File Manager Unmount Unknown Error.</summary>
 		FileManagerUnmountUnknownError = 768,
-		/// <summary>To be added.</summary>
+		/// <summary>File Manager Unmount Busy Error.</summary>
 		FileManagerUnmountBusyError = 769,
 #endif
 
-		/// <summary>To be added.</summary>
+		/// <summary>Key Value Validation.</summary>
 		KeyValueValidation = 1024,
-		/// <summary>To be added.</summary>
+		/// <summary>Formatting.</summary>
 		Formatting = 2048,
-		/// <summary>To be added.</summary>
+		/// <summary>User Cancelled.</summary>
 		UserCancelled = 3072,
-		/// <summary>To be added.</summary>
+		/// <summary>Feature Unsupported.</summary>
 		FeatureUnsupported = 3328,
-		/// <summary>To be added.</summary>
+		/// <summary>Executable Not Loadable.</summary>
 		ExecutableNotLoadable = 3584,
-		/// <summary>To be added.</summary>
+		/// <summary>Executable Architecture Mismatch.</summary>
 		ExecutableArchitectureMismatch = 3585,
-		/// <summary>To be added.</summary>
+		/// <summary>Executable Runtime Mismatch.</summary>
 		ExecutableRuntimeMismatch = 3586,
-		/// <summary>To be added.</summary>
+		/// <summary>Executable Load.</summary>
 		ExecutableLoad = 3587,
-		/// <summary>To be added.</summary>
+		/// <summary>Executable Link.</summary>
 		ExecutableLink = 3588,
-		/// <summary>To be added.</summary>
+		/// <summary>File Error Minimum.</summary>
 		FileErrorMinimum = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>File Error Maximum.</summary>
 		FileErrorMaximum = 1023,
-		/// <summary>To be added.</summary>
+		/// <summary>Validation Error Minimum.</summary>
 		ValidationErrorMinimum = 1024,
-		/// <summary>To be added.</summary>
+		/// <summary>Validation Error Maximum.</summary>
 		ValidationErrorMaximum = 2047,
-		/// <summary>To be added.</summary>
+		/// <summary>Executable Error Minimum.</summary>
 		ExecutableErrorMinimum = 3584,
-		/// <summary>To be added.</summary>
+		/// <summary>Executable Error Maximum.</summary>
 		ExecutableErrorMaximum = 3839,
-		/// <summary>To be added.</summary>
+		/// <summary>Formatting Error Minimum.</summary>
 		FormattingErrorMinimum = 2048,
-		/// <summary>To be added.</summary>
+		/// <summary>Formatting Error Maximum.</summary>
 		FormattingErrorMaximum = 2559,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Property List Read Corrupt.</summary>
 		PropertyListReadCorrupt = 3840,
-		/// <summary>To be added.</summary>
+		/// <summary>Property List Read Unknown Version.</summary>
 		PropertyListReadUnknownVersion = 3841,
-		/// <summary>To be added.</summary>
+		/// <summary>Property List Read Stream.</summary>
 		PropertyListReadStream = 3842,
-		/// <summary>To be added.</summary>
+		/// <summary>Property List Write Stream.</summary>
 		PropertyListWriteStream = 3851,
-		/// <summary>To be added.</summary>
+		/// <summary>Property List Write Invalid.</summary>
 		PropertyListWriteInvalid = 3852,
-		/// <summary>To be added.</summary>
+		/// <summary>Property List Error Minimum.</summary>
 		PropertyListErrorMinimum = 3840,
-		/// <summary>To be added.</summary>
+		/// <summary>Property List Error Maximum.</summary>
 		PropertyListErrorMaximum = 4095,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Xpc Connection Interrupted.</summary>
 		XpcConnectionInterrupted = 4097,
-		/// <summary>To be added.</summary>
+		/// <summary>Xpc Connection Invalid.</summary>
 		XpcConnectionInvalid = 4099,
-		/// <summary>To be added.</summary>
+		/// <summary>Xpc Connection Reply Invalid.</summary>
 		XpcConnectionReplyInvalid = 4101,
 		XpcConnectionCodeSigningRequirementFailure = 4102,
-		/// <summary>To be added.</summary>
+		/// <summary>Xpc Connection Error Minimum.</summary>
 		XpcConnectionErrorMinimum = 4096,
-		/// <summary>To be added.</summary>
+		/// <summary>Xpc Connection Error Maximum.</summary>
 		XpcConnectionErrorMaximum = 4224,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Ubiquitous File Unavailable.</summary>
 		UbiquitousFileUnavailable = 4353,
-		/// <summary>To be added.</summary>
+		/// <summary>Ubiquitous File Not Uploaded Due To Quota.</summary>
 		UbiquitousFileNotUploadedDueToQuota = 4354,
-		/// <summary>To be added.</summary>
+		/// <summary>Ubiquitous File Ubiquity Server Not Available.</summary>
 		UbiquitousFileUbiquityServerNotAvailable = 4355,
-		/// <summary>To be added.</summary>
+		/// <summary>Ubiquitous File Error Minimum.</summary>
 		UbiquitousFileErrorMinimum = 4352,
-		/// <summary>To be added.</summary>
+		/// <summary>Ubiquitous File Error Maximum.</summary>
 		UbiquitousFileErrorMaximum = 4607,
 
-		/// <summary>To be added.</summary>
+		/// <summary>User Activity Handoff Failed Error.</summary>
 		UserActivityHandoffFailedError = 4608,
-		/// <summary>To be added.</summary>
+		/// <summary>User Activity Connection Unavailable Error.</summary>
 		UserActivityConnectionUnavailableError = 4609,
-		/// <summary>To be added.</summary>
+		/// <summary>User Activity Remote Application Timed Out Error.</summary>
 		UserActivityRemoteApplicationTimedOutError = 4610,
-		/// <summary>To be added.</summary>
+		/// <summary>User Activity Handoff User Info Too Large Error.</summary>
 		UserActivityHandoffUserInfoTooLargeError = 4611,
 
-		/// <summary>To be added.</summary>
+		/// <summary>User Activity Error Minimum.</summary>
 		UserActivityErrorMinimum = 4608,
-		/// <summary>To be added.</summary>
+		/// <summary>User Activity Error Maximum.</summary>
 		UserActivityErrorMaximum = 4863,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Coder Read Corrupt Error.</summary>
 		CoderReadCorruptError = 4864,
-		/// <summary>To be added.</summary>
+		/// <summary>Coder Value Not Found Error.</summary>
 		CoderValueNotFoundError = 4865,
-		/// <summary>To be added.</summary>
+		/// <summary>Coder Invalid Value Error.</summary>
 		CoderInvalidValueError = 4866,
-		/// <summary>To be added.</summary>
+		/// <summary>Coder Error Minimum.</summary>
 		CoderErrorMinimum = 4864,
-		/// <summary>To be added.</summary>
+		/// <summary>Coder Error Maximum.</summary>
 		CoderErrorMaximum = 4991,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Bundle Error Minimum.</summary>
 		BundleErrorMinimum = 4992,
-		/// <summary>To be added.</summary>
+		/// <summary>Bundle Error Maximum.</summary>
 		BundleErrorMaximum = 5119,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Bundle On Demand Resource Out Of Space Error.</summary>
 		BundleOnDemandResourceOutOfSpaceError = 4992,
-		/// <summary>To be added.</summary>
+		/// <summary>Bundle On Demand Resource Exceeded Maximum Size Error.</summary>
 		BundleOnDemandResourceExceededMaximumSizeError = 4993,
-		/// <summary>To be added.</summary>
+		/// <summary>Bundle On Demand Resource Invalid Tag Error.</summary>
 		BundleOnDemandResourceInvalidTagError = 4994,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Cloud Sharing Network Failure Error.</summary>
 		CloudSharingNetworkFailureError = 5120,
-		/// <summary>To be added.</summary>
+		/// <summary>Cloud Sharing Quota Exceeded Error.</summary>
 		CloudSharingQuotaExceededError = 5121,
-		/// <summary>To be added.</summary>
+		/// <summary>Cloud Sharing Too Many Participants Error.</summary>
 		CloudSharingTooManyParticipantsError = 5122,
-		/// <summary>To be added.</summary>
+		/// <summary>Cloud Sharing Conflict Error.</summary>
 		CloudSharingConflictError = 5123,
-		/// <summary>To be added.</summary>
+		/// <summary>Cloud Sharing No Permission Error.</summary>
 		CloudSharingNoPermissionError = 5124,
-		/// <summary>To be added.</summary>
+		/// <summary>Cloud Sharing Other Error.</summary>
 		CloudSharingOtherError = 5375,
-		/// <summary>To be added.</summary>
+		/// <summary>Cloud Sharing Error Minimum.</summary>
 		CloudSharingErrorMinimum = 5120,
-		/// <summary>To be added.</summary>
+		/// <summary>Cloud Sharing Error Maximum.</summary>
 		CloudSharingErrorMaximum = 5375,
 
 		CompressionFailedError = 5376,
@@ -735,112 +711,111 @@ namespace Foundation {
 	// they share the same values but there's more entries in CFNetworkErrors
 	// so anything new probably already exists over there
 	/// <summary>An enumeration of errors associated with creating or loading a <see cref="Foundation.NSUrl" />.</summary>
-	/// <remarks>To be added.</remarks>
 	public enum NSUrlError : int {
-		/// <summary>To be added.</summary>
+		/// <summary>Unknown.</summary>
 		Unknown = -1,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Background Session Requires Shared Container.</summary>
 		BackgroundSessionRequiresSharedContainer = -995,
-		/// <summary>To be added.</summary>
+		/// <summary>Background Session In Use By Another Process.</summary>
 		BackgroundSessionInUseByAnotherProcess = -996,
-		/// <summary>To be added.</summary>
+		/// <summary>Background Session Was Disconnected.</summary>
 		BackgroundSessionWasDisconnected = -997,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Cancelled.</summary>
 		Cancelled = -999,
-		/// <summary>To be added.</summary>
+		/// <summary>Bad U R L.</summary>
 		BadURL = -1000,
-		/// <summary>To be added.</summary>
+		/// <summary>Timed Out.</summary>
 		TimedOut = -1001,
-		/// <summary>To be added.</summary>
+		/// <summary>Unsupported U R L.</summary>
 		UnsupportedURL = -1002,
-		/// <summary>To be added.</summary>
+		/// <summary>Cannot Find Host.</summary>
 		CannotFindHost = -1003,
-		/// <summary>To be added.</summary>
+		/// <summary>Cannot Connect To Host.</summary>
 		CannotConnectToHost = -1004,
-		/// <summary>To be added.</summary>
+		/// <summary>Network Connection Lost.</summary>
 		NetworkConnectionLost = -1005,
-		/// <summary>To be added.</summary>
+		/// <summary>D N S Lookup Failed.</summary>
 		DNSLookupFailed = -1006,
-		/// <summary>To be added.</summary>
+		/// <summary>H T T P Too Many Redirects.</summary>
 		HTTPTooManyRedirects = -1007,
-		/// <summary>To be added.</summary>
+		/// <summary>Resource Unavailable.</summary>
 		ResourceUnavailable = -1008,
-		/// <summary>To be added.</summary>
+		/// <summary>Not Connected To Internet.</summary>
 		NotConnectedToInternet = -1009,
-		/// <summary>To be added.</summary>
+		/// <summary>Redirect To Non Existent Location.</summary>
 		RedirectToNonExistentLocation = -1010,
-		/// <summary>To be added.</summary>
+		/// <summary>Bad Server Response.</summary>
 		BadServerResponse = -1011,
-		/// <summary>To be added.</summary>
+		/// <summary>User Cancelled Authentication.</summary>
 		UserCancelledAuthentication = -1012,
-		/// <summary>To be added.</summary>
+		/// <summary>User Authentication Required.</summary>
 		UserAuthenticationRequired = -1013,
-		/// <summary>To be added.</summary>
+		/// <summary>Zero Byte Resource.</summary>
 		ZeroByteResource = -1014,
-		/// <summary>To be added.</summary>
+		/// <summary>Cannot Decode Raw Data.</summary>
 		CannotDecodeRawData = -1015,
-		/// <summary>To be added.</summary>
+		/// <summary>Cannot Decode Content Data.</summary>
 		CannotDecodeContentData = -1016,
-		/// <summary>To be added.</summary>
+		/// <summary>Cannot Parse Response.</summary>
 		CannotParseResponse = -1017,
-		/// <summary>To be added.</summary>
+		/// <summary>International Roaming Off.</summary>
 		InternationalRoamingOff = -1018,
-		/// <summary>To be added.</summary>
+		/// <summary>Call Is Active.</summary>
 		CallIsActive = -1019,
-		/// <summary>To be added.</summary>
+		/// <summary>Data Not Allowed.</summary>
 		DataNotAllowed = -1020,
-		/// <summary>To be added.</summary>
+		/// <summary>Request Body Stream Exhausted.</summary>
 		RequestBodyStreamExhausted = -1021,
-		/// <summary>To be added.</summary>
+		/// <summary>App Transport Security Requires Secure Connection.</summary>
 		AppTransportSecurityRequiresSecureConnection = -1022,
 
-		/// <summary>To be added.</summary>
+		/// <summary>File Does Not Exist.</summary>
 		FileDoesNotExist = -1100,
-		/// <summary>To be added.</summary>
+		/// <summary>File Is Directory.</summary>
 		FileIsDirectory = -1101,
-		/// <summary>To be added.</summary>
+		/// <summary>No Permissions To Read File.</summary>
 		NoPermissionsToReadFile = -1102,
-		/// <summary>To be added.</summary>
+		/// <summary>Data Length Exceeds Maximum.</summary>
 		DataLengthExceedsMaximum = -1103,
-		/// <summary>To be added.</summary>
+		/// <summary>File Outside Safe Area.</summary>
 		FileOutsideSafeArea = -1104,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Secure Connection Failed.</summary>
 		SecureConnectionFailed = -1200,
-		/// <summary>To be added.</summary>
+		/// <summary>Server Certificate Has Bad Date.</summary>
 		ServerCertificateHasBadDate = -1201,
-		/// <summary>To be added.</summary>
+		/// <summary>Server Certificate Untrusted.</summary>
 		ServerCertificateUntrusted = -1202,
-		/// <summary>To be added.</summary>
+		/// <summary>Server Certificate Has Unknown Root.</summary>
 		ServerCertificateHasUnknownRoot = -1203,
-		/// <summary>To be added.</summary>
+		/// <summary>Server Certificate Not Yet Valid.</summary>
 		ServerCertificateNotYetValid = -1204,
-		/// <summary>To be added.</summary>
+		/// <summary>Client Certificate Rejected.</summary>
 		ClientCertificateRejected = -1205,
-		/// <summary>To be added.</summary>
+		/// <summary>Client Certificate Required.</summary>
 		ClientCertificateRequired = -1206,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Cannot Load From Network.</summary>
 		CannotLoadFromNetwork = -2000,
 
 		// Download and file I/O errors
-		/// <summary>To be added.</summary>
+		/// <summary>Cannot Create File.</summary>
 		CannotCreateFile = -3000,
-		/// <summary>To be added.</summary>
+		/// <summary>Cannot Open File.</summary>
 		CannotOpenFile = -3001,
-		/// <summary>To be added.</summary>
+		/// <summary>Cannot Close File.</summary>
 		CannotCloseFile = -3002,
-		/// <summary>To be added.</summary>
+		/// <summary>Cannot Write To File.</summary>
 		CannotWriteToFile = -3003,
-		/// <summary>To be added.</summary>
+		/// <summary>Cannot Remove File.</summary>
 		CannotRemoveFile = -3004,
-		/// <summary>To be added.</summary>
+		/// <summary>Cannot Move File.</summary>
 		CannotMoveFile = -3005,
-		/// <summary>To be added.</summary>
+		/// <summary>Download Decoding Failed Mid Stream.</summary>
 		DownloadDecodingFailedMidStream = -3006,
-		/// <summary>To be added.</summary>
+		/// <summary>Download Decoding Failed To Complete.</summary>
 		DownloadDecodingFailedToComplete = -3007,
 	}
 
@@ -882,147 +857,138 @@ namespace Foundation {
 	}
 
 	/// <summary>An enumeration of values indicating the operation being performed on a mutable key-value store.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSKeyValueSetMutationKind : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Union Set.</summary>
 		UnionSet = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Minus Set.</summary>
 		MinusSet,
-		/// <summary>To be added.</summary>
+		/// <summary>Intersect Set.</summary>
 		IntersectSet,
-		/// <summary>To be added.</summary>
+		/// <summary>Set Set.</summary>
 		SetSet,
 	}
 
 	/// <summary>An enumeration of valid options for use when enumerating over Blocks.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSEnumerationOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Sort Concurrent.</summary>
 		SortConcurrent = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Reverse.</summary>
 		Reverse = 2,
 	}
 
 	/// <summary>An enumeration of values that may be sent to <see cref="Foundation.NSStreamDelegate.HandleEvent(Foundation.NSStream,Foundation.NSStreamEvent)" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSStreamEvent : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Open Completed.</summary>
 		OpenCompleted = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Has Bytes Available.</summary>
 		HasBytesAvailable = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Has Space Available.</summary>
 		HasSpaceAvailable = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Error Occurred.</summary>
 		ErrorOccurred = 1 << 3,
-		/// <summary>To be added.</summary>
+		/// <summary>End Encountered.</summary>
 		EndEncountered = 1 << 4,
 	}
 
 	/// <summary>An enumeration whose values specify how a <see cref="Foundation.NSComparisonPredicate" /> should apply to an n-to-many relationship.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSComparisonPredicateModifier : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Direct.</summary>
 		Direct,
-		/// <summary>To be added.</summary>
+		/// <summary>All.</summary>
 		All,
-		/// <summary>To be added.</summary>
+		/// <summary>Any.</summary>
 		Any,
 	}
 
 	/// <summary>An enumeration of values that specify comparison types for use with <see cref="Foundation.NSComparisonPredicate" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSPredicateOperatorType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Less Than.</summary>
 		LessThan,
-		/// <summary>To be added.</summary>
+		/// <summary>Less Than Or Equal To.</summary>
 		LessThanOrEqualTo,
-		/// <summary>To be added.</summary>
+		/// <summary>Greater Than.</summary>
 		GreaterThan,
-		/// <summary>To be added.</summary>
+		/// <summary>Greater Than Or Equal To.</summary>
 		GreaterThanOrEqualTo,
-		/// <summary>To be added.</summary>
+		/// <summary>Equal To.</summary>
 		EqualTo,
-		/// <summary>To be added.</summary>
+		/// <summary>Not Equal To.</summary>
 		NotEqualTo,
-		/// <summary>To be added.</summary>
+		/// <summary>Matches.</summary>
 		Matches,
-		/// <summary>To be added.</summary>
+		/// <summary>Like.</summary>
 		Like,
-		/// <summary>To be added.</summary>
+		/// <summary>Begins With.</summary>
 		BeginsWith,
-		/// <summary>To be added.</summary>
+		/// <summary>Ends With.</summary>
 		EndsWith,
-		/// <summary>To be added.</summary>
+		/// <summary>In.</summary>
 		In,
-		/// <summary>To be added.</summary>
+		/// <summary>Custom Selector.</summary>
 		CustomSelector,
-		/// <summary>To be added.</summary>
+		/// <summary>Contains.</summary>
 		Contains = 99,
-		/// <summary>To be added.</summary>
+		/// <summary>Between.</summary>
 		Between,
 	}
 
 	/// <summary>An enumeration whose values specify the type of string comparison to be used in a <see cref="Foundation.NSComparisonPredicate" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSComparisonPredicateOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0x00,
-		/// <summary>To be added.</summary>
+		/// <summary>Case Insensitive.</summary>
 		CaseInsensitive = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Diacritic Insensitive.</summary>
 		DiacriticInsensitive = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Normalized.</summary>
 		Normalized = 1 << 2,
 	}
 
 	/// <summary>An enumeration whose values specify the Boolean logical operator to be applied to a <see cref="Foundation.NSCompoundPredicate" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSCompoundPredicateType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Not.</summary>
 		Not,
-		/// <summary>To be added.</summary>
+		/// <summary>And.</summary>
 		And,
-		/// <summary>To be added.</summary>
+		/// <summary>Or.</summary>
 		Or,
 	}
 
 	/// <summary>An enumeration of options for use when enumerating mounted volumes.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSVolumeEnumerationOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
 		// skip                  = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Skip Hidden Volumes.</summary>
 		SkipHiddenVolumes = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Produce File Reference Urls.</summary>
 		ProduceFileReferenceUrls = 1 << 2,
 	}
 
 	/// <summary>An enumeration of options for use with <see cref="Foundation.NSDirectoryEnumerator" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSDirectoryEnumerationOptions : ulong {
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Skips Subdirectory Descendants.</summary>
 		SkipsSubdirectoryDescendants = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Skips Package Descendants.</summary>
 		SkipsPackageDescendants = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Skips Hidden Files.</summary>
 		SkipsHiddenFiles = 1 << 2,
 		[TV (13, 0), iOS (13, 0)]
 		[MacCatalyst (13, 1)]
@@ -1033,15 +999,14 @@ namespace Foundation {
 	}
 
 	/// <summary>An enumeration of options for use with <see cref="Foundation.NSFileManager.Replace(Foundation.NSUrl,Foundation.NSUrl,System.String,Foundation.NSFileManagerItemReplacementOptions,out Foundation.NSUrl,out Foundation.NSError)" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSFileManagerItemReplacementOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Using New Metadata Only.</summary>
 		UsingNewMetadataOnly = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Without Deleting Backup Item.</summary>
 		WithoutDeletingBackupItem = 1 << 1,
 	}
 
@@ -1130,43 +1095,40 @@ namespace Foundation {
 	}
 
 	/// <summary>An enumeration of values that specify rounding behaviors for <see cref="Foundation.NSDecimal" />s.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSRoundingMode : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Plain.</summary>
 		Plain,
-		/// <summary>To be added.</summary>
+		/// <summary>Down.</summary>
 		Down,
-		/// <summary>To be added.</summary>
+		/// <summary>Up.</summary>
 		Up,
-		/// <summary>To be added.</summary>
+		/// <summary>Bankers.</summary>
 		Bankers,
 	}
 
 	/// <summary>An enumeration whose values indicate a specific calculation error (e.g., underflow, division by zero, loss of precision).</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSCalculationError : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Precision Loss.</summary>
 		PrecisionLoss,
-		/// <summary>To be added.</summary>
+		/// <summary>Underflow.</summary>
 		Underflow,
-		/// <summary>To be added.</summary>
+		/// <summary>Overflow.</summary>
 		Overflow,
-		/// <summary>To be added.</summary>
+		/// <summary>Divide By Zero.</summary>
 		DivideByZero,
 	}
 
 	/// <summary>An enumeration of options for use when drawing strings.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSStringDrawingOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Uses Line Fragment Origin.</summary>
 		UsesLineFragmentOrigin = (1 << 0),
-		/// <summary>To be added.</summary>
+		/// <summary>Uses Font Leading.</summary>
 		UsesFontLeading = (1 << 1),
 		/// <summary>This value is OSX-specific (not available in iOS)</summary>
 		[NoiOS]
@@ -1174,7 +1136,7 @@ namespace Foundation {
 		[NoMacCatalyst]
 		[Deprecated (PlatformName.MacOSX, 10, 11)]
 		DisableScreenFontSubstitution = (1 << 2),
-		/// <summary>To be added.</summary>
+		/// <summary>Uses Device Metrics.</summary>
 		UsesDeviceMetrics = (1 << 3),
 		/// <summary>This value is OSX-specific (not available in iOS)</summary>
 		[NoiOS]
@@ -1182,7 +1144,7 @@ namespace Foundation {
 		[NoMacCatalyst]
 		[Deprecated (PlatformName.MacOSX, 10, 11)]
 		OneShot = (1 << 4),
-		/// <summary>To be added.</summary>
+		/// <summary>Truncates Last Visible Line.</summary>
 		TruncatesLastVisibleLine = (1 << 5),
 
 		[iOS (26, 0), TV (26, 0), MacCatalyst (26, 0), Mac (26, 0)]
@@ -1190,20 +1152,19 @@ namespace Foundation {
 	}
 
 	/// <summary>An enumeration of formats that can be used with numbers.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSNumberFormatterStyle : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Decimal.</summary>
 		Decimal = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Currency.</summary>
 		Currency = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Percent.</summary>
 		Percent = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Scientific.</summary>
 		Scientific = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Spell Out.</summary>
 		SpellOut = 5,
 		[MacCatalyst (13, 1)]
 		OrdinalStyle = 6,
@@ -1216,145 +1177,135 @@ namespace Foundation {
 	}
 
 	/// <summary>An enumeration whose values specify whether the number formatter should behave as it did before OS X v10.4</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSNumberFormatterBehavior : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Default.</summary>
 		Default = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Version_10_0.</summary>
 		[NoiOS]
 		[NoTV]
 		[NoMacCatalyst]
 		Version_10_0 = 1000,
-		/// <summary>To be added.</summary>
+		/// <summary>Version_10_4.</summary>
 		Version_10_4 = 1040,
 	}
 
 	/// <summary>An enumeration whose values indicates where padding should be applied to numbers.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSNumberFormatterPadPosition : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Before Prefix.</summary>
 		BeforePrefix,
-		/// <summary>To be added.</summary>
+		/// <summary>After Prefix.</summary>
 		AfterPrefix,
-		/// <summary>To be added.</summary>
+		/// <summary>Before Suffix.</summary>
 		BeforeSuffix,
-		/// <summary>To be added.</summary>
+		/// <summary>After Suffix.</summary>
 		AfterSuffix,
 	}
 
 	/// <summary>An enumeration of rounding modes that can be applied to numbers.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSNumberFormatterRoundingMode : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Ceiling.</summary>
 		Ceiling,
-		/// <summary>To be added.</summary>
+		/// <summary>Floor.</summary>
 		Floor,
-		/// <summary>To be added.</summary>
+		/// <summary>Down.</summary>
 		Down,
-		/// <summary>To be added.</summary>
+		/// <summary>Up.</summary>
 		Up,
-		/// <summary>To be added.</summary>
+		/// <summary>Half Even.</summary>
 		HalfEven,
-		/// <summary>To be added.</summary>
+		/// <summary>Half Down.</summary>
 		HalfDown,
-		/// <summary>To be added.</summary>
+		/// <summary>Half Up.</summary>
 		HalfUp,
 	}
 
 	/// <summary>Allows the application developer to specify that the old version of the file should be removed from the version store.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSFileVersionReplacingOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>By Moving.</summary>
 		ByMoving = 1 << 0,
 	}
 
 	/// <summary>Allows the application developer to specify that a new file version should be created by moving the source file.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSFileVersionAddingOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>By Moving.</summary>
 		ByMoving = 1 << 0,
 	}
 
 	/// <summary>An enumeration of options relating to reading the contents or attributes of a file or directory.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSFileCoordinatorReadingOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Without Changes.</summary>
 		WithoutChanges = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Resolves Symbolic Link.</summary>
 		ResolvesSymbolicLink = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Immediately Available Metadata Only.</summary>
 		[MacCatalyst (13, 1)]
 		ImmediatelyAvailableMetadataOnly = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>For Uploading.</summary>
 		[MacCatalyst (13, 1)]
 		ForUploading = 1 << 3,
 	}
 
 	/// <summary>An enumeration of options valid when changing the contents or attributes of a file or directory.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSFileCoordinatorWritingOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>For Deleting.</summary>
 		ForDeleting = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>For Moving.</summary>
 		ForMoving = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>For Merging.</summary>
 		ForMerging = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>For Replacing.</summary>
 		ForReplacing = 8,
 		[MacCatalyst (13, 1)]
 		ContentIndependentMetadataOnly = 16,
 	}
 
 	/// <summary>An enumeration of options for use with <see cref="Foundation.NSLinguisticTagger" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSLinguisticTaggerOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Omit Words.</summary>
 		OmitWords = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Omit Punctuation.</summary>
 		OmitPunctuation = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Omit Whitespace.</summary>
 		OmitWhitespace = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Omit Other.</summary>
 		OmitOther = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Join Names.</summary>
 		JoinNames = 16,
 	}
 
 	/// <summary>An enumeration of valid reasons for modifying the iCloud ubiquitous key store.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSUbiquitousKeyValueStoreChangeReason : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Server Change.</summary>
 		ServerChange,
-		/// <summary>To be added.</summary>
+		/// <summary>Initial Sync Change.</summary>
 		InitialSyncChange,
-		/// <summary>To be added.</summary>
+		/// <summary>Quota Violation Change.</summary>
 		QuotaViolationChange,
-		/// <summary>To be added.</summary>
+		/// <summary>Account Change.</summary>
 		AccountChange,
 	}
 
 	/// <summary>Options for use when converting JSON data to instances of Foundation types.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSJsonReadingOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Mutable Containers.</summary>
 		MutableContainers = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Mutable Leaves.</summary>
 		MutableLeaves = 2,
 		FragmentsAllowed = 4,
 		[iOS (15, 0), TV (15, 0), MacCatalyst (15, 0)]
@@ -1364,13 +1315,12 @@ namespace Foundation {
 	}
 
 	/// <summary>An enumeration specifying printing options (compact vs. pretty-printed) for JSON data.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSJsonWritingOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Pretty Printed.</summary>
 		PrettyPrinted = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Sorted Keys.</summary>
 		[MacCatalyst (13, 1)]
 		SortedKeys = (1 << 1),
 		[TV (13, 0), iOS (13, 0)]
@@ -1382,135 +1332,129 @@ namespace Foundation {
 	}
 
 	/// <summary>An enumeration of values that specify the direction of text for a language.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSLocaleLanguageDirection : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Unknown.</summary>
 		Unknown,
-		/// <summary>To be added.</summary>
+		/// <summary>Left To Right.</summary>
 		LeftToRight,
-		/// <summary>To be added.</summary>
+		/// <summary>Right To Left.</summary>
 		RightToLeft,
-		/// <summary>To be added.</summary>
+		/// <summary>Top To Bottom.</summary>
 		TopToBottom,
-		/// <summary>To be added.</summary>
+		/// <summary>Bottom To Top.</summary>
 		BottomToTop,
 	}
 
 	/// <summary>An enumeration of values used by alignment functions.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	public enum NSAlignmentOptions : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Min X Inward.</summary>
 		MinXInward = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Min Y Inward.</summary>
 		MinYInward = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Max X Inward.</summary>
 		MaxXInward = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Max Y Inward.</summary>
 		MaxYInward = 1 << 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Width Inward.</summary>
 		WidthInward = 1 << 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Height Inward.</summary>
 		HeightInward = 1 << 5,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Min X Outward.</summary>
 		MinXOutward = 1 << 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Min Y Outward.</summary>
 		MinYOutward = 1 << 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Max X Outward.</summary>
 		MaxXOutward = 1 << 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Max Y Outward.</summary>
 		MaxYOutward = 1 << 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Width Outward.</summary>
 		WidthOutward = 1 << 12,
-		/// <summary>To be added.</summary>
+		/// <summary>Height Outward.</summary>
 		HeightOutward = 1 << 13,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Min X Nearest.</summary>
 		MinXNearest = 1 << 16,
-		/// <summary>To be added.</summary>
+		/// <summary>Min Y Nearest.</summary>
 		MinYNearest = 1 << 17,
-		/// <summary>To be added.</summary>
+		/// <summary>Max X Nearest.</summary>
 		MaxXNearest = 1 << 18,
-		/// <summary>To be added.</summary>
+		/// <summary>Max Y Nearest.</summary>
 		MaxYNearest = 1 << 19,
-		/// <summary>To be added.</summary>
+		/// <summary>Width Nearest.</summary>
 		WidthNearest = 1 << 20,
-		/// <summary>To be added.</summary>
+		/// <summary>Height Nearest.</summary>
 		HeightNearest = 1 << 21,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Rect Flipped.</summary>
 		RectFlipped = unchecked((long) (1UL << 63)),
 
-		/// <summary>To be added.</summary>
+		/// <summary>All Edges Inward.</summary>
 		AllEdgesInward = MinXInward | MaxXInward | MinYInward | MaxYInward,
-		/// <summary>To be added.</summary>
+		/// <summary>All Edges Outward.</summary>
 		AllEdgesOutward = MinXOutward | MaxXOutward | MinYOutward | MaxYOutward,
-		/// <summary>To be added.</summary>
+		/// <summary>All Edges Nearest.</summary>
 		AllEdgesNearest = MinXNearest | MaxXNearest | MinYNearest | MaxYNearest,
 	}
 
 	/// <summary>An enumeration of options to be used when reading a file-system node.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSFileWrapperReadingOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Immediate.</summary>
 		Immediate = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Without Mapping.</summary>
 		WithoutMapping = 1 << 1,
 	}
 
 	/// <summary>An enumeration of options to be used when writing a file-system node.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSFileWrapperWritingOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Atomic.</summary>
 		Atomic = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>With Name Updating.</summary>
 		WithNameUpdating = 1 << 1,
 	}
 
 	/// <summary>An enumeration whose values specify the options to be used in the <see cref="Foundation.NSAttributedString.EnumerateAttribute(Foundation.NSString,Foundation.NSRange,Foundation.NSAttributedStringEnumeration,Foundation.NSAttributedStringCallback)" /> and <see cref="Foundation.NSAttributedString.EnumerateAttributes(Foundation.NSRange,Foundation.NSAttributedStringEnumeration,Foundation.NSAttributedRangeCallback)" /> methods.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native ("NSAttributedStringEnumerationOptions")]
 	public enum NSAttributedStringEnumeration : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Reverse.</summary>
 		Reverse = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Longest Effective Range Not Required.</summary>
 		LongestEffectiveRangeNotRequired = 1 << 20,
 	}
 
 	// macOS has defined this in AppKit as well, but starting with .NET we're going
 	// to use this one only.
 	/// <summary>An enumeration of valid styles for underlines or strikethroughs.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSUnderlineStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0x00,
-		/// <summary>To be added.</summary>
+		/// <summary>Single.</summary>
 		Single = 0x01,
-		/// <summary>To be added.</summary>
+		/// <summary>Thick.</summary>
 		Thick = 0x02,
-		/// <summary>To be added.</summary>
+		/// <summary>Double.</summary>
 		Double = 0x09,
-		/// <summary>To be added.</summary>
+		/// <summary>Pattern Solid.</summary>
 		PatternSolid = 0x0000,
-		/// <summary>To be added.</summary>
+		/// <summary>Pattern Dot.</summary>
 		PatternDot = 0x0100,
-		/// <summary>To be added.</summary>
+		/// <summary>Pattern Dash.</summary>
 		PatternDash = 0x0200,
-		/// <summary>To be added.</summary>
+		/// <summary>Pattern Dash Dot.</summary>
 		PatternDashDot = 0x0300,
-		/// <summary>To be added.</summary>
+		/// <summary>Pattern Dash Dot Dot.</summary>
 		PatternDashDotDot = 0x0400,
-		/// <summary>To be added.</summary>
+		/// <summary>By Word.</summary>
 		ByWord = 0x8000,
 	}
 
@@ -1519,76 +1463,72 @@ namespace Foundation {
 	// This is the enum we should be using.
 	// See https://github.com/dotnet/macios/issues/6573
 	/// <summary>An enumeration of valid writing directions.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSWritingDirection : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Natural.</summary>
 		Natural = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Left To Right.</summary>
 		LeftToRight = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Right To Left.</summary>
 		RightToLeft = 1,
 	}
 
 	/// <summary>An enumeration whose values specify the units to be displayed by a <see cref="Foundation.NSByteCountFormatter" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSByteCountFormatterUnits : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Use Default.</summary>
 		UseDefault = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Use Bytes.</summary>
 		UseBytes = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Use K B.</summary>
 		UseKB = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Use M B.</summary>
 		UseMB = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Use G B.</summary>
 		UseGB = 1 << 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Use T B.</summary>
 		UseTB = 1 << 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Use P B.</summary>
 		UsePB = 1 << 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Use E B.</summary>
 		UseEB = 1 << 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Use Z B.</summary>
 		UseZB = 1 << 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Use Y B Or Higher.</summary>
 		UseYBOrHigher = 0x0FF << 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Use All.</summary>
 		UseAll = 0x0FFFF,
 	}
 
 	/// <summary>An enumeration whose values specify how byte units are calculated (e.g., if "KB" indicates 1000 or 1024 bytes).</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSByteCountFormatterCountStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>File.</summary>
 		File,
-		/// <summary>To be added.</summary>
+		/// <summary>Memory.</summary>
 		Memory,
-		/// <summary>To be added.</summary>
+		/// <summary>Decimal.</summary>
 		Decimal,
-		/// <summary>To be added.</summary>
+		/// <summary>Binary.</summary>
 		Binary,
 	}
 
 	/// <summary>An enumeration of options ot be used when creating a bookmark.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSUrlBookmarkCreationOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Prefer File I D Resolution.</summary>
 		PreferFileIDResolution = 1 << 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Minimal Bookmark.</summary>
 		MinimalBookmark = 1 << 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Suitable For Bookmark File.</summary>
 		SuitableForBookmarkFile = 1 << 10,
-		/// <summary>To be added.</summary>
+		/// <summary>With Security Scope.</summary>
 		[NoiOS, NoTV]
 		[NoMacCatalyst]
 		WithSecurityScope = 1 << 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Security Scope Allow Only Read Access.</summary>
 		[NoiOS, NoTV]
 		[NoMacCatalyst]
 		SecurityScopeAllowOnlyReadAccess = 1 << 12,
@@ -1597,15 +1537,14 @@ namespace Foundation {
 	}
 
 	/// <summary>An enumeration of options to be used when creating an NSUrl by resolving a bookmark.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSUrlBookmarkResolutionOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Without U I.</summary>
 		WithoutUI = 1 << 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Without Mounting.</summary>
 		WithoutMounting = 1 << 9,
-		/// <summary>To be added.</summary>
+		/// <summary>With Security Scope.</summary>
 		[NoiOS, NoTV]
 		[NoMacCatalyst]
 		WithSecurityScope = 1 << 10,
@@ -1614,48 +1553,46 @@ namespace Foundation {
 	}
 
 	/// <summary>An enumeration that defines the valid ligature types of an <see cref="Foundation.NSAttributedString" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSLigatureType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Default.</summary>
 		Default,
-		/// <summary>To be added.</summary>
+		/// <summary>All.</summary>
 		All,
 	}
 
 	/// <summary>A flagging enumeration whose values specify options in calls to <see cref="NSCalendar.Components" /> and <see cref="Foundation.NSCalendar.DateByAddingComponents(Foundation.NSDateComponents,Foundation.NSDate,Foundation.NSCalendarOptions)" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSCalendarOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Wrap Calendar Components.</summary>
 		WrapCalendarComponents = 1 << 0,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Match Strictly.</summary>
 		[MacCatalyst (13, 1)]
 		MatchStrictly = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Search Backwards.</summary>
 		[MacCatalyst (13, 1)]
 		SearchBackwards = 1 << 2,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Match Previous Time Preserving Smaller Units.</summary>
 		[MacCatalyst (13, 1)]
 		MatchPreviousTimePreservingSmallerUnits = 1 << 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Match Next Time Preserving Smaller Units.</summary>
 		[MacCatalyst (13, 1)]
 		MatchNextTimePreservingSmallerUnits = 1 << 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Match Next Time.</summary>
 		[MacCatalyst (13, 1)]
 		MatchNextTime = 1 << 10,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Match First.</summary>
 		[MacCatalyst (13, 1)]
 		MatchFirst = 1 << 12,
-		/// <summary>To be added.</summary>
+		/// <summary>Match Last.</summary>
 		[MacCatalyst (13, 1)]
 		MatchLast = 1 << 13,
 	}
@@ -1679,7 +1616,7 @@ namespace Foundation {
 		Background,
 		/// <summary>Voice traffic.</summary>
 		Voice,
-		/// <summary>To be added.</summary>
+		/// <summary>Responsive Data.</summary>
 		[MacCatalyst (13, 1)]
 		ResponsiveData = 6,
 		[TV (13, 0), iOS (13, 0)]
@@ -1688,47 +1625,44 @@ namespace Foundation {
 		[TV (13, 0), iOS (13, 0)]
 		[MacCatalyst (13, 1)]
 		ResponsiveAV = 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Call Signaling.</summary>
 		[MacCatalyst (13, 1)]
 		CallSignaling = 11,
 	}
 
 	/// <summary>A flagging enumeration that specifies sorting options in calls to <see cref="NSMutableOrderedSet.Sort" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSSortOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Concurrent.</summary>
 		Concurrent = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Stable.</summary>
 		Stable = 1 << 4,
 	}
 
 	/// <summary>A flagging enumeration that can be used with the <see cref="Foundation.NSData(Foundation.NSData,Foundation.NSDataBase64DecodingOptions)" /> constructor.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSDataBase64DecodingOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Ignore Unknown Characters.</summary>
 		IgnoreUnknownCharacters = 1,
 	}
 
 	/// <summary>A flagging enumeration that can be used to specify options for <see cref="Foundation.NSData.GetBase64EncodedData(Foundation.NSDataBase64EncodingOptions)" /> and <see cref="Foundation.NSData.GetBase64EncodedString(Foundation.NSDataBase64EncodingOptions)" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum NSDataBase64EncodingOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Sixty Four Character Line Length.</summary>
 		SixtyFourCharacterLineLength = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Seventy Six Character Line Length.</summary>
 		SeventySixCharacterLineLength = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>End Line With Carriage Return.</summary>
 		EndLineWithCarriageReturn = 1 << 4,
-		/// <summary>To be added.</summary>
+		/// <summary>End Line With Line Feed.</summary>
 		EndLineWithLineFeed = 1 << 5,
 	}
 
@@ -1738,26 +1672,26 @@ namespace Foundation {
 	///     </remarks>
 	[Native]
 	public enum NSUrlSessionAuthChallengeDisposition : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Use Credential.</summary>
 		UseCredential = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Perform Default Handling.</summary>
 		PerformDefaultHandling = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Cancel Authentication Challenge.</summary>
 		CancelAuthenticationChallenge = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Reject Protection Space.</summary>
 		RejectProtectionSpace = 3,
 	}
 
 	/// <summary>An enumeration whose values specify the state of a <see cref="NSUrlSessionTask" />.</summary>
 	[Native]
 	public enum NSUrlSessionTaskState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Running.</summary>
 		Running = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Suspended.</summary>
 		Suspended = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Canceling.</summary>
 		Canceling = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Completed.</summary>
 		Completed = 3,
 	}
 
@@ -1765,376 +1699,356 @@ namespace Foundation {
 	/// <remarks>An instance of this class is passed as an argument to the completion handler of the <see cref="Foundation.NSUrlSessionDataDelegate.DidReceiveResponse(Foundation.NSUrlSession,Foundation.NSUrlSessionDataTask,Foundation.NSUrlResponse,System.Action{Foundation.NSUrlSessionResponseDisposition})" /> method.</remarks>
 	[Native]
 	public enum NSUrlSessionResponseDisposition : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Cancel.</summary>
 		Cancel = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Allow.</summary>
 		Allow = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Become Download.</summary>
 		BecomeDownload = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Become Stream.</summary>
 		BecomeStream = 3,
 	}
 
 	/// <summary>An enumeration whose values specify why a data transfer was cancelled.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSUrlErrorCancelledReason : long {
-		/// <summary>To be added.</summary>
+		/// <summary>User Force Quit Application.</summary>
 		UserForceQuitApplication,
-		/// <summary>To be added.</summary>
+		/// <summary>Background Updates Disabled.</summary>
 		BackgroundUpdatesDisabled,
-		/// <summary>To be added.</summary>
+		/// <summary>Insufficient System Resources.</summary>
 		InsufficientSystemResources,
 	}
 
 	/// <summary>A flagging enumeration whose values can be used with <see cref="Foundation.NSProcessInfo.BeginActivity(Foundation.NSActivityOptions,System.String)" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	public enum NSActivityOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Idle Display Sleep Disabled.</summary>
 		IdleDisplaySleepDisabled = 1UL << 40,
-		/// <summary>To be added.</summary>
+		/// <summary>Idle System Sleep Disabled.</summary>
 		IdleSystemSleepDisabled = 1UL << 20,
-		/// <summary>To be added.</summary>
+		/// <summary>Sudden Termination Disabled.</summary>
 		SuddenTerminationDisabled = 1UL << 14,
-		/// <summary>To be added.</summary>
+		/// <summary>Automatic Termination Disabled.</summary>
 		AutomaticTerminationDisabled = 1UL << 15,
 		AnimationTrackingEnabled = 1uL << 45,
 		TrackingEnabled = 1uL << 46,
 		UserInteractive = (UserInitiated | LatencyCritical),
-		/// <summary>To be added.</summary>
+		/// <summary>User Initiated.</summary>
 		UserInitiated = 0x00FFFFFFUL | IdleSystemSleepDisabled,
-		/// <summary>To be added.</summary>
+		/// <summary>Background.</summary>
 		Background = 0x000000ffUL,
-		/// <summary>To be added.</summary>
+		/// <summary>Latency Critical.</summary>
 		LatencyCritical = 0xFF00000000UL,
 		InitiatedAllowingIdleSystemSleep = UserInitiated & ~IdleSystemSleepDisabled,
 	}
 
 	/// <summary>Specifies styles for time-zone names.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSTimeZoneNameStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Standard.</summary>
 		Standard,
-		/// <summary>To be added.</summary>
+		/// <summary>Short Standard.</summary>
 		ShortStandard,
-		/// <summary>To be added.</summary>
+		/// <summary>Daylight Saving.</summary>
 		DaylightSaving,
-		/// <summary>To be added.</summary>
+		/// <summary>Short Daylight Saving.</summary>
 		ShortDaylightSaving,
-		/// <summary>To be added.</summary>
+		/// <summary>Generic.</summary>
 		Generic,
-		/// <summary>To be added.</summary>
+		/// <summary>Short Generic.</summary>
 		ShortGeneric,
 	}
 
 	/// <summary>Enumerates errors relating to <see cref="Foundation.NSItemProvider" /> methods.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NSItemProviderErrorCode : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Unknown.</summary>
 		Unknown = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Item Unavailable.</summary>
 		ItemUnavailable = -1000,
-		/// <summary>To be added.</summary>
+		/// <summary>Unexpected Value Class.</summary>
 		UnexpectedValueClass = -1100,
-		/// <summary>To be added.</summary>
+		/// <summary>Unavailable Coercion.</summary>
 		UnavailableCoercion = -1200,
 	}
 
 	/// <summary>Enumerates <see cref="Foundation.NSDateComponentsFormatter" /> output styles.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	[MacCatalyst (13, 1)]
 	public enum NSDateComponentsFormatterUnitsStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Positional.</summary>
 		Positional = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Abbreviated.</summary>
 		Abbreviated,
-		/// <summary>To be added.</summary>
+		/// <summary>Short.</summary>
 		Short,
-		/// <summary>To be added.</summary>
+		/// <summary>Full.</summary>
 		Full,
-		/// <summary>To be added.</summary>
+		/// <summary>Spell Out.</summary>
 		SpellOut,
-		/// <summary>To be added.</summary>
+		/// <summary>Brief.</summary>
 		[MacCatalyst (13, 1)]
 		Brief,
 	}
 
 	/// <summary>Enumerates how zero values should be dealt with by a <see cref="Foundation.NSDateComponentsFormatter" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	[MacCatalyst (13, 1)]
 	public enum NSDateComponentsFormatterZeroFormattingBehavior : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = (0),
-		/// <summary>To be added.</summary>
+		/// <summary>Default.</summary>
 		Default = (1 << 0),
-		/// <summary>To be added.</summary>
+		/// <summary>Drop Leading.</summary>
 		DropLeading = (1 << 1),
-		/// <summary>To be added.</summary>
+		/// <summary>Drop Middle.</summary>
 		DropMiddle = (1 << 2),
-		/// <summary>To be added.</summary>
+		/// <summary>Drop Trailing.</summary>
 		DropTrailing = (1 << 3),
-		/// <summary>To be added.</summary>
+		/// <summary>Drop All.</summary>
 		DropAll = (DropLeading | DropMiddle | DropTrailing),
-		/// <summary>To be added.</summary>
+		/// <summary>Pad.</summary>
 		Pad = (1 << 16),
 	}
 
 	/// <summary>Enumerates the position of the data being formatted. Used with <see cref="Foundation.NSByteCountFormatter" /> and <see cref="Foundation.NSDateComponentsFormatter" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	[MacCatalyst (13, 1)]
 	public enum NSFormattingContext : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Unknown.</summary>
 		Unknown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Dynamic.</summary>
 		Dynamic = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Standalone.</summary>
 		Standalone = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>List Item.</summary>
 		ListItem = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Beginning Of Sentence.</summary>
 		BeginningOfSentence = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Middle Of Sentence.</summary>
 		MiddleOfSentence = 5,
 	}
 
 	/// <summary>Enumerates the output styles of a <see cref="Foundation.NSDateIntervalFormatter" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NSDateIntervalFormatterStyle : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Short.</summary>
 		Short = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Medium.</summary>
 		Medium = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Long.</summary>
 		Long = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Full.</summary>
 		Full = 4,
 	}
 
 	/// <summary>The unit to be used by a <see cref="Foundation.NSEnergyFormatter" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NSEnergyFormatterUnit : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Joule.</summary>
 		Joule = 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Kilojoule.</summary>
 		Kilojoule = 14,
-		/// <summary>To be added.</summary>
+		/// <summary>Calorie.</summary>
 		Calorie = (7 << 8) + 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Kilocalorie.</summary>
 		Kilocalorie = (7 << 8) + 2,
 	}
 
 	/// <summary>Enumerates the style (desired length) of an <see cref="Foundation.NSLengthFormatter" />, <see cref="Foundation.NSEnergyFormatter" />, or <see cref="Foundation.NSMassFormatter" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NSFormattingUnitStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Short.</summary>
 		Short = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Medium.</summary>
 		Medium,
-		/// <summary>To be added.</summary>
+		/// <summary>Long.</summary>
 		Long,
 	}
 
 	/// <summary>Enumerates mass units (lb, kg, stone).</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NSMassFormatterUnit : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Gram.</summary>
 		Gram = 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Kilogram.</summary>
 		Kilogram = 14,
-		/// <summary>To be added.</summary>
+		/// <summary>Ounce.</summary>
 		Ounce = (6 << 8) + 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Pound.</summary>
 		Pound = (6 << 8) + 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Stone.</summary>
 		Stone = (6 << 8) + 3,
 	}
 
 	/// <summary>Enumerates units of length (foot, meter, etc.) for use with <see cref="Foundation.NSLengthFormatter" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NSLengthFormatterUnit : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Millimeter.</summary>
 		Millimeter = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Centimeter.</summary>
 		Centimeter = 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Meter.</summary>
 		Meter = 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Kilometer.</summary>
 		Kilometer = 14,
-		/// <summary>To be added.</summary>
+		/// <summary>Inch.</summary>
 		Inch = (5 << 8) + 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Foot.</summary>
 		Foot = (5 << 8) + 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Yard.</summary>
 		Yard = (5 << 8) + 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Mile.</summary>
 		Mile = (5 << 8) + 4,
 	}
 
 	/// <summary>Enumerates QoS values for use with <see cref="Foundation.NSOperation" /> objects and <see cref="Foundation.NSOperationQueue" /> objects.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NSQualityOfService : long {
-		/// <summary>To be added.</summary>
+		/// <summary>User Interactive.</summary>
 		UserInteractive = 33,
-		/// <summary>To be added.</summary>
+		/// <summary>User Initiated.</summary>
 		UserInitiated = 25,
-		/// <summary>To be added.</summary>
+		/// <summary>Utility.</summary>
 		Utility = 17,
-		/// <summary>To be added.</summary>
+		/// <summary>Background.</summary>
 		Background = 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Default.</summary>
 		Default = -1,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NSProcessInfoThermalState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Nominal.</summary>
 		Nominal,
-		/// <summary>To be added.</summary>
+		/// <summary>Fair.</summary>
 		Fair,
-		/// <summary>To be added.</summary>
+		/// <summary>Serious.</summary>
 		Serious,
-		/// <summary>To be added.</summary>
+		/// <summary>Critical.</summary>
 		Critical,
 	}
 
 	/// <summary>Defines constants defining the relationship between a directory and an item.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum NSUrlRelationship : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Contains.</summary>
 		Contains,
-		/// <summary>To be added.</summary>
+		/// <summary>Same.</summary>
 		Same,
-		/// <summary>To be added.</summary>
+		/// <summary>Other.</summary>
 		Other,
 	}
 
 	// NSTextCheckingResult.h:typedef NS_OPTIONS(uint64_t, NSTextCheckingType)
 	/// <summary>Enumerates available predefined regular expressions for checking text.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	public enum NSTextCheckingType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Orthography.</summary>
 		Orthography = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Spelling.</summary>
 		Spelling = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Grammar.</summary>
 		Grammar = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Date.</summary>
 		Date = 1 << 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Address.</summary>
 		Address = 1 << 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Link.</summary>
 		Link = 1 << 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Quote.</summary>
 		Quote = 1 << 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Dash.</summary>
 		Dash = 1 << 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Replacement.</summary>
 		Replacement = 1 << 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Correction.</summary>
 		Correction = 1 << 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Regular Expression.</summary>
 		RegularExpression = 1 << 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Phone Number.</summary>
 		PhoneNumber = 1 << 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Transit Information.</summary>
 		TransitInformation = 1 << 12,
 	}
 
 	// NSTextCheckingResult.h:typedef uint64_t NSTextCheckingTypes;
 	/// <summary>Enumerates available predefined classes of regular expressions for checking text.</summary>
-	/// <remarks>To be added.</remarks>
 	public enum NSTextCheckingTypes : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>All System Types.</summary>
 		AllSystemTypes = 0xffffffff,
-		/// <summary>To be added.</summary>
+		/// <summary>All Custom Types.</summary>
 		AllCustomTypes = 0xffffffff00000000,
-		/// <summary>To be added.</summary>
+		/// <summary>All Types.</summary>
 		AllTypes = 0xffffffffffffffff,
 	}
 
 	/// <summary>Defines options for use with <see cref="Foundation.NSRegularExpression" /> objects.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	[Flags]
 	public enum NSRegularExpressionOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Case Insensitive.</summary>
 		CaseInsensitive = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Allow Comments And Whitespace.</summary>
 		AllowCommentsAndWhitespace = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Ignore Metacharacters.</summary>
 		IgnoreMetacharacters = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Dot Matches Line Separators.</summary>
 		DotMatchesLineSeparators = 1 << 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Anchors Match Lines.</summary>
 		AnchorsMatchLines = 1 << 4,
 		UseUnixLineSeparators = 1 << 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Use Unicode Word Boundaries.</summary>
 		UseUnicodeWordBoundaries = 1 << 6,
 	}
 
 	/// <summary>Enumerates options for use with <see cref="Foundation.NSRegularExpression" /> regular expression objects.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	[Flags]
 	public enum NSMatchingOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Report Progress.</summary>
 		ReportProgress = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Report Completion.</summary>
 		ReportCompletion = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Anchored.</summary>
 		Anchored = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>With Transparent Bounds.</summary>
 		WithTransparentBounds = 1 << 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Without Anchoring Bounds.</summary>
 		WithoutAnchoringBounds = 1 << 4,
 	}
 
 	/// <summary>Enumerates flags for use with the <see cref="Foundation.NSMatchEnumerator" /> delegate.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	[Flags]
 	public enum NSMatchingFlags : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Progress.</summary>
 		Progress = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Completed.</summary>
 		Completed = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Hit End.</summary>
 		HitEnd = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Required End.</summary>
 		RequiredEnd = 1 << 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Internal Error.</summary>
 		InternalError = 1 << 4,
 	}
 
 	/// <summary>Contains a constant that, if specified, indicates that the phonetic representation of a name should be formatted, rather than the name object's own components.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	[Flags]
@@ -2144,7 +2058,6 @@ namespace Foundation {
 	}
 
 	/// <summary>Enumerates values that control the way that names are displayed.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NSPersonNameComponentsFormatterStyle : long {
@@ -2161,13 +2074,12 @@ namespace Foundation {
 	}
 
 	/// <summary>Enumerates the manner in which a <see cref="Foundation.NSCoder" /> fails. (See <see cref="Foundation.NSCoder.DecodingFailurePolicy" />)</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NSDecodingFailurePolicy : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Raise Exception.</summary>
 		RaiseException,
-		/// <summary>To be added.</summary>
+		/// <summary>Set Error And Return.</summary>
 		SetErrorAndReturn,
 	}
 
@@ -2205,7 +2117,7 @@ namespace Foundation {
 		ColonSeparatorInTime = 1 << 9,
 		/// <summary>Puts a colon in the time.</summary>
 		ColonSeparatorInTimeZone = 1 << 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Fractional Seconds.</summary>
 		[MacCatalyst (13, 1)]
 		FractionalSeconds = 1 << 11,
 		/// <summary>Includes the date in the string.</summary>
@@ -2217,7 +2129,6 @@ namespace Foundation {
 	}
 
 	/// <summary>Enumerates the way a network resource might be loaded.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NSUrlSessionTaskMetricsResourceFetchType : long {
@@ -2239,11 +2150,11 @@ namespace Foundation {
 	[Native]
 	[Flags]
 	public enum NSMeasurementFormatterUnitOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Provided Unit.</summary>
 		ProvidedUnit = (1 << 0),
-		/// <summary>To be added.</summary>
+		/// <summary>Natural Scale.</summary>
 		NaturalScale = (1 << 1),
-		/// <summary>To be added.</summary>
+		/// <summary>Temperature Without Unit.</summary>
 		TemperatureWithoutUnit = (1 << 2),
 	}
 
@@ -2251,50 +2162,49 @@ namespace Foundation {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NSItemProviderRepresentationVisibility : long {
-		/// <summary>To be added.</summary>
+		/// <summary>All.</summary>
 		All = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Team.</summary>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		Team = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Group.</summary>
 		[NoiOS, NoTV]
 		[NoMacCatalyst]
 		Group = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Own Process.</summary>
 		OwnProcess = 3,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NSItemProviderFileOptions : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Open In Place.</summary>
 		OpenInPlace = 1,
 	}
 
 	/// <summary>Enumerate the linguistic units recognized by the <see cref="Foundation.NSLinguisticTagger" /> class.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NSLinguisticTaggerUnit : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Word.</summary>
 		Word,
-		/// <summary>To be added.</summary>
+		/// <summary>Sentence.</summary>
 		Sentence,
-		/// <summary>To be added.</summary>
+		/// <summary>Paragraph.</summary>
 		Paragraph,
-		/// <summary>To be added.</summary>
+		/// <summary>Document.</summary>
 		Document,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NSUrlSessionDelayedRequestDisposition : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Continue Loading.</summary>
 		ContinueLoading = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Use New Request.</summary>
 		UseNewRequest = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Cancel.</summary>
 		Cancel = 2,
 	}
 

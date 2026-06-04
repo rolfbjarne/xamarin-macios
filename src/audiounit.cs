@@ -44,16 +44,16 @@ namespace AudioUnit {
 	delegate int AUMidiOutputEventBlock (long eventSampleTime, byte cable, nint length, IntPtr midiBytes);
 	/// <param name="param">The parameter that changed.</param>
 	///     <param name="value">The new parameter value.</param>
-	///     <summary>A delegate that notifies the audio unit when a parameter value changes.</summary>
+	///     <summary>A delegate that notifies the audio unit when AParameter value changes.</summary>
 	delegate void AUImplementorValueObserver (AUParameter param, float value);
 	/// <param name="param">The parameter whose value to get.</param>
-	///     <summary>A delegate that retrieves a parameter value.</summary>
+	///     <summary>A delegate that retrieves AParameter value.</summary>
 	///     <returns>The value of the parameter that is identified by <paramref name="param" />.</returns>
 	delegate float AUImplementorValueProvider (AUParameter param);
 
 	/// <param name="address">The parameter address.</param>
 	///     <param name="value">The current parameter value.</param>
-	///     <summary>Observer that notifies an audio unit when a parameter value changes.</summary>
+	///     <summary>Observer that notifies an audio unit when AParameter value changes.</summary>
 	delegate void AUParameterObserver (ulong address, float value);
 
 	delegate void AUVoiceIOMutedSpeechActivityEventListener (AUVoiceIOSpeechActivityEvent activityEvent);
@@ -63,7 +63,7 @@ namespace AudioUnit {
 	// 	delegate bool AUHostMusicalContextBlock (ref double currentTempo, ref double timeSignatureNumerator, ref nint timeSignatureDenominator, ref double currentBeatPosition, ref nint sampleOffsetToNextBeat, ref double currentMeasureDownbeatPosition);
 	delegate string AUImplementorStringFromValueCallback (AUParameter param, ref float? value);
 
-	/// <param name="node">The parameter node for which to get a possibly shortened name.</param>
+	/// <param name="node">The parameter node for which to get APossibly shortened name.</param>
 	///     <param name="desiredLength">The maximum desired length of the display name.</param>
 	///     <summary>A delegate that returns the display name, possibly shortened to <paramref name="desiredLength" /> characters.</summary>
 	///     <returns>The display name, possibly shortened to <paramref name="desiredLength" /> characters.</returns>
@@ -327,7 +327,7 @@ namespace AudioUnit {
 
 		/// <summary>A delegate block that provides information about its transport state.</summary>
 		///         <value>
-		///           <para>Developers may optionally assign an instance of the <see cref="AUHostTransportStateBlock" /> delegate to thi property so that they can call it at the beginning of render cycles to get the transport state at the cycle start.</para>
+		///           <para>Developers may optionally assign an instance of the <see cref="AUHostTransportStateBlock" /> delegate to thIProperty so that they can call it at the beginning of render cycles to get the transport state at the cycle start.</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
 		///         <remarks>To be added.</remarks>
@@ -1078,7 +1078,7 @@ namespace AudioUnit {
 		[Export ("stringFromValue:")]
 		string _GetString (IntPtr value);
 
-		/// <param name="str">The string representation for which to get a parameter value.</param>
+		/// <param name="str">The string representation for which to get AParameter value.</param>
 		///         <summary>Returns the numeric value for the parameter in <paramref name="str" />.</summary>
 		///         <returns>The numeric value for the parameter string.</returns>
 		///         <remarks>To be added.</remarks>
@@ -1104,7 +1104,7 @@ namespace AudioUnit {
 	[MacCatalyst (13, 1)]
 	delegate void AUParameterAutomationObserver (ulong address, float value);
 
-	/// <summary>A node which represents a parameter or parameter group in an <see cref="AUParameterTree" />.</summary>
+	/// <summary>A node which represents AParameter or parameter group in an <see cref="AUParameterTree" />.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/AudioUnit/Reference/AUParameterNode_ClassReference/index.html">Apple documentation for <c>AUParameterNode</c></related>
 	[MacCatalyst (13, 1)]
@@ -1136,7 +1136,7 @@ namespace AudioUnit {
 		string GetDisplayName (nint maximumLength);
 
 		/// <param name="observer">To be added.</param>
-		///         <summary>Adds an observer to a parameter or parameter group, and returns a token that identifies the observers for later removal.</summary>
+		///         <summary>Adds an observer to AParameter or parameter group, and returns a token that identifies the observers for later removal.</summary>
 		///         <returns>A token that identifies the observers for later removal.</returns>
 		///         <remarks>To be added.</remarks>
 		[Export ("tokenByAddingParameterObserver:")]
@@ -1151,7 +1151,7 @@ namespace AudioUnit {
 		AUParameterObserverToken CreateTokenByAddingParameterObserver (AUParameterObserver observer);
 
 		/// <param name="observer">To be added.</param>
-		///         <summary>Adds a recording observer to a parameter or parameter group, and returns a token that identifies the observers for later removal.</summary>
+		///         <summary>Adds a recording observer to AParameter or parameter group, and returns a token that identifies the observers for later removal.</summary>
 		///         <returns>A token that identifies the observers for later removal.</returns>
 		///         <remarks>To be added.</remarks>
 		[Export ("tokenByAddingParameterRecordingObserver:")]
@@ -1165,8 +1165,8 @@ namespace AudioUnit {
 		[Wrap ("new AUParameterObserverToken { ObserverToken = TokenByAddingParameterRecordingObserver (observer) }")]
 		AUParameterObserverToken CreateTokenByAddingParameterRecordingObserver (AUParameterRecordingObserver observer);
 
-		/// <summary>Gets or sets the <see cref="AUImplementorValueObserver" /> that notifies the audio unit when a parameter value changes.</summary>
-		///         <value>The <see cref="AUImplementorValueObserver" /> that notifies the audio unit when a parameter value changes.</value>
+		/// <summary>Gets or sets the <see cref="AUImplementorValueObserver" /> that notifies the audio unit when AParameter value changes.</summary>
+		///         <value>The <see cref="AUImplementorValueObserver" /> that notifies the audio unit when AParameter value changes.</value>
 		///         <remarks>To be added.</remarks>
 		[Export ("implementorValueObserver", ArgumentSemantic.Copy)]
 		AUImplementorValueObserver ImplementorValueObserver { get; set; }
@@ -1177,8 +1177,8 @@ namespace AudioUnit {
 		[Export ("implementorValueProvider", ArgumentSemantic.Copy)]
 		AUImplementorValueProvider ImplementorValueProvider { get; set; }
 
-		/// <summary>Gets or sets the callback that provides a parameter value when provided with a string representation of the value of the parameter.</summary>
-		///         <value>The callback that provides a parameter value when provided with a string representation of the value of the parameter.</value>
+		/// <summary>Gets or sets the callback that provides AParameter value when provided with a string representation of the value of the parameter.</summary>
+		///         <value>The callback that provides AParameter value when provided with a string representation of the value of the parameter.</value>
 		///         <remarks>To be added.</remarks>
 		[Export ("implementorValueFromStringCallback", ArgumentSemantic.Copy)]
 		AUImplementorValueFromStringCallback ImplementorValueFromStringCallback { get; set; }
@@ -1213,7 +1213,7 @@ namespace AudioUnit {
 		IntPtr _GetToken (AUParameterAutomationObserver observer);
 
 		/// <param name="observer">To be added.</param>
-		///         <summary>Adds a parameter automation observer for the parameter and returns a token that developers can use to identify it.</summary>
+		///         <summary>Adds AParameter automation observer for the parameter and returns a token that developers can use to identify it.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
@@ -1272,7 +1272,7 @@ namespace AudioUnit {
 		/// <param name="identifier">A permanent non-localized name for the group.</param>
 		///         <param name="name">A localized display name.</param>
 		///         <param name="children">The array of parameter nodes that will become the group's children.</param>
-		///         <summary>Creates a parameter group with the specified <paramref name="identifier" />, <paramref name="name" />, and <paramref name="children" />.</summary>
+		///         <summary>Creates AParameter group with the specified <paramref name="identifier" />, <paramref name="name" />, and <paramref name="children" />.</summary>
 		///         <returns>A new parameter group.</returns>
 		///         <remarks>To be added.</remarks>
 		[Static]
@@ -1280,7 +1280,7 @@ namespace AudioUnit {
 		AUParameterGroup CreateGroup (string identifier, string name, AUParameterNode [] children);
 
 		/// <param name="children">The template group's children.</param>
-		///         <summary>Creates a prototype parameter group for creating related classes of parameter groups.</summary>
+		///         <summary>Creates APrototype parameter group for creating related classes of parameter groups.</summary>
 		///         <returns>A prototype parameter group for creating related classes of parameter groups.</returns>
 		///         <remarks>Template parameter groups can only appear in trees at the root.</remarks>
 		[Static]

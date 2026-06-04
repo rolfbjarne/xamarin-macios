@@ -41,54 +41,54 @@ using CoreFoundation;
 namespace AudioUnit {
 	/// <summary>An enumeration whose values specify the status of an <see cref="AudioUnit" />.</summary>
 	public enum AudioUnitStatus { // Implictly cast to OSType
-		/// <summary>To be added.</summary>
+		/// <summary>No Error.</summary>
 		NoError = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>O K.</summary>
 		OK = NoError,
-		/// <summary>To be added.</summary>
+		/// <summary>File Not Found.</summary>
 		FileNotFound = -43,
-		/// <summary>To be added.</summary>
+		/// <summary>Parameter Error.</summary>
 		ParameterError = -50,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Property.</summary>
 		InvalidProperty = -10879,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Parameter.</summary>
 		InvalidParameter = -10878,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Element.</summary>
 		InvalidElement = -10877,
-		/// <summary>To be added.</summary>
+		/// <summary>No Connection.</summary>
 		NoConnection = -10876,
-		/// <summary>To be added.</summary>
+		/// <summary>Failed Initialization.</summary>
 		FailedInitialization = -10875,
-		/// <summary>To be added.</summary>
+		/// <summary>Too Many Frames To Process.</summary>
 		TooManyFramesToProcess = -10874,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid File.</summary>
 		InvalidFile = -10871,
-		/// <summary>To be added.</summary>
+		/// <summary>Format Not Supported.</summary>
 		FormatNotSupported = -10868,
-		/// <summary>To be added.</summary>
+		/// <summary>Uninitialized.</summary>
 		Uninitialized = -10867,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Scope.</summary>
 		InvalidScope = -10866,
-		/// <summary>To be added.</summary>
+		/// <summary>Property Not Writable.</summary>
 		PropertyNotWritable = -10865,
-		/// <summary>To be added.</summary>
+		/// <summary>Cannot Do In Current Context.</summary>
 		CannotDoInCurrentContext = -10863,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Property Value.</summary>
 		InvalidPropertyValue = -10851,
-		/// <summary>To be added.</summary>
+		/// <summary>Property Not In Use.</summary>
 		PropertyNotInUse = -10850,
-		/// <summary>To be added.</summary>
+		/// <summary>Initialized.</summary>
 		Initialized = -10849,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Offline Render.</summary>
 		InvalidOfflineRender = -10848,
-		/// <summary>To be added.</summary>
+		/// <summary>Unauthorized.</summary>
 		Unauthorized = -10847,
-		/// <summary>To be added.</summary>
+		/// <summary>Midi Output Buffer Full.</summary>
 		MidiOutputBufferFull = -66753,
 		RenderTimeout = -66745,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Parameter Value.</summary>
 		InvalidParameterValue = -66743,
-		/// <summary>To be added.</summary>
+		/// <summary>Extension Not Found.</summary>
 		ExtensionNotFound = -66744,
 		InvalidFilePath = -66742,
 		MissingKey = -66741,
@@ -100,24 +100,24 @@ namespace AudioUnit {
 	/// <summary>Enumerates status values returned by <see cref="AudioUnit.AudioOutputUnitPublish(AudioComponentDescription,System.String,System.UInt32)" />.</summary>
 #endif
 	public enum AudioComponentStatus { // Implictly cast to OSType
-		/// <summary>To be added.</summary>
+		/// <summary>O K.</summary>
 		OK = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Duplicate Description.</summary>
 		DuplicateDescription = -66752,
-		/// <summary>To be added.</summary>
+		/// <summary>Unsupported Type.</summary>
 		UnsupportedType = -66751,
-		/// <summary>To be added.</summary>
+		/// <summary>Too Many Instances.</summary>
 		TooManyInstances = -66750,
 		InstanceTimedOut = -66754,
-		/// <summary>To be added.</summary>
+		/// <summary>Instance Invalidated.</summary>
 		InstanceInvalidated = -66749,
-		/// <summary>To be added.</summary>
+		/// <summary>Not Permitted.</summary>
 		NotPermitted = -66748,
-		/// <summary>To be added.</summary>
+		/// <summary>Initialization Timed Out.</summary>
 		InitializationTimedOut = -66747,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Format.</summary>
 		InvalidFormat = -66746,
-		/// <summary>To be added.</summary>
+		/// <summary>Render Timeout.</summary>
 		[MacCatalyst (13, 1)]
 		RenderTimeout = -66745,
 	}
@@ -125,83 +125,83 @@ namespace AudioUnit {
 	/// <summary>An enumeration whose values specify whether to use a hardware or software encoder.</summary>
 	public enum AudioCodecManufacturer : uint  // Implictly cast to OSType in CoreAudio.framework - CoreAudioTypes.h
 	{
-		/// <summary>To be added.</summary>
+		/// <summary>Apple Software.</summary>
 		AppleSoftware = 0x6170706c, // 'appl'
-		/// <summary>To be added.</summary>
+		/// <summary>Apple Hardware.</summary>
 		AppleHardware = 0x61706877, // 'aphw'
 	}
 
 	/// <summary>Enumerates instrument types.</summary>
 	public enum InstrumentType : byte // UInt8 in AUSamplerInstrumentData
 	{
-		/// <summary>To be added.</summary>
+		/// <summary>D L S Preset.</summary>
 		DLSPreset = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>S F2 Preset.</summary>
 		SF2Preset = DLSPreset,
-		/// <summary>To be added.</summary>
+		/// <summary>A U Preset.</summary>
 		AUPreset = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Audiofile.</summary>
 		Audiofile = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>E X S24.</summary>
 		EXS24 = 4,
 	}
 
 	/// <summary>The unit of measure used by an audio unit parameter.</summary>
 	public enum AudioUnitParameterUnit // UInt32 AudioUnitParameterUnit
 	{
-		/// <summary>To be added.</summary>
+		/// <summary>Generic.</summary>
 		Generic = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indexed.</summary>
 		Indexed = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Boolean.</summary>
 		Boolean = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Percent.</summary>
 		Percent = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Seconds.</summary>
 		Seconds = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Sample Frames.</summary>
 		SampleFrames = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Phase.</summary>
 		Phase = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Rate.</summary>
 		Rate = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Hertz.</summary>
 		Hertz = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Cents.</summary>
 		Cents = 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Relative Semi Tones.</summary>
 		RelativeSemiTones = 10,
-		/// <summary>To be added.</summary>
+		/// <summary>M I D I Note Number.</summary>
 		MIDINoteNumber = 11,
-		/// <summary>To be added.</summary>
+		/// <summary>M I D I Controller.</summary>
 		MIDIController = 12,
-		/// <summary>To be added.</summary>
+		/// <summary>Decibels.</summary>
 		Decibels = 13,
-		/// <summary>To be added.</summary>
+		/// <summary>Linear Gain.</summary>
 		LinearGain = 14,
-		/// <summary>To be added.</summary>
+		/// <summary>Degrees.</summary>
 		Degrees = 15,
-		/// <summary>To be added.</summary>
+		/// <summary>Equal Power Crossfade.</summary>
 		EqualPowerCrossfade = 16,
-		/// <summary>To be added.</summary>
+		/// <summary>Mixer Fader Curve1.</summary>
 		MixerFaderCurve1 = 17,
-		/// <summary>To be added.</summary>
+		/// <summary>Pan.</summary>
 		Pan = 18,
-		/// <summary>To be added.</summary>
+		/// <summary>Meters.</summary>
 		Meters = 19,
-		/// <summary>To be added.</summary>
+		/// <summary>Absolute Cents.</summary>
 		AbsoluteCents = 20,
-		/// <summary>To be added.</summary>
+		/// <summary>Octaves.</summary>
 		Octaves = 21,
-		/// <summary>To be added.</summary>
+		/// <summary>B P M.</summary>
 		BPM = 22,
-		/// <summary>To be added.</summary>
+		/// <summary>Beats.</summary>
 		Beats = 23,
-		/// <summary>To be added.</summary>
+		/// <summary>Milliseconds.</summary>
 		Milliseconds = 24,
-		/// <summary>To be added.</summary>
+		/// <summary>Ratio.</summary>
 		Ratio = 25,
-		/// <summary>To be added.</summary>
+		/// <summary>Custom Unit.</summary>
 		CustomUnit = 26,
 		[iOS (15, 0), TV (15, 0), MacCatalyst (15, 0)]
 		MIDI2Controller = 27,
@@ -211,63 +211,63 @@ namespace AudioUnit {
 	[Flags]
 	public enum AudioUnitParameterFlag : uint // UInt32 in AudioUnitParameterInfo
 	{
-		/// <summary>To be added.</summary>
+		/// <summary>C F Name Release.</summary>
 		CFNameRelease = (1 << 4),
 
-		/// <summary>To be added.</summary>
+		/// <summary>Omit From Presets.</summary>
 		[MacCatalyst (13, 1)]
 		OmitFromPresets = (1 << 13),
-		/// <summary>To be added.</summary>
+		/// <summary>Plot History.</summary>
 		PlotHistory = (1 << 14),
-		/// <summary>To be added.</summary>
+		/// <summary>Meter Read Only.</summary>
 		MeterReadOnly = (1 << 15),
 
 		// bit positions 18,17,16 are set aside for display scales. bit 19 is reserved.
-		/// <summary>To be added.</summary>
+		/// <summary>Display Mask.</summary>
 		DisplayMask = (7 << 16) | (1 << 22),
-		/// <summary>To be added.</summary>
+		/// <summary>Display Square Root.</summary>
 		DisplaySquareRoot = (1 << 16),
-		/// <summary>To be added.</summary>
+		/// <summary>Display Squared.</summary>
 		DisplaySquared = (2 << 16),
-		/// <summary>To be added.</summary>
+		/// <summary>Display Cubed.</summary>
 		DisplayCubed = (3 << 16),
-		/// <summary>To be added.</summary>
+		/// <summary>Display Cube Root.</summary>
 		DisplayCubeRoot = (4 << 16),
-		/// <summary>To be added.</summary>
+		/// <summary>Display Exponential.</summary>
 		DisplayExponential = (5 << 16),
 
-		/// <summary>To be added.</summary>
+		/// <summary>Has Clump.</summary>
 		HasClump = (1 << 20),
-		/// <summary>To be added.</summary>
+		/// <summary>Values Have Strings.</summary>
 		ValuesHaveStrings = (1 << 21),
 
-		/// <summary>To be added.</summary>
+		/// <summary>Display Logarithmic.</summary>
 		DisplayLogarithmic = (1 << 22),
 
-		/// <summary>To be added.</summary>
+		/// <summary>Is High Resolution.</summary>
 		IsHighResolution = (1 << 23),
-		/// <summary>To be added.</summary>
+		/// <summary>Non Real Time.</summary>
 		NonRealTime = (1 << 24),
-		/// <summary>To be added.</summary>
+		/// <summary>Can Ramp.</summary>
 		CanRamp = (1 << 25),
-		/// <summary>To be added.</summary>
+		/// <summary>Expert Mode.</summary>
 		ExpertMode = (1 << 26),
-		/// <summary>To be added.</summary>
+		/// <summary>Has C F Name String.</summary>
 		HasCFNameString = (1 << 27),
-		/// <summary>To be added.</summary>
+		/// <summary>Is Global Meta.</summary>
 		IsGlobalMeta = (1 << 28),
-		/// <summary>To be added.</summary>
+		/// <summary>Is Element Meta.</summary>
 		IsElementMeta = (1 << 29),
-		/// <summary>To be added.</summary>
+		/// <summary>Is Readable.</summary>
 		IsReadable = (1 << 30),
-		/// <summary>To be added.</summary>
+		/// <summary>Is Writable.</summary>
 		IsWritable = ((uint) 1 << 31),
 	}
 
 	/// <summary>Enumerates values used by <see cref="AudioUnitParameterInfo" />. Currenty reserved for system use.</summary>
 	public enum AudioUnitClumpID // UInt32 in AudioUnitParameterInfo
 	{
-		/// <summary>To be added.</summary>
+		/// <summary>System.</summary>
 		System = 0,
 	}
 
@@ -275,36 +275,36 @@ namespace AudioUnit {
 	[NoTV]
 	[NoiOS]
 	public enum AudioObjectPropertySelector : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Property Devices.</summary>
 		PropertyDevices = 1684370979, // 'dev#'
-		/// <summary>To be added.</summary>
+		/// <summary>Devices.</summary>
 		Devices = 1684370979, // 'dev#'
-		/// <summary>To be added.</summary>
+		/// <summary>Default Input Device.</summary>
 		DefaultInputDevice = 1682533920, // 'dIn '
-		/// <summary>To be added.</summary>
+		/// <summary>Default Output Device.</summary>
 		DefaultOutputDevice = 1682929012, // 'dOut'
-		/// <summary>To be added.</summary>
+		/// <summary>Default System Output Device.</summary>
 		DefaultSystemOutputDevice = 1934587252, // 'sOut'
-		/// <summary>To be added.</summary>
+		/// <summary>Translate U I D To Device.</summary>
 		TranslateUIDToDevice = 1969841252, // 'uidd'
-		/// <summary>To be added.</summary>
+		/// <summary>Mix Stereo To Mono.</summary>
 		MixStereoToMono = 1937010031, // 'stmo'
-		/// <summary>To be added.</summary>
+		/// <summary>Plug In List.</summary>
 		PlugInList = 1886152483, // 'plg#'
-		/// <summary>To be added.</summary>
+		/// <summary>Translate Bundle I D To Plug In.</summary>
 		TranslateBundleIDToPlugIn = 1651074160, // 'bidp'
-		/// <summary>To be added.</summary>
+		/// <summary>Transport Manager List.</summary>
 		TransportManagerList = 1953326883, // 'tmg#'
-		/// <summary>To be added.</summary>
+		/// <summary>Translate Bundle I D To Transport Manager.</summary>
 		TranslateBundleIDToTransportManager = 1953325673, // 'tmbi'
-		/// <summary>To be added.</summary>
+		/// <summary>Box List.</summary>
 		BoxList = 1651472419, // 'box#'
-		/// <summary>To be added.</summary>
+		/// <summary>Translate U I D To Box.</summary>
 		TranslateUIDToBox = 1969841250, // 'uidb'
 		ClockDeviceList = 1668049699, //'clk#'
 		TranslateUidToClockDevice = 1969841251, // 'uidc',
 #if !XAMCORE_5_0
-		/// <summary>To be added.</summary>
+		/// <summary>Process Is Master.</summary>
 		[MacCatalyst (13, 1)] // This is required for .NET, because otherwise the generator thinks it's not available because it's not available on iOS.
 		[Deprecated (PlatformName.iOS, 15, 0, message: "Use the 'ProcessIsMain' element instead.")]
 		[Deprecated (PlatformName.TvOS, 15, 0, message: "Use the 'ProcessIsMain' element instead.")]
@@ -316,23 +316,23 @@ namespace AudioUnit {
 		[NoiOS]
 		[MacCatalyst (15, 0), NoTV]
 		ProcessIsMain = 1835100526, // 'main'
-		/// <summary>To be added.</summary>
+		/// <summary>Is Initing Or Exiting.</summary>
 		IsInitingOrExiting = 1768845172, // 'inot'
-		/// <summary>To be added.</summary>
+		/// <summary>User I D Changed.</summary>
 		UserIDChanged = 1702193508, // 'euid'
-		/// <summary>To be added.</summary>
+		/// <summary>Process Is Audible.</summary>
 		ProcessIsAudible = 1886221684, // 'pmut'
-		/// <summary>To be added.</summary>
+		/// <summary>Sleeping Is Allowed.</summary>
 		SleepingIsAllowed = 1936483696, // 'slep'
-		/// <summary>To be added.</summary>
+		/// <summary>Unloading Is Allowed.</summary>
 		UnloadingIsAllowed = 1970170980, // 'unld'
-		/// <summary>To be added.</summary>
+		/// <summary>Hog Mode Is Allowed.</summary>
 		HogModeIsAllowed = 1752131442, // 'hogr'
-		/// <summary>To be added.</summary>
+		/// <summary>User Session Is Active Or Headless.</summary>
 		UserSessionIsActiveOrHeadless = 1970496882, // 'user'
-		/// <summary>To be added.</summary>
+		/// <summary>Service Restarted.</summary>
 		ServiceRestarted = 1936880500, // 'srst'
-		/// <summary>To be added.</summary>
+		/// <summary>Power Hint.</summary>
 		PowerHint = 1886353256, // 'powh'
 		ActualSampleRate = 1634955892,// 'asrt',
 		ClockDevice = 1634755428, // 'apcd',
@@ -348,13 +348,13 @@ namespace AudioUnit {
 	[NoTV]
 	[NoiOS]
 	public enum AudioObjectPropertyScope : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Global.</summary>
 		Global = 1735159650, // 'glob'
-		/// <summary>To be added.</summary>
+		/// <summary>Input.</summary>
 		Input = 1768845428, // 'inpt'
-		/// <summary>To be added.</summary>
+		/// <summary>Output.</summary>
 		Output = 1869968496, // 'outp'
-		/// <summary>To be added.</summary>
+		/// <summary>Play Through.</summary>
 		PlayThrough = 1886679669, // 'ptru'
 	}
 
@@ -362,7 +362,7 @@ namespace AudioUnit {
 	[NoTV]
 	[NoiOS]
 	public enum AudioObjectPropertyElement : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Main.</summary>
 		Main = 0, // 0
 	}
 
@@ -370,90 +370,90 @@ namespace AudioUnit {
 	[Internal]
 	enum AudioUnitPropertyIDType { // UInt32 AudioUnitPropertyID
 								   // Audio Unit Properties
-		/// <summary>To be added.</summary>
+		/// <summary>Class Info.</summary>
 		ClassInfo = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Make Connection.</summary>
 		MakeConnection = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Sample Rate.</summary>
 		SampleRate = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Parameter List.</summary>
 		ParameterList = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Parameter Info.</summary>
 		ParameterInfo = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>C P U Load.</summary>
 		CPULoad = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Stream Format.</summary>
 		StreamFormat = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Element Count.</summary>
 		ElementCount = 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Latency.</summary>
 		Latency = 12,
-		/// <summary>To be added.</summary>
+		/// <summary>Supported Num Channels.</summary>
 		SupportedNumChannels = 13,
-		/// <summary>To be added.</summary>
+		/// <summary>Maximum Frames Per Slice.</summary>
 		MaximumFramesPerSlice = 14,
-		/// <summary>To be added.</summary>
+		/// <summary>Parameter Value Strings.</summary>
 		ParameterValueStrings = 16,
-		/// <summary>To be added.</summary>
+		/// <summary>Audio Channel Layout.</summary>
 		AudioChannelLayout = 19,
-		/// <summary>To be added.</summary>
+		/// <summary>Tail Time.</summary>
 		TailTime = 20,
-		/// <summary>To be added.</summary>
+		/// <summary>Bypass Effect.</summary>
 		BypassEffect = 21,
-		/// <summary>To be added.</summary>
+		/// <summary>Last Render Error.</summary>
 		LastRenderError = 22,
-		/// <summary>To be added.</summary>
+		/// <summary>Set Render Callback.</summary>
 		SetRenderCallback = 23,
-		/// <summary>To be added.</summary>
+		/// <summary>Factory Presets.</summary>
 		FactoryPresets = 24,
-		/// <summary>To be added.</summary>
+		/// <summary>Render Quality.</summary>
 		RenderQuality = 26,
-		/// <summary>To be added.</summary>
+		/// <summary>Host Callbacks.</summary>
 		HostCallbacks = 27,
-		/// <summary>To be added.</summary>
+		/// <summary>In Place Processing.</summary>
 		InPlaceProcessing = 29,
-		/// <summary>To be added.</summary>
+		/// <summary>Element Name.</summary>
 		ElementName = 30,
-		/// <summary>To be added.</summary>
+		/// <summary>Supported Channel Layout Tags.</summary>
 		SupportedChannelLayoutTags = 32,
-		/// <summary>To be added.</summary>
+		/// <summary>Present Preset.</summary>
 		PresentPreset = 36,
-		/// <summary>To be added.</summary>
+		/// <summary>Dependent Parameters.</summary>
 		DependentParameters = 45,
-		/// <summary>To be added.</summary>
+		/// <summary>Input Sample In Output.</summary>
 		InputSampleInOutput = 49,
-		/// <summary>To be added.</summary>
+		/// <summary>Should Allocate Buffer.</summary>
 		ShouldAllocateBuffer = 51,
-		/// <summary>To be added.</summary>
+		/// <summary>Frequency Response.</summary>
 		FrequencyResponse = 52,
-		/// <summary>To be added.</summary>
+		/// <summary>Parameter History Info.</summary>
 		ParameterHistoryInfo = 53,
-		/// <summary>To be added.</summary>
+		/// <summary>Nickname.</summary>
 		Nickname = 54,
-		/// <summary>To be added.</summary>
+		/// <summary>Offline Render.</summary>
 		OfflineRender = 37,
-		/// <summary>To be added.</summary>
+		/// <summary>Parameter I D Name.</summary>
 		[MacCatalyst (13, 1)]
 		ParameterIDName = 34,
-		/// <summary>To be added.</summary>
+		/// <summary>Parameter String From Value.</summary>
 		[MacCatalyst (13, 1)]
 		ParameterStringFromValue = 33,
-		/// <summary>To be added.</summary>
+		/// <summary>Parameter Clump Name.</summary>
 		ParameterClumpName = 35,
-		/// <summary>To be added.</summary>
+		/// <summary>Parameter Value From String.</summary>
 		[MacCatalyst (13, 1)]
 		ParameterValueFromString = 38,
-		/// <summary>To be added.</summary>
+		/// <summary>Context Name.</summary>
 		ContextName = 25,
-		/// <summary>To be added.</summary>
+		/// <summary>Presentation Latency.</summary>
 		PresentationLatency = 40,
-		/// <summary>To be added.</summary>
+		/// <summary>Class Info From Document.</summary>
 		ClassInfoFromDocument = 50,
-		/// <summary>To be added.</summary>
+		/// <summary>Request View Controller.</summary>
 		RequestViewController = 56,
-		/// <summary>To be added.</summary>
+		/// <summary>Parameters For Overview.</summary>
 		ParametersForOverview = 57,
-		/// <summary>To be added.</summary>
+		/// <summary>Supports Mpe.</summary>
 		[MacCatalyst (13, 1)]
 		SupportsMpe = 58,
 		[iOS (15, 0), TV (15, 0), MacCatalyst (15, 0)]
@@ -469,158 +469,158 @@ namespace AudioUnit {
 		HostMIDIProtocol = 65,
 
 #if MONOMAC
-		/// <summary>To be added.</summary>
+		/// <summary>Fast Dispatch.</summary>
 		FastDispatch = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Set External Buffer.</summary>
 		SetExternalBuffer = 15,
-		/// <summary>To be added.</summary>
+		/// <summary>Get U I Component List.</summary>
 		GetUIComponentList = 18,
-		/// <summary>To be added.</summary>
+		/// <summary>Cocoa U I.</summary>
 		CocoaUI = 31,
-		/// <summary>To be added.</summary>
+		/// <summary>Icon Location.</summary>
 		IconLocation = 39,
-		/// <summary>To be added.</summary>
+		/// <summary>A U Host Identifier.</summary>
 		AUHostIdentifier = 46,
-		/// <summary>To be added.</summary>
+		/// <summary>M I D I Output Callback Info.</summary>
 		MIDIOutputCallbackInfo = 47,
-		/// <summary>To be added.</summary>
+		/// <summary>M I D I Output Callback.</summary>
 		MIDIOutputCallback = 48,
 #else
-		/// <summary>To be added.</summary>
+		/// <summary>Remote Control Event Listener.</summary>
 		RemoteControlEventListener = 100,
-		/// <summary>To be added.</summary>
+		/// <summary>Is Inter App Connected.</summary>
 		IsInterAppConnected = 101,
-		/// <summary>To be added.</summary>
+		/// <summary>Peer U R L.</summary>
 		PeerURL = 102,
 #endif // MONOMAC
 
 		// Output Unit
-		/// <summary>To be added.</summary>
+		/// <summary>Is Running.</summary>
 		IsRunning = 2001,
 
 		// OS X Availability
 #if MONOMAC
 
 		// Music Effects and Instruments
-		/// <summary>To be added.</summary>
+		/// <summary>All Parameter M I D I Mappings.</summary>
 		AllParameterMIDIMappings = 41,
-		/// <summary>To be added.</summary>
+		/// <summary>Add Parameter M I D I Mapping.</summary>
 		AddParameterMIDIMapping = 42,
-		/// <summary>To be added.</summary>
+		/// <summary>Remove Parameter M I D I Mapping.</summary>
 		RemoveParameterMIDIMapping = 43,
-		/// <summary>To be added.</summary>
+		/// <summary>Hot Map Parameter M I D I Mapping.</summary>
 		HotMapParameterMIDIMapping = 44,
 
 		// Music Device
-		/// <summary>To be added.</summary>
+		/// <summary>M I D I X M L Names.</summary>
 		MIDIXMLNames = 1006,
-		/// <summary>To be added.</summary>
+		/// <summary>Part Group.</summary>
 		PartGroup = 1010,
-		/// <summary>To be added.</summary>
+		/// <summary>Dual Scheduling Mode.</summary>
 		DualSchedulingMode = 1013,
-		/// <summary>To be added.</summary>
+		/// <summary>Supports Start Stop Note.</summary>
 		SupportsStartStopNote = 1014,
 
 		// Offline Unit
-		/// <summary>To be added.</summary>
+		/// <summary>Input Size.</summary>
 		InputSize = 3020,
-		/// <summary>To be added.</summary>
+		/// <summary>Output Size.</summary>
 		OutputSize = 3021,
-		/// <summary>To be added.</summary>
+		/// <summary>Start Offset.</summary>
 		StartOffset = 3022,
-		/// <summary>To be added.</summary>
+		/// <summary>Preflight Requirements.</summary>
 		PreflightRequirements = 3023,
-		/// <summary>To be added.</summary>
+		/// <summary>Preflight Name.</summary>
 		PreflightName = 3024,
 
 		// Translation Service
-		/// <summary>To be added.</summary>
+		/// <summary>From Plugin.</summary>
 		FromPlugin = 4000,
-		/// <summary>To be added.</summary>
+		/// <summary>Old Automation.</summary>
 		OldAutomation = 4001,
 
 #endif // MONOMAC
 
 		// Apple Specific Properties
 		// AUConverter
-		/// <summary>To be added.</summary>
+		/// <summary>Sample Rate Converter Complexity.</summary>
 		SampleRateConverterComplexity = 3014,
 
 		// AUHAL and device units
-		/// <summary>To be added.</summary>
+		/// <summary>Current Device.</summary>
 		CurrentDevice = 2000,
-		/// <summary>To be added.</summary>
+		/// <summary>Channel Map.</summary>
 		ChannelMap = 2002, // this will also work with AUConverter
-		/// <summary>To be added.</summary>
+		/// <summary>Enable I O.</summary>
 		EnableIO = 2003,
-		/// <summary>To be added.</summary>
+		/// <summary>Start Time.</summary>
 		StartTime = 2004,
-		/// <summary>To be added.</summary>
+		/// <summary>Set Input Callback.</summary>
 		SetInputCallback = 2005,
-		/// <summary>To be added.</summary>
+		/// <summary>Has I O.</summary>
 		HasIO = 2006,
-		/// <summary>To be added.</summary>
+		/// <summary>Start Timestamps At Zero.</summary>
 		StartTimestampsAtZero = 2007, // this will also work with AUConverter
 
 #if !MONOMAC
-		/// <summary>To be added.</summary>
+		/// <summary>M I D I Callbacks.</summary>
 		MIDICallbacks = 2010,
-		/// <summary>To be added.</summary>
+		/// <summary>Host Receives Remote Control Events.</summary>
 		HostReceivesRemoteControlEvents = 2011,
-		/// <summary>To be added.</summary>
+		/// <summary>Remote Control To Host.</summary>
 		RemoteControlToHost = 2012,
-		/// <summary>To be added.</summary>
+		/// <summary>Host Transport State.</summary>
 		HostTransportState = 2013,
-		/// <summary>To be added.</summary>
+		/// <summary>Node Component Description.</summary>
 		NodeComponentDescription = 2014,
 #endif // !MONOMAC
 
 		// AUVoiceProcessing unit
-		/// <summary>To be added.</summary>
+		/// <summary>Bypass Voice Processing.</summary>
 		BypassVoiceProcessing = 2100,
-		/// <summary>To be added.</summary>
+		/// <summary>Voice Processing Enable A G C.</summary>
 		VoiceProcessingEnableAGC = 2101,
-		/// <summary>To be added.</summary>
+		/// <summary>Mute Output.</summary>
 		MuteOutput = 2104,
 		[iOS (15, 0), MacCatalyst (15, 0), NoMac, NoTV]
 		MutedSpeechActivityEventListener = 2106,
 
 		// AUNBandEQ unit
-		/// <summary>To be added.</summary>
+		/// <summary>Number Of Bands.</summary>
 		NumberOfBands = 2200,
-		/// <summary>To be added.</summary>
+		/// <summary>Max Number Of Bands.</summary>
 		MaxNumberOfBands = 2201,
-		/// <summary>To be added.</summary>
+		/// <summary>Biquad Coefficients.</summary>
 		BiquadCoefficients = 2203,
 
 		// Mixers
 		// General mixers
-		/// <summary>To be added.</summary>
+		/// <summary>Metering Mode.</summary>
 		MeteringMode = 3007,
 
 		// Matrix Mixer
-		/// <summary>To be added.</summary>
+		/// <summary>Matrix Levels.</summary>
 		MatrixLevels = 3006,
-		/// <summary>To be added.</summary>
+		/// <summary>Matrix Dimensions.</summary>
 		MatrixDimensions = 3009,
-		/// <summary>To be added.</summary>
+		/// <summary>Meter Clipping.</summary>
 		MeterClipping = 3011,
-		/// <summary>To be added.</summary>
+		/// <summary>Input Anchor Time Stamp.</summary>
 		[MacCatalyst (13, 1)]
 		InputAnchorTimeStamp = 3016,
 
 		// SpatialMixer
-		/// <summary>To be added.</summary>
+		/// <summary>Reverb Room Type.</summary>
 		ReverbRoomType = 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Uses Internal Reverb.</summary>
 		UsesInternalReverb = 1005,
-		/// <summary>To be added.</summary>
+		/// <summary>Spatialization Algorithm.</summary>
 		SpatializationAlgorithm = 3000,
 		SpatialMixerRenderingFlags = 3003,
 		SpatialMixerSourceMode = 3005,
 		SpatialMixerDistanceParams = 3010,
 #if !XAMCORE_5_0
-		/// <summary>To be added.</summary>
+		/// <summary>Distance Params.</summary>
 		[Obsolete ("Use 'SpatialMixerDistanceParams' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		DistanceParams = SpatialMixerDistanceParams,
@@ -628,7 +628,7 @@ namespace AudioUnit {
 		[Obsolete ("Use 'SpatialMixerAttenuationCurve' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		AttenuationCurve = SpatialMixerAttenuationCurve,
-		/// <summary>To be added.</summary>
+		/// <summary>Rendering Flags.</summary>
 		[Obsolete ("Use 'SpatialMixerRenderingFlags' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		RenderingFlags = SpatialMixerRenderingFlags,
@@ -644,87 +644,87 @@ namespace AudioUnit {
 		SpatialMixerAnyInputIsUsingPersonalizedHrtf = 3116,
 
 		// AUScheduledSoundPlayer
-		/// <summary>To be added.</summary>
+		/// <summary>Schedule Audio Slice.</summary>
 		ScheduleAudioSlice = 3300,
-		/// <summary>To be added.</summary>
+		/// <summary>Schedule Start Time Stamp.</summary>
 		ScheduleStartTimeStamp = 3301,
-		/// <summary>To be added.</summary>
+		/// <summary>Current Play Time.</summary>
 		CurrentPlayTime = 3302,
 
 		// AUAudioFilePlayer
-		/// <summary>To be added.</summary>
+		/// <summary>Scheduled File I Ds.</summary>
 		ScheduledFileIDs = 3310,
-		/// <summary>To be added.</summary>
+		/// <summary>Scheduled File Region.</summary>
 		ScheduledFileRegion = 3311,
-		/// <summary>To be added.</summary>
+		/// <summary>Scheduled File Prime.</summary>
 		ScheduledFilePrime = 3312,
-		/// <summary>To be added.</summary>
+		/// <summary>Scheduled File Buffer Size Frames.</summary>
 		ScheduledFileBufferSizeFrames = 3313,
-		/// <summary>To be added.</summary>
+		/// <summary>Scheduled File Number Buffers.</summary>
 		ScheduledFileNumberBuffers = 3314,
 
 #if MONOMAC
 		// OS X-specific Music Device Properties
-		/// <summary>To be added.</summary>
+		/// <summary>Sound Bank Data.</summary>
 		SoundBankData = 1008,
-		/// <summary>To be added.</summary>
+		/// <summary>Stream From Disk.</summary>
 		StreamFromDisk = 1011,
-		/// <summary>To be added.</summary>
+		/// <summary>Sound Bank F S Ref.</summary>
 		SoundBankFSRef = 1012,
 
 #endif // !MONOMAC
 
 		// Music Device Properties
-		/// <summary>To be added.</summary>
+		/// <summary>Instrument Name.</summary>
 		InstrumentName = 1001,
-		/// <summary>To be added.</summary>
+		/// <summary>Instrument Number.</summary>
 		InstrumentNumber = 1004,
 
 		// Music Device Properties used by DLSMusicDevice and AUMIDISynth
-		/// <summary>To be added.</summary>
+		/// <summary>Instrument Count.</summary>
 		InstrumentCount = 1000,
-		/// <summary>To be added.</summary>
+		/// <summary>Bank Name.</summary>
 		BankName = 1007,
-		/// <summary>To be added.</summary>
+		/// <summary>Sound Bank U R L.</summary>
 		SoundBankURL = 1100,
 
 		// AUMIDISynth
-		/// <summary>To be added.</summary>
+		/// <summary>Midi Synth Enable Preload.</summary>
 		MidiSynthEnablePreload = 4119,
 
 		// AUSampler
-		/// <summary>To be added.</summary>
+		/// <summary>Load Instrument.</summary>
 		LoadInstrument = 4102,
-		/// <summary>To be added.</summary>
+		/// <summary>Load Audio Files.</summary>
 		LoadAudioFiles = 4101,
 
 		// AUDeferredRenderer
-		/// <summary>To be added.</summary>
+		/// <summary>Deferred Renderer Pull Size.</summary>
 		DeferredRendererPullSize = 3320,
-		/// <summary>To be added.</summary>
+		/// <summary>Deferred Renderer Extra Latency.</summary>
 		DeferredRendererExtraLatency = 3321,
-		/// <summary>To be added.</summary>
+		/// <summary>Deferred Renderer Wait Frames.</summary>
 		DeferredRendererWaitFrames = 3322,
 
 #if MONOMAC
 		// AUNetReceive
-		/// <summary>To be added.</summary>
+		/// <summary>Hostname.</summary>
 		Hostname = 3511,
-		/// <summary>To be added.</summary>
+		/// <summary>Net Receive Password.</summary>
 		NetReceivePassword = 3512,
 
 		// AUNetSend
-		/// <summary>To be added.</summary>
+		/// <summary>Port Num.</summary>
 		PortNum = 3513,
-		/// <summary>To be added.</summary>
+		/// <summary>Transmission Format.</summary>
 		TransmissionFormat = 3514,
-		/// <summary>To be added.</summary>
+		/// <summary>Transmission Format Index.</summary>
 		TransmissionFormatIndex = 3515,
-		/// <summary>To be added.</summary>
+		/// <summary>Service Name.</summary>
 		ServiceName = 3516,
-		/// <summary>To be added.</summary>
+		/// <summary>Disconnect.</summary>
 		Disconnect = 3517,
-		/// <summary>To be added.</summary>
+		/// <summary>Net Send Password.</summary>
 		NetSendPassword = 3518,
 #endif // MONOMAC
 	}
@@ -733,15 +733,15 @@ namespace AudioUnit {
 	public enum AudioUnitParameterType // UInt32 in AudioUnitParameterInfo
 	{
 		// AUMixer3D unit
-		/// <summary>To be added.</summary>
+		/// <summary>Mixer3 D Azimuth.</summary>
 		Mixer3DAzimuth = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Mixer3 D Elevation.</summary>
 		Mixer3DElevation = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Mixer3 D Distance.</summary>
 		Mixer3DDistance = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Mixer3 D Gain.</summary>
 		Mixer3DGain = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Mixer3 D Playback Rate.</summary>
 		Mixer3DPlaybackRate = 4,
 #if MONOMAC
 		Mixer3DReverbBlend = 5,
@@ -750,186 +750,186 @@ namespace AudioUnit {
 		Mixer3DObstructionAttenuation = 8,
 		Mixer3DMinGain = 9,
 		Mixer3DMaxGain = 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Mixer3 D Pre Average Power.</summary>
 		Mixer3DPreAveragePower = 1000,
-		/// <summary>To be added.</summary>
+		/// <summary>Mixer3 D Pre Peak Hold Level.</summary>
 		Mixer3DPrePeakHoldLevel = 2000,
-		/// <summary>To be added.</summary>
+		/// <summary>Mixer3 D Post Average Power.</summary>
 		Mixer3DPostAveragePower = 3000,
-		/// <summary>To be added.</summary>
+		/// <summary>Mixer3 D Post Peak Hold Level.</summary>
 		Mixer3DPostPeakHoldLevel = 4000,
 #else
-		/// <summary>To be added.</summary>
+		/// <summary>Mixer3 D Enable.</summary>
 		Mixer3DEnable = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Mixer3 D Min Gain.</summary>
 		Mixer3DMinGain = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Mixer3 D Max Gain.</summary>
 		Mixer3DMaxGain = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Mixer3 D Reverb Blend.</summary>
 		Mixer3DReverbBlend = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Mixer3 D Global Reverb Gain.</summary>
 		Mixer3DGlobalReverbGain = 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Mixer3 D Occlusion Attenuation.</summary>
 		Mixer3DOcclusionAttenuation = 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Mixer3 D Obstruction Attenuation.</summary>
 		Mixer3DObstructionAttenuation = 11,
 #endif
 
 		// AUSpatialMixer unit
-		/// <summary>To be added.</summary>
+		/// <summary>Spatial Azimuth.</summary>
 		SpatialAzimuth = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Spatial Elevation.</summary>
 		SpatialElevation = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Spatial Distance.</summary>
 		SpatialDistance = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Spatial Gain.</summary>
 		SpatialGain = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Spatial Playback Rate.</summary>
 		SpatialPlaybackRate = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Spatial Enable.</summary>
 		SpatialEnable = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Spatial Min Gain.</summary>
 		SpatialMinGain = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Spatial Max Gain.</summary>
 		SpatialMaxGain = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Spatial Reverb Blend.</summary>
 		SpatialReverbBlend = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Spatial Global Reverb Gain.</summary>
 		SpatialGlobalReverbGain = 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Spatial Occlusion Attenuation.</summary>
 		SpatialOcclusionAttenuation = 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Spatial Obstruction Attenuation.</summary>
 		SpatialObstructionAttenuation = 11,
 
 		// Reverb applicable to the 3DMixer or AUSpatialMixer
-		/// <summary>To be added.</summary>
+		/// <summary>Reverb Filter Frequency.</summary>
 		ReverbFilterFrequency = 14,
-		/// <summary>To be added.</summary>
+		/// <summary>Reverb Filter Bandwidth.</summary>
 		ReverbFilterBandwidth = 15,
-		/// <summary>To be added.</summary>
+		/// <summary>Reverb Filter Gain.</summary>
 		ReverbFilterGain = 16,
-		/// <summary>To be added.</summary>
+		/// <summary>Reverb Filter Type.</summary>
 		[MacCatalyst (13, 1)]
 		ReverbFilterType = 17,
-		/// <summary>To be added.</summary>
+		/// <summary>Reverb Filter Enable.</summary>
 		[MacCatalyst (13, 1)]
 		ReverbFilterEnable = 18,
 
 		// AUMultiChannelMixer
-		/// <summary>To be added.</summary>
+		/// <summary>Multi Channel Mixer Volume.</summary>
 		MultiChannelMixerVolume = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Multi Channel Mixer Enable.</summary>
 		MultiChannelMixerEnable = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Multi Channel Mixer Pan.</summary>
 		MultiChannelMixerPan = 2,
 
 		// AUMatrixMixer unit
-		/// <summary>To be added.</summary>
+		/// <summary>Matrix Mixer Volume.</summary>
 		MatrixMixerVolume = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Matrix Mixer Enable.</summary>
 		MatrixMixerEnable = 1,
 
 		// AudioDeviceOutput, DefaultOutputUnit, and SystemOutputUnit units
-		/// <summary>To be added.</summary>
+		/// <summary>H A L Output Volume.</summary>
 		HALOutputVolume = 14,
 
 		// AUTimePitch, AUTimePitch (offline), AUPitch units
-		/// <summary>To be added.</summary>
+		/// <summary>Time Pitch Rate.</summary>
 		TimePitchRate = 0,
 #if MONOMAC
-		/// <summary>To be added.</summary>
+		/// <summary>Time Pitch Pitch.</summary>
 		TimePitchPitch = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Time Pitch Effect Blend.</summary>
 		TimePitchEffectBlend = 2,
 #endif
 
 		// AUNewTimePitch
-		/// <summary>To be added.</summary>
+		/// <summary>New Time Pitch Rate.</summary>
 		NewTimePitchRate = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>New Time Pitch Pitch.</summary>
 		NewTimePitchPitch = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>New Time Pitch Overlap.</summary>
 		NewTimePitchOverlap = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>New Time Pitch Enable Peak Locking.</summary>
 		NewTimePitchEnablePeakLocking = 6,
 
 		// AUSampler unit
-		/// <summary>To be added.</summary>
+		/// <summary>A U Sampler Gain.</summary>
 		AUSamplerGain = 900,
-		/// <summary>To be added.</summary>
+		/// <summary>A U Sampler Coarse Tuning.</summary>
 		AUSamplerCoarseTuning = 901,
-		/// <summary>To be added.</summary>
+		/// <summary>A U Sampler Fine Tuning.</summary>
 		AUSamplerFineTuning = 902,
-		/// <summary>To be added.</summary>
+		/// <summary>A U Sampler Pan.</summary>
 		AUSamplerPan = 903,
 
 		// AUBandpass
-		/// <summary>To be added.</summary>
+		/// <summary>Bandpass Center Frequency.</summary>
 		BandpassCenterFrequency = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Bandpass Bandwidth.</summary>
 		BandpassBandwidth = 1,
 
 		// AUHipass
-		/// <summary>To be added.</summary>
+		/// <summary>Hipass Cutoff Frequency.</summary>
 		HipassCutoffFrequency = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Hipass Resonance.</summary>
 		HipassResonance = 1,
 
 		// AULowpass
-		/// <summary>To be added.</summary>
+		/// <summary>Low Pass Cutoff Frequency.</summary>
 		LowPassCutoffFrequency = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Low Pass Resonance.</summary>
 		LowPassResonance = 1,
 
 		// AUHighShelfFilter
-		/// <summary>To be added.</summary>
+		/// <summary>High Shelf Cut Off Frequency.</summary>
 		HighShelfCutOffFrequency = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>High Shelf Gain.</summary>
 		HighShelfGain = 1,
 
 		// AULowShelfFilter
-		/// <summary>To be added.</summary>
+		/// <summary>A U Low Shelf Cutoff Frequency.</summary>
 		AULowShelfCutoffFrequency = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>A U Low Shelf Gain.</summary>
 		AULowShelfGain = 1,
 
 #if !XAMCORE_5_0 // I can't find this value in the headers anymore
-		/// <summary>To be added.</summary>
+		/// <summary>A U D C Filter Decay Time.</summary>
 		[Obsoleted (PlatformName.iOS, 7, 0)]
 		[Obsoleted (PlatformName.MacCatalyst, 13, 1)]
 		AUDCFilterDecayTime = 0,
 #endif
 
 		// AUParametricEQ
-		/// <summary>To be added.</summary>
+		/// <summary>Parametric E Q Center Freq.</summary>
 		ParametricEQCenterFreq = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Parametric E Q Q.</summary>
 		ParametricEQQ = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Parametric E Q Gain.</summary>
 		ParametricEQGain = 2,
 
 		// AUPeakLimiter
-		/// <summary>To be added.</summary>
+		/// <summary>Limiter Attack Time.</summary>
 		LimiterAttackTime = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Limiter Decay Time.</summary>
 		LimiterDecayTime = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Limiter Pre Gain.</summary>
 		LimiterPreGain = 2,
 
 		// AUDynamicsProcessor
-		/// <summary>To be added.</summary>
+		/// <summary>Dynamics Processor Threshold.</summary>
 		DynamicsProcessorThreshold = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Dynamics Processor Head Room.</summary>
 		DynamicsProcessorHeadRoom = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Dynamics Processor Expansion Ratio.</summary>
 		DynamicsProcessorExpansionRatio = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Dynamics Processor Expansion Threshold.</summary>
 		DynamicsProcessorExpansionThreshold = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Dynamics Processor Attack Time.</summary>
 		DynamicsProcessorAttackTime = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Dynamics Processor Release Time.</summary>
 		DynamicsProcessorReleaseTime = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Dynamics Processor Master Gain.</summary>
 		[Deprecated (PlatformName.iOS, 15, 0, message: "Use 'DynamicsProcessorOverallGain' instead.")]
 		[Deprecated (PlatformName.TvOS, 15, 0, message: "Use 'DynamicsProcessorOverallGain' instead.")]
 		[Deprecated (PlatformName.MacOSX, 12, 0, message: "Use 'DynamicsProcessorOverallGain' instead.")]
@@ -937,148 +937,148 @@ namespace AudioUnit {
 		DynamicsProcessorMasterGain = 6,
 		[iOS (15, 0), TV (15, 0), MacCatalyst (15, 0)]
 		DynamicsProcessorOverallGain = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Dynamics Processor Compression Amount.</summary>
 		DynamicsProcessorCompressionAmount = 1000,
-		/// <summary>To be added.</summary>
+		/// <summary>Dynamics Processor Input Amplitude.</summary>
 		DynamicsProcessorInputAmplitude = 2000,
-		/// <summary>To be added.</summary>
+		/// <summary>Dynamics Processor Output Amplitude.</summary>
 		DynamicsProcessorOutputAmplitude = 3000,
 
 		// AUVarispeed
-		/// <summary>To be added.</summary>
+		/// <summary>Varispeed Playback Rate.</summary>
 		VarispeedPlaybackRate = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Varispeed Playback Cents.</summary>
 		VarispeedPlaybackCents = 1,
 
 		// Distortion unit 
-		/// <summary>To be added.</summary>
+		/// <summary>Distortion Delay.</summary>
 		DistortionDelay = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Distortion Decay.</summary>
 		DistortionDecay = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Distortion Delay Mix.</summary>
 		DistortionDelayMix = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Distortion Decimation.</summary>
 		DistortionDecimation = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Distortion Rounding.</summary>
 		DistortionRounding = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Distortion Decimation Mix.</summary>
 		DistortionDecimationMix = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Distortion Linear Term.</summary>
 		DistortionLinearTerm = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Distortion Squared Term.</summary>
 		DistortionSquaredTerm = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Distortion Cubic Term.</summary>
 		DistortionCubicTerm = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Distortion Polynomial Mix.</summary>
 		DistortionPolynomialMix = 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Distortion Ring Mod Freq1.</summary>
 		DistortionRingModFreq1 = 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Distortion Ring Mod Freq2.</summary>
 		DistortionRingModFreq2 = 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Distortion Ring Mod Balance.</summary>
 		DistortionRingModBalance = 12,
-		/// <summary>To be added.</summary>
+		/// <summary>Distortion Ring Mod Mix.</summary>
 		DistortionRingModMix = 13,
-		/// <summary>To be added.</summary>
+		/// <summary>Distortion Soft Clip Gain.</summary>
 		DistortionSoftClipGain = 14,
-		/// <summary>To be added.</summary>
+		/// <summary>Distortion Final Mix.</summary>
 		DistortionFinalMix = 15,
 
 		// AUDelay
-		/// <summary>To be added.</summary>
+		/// <summary>Delay Wet Dry Mix.</summary>
 		DelayWetDryMix = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Delay Time.</summary>
 		DelayTime = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Delay Feedback.</summary>
 		DelayFeedback = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Delay Lopass Cutoff.</summary>
 		DelayLopassCutoff = 3,
 
 		// AUNBandEQ
-		/// <summary>To be added.</summary>
+		/// <summary>A U N Band E Q Global Gain.</summary>
 		AUNBandEQGlobalGain = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>A U N Band E Q Bypass Band.</summary>
 		AUNBandEQBypassBand = 1000,
-		/// <summary>To be added.</summary>
+		/// <summary>A U N Band E Q Filter Type.</summary>
 		AUNBandEQFilterType = 2000,
-		/// <summary>To be added.</summary>
+		/// <summary>A U N Band E Q Frequency.</summary>
 		AUNBandEQFrequency = 3000,
-		/// <summary>To be added.</summary>
+		/// <summary>A U N Band E Q Gain.</summary>
 		AUNBandEQGain = 4000,
-		/// <summary>To be added.</summary>
+		/// <summary>A U N Band E Q Bandwidth.</summary>
 		AUNBandEQBandwidth = 5000,
 
 		// AURandomUnit
-		/// <summary>To be added.</summary>
+		/// <summary>Random Bound A.</summary>
 		RandomBoundA = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Random Bound B.</summary>
 		RandomBoundB = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Random Curve.</summary>
 		RandomCurve = 2,
 
 #if !MONOMAC
 		// iOS reverb
-		/// <summary>To be added.</summary>
+		/// <summary>Reverb2 Dry Wet Mix.</summary>
 		Reverb2DryWetMix = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Reverb2 Gain.</summary>
 		Reverb2Gain = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Reverb2 Min Delay Time.</summary>
 		Reverb2MinDelayTime = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Reverb2 Max Delay Time.</summary>
 		Reverb2MaxDelayTime = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Reverb2 Decay Time At0 Hz.</summary>
 		Reverb2DecayTimeAt0Hz = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Reverb2 Decay Time At Nyquist.</summary>
 		Reverb2DecayTimeAtNyquist = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Reverb2 Randomize Reflections.</summary>
 		Reverb2RandomizeReflections = 6,
 #endif
 
 		// RoundTripAAC
-		/// <summary>To be added.</summary>
+		/// <summary>Round Trip Aac Format.</summary>
 		RoundTripAacFormat = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Round Trip Aac Encoding Strategy.</summary>
 		RoundTripAacEncodingStrategy = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Round Trip Aac Rate Or Quality.</summary>
 		RoundTripAacRateOrQuality = 2,
 
 		// Spacial Mixer
-		/// <summary>To be added.</summary>
+		/// <summary>Spacial Mixer Azimuth.</summary>
 		SpacialMixerAzimuth = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Elevation.</summary>
 		Elevation = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Distance.</summary>
 		Distance = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Gain.</summary>
 		Gain = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Playback Rate.</summary>
 		PlaybackRate = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Enable.</summary>
 		Enable = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Min Gain.</summary>
 		MinGain = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Max Gain.</summary>
 		MaxGain = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Reverb Blend.</summary>
 		ReverbBlend = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Global Reverb Gain.</summary>
 		GlobalReverbGain = 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Occlussion Attenuation.</summary>
 		OcclussionAttenuation = 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Obstruction Attenuation.</summary>
 		ObstructionAttenuation = 11,
 	}
 
 	/// <summary>Enumerates attenuation modes.</summary>
 	[MacCatalyst (13, 1)]
 	public enum SpatialMixerAttenuation {
-		/// <summary>To be added.</summary>
+		/// <summary>Power.</summary>
 		Power = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Exponential.</summary>
 		Exponential = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Inverse.</summary>
 		Inverse = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Linear.</summary>
 		Linear = 3,
 	}
 
@@ -1086,7 +1086,7 @@ namespace AudioUnit {
 	[Flags]
 	[MacCatalyst (13, 1)]
 	public enum SpatialMixerRenderingFlags {
-		/// <summary>To be added.</summary>
+		/// <summary>Inter Aural Delay.</summary>
 		InterAuralDelay = (1 << 0),
 		/// <summary>Developers should not use this deprecated field. </summary>
 		[Deprecated (PlatformName.iOS, 9, 0)]
@@ -1099,81 +1099,81 @@ namespace AudioUnit {
 	/// <summary>Enumerates timing flags for rendering audio slices.</summary>
 	[Flags]
 	public enum ScheduledAudioSliceFlag {
-		/// <summary>To be added.</summary>
+		/// <summary>Complete.</summary>
 		Complete = 0x01,
-		/// <summary>To be added.</summary>
+		/// <summary>Began To Render.</summary>
 		BeganToRender = 0x02,
-		/// <summary>To be added.</summary>
+		/// <summary>Began To Render Late.</summary>
 		BeganToRenderLate = 0x04,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Loop.</summary>
 		[MacCatalyst (13, 1)]
 		Loop = 0x08,
-		/// <summary>To be added.</summary>
+		/// <summary>Interrupt.</summary>
 		[MacCatalyst (13, 1)]
 		Interrupt = 0x10,
-		/// <summary>To be added.</summary>
+		/// <summary>Interrupt At Loop.</summary>
 		[MacCatalyst (13, 1)]
 		InterruptAtLoop = 0x20,
 	}
 
 	/// <summary>An enumeration whose values specify roles and contexts for audio unit properties.</summary>
 	public enum AudioUnitScopeType { // UInt32 AudioUnitScope
-		/// <summary>To be added.</summary>
+		/// <summary>Global.</summary>
 		Global = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Input.</summary>
 		Input = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Output.</summary>
 		Output = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Group.</summary>
 		Group = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Part.</summary>
 		Part = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Note.</summary>
 		Note = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Layer.</summary>
 		Layer = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Layer Item.</summary>
 		LayerItem = 7,
 	}
 
 	/// <summary>An enumeration whose values specify configuration flags for audio-unit rendering.</summary>
 	[Flags]
 	public enum AudioUnitRenderActionFlags { // UInt32 AudioUnitRenderActionFlags
-		/// <summary>To be added.</summary>
+		/// <summary>Pre Render.</summary>
 		PreRender = (1 << 2),
-		/// <summary>To be added.</summary>
+		/// <summary>Post Render.</summary>
 		PostRender = (1 << 3),
-		/// <summary>To be added.</summary>
+		/// <summary>Output Is Silence.</summary>
 		OutputIsSilence = (1 << 4),
-		/// <summary>To be added.</summary>
+		/// <summary>Offline Preflight.</summary>
 		OfflinePreflight = (1 << 5),
-		/// <summary>To be added.</summary>
+		/// <summary>Offline Render.</summary>
 		OfflineRender = (1 << 6),
-		/// <summary>To be added.</summary>
+		/// <summary>Offline Complete.</summary>
 		OfflineComplete = (1 << 7),
-		/// <summary>To be added.</summary>
+		/// <summary>Post Render Error.</summary>
 		PostRenderError = (1 << 8),
-		/// <summary>To be added.</summary>
+		/// <summary>Do Not Check Render Args.</summary>
 		DoNotCheckRenderArgs = (1 << 9),
 	}
 
 	/// <summary>Enumerates events relating to remote control commands.</summary>
 	public enum AudioUnitRemoteControlEvent // Unused?
 	{
-		/// <summary>To be added.</summary>
+		/// <summary>Toggle Play Pause.</summary>
 		TogglePlayPause = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Toggle Record.</summary>
 		ToggleRecord = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Rewind.</summary>
 		Rewind = 3,
 	}
 
 	[Native]
 	public enum AudioUnitBusType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Input.</summary>
 		Input = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Output.</summary>
 		Output = 2,
 	}
 
@@ -1191,16 +1191,16 @@ namespace AudioUnit {
 	}
 
 	public enum AUEventSampleTime : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Immediate.</summary>
 		Immediate = unchecked((long) 0xffffffff00000000),
 	}
 
 	/// <summary>Enumerates options that can be used while instantiating a <see cref="AUAudioUnit" />.</summary>
 	[MacCatalyst (13, 1)]
 	public enum AudioComponentInstantiationOptions : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Out Of Process.</summary>
 		OutOfProcess = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>In Process.</summary>
 		[NoiOS, NoTV, NoMacCatalyst]
 		InProcess = 2,
 		[iOS (14, 5), TV (14, 5), NoMac]
@@ -1218,153 +1218,153 @@ namespace AudioUnit {
 	}
 
 	public enum AudioUnitParameterOptions : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>C F Name Release.</summary>
 		CFNameRelease = (1 << 4),
-		/// <summary>To be added.</summary>
+		/// <summary>Omit From Presets.</summary>
 		OmitFromPresets = (1 << 13),
-		/// <summary>To be added.</summary>
+		/// <summary>Plot History.</summary>
 		PlotHistory = (1 << 14),
-		/// <summary>To be added.</summary>
+		/// <summary>Meter Read Only.</summary>
 		MeterReadOnly = (1 << 15),
-		/// <summary>To be added.</summary>
+		/// <summary>Display Mask.</summary>
 		DisplayMask = (7 << 16) | (1 << 22),
-		/// <summary>To be added.</summary>
+		/// <summary>Display Square Root.</summary>
 		DisplaySquareRoot = (1 << 16),
-		/// <summary>To be added.</summary>
+		/// <summary>Display Squared.</summary>
 		DisplaySquared = (2 << 16),
-		/// <summary>To be added.</summary>
+		/// <summary>Display Cubed.</summary>
 		DisplayCubed = (3 << 16),
-		/// <summary>To be added.</summary>
+		/// <summary>Display Cube Root.</summary>
 		DisplayCubeRoot = (4 << 16),
-		/// <summary>To be added.</summary>
+		/// <summary>Display Exponential.</summary>
 		DisplayExponential = (5 << 16),
-		/// <summary>To be added.</summary>
+		/// <summary>Has Clump.</summary>
 		HasClump = (1 << 20),
-		/// <summary>To be added.</summary>
+		/// <summary>Values Have Strings.</summary>
 		ValuesHaveStrings = (1 << 21),
-		/// <summary>To be added.</summary>
+		/// <summary>Display Logarithmic.</summary>
 		DisplayLogarithmic = (1 << 22),
-		/// <summary>To be added.</summary>
+		/// <summary>Is High Resolution.</summary>
 		IsHighResolution = (1 << 23),
-		/// <summary>To be added.</summary>
+		/// <summary>Non Real Time.</summary>
 		NonRealTime = (1 << 24),
-		/// <summary>To be added.</summary>
+		/// <summary>Can Ramp.</summary>
 		CanRamp = (1 << 25),
-		/// <summary>To be added.</summary>
+		/// <summary>Expert Mode.</summary>
 		ExpertMode = (1 << 26),
-		/// <summary>To be added.</summary>
+		/// <summary>Has C F Name String.</summary>
 		HasCFNameString = (1 << 27),
-		/// <summary>To be added.</summary>
+		/// <summary>Is Global Meta.</summary>
 		IsGlobalMeta = (1 << 28),
-		/// <summary>To be added.</summary>
+		/// <summary>Is Element Meta.</summary>
 		IsElementMeta = (1 << 29),
-		/// <summary>To be added.</summary>
+		/// <summary>Is Readable.</summary>
 		IsReadable = (1 << 30),
-		/// <summary>To be added.</summary>
+		/// <summary>Is Writable.</summary>
 		IsWritable = unchecked((uint) 1 << 31),
 	}
 
 	public enum AudioComponentValidationResult : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Unknown.</summary>
 		Unknown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Passed.</summary>
 		Passed,
-		/// <summary>To be added.</summary>
+		/// <summary>Failed.</summary>
 		Failed,
-		/// <summary>To be added.</summary>
+		/// <summary>Timed Out.</summary>
 		TimedOut,
-		/// <summary>To be added.</summary>
+		/// <summary>Unauthorized Error Open.</summary>
 		UnauthorizedErrorOpen,
-		/// <summary>To be added.</summary>
+		/// <summary>Unauthorized Error Init.</summary>
 		UnauthorizedErrorInit,
 	}
 
 	public enum AUSpatialMixerAttenuationCurve : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Power.</summary>
 		Power = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Exponential.</summary>
 		Exponential = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Inverse.</summary>
 		Inverse = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Linear.</summary>
 		Linear = 3,
 	}
 
 	public enum AU3DMixerRenderingFlags : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Inter Aural Delay.</summary>
 		InterAuralDelay = (1 << 0),
-		/// <summary>To be added.</summary>
+		/// <summary>Doppler Shift.</summary>
 		DopplerShift = (1 << 1),
-		/// <summary>To be added.</summary>
+		/// <summary>Distance Attenuation.</summary>
 		DistanceAttenuation = (1 << 2),
-		/// <summary>To be added.</summary>
+		/// <summary>Distance Filter.</summary>
 		DistanceFilter = (1 << 3),
-		/// <summary>To be added.</summary>
+		/// <summary>Distance Diffusion.</summary>
 		DistanceDiffusion = (1 << 4),
-		/// <summary>To be added.</summary>
+		/// <summary>Linear Distance Attenuation.</summary>
 		LinearDistanceAttenuation = (1 << 5),
-		/// <summary>To be added.</summary>
+		/// <summary>Constant Reverb Blend.</summary>
 		ConstantReverbBlend = (1 << 6),
 	}
 
 	public enum AUReverbRoomType : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Small Room.</summary>
 		SmallRoom = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Medium Room.</summary>
 		MediumRoom = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Large Room.</summary>
 		LargeRoom = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Medium Hall.</summary>
 		MediumHall = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Large Hall.</summary>
 		LargeHall = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Plate.</summary>
 		Plate = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Medium Chamber.</summary>
 		MediumChamber = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Large Chamber.</summary>
 		LargeChamber = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Cathedral.</summary>
 		Cathedral = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Large Room2.</summary>
 		LargeRoom2 = 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Medium Hall2.</summary>
 		MediumHall2 = 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Medium Hall3.</summary>
 		MediumHall3 = 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Large Hall2.</summary>
 		LargeHall2 = 12,
 	}
 
 	public enum AUScheduledAudioSliceFlags : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Complete.</summary>
 		Complete = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Began To Render.</summary>
 		BeganToRender = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Began To Render Late.</summary>
 		BeganToRenderLate = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Loop.</summary>
 		Loop = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Interrupt.</summary>
 		Interrupt = 16,
-		/// <summary>To be added.</summary>
+		/// <summary>Interrupt At Loop.</summary>
 		InterruptAtLoop = 32,
 	}
 
 	public enum AUSpatializationAlgorithm : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Equal Power Panning.</summary>
 		EqualPowerPanning = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Spherical Head.</summary>
 		SphericalHead = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Hrtf.</summary>
 		Hrtf = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Sound Field.</summary>
 		SoundField = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Vector Based Panning.</summary>
 		VectorBasedPanning = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Stereo Pass Through.</summary>
 		StereoPassThrough = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Hrtf H Q.</summary>
 		HrtfHQ = 6,
 		[iOS (14, 0)]
 		[TV (14, 0)]
@@ -1385,19 +1385,19 @@ namespace AudioUnit {
 	}
 
 	public enum AUSpatialMixerRenderingFlags : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Inter Aural Delay.</summary>
 		InterAuralDelay = (1 << 0),
-		/// <summary>To be added.</summary>
+		/// <summary>Distance Attenuation.</summary>
 		DistanceAttenuation = (1 << 2),
 	}
 
 	[MacCatalyst (13, 1)]
 	public enum AUParameterAutomationEventType : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Value.</summary>
 		Value = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Touch.</summary>
 		Touch = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Release.</summary>
 		Release = 2,
 	}
 
@@ -1417,65 +1417,65 @@ namespace AudioUnit {
 
 
 	public enum AudioUnitSubType : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>A U Converter.</summary>
 		AUConverter = 0x636F6E76, // 'conv'
-		/// <summary>To be added.</summary>
+		/// <summary>Varispeed.</summary>
 		Varispeed = 0x76617269, // 'vari'
-		/// <summary>To be added.</summary>
+		/// <summary>Deferred Renderer.</summary>
 		DeferredRenderer = 0x64656672, // 'defr'
-		/// <summary>To be added.</summary>
+		/// <summary>Splitter.</summary>
 		Splitter = 0x73706C74, // 'splt'
-		/// <summary>To be added.</summary>
+		/// <summary>Multi Splitter.</summary>
 		MultiSplitter = 0x6D73706C, // 'mspl'
-		/// <summary>To be added.</summary>
+		/// <summary>Merger.</summary>
 		Merger = 0x6D657267, // 'merg'
-		/// <summary>To be added.</summary>
+		/// <summary>New Time Pitch.</summary>
 		NewTimePitch = 0x6E757470, // 'nutp'
-		/// <summary>To be added.</summary>
+		/// <summary>A Ui Pod Time Other.</summary>
 		AUiPodTimeOther = 0x6970746F, // 'ipto'
-		/// <summary>To be added.</summary>
+		/// <summary>Round Trip Aac.</summary>
 		RoundTripAac = 0x72616163, // 'raac'
-		/// <summary>To be added.</summary>
+		/// <summary>Generic Output.</summary>
 		GenericOutput = 0x67656E72, // 'genr'
-		/// <summary>To be added.</summary>
+		/// <summary>Voice Processing I O.</summary>
 		VoiceProcessingIO = 0x7670696F, // 'vpio'
-		/// <summary>To be added.</summary>
+		/// <summary>Sampler.</summary>
 		Sampler = 0x73616D70, // 'samp'
-		/// <summary>To be added.</summary>
+		/// <summary>Midi Synth.</summary>
 		MidiSynth = 0x6D73796E, // 'msyn'
-		/// <summary>To be added.</summary>
+		/// <summary>Peak Limiter.</summary>
 		PeakLimiter = 0x6C6D7472, // 'lmtr'
-		/// <summary>To be added.</summary>
+		/// <summary>Dynamics Processor.</summary>
 		DynamicsProcessor = 0x64636D70, // 'dcmp'
-		/// <summary>To be added.</summary>
+		/// <summary>Low Pass Filter.</summary>
 		LowPassFilter = 0x6C706173, // 'lpas'
-		/// <summary>To be added.</summary>
+		/// <summary>High Pass Filter.</summary>
 		HighPassFilter = 0x68706173, // 'hpas'
-		/// <summary>To be added.</summary>
+		/// <summary>Band Pass Filter.</summary>
 		BandPassFilter = 0x62706173, // 'bpas'
-		/// <summary>To be added.</summary>
+		/// <summary>High Shelf Filter.</summary>
 		HighShelfFilter = 0x68736866, // 'hshf'
-		/// <summary>To be added.</summary>
+		/// <summary>Low Shelf Filter.</summary>
 		LowShelfFilter = 0x6C736866, // 'lshf'
-		/// <summary>To be added.</summary>
+		/// <summary>Parametric E Q.</summary>
 		ParametricEQ = 0x706D6571, // 'pmeq'
-		/// <summary>To be added.</summary>
+		/// <summary>Distortion.</summary>
 		Distortion = 0x64697374, // 'dist'
-		/// <summary>To be added.</summary>
+		/// <summary>Delay.</summary>
 		Delay = 0x64656C79, // 'dely'
-		/// <summary>To be added.</summary>
+		/// <summary>Sample Delay.</summary>
 		SampleDelay = 0x73646C79, // 'sdly'
-		/// <summary>To be added.</summary>
+		/// <summary>N Band E Q.</summary>
 		NBandEQ = 0x6E626571, // 'nbeq'
-		/// <summary>To be added.</summary>
+		/// <summary>Multi Channel Mixer.</summary>
 		MultiChannelMixer = 0x6D636D78, // 'mcmx'
-		/// <summary>To be added.</summary>
+		/// <summary>Matrix Mixer.</summary>
 		MatrixMixer = 0x6D786D78, // 'mxmx'
-		/// <summary>To be added.</summary>
+		/// <summary>Spatial Mixer.</summary>
 		SpatialMixer = 0x3364656D, // '3dem'
-		/// <summary>To be added.</summary>
+		/// <summary>Scheduled Sound Player.</summary>
 		ScheduledSoundPlayer = 0x7373706C, // 'sspl'
-		/// <summary>To be added.</summary>
+		/// <summary>Audio File Player.</summary>
 		AudioFilePlayer = 0x6166706C, // 'afpl'
 		/// <summary>A light reverb.</summary>
 		Reverb2 = 0x72766232, // 'rvb2'
@@ -1486,41 +1486,41 @@ namespace AudioUnit {
 		[iOS (26, 0), Mac (26, 0), MacCatalyst (26, 0), NoTV]
 		AUAudioMix = 0x616d6978, // 'amix'
 #if MONOMAC
-		/// <summary>To be added.</summary>
+		/// <summary>H A L Output.</summary>
 		HALOutput = 0x6168616C, // 'ahal'
-		/// <summary>To be added.</summary>
+		/// <summary>Default Output.</summary>
 		DefaultOutput = 0x64656620, // 'def '
-		/// <summary>To be added.</summary>
+		/// <summary>System Output.</summary>
 		SystemOutput = 0x73797320, // 'sys '
-		/// <summary>To be added.</summary>
+		/// <summary>D L S Synth.</summary>
 		DLSSynth = 0x646C7320, // 'dls '
-		/// <summary>To be added.</summary>
+		/// <summary>Time Pitch.</summary>
 		TimePitch = 0x746D7074, // 'tmpt'
-		/// <summary>To be added.</summary>
+		/// <summary>Graphic E Q.</summary>
 		GraphicEQ = 0x67726571, // 'greq'
-		/// <summary>To be added.</summary>
+		/// <summary>Multi Band Compressor.</summary>
 		MultiBandCompressor = 0x6D636D70, // 'mcmp'
-		/// <summary>To be added.</summary>
+		/// <summary>Matrix Reverb.</summary>
 		MatrixReverb = 0x6D726576, // 'mrev'
-		/// <summary>To be added.</summary>
+		/// <summary>Pitch.</summary>
 		Pitch = 0x746D7074, // 'tmpt'
-		/// <summary>To be added.</summary>
+		/// <summary>A U Filter.</summary>
 		AUFilter = 0x66696C74, // 'filt
-		/// <summary>To be added.</summary>
+		/// <summary>Net Send.</summary>
 		NetSend = 0x6E736E64, // 'nsnd'
-		/// <summary>To be added.</summary>
+		/// <summary>Roger Beep.</summary>
 		RogerBeep = 0x726F6772, // 'rogr'
-		/// <summary>To be added.</summary>
+		/// <summary>Stereo Mixer.</summary>
 		StereoMixer = 0x736D7872, // 'smxr'
-		/// <summary>To be added.</summary>
+		/// <summary>Spherical Head Panner.</summary>
 		SphericalHeadPanner = 0x73706872, // 'sphr'
-		/// <summary>To be added.</summary>
+		/// <summary>Vector Panner.</summary>
 		VectorPanner = 0x76626173, // 'vbas'
-		/// <summary>To be added.</summary>
+		/// <summary>Sound Field Panner.</summary>
 		SoundFieldPanner = 0x616D6269, // 'ambi'
-		/// <summary>To be added.</summary>
+		/// <summary>H R T F Panner.</summary>
 		HRTFPanner = 0x68727466, // 'hrtf'
-		/// <summary>To be added.</summary>
+		/// <summary>Net Receive.</summary>
 		NetReceive = 0x6E726376, // 'nrcv'
 #endif
 	}

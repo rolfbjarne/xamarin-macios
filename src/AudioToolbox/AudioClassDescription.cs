@@ -41,17 +41,17 @@ namespace AudioToolbox {
 	[SupportedOSPlatform ("tvos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AudioClassDescription {
-		/// <summary>To be added.</summary>
+		/// <summary>The type.</summary>
 		public AudioCodecComponentType Type;
-		/// <summary>To be added.</summary>
+		/// <summary>The sub type.</summary>
 		public AudioFormatType SubType;
-		/// <summary>To be added.</summary>
+		/// <summary>The manufacturer.</summary>
 		public AudioCodecManufacturer Manufacturer;
 
 		/// <param name="type">The type.</param>
 		///         <param name="subType">The sub type.</param>
 		///         <param name="manufacturer">The manufacturer.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="AudioClassDescription" /> instance.</summary>
 		public AudioClassDescription (AudioCodecComponentType type, AudioFormatType subType, AudioCodecManufacturer manufacturer)
 		{
 			Type = type;
@@ -59,8 +59,7 @@ namespace AudioToolbox {
 			Manufacturer = manufacturer;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the is hardware codec.</summary>
 		public bool IsHardwareCodec {
 			get {
 				return Manufacturer == AudioCodecManufacturer.AppleHardware;

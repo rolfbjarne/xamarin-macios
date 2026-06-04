@@ -51,7 +51,7 @@ namespace AudioToolbox {
 
 	/// <summary>An enumeration whose values indicate the status following calls to the <see cref="AudioToolbox.AudioFileStream.Seek(System.Int64,out System.Int64,out System.Boolean)" /> or <see cref="AudioToolbox.AudioFileStream.ParseBytes(System.Byte[],System.Int32,System.Int32,System.Boolean)" /> methods.</summary>
 	public enum AudioFileStreamStatus { // Implictly cast to OSType
-		/// <summary>Indicates ok.</summary>
+		/// <summary>The operation completed successfully.</summary>
 		Ok = 0,
 		/// <summary>Indicates unsupported file type.</summary>
 		UnsupportedFileType = 0x7479703f,

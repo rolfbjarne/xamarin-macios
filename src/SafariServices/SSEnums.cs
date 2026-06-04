@@ -28,7 +28,7 @@ namespace SafariServices {
 	[Native]
 	[ErrorDomain ("SFContentBlockerErrorDomain")]
 	public enum SFContentBlockerErrorCode : long {
-		/// <summary>Indicates ok.</summary>
+		/// <summary>The operation completed successfully.</summary>
 		Ok = 0,
 		/// <summary>Indicates no extension found.</summary>
 		NoExtensionFound = 1,

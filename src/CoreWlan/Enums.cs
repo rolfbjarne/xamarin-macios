@@ -9,7 +9,7 @@ namespace CoreWlan {
 	[Native]
 	[ErrorDomain ("CWErrorDomain")] // enum named `CWErr` in headers
 	public enum CWStatus : long {
-		/// <summary>Indicates ok.</summary>
+		/// <summary>The operation completed successfully.</summary>
 		Ok = 0,
 		/// <summary>Indicates EAPOL.</summary>
 		EAPOL = 1,

@@ -157,7 +157,7 @@ namespace CallKit {
 	public enum CXHandleType : long {
 		/// <summary>The handle is an arbitrary string.</summary>
 		Generic = 1,
-		/// <summary>The handle is a phone number.</summary>
+		/// <summary>The handle is APhone number.</summary>
 		PhoneNumber = 2,
 		/// <summary>The handle is an email address.</summary>
 		EmailAddress = 3,

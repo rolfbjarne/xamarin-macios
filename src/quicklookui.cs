@@ -198,7 +198,7 @@ namespace QuickLookUI {
 		/// <param name="identifier">The identifier to use.</param>
 		/// <param name="queryString">The query string.</param>
 		/// <param name="ItemLoadingHandler">The item loading handler.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Prepares a preview of the searchable item with the specified identifier.</summary>
 		[Export ("preparePreviewOfSearchableItemWithIdentifier:queryString:completionHandler:")]
 #if XAMCORE_5_0
 		void PreparePreviewOfSearchableItem (string identifier, string queryString, Action<NSError> itemLoadingHandler);

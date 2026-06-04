@@ -37,35 +37,35 @@ namespace AudioToolbox {
 	/// <summary>An enumeration whose values can be returned by the <see cref="AVAudioSession.SetActive(System.Boolean,AVAudioSessionSetActiveOptions)" /> method.</summary>
 #endif
 	public enum AudioSessionErrors { // Implictly cast to OSType 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates not initialized.</summary>
 		NotInitialized = 0x21696e69, // '!ini',
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates already initialized.</summary>
 		AlreadyInitialized = 0x696e6974, // 'init',
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates initialization error.</summary>
 		InitializationError = 0x696e693f, // 'ini?',
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unsupported property error.</summary>
 		UnsupportedPropertyError = 0x7074793f, // 'pty?',
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bad property size error.</summary>
 		BadPropertySizeError = 0x2173697a, // '!siz',
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates not active error.</summary>
 		NotActiveError = 0x21616374, // '!act',
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates no hardware error.</summary>
 		NoHardwareError = 0x6e6f6877, // 'nohw'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates incompatible category.</summary>
 		IncompatibleCategory = 0x21636174, // '!cat'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates no category set.</summary>
 		NoCategorySet = 0x3f636174, // '?cat'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unspecified error.</summary>
 		UnspecifiedError = 0x77686371, // 'what'
 	}
 
 	/// <summary>An enumeration whose values represent the beginning and end of an audio session interruption.</summary>
 	public enum AudioSessionInterruptionState { // UInt32 in AudioSessionInterruptionListener
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates end.</summary>
 		End = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates begin.</summary>
 		Begin = 1,
 	}
 
@@ -124,26 +124,26 @@ namespace AudioToolbox {
 		WakeFromSleep = 6,
 		/// <summary>There is no audio device for the current set category in the audio session.  For example, recording when there is no microphone available.</summary>
 		NoSuitableRouteForCategory = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates route configuration change.</summary>
 		RouteConfigurationChange = 8,
 	}
 
 	/// <summary>An enumeration whose values indicate whether the application should resume after an interruption.</summary>
 	public enum AudioSessionInterruptionType { // UInt32 AudioSessionInterruptionType
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates should resume.</summary>
 		ShouldResume = 1769108333, // 'irsm'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates should not resume.</summary>
 		ShouldNotResume = 561148781, // '!rsm'
 	}
 
 	// Should be internal with AudioSessionPropertyListener public
 	/// <summary>An enumeration whose values specify properties for audio sessions.</summary>
 	public enum AudioSessionProperty { // typedef UInt32 AudioSessionPropertyID
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates preferred hardware sample rate.</summary>
 		PreferredHardwareSampleRate = 0x68777372,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates preferred hardware i o buffer duration.</summary>
 		PreferredHardwareIOBufferDuration = 0x696f6264,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates audio category.</summary>
 		AudioCategory = 0x61636174, // 'acat'
 		/// <summary>Developers should not use this deprecated field. </summary>
 		[Deprecated (PlatformName.iOS, 5, 0)]
@@ -151,29 +151,29 @@ namespace AudioToolbox {
 		[Deprecated (PlatformName.TvOS, 9, 0)]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1)]
 		AudioRoute = 0x726f7574,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates audio route change.</summary>
 		AudioRouteChange = 0x726f6368,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates current hardware sample rate.</summary>
 		CurrentHardwareSampleRate = 0x63687372,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates current hardware input number channels.</summary>
 		CurrentHardwareInputNumberChannels = 0x63686963,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates current hardware output number channels.</summary>
 		CurrentHardwareOutputNumberChannels = 0x63686f63,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates current hardware output volume.</summary>
 		CurrentHardwareOutputVolume = 0x63686f76,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates current hardware input latency.</summary>
 		CurrentHardwareInputLatency = 0x63696c74,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates current hardware output latency.</summary>
 		CurrentHardwareOutputLatency = 0x636f6c74,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates current hardware i o buffer duration.</summary>
 		CurrentHardwareIOBufferDuration = 0x63686264,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates other audio is playing.</summary>
 		OtherAudioIsPlaying = 0x6f746872,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates override audio route.</summary>
 		OverrideAudioRoute = 0x6f767264,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates audio input available.</summary>
 		AudioInputAvailable = 0x61696176,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates server died.</summary>
 		ServerDied = 0x64696564,
 		/// <summary>To be added.</summary>
 		[Deprecated (PlatformName.iOS, 7, 0)]
@@ -181,29 +181,29 @@ namespace AudioToolbox {
 		[Deprecated (PlatformName.TvOS, 9, 0)]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1)]
 		OtherMixableAudioShouldDuck = 0x6475636b,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates override category mix with others.</summary>
 		OverrideCategoryMixWithOthers = 0x636d6978,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates override category default to speaker.</summary>
 		OverrideCategoryDefaultToSpeaker = 0x6373706b, //'cspk'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates override category enable bluetooth input.</summary>
 		OverrideCategoryEnableBluetoothInput = 0x63626c75, //'cblu'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates interruption type.</summary>
 		InterruptionType = 0x74797065,      // 'type'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates mode.</summary>
 		Mode = 0x6d6f6465,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates input sources.</summary>
 		InputSources = 0x73726373,      // 'srcs'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates output destinations.</summary>
 		OutputDestinations = 0x64737473,        // 'dsts'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates input source.</summary>
 		InputSource = 0x69737263,       // 'isrc'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates output destination.</summary>
 		OutputDestination = 0x6f647374,     // 'odst'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates input gain available.</summary>
 		InputGainAvailable = 0x69676176,        // 'igav'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates input gain scalar.</summary>
 		InputGainScalar = 0x69677363,       // 'igsc'
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates audio route description.</summary>
 		AudioRouteDescription = 0x63726172,     // 'crar'
 	}
 
@@ -265,25 +265,25 @@ namespace AudioToolbox {
 
 	/// <summary>An enumeration whose values specify different kinds of output routes. </summary>
 	public enum AudioSessionOutputRouteKind { // UInt32           (set only) in AudioSession.h
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates line out.</summary>
 		LineOut,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates headphones.</summary>
 		Headphones,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bluetooth h f p.</summary>
 		BluetoothHFP,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bluetooth a2 d p.</summary>
 		BluetoothA2DP,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates built in receiver.</summary>
 		BuiltInReceiver,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates built in speaker.</summary>
 		BuiltInSpeaker,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates u s b audio.</summary>
 		USBAudio,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates h d m i.</summary>
 		HDMI,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates air play.</summary>
 		AirPlay,
 	}
 }

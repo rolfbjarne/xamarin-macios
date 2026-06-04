@@ -1,9 +1,9 @@
 <Documentation>
   <Docs DocId="M:MultipeerConnectivity.MCNearbyServiceAdvertiserDelegate.DidReceiveInvitationFromPeer(MultipeerConnectivity.MCNearbyServiceAdvertiser,MultipeerConnectivity.MCPeerID,Foundation.NSData,MultipeerConnectivity.MCNearbyServiceAdvertiserInvitationHandler)">
-        <param name="advertiser">To be added.</param>
-        <param name="peerID">To be added.</param>
+        <param name="advertiser">The advertiser that received the invitation.</param>
+        <param name="peerID">The peer ID of the remote device that sent the invitation.</param>
         <param name="context">
-          <para>To be added.</para>
+          <para>Arbitrary data supplied by the peer that sent the invitation.</para>
           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
         </param>
         <param name="invitationHandler">Continuation that the app developer must call.</param>

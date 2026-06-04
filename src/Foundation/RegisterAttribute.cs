@@ -32,7 +32,7 @@ namespace Foundation {
 		string? name;
 		bool is_wrapper;
 
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new register attribute with no name.</summary>
 		public RegisterAttribute () { }
 		/// <param name="name">The name to use when exposing this class to the Objective-C world.</param>
 		///         <summary>Used to specify how the ECMA class is exposed as an Objective-C class.</summary>
@@ -64,8 +64,7 @@ namespace Foundation {
 			set { this.is_wrapper = value; }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets whether to skip the Objective-C registration for this type.</summary>
 		public bool SkipRegistration { get; set; }
 
 		/// <summary>

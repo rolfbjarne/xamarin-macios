@@ -15,11 +15,10 @@ using ImageIO;
 namespace AVFoundation {
 	public partial class AVDepthData {
 
-		/// <param name="dataInfo">To be added.</param>
-		///         <param name="error">To be added.</param>
+		/// <param name="dataInfo">The data info.</param>
+		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>Creates and returns a new AVDepthData object with the specified values.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static AVDepthData? Create (CGImageAuxiliaryDataInfo dataInfo, out NSError? error)
 		{
 			return Create (dataInfo.Dictionary, out error);
@@ -27,7 +26,6 @@ namespace AVFoundation {
 
 		/// <summary>Returns an array of depth data types that are suitable for use with <see cref="AVFoundation.AVDepthData.Create(CGImageAuxiliaryDataInfo, out NSError)" />.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public CVPixelFormatType []? AvailableDepthDataTypes {
 			get {
 				var values = WeakAvailableDepthDataTypes;

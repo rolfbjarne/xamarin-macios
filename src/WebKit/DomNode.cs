@@ -26,7 +26,7 @@
 #nullable enable
 
 namespace WebKit {
-	/// <summary>To be added.</summary>
+	/// <summary>Provides event data for DOM events.</summary>
 	[SupportedOSPlatform ("macos")]
 	public class DomEventArgs : EventArgs {
 		/// <param name="evt">The evt.</param>
@@ -41,7 +41,7 @@ namespace WebKit {
 
 	/// <param name="sender">The object that raised the event.</param>
 	///     <param name="args">The event arguments.</param>
-	///     <summary>To be added.</summary>
+	/// <summary>A handler for DOM event notifications.</summary>
 	public delegate void DomEventListenerHandler (object sender, DomEventArgs args);
 
 	public partial class DomNode {

@@ -638,7 +638,7 @@ namespace Security {
 #endif
 	}
 
-	/// <summary>Encapsulates a security key, one half of a public-private key-pair.</summary>
+	/// <summary>Encapsulates a security key, one half of APublic-private key-pair.</summary>
 	///     <remarks>To be added.</remarks>
 	public partial class SecKey : NativeObject {
 		[Preserve (Conditional = true)]

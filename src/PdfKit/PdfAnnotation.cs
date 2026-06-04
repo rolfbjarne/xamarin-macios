@@ -16,11 +16,10 @@ namespace PdfKit {
 	public partial class PdfAnnotation {
 
 		/// <typeparam name="T">To be added.</typeparam>
-		///         <param name="value">To be added.</param>
-		///         <param name="key">To be added.</param>
+		///         <param name="value">The value to set.</param>
+		///         <param name="key">The key to use.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -35,11 +34,10 @@ namespace PdfKit {
 			return result;
 		}
 
-		/// <param name="str">To be added.</param>
-		///         <param name="key">To be added.</param>
+		/// <param name="str">The str.</param>
+		///         <param name="key">The key to use.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -55,10 +53,9 @@ namespace PdfKit {
 		}
 
 		/// <typeparam name="T">To be added.</typeparam>
-		///         <param name="key">To be added.</param>
+		///         <param name="key">The key to use.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -70,7 +67,6 @@ namespace PdfKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public PdfAnnotationKey AnnotationType {
 			get { return PdfAnnotationKeyExtensions.GetValue (Type!); }
 			set { Type = value.GetConstant ()!; }

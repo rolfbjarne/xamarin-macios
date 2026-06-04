@@ -72,7 +72,6 @@ namespace AVFoundation {
 
 		// Should be VideoGravity only but previous binding was wrong
 		/// <summary>Gets or sets a value that controls how the visual content is displayed within the bounds of the layer.</summary>
-		///         <value>To be added.</value>
 		public AVLayerVideoGravity VideoGravity {
 			set {
 				WeakVideoGravity = EnumToKey (value);
@@ -87,7 +86,6 @@ namespace AVFoundation {
 	partial class AVCaptureVideoPreviewLayer {
 		// Should be VideoGravity only but previous binding was wrong
 		/// <summary>Gets or sets how the video is displayed within the layer's <see cref="CoreAnimation.CALayer.Bounds" />.</summary>
-		///         <value>To be added.</value>
 		public AVLayerVideoGravity VideoGravity {
 			set {
 				WeakVideoGravity = AVPlayerLayer.EnumToKey (value);
@@ -101,7 +99,6 @@ namespace AVFoundation {
 
 	partial class AVPlayer {
 		/// <summary>The technique used to modify the video playback aspect ratio during external playback.</summary>
-		///         <value>To be added.</value>
 		public AVLayerVideoGravity? ExternalPlaybackVideoGravity {
 			set {
 				WeakExternalPlaybackVideoGravity = AVPlayerLayer.EnumToKey (value);

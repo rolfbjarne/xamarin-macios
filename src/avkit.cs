@@ -829,7 +829,7 @@ namespace AVKit {
 	interface AVCaptureViewDelegate {
 		/// <param name="captureView">The capture view.</param>
 		/// <param name="fileOutput">The file output.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Called when the capture view begins recording to the specified file output.</summary>
 		[Abstract]
 		[Export ("captureView:startRecordingToFileOutput:")]
 		void StartRecording (AVCaptureView captureView, AVCaptureFileOutput fileOutput);

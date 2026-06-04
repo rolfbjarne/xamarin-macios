@@ -9,13 +9,12 @@ using Metal;
 namespace MetalKit {
 
 	public partial class MTKMesh {
-		/// <param name="asset">To be added.</param>
-		///         <param name="device">To be added.</param>
-		///         <param name="sourceMeshes">To be added.</param>
-		///         <param name="error">To be added.</param>
+		/// <param name="asset">The asset.</param>
+		///         <param name="device">The device.</param>
+		///         <param name="sourceMeshes">The source meshes.</param>
+		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>Creates and returns a new Metal Kit mesh from the supplied Model IO asset.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static MTKMesh []? FromAsset (MDLAsset asset, IMTLDevice device, out MDLMesh []? sourceMeshes, out NSError error)
 		{
 			NSArray aret;

@@ -101,25 +101,25 @@ namespace UserNotificationsUI {
 		[Export ("mediaPlayingPaused")]
 		void MediaPlayingPaused ();
 
-		/// <summary>To be added.</summary>
+		/// <summary>Performs the default action for the notification.</summary>
 		[MacCatalyst (14, 0)]
 		[Export ("performNotificationDefaultAction")]
 		void PerformNotificationDefaultAction ();
 
-		/// <summary>To be added.</summary>
+		/// <summary>Dismisses the notification content extension.</summary>
 		[MacCatalyst (14, 0)]
 		[Export ("dismissNotificationContentExtension")]
 		void DismissNotificationContentExtension ();
 
 		// property, but we have to add the two methods since it is a category.
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Gets the notification actions associated with this extension context.</summary>
+		/// <returns>An array of <see cref="T:UserNotifications.UNNotificationAction" /> objects.</returns>
 		[MacCatalyst (14, 0)]
 		[Export ("notificationActions")]
 		UNNotificationAction [] GetNotificationActions ();
 
 		/// <param name="actions">The actions.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Sets the notification actions associated with this extension context.</summary>
 		[MacCatalyst (14, 0)]
 		[Export ("setNotificationActions:")]
 		void SetNotificationActions (UNNotificationAction [] actions);

@@ -75,8 +75,8 @@ namespace QuickLookUI {
 		[Export ("previewItemTitle")]
 		string PreviewItemTitle { get; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
+		/// <summary>Gets the display state for the preview item.</summary>
+		/// <value>The display state object.</value>
 		[Export ("previewItemDisplayState")]
 		NSObject PreviewItemDisplayState { get; }
 	}

@@ -35,7 +35,6 @@ using OpenGL;
 
 namespace CoreVideo {
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("macos")]
 	public class CVDisplayLink : NativeObject {
 		GCHandle callbackHandle;
@@ -233,7 +232,7 @@ namespace CoreVideo {
 		[DllImport (Constants.CoreVideoLibrary)]
 		extern static CVReturn CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext (IntPtr displayLink, IntPtr cglContext, IntPtr cglPixelFormat);
 
-		/// <param name="cglContext">To be added.</param>
+		/// <param name="cglContext">The cgl context.</param>
 		///         <param name="cglPixelFormat">To be added.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
@@ -380,14 +379,13 @@ namespace CoreVideo {
 			return ret;
 		}
 
-		/// <param name="displayLink">To be added.</param>
-		///     <param name="inNow">To be added.</param>
-		///     <param name="inOutputTime">To be added.</param>
-		///     <param name="flagsIn">To be added.</param>
-		///     <param name="flagsOut">To be added.</param>
+		/// <param name="displayLink">The display link.</param>
+		///     <param name="inNow">The in now.</param>
+		///     <param name="inOutputTime">The in output time.</param>
+		///     <param name="flagsIn">The flags in.</param>
+		///     <param name="flagsOut">The flags out.</param>
 		///     <summary>To be added.</summary>
 		///     <returns>To be added.</returns>
-		///     <remarks>To be added.</remarks>
 		public delegate CVReturn DisplayLinkOutputCallback (CVDisplayLink displayLink, ref CVTimeStamp inNow, ref CVTimeStamp inOutputTime, CVOptionFlags flagsIn, ref CVOptionFlags flagsOut);
 		delegate CVReturn CVDisplayLinkOutputCallback (IntPtr displayLink, ref CVTimeStamp inNow, ref CVTimeStamp inOutputTime, CVOptionFlags flagsIn, ref CVOptionFlags flagsOut, IntPtr displayLinkContext);
 

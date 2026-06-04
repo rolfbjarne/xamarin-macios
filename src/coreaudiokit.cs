@@ -246,8 +246,8 @@ namespace CoreAudioKit {
 		[Export ("initWithFrame:")]
 		NativeHandle Constructor (CGRect bounds);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets a value that indicates whether app names are shown.</summary>
+		/// <value><see langword="true" /> if app names are shown; otherwise, <see langword="false" />.</value>
 		[Export ("showingAppNames")]
 		bool ShowingAppNames { [Bind ("isShowingAppNames")] get; set; }
 

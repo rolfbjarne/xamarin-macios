@@ -59,7 +59,7 @@ namespace GameplayKit {
 		}
 
 		/// <param name="obstacle">The obstacle.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the nodes associated with the specified obstacle.</summary>
 		public new NodeType []? GetNodes (GKPolygonObstacle obstacle)
 		{
 			return NSArray.ArrayFromHandleDropNullElements<NodeType> (_GetNodes (obstacle));

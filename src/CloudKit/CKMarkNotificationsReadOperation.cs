@@ -31,7 +31,7 @@ namespace CloudKit {
 		}
 
 		/// <param name="notificationIds">The notification ids.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CKMarkNotificationsReadOperation" /> instance.</summary>
 		public CKMarkNotificationsReadOperation (CKNotificationID [] notificationIds)
 			: base (NSObjectFlag.Empty)
 		{
@@ -39,7 +39,6 @@ namespace CloudKit {
 		}
 
 		/// <summary>Gets or sets the handler that is run after the operation completes.</summary>
-		///         <value>To be added.</value>
 		public unsafe virtual CKMarkNotificationsReadHandler? Completed {
 			get {
 				throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);

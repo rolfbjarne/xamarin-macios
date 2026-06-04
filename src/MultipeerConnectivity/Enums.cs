@@ -54,7 +54,7 @@ namespace MultipeerConnectivity {
 	public enum MCError : long {
 		/// <summary>The type of the error could not be determined.</summary>
 		Unknown,
-		/// <summary>Data was sent to a peer that is not connected.</summary>
+		/// <summary>Data was sent to APeer that is not connected.</summary>
 		NotConnected,
 		/// <summary>The relevant operation was called with an invalid parameter.</summary>
 		InvalidParameter,

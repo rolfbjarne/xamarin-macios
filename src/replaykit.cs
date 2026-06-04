@@ -346,7 +346,7 @@ namespace ReplayKit {
 		bool Broadcasting { [Bind ("isBroadcasting")] get; }
 
 		/// <summary>Gets a value that tells whether the broadcast is paused.</summary>
-		///         <value>To be added.</value>
+		/// <value><see langword="true" /> if the broadcast is paused; otherwise, <see langword="false" />.</value>
 		[Export ("paused")]
 		bool Paused { [Bind ("isPaused")] get; }
 
@@ -371,7 +371,7 @@ namespace ReplayKit {
 		[Async (XmlDocs = """
 			<summary>Starts a new broadcast.</summary>
 			<returns>A task that represents the asynchronous StartBroadcast operation</returns>
-			<remarks>To be added.</remarks>
+			
 			""")]
 		[Export ("startBroadcastWithHandler:")]
 		void StartBroadcast (Action<NSError> handler);
@@ -387,7 +387,7 @@ namespace ReplayKit {
 			<returns>A task that represents the asynchronous FinishBroadcast operation</returns>
 			<remarks>
 			          <para copied="true">The FinishBroadcastAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
+			          <para copied="true">Returns a task representing the asynchronous operation.</para>
 			        </remarks>
 			""")]
 		[Export ("finishBroadcastWithHandler:")]

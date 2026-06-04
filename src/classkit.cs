@@ -23,7 +23,7 @@ namespace ClassKit {
 		PassFail,
 		/// <summary>Indicates an activity that results in a yes or no value</summary>
 		YesNo,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates correct incorrect.</summary>
 		[MacCatalyst (14, 0)]
 		CorrectIncorrect,
 	}
@@ -156,13 +156,11 @@ namespace ClassKit {
 
 		/// <summary>Gets a key that can be used for finding the object that caused the error.</summary>
 		///         <value>The key that can be used for finding the object that caused the error.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CLSErrorObjectKey")]
 		NSString ObjectKey { get; }
 
 		/// <summary>Gets a key that can be used for finding the underlying error that caused the current error.</summary>
 		///         <value>The key that can be used for finding the underlying error that caused the current error.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CLSErrorUnderlyingErrorsKey")]
 		NSString UnderlyingErrorsKey { get; }
 
@@ -178,37 +176,31 @@ namespace ClassKit {
 	interface CLSPredicateKeyPath {
 		/// <summary>Gets the key path for retrieving contexts by their creation date.</summary>
 		///         <value>The key path for retrieving contexts by their creation date.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CLSPredicateKeyPathDateCreated")]
 		NSString DateCreated { get; }
 
 		/// <summary>Gets the key path for retrieving contexts by their identifier.</summary>
 		///         <value>The key path for retrieving contexts by their identifier.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CLSPredicateKeyPathIdentifier")]
 		NSString Identifier { get; }
 
 		/// <summary>Gets the key path for retrieving contexts by their title.</summary>
 		///         <value>The key path for retrieving contexts by their title.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CLSPredicateKeyPathTitle")]
 		NSString Title { get; }
 
 		/// <summary>Gets the key path for retrieving contexts by universal link URL.</summary>
 		///         <value>The key path for retrieving contexts by universal link URL.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CLSPredicateKeyPathUniversalLinkURL")]
 		NSString UniversalLinkUrl { get; }
 
 		/// <summary>Gets the key path for retrieving contexts by topic.</summary>
 		///         <value>The key path for retrieving contexts by topic.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CLSPredicateKeyPathTopic")]
 		NSString Topic { get; }
 
 		/// <summary>Gets the key path for retrieving contexts by their parent.</summary>
 		///         <value>The key path for retrieving contexts by their parent.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CLSPredicateKeyPathParent")]
 		NSString Parent { get; }
 	}
@@ -257,7 +249,6 @@ namespace ClassKit {
 
 		/// <summary>Gets a Boolean value that tells whether the activity is active.</summary>
 		///         <value>A Boolean value that tells whether the activity is active.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("started")]
 		bool Started { [Bind ("isStarted")] get; }
 
@@ -357,7 +348,6 @@ namespace ClassKit {
 		/// <summary>Gets a Boolean value that tells whether the context is currently active.</summary>
 		///         <value>
 		///           <see langword="true" /> if the context is active. Otherwise, <see langword="false" />.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("active")]
 		bool Active { [Bind ("isActive")] get; }
 
@@ -604,10 +594,9 @@ namespace ClassKit {
 	[NoTV]
 	[Protocol]
 	interface CLSContextProvider {
-		/// <param name="context">To be added.</param>
-		/// <param name="completion">To be added.</param>
+		/// <param name="context">The context to use.</param>
+		/// <param name="completion">The completion.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("updateDescendantsOfContext:completion:")]
 		void UpdateDescendants (CLSContext context, Action<NSError> completion);

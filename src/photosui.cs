@@ -541,13 +541,13 @@ namespace PhotosUI {
 	[Protocol]
 	interface PHProjectTypeDescriptionInvalidator {
 		/// <param name="projectType">The project type.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Invalidates the type description for the specified project type.</summary>
 		[Abstract]
 		[Export ("invalidateTypeDescriptionForProjectType:")]
 		void InvalidateTypeDescription (NSString projectType);
 
 		/// <param name="projectType">The project type.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Invalidates the footer text for subtypes of the specified project type.</summary>
 		[Abstract]
 		[Export ("invalidateFooterTextForSubtypesOfProjectType:")]
 		void InvalidateFooterTextForSubtypes (NSString projectType);

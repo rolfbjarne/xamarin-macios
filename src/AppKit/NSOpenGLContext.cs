@@ -24,7 +24,6 @@ namespace AppKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		unsafe public Rectangle SwapRectangle {
 			get {
 				Rectangle ret;
@@ -38,7 +37,6 @@ namespace AppKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool SwapRectangleEnabled {
 			get {
 				return GetValue (NSOpenGLContextParameter.SwapRectangleEnable) != 0;
@@ -50,7 +48,6 @@ namespace AppKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool RasterizationEnabled {
 			get {
 				return GetValue (NSOpenGLContextParameter.RasterizationEnable) != 0;
@@ -62,7 +59,6 @@ namespace AppKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool SwapInterval {
 			get {
 				return GetValue (NSOpenGLContextParameter.SwapInterval) != 0;
@@ -74,7 +70,6 @@ namespace AppKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NSSurfaceOrder SurfaceOrder {
 			get {
 				switch (GetValue (NSOpenGLContextParameter.SurfaceOrder)) {
@@ -91,7 +86,6 @@ namespace AppKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool SurfaceOpaque {
 			get {
 				return GetValue (NSOpenGLContextParameter.SurfaceOpacity) != 0;
@@ -103,7 +97,6 @@ namespace AppKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool StateValidation {
 			get {
 				return GetValue (NSOpenGLContextParameter.StateValidation) != 0;

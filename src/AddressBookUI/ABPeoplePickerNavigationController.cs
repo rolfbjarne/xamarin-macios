@@ -33,10 +33,10 @@ namespace AddressBookUI {
 			Person = person;
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the person that was selected.</summary>
 		public ABPerson Person { get; private set; }
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets a value indicating whether the people picker should continue its default action.</summary>
 		public bool Continue { get; set; }
 	}
 
@@ -65,9 +65,9 @@ namespace AddressBookUI {
 			Identifier = identifier;
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the property on which the action was performed.</summary>
 		public ABPersonProperty Property { get; private set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the identifier of the multi-value property item, or <see langword="null" /> if not applicable.</summary>
 		public int? Identifier { get; private set; }
 	}
 
@@ -91,7 +91,7 @@ namespace AddressBookUI {
 			Person = person;
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the person that was selected.</summary>
 		public ABPerson Person { get; private set; }
 	}
 
@@ -119,9 +119,9 @@ namespace AddressBookUI {
 			Identifier = identifier;
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the property on which the action was performed.</summary>
 		public ABPersonProperty Property { get; private set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the identifier of the multi-value property item, or <see langword="null" /> if not applicable.</summary>
 		public int? Identifier { get; private set; }
 	}
 
@@ -243,7 +243,7 @@ namespace AddressBookUI {
 		}
 
 		/// <param name="e">The event arguments.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Raises the select person event.</summary>
 		protected internal virtual void OnSelectPerson (ABPeoplePickerSelectPersonEventArgs e)
 		{
 			var h = EnsureEventDelegate<InternalABPeoplePickerNavigationControllerDelegate> ().selectPerson;
@@ -252,7 +252,7 @@ namespace AddressBookUI {
 		}
 
 		/// <param name="e">The event arguments.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Raises the select person event.</summary>
 		protected internal virtual void OnSelectPerson2 (ABPeoplePickerSelectPerson2EventArgs e)
 		{
 			var h = EnsureEventDelegate<InternalABPeoplePickerNavigationControllerDelegate> ().selectPerson2;
@@ -261,7 +261,7 @@ namespace AddressBookUI {
 		}
 
 		/// <param name="e">The event arguments.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Raises the perform action event.</summary>
 		protected internal virtual void OnPerformAction (ABPeoplePickerPerformActionEventArgs e)
 		{
 			var h = EnsureEventDelegate<InternalABPeoplePickerNavigationControllerDelegate> ().performAction;
@@ -270,7 +270,7 @@ namespace AddressBookUI {
 		}
 
 		/// <param name="e">The event arguments.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Raises the perform action event.</summary>
 		protected internal virtual void OnPerformAction2 (ABPeoplePickerPerformAction2EventArgs e)
 		{
 			var h = EnsureEventDelegate<InternalABPeoplePickerNavigationControllerDelegate> ().performAction2;
@@ -279,7 +279,7 @@ namespace AddressBookUI {
 		}
 
 		/// <param name="e">The event arguments.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Raises the cancelled event.</summary>
 		protected internal virtual void OnCancelled (EventArgs e)
 		{
 			var h = EnsureEventDelegate<InternalABPeoplePickerNavigationControllerDelegate> ().cancelled;

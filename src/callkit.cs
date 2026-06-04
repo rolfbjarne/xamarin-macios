@@ -414,7 +414,6 @@ namespace CallKit {
 			<param name="identifier">The unique id of the directory extension to check.</param>
 			<summary>Asynchronously reloads the identified directory extension.</summary>
 			<returns>A task that represents the asynchronous ReloadExtension operation</returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Export ("reloadExtensionWithIdentifier:completionHandler:")]
 		void ReloadExtension (string identifier, [NullAllowed] Action<NSError> completion);
@@ -425,7 +424,6 @@ namespace CallKit {
 			<returns>A task that processes the enabled status of the extension.</returns>
 			<remarks>
 			          <para copied="true">The GetEnabledStatusForExtensionAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
 			        </remarks>
 			""")]
 		[Export ("getEnabledStatusForExtensionWithIdentifier:completionHandler:")]

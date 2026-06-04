@@ -218,7 +218,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSUrl? LinkUrl {
 			get { return Link as NSUrl; }
@@ -226,7 +225,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSString? LinkString {
 			get { return Link as NSString; }
@@ -234,7 +232,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSFont? Font {
 			get { return Get (NSStringAttributeKey.Font, handle => new NSFont (handle)); }
@@ -242,7 +239,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSParagraphStyle? ParagraphStyle {
 			get { return Get (NSStringAttributeKey.ParagraphStyle, handle => new NSParagraphStyle (handle)); }
@@ -250,7 +246,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSColor? ForegroundColor {
 			get { return Get (NSStringAttributeKey.ForegroundColor, handle => new NSColor (handle)); }
@@ -258,7 +253,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int? UnderlineStyle {
 			get { return GetInt32Value (NSStringAttributeKey.UnderlineStyle); }
@@ -272,7 +266,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool? Superscript {
 			get { return GetBool (NSStringAttributeKey.Superscript); }
@@ -280,7 +273,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSColor? BackgroundColor {
 			get { return Get (NSStringAttributeKey.BackgroundColor, handle => new NSColor (handle)); }
@@ -288,7 +280,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSTextAttachment? Attachment {
 			get { return Get (NSStringAttributeKey.Attachment, handle => new NSTextAttachment (handle)); }
@@ -296,7 +287,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSLigatureType? Ligature {
 			get { return (NSLigatureType?) GetInt32Value (NSStringAttributeKey.Ligature); }
@@ -304,7 +294,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? BaselineOffset {
 			get { return GetFloatValue (NSStringAttributeKey.BaselineOffset); }
@@ -312,7 +301,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? KerningAdjustment {
 			get { return GetFloatValue (NSStringAttributeKey.KerningAdjustment); }
@@ -329,7 +317,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? StrokeWidth {
 			get { return GetFloatValue (NSStringAttributeKey.StrokeWidth); }
@@ -337,7 +324,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSColor? StrokeColor {
 			get { return Get (NSStringAttributeKey.StrokeColor, handle => new NSColor (handle)); }
@@ -345,7 +331,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSColor? UnderlineColor {
 			get { return Get (NSStringAttributeKey.UnderlineColor, handle => new NSColor (handle)); }
@@ -353,7 +338,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int? StrikethroughStyle {
 			get { return GetInt32Value (NSStringAttributeKey.StrikethroughStyle); }
@@ -367,7 +351,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSColor? StrikethroughColor {
 			get { return Get (NSStringAttributeKey.StrikethroughColor, handle => new NSColor (handle)); }
@@ -375,7 +358,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSShadow? Shadow {
 			get { return Get (NSStringAttributeKey.Shadow, handle => new NSShadow (handle)); }
@@ -383,7 +365,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? Obliqueness {
 			get { return GetFloatValue (NSStringAttributeKey.Obliqueness); }
@@ -391,7 +372,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? Expansion {
 			get { return GetFloatValue (NSStringAttributeKey.Expansion); }
@@ -399,7 +379,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSCursor? Cursor {
 			get { return Get (NSStringAttributeKey.Cursor, handle => new NSCursor (handle)); }
@@ -407,7 +386,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? ToolTip {
 			get { return Get (NSStringAttributeKey.ToolTip, handle => new NSString (handle)); }
@@ -415,7 +393,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int? CharacterShape {
 			get { return GetInt32Value (NSStringAttributeKey.CharacterShape); }
@@ -423,7 +400,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSGlyphInfo? GlyphInfo {
 			get { return Get (NSStringAttributeKey.GlyphInfo, handle => new NSGlyphInfo (handle)); }
@@ -431,7 +407,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSArray? WritingDirection {
 			get { return Get (NSStringAttributeKey.WritingDirection, handle => new NSArray (handle)); }
@@ -439,7 +414,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool? MarkedClauseSegment {
 			get { return GetBool (NSStringAttributeKey.MarkedClauseSegment); }
@@ -447,7 +421,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSTextLayoutOrientation? VerticalGlyphForm {
 			get { return (NSTextLayoutOrientation?) GetInt32Value (NSStringAttributeKey.VerticalGlyphForm); }
@@ -455,7 +428,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSTextAlternatives? TextAlternatives {
 			get { return Get (NSStringAttributeKey.TextAlternatives, handle => new NSTextAlternatives (handle)); }
@@ -463,7 +435,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSSpellingState? SpellingState {
 			get { return (NSSpellingState?) GetInt32Value (NSStringAttributeKey.SpellingState); }

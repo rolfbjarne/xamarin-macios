@@ -279,9 +279,9 @@ namespace AudioToolbox {
 		BuiltInReceiver,
 		/// <summary>Indicates built in speaker.</summary>
 		BuiltInSpeaker,
-		/// <summary>Indicates u s b audio.</summary>
+		/// <summary>Indicates USB audio.</summary>
 		USBAudio,
-		/// <summary>Indicates h d m i.</summary>
+		/// <summary>Indicates HDMI.</summary>
 		HDMI,
 		/// <summary>Indicates air play.</summary>
 		AirPlay,

@@ -66,14 +66,14 @@ namespace NetworkExtension {
 		[Deprecated (PlatformName.MacOSX, 26, 0, "Not supported anymore.")]
 		[Deprecated (PlatformName.MacCatalyst, 26, 0, "Not supported anymore.")]
 		TripleDES = 2,
-		/// <summary>Indicates a e s128.</summary>
+		/// <summary>Indicates AE s128.</summary>
 		AES128 = 3,
-		/// <summary>Indicates a e s256.</summary>
+		/// <summary>Indicates AE s256.</summary>
 		AES256 = 4,
-		/// <summary>Indicates a e s128 g c m.</summary>
+		/// <summary>Indicates AE s128 g c m.</summary>
 		[MacCatalyst (13, 1)]
 		AES128GCM = 5,
-		/// <summary>Indicates a e s256 g c m.</summary>
+		/// <summary>Indicates AE s256 g c m.</summary>
 		[MacCatalyst (13, 1)]
 		AES256GCM = 6,
 		[iOS (13, 0)]
@@ -213,13 +213,13 @@ namespace NetworkExtension {
 	[MacCatalyst (13, 1)]
 	[Native ("NEVPNIKEv2CertificateType")] // NSInteger
 	public enum NEVpnIke2CertificateType : long {
-		/// <summary>Indicates r s a.</summary>
+		/// <summary>Indicates RSA.</summary>
 		RSA = 1,
-		/// <summary>Indicates e c d s a256.</summary>
+		/// <summary>Indicates ECDS a256.</summary>
 		ECDSA256 = 2,
-		/// <summary>Indicates e c d s a384.</summary>
+		/// <summary>Indicates ECDS a384.</summary>
 		ECDSA384 = 3,
-		/// <summary>Indicates e c d s a521.</summary>
+		/// <summary>Indicates ECDS a521.</summary>
 		ECDSA521 = 4,
 		[NoTV]
 		[iOS (13, 0)]

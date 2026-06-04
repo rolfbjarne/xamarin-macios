@@ -93,7 +93,7 @@ namespace CoreData {
 		ManagedObjectID = 0x01,
 		/// <summary>Indicates dictionary result type.</summary>
 		DictionaryResultType = 0x02,
-		/// <summary>Indicates n s count result type.</summary>
+		/// <summary>Indicates NS count result type.</summary>
 		NSCountResultType = 0x04,
 	}
 

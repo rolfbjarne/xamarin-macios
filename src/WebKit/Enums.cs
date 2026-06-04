@@ -129,7 +129,7 @@ namespace WebKit {
 	public enum WebDragSourceAction : ulong {
 		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>Indicates d h t m l.</summary>
+		/// <summary>Indicates DHTML.</summary>
 		DHTML = 1,
 		/// <summary>Indicates image.</summary>
 		Image = 2,
@@ -147,7 +147,7 @@ namespace WebKit {
 	public enum WebDragDestinationAction : ulong {
 		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>Indicates d h t m l.</summary>
+		/// <summary>Indicates DHTML.</summary>
 		DHTML = 1,
 		/// <summary>Indicates image.</summary>
 		Image = 2,

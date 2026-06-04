@@ -140,7 +140,7 @@ namespace CoreBluetooth {
 		ConnectionTimeout,
 		/// <summary>Indicates peripheral disconnected.</summary>
 		PeripheralDisconnected,
-		/// <summary>Indicates u u i d not allowed.</summary>
+		/// <summary>Indicates UUID not allowed.</summary>
 		UUIDNotAllowed,
 		/// <summary>Indicates already advertising.</summary>
 		AlreadyAdvertising,

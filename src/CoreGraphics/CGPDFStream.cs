@@ -38,9 +38,9 @@ namespace CoreGraphics {
 	public enum CGPDFDataFormat {
 		/// <summary>Indicates raw.</summary>
 		Raw,
-		/// <summary>Indicates j p e g encoded.</summary>
+		/// <summary>Indicates JPEG encoded.</summary>
 		JPEGEncoded,
-		/// <summary>Indicates j p e g2000.</summary>
+		/// <summary>Indicates JPE g2000.</summary>
 		JPEG2000,
 	};
 

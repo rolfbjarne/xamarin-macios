@@ -9,90 +9,90 @@ namespace CoreWlan {
 	[Native]
 	[ErrorDomain ("CWErrorDomain")] // enum named `CWErr` in headers
 	public enum CWStatus : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates ok.</summary>
 		Ok = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates EAPOL.</summary>
 		EAPOL = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid parameter.</summary>
 		InvalidParameter = -3900,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates no memory.</summary>
 		NoMemory = -3901,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown = -3902,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates not supported.</summary>
 		NotSupported = -3903,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid format.</summary>
 		InvalidFormat = -3904,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates timeout.</summary>
 		Timeout = -3905,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unspecified failure.</summary>
 		UnspecifiedFailure = -3906,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unsupported capabilities.</summary>
 		UnsupportedCapabilities = -3907,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates reassociation denied.</summary>
 		ReassociationDenied = -3908,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates association denied.</summary>
 		AssociationDenied = -3909,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates authentication algorithm unsupported.</summary>
 		AuthenticationAlgorithmUnsupported = -3910,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid authentication sequence number.</summary>
 		InvalidAuthenticationSequenceNumber = -3911,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates challenge failure.</summary>
 		ChallengeFailure = -3912,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates AP full.</summary>
 		APFull = -3913,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unsupported rate set.</summary>
 		UnsupportedRateSet = -3914,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates short slot unsupported.</summary>
 		ShortSlotUnsupported = -3915,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates DSSSOFDM unsupported.</summary>
 		DSSSOFDMUnsupported = -3916,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid information element.</summary>
 		InvalidInformationElement = -3917,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid group cipher.</summary>
 		InvalidGroupCipher = -3918,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid pairwise cipher.</summary>
 		InvalidPairwiseCipher = -3919,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid a k m p.</summary>
 		InvalidAKMP = -3920,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unsupported r s n version.</summary>
 		UnsupportedRSNVersion = -3921,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid r s n capabilities.</summary>
 		InvalidRSNCapabilities = -3922,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates cipher suite rejected.</summary>
 		CipherSuiteRejected = -3923,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid p m k.</summary>
 		InvalidPMK = -3924,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates supplicant timeout.</summary>
 		SupplicantTimeout = -3925,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates HT features not supported.</summary>
 		HTFeaturesNotSupported = -3926,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates PCO transition time not supported.</summary>
 		PCOTransitionTimeNotSupported = -3927,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates reference not bound.</summary>
 		ReferenceNotBound = -3928,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates IPC failure.</summary>
 		IPCFailure = -3929,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates operation not permitted.</summary>
 		OperationNotPermitted = -3930,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates status.</summary>
 		Status = -3931,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum CWPhyMode : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates a.</summary>
 		A = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates b.</summary>
 		B = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates g.</summary>
 		G = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates n.</summary>
 		N = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates AC.</summary>
 		AC = 5,
 		AX = 6,
 		/// <summary>802.11be (Wi-Fi 7).</summary>
@@ -103,40 +103,40 @@ namespace CoreWlan {
 	[NoMacCatalyst]
 	[Native]
 	public enum CWInterfaceMode : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates station.</summary>
 		Station = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates ibss.</summary>
 		Ibss = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates host a p.</summary>
 		HostAP = 3,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum CWSecurity : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates WEP.</summary>
 		WEP = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates WPA personal.</summary>
 		WPAPersonal = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates WPA personal mixed.</summary>
 		WPAPersonalMixed = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates WP a2 personal.</summary>
 		WPA2Personal = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates personal.</summary>
 		Personal = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates dynamic w e p.</summary>
 		DynamicWEP = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates WPA enterprise.</summary>
 		WPAEnterprise = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates WPA enterprise mixed.</summary>
 		WPAEnterpriseMixed = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates WP a2 enterprise.</summary>
 		WPA2Enterprise = 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates enterprise.</summary>
 		Enterprise = 10,
 		Wpa3Personal = 11,
 		Wpa3Enterprise = 12,
@@ -145,7 +145,7 @@ namespace CoreWlan {
 		Owe = 14,
 		[Mac (13, 0)]
 		OweTransition = 15,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown = long.MaxValue,
 	}
 
@@ -153,37 +153,37 @@ namespace CoreWlan {
 	[Deprecated (PlatformName.MacOSX, 11, 0)]
 	[Native]
 	public enum CWIbssModeSecurity : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates WE p40.</summary>
 		WEP40 = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates WE p104.</summary>
 		WEP104 = 2,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum CWChannelWidth : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates twenty m hz.</summary>
 		TwentyMHz = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates fourty m hz.</summary>
 		FourtyMHz = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates eighty m hz.</summary>
 		EightyMHz = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates one hundred sixty m hz.</summary>
 		OneHundredSixtyMHz = 4,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum CWChannelBand : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates two g hz.</summary>
 		TwoGHz = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates five g hz.</summary>
 		FiveGHz = 2,
 		SixGHz = 3,
 	}
@@ -191,59 +191,59 @@ namespace CoreWlan {
 	[NoMacCatalyst]
 	[Native]
 	public enum CWCipherKeyFlags : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unicast.</summary>
 		Unicast = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates multicast.</summary>
 		Multicast = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates tx.</summary>
 		Tx = 1 << 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates rx.</summary>
 		Rx = 1 << 4,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum CWKeychainDomain : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates user.</summary>
 		User = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates system.</summary>
 		System = 2,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum CWEventType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates power did change.</summary>
 		PowerDidChange = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates ssid did change.</summary>
 		SsidDidChange = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bssid did change.</summary>
 		BssidDidChange = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates country code did change.</summary>
 		CountryCodeDidChange = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates link did change.</summary>
 		LinkDidChange = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates link quality did change.</summary>
 		LinkQualityDidChange = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates mode did change.</summary>
 		ModeDidChange = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates scan cache updated.</summary>
 		ScanCacheUpdated = 8,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates virtual interface state changed.</summary>
 		[Deprecated (PlatformName.MacOSX, 11, 0)]
 		VirtualInterfaceStateChanged = 9,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates ranging report event.</summary>
 		[Deprecated (PlatformName.MacOSX, 11, 0)]
 		RangingReportEvent = 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown = long.MaxValue,
 	}
 }

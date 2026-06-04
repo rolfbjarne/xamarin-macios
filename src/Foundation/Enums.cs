@@ -9,11 +9,11 @@ namespace Foundation {
 		Unknown = -1,
 		/// <summary>Indicates plain text.</summary>
 		PlainText,
-		/// <summary>Indicates r t f.</summary>
+		/// <summary>Indicates RTF.</summary>
 		RTF,
-		/// <summary>Indicates r t f d.</summary>
+		/// <summary>Indicates RTFD.</summary>
 		RTFD,
-		/// <summary>Indicates h t m l.</summary>
+		/// <summary>Indicates HTML.</summary>
 		HTML,
 		/// <summary>Indicates mac simple text.</summary>
 		[NoiOS, NoTV, NoMacCatalyst]

@@ -331,11 +331,11 @@ namespace AddressBook {
 		ExchangeGAL = Exchange | SearchableMask,
 		/// <summary>Indicates mobile me.</summary>
 		MobileMe = 0x2,
-		/// <summary>Indicates l d a p.</summary>
+		/// <summary>Indicates LDAP.</summary>
 		LDAP = 0x3 | SearchableMask,
 		/// <summary>Indicates card d a v.</summary>
 		CardDAV = 0x4,
-		/// <summary>Indicates d a v search.</summary>
+		/// <summary>Indicates DAV search.</summary>
 		DAVSearch = CardDAV | SearchableMask,
 
 		/// <summary>Indicates searchable mask.</summary>

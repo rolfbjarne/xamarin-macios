@@ -129,7 +129,7 @@ namespace OpenGL {
 		Robust = 75,
 		/// <summary>Indicates backing store.</summary>
 		BackingStore = 76,
-		/// <summary>Indicates m p safe.</summary>
+		/// <summary>Indicates MP safe.</summary>
 		MPSafe = 78,
 		/// <summary>Indicates window.</summary>
 		Window = 80,

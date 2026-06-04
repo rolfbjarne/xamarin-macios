@@ -100,7 +100,7 @@ namespace AudioUnit {
 		/// <summary>Indicates generic.</summary>
 		Generic = 0x67656e72, // 'genr'
 #if MONOMAC
-		/// <summary>Indicates h a l.</summary>
+		/// <summary>Indicates HAL.</summary>
 		HAL = 0x6168616c, // 'ahal'
 		/// <summary>Indicates default.</summary>
 		Default = 0x64656620, // 'def'
@@ -218,7 +218,7 @@ namespace AudioUnit {
 		MatrixReverb = 0x6d726576, // 'mrev'
 		/// <summary>Indicates pitch.</summary>
 		Pitch = 0x70697463, // 'pitc'
-		/// <summary>Indicates a u filter.</summary>
+		/// <summary>Indicates AU filter.</summary>
 		AUFilter = 0x66696c74, // 'filt'
 		/// <summary>Indicates net send.</summary>
 		NetSend = 0x6e736e64, // 'nsnd'
@@ -282,7 +282,7 @@ namespace AudioUnit {
 		Vector = 0x76626173, // 'vbas'
 		/// <summary>Indicates sound field.</summary>
 		SoundField = 0x616d6269, // 'ambi'
-		/// <summary>Indicates r h r t f.</summary>
+		/// <summary>Indicates RHRTF.</summary>
 		rHRTF = 0x68727466, // 'hrtf'
 #endif
 	}

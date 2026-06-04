@@ -37,7 +37,7 @@ namespace AVFoundation {
 	public enum AVVideoCodec : int {
 		/// <summary>Indicates h264.</summary>
 		H264 = 1,
-		/// <summary>Indicates j p e g.</summary>
+		/// <summary>Indicates JPEG.</summary>
 		JPEG = 2,
 	}
 

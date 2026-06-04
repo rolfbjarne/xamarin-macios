@@ -1188,7 +1188,7 @@ namespace AVKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum AVPlayerViewTrimResult : long {
-		/// <summary>Indicates o k button.</summary>
+		/// <summary>Indicates OK button.</summary>
 		OKButton,
 		/// <summary>Indicates cancel button.</summary>
 		CancelButton,

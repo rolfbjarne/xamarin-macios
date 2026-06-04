@@ -102,7 +102,7 @@ namespace Foundation {
 		ToolbarItem = 1952606580, // 'tbit'
 		/// <summary>Indicates accessibility.</summary>
 		Accessibility = 1633903461, // 'acce'
-		/// <summary>Indicates h i object.</summary>
+		/// <summary>Indicates HI object.</summary>
 		HIObject = 1751740258, // 'hiob'
 		/// <summary>Indicates apple event.</summary>
 		AppleEvent = 1634039412, // 'aevt'

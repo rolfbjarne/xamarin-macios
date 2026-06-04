@@ -779,10 +779,10 @@ namespace Security {
 	public enum SecPadding {
 		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>Indicates p k c s1.</summary>
+		/// <summary>Indicates PKC s1.</summary>
 		PKCS1 = 1,
 
-		/// <summary>Indicates o a e p.</summary>
+		/// <summary>Indicates OAEP.</summary>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		OAEP = 2,
@@ -803,22 +803,22 @@ namespace Security {
 		[MacCatalyst (13, 1)]
 		PKCS1MD5 = 0x8001,
 
-		/// <summary>Indicates p k c s1 s h a1.</summary>
+		/// <summary>Indicates PKC s1 s h a1.</summary>
 		PKCS1SHA1 = 0x8002,
 
-		/// <summary>Indicates p k c s1 s h a224.</summary>
+		/// <summary>Indicates PKC s1 s h a224.</summary>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		PKCS1SHA224 = 0x8003,
-		/// <summary>Indicates p k c s1 s h a256.</summary>
+		/// <summary>Indicates PKC s1 s h a256.</summary>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		PKCS1SHA256 = 0x8004,
-		/// <summary>Indicates p k c s1 s h a384.</summary>
+		/// <summary>Indicates PKC s1 s h a384.</summary>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		PKCS1SHA384 = 0x8005,
-		/// <summary>Indicates p k c s1 s h a512.</summary>
+		/// <summary>Indicates PKC s1 s h a512.</summary>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		PKCS1SHA512 = 0x8006,
@@ -917,9 +917,9 @@ namespace Security {
 	public enum SecRevocation : ulong {
 		/// <summary>Indicates none.</summary>
 		None,
-		/// <summary>Indicates o c s p method.</summary>
+		/// <summary>Indicates OCSP method.</summary>
 		OCSPMethod = 1,
-		/// <summary>Indicates c r l method.</summary>
+		/// <summary>Indicates CRL method.</summary>
 		CRLMethod = 2,
 		/// <summary>Indicates prefer c r l.</summary>
 		PreferCRL = 4,

@@ -379,9 +379,9 @@ namespace Security {
 	public enum SslSessionStrengthPolicy {
 		/// <summary>Indicates default.</summary>
 		Default,
-		/// <summary>Indicates a t sv1.</summary>
+		/// <summary>Indicates AT sv1.</summary>
 		ATSv1,
-		/// <summary>Indicates a t sv1 no p f s.</summary>
+		/// <summary>Indicates AT sv1 no p f s.</summary>
 		ATSv1NoPFS,
 	}
 

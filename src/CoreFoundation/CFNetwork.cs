@@ -89,9 +89,9 @@ namespace CoreFoundation {
 		CannotConnectToHost = -1004,
 		/// <summary>Indicates network connection lost.</summary>
 		NetworkConnectionLost = -1005,
-		/// <summary>Indicates d n s lookup failed.</summary>
+		/// <summary>Indicates DNS lookup failed.</summary>
 		DNSLookupFailed = -1006,
-		/// <summary>Indicates h t t p too many redirects.</summary>
+		/// <summary>Indicates HTTP too many redirects.</summary>
 		HTTPTooManyRedirects = -1007,
 		/// <summary>Indicates resource unavailable.</summary>
 		ResourceUnavailable = -1008,

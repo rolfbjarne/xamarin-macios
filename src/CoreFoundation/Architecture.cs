@@ -20,13 +20,13 @@ namespace CoreFoundation {
 			I386 = 0x00000007,
 			/// <summary>Indicates x86_64.</summary>
 			X86_64 = 0x01000007,
-			/// <summary>Indicates a r m.</summary>
+			/// <summary>Indicates ARM.</summary>
 			ARM = 0x0000000c,
-			/// <summary>Indicates a r m64.</summary>
+			/// <summary>Indicates AR m64.</summary>
 			ARM64 = 0x01000000 | ARM,
-			/// <summary>Indicates p p c.</summary>
+			/// <summary>Indicates PPC.</summary>
 			PPC = 0x00000012,
-			/// <summary>Indicates p p c64.</summary>
+			/// <summary>Indicates PP c64.</summary>
 			PPC64 = 0x01000000 | PPC,
 		}
 	}

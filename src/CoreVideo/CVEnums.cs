@@ -122,7 +122,7 @@ namespace CoreVideo {
 		VideoTimeValid = (1 << 0),
 		/// <summary>Indicates host time valid.</summary>
 		HostTimeValid = (1 << 1),
-		/// <summary>Indicates s m p t e time valid.</summary>
+		/// <summary>Indicates SMPTE time valid.</summary>
 		SMPTETimeValid = (1 << 2),
 		/// <summary>Indicates video refresh period valid.</summary>
 		VideoRefreshPeriodValid = (1 << 3),

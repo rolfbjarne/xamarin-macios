@@ -160,7 +160,7 @@ namespace CoreGraphics {
 		DestinationOut,
 		/// <summary>Indicates destination atop.</summary>
 		DestinationAtop,
-		/// <summary>Indicates x o r.</summary>
+		/// <summary>Indicates XOR.</summary>
 		XOR,
 		/// <summary>Indicates plus darker.</summary>
 		PlusDarker,

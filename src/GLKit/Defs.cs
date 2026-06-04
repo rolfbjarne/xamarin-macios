@@ -93,11 +93,11 @@ namespace GLKit {
 	// GLint (32 bits on 64 bit hardware) -> GLKView.h
 	/// <summary>An enumeration whose values specify the format of the color renderbuffer.</summary>
 	public enum GLKViewDrawableColorFormat {
-		/// <summary>Indicates r g b a8888.</summary>
+		/// <summary>Indicates RGB a8888.</summary>
 		RGBA8888 = 0,
-		/// <summary>Indicates r g b565.</summary>
+		/// <summary>Indicates RG b565.</summary>
 		RGB565,
-		/// <summary>Indicates s r g b a8888.</summary>
+		/// <summary>Indicates SRGB a8888.</summary>
 		SRGBA8888,
 	}
 
@@ -165,7 +165,7 @@ namespace GLKit {
 		UnknownPathType = 3,
 		/// <summary>Indicates unknown file type.</summary>
 		UnknownFileType = 4,
-		/// <summary>Indicates p v r atlas unsupported.</summary>
+		/// <summary>Indicates PVR atlas unsupported.</summary>
 		PVRAtlasUnsupported = 5,
 		/// <summary>Indicates cube map invalid num files.</summary>
 		CubeMapInvalidNumFiles = 6,

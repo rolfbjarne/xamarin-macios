@@ -64,7 +64,7 @@ namespace AudioToolbox {
 		MidiRawData = 8,
 		/// <summary>Indicates parameter.</summary>
 		Parameter = 9,
-		/// <summary>Indicates a u preset.</summary>
+		/// <summary>Indicates AU preset.</summary>
 		AUPreset = 10,
 	}
 

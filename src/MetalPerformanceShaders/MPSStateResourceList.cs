@@ -12,11 +12,11 @@
 using Metal;
 
 namespace MetalPerformanceShaders {
-	/// <summary>To be added.</summary>
+	/// <summary>Represents a list of state resources for Metal Performance Shaders.</summary>
 	public partial class MPSStateResourceList {
 		/// <param name="descriptors">The descriptors.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Creates a new state resource list from the specified texture descriptors.</summary>
+		/// <returns>A new state resource list, or <see langword="null" /> if creation failed.</returns>
 		public static MPSStateResourceList? Create (params MTLTextureDescriptor [] descriptors)
 		{
 			if (descriptors is null)

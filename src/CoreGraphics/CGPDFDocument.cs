@@ -56,8 +56,8 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGPDFDocumentRef */ IntPtr CGPDFDocumentCreateWithProvider (/* CGDataProviderRef */ IntPtr provider);
 
-		/// <param name="provider">Data provider.</param>
-		///         <summary>Creates a CGPDFDocument from a data provider, typically an array of bytes.</summary>
+		/// <param name="provider">DatAProvider.</param>
+		///         <summary>Creates a CGPDFDocument from a datAProvider, typically an array of bytes.</summary>
 		///         <remarks>You can use this to create PDF documents dynamically.   CGDataProviders can deliver the data either from a block of memory or from the contents of a file.</remarks>
 		public CGPDFDocument (CGDataProvider provider)
 			: base (CGPDFDocumentCreateWithProvider (provider.GetNonNullHandle (nameof (provider))), true)
@@ -167,7 +167,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static byte CGPDFDocumentIsUnlocked (/* CGPDFDocumentRef */ IntPtr document);
 
-		/// <summary>Gets whether the <c>this</c> <see cref="CoreGraphics.CGPDFDocument" /> object is not locked, either because the object is not encrypted or a password has been supplied.</summary>
+		/// <summary>Gets whether the <c>this</c> <see cref="CoreGraphics.CGPDFDocument" /> object is not locked, either because the object is not encrypted or APassword has been supplied.</summary>
 		public bool IsUnlocked {
 			get {
 				return CGPDFDocumentIsUnlocked (Handle) != 0;

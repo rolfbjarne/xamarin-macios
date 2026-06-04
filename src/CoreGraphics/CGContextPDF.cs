@@ -34,15 +34,15 @@ namespace CoreGraphics {
 
 	public partial class CGPDFPageInfo {
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the media box for the PDF page.</summary>
 		public CGRect? MediaBox { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the crop box for the PDF page.</summary>
 		public CGRect? CropBox { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the bleed box for the PDF page.</summary>
 		public CGRect? BleedBox { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the trim box for the PDF page.</summary>
 		public CGRect? TrimBox { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the art box for the PDF page.</summary>
 		public CGRect? ArtBox { get; set; }
 
 		static void Add (NSMutableDictionary dict, IntPtr key, CGRect? val)
@@ -72,27 +72,27 @@ namespace CoreGraphics {
 
 	public partial class CGPDFInfo : CGPDFPageInfo {
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the PDF document title.</summary>
 		public string? Title { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the PDF document author.</summary>
 		public string? Author { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the PDF document subject.</summary>
 		public string? Subject { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the PDF document keywords.</summary>
 		public string []? Keywords { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the PDF document creator application name.</summary>
 		public string? Creator { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the owner password for the PDF document.</summary>
 		public string? OwnerPassword { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the user password for the PDF document.</summary>
 		public string? UserPassword { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the encryption key length in bits.</summary>
 		public int? EncryptionKeyLength { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets a value indicating whether printing is allowed.</summary>
 		public bool? AllowsPrinting { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets a value indicating whether copying is allowed.</summary>
 		public bool? AllowsCopying { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the access permissions for the PDF document.</summary>
 		public CGPDFAccessPermissions? AccessPermissions { get; set; }
 		//public NSDictionary OutputIntent { get; set; }
 		[SupportedOSPlatform ("macos")]
@@ -185,7 +185,7 @@ namespace CoreGraphics {
 		/// <param name="dataConsumer">The data consumer.</param>
 		///         <param name="mediaBox">The media box.</param>
 		///         <param name="info">The info.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a PDF context that writes to the specified data consumer with a media box and document info.</summary>
 		public unsafe CGContextPDF (CGDataConsumer dataConsumer, CGRect mediaBox, CGPDFInfo? info) :
 			this (dataConsumer, &mediaBox, info)
 		{
@@ -193,7 +193,7 @@ namespace CoreGraphics {
 
 		/// <param name="dataConsumer">The data consumer.</param>
 		///         <param name="mediaBox">The media box.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a PDF context that writes to the specified data consumer with a media box.</summary>
 		public unsafe CGContextPDF (CGDataConsumer dataConsumer, CGRect mediaBox) :
 			this (dataConsumer, &mediaBox, null)
 		{
@@ -201,14 +201,14 @@ namespace CoreGraphics {
 
 		/// <param name="dataConsumer">The data consumer.</param>
 		///         <param name="info">The info.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a PDF context that writes to the specified data consumer with document info.</summary>
 		public unsafe CGContextPDF (CGDataConsumer dataConsumer, CGPDFInfo? info) :
 			this (dataConsumer, null, info)
 		{
 		}
 
 		/// <param name="dataConsumer">The data consumer.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a PDF context that writes to the specified data consumer.</summary>
 		public unsafe CGContextPDF (CGDataConsumer dataConsumer) :
 			this (dataConsumer, null, null)
 		{
@@ -230,7 +230,7 @@ namespace CoreGraphics {
 		/// <param name="url">The URL to use.</param>
 		///         <param name="mediaBox">The media box.</param>
 		///         <param name="info">The info.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a PDF context that writes to the specified URL with a media box and document info.</summary>
 		public unsafe CGContextPDF (NSUrl url, CGRect mediaBox, CGPDFInfo? info) :
 			this (url, &mediaBox, info)
 		{
@@ -268,7 +268,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGPDFContextClose (/* CGContextRef */ IntPtr context);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Closes the PDF context and finalizes the document.</summary>
 		public void Close ()
 		{
 			if (closed)
@@ -281,7 +281,7 @@ namespace CoreGraphics {
 		extern static void CGPDFContextBeginPage (/* CGContextRef */ IntPtr context, /* CFDictionaryRef */ IntPtr pageInfo);
 
 		/// <param name="info">PDF Configuration options</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Begins a new page in the PDF document with the specified page info.</summary>
 		public void BeginPage (CGPDFPageInfo? info)
 		{
 			using (var dict = info?.ToDictionary ())
@@ -291,7 +291,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGPDFContextEndPage (/* CGContextRef */ IntPtr context);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Ends the current page in the PDF document.</summary>
 		public void EndPage ()
 		{
 			CGPDFContextEndPage (Handle);
@@ -301,7 +301,7 @@ namespace CoreGraphics {
 		extern static void CGPDFContextAddDocumentMetadata (/* CGContextRef */ IntPtr context, /* CFDataRef */ IntPtr metadata);
 
 		/// <param name="data">PDF Metadata encoded in XML format following the specification of the "Extensible Metadata Platform" from the PDF spec.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Adds XML metadata to the PDF document.</summary>
 		///         <remarks>
 		///         </remarks>
 		public void AddDocumentMetadata (NSData data)

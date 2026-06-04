@@ -374,7 +374,7 @@ namespace CoreMidi {
 			set { connectionParams.Sources = value; }
 		}
 
-		/// <summary>Midi output destination routes.</summary>
+		/// <summary>MidI/Output destination routes.</summary>
 		///         <value>To be added.</value>
 		public MidiThruConnectionEndpoint []? Destinations {
 			get { return connectionParams.Destinations; }

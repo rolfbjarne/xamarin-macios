@@ -46,7 +46,6 @@ namespace CoreFoundation {
 	};
 
 	/// <summary>URL class used by C-only Cocoa APIs.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -66,10 +65,9 @@ namespace CoreFoundation {
 		{
 		}
 
-		/// <param name="filename">To be added.</param>
+		/// <param name="filename">The filename.</param>
 		///         <summary>Creates a CFUrl from a pathname.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		static public CFUrl? FromFile (string filename)
 		{
 			if (filename is null)
@@ -90,11 +88,10 @@ namespace CoreFoundation {
 			/* CFStringRef */ IntPtr URLString,
 			/* CFStringRef */ IntPtr baseURL);
 
-		/// <param name="url">To be added.</param>
-		///         <param name="baseurl">To be added.</param>
+		/// <param name="url">The URL to use.</param>
+		///         <param name="baseurl">The baseurl.</param>
 		///         <summary>Creates a CFUrl from a string and a base URL. </summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		static public CFUrl? FromUrlString (string url, CFUrl? baseurl)
 		{
 			if (url is null)
@@ -121,7 +118,6 @@ namespace CoreFoundation {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public override string? ToString ()
 		{
 			return CFString.FromHandle (CFURLGetString (Handle));
@@ -133,7 +129,6 @@ namespace CoreFoundation {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? FileSystemPath {
 			get {
 				return GetFileSystemPath (Handle);
@@ -154,7 +149,6 @@ namespace CoreFoundation {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]

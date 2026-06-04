@@ -31,7 +31,7 @@ namespace AddressBookUI {
 			Person = person;
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets the person.</summary>
 		///         <value>To be added.</value>
 		public ABPerson? Person { get; private set; }
 	}
@@ -73,7 +73,6 @@ namespace AddressBookUI {
 
 		ABPerson? displayedPerson;
 		/// <summary>Gets or sets the <see cref="AddressBook.ABPerson" /> whose data is being displayed.</summary>
-		///         <value>To be added.</value>
 		public ABPerson? DisplayedPerson {
 			get {
 				MarkDirty ();
@@ -87,7 +86,6 @@ namespace AddressBookUI {
 
 		ABAddressBook? addressBook;
 		/// <summary>Gets or sets the <see cref="AddressBook.ABAddressBook" /> to which the controller will save data.</summary>
-		///         <value>To be added.</value>
 		public ABAddressBook? AddressBook {
 			get {
 				MarkDirty ();
@@ -127,13 +125,13 @@ namespace AddressBookUI {
 				h (this, e);
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Events handler.</summary>
 		public event EventHandler<ABPersonViewPerformDefaultActionEventArgs> PerformDefaultAction {
 			add { EnsureEventDelegate ().performDefaultAction += value; }
 			remove { EnsureEventDelegate ().performDefaultAction -= value; }
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Events handler.</summary>
 		public event EventHandler<ABUnknownPersonCreatedEventArgs> PersonCreated {
 			add { EnsureEventDelegate ().personCreated += value; }
 			remove { EnsureEventDelegate ().personCreated -= value; }

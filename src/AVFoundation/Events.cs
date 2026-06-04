@@ -52,8 +52,7 @@ namespace AVFoundation {
 			Error = error;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the error.</summary>
 		public NSError Error { get; private set; }
 	}
 
@@ -81,8 +80,7 @@ namespace AVFoundation {
 			Status = status;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the status.</summary>
 		public bool Status { get; private set; }
 	}
 
@@ -319,8 +317,7 @@ namespace AVFoundation {
 		{
 			SampleRate = sampleRate;
 		}
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the sample rate.</summary>
 		public double SampleRate { get; private set; }
 	}
 
@@ -345,8 +342,7 @@ namespace AVFoundation {
 		{
 			NumberOfChannels = numberOfChannels;
 		}
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the number of channels.</summary>
 		public int NumberOfChannels { get; private set; }
 	}
 
@@ -372,8 +368,7 @@ namespace AVFoundation {
 			Category = category;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the category.</summary>
 		public string Category { get; private set; }
 	}
 #endif // !(XAMCORE_5_0 && (__TVOS__ || __MACOS__)

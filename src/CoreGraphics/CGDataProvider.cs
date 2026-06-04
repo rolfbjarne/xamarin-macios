@@ -253,7 +253,6 @@ namespace CoreGraphics {
 		extern static /* CFDataRef */ IntPtr CGDataProviderCopyData (/* CGDataProviderRef */ IntPtr provider);
 
 		/// <summary>Returns a copy of the provider's data.</summary>
-		///         <returns>To be added.</returns>
 		public NSData? CopyData ()
 		{
 			return Runtime.GetNSObject<NSData> (CGDataProviderCopyData (Handle), true);

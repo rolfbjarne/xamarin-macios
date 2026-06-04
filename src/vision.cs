@@ -3344,7 +3344,7 @@ namespace Vision {
 		NativeHandle Constructor (CMSampleBuffer sampleBuffer, CGImagePropertyOrientation orientation, VNImageOptions options, VNRequestCompletionHandler completionHandler);
 	}
 
-	/// <summary>A <see cref="Vision.VNTrackingRequest" /> that tracks a previously recognized object across multiple frames.</summary>
+	/// <summary>A <see cref="Vision.VNTrackingRequest" /> that tracks APreviously recognized object across multiple frames.</summary>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (VNTrackingRequest))]
 	[DisableDefaultCtor]

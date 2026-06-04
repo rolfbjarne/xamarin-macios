@@ -272,7 +272,6 @@ namespace Foundation {
 		/// <param name="location">The location.</param>
 		/// <param name="effectiveRange">The effective range.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		public NSDictionary? GetAttributes (nint location, out NSRange effectiveRange)
 		{
 			return Runtime.GetNSObject<NSDictionary> (LowLevelGetAttributes (location, out effectiveRange));
@@ -301,7 +300,6 @@ namespace Foundation {
 		/// <param name="location">The location.</param>
 		/// <param name="effectiveRange">The effective range.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		public CTStringAttributes? GetCoreTextAttributes (nint location, out NSRange effectiveRange)
 		{
 			var attr = GetAttributes (location, out effectiveRange);
@@ -312,7 +310,6 @@ namespace Foundation {
 		/// <param name="longestEffectiveRange">The longest effective range.</param>
 		/// <param name="rangeLimit">The range limit.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		public CTStringAttributes? GetCoreTextAttributes (nint location, out NSRange longestEffectiveRange, NSRange rangeLimit)
 		{
 			var attr = GetAttributes (location, out longestEffectiveRange, rangeLimit);
@@ -322,7 +319,6 @@ namespace Foundation {
 		/// <param name="start">The start.</param>
 		/// <param name="len">The len.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		public NSAttributedString Substring (nint start, nint len)
 		{
 			return Substring (new NSRange (start, len));
@@ -340,7 +336,6 @@ namespace Foundation {
 		/// <param name="location">The location.</param>
 		/// <param name="effectiveRange">The effective range.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		public UIStringAttributes? GetUIKitAttributes (nint location, out NSRange effectiveRange)
 		{
 			var attr = GetAttributes (location, out effectiveRange);
@@ -351,7 +346,6 @@ namespace Foundation {
 		/// <param name="longestEffectiveRange">The longest effective range.</param>
 		/// <param name="rangeLimit">The range limit.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		public UIStringAttributes? GetUIKitAttributes (nint location, out NSRange longestEffectiveRange, NSRange rangeLimit)
 		{
 			var attr = GetAttributes (location, out longestEffectiveRange, rangeLimit);

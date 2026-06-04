@@ -6511,7 +6511,7 @@ namespace CoreImage {
 
 	/// <summary>An abstract class that is the base for convolution filters.</summary>
 	///     <remarks>
-	///       <para>Convolution filters generate a pixel value by summing the pixel values in a neighborhood (the size of the neighborhood may be 3x3, 5x5, or 9 pixels horizontally or vertically) and then by adding a bias. To maintain brightness, the sum of values in the convolution kernel must sum to 1.0.</para>
+	///       <para>Convolution filters generate APixel value by summing the pixel values in a neighborhood (the size of the neighborhood may be 3x3, 5x5, or 9 pixels horizontally or vertically) and then by adding a bias. To maintain brightness, the sum of values in the convolution kernel must sum to 1.0.</para>
 	///     </remarks>
 	[CoreImageFilter (StringCtorVisibility = MethodAttributes.Public)]
 	[Abstract]
@@ -6756,7 +6756,7 @@ namespace CoreImage {
 		float Zoom { get; set; }
 	}
 
-	/// <summary>Creates a series of increasingly smaller boxes repeating a portion of the image.</summary>
+	/// <summary>Creates a series of increasingly smaller boxes repeating APortion of the image.</summary>
 	[CoreImageFilter]
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (CIFilter))]
@@ -7295,21 +7295,21 @@ namespace CoreImage {
 	interface CIOverlayBlendMode {
 	}
 
-	/// <summary>Animates a page curl transition between images.</summary>
+	/// <summary>Animates APage curl transition between images.</summary>
 	[CoreImageFilter]
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (CITransitionFilter))]
 	interface CIPageCurlTransition : CIPageCurlTransitionProtocol {
 	}
 
-	/// <summary>Animates a page curl transition, with a shadow, between images.</summary>
+	/// <summary>Animates APage curl transition, with a shadow, between images.</summary>
 	[CoreImageFilter]
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (CIFilter))]
 	interface CIPageCurlWithShadowTransition : CIPageCurlWithShadowTransitionProtocol {
 	}
 
-	/// <summary>Warps an image into a parallelogram and then tiles the result.</summary>
+	/// <summary>Warps an image into AParallelogram and then tiles the result.</summary>
 	[CoreImageFilter]
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (CITileFilter))]

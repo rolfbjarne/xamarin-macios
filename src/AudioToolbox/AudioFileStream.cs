@@ -141,15 +141,12 @@ namespace AudioToolbox {
 			Flags = ioFlags;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the property.</summary>
 		public AudioFileStreamProperty Property { get; private set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the flags.</summary>
 		public AudioFileStreamPropertyFlag Flags { get; set; }
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override string ToString ()
 		{
 			return String.Format ("AudioFileStreamProperty ({0})", Property);
@@ -177,18 +174,14 @@ namespace AudioToolbox {
 			this.InputData = inputData;
 			this.PacketDescriptions = packetDescriptions;
 		}
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the bytes.</summary>
 		public int Bytes { get; private set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the input data.</summary>
 		public IntPtr InputData { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public AudioStreamPacketDescription []? PacketDescriptions { get; private set; }
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override string ToString ()
 		{
 			return String.Format ("Packet (Bytes={0} InputData={1} PacketDescriptions={2}", Bytes, InputData, PacketDescriptions?.Length ?? -1);

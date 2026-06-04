@@ -36,15 +36,15 @@ namespace IdentityLookup {
 	[ErrorDomain ("ILMessageFilterErrorDomain")]
 	[Native]
 	public enum ILMessageFilterError : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates system.</summary>
 		System = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid network url.</summary>
 		InvalidNetworkUrl = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates network url unauthorized.</summary>
 		NetworkUrlUnauthorized = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates network request failed.</summary>
 		NetworkRequestFailed = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates redundant network deferral.</summary>
 		RedundantNetworkDeferral = 5,
 	}
 
@@ -126,7 +126,6 @@ namespace IdentityLookup {
 		/// <param name="context">The app extension context for deferring requests.</param>
 		/// <param name="completion">A handler that is run after the operation completes.</param>
 		/// <summary>Evaluates the specified request in the provided context, and runs a handler when the operation is complete.</summary>
-		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("handleQueryRequest:context:completion:")]
 		void HandleQueryRequest (ILMessageFilterQueryRequest queryRequest, ILMessageFilterExtensionContext context, Action<ILMessageFilterQueryResponse> completion);

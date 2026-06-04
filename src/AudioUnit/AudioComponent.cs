@@ -71,7 +71,6 @@ namespace AudioUnit {
 		public ResourceUsageInfo (NSDictionary dic) : base (dic) { }
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string []? IOKitUserClient {
 			get {
@@ -86,7 +85,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string []? MachLookUpGlobalName {
 			get {
@@ -101,7 +99,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool? NetworkClient {
 			get {
@@ -113,7 +110,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool? TemporaryExceptionReadWrite {
 			get {
@@ -153,7 +149,6 @@ namespace AudioUnit {
 		public AudioComponentInfo (NSDictionary dic) : base (dic) { }
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Type {
 			get {
@@ -165,7 +160,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Subtype {
 			get {
@@ -177,7 +171,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Manufacturer {
 			get {
@@ -189,7 +182,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Name {
 			get {
@@ -201,7 +193,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public nuint? Version {
 			get {
@@ -213,7 +204,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? FactoryFunction {
 			get {
@@ -225,7 +215,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool? SandboxSafe {
 			get {
@@ -237,7 +226,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public ResourceUsageInfo? ResourceUsage {
 			get {
@@ -249,7 +237,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string []? Tags {
 			get {
@@ -283,7 +270,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioUnit CreateAudioUnit ()
 		{
@@ -293,7 +279,6 @@ namespace AudioUnit {
 		/// <param name="cmp">To be added.</param>
 		///         <param name="cd">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static AudioComponent? FindNextComponent (AudioComponent? cmp, ref AudioComponentDescription cd)
 		{
@@ -310,7 +295,6 @@ namespace AudioUnit {
 
 		/// <param name="cd">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static AudioComponent? FindComponent (ref AudioComponentDescription cd)
 		{
@@ -319,7 +303,6 @@ namespace AudioUnit {
 
 		/// <param name="output">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static AudioComponent? FindComponent (AudioTypeOutput output)
 		{
@@ -329,7 +312,6 @@ namespace AudioUnit {
 
 		/// <param name="musicDevice">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static AudioComponent? FindComponent (AudioTypeMusicDevice musicDevice)
 		{
@@ -339,7 +321,6 @@ namespace AudioUnit {
 
 		/// <param name="conveter">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static AudioComponent? FindComponent (AudioTypeConverter conveter)
 		{
@@ -349,7 +330,6 @@ namespace AudioUnit {
 
 		/// <param name="effect">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static AudioComponent? FindComponent (AudioTypeEffect effect)
 		{
@@ -359,7 +339,6 @@ namespace AudioUnit {
 
 		/// <param name="mixer">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static AudioComponent? FindComponent (AudioTypeMixer mixer)
 		{
@@ -369,7 +348,6 @@ namespace AudioUnit {
 
 		/// <param name="panner">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static AudioComponent? FindComponent (AudioTypePanner panner)
 		{
@@ -379,7 +357,6 @@ namespace AudioUnit {
 
 		/// <param name="generator">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static AudioComponent? FindComponent (AudioTypeGenerator generator)
 		{
@@ -394,7 +371,6 @@ namespace AudioUnit {
 		unsafe static extern int /* OSStatus */ AudioComponentCopyName (IntPtr component, IntPtr* cfstr);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Name {
 			get {
@@ -411,7 +387,6 @@ namespace AudioUnit {
 		unsafe static extern int /* OSStatus */ AudioComponentGetDescription (IntPtr component, AudioComponentDescription* desc);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public AudioComponentDescription? Description {
 			get {
@@ -429,7 +404,6 @@ namespace AudioUnit {
 		unsafe static extern int /* OSStatus */ AudioComponentGetVersion (IntPtr component, int* /* UInt32* */ version);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Version? Version {
 			get {
@@ -473,7 +447,6 @@ namespace AudioUnit {
 
 		/// <param name="desiredPointSize">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
@@ -498,7 +471,6 @@ namespace AudioUnit {
 		static extern double AudioComponentGetLastActiveTime (IntPtr comp);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -523,7 +495,6 @@ namespace AudioUnit {
 		static extern IntPtr AudioComponentGetIcon (IntPtr comp);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("ios")]

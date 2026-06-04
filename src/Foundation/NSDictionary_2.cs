@@ -56,9 +56,9 @@ namespace Foundation {
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="NSDictionary{TKey, TValue}"/> class from a property list file.
+		/// Initializes a new instance of the <see cref="NSDictionary{TKey, TValue}"/> class from AProperty list file.
 		/// </summary>
-		/// <param name="filename">The path to a property list file.</param>
+		/// <param name="filename">The path to AProperty list file.</param>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -73,9 +73,9 @@ namespace Foundation {
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="NSDictionary{TKey, TValue}"/> class from a property list at the specified URL.
+		/// Initializes a new instance of the <see cref="NSDictionary{TKey, TValue}"/> class from AProperty list at the specified URL.
 		/// </summary>
-		/// <param name="url">The URL to a property list file.</param>
+		/// <param name="url">The URL to AProperty list file.</param>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]

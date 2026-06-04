@@ -401,7 +401,6 @@ namespace CoreFoundation {
 			{ }
 
 			/// <summary>The MachPort that this DispatchSource is monitoring.</summary>
-			///         <value>To be added.</value>
 			///         <remarks>To be added.</remarks>
 			public int MachPort {
 				get {
@@ -590,7 +589,6 @@ namespace CoreFoundation {
 			}
 
 			/// <summary>The process ID that is being monitored</summary>
-			///         <value>To be added.</value>
 			///         <remarks>To be added.</remarks>
 			public int ProcessId {
 				get {
@@ -712,7 +710,6 @@ namespace CoreFoundation {
 			}
 
 			/// <summary>To be added.</summary>
-			///         <value>To be added.</value>
 			///         <remarks>To be added.</remarks>
 			public int SignalNumber {
 				get {
@@ -884,7 +881,6 @@ namespace CoreFoundation {
 			}
 
 			/// <summary>File descriptor that is being monitored</summary>
-			///         <value>To be added.</value>
 			///         <remarks>To be added.</remarks>
 			public int FileDescriptor {
 				get {

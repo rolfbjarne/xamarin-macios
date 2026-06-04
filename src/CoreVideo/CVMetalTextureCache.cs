@@ -53,15 +53,14 @@ namespace CoreVideo {
 		}
 
 		/// <param name="metalDevice">The metal device.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CVMetalTextureCache" /> instance.</summary>
 		public CVMetalTextureCache (IMTLDevice metalDevice)
 			: base (Create (metalDevice, null), true)
 		{
 		}
 
 		/// <param name="metalDevice">The metal device.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Froms device.</summary>
 		public static CVMetalTextureCache? FromDevice (IMTLDevice metalDevice)
 		{
 			if (metalDevice is null)
@@ -83,7 +82,7 @@ namespace CoreVideo {
 
 		/// <param name="metalDevice">The metal device.</param>
 		///         <param name="textureAttributes">The texture attributes.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CVMetalTextureCache" /> instance.</summary>
 		public CVMetalTextureCache (IMTLDevice metalDevice, CVMetalTextureAttributes textureAttributes)
 			: base (Create (metalDevice, textureAttributes), true)
 		{
@@ -92,8 +91,7 @@ namespace CoreVideo {
 		/// <param name="metalDevice">The metal device.</param>
 		///         <param name="textureAttributes">The texture attributes.</param>
 		///         <param name="creationErr">The creation err.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Froms device.</summary>
 		public static CVMetalTextureCache? FromDevice (IMTLDevice metalDevice, CVMetalTextureAttributes? textureAttributes, out CVReturn creationErr)
 		{
 			if (metalDevice is null)
@@ -115,8 +113,7 @@ namespace CoreVideo {
 
 		/// <param name="metalDevice">The metal device.</param>
 		///         <param name="textureAttributes">The texture attributes.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Froms device.</summary>
 		public static CVMetalTextureCache? FromDevice (IMTLDevice metalDevice, CVMetalTextureAttributes textureAttributes)
 		{
 			CVReturn creationErr;
@@ -129,8 +126,7 @@ namespace CoreVideo {
 		/// <param name="height">The height.</param>
 		/// <param name="planeIndex">The plane index.</param>
 		/// <param name="errorCode">The error code.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Textures from image.</summary>
 		public CVMetalTexture? TextureFromImage (CVImageBuffer imageBuffer, MTLPixelFormat format, nint width, nint height, nint planeIndex, out CVReturn errorCode)
 		{
 			if (imageBuffer is null)
@@ -160,7 +156,7 @@ namespace CoreVideo {
 			/* CVMetalTextureCacheRef __nonnull */ IntPtr textureCache, CVOptionFlags flags);
 
 		/// <param name="flags">The flags.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Flush.</summary>
 		public void Flush (CVOptionFlags flags)
 		{
 			CVMetalTextureCacheFlush (Handle, flags);

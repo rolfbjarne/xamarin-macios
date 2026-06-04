@@ -101,7 +101,6 @@ namespace Security {
 	}
 
 	/// <summary>Protocol used for InternetPasswords</summary>
-	///     <remarks>To be added.</remarks>
 	public enum SecProtocol {
 		/// <summary>Invalid</summary>
 		Invalid = -1,
@@ -127,7 +126,7 @@ namespace Security {
 		Ldap,
 		/// <summary>AppleTalk service</summary>
 		AppleTalk,
-		/// <summary>To be added.</summary>
+		/// <summary>AFP protocol.</summary>
 		Afp,
 		/// <summary>Telnet service</summary>
 		Telnet,
@@ -149,11 +148,11 @@ namespace Security {
 		Rtsp,
 		/// <summary>RTSP Proxy</summary>
 		RtspProxy,
-		/// <summary>To be added.</summary>
+		/// <summary>DAAP protocol.</summary>
 		Daap,
-		/// <summary>To be added.</summary>
+		/// <summary>EPPC protocol.</summary>
 		Eppc,
-		/// <summary>To be added.</summary>
+		/// <summary>IPP protocol.</summary>
 		Ipp,
 		/// <summary>NTTP over SSL/TLS.</summary>
 		Nntps,
@@ -356,11 +355,10 @@ namespace Security {
 			}
 		}
 
-		/// <param name="query">To be added.</param>
-		///         <param name="max">To be added.</param>
-		///         <param name="result">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="query">The query.</param>
+		/// <param name="max">The max.</param>
+		/// <param name="result">The result.</param>
+		/// <summary>Queries the keychain and returns results as native objects.</summary>
 		public static INativeObject []? QueryAsReference (SecRecord query, int max, out SecStatusCode result)
 		{
 			if (query is null) {
@@ -398,7 +396,6 @@ namespace Security {
 		/// <param name="record">A populated record.</param>
 		///         <summary>Adds the specified record to the keychain.</summary>
 		///         <returns>The result of the operation.</returns>
-		///         <remarks>To be added.</remarks>
 		public static SecStatusCode Add (SecRecord record)
 		{
 			if (record is null)
@@ -527,16 +524,15 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static SecStatusCode SecKeychainItemFreeContent (IntPtr attrList, IntPtr data);
 
-		/// <param name="serverName">To be added.</param>
-		///         <param name="accountName">To be added.</param>
-		///         <param name="password">To be added.</param>
-		///         <param name="protocolType">To be added.</param>
-		///         <param name="port">To be added.</param>
-		///         <param name="path">To be added.</param>
-		///         <param name="authenticationType">To be added.</param>
-		///         <param name="securityDomain">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="serverName">The serverName.</param>
+		/// <param name="accountName">The accountName.</param>
+		/// <param name="password">The password.</param>
+		/// <param name="protocolType">The protocolType.</param>
+		/// <param name="port">The port.</param>
+		/// <param name="path">The path.</param>
+		/// <param name="authenticationType">The authenticationType.</param>
+		/// <param name="securityDomain">The securityDomain.</param>
+		/// <summary>Adds an internet password to the keychain.</summary>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("ios")]
@@ -588,16 +584,15 @@ namespace Security {
 		}
 
 
-		/// <param name="serverName">To be added.</param>
-		///         <param name="accountName">To be added.</param>
-		///         <param name="password">To be added.</param>
-		///         <param name="protocolType">To be added.</param>
-		///         <param name="port">To be added.</param>
-		///         <param name="path">To be added.</param>
-		///         <param name="authenticationType">To be added.</param>
-		///         <param name="securityDomain">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="serverName">The serverName.</param>
+		/// <param name="accountName">The accountName.</param>
+		/// <param name="password">The password.</param>
+		/// <param name="protocolType">The protocolType.</param>
+		/// <param name="port">The port.</param>
+		/// <param name="path">The path.</param>
+		/// <param name="authenticationType">The authenticationType.</param>
+		/// <param name="securityDomain">The securityDomain.</param>
+		/// <summary>Finds an internet password in the keychain.</summary>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("ios")]
@@ -678,11 +673,10 @@ namespace Security {
 			}
 		}
 
-		/// <param name="serviceName">To be added.</param>
-		///         <param name="accountName">To be added.</param>
-		///         <param name="password">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="serviceName">The serviceName.</param>
+		/// <param name="accountName">The accountName.</param>
+		/// <param name="password">The password.</param>
+		/// <summary>Adds a generic password to the keychain.</summary>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("ios")]
@@ -711,11 +705,10 @@ namespace Security {
 				);
 		}
 
-		/// <param name="serviceName">To be added.</param>
-		///         <param name="accountName">To be added.</param>
-		///         <param name="password">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="serviceName">The serviceName.</param>
+		/// <param name="accountName">The accountName.</param>
+		/// <param name="password">The password.</param>
+		/// <summary>Finds a generic password in the keychain.</summary>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("ios")]
@@ -801,9 +794,8 @@ namespace Security {
 			}
 		}
 
-		/// <param name="identity">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="identity">The identity.</param>
+		/// <summary>Adds an identity to the keychain.</summary>
 		public static void AddIdentity (SecIdentity identity)
 		{
 			if (identity is null)
@@ -818,9 +810,8 @@ namespace Security {
 			}
 		}
 
-		/// <param name="identity">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="identity">The identity.</param>
+		/// <summary>Removes an identity from the keychain.</summary>
 		public static void RemoveIdentity (SecIdentity identity)
 		{
 			if (identity is null)
@@ -835,10 +826,9 @@ namespace Security {
 			}
 		}
 
-		/// <param name="certificate">To be added.</param>
-		///         <param name="throwOnError">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="certificate">The certificate.</param>
+		/// <param name="throwOnError">The throwOnError.</param>
+		/// <summary>Finds an identity for the specified certificate.</summary>
 		public static SecIdentity? FindIdentity (SecCertificate certificate, bool throwOnError = false)
 		{
 			if (certificate is null)
@@ -924,8 +914,7 @@ namespace Security {
 		}
 
 		// it's possible to query something without a class
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a new empty keychain record.</summary>
 		public SecRecord ()
 		{
 			queryDict = new NSMutableDictionary ();
@@ -947,48 +936,42 @@ namespace Security {
 #endif
 		}
 
-		/// <param name="certificate">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="certificate">The certificate.</param>
+		/// <summary>Creates a new keychain record of the specified kind.</summary>
 		public SecRecord (SecCertificate certificate) : this (SecKind.Certificate)
 		{
 			SetCertificate (certificate);
 		}
 
-		/// <param name="identity">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="identity">The identity.</param>
+		/// <summary>Creates a new keychain record of the specified kind.</summary>
 		public SecRecord (SecIdentity identity) : this (SecKind.Identity)
 		{
 			SetIdentity (identity);
 		}
 
-		/// <param name="key">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="key">The key.</param>
+		/// <summary>Creates a new keychain record of the specified kind.</summary>
 		public SecRecord (SecKey key) : this (SecKind.Key)
 		{
 			SetKey (key);
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the certificate from this record.</summary>
 		public SecCertificate? GetCertificate ()
 		{
 			CheckClass (SecClass.Certificate);
 			return GetValueRef<SecCertificate> ();
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the identity from this record.</summary>
 		public SecIdentity? GetIdentity ()
 		{
 			CheckClass (SecClass.Identity);
 			return GetValueRef<SecIdentity> ();
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the key from this record.</summary>
 		public SecKey? GetKey ()
 		{
 			CheckClass (SecClass.Key);
@@ -1004,15 +987,13 @@ namespace Security {
 
 		/// <summary>Makes a copy of this SecRecord.</summary>
 		///         <returns />
-		///         <remarks>To be added.</remarks>
 		public SecRecord Clone ()
 		{
 			return new SecRecord (NSMutableDictionary.FromDictionary (queryDict));
 		}
 
 		// some API are unusable without this (e.g. SecKey.GenerateKeyPair) without duplicating much of SecRecord logic
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Converts this record to a dictionary.</summary>
 		public NSDictionary ToDictionary ()
 		{
 			return queryDict;
@@ -1114,8 +1095,7 @@ namespace Security {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether the item can be synchronized.</summary>
 		public bool Synchronizable {
 			get {
 				return FetchBool (SecAttributeKey.Synchronizable, false);
@@ -1125,8 +1105,7 @@ namespace Security {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether to match any synchronizable item.</summary>
 		public bool SynchronizableAny {
 			get {
 				return FetchBool (SecAttributeKey.SynchronizableAny, false);
@@ -1137,8 +1116,7 @@ namespace Security {
 		}
 
 #if !MONOMAC
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the sync view hint.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
@@ -1152,8 +1130,7 @@ namespace Security {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the token identifier.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("macos")]
@@ -1171,7 +1148,6 @@ namespace Security {
 
 		/// <summary>Creation date for this item.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public NSDate? CreationDate {
 			get {
 				return (NSDate?) FetchObject (SecAttributeKey.CreationDate);
@@ -1184,8 +1160,7 @@ namespace Security {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the modification date.</summary>
 		public NSDate? ModificationDate {
 			get {
 				return (NSDate?) FetchObject (SecAttributeKey.ModificationDate);
@@ -1200,7 +1175,6 @@ namespace Security {
 
 		/// <summary>User visible description of this item.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public string? Description {
 			get {
 				return FetchString (SecAttributeKey.Description);
@@ -1213,7 +1187,6 @@ namespace Security {
 
 		/// <summary>Used editable comment for this record.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public string? Comment {
 			get {
 				return FetchString (SecAttributeKey.Comment);
@@ -1239,7 +1212,6 @@ namespace Security {
 
 		/// <summary>Item's type.   32-bit value.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public int CreatorType {
 			get {
 				return FetchInt (SecAttributeKey.Type);
@@ -1252,7 +1224,6 @@ namespace Security {
 
 		/// <summary>User visible label for this item.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public string? Label {
 			get {
 				return FetchString (SecAttributeKeys.LabelKey.Handle);
@@ -1265,7 +1236,6 @@ namespace Security {
 
 		/// <summary>If set, the item is not displayed to the user.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public bool Invisible {
 			get {
 				return Fetch (SecAttributeKey.IsInvisible) == CFBoolean.TrueHandle;
@@ -1304,7 +1274,6 @@ namespace Security {
 
 		/// <summary>Service associated with an InternetPassword.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public string? Service {
 			get {
 				return FetchString (SecAttributeKey.Service);
@@ -1358,8 +1327,7 @@ namespace Security {
 			}
 		}
 #endif
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the authentication UI behavior.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -1375,8 +1343,7 @@ namespace Security {
 		}
 
 #if !TVOS
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the local authentication context.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -1398,7 +1365,6 @@ namespace Security {
 		// it is ever returned from a dictionary, so return what we cached.
 		SecAccessControl? _secAccessControl;
 		/// <summary>Access control for the item.</summary>
-		///         <remarks>To be added.</remarks>
 		public SecAccessControl? AccessControl {
 			get {
 				return _secAccessControl;
@@ -1414,7 +1380,6 @@ namespace Security {
 
 		/// <summary>Generic password's NSData storage.</summary>
 		///         <value>Items of kind GenericPassword use this field to store item-specific data.</value>
-		///         <remarks>To be added.</remarks>
 		public NSData? Generic {
 			get {
 				return Fetch<NSData> (SecAttributeKey.Generic);
@@ -1428,7 +1393,6 @@ namespace Security {
 		}
 
 		/// <summary>Security domain for InternetPassword items.</summary>
-		///         <remarks>To be added.</remarks>
 		public string? SecurityDomain {
 			get {
 				return FetchString (SecAttributeKey.SecurityDomain);
@@ -1440,7 +1404,6 @@ namespace Security {
 		}
 
 		/// <summary>Server component for an InternetPassword</summary>
-		///         <remarks>To be added.</remarks>
 		public string? Server {
 			get {
 				return FetchString (SecAttributeKey.Server);
@@ -1453,7 +1416,6 @@ namespace Security {
 
 		/// <summary>Protocol component of an InternetPassword.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public SecProtocol Protocol {
 			get {
 				return SecProtocolKeys.ToSecProtocol (Fetch (SecAttributeKey.Protocol));
@@ -1466,7 +1428,6 @@ namespace Security {
 
 		/// <summary>The authentication type.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public SecAuthenticationType AuthenticationType {
 			get {
 				var at = Fetch (SecAttributeKey.AuthenticationType);
@@ -1483,7 +1444,6 @@ namespace Security {
 
 		/// <summary>Port component of an InternetPassword</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public int Port {
 			get {
 				return FetchInt (SecAttributeKey.Port);
@@ -1496,7 +1456,6 @@ namespace Security {
 
 		/// <summary>Path component of an InternetPassword.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public string? Path {
 			get {
 				return FetchString (SecAttributeKey.Path);
@@ -1510,7 +1469,6 @@ namespace Security {
 		// read only
 		/// <summary>X.500 Subject name stored as an NSData.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public string? Subject {
 			get {
 				return FetchString (SecAttributeKey.Subject);
@@ -1520,7 +1478,6 @@ namespace Security {
 		// read only
 		/// <summary>X.500 Issuer certificate name as an NSData block.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public NSData? Issuer {
 			get {
 				return Fetch<NSData> (SecAttributeKey.Issuer);
@@ -1530,7 +1487,6 @@ namespace Security {
 		// read only
 		/// <summary>Serial number for the certificate.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public NSData? SerialNumber {
 			get {
 				return Fetch<NSData> (SecAttributeKey.SerialNumber);
@@ -1540,7 +1496,6 @@ namespace Security {
 		// read only
 		/// <summary>SubjectKeyID of the certificate.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public NSData? SubjectKeyID {
 			get {
 				return Fetch<NSData> (SecAttributeKey.SubjectKeyID);
@@ -1560,7 +1515,6 @@ namespace Security {
 		// read only
 		/// <summary>A certificate type.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public NSNumber? CertificateType {
 			get {
 				return Fetch<NSNumber> (SecAttributeKey.CertificateType);
@@ -1570,7 +1524,6 @@ namespace Security {
 		// read only
 		/// <summary>The encoding used for the certificate.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public NSNumber? CertificateEncoding {
 			get {
 				return Fetch<NSNumber> (SecAttributeKey.CertificateEncoding);
@@ -1579,7 +1532,6 @@ namespace Security {
 
 		/// <summary>The key class.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public SecKeyClass KeyClass {
 			get {
 				var k = Fetch (SecAttributeKey.KeyClass);
@@ -1609,8 +1561,7 @@ namespace Security {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether the key is permanent.</summary>
 		public bool IsPermanent {
 			get {
 				return Fetch (SecAttributeKeys.IsPermanentKey.Handle) == CFBoolean.TrueHandle;
@@ -1621,8 +1572,7 @@ namespace Security {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether the key is sensitive.</summary>
 		public bool IsSensitive {
 			get {
 				return Fetch (SecAttributeKey.IsSensitive) == CFBoolean.TrueHandle;
@@ -1633,8 +1583,7 @@ namespace Security {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether the key is extractable.</summary>
 		public bool IsExtractable {
 			get {
 				return Fetch (SecAttributeKey.IsExtractable) == CFBoolean.TrueHandle;
@@ -1662,7 +1611,6 @@ namespace Security {
 
 		/// <summary>The key type.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public SecKeyType KeyType {
 			get {
 				var k = Fetch (SecKeyGenerationAttributeKeys.KeyTypeKey.Handle);
@@ -1760,7 +1708,6 @@ namespace Security {
 
 		/// <summary>Whether this key can be used to verify a digital signature.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public bool CanVerify {
 			get {
 				return Fetch (SecAttributeKeys.CanVerifyKey.Handle) == CFBoolean.TrueHandle;
@@ -1773,7 +1720,6 @@ namespace Security {
 
 		/// <summary>Whether this key can be used to wrap another key.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public bool CanWrap {
 			get {
 				return Fetch (SecKeyGenerationAttributeKeys.CanWrapKey.Handle) == CFBoolean.TrueHandle;
@@ -1786,7 +1732,6 @@ namespace Security {
 
 		/// <summary>Whether this key can be used to unwrap another key.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public bool CanUnwrap {
 			get {
 				return Fetch (SecAttributeKeys.CanUnwrapKey.Handle) == CFBoolean.TrueHandle;
@@ -1810,8 +1755,7 @@ namespace Security {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether to return a persistent reference.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
@@ -1842,8 +1786,7 @@ namespace Security {
 		// Matches
 		//
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the policy to match.</summary>
 		public SecPolicy? MatchPolicy {
 			get {
 				var pol = Fetch (SecItem.MatchPolicy);
@@ -1858,8 +1801,7 @@ namespace Security {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the item list to match against.</summary>
 		public SecKeyChain? []? MatchItemList {
 			get {
 				return NSArray.ArrayFromHandle<SecKeyChain> (Fetch (SecItem.MatchItemList));
@@ -1873,8 +1815,7 @@ namespace Security {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the issuers to match.</summary>
 		public NSData? []? MatchIssuers {
 			get {
 				return NSArray.ArrayFromHandle<NSData> (Fetch (SecItem.MatchIssuers));
@@ -1887,8 +1828,7 @@ namespace Security {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the email address to match.</summary>
 		public string? MatchEmailAddressIfPresent {
 			get {
 				return FetchString (SecItem.MatchEmailAddressIfPresent);
@@ -1899,8 +1839,7 @@ namespace Security {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the subject string to match.</summary>
 		public string? MatchSubjectContains {
 			get {
 				return FetchString (SecItem.MatchSubjectContains);
@@ -1913,7 +1852,6 @@ namespace Security {
 
 		/// <summary>Whether matches should be case insensitive</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public bool MatchCaseInsensitive {
 			get {
 				return Fetch (SecItem.MatchCaseInsensitive) == CFBoolean.TrueHandle;
@@ -1924,8 +1862,7 @@ namespace Security {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether to match only trusted items.</summary>
 		public bool MatchTrustedOnly {
 			get {
 				return Fetch (SecItem.MatchTrustedOnly) == CFBoolean.TrueHandle;
@@ -1936,8 +1873,7 @@ namespace Security {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the date on which items must be valid.</summary>
 		public NSDate? MatchValidOnDate {
 			get {
 				return Runtime.GetNSObject<NSDate> (Fetch (SecItem.MatchValidOnDate));
@@ -1951,7 +1887,6 @@ namespace Security {
 		}
 
 		/// <summary>The value data to store.</summary>
-		///         <remarks>To be added.</remarks>
 		public NSData? ValueData {
 			get {
 				return Fetch<NSData> (SecItem.ValueData);
@@ -1987,17 +1922,14 @@ namespace Security {
 			GC.KeepAlive (value);
 		}
 
-		/// <param name="cert">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="cert">The cert.</param>
+		/// <summary>Sets the certificate for this record.</summary>
 		public void SetCertificate (SecCertificate cert) => SetValueRef (cert);
-		/// <param name="identity">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="identity">The identity.</param>
+		/// <summary>Sets the identity for this record.</summary>
 		public void SetIdentity (SecIdentity identity) => SetValueRef (identity);
-		/// <param name="key">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="key">The key.</param>
+		/// <summary>Sets the key for this record.</summary>
 		public void SetKey (SecKey key) => SetValueRef (key);
 
 	}
@@ -2261,7 +2193,6 @@ namespace Security {
 	}
 
 	/// <summary>An exception based on a <see cref="Security.SecStatusCode" />.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -2287,21 +2218,18 @@ namespace Security {
 
 		/// <param name="code" />
 		///         <summary>Creates an exception from a status code.</summary>
-		///         <remarks>To be added.</remarks>
 		public SecurityException (SecStatusCode code) : base (ToMessage (code))
 		{
 		}
 	}
 
 	/// <summary>Contains parameters for use with <see cref="Security.SecKey.CreateRandomKey(Security.SecKeyType,System.Int32,Foundation.NSDictionary,out Foundation.NSError)" />.</summary>
-	///     <remarks>To be added.</remarks>
 	public partial class SecKeyParameters : DictionaryContainer {
 		// For caching, as we can't reverse it easily.
 		SecAccessControl? _secAccessControl;
 
 		/// <summary>Gets or sets the access control for the new key.</summary>
 		///         <value>The access control for the new key.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -2320,11 +2248,9 @@ namespace Security {
 	}
 
 	/// <summary>Contains parameters for key generation.</summary>
-	///     <remarks>To be added.</remarks>
 	public partial class SecKeyGenerationParameters : DictionaryContainer {
 		/// <summary>Gets or sets the type of key to create.</summary>
 		///         <value>The type of key to create.</value>
-		///         <remarks>To be added.</remarks>
 		public SecKeyType KeyType {
 			get {
 				var type = GetNSStringValue (SecKeyGenerationAttributeKeys.KeyTypeKey);
@@ -2346,7 +2272,6 @@ namespace Security {
 
 		/// <summary>Gets or sets the access control for the new key.</summary>
 		///         <value>The access control for the new key.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -2366,7 +2291,6 @@ namespace Security {
 
 		/// <summary>Gets or sets the token ID.</summary>
 		///         <value>The token ID.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]

@@ -91,7 +91,7 @@ namespace SpriteKit {
 		Screen = 5,
 		/// <summary>The source color is used.</summary>
 		Replace = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates multiply alpha.</summary>
 		MultiplyAlpha = 7,
 	}
 
@@ -171,23 +171,23 @@ namespace SpriteKit {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum SKAttributeType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates float.</summary>
 		Float = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates vector float2.</summary>
 		VectorFloat2 = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates vector float3.</summary>
 		VectorFloat3 = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates vector float4.</summary>
 		VectorFloat4 = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates half float.</summary>
 		HalfFloat = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates vector half float2.</summary>
 		VectorHalfFloat2 = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates vector half float3.</summary>
 		VectorHalfFloat3 = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates vector half float4.</summary>
 		VectorHalfFloat4 = 8,
 	}
 
@@ -195,13 +195,13 @@ namespace SpriteKit {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum SKTileDefinitionRotation : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates angle0.</summary>
 		Angle0 = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates angle90.</summary>
 		Angle90,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates angle180.</summary>
 		Angle180,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates angle270.</summary>
 		Angle270,
 	}
 
@@ -209,13 +209,13 @@ namespace SpriteKit {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum SKTileSetType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates grid.</summary>
 		Grid,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates isometric.</summary>
 		Isometric,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hexagonal flat.</summary>
 		HexagonalFlat,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hexagonal pointy.</summary>
 		HexagonalPointy,
 	}
 
@@ -223,75 +223,75 @@ namespace SpriteKit {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum SKTileAdjacencyMask : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates up.</summary>
 		Up = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates upper right.</summary>
 		UpperRight = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates right.</summary>
 		Right = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates lower right.</summary>
 		LowerRight = 1 << 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates down.</summary>
 		Down = 1 << 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates lower left.</summary>
 		LowerLeft = 1 << 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates left.</summary>
 		Left = 1 << 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates upper left.</summary>
 		UpperLeft = 1 << 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates all.</summary>
 		All = Up | UpperRight | Right | LowerRight | Down | LowerLeft | Left | UpperLeft,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hex flat up.</summary>
 		HexFlatUp = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hex flat upper right.</summary>
 		HexFlatUpperRight = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hex flat lower right.</summary>
 		HexFlatLowerRight = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hex flat down.</summary>
 		HexFlatDown = 1 << 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hex flat lower left.</summary>
 		HexFlatLowerLeft = 1 << 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hex flat upper left.</summary>
 		HexFlatUpperLeft = 1 << 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hex flat all.</summary>
 		HexFlatAll = HexFlatUp | HexFlatUpperRight | HexFlatLowerRight | HexFlatDown | HexFlatLowerLeft | HexFlatUpperLeft,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hex pointy upper left.</summary>
 		HexPointyUpperLeft = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hex pointy upper right.</summary>
 		HexPointyUpperRight = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hex pointy right.</summary>
 		HexPointyRight = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hex pointy lower right.</summary>
 		HexPointyLowerRight = 1 << 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hex pointy lower left.</summary>
 		HexPointyLowerLeft = 1 << 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hex pointy left.</summary>
 		HexPointyLeft = 1 << 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hex pointy all.</summary>
 		HexPointyAll = HexPointyUpperLeft | HexPointyUpperRight | HexPointyRight | HexPointyLowerRight | HexPointyLowerLeft | HexPointyLeft,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates up edge.</summary>
 		UpEdge = Right | LowerRight | Down | LowerLeft | Left,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates upper right edge.</summary>
 		UpperRightEdge = Down | LowerLeft | Left,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates right edge.</summary>
 		RightEdge = Down | LowerLeft | Left | UpperLeft | Up,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates lower right edge.</summary>
 		LowerRightEdge = Left | UpperLeft | Up,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates down edge.</summary>
 		DownEdge = Up | UpperRight | Right | Left | UpperLeft,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates lower left edge.</summary>
 		LowerLeftEdge = Up | UpperRight | Right,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates left edge.</summary>
 		LeftEdge = Up | UpperRight | Right | LowerRight | Down,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates upper left edge.</summary>
 		UpperLeftEdge = Right | LowerRight | Down,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates upper right corner.</summary>
 		UpperRightCorner = Up | UpperRight | Right | LowerRight | Down | Left | UpperLeft,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates lower right corner.</summary>
 		LowerRightCorner = Up | UpperRight | Right | LowerRight | Down | LowerLeft | Left,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates lower left corner.</summary>
 		LowerLeftCorner = Up | Right | LowerRight | Down | LowerLeft | Left | UpperLeft,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates upper left corner.</summary>
 		UpperLeftCorner = Up | UpperRight | Right | Down | LowerLeft | Left | UpperLeft,
 	}
 

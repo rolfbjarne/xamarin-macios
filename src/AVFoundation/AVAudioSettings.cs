@@ -289,7 +289,7 @@ namespace AVFoundation {
 			}
 		}
 
-		/// <summary>Gets or sets the encoder audio quality for v b r.</summary>
+		/// <summary>Gets or sets the encoder audio quality for VBR.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]

@@ -31,7 +31,6 @@ namespace CoreImage {
 
 	// convenience enum for CIDetectorAccuracy[High|Low] internal fields in CIDetector (coreimage.cs)
 	/// <summary>An enumeration whose values specify the accuracy of face detection.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum FaceDetectorAccuracy {
 		/// <summary>Low detection accuracy.</summary>
 		High,
@@ -73,7 +72,7 @@ namespace CoreImage {
 		}
 
 		/// <param name="context">Image context.</param>
-		///         <param name="accuracy">To be added.</param>
+		///         <param name="accuracy">The accuracy.</param>
 		///         <param name="minFeatureSize">Minimum size that the detector will discover as a feature.</param>
 		///         <param name="trackingEnabled">Enables feature tracking.</param>
 		///         <summary>Create a new face detector using the specified parameters.</summary>
@@ -103,11 +102,10 @@ namespace CoreImage {
 				return FromType (TypeFace, context, options);
 		}
 
-		/// <param name="context">To be added.</param>
-		///         <param name="detectorOptions">To be added.</param>
+		/// <param name="context">The context to use.</param>
+		///         <param name="detectorOptions">The detector options.</param>
 		///         <summary>Create a detector that recognizes rectangular objects in the image.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CIDetector? CreateRectangleDetector (CIContext context, CIDetectorOptions detectorOptions)
 		{
 			using (var options = detectorOptions?.ToDictionary ())
@@ -115,22 +113,20 @@ namespace CoreImage {
 		}
 
 
-		/// <param name="context">To be added.</param>
-		///         <param name="detectorOptions">To be added.</param>
+		/// <param name="context">The context to use.</param>
+		///         <param name="detectorOptions">The detector options.</param>
 		///         <summary>Create a detector that recognizes QR codes.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CIDetector? CreateQRDetector (CIContext context, CIDetectorOptions detectorOptions)
 		{
 			using (var options = detectorOptions?.ToDictionary ())
 				return FromType (TypeQRCode, context, options);
 		}
 
-		/// <param name="context">To be added.</param>
-		///         <param name="detectorOptions">To be added.</param>
+		/// <param name="context">The context to use.</param>
+		///         <param name="detectorOptions">The detector options.</param>
 		///         <summary>Creates a new CIDetector with the specified context and detection options.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CIDetector? CreateTextDetector (CIContext context, CIDetectorOptions detectorOptions)
 		{
 			using (var options = detectorOptions?.ToDictionary ())

@@ -10,11 +10,9 @@ namespace WebKit {
 
 	/// <typeparam name="T">To be added.</typeparam>
 	///     <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	public interface IIndexedContainer<T> {
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		int Count { get; }
 		T this [int index] { get; }
 	}
@@ -62,7 +60,6 @@ namespace WebKit {
 	public partial class DomCssRuleList : IIndexedContainer<DomCssRule>, IEnumerable<DomCssRule> {
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public IEnumerator<DomCssRule> GetEnumerator ()
 		{
 			return new IndexedContainerEnumerator<DomCssRule> (this);
@@ -70,7 +67,6 @@ namespace WebKit {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		IEnumerator IEnumerable.GetEnumerator ()
 		{
 			return ((IEnumerable<DomCssRule>) this).GetEnumerator ();
@@ -80,7 +76,6 @@ namespace WebKit {
 	public partial class DomCssStyleDeclaration : IIndexedContainer<string>, IEnumerable<string> {
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public IEnumerator<string> GetEnumerator ()
 		{
 			return new IndexedContainerEnumerator<string> (this);
@@ -88,7 +83,6 @@ namespace WebKit {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		IEnumerator IEnumerable.GetEnumerator ()
 		{
 			return ((IEnumerable<string>) this).GetEnumerator ();
@@ -98,7 +92,6 @@ namespace WebKit {
 	public partial class DomHtmlCollection : IIndexedContainer<DomNode>, IEnumerable<DomNode> {
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public IEnumerator<DomNode> GetEnumerator ()
 		{
 			return new IndexedContainerEnumerator<DomNode> (this);
@@ -106,7 +99,6 @@ namespace WebKit {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		IEnumerator IEnumerable.GetEnumerator ()
 		{
 			return ((IEnumerable<DomNode>) this).GetEnumerator ();
@@ -116,7 +108,6 @@ namespace WebKit {
 	public partial class DomMediaList : IIndexedContainer<string>, IEnumerable<string> {
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public IEnumerator<string> GetEnumerator ()
 		{
 			return new IndexedContainerEnumerator<string> (this);
@@ -124,7 +115,6 @@ namespace WebKit {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		IEnumerator IEnumerable.GetEnumerator ()
 		{
 			return ((IEnumerable<string>) this).GetEnumerator ();
@@ -134,7 +124,6 @@ namespace WebKit {
 	public partial class DomNamedNodeMap : IIndexedContainer<DomNode>, IEnumerable<DomNode> {
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public IEnumerator<DomNode> GetEnumerator ()
 		{
 			return new IndexedContainerEnumerator<DomNode> (this);
@@ -142,7 +131,6 @@ namespace WebKit {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		IEnumerator IEnumerable.GetEnumerator ()
 		{
 			return ((IEnumerable<DomNode>) this).GetEnumerator ();
@@ -152,7 +140,6 @@ namespace WebKit {
 	public partial class DomNodeList : IIndexedContainer<DomNode>, IEnumerable<DomNode> {
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public IEnumerator<DomNode> GetEnumerator ()
 		{
 			return new IndexedContainerEnumerator<DomNode> (this);
@@ -160,7 +147,6 @@ namespace WebKit {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		IEnumerator IEnumerable.GetEnumerator ()
 		{
 			return ((IEnumerable<DomNode>) this).GetEnumerator ();
@@ -170,7 +156,6 @@ namespace WebKit {
 	public partial class DomStyleSheetList : IIndexedContainer<DomStyleSheet>, IEnumerable<DomStyleSheet> {
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public IEnumerator<DomStyleSheet> GetEnumerator ()
 		{
 			return new IndexedContainerEnumerator<DomStyleSheet> (this);
@@ -178,7 +163,6 @@ namespace WebKit {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		IEnumerator IEnumerable.GetEnumerator ()
 		{
 			return ((IEnumerable<DomStyleSheet>) this).GetEnumerator ();

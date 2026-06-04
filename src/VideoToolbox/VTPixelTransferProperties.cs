@@ -19,8 +19,7 @@ using AVFoundation;
 namespace VideoToolbox {
 	public partial class VTPixelTransferProperties : DictionaryContainer {
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the scaling mode.</summary>
 		public VTScalingMode ScalingMode {
 			get {
 				var key = GetNSStringValue (VTPixelTransferPropertyKeys.ScalingMode);
@@ -58,8 +57,7 @@ namespace VideoToolbox {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the downsampling mode.</summary>
 		public VTDownsamplingMode DownsamplingMode {
 			get {
 				var key = GetNSStringValue (VTPixelTransferPropertyKeys.DownsamplingMode);
@@ -87,8 +85,7 @@ namespace VideoToolbox {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the destination color primaries.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -130,8 +127,7 @@ namespace VideoToolbox {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the destination transfer function.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -168,8 +164,7 @@ namespace VideoToolbox {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the destination y cb cr matrix.</summary>
 		public VTYCbCrMatrix DestinationYCbCrMatrix {
 			get {
 				var key = GetNSStringValue (VTPixelTransferPropertyKeys.DestinationYCbCrMatrix);

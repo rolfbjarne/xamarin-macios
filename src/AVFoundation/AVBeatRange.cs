@@ -33,15 +33,15 @@ namespace AVFoundation {
 	[SupportedOSPlatform ("tvos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AVBeatRange {
-		/// <summary>To be added.</summary>
+		/// <summary>The start.</summary>
 		public double Start;
 
-		/// <summary>To be added.</summary>
+		/// <summary>The length.</summary>
 		public double Length;
 
 		/// <param name="startBeat">The start beat.</param>
 		///         <param name="lengthInBeats">The length in beats.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="AVBeatRange" /> instance.</summary>
 		public AVBeatRange (double startBeat, double lengthInBeats)
 		{
 			Start = startBeat;
@@ -49,7 +49,6 @@ namespace AVFoundation {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override string ToString ()
 		{
 			return $"(Start={Start},Length={Length})";
@@ -67,7 +66,6 @@ namespace AVFoundation {
 
 		/// <param name="obj">The obj.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override bool Equals (object? obj)
 		{
 			if (!(obj is AVBeatRange))
@@ -77,15 +75,13 @@ namespace AVFoundation {
 		}
 
 		/// <param name="other">The other.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Equals.</summary>
 		public bool Equals (AVBeatRange other)
 		{
 			return Start == other.Start && Length == other.Length;
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override int GetHashCode ()
 		{
 			return HashCode.Combine (Start, Length);

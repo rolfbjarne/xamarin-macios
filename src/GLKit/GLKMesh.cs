@@ -7,12 +7,11 @@ using ModelIO;
 namespace GLKit {
 
 	public partial class GLKMesh {
-		/// <param name="asset">To be added.</param>
-		///         <param name="sourceMeshes">To be added.</param>
-		///         <param name="error">To be added.</param>
+		/// <param name="asset">The asset.</param>
+		///         <param name="sourceMeshes">The source meshes.</param>
+		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static GLKMesh []? FromAsset (MDLAsset asset, out MDLMesh []? sourceMeshes, out NSError? error)
 		{
 			var ret = FromAsset (asset, out NSArray? aret, out error);

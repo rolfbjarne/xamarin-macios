@@ -17,13 +17,13 @@ namespace AudioToolbox {
 	public class InstrumentInfo {
 
 		// defines, not NSString, are used for the key names
-		/// <summary>To be added.</summary>
+		/// <summary>The key for the instrument name.</summary>
 		public const string NameKey = "name";
-		/// <summary>To be added.</summary>
+		/// <summary>The key for the most significant byte.</summary>
 		public const string MSBKey = "MSB";
-		/// <summary>To be added.</summary>
+		/// <summary>The key for the least significant byte.</summary>
 		public const string LSBKey = "LSB";
-		/// <summary>To be added.</summary>
+		/// <summary>The key for the program number.</summary>
 		public const string ProgramKey = "program";
 
 		internal InstrumentInfo (NSDictionary d)
@@ -99,7 +99,7 @@ namespace AudioToolbox {
 		unsafe extern static OSStatus CopyInstrumentInfoFromSoundBank (/* CFURLRef */ IntPtr inURL, /* CFSArrayRef */ IntPtr* outInstrumentInfo);
 
 		/// <param name="url">The URL to use.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the instrument information from the specified sound bank URL.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]

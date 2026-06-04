@@ -74,7 +74,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>Gets or sets whether an image has an alpha channel.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool? Alpha {
 			get {
@@ -86,7 +85,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>Gets or sets the color model for an image, as a <see cref="CoreGraphics.CGImageColorModel" /> object.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CGImageColorModel? ColorModel {
 			get {
@@ -125,7 +123,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>Gets or sets the number of bits in the color sample of each pixel for an image.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int? Depth {
 			get {
@@ -137,7 +134,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>Gets or sets the resolution, in dots per inch, of an image for the x axis.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? DPIHeightF {
 			get {
@@ -149,7 +145,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>Gets or sets the resolution, in dots per inch, of an image for the y axis.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? DPIWidthF {
 			get {
@@ -161,7 +156,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>Gets or sets the size of the image file, in bytes.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int? FileSize {
 			get {
@@ -173,7 +167,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>Gets or sets whether an image contains floating-point pixel samples.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool? IsFloat {
 			get {
@@ -185,7 +178,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>Gets or sets whether an image contains indexed pixel samples.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool? IsIndexed {
 			get {
@@ -197,7 +189,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>Gets or sets the orientation of an image, as a <see cref="CoreImage.CIImageOrientation" /> object.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CIImageOrientation? Orientation {
 			get {
@@ -209,7 +200,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>Gets or sets the number of pixels in an image for the y axis.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int? PixelHeight {
 			get {
@@ -221,7 +211,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>Gets or sets the number of pixels in an image for the x axis.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int? PixelWidth {
 			get {
@@ -233,7 +222,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>Gets or sets name of the ICC profile for an image.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? ProfileName {
 			get {
@@ -245,7 +233,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesExif? Exif {
 			get {
@@ -255,7 +242,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesGps? Gps {
 			get {
@@ -265,7 +251,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesIptc? Iptc {
 			get {
@@ -275,7 +260,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesPng? Png {
 			get {
@@ -285,7 +269,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesJfif? Jfif {
 			get {
@@ -295,7 +278,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesTiff? Tiff {
 			get {
@@ -333,7 +315,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? Aperture {
 			get {
@@ -345,7 +326,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? Brightness {
 			get {
@@ -357,7 +337,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? CompressedBitsPerPixel {
 			get {
@@ -369,7 +348,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? DigitalZoomRatio {
 			get {
@@ -381,7 +359,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? ExposureBias {
 			get {
@@ -393,7 +370,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? ExposureIndex {
 			get {
@@ -405,7 +381,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? ExposureTime {
 			get {
@@ -417,7 +392,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int? ExposureProgram {
 			get {
@@ -429,7 +403,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool? Flash {
 			get {
@@ -441,7 +414,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? FlashEnergy {
 			get {
@@ -453,7 +425,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? FocalPlaneXResolution {
 			get {
@@ -465,7 +436,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? FocalPlaneYResolution {
 			get {
@@ -477,7 +447,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? GainControl {
 			get {
@@ -489,7 +458,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int []? ISOSpeedRatings {
 			get {
@@ -498,7 +466,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? MaximumLensAperture {
 			get {
@@ -510,7 +477,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int? PixelXDimension {
 			get {
@@ -522,7 +488,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int? PixelYDimension {
 			get {
@@ -534,7 +499,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? SubjectDistance {
 			get {
@@ -546,7 +510,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? ShutterSpeed {
 			get {
@@ -584,7 +547,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CIImageOrientation? Orientation {
 			get {
@@ -596,7 +558,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int? XResolution {
 			get {
@@ -608,7 +569,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int? YResolution {
 			get {
@@ -620,7 +580,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Software {
 			get {
@@ -658,7 +617,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int? XDensity {
 			get {
@@ -670,7 +628,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int? YDensity {
 			get {
@@ -708,7 +665,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Author {
 			get {
@@ -720,7 +676,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Description {
 			get {
@@ -732,7 +687,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? Gamma {
 			get {
@@ -744,7 +698,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Software {
 			get {
@@ -756,7 +709,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int? XPixelsPerMeter {
 			get {
@@ -768,7 +720,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int? YPixelsPerMeter {
 			get {
@@ -780,7 +731,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Title {
 			get {
@@ -818,7 +768,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int? Altitude {
 			get {
@@ -830,7 +779,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? Latitude {
 			get {
@@ -851,7 +799,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float? Longitude {
 			get {
@@ -899,7 +846,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Byline {
 			get {
@@ -911,7 +857,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? BylineTitle {
 			get {
@@ -923,7 +868,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? CaptionAbstract {
 			get {
@@ -935,7 +879,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? City {
 			get {
@@ -947,7 +890,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? ContentLocationName {
 			get {
@@ -959,7 +901,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? CountryPrimaryLocationName {
 			get {
@@ -971,7 +912,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? CopyrightNotice {
 			get {
@@ -983,7 +923,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Credit {
 			get {
@@ -995,7 +934,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Source {
 			get {
@@ -1007,7 +945,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? WriterEditor {
 			get {

@@ -16,7 +16,6 @@ using OS_nw_path_monitor = System.IntPtr;
 
 namespace Network {
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
@@ -35,7 +34,6 @@ namespace Network {
 		public NWPath? CurrentPath => currentPath;
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public NWPathMonitor ()
 			: this (nw_path_monitor_create (), true)
 		{
@@ -44,9 +42,8 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		extern static IntPtr nw_path_monitor_create_with_type (NWInterfaceType interfaceType);
 
-		/// <param name="interfaceType">To be added.</param>
+		/// <param name="interfaceType">The interface type.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public NWPathMonitor (NWInterfaceType interfaceType)
 			: this (nw_path_monitor_create_with_type (interfaceType), true)
 		{
@@ -56,22 +53,19 @@ namespace Network {
 		extern static void nw_path_monitor_cancel (IntPtr handle);
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void Cancel () => nw_path_monitor_cancel (GetCheckedHandle ());
 
 		[DllImport (Constants.NetworkLibrary)]
 		extern static void nw_path_monitor_start (IntPtr handle);
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void Start () => nw_path_monitor_start (GetCheckedHandle ());
 
 		[DllImport (Constants.NetworkLibrary)]
 		extern static void nw_path_monitor_set_queue (IntPtr handle, IntPtr queue);
 
-		/// <param name="queue">To be added.</param>
+		/// <param name="queue">The dispatch queue on which to execute.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void SetQueue (DispatchQueue queue)
 		{
 			if (queue is null)
@@ -125,9 +119,8 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		static extern unsafe void nw_path_monitor_set_cancel_handler (IntPtr handle, BlockLiteral* callback);
 
-		/// <param name="callback">To be added.</param>
+		/// <param name="callback">The callback to invoke.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public void SetMonitorCanceledHandler (Action callback)
 		{

@@ -83,7 +83,6 @@ namespace Network {
 		static extern nw_endpoint_t nw_connection_copy_endpoint (nw_connection_t connection);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NWEndpoint? Endpoint {
 			get {
@@ -98,7 +97,6 @@ namespace Network {
 		static extern nw_parameters_t nw_connection_copy_parameters (nw_connection_t connection);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NWParameters? Parameters {
 			get {
@@ -570,7 +568,6 @@ namespace Network {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string Description => nw_connection_copy_description (GetCheckedHandle ());
 
@@ -578,7 +575,6 @@ namespace Network {
 		extern static IntPtr nw_connection_copy_current_path (IntPtr handle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NWPath? CurrentPath {
 			get {
@@ -594,7 +590,6 @@ namespace Network {
 
 		/// <param name="definition">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public NWProtocolMetadata? GetProtocolMetadata (NWProtocolDefinition definition)
 		{
@@ -622,7 +617,6 @@ namespace Network {
 		extern static /* uint32_t */ uint nw_connection_get_maximum_datagram_size (IntPtr handle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public uint MaximumDatagramSize => nw_connection_get_maximum_datagram_size (GetCheckedHandle ());
 

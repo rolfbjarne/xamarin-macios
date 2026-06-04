@@ -34,17 +34,14 @@ namespace AddressBookUI {
 			Identifier = identifier;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the person.</summary>
 		public ABPerson Person { get; private set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the property.</summary>
 		public ABPersonProperty Property { get; private set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the identifier.</summary>
 		public int? Identifier { get; private set; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets the should perform default action.</summary>
 		///         <value>To be added.</value>
 		public bool ShouldPerformDefaultAction { get; set; }
 	}
@@ -80,7 +77,6 @@ namespace AddressBookUI {
 
 		ABPerson? displayedPerson;
 		/// <summary>Returns the <see cref="AddressBook.ABPerson" /> associated with the displayed data.</summary>
-		///         <value>To be added.</value>
 		public ABPerson? DisplayedPerson {
 			get {
 				MarkDirty ();
@@ -94,7 +90,6 @@ namespace AddressBookUI {
 
 		DisplayedPropertiesCollection? displayedProperties;
 		/// <summary>Gets the collection of properties that are displayed about the <see cref="AddressBookUI.ABPersonViewController.DisplayedPerson" />.</summary>
-		///         <value>To be added.</value>
 		public DisplayedPropertiesCollection? DisplayedProperties {
 			get {
 				if (displayedProperties is null) {
@@ -109,7 +104,6 @@ namespace AddressBookUI {
 
 		ABAddressBook? addressBook;
 		/// <summary>Gets or sets the <see cref="AddressBook.ABAddressBook" /> that is the store for the data.</summary>
-		///         <value>To be added.</value>
 		public ABAddressBook? AddressBook {
 			get {
 				MarkDirty ();
@@ -159,7 +153,7 @@ namespace AddressBookUI {
 				h (this, e);
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Events handler.</summary>
 		public event EventHandler<ABPersonViewPerformDefaultActionEventArgs> PerformDefaultAction {
 			add { EnsureEventDelegate ().performDefaultAction += value; }
 			remove { EnsureEventDelegate ().performDefaultAction -= value; }

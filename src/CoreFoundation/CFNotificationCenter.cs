@@ -126,7 +126,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static CFNotificationCenterRef CFNotificationCenterGetDistributedCenter ();
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the distributed notification center.</summary>
 		static public CFNotificationCenter Distributed {
 			get {
 				return distributednc ?? (distributednc = new CFNotificationCenter (CFNotificationCenterGetDistributedCenter (), false));

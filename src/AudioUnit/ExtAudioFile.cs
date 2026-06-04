@@ -258,7 +258,6 @@ namespace AudioUnit {
 		/// <param name="url">To be added.</param>
 		///         <param name="error">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static ExtAudioFile? OpenUrl (NSUrl url, out ExtAudioFileError error)
 		{
@@ -273,7 +272,6 @@ namespace AudioUnit {
 		/// <param name="url">To be added.</param>
 		///         <param name="error">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static ExtAudioFile? OpenUrl (CFUrl url, out ExtAudioFileError error)
 		{
@@ -287,7 +285,6 @@ namespace AudioUnit {
 
 		/// <param name="url">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static ExtAudioFile OpenUrl (CFUrl url)
 		{
@@ -329,7 +326,6 @@ namespace AudioUnit {
 		///         <param name="fileFlags">To be added.</param>
 		///         <param name="error">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static ExtAudioFile? CreateWithUrl (NSUrl url, AudioFileType fileType, AudioStreamBasicDescription inStreamDesc, AudioFileFlags fileFlags, out ExtAudioFileError error)
 		{
@@ -347,7 +343,6 @@ namespace AudioUnit {
 		///         <param name="flag">To be added.</param>
 		///         <param name="error">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static ExtAudioFile? CreateWithUrl (CFUrl url, AudioFileType fileType, AudioStreamBasicDescription inStreamDesc, AudioFileFlags flag, out ExtAudioFileError error)
 		{
@@ -364,7 +359,6 @@ namespace AudioUnit {
 		///         <param name="inStreamDesc">To be added.</param>
 		///         <param name="flag">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static ExtAudioFile CreateWithUrl (CFUrl url,
 			AudioFileType fileType,
@@ -403,7 +397,6 @@ namespace AudioUnit {
 		///         <param name="forWriting">To be added.</param>
 		///         <param name="outAudioFile">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static ExtAudioFileError WrapAudioFileID (IntPtr audioFileID, bool forWriting, out ExtAudioFile? outAudioFile)
 		{
@@ -433,7 +426,6 @@ namespace AudioUnit {
 			}
 		}
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public long FileTell ()
 		{
@@ -453,7 +445,6 @@ namespace AudioUnit {
 		///         <param name="audioBufferList">To be added.</param>
 		///         <param name="status">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public uint Read (uint numberFrames, AudioBuffers audioBufferList, out ExtAudioFileError status)
 		{
@@ -469,7 +460,6 @@ namespace AudioUnit {
 		/// <param name="numberFrames">To be added.</param>
 		///         <param name="audioBufferList">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public ExtAudioFileError WriteAsync (uint numberFrames, AudioBuffers audioBufferList)
 		{
@@ -482,7 +472,6 @@ namespace AudioUnit {
 		/// <param name="numberFrames">To be added.</param>
 		///         <param name="audioBufferList">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public ExtAudioFileError Write (uint numberFrames, AudioBuffers audioBufferList)
 		{
@@ -493,7 +482,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public ExtAudioFileError SynchronizeAudioConverter ()
 		{

@@ -141,7 +141,7 @@ namespace UIKit {
 		HorizontalTab = (1 << 2),
 		/// <summary>Causes a line break.</summary>
 		LineBreak = (1 << 3),
-		/// <summary>Causes a paragraph break.</summary>
+		/// <summary>Causes AParagraph break.</summary>
 		ParagraphBreak = (1 << 4),
 		/// <summary>Causes container break.</summary>
 		ContainerBreak = (1 << 5),
@@ -1822,7 +1822,7 @@ namespace UIKit {
 	///     An immutable set of attributes associated with the display of an <see cref="Foundation.NSAttributedString" />.
 	///     Important: the application developer must use the subtype <see cref="NSMutableParagraphStyle" /> if they modify
 	///     the paragraph style after assignment to a <see cref="Foundation.NSAttributedString" />. Modifying an attribute
-	///     of an assigned <see cref="NSParagraphStyle" /> may result in a program crash.
+	///     of an assigned <see cref="NSParagraphStyle" /> may result in AProgram crash.
 	///   </para>
 	///   <para tool="threads">The members of this class can be used from a background thread.</para>
 	/// </remarks>
@@ -1918,7 +1918,7 @@ namespace UIKit {
 		[Export ("lineHeightMultiple")]
 		nfloat LineHeightMultiple { get; [NotImplemented] set; }
 
-		/// <summary>Distance, in points, between a paragraph's top and its first line.</summary>
+		/// <summary>Distance, in points, between AParagraph's top and its first line.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>
 		///           <para>(More documentation for this node is coming)</para>
@@ -2117,7 +2117,7 @@ namespace UIKit {
 		[Override]
 		nfloat ParagraphSpacing { get; set; }
 
-		/// <summary>Distance, in points, between a paragraph's top and its first line.</summary>
+		/// <summary>Distance, in points, between AParagraph's top and its first line.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>
 		///           <para>(More documentation for this node is coming)</para>

@@ -111,8 +111,8 @@ namespace QuickLookUI {
 		[NullAllowed]
 		NSObject WeakDataSource { get; set; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
+		/// <summary>Gets or sets the data source for the preview panel.</summary>
+		/// <value>The data source, or <see langword="null" />.</value>
 		[Wrap ("WeakDataSource")]
 		[NullAllowed]
 		IQLPreviewPanelDataSource DataSource { get; set; }
@@ -130,14 +130,14 @@ namespace QuickLookUI {
 		[NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
+		/// <summary>Gets or sets the delegate for the preview panel.</summary>
+		/// <value>The delegate, or <see langword="null" />.</value>
 		[Wrap ("WeakDelegate")]
 		[NullAllowed]
 		IQLPreviewPanelDelegate Delegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
+		/// <summary>Gets a value that indicates whether the panel is in full-screen mode.</summary>
+		/// <value><see langword="true" /> if the panel is in full-screen mode; otherwise, <see langword="false" />.</value>
 		[Export ("inFullScreenMode")]
 		bool InFullScreenMode { [Bind ("isInFullScreenMode")] get; }
 

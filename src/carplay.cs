@@ -1266,34 +1266,34 @@ namespace CarPlay {
 		[Export ("mapTemplate:shouldShowNotificationForNavigationAlert:")]
 		bool ShouldShowNotificationForNavigationAlert (CPMapTemplate mapTemplate, CPNavigationAlert navigationAlert);
 
-		/// <param name="mapTemplate">The template for the map for which a panning interface was shown.</param>
-		/// <summary>Method that is called when a panning interface is shown.</summary>
+		/// <param name="mapTemplate">The template for the map for which APanning interface was shown.</param>
+		/// <summary>Method that is called when APanning interface is shown.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("mapTemplateDidShowPanningInterface:")]
 		void DidShowPanningInterface (CPMapTemplate mapTemplate);
 
-		/// <param name="mapTemplate">The template for the map on which a panning interface will be dismissed.</param>
-		/// <summary>Method that is called just before a panning interface is dismissed.</summary>
+		/// <param name="mapTemplate">The template for the map on which APanning interface will be dismissed.</param>
+		/// <summary>Method that is called just before APanning interface is dismissed.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("mapTemplateWillDismissPanningInterface:")]
 		void WillDismissPanningInterface (CPMapTemplate mapTemplate);
 
 		/// <param name="mapTemplate">The template for the map whose panning interface was dismissed.</param>
-		/// <summary>Method that is called when a panning interface is dismissed.</summary>
+		/// <summary>Method that is called when APanning interface is dismissed.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("mapTemplateDidDismissPanningInterface:")]
 		void DidDismissPanningInterface (CPMapTemplate mapTemplate);
 
-		/// <param name="mapTemplate">The template for the map for which a pan was started.</param>
+		/// <param name="mapTemplate">The template for the map for which APan was started.</param>
 		/// <param name="direction">The direction of the pan.</param>
-		/// <summary>Method that is called when a pan begins.</summary>
+		/// <summary>Method that is called when APan begins.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("mapTemplate:panBeganWithDirection:")]
 		void PanBegan (CPMapTemplate mapTemplate, CPPanDirection direction);
 
-		/// <param name="mapTemplate">The template for the map for which a pan was ended.</param>
+		/// <param name="mapTemplate">The template for the map for which APan was ended.</param>
 		/// <param name="direction">The direction of the pan.</param>
-		/// <summary>Method that is called when a pan ends.</summary>
+		/// <summary>Method that is called when APan ends.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("mapTemplate:panEndedWithDirection:")]
 		void PanEnded (CPMapTemplate mapTemplate, CPPanDirection direction);
@@ -1306,7 +1306,7 @@ namespace CarPlay {
 		void Pan (CPMapTemplate mapTemplate, CPPanDirection direction);
 
 		/// <param name="mapTemplate">The template for the map that is panning.</param>
-		/// <summary>Method that is called when a pan gesture starts.</summary>
+		/// <summary>Method that is called when APan gesture starts.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("mapTemplateDidBeginPanGesture:")]
 		void DidBeginPanGesture (CPMapTemplate mapTemplate);
@@ -1314,14 +1314,14 @@ namespace CarPlay {
 		/// <param name="mapTemplate">The template for the map whose pan gesture was updated.</param>
 		/// <param name="translation">To be added.</param>
 		/// <param name="velocity">The pan velocity.</param>
-		/// <summary>Method that is called when a pan gesture is updated.</summary>
+		/// <summary>Method that is called when APan gesture is updated.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("mapTemplate:didUpdatePanGestureWithTranslation:velocity:")]
 		void DidUpdatePanGesture (CPMapTemplate mapTemplate, CGPoint translation, CGPoint velocity);
 
 		/// <param name="mapTemplate">The template for the map whose pan gesture ended.</param>
 		/// <param name="velocity">To be added.</param>
-		/// <summary>Method that is called when a panning interface ends.</summary>
+		/// <summary>Method that is called when APanning interface ends.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("mapTemplate:didEndPanGestureWithVelocity:")]
 		void DidEndPanGesture (CPMapTemplate mapTemplate, CGPoint velocity);
@@ -1416,7 +1416,7 @@ namespace CarPlay {
 
 		/// <param name="mapTemplate">The template for the map whose pitch gesture ended.</param>
 		/// <param name="center">The center point of the pitch gesture.</param>
-		/// <summary>Method that is called when a pitch gesture ends.</summary>
+		/// <summary>Method that is called when APitch gesture ends.</summary>
 		/// <remarks>To be added.</remarks>
 		[iOS (26, 0), MacCatalyst (26, 0)]
 		[Export ("mapTemplate:pitchEndedWithCenter:")]
@@ -1438,8 +1438,8 @@ namespace CarPlay {
 		[Export ("mapTemplate:rotationDidEndWithVelocity:")]
 		void RotationDidEnd (CPMapTemplate mapTemplate, nfloat velocity);
 
-		/// <param name="mapTemplate">The template for the map that began a pitch gesture.</param>
-		/// <summary>Method that is called when a pitch gesture begins.</summary>
+		/// <param name="mapTemplate">The template for the map that began APitch gesture.</param>
+		/// <summary>Method that is called when APitch gesture begins.</summary>
 		/// <remarks>To be added.</remarks>
 		[iOS (26, 0), MacCatalyst (26, 0)]
 		[Export ("mapTemplateDidBeginPitchGesture:")]

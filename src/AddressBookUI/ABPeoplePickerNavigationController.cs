@@ -34,11 +34,9 @@ namespace AddressBookUI {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public ABPerson Person { get; private set; }
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public bool Continue { get; set; }
 	}
 
@@ -68,10 +66,8 @@ namespace AddressBookUI {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public ABPersonProperty Property { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public int? Identifier { get; private set; }
 	}
 
@@ -96,7 +92,6 @@ namespace AddressBookUI {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public ABPerson Person { get; private set; }
 	}
 
@@ -125,10 +120,8 @@ namespace AddressBookUI {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public ABPersonProperty Property { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public int? Identifier { get; private set; }
 	}
 
@@ -214,7 +207,6 @@ namespace AddressBookUI {
 
 		DisplayedPropertiesCollection? displayedProperties;
 		/// <summary>Gets the list of properties that the <see cref="AddressBookUI.ABPeoplePickerNavigationController" /> displays.</summary>
-		///         <value>To be added.</value>
 		public DisplayedPropertiesCollection? DisplayedProperties {
 			get {
 				if (displayedProperties is null) {
@@ -229,7 +221,6 @@ namespace AddressBookUI {
 
 		ABAddressBook? addressBook;
 		/// <summary>Gets or sets the <see cref="AddressBook.ABAddressBook" /> that contains the list of contacts.</summary>
-		///         <value>To be added.</value>
 		public ABAddressBook? AddressBook {
 			get {
 				MarkDirty ();

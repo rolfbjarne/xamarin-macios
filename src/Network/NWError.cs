@@ -13,7 +13,7 @@ using System.Runtime.CompilerServices;
 using CoreFoundation;
 
 namespace Network {
-	/// <summary>To be added.</summary>
+	/// <summary>Represents an error that occurred during a network operation.</summary>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]

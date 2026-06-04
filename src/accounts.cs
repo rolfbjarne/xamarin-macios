@@ -238,8 +238,8 @@ namespace Accounts {
 		[Field ("ACAccountTypeIdentifierTencentWeibo")]
 		NSString TencentWeibo { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the LinkedIn account type identifier.</summary>
+		/// <value>The <see cref="T:Foundation.NSString" /> constant representing the LinkedIn account type.</value>
 		[NoiOS]
 		[NoTV]
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use LinkedIn SDK instead.")]

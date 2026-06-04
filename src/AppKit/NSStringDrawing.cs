@@ -5,7 +5,7 @@ using CoreGraphics;
 #nullable enable
 
 namespace AppKit {
-	/// <summary>To be added.</summary>
+	/// <summary>Provides extension methods for drawing strings with AppKit.</summary>
 	[SupportedOSPlatform ("macos")]
 	[UnsupportedOSPlatform ("ios")]
 	[UnsupportedOSPlatform ("tvos")]

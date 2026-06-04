@@ -19,7 +19,6 @@ namespace VideoToolbox {
 	public partial class VTPropertyOptions {
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public VTPropertyType Type {
 			get {
 				var key = GetNSStringValue (VTPropertyKeys.Type);
@@ -54,7 +53,6 @@ namespace VideoToolbox {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public VTReadWriteStatus ReadWriteStatus {
 			get {
 				var key = GetNSStringValue (VTPropertyKeys.ReadWriteStatus);

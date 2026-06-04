@@ -129,7 +129,6 @@ namespace CoreServices {
 		/// <param name="url">To be added.</param>
 		///         <param name="roles">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos14.0")]
@@ -153,7 +152,6 @@ namespace CoreServices {
 		/// <param name="contentType">To be added.</param>
 		///         <param name="roles">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos14.0")]
@@ -180,7 +178,6 @@ namespace CoreServices {
 		/// <param name="url">To be added.</param>
 		///         <param name="roles">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos14.0")]
@@ -209,7 +206,6 @@ namespace CoreServices {
 		///         <param name="acceptanceFlags">To be added.</param>
 		///         <param name="result">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static bool CanUrlAcceptUrl (NSUrl itemUrl, NSUrl targetUrl,
 			LSRoles roles, LSAcceptanceFlags acceptanceFlags, out LSResult result)
@@ -233,7 +229,6 @@ namespace CoreServices {
 		///         <param name="roles">To be added.</param>
 		///         <param name="acceptanceFlags">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static bool CanUrlAcceptUrl (NSUrl itemUrl, NSUrl targetUrl,
 			LSRoles roles = LSRoles.All, LSAcceptanceFlags acceptanceFlags = LSAcceptanceFlags.Default)
@@ -249,7 +244,6 @@ namespace CoreServices {
 
 		/// <param name="bundleIdentifier">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos14.0")]
@@ -278,7 +272,6 @@ namespace CoreServices {
 
 		/// <param name="url">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public unsafe static LSResult Open (NSUrl url)
 		{
@@ -293,7 +286,6 @@ namespace CoreServices {
 		/// <param name="url">To be added.</param>
 		///         <param name="launchedUrl">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public unsafe static LSResult Open (NSUrl url, out NSUrl? launchedUrl)
 		{
@@ -317,7 +309,6 @@ namespace CoreServices {
 		/// <param name="url">To be added.</param>
 		///         <param name="update">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static LSResult Register (NSUrl url, bool update)
 		{
@@ -341,7 +332,6 @@ namespace CoreServices {
 		/// <param name="contentType">To be added.</param>
 		///         <param name="roles">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos14.0")]
@@ -368,7 +358,6 @@ namespace CoreServices {
 		/// <param name="contentType">To be added.</param>
 		///         <param name="roles">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos14.0")]
@@ -397,7 +386,6 @@ namespace CoreServices {
 		///         <param name="handlerBundleId">To be added.</param>
 		///         <param name="roles">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos14.0")]
@@ -431,7 +419,6 @@ namespace CoreServices {
 
 		/// <param name="urlScheme">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'GetApplicationUrlsForUrl' instead.")]
@@ -457,7 +444,6 @@ namespace CoreServices {
 
 		/// <param name="urlScheme">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'GetDefaultApplicationUrlForUrl' instead.")]
@@ -484,7 +470,6 @@ namespace CoreServices {
 		/// <param name="urlScheme">To be added.</param>
 		///         <param name="handlerBundleId">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos14.0")]

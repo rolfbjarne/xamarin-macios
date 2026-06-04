@@ -17,8 +17,7 @@ namespace Intents {
 		///         <param name="temperature">The temperature.</param>
 		///         <param name="relativeTemperatureSetting">The relative temperature setting.</param>
 		///         <param name="climateZone">The climate zone.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a new intent to set climate settings in a car.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[ObsoletedOSPlatform ("ios12.0", "Use the overload that takes 'INSpeakableString carName'.")]

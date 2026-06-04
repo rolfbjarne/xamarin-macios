@@ -102,21 +102,17 @@ namespace CoreServices {
 	[SupportedOSPlatform ("macos")]
 	public struct FSEvent {
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public ulong Id { get; internal set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Path { get; internal set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public FSEventStreamEventFlags Flags { get; internal set; }
 		public ulong FileId { get; internal set; }
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{
@@ -132,7 +128,6 @@ namespace CoreServices {
 
 		/// <param name="device">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static Guid GetUuidForDevice (ulong device)
 		{
@@ -152,7 +147,6 @@ namespace CoreServices {
 		static extern ulong FSEventsGetCurrentEventId ();
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public static ulong CurrentEventId {
 			get { return FSEventsGetCurrentEventId (); }
@@ -165,7 +159,6 @@ namespace CoreServices {
 		/// <param name="device">To be added.</param>
 		///         <param name="timeInSecondsSinceEpoch">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static ulong GetLastEventIdForDeviceBeforeTime (ulong device, double timeInSecondsSinceEpoch)
 		{
@@ -178,7 +171,6 @@ namespace CoreServices {
 		/// <param name="device">To be added.</param>
 		///         <param name="eventId">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static bool PurgeEventsForDeviceUpToEventId (ulong device, ulong eventId)
 		{
@@ -205,7 +197,6 @@ namespace CoreServices {
 	[SupportedOSPlatform ("macos")]
 	public sealed class FSEventStreamEventsArgs : EventArgs {
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public FSEvent [] Events { get; private set; }
 
@@ -491,7 +482,6 @@ namespace CoreServices {
 		static extern IntPtr FSEventStreamCopyDescription (IntPtr handle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Description {
 			get {
@@ -504,7 +494,6 @@ namespace CoreServices {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override string? ToString ()
 		{
@@ -525,7 +514,6 @@ namespace CoreServices {
 		static extern byte FSEventStreamStart (IntPtr handle);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public bool Start ()
 		{
@@ -634,7 +622,6 @@ namespace CoreServices {
 		static extern IntPtr FSEventStreamCopyPathsBeingWatched (IntPtr handle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? []? PathsBeingWatched {
 			get {
@@ -649,7 +636,6 @@ namespace CoreServices {
 		static extern uint FSEventStreamFlushAsync (IntPtr handle);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public uint FlushAsync ()
 		{
@@ -680,7 +666,6 @@ namespace CoreServices {
 		static extern ulong FSEventStreamGetLatestEventId (IntPtr handle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public ulong LatestEventId {
 			get {

@@ -1,7 +1,7 @@
 #nullable enable
 
 namespace FinderSync {
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies the kind of Finder menu being displayed.</summary>
 	[Native]
 	public enum FIMenuKind : ulong {
 		/// <summary>Indicates contextual menu for items.</summary>

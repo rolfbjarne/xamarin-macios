@@ -291,7 +291,7 @@ namespace PassKit {
 		[Export ("canAddSecureElementPassWithPrimaryAccountIdentifier:")]
 		bool CanAddSecureElementPass (string primaryAccountIdentifier);
 
-		/// <summary>Gets a Boolean value that tells whether Felica passes can be added to the library.</summary>
+		/// <summary>Gets a Boolean value that tells whether FelicAPasses can be added to the library.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
@@ -490,7 +490,7 @@ namespace PassKit {
 
 	interface IPKPaymentAuthorizationViewControllerDelegate { }
 
-	/// <summary>Delegate object providing events relating to a payment authorization request made with a <see cref="PassKit.PKPaymentAuthorizationViewController" />.</summary>
+	/// <summary>Delegate object providing events relating to APayment authorization request made with a <see cref="PassKit.PKPaymentAuthorizationViewController" />.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/PassKit/Reference/PKPaymentAuthorizationViewControllerDelegate_Ref/index.html">Apple documentation for <c>PKPaymentAuthorizationViewControllerDelegate</c></related>
 	[MacCatalyst (13, 1)]
@@ -626,7 +626,7 @@ namespace PassKit {
 		/// <param name="controller">To be added.</param>
 		///         <param name="paymentMethod">To be added.</param>
 		///         <param name="completion">To be added.</param>
-		///         <summary>Called after the user has selected a payment method.</summary>
+		///         <summary>Called after the user has selected APayment method.</summary>
 		///         <remarks>To be added.</remarks>
 		[NoMac]
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use 'DidSelectPaymentMethod2' instead.")]
@@ -664,7 +664,7 @@ namespace PassKit {
 		void DidChangeCouponCode (PKPaymentAuthorizationViewController controller, string couponCode, Action<PKPaymentRequestCouponCodeUpdate> completion);
 	}
 
-	/// <summary>Standard view controller that prompts the user to authorize a payment.</summary>
+	/// <summary>Standard view controller that prompts the user to authorize APayment.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/PassKit/Reference/PKPaymentAuthorizationViewController_Ref/index.html">Apple documentation for <c>PKPaymentAuthorizationViewController</c></related>
 	[MacCatalyst (13, 1)]
@@ -747,7 +747,7 @@ namespace PassKit {
 		bool SupportsDisbursements (string [] supportedNetworks, PKMerchantCapability capabilities);
 	}
 
-	/// <summary>A summary item (such as grand total, tax, or discounts) within a payment request.</summary>
+	/// <summary>A summary item (such as grand total, tax, or discounts) within APayment request.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/PassKit/Reference/PKPaymentSummaryItem_Ref/index.html">Apple documentation for <c>PKPaymentSummaryItem</c></related>
 	[MacCatalyst (13, 1)]
@@ -832,7 +832,7 @@ namespace PassKit {
 		PKDateComponentsRange DateComponentsRange { get; set; }
 	}
 
-	/// <summary>The main class for a payment request, including processing capabilities, amount request, and shipping information.</summary>
+	/// <summary>The main class for APayment request, including processing capabilities, amount request, and shipping information.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/PassKit/Reference/PKPaymentRequest_Ref/index.html">Apple documentation for <c>PKPaymentRequest</c></related>
 	[MacCatalyst (13, 1)]
@@ -1172,7 +1172,7 @@ namespace PassKit {
 		/// <summary>Indicates a name field.</summary>
 		None = 0,
 
-		/// <summary>Indicates a postal address field.</summary>
+		/// <summary>Indicates APostal address field.</summary>
 		[Field ("PKContactFieldPostalAddress")]
 		PostalAddress = 1 << 0,
 
@@ -1180,7 +1180,7 @@ namespace PassKit {
 		[Field ("PKContactFieldEmailAddress")]
 		EmailAddress = 1 << 1,
 
-		/// <summary>Indicates a phone number field.</summary>
+		/// <summary>Indicates APhone number field.</summary>
 		[Field ("PKContactFieldPhoneNumber")]
 		PhoneNumber = 1 << 2,
 
@@ -1188,7 +1188,7 @@ namespace PassKit {
 		[Field ("PKContactFieldName")]
 		Name = 1 << 3,
 
-		/// <summary>Indicates a phonetic name field.</summary>
+		/// <summary>Indicates APhonetic name field.</summary>
 		[Field ("PKContactFieldPhoneticName")]
 		PhoneticName = 1 << 4,
 	}
@@ -1681,7 +1681,7 @@ namespace PassKit {
 		[NullAllowed, Export ("secureElementPass")]
 		PKSecureElementPass SecureElementPass { get; }
 
-		/// <summary>Whether the pass is stored on a peer device (e.g., an Apple Watch).</summary>
+		/// <summary>Whether the pass is stored on APeer device (e.g., an Apple Watch).</summary>
 		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
@@ -2107,7 +2107,7 @@ namespace PassKit {
 		NSString Rsa_V2 { get; }
 	}
 
-	/// <summary>Presents a payment authorization user interface to the user and acts on the user's response.</summary>
+	/// <summary>Presents APayment authorization user interface to the user and acts on the user's response.</summary>
 	///     <remarks>
 	///       <para>This class performs the same job as <see cref="PassKit.PKPaymentAuthorizationViewController" /> but does not rely on UIKit. Because of this, this view controller can be used in watchOS apps and in intents extensions.</para>
 	///     </remarks>
@@ -2258,7 +2258,7 @@ namespace PassKit {
 		void DidFinish (PKPaymentAuthorizationController controller);
 
 		/// <param name="controller">The controller that owns this delegate.</param>
-		///         <summary>Method that is called when the user is authorizing a payment request.</summary>
+		///         <summary>Method that is called when the user is authorizing APayment request.</summary>
 		///         <remarks>This method is called after the user authenticates, but before the request is authorized.</remarks>
 		[Export ("paymentAuthorizationControllerWillAuthorizePayment:")]
 		void WillAuthorizePayment (PKPaymentAuthorizationController controller);
@@ -2308,7 +2308,7 @@ namespace PassKit {
 		/// <param name="controller">The controller that owns this delegate.</param>
 		///         <param name="paymentMethod">The payment method that was selected.</param>
 		///         <param name="completion">A handler that takes a list of updated payment summary items.</param>
-		///         <summary>Method that is called when the user selects a payment method.</summary>
+		///         <summary>Method that is called when the user selects APayment method.</summary>
 		///         <remarks>To be added.</remarks>
 		[NoMac]
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use 'DidSelectPaymentMethod' overload with the 'Action<PKPaymentRequestPaymentMethodUpdate>' parameter instead.")]
@@ -2431,7 +2431,7 @@ namespace PassKit {
 		NSDate ExpirationDate { get; }
 	}
 
-	/// <summary>Contains Suica pass properties.</summary>
+	/// <summary>Contains SuicAPass properties.</summary>
 	[Mac (11, 0)]
 	[MacCatalyst (13, 1)]
 	[DisableDefaultCtor] // hint: getter only props and a factory method.

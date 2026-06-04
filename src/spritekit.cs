@@ -479,7 +479,7 @@ namespace SpriteKit {
 	/// <summary>A method that derives a force by applying the physics of a field to a body that is within the field.</summary>
 	delegate Vector3 SKFieldForceEvaluator (/* vector_float3 */ Vector4 position, /* vector_float3 */ Vector4 velocity, float /* float, not CGFloat */ mass, float /* float, not CGFloat */ charge, double time);
 
-	/// <summary>Applies physics effects within a portion of a scene.</summary>
+	/// <summary>Applies physics effects within APortion of a scene.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/SpriteKit/Reference/SKFieldNode_Ref/index.html">Apple documentation for <c>SKFieldNode</c></related>
 	[MacCatalyst (13, 1)]

@@ -27,26 +27,22 @@
 
 namespace WebKit {
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("macos")]
 	public class DomEventArgs : EventArgs {
-		/// <param name="evt">To be added.</param>
+		/// <param name="evt">The evt.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public DomEventArgs (DomEvent evt)
 		{
 			Event = evt;
 		}
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public DomEvent Event { get; set; }
 	}
 
-	/// <param name="sender">To be added.</param>
-	///     <param name="args">To be added.</param>
+	/// <param name="sender">The object that raised the event.</param>
+	///     <param name="args">The event arguments.</param>
 	///     <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	public delegate void DomEventListenerHandler (object sender, DomEventArgs args);
 
 	public partial class DomNode {
@@ -81,12 +77,11 @@ namespace WebKit {
 			}
 		}
 
-		/// <param name="type">To be added.</param>
-		///         <param name="handler">To be added.</param>
-		///         <param name="useCapture">To be added.</param>
+		/// <param name="type">The type.</param>
+		///         <param name="handler">The completion handler to call when the operation completes.</param>
+		///         <param name="useCapture">The use capture.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public IDomEventListener AddEventListener (string type, DomEventListenerHandler handler, bool useCapture)
 		{
 			if (handler is null)
@@ -96,12 +91,11 @@ namespace WebKit {
 			return obj;
 		}
 
-		/// <param name="type">To be added.</param>
-		///         <param name="callback">To be added.</param>
-		///         <param name="useCapture">To be added.</param>
+		/// <param name="type">The type.</param>
+		///         <param name="callback">The callback to invoke.</param>
+		///         <param name="useCapture">The use capture.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public IDomEventListener AddEventListener (string type, Action<DomEvent> callback, bool useCapture)
 		{
 			if (callback is null)

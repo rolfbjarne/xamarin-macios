@@ -118,7 +118,7 @@ namespace Network {
 #if !XAMCORE_5_0
 	/// <param name="callback">The callback to invoke for each interface.</param>
 		/// <summary>Enumerates the interfaces available on this path.</summary>
-		/// <remarks>Use the overload that takes a <c>Func		///         <remarks>To be added.</remarks>lt;NWInterface, bool		///         <remarks>To be added.</remarks>gt;</c> instead.</remarks>
+		/// <remarks>Use the overload that takes a <c>Func&lt;NWInterface, bool&gt;</c> instead.</remarks>
 		[Obsolete ("Use the overload that takes a 'Func<NWInterface, bool>' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public void EnumerateInterfaces (Action<NWInterface> callback)

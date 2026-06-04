@@ -32,9 +32,9 @@ using System.Threading;
 
 namespace AppKit {
 	public partial class NSApplication : NSResponder {
-		/// <summary>To be added.</summary>
+		/// <summary>The check for illegal cross thread calls.</summary>
 		public static bool CheckForIllegalCrossThreadCalls = true;
-		/// <summary>To be added.</summary>
+		/// <summary>The check for event and delegate mismatches.</summary>
 		public static bool CheckForEventAndDelegateMismatches = true;
 
 		private static Thread? mainThread;
@@ -44,7 +44,7 @@ namespace AppKit {
 
 		static bool initialized;
 
-		/// <summary>To be added.</summary>
+		/// <summary>Init.</summary>
 		[Preserve]
 		public static void Init ()
 		{
@@ -91,7 +91,7 @@ namespace AppKit {
 			typeof (NSApplication).GetField ("class_ptr", BindingFlags.Static | BindingFlags.NonPublic)?.SetValue (null, Class.GetHandle ("NSApplication"));
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Inits drawing bridge.</summary>
 		public static void InitDrawingBridge ()
 		{
 			var UseCocoaDrawableField = Type.GetType ("System.Drawing.GDIPlus, System.Drawing")?.GetField ("UseCocoaDrawable", BindingFlags.Static | BindingFlags.Public);
@@ -102,7 +102,7 @@ namespace AppKit {
 		}
 
 		/// <param name="args">The event arguments.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Main.</summary>
 		public static void Main (string [] args)
 		{
 			// Switch to an AppKitSynchronizationContext if Main is invoked
@@ -119,7 +119,7 @@ namespace AppKit {
 				TransientString.FreeStringArray (argsPtr, args.Length);
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Ensures u i thread.</summary>
 		public static void EnsureUIThread ()
 		{
 			if (NSApplication.CheckForIllegalCrossThreadCalls && NSApplication.mainThread != Thread.CurrentThread)
@@ -128,7 +128,7 @@ namespace AppKit {
 
 		/// <param name="del">The del.</param>
 		///         <param name="expectedType">The expected type.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Ensures event and delegate are not mismatched.</summary>
 		public static void EnsureEventAndDelegateAreNotMismatched (object del, Type expectedType)
 		{
 			if (NSApplication.CheckForEventAndDelegateMismatches && !(expectedType.IsAssignableFrom (del.GetType ())))
@@ -138,7 +138,7 @@ namespace AppKit {
 		/// <param name="currentDelegateValue">The current delegate value.</param>
 		///         <param name="newDelegateValue">The new delegate value.</param>
 		///         <param name="internalDelegateType">The internal delegate type.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Ensures delegate assign is not overwriting internal delegate.</summary>
 		public static void EnsureDelegateAssignIsNotOverwritingInternalDelegate (object? currentDelegateValue, object? newDelegateValue, Type internalDelegateType)
 		{
 			if (NSApplication.CheckForEventAndDelegateMismatches && currentDelegateValue is not null && newDelegateValue is not null
@@ -149,15 +149,14 @@ namespace AppKit {
 
 		/// <param name="mask">The mask.</param>
 		///         <param name="lastEvent">The last event.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Discards events.</summary>
 		public void DiscardEvents (NSEventMask mask, NSEvent lastEvent)
 		{
 			DiscardEvents ((nuint) (ulong) mask, lastEvent);
 		}
 
 		// note: if needed override the protected Get|Set methods
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the activation policy.</summary>
 		public NSApplicationActivationPolicy ActivationPolicy {
 			get { return GetActivationPolicy (); }
 			// ignore return value (bool)

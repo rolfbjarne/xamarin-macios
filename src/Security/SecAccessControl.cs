@@ -96,7 +96,7 @@ namespace Security {
 		[SupportedOSPlatform ("tvos")]
 		And = 1 << 15,
 
-		/// <summary>Require a private key for access.</summary>
+		/// <summary>Require APrivate key for access.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]

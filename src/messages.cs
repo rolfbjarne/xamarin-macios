@@ -288,8 +288,8 @@ namespace Messages {
 		[NullAllowed, Export ("session")]
 		MSSession Session { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets a value that indicates whether the message is pending.</summary>
+		/// <value><see langword="true" /> if the message is pending; otherwise, <see langword="false" />.</value>
 		[MacCatalyst (14, 0)]
 		[Export ("pending")]
 		bool Pending { [Bind ("isPending")] get; }

@@ -25,7 +25,7 @@ namespace Foundation {
 		/// <param name="protocol">The protocol for the new <see cref="NSUrlProtectionSpace" /> instance.</param>
 		/// <param name="realm">The realm for the new <see cref="NSUrlProtectionSpace" /> instance.</param>
 		/// <param name="authenticationMethod">The authentication method for the new <see cref="NSUrlProtectionSpace" /> instance.</param>
-		/// <param name="useProxy">Whether a proxy is used or not.</param>
+		/// <param name="useProxy">Whether AProxy is used or not.</param>
 		public NSUrlProtectionSpace (string host, int port, string? protocol, string? realm, string? authenticationMethod, bool useProxy)
 			: base (NSObjectFlag.Empty)
 		{

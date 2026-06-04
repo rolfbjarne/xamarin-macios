@@ -30,13 +30,13 @@ namespace Foundation {
 			return host;
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the current host.</summary>
 		public static NSHost? Current {
 			get { return CheckNull (_Current); }
 		}
 
 		/// <param name="address">The address.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates an NSHost from the specified IP address string.</summary>
 		public static NSHost? FromAddress (string? address)
 		{
 			if (address is null)
@@ -45,7 +45,7 @@ namespace Foundation {
 		}
 
 		/// <param name="name">The name to use.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates an NSHost from the specified hostname.</summary>
 		public static NSHost? FromName (string? name)
 		{
 			if (name is null)
@@ -80,7 +80,7 @@ namespace Foundation {
 		}
 
 		/// <param name="hostEntry">The host entry.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates an NSHost from the specified IP host entry.</summary>
 		public static NSHost? FromIPHostEntry (IPHostEntry? hostEntry)
 		{
 			if (hostEntry is null)
@@ -111,7 +111,7 @@ namespace Foundation {
 			return null;
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Converts this host to an <see cref="T:System.Net.IPHostEntry" />.</summary>
 		public IPHostEntry ToIPHostEntry ()
 		{
 			return new IPHostEntry {
@@ -122,7 +122,7 @@ namespace Foundation {
 		}
 
 		/// <param name="address">The address.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates an NSHost from the specified IP address.</summary>
 		public static NSHost? FromAddress (IPAddress? address)
 		{
 			if (address is null)
@@ -130,7 +130,7 @@ namespace Foundation {
 			return FromAddress (address.ToString ());
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the first IP address of this host.</summary>
 		public IPAddress? Address {
 			get {
 				var address = _Address;
@@ -140,7 +140,7 @@ namespace Foundation {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets all IP addresses of this host.</summary>
 		public IPAddress [] Addresses {
 			get {
 				var addrs = new IPAddress [_Addresses.Length];
@@ -150,14 +150,14 @@ namespace Foundation {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Returns the hash code for this host.</summary>
 		public override int GetHashCode ()
 		{
 			return (int) _Hash;
 		}
 
 		/// <param name="obj">The obj.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Determines whether this host is equal to the specified object.</summary>
 		public override bool Equals (object? obj)
 		{
 			if (obj == this)
@@ -170,14 +170,14 @@ namespace Foundation {
 			return false;
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Returns an enumerator that iterates through the IP addresses of this host.</summary>
 		public IEnumerator<IPAddress> GetEnumerator ()
 		{
 			foreach (var address in Addresses)
 				yield return address;
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Returns an enumerator that iterates through the IP addresses of this host.</summary>
 		IEnumerator IEnumerable.GetEnumerator ()
 		{
 			return GetEnumerator ();

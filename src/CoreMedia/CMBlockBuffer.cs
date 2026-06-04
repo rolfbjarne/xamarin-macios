@@ -37,8 +37,7 @@ namespace CoreMedia {
 		/// <param name="subBlockCapacity">The sub block capacity.</param>
 		///         <param name="flags">The flags.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Creates empty.</summary>
 		public static CMBlockBuffer? CreateEmpty (uint subBlockCapacity, CMBlockBufferFlags flags, out CMBlockBufferError error)
 		{
 			IntPtr buffer;
@@ -102,8 +101,7 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static /* OSStatus */ CMBlockBufferError CMBlockBufferAssureBlockMemory (/* CMBlockBufferRef */ IntPtr buffer);
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Assures block memory.</summary>
 		public CMBlockBufferError AssureBlockMemory ()
 		{
 			return CMBlockBufferAssureBlockMemory (GetCheckedHandle ());
@@ -211,8 +209,7 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static /* size_t */ nuint CMBlockBufferGetDataLength (/* CMBlockBufferRef */ IntPtr theBuffer);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the data length.</summary>
 		public nuint DataLength {
 			get {
 				return CMBlockBufferGetDataLength (Handle);
@@ -233,8 +230,7 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static /* Boolean */ byte CMBlockBufferIsEmpty (/* CMBlockBufferRef */ IntPtr theBuffer);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the is empty.</summary>
 		public bool IsEmpty {
 			get {
 				return CMBlockBufferIsEmpty (GetCheckedHandle ()) != 0;

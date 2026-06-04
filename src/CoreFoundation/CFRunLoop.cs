@@ -131,7 +131,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		unsafe extern static /* CFRunLoopSourceRef */ IntPtr CFRunLoopSourceCreate (/* CFAllocatorRef */ IntPtr allocator, /* CFIndex */ nint order, /* CFRunLoopSourceContext* */ CFRunLoopSourceContext* context);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Initializes a new instance of the custom run loop source.</summary>
 		protected CFRunLoopSourceCustom ()
 			: base (IntPtr.Zero, true)
 		{
@@ -166,7 +166,7 @@ namespace CoreFoundation {
 
 		/// <param name="loop">The loop.</param>
 		///         <param name="mode">The mode.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Called when the source is scheduled on the specified run loop and mode.</summary>
 		protected abstract void OnSchedule (CFRunLoop loop, NSString mode);
 
 		[UnmanagedCallersOnly]
@@ -184,7 +184,7 @@ namespace CoreFoundation {
 
 		/// <param name="loop">The loop.</param>
 		///         <param name="mode">The mode.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Called when the source is cancelled from the specified run loop and mode.</summary>
 		protected abstract void OnCancel (CFRunLoop loop, NSString mode);
 
 		[UnmanagedCallersOnly]
@@ -197,7 +197,7 @@ namespace CoreFoundation {
 			source.OnPerform ();
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Called when the source is signaled and needs to perform its work.</summary>
 		protected abstract void OnPerform ();
 
 		/// <inheritdoc />

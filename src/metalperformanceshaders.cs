@@ -26,7 +26,7 @@ namespace MetalPerformanceShaders {
 		[Export ("kernelWidth")]
 		nuint KernelWidth { get; }
 
-		/// <summary>Gets or sets a value that is added to a pixel after it is transformed.</summary>
+		/// <summary>Gets or sets a value that is added to APixel after it is transformed.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[Export ("bias")]
@@ -1232,7 +1232,7 @@ namespace MetalPerformanceShaders {
 		[Export ("device", ArgumentSemantic.Retain)]
 		IMTLDevice Device { get; }
 
-		/// <summary>Gets or sets a programmer-friendly name for the shader</summary>
+		/// <summary>Gets or sets AProgrammer-friendly name for the shader</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
@@ -8221,7 +8221,7 @@ namespace MetalPerformanceShaders {
 		NativeHandle Constructor (MPSNNImageNode sourceNode, NSData aData);
 	}
 
-	/// <summary>A <see cref="MetalPerformanceShaders.MPSNNFilterNode" /> that represents a pooling kernel in a convolutional neural net.</summary>
+	/// <summary>A <see cref="MetalPerformanceShaders.MPSNNFilterNode" /> that represents APooling kernel in a convolutional neural net.</summary>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (MPSNNFilterNode), Name = "MPSCNNPoolingNode")]
 	[DisableDefaultCtor] // 'init' is unavailable

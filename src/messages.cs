@@ -17,11 +17,11 @@ namespace Messages {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum MSMessagesAppPresentationStyle : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates compact.</summary>
 		Compact,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates expanded.</summary>
 		Expanded,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates transcript.</summary>
 		Transcript,
 	}
 
@@ -42,7 +42,7 @@ namespace Messages {
 	[Native]
 	[ErrorDomain ("MSMessagesErrorDomain")]
 	public enum MSMessageErrorCode : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown = -1,
 		/// <summary>A resource file was not found.</summary>
 		FileNotFound = 1,
@@ -52,17 +52,17 @@ namespace Messages {
 		ImproperFileType,
 		/// <summary>An error in the format of the File URL for a resource file.</summary>
 		ImproperFileUrl,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates sticker file improper file attributes.</summary>
 		StickerFileImproperFileAttributes,
 		/// <summary>A sticker file was not properly sized.</summary>
 		StickerFileImproperFileSize,
 		/// <summary>A sticker file had an improper format.</summary>
 		StickerFileImproperFileFormat,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates url exceeds max size.</summary>
 		UrlExceedsMaxSize,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates send without recent interaction.</summary>
 		SendWithoutRecentInteraction,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates send while not visible.</summary>
 		SendWhileNotVisible,
 		/// <summary>Indicates that an attempt was made to use an API that cannot be used in the current presentation context.</summary>
 		APIUnavailableInPresentationContext,
@@ -81,10 +81,9 @@ namespace Messages {
 	[MacCatalyst (14, 0)]
 	[Protocol]
 	interface MSMessagesAppTranscriptPresentation {
-		/// <param name="size">To be added.</param>
+		/// <param name="size">The size.</param>
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("contentSizeThatFits:")]
 		CGSize GetContentSizeThatFits (CGSize size);
@@ -121,7 +120,6 @@ namespace Messages {
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithNibName:bundle:")]
 		NativeHandle Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);
 
@@ -292,7 +290,6 @@ namespace Messages {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (14, 0)]
 		[Export ("pending")]
 		bool Pending { [Bind ("isPending")] get; }
@@ -430,19 +427,17 @@ namespace Messages {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface MSStickerBrowserViewDataSource {
-		/// <param name="stickerBrowserView">To be added.</param>
+		/// <param name="stickerBrowserView">The sticker browser view.</param>
 		/// <summary>The number of <see cref="Messages.MSSticker" /> objects held by this data source.</summary>
 		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("numberOfStickersInStickerBrowserView:")]
 		nint GetNumberOfStickers (MSStickerBrowserView stickerBrowserView);
 
-		/// <param name="stickerBrowserView">To be added.</param>
-		/// <param name="index">To be added.</param>
+		/// <param name="stickerBrowserView">The sticker browser view.</param>
+		/// <param name="index">The zero-based index.</param>
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("stickerBrowserView:stickerAtIndex:")]
 		MSSticker GetSticker (MSStickerBrowserView stickerBrowserView, nint index);

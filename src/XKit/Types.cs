@@ -94,7 +94,7 @@ namespace UIKit {
 			return !insets1.Equals (insets2);
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Returns the hash code for this directional edge insets value.</summary>
 		public override int GetHashCode ()
 		{
 			return HashCode.Combine (Top, Leading, Trailing, Bottom);

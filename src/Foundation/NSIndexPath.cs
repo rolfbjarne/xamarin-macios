@@ -103,10 +103,9 @@ namespace Foundation {
 			return ret;
 		}
 
-		/// <param name="range">To be added.</param>
+		/// <param name="range">The range.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]

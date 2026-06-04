@@ -5,43 +5,43 @@
 namespace SearchKit {
 	[Static]
 	interface SKTextAnalysisKeys {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the minimum term length key.</summary>
+		/// <value>The key string.</value>
 		[Field ("kSKMinTermLength")]
 		NSString MinTermLengthKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the stop words key.</summary>
+		/// <value>The key string.</value>
 		[Field ("kSKStopWords")]
 		NSString StopWordsKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the substitutions key.</summary>
+		/// <value>The key string.</value>
 		[Field ("kSKSubstitutions")]
 		NSString SubstitutionsKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the maximum terms key.</summary>
+		/// <value>The key string.</value>
 		[Field ("kSKMaximumTerms")]
 		NSString MaximumTermsKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the proximity indexing key.</summary>
+		/// <value>The key string.</value>
 		[Field ("kSKProximityIndexing")]
 		NSString ProximityIndexingKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the term characters key.</summary>
+		/// <value>The key string.</value>
 		[Field ("kSKTermChars")]
 		NSString TermCharsKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the start term characters key.</summary>
+		/// <value>The key string.</value>
 		[Field ("kSKStartTermChars")]
 		NSString StartTermCharsKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the end term characters key.</summary>
+		/// <value>The key string.</value>
 		[Field ("kSKEndTermChars")]
 		NSString EndTermCharsKey { get; }
 	}

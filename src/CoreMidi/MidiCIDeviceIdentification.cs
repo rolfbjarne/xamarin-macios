@@ -7,7 +7,7 @@ using CoreFoundation;
 namespace CoreMidi {
 
 #if !XAMCORE_5_0
-	/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the midi c i device identification.</summary>
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]

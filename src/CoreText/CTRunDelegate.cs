@@ -47,7 +47,6 @@ namespace CoreText {
 	#endregion
 
 	/// <summary>A class that represents the operations possible on a <see cref="CoreText.CTRunDelegate" />.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -63,7 +62,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		protected CTRunDelegateOperations ()
 		{
 			handle = GCHandle.Alloc (this);
@@ -92,7 +90,6 @@ namespace CoreText {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public virtual nfloat GetAscent ()
 		{
 			return 0;
@@ -100,7 +97,6 @@ namespace CoreText {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public virtual nfloat GetDescent ()
 		{
 			return 0;
@@ -108,7 +104,6 @@ namespace CoreText {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public virtual nfloat GetWidth ()
 		{
 			return 0;
@@ -181,7 +176,6 @@ namespace CoreText {
 	}
 
 	/// <summary>A delegate object that can be used to handle <see cref="CoreText.CTRunDelegateOperations" /> on a <see cref="CoreText.CTRun" />.</summary>
-	///     <remarks>To be added.</remarks>
 	///     <altmember cref="CoreText.CTStringAttributes.RunDelegate" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -209,9 +203,8 @@ namespace CoreText {
 			}
 		}
 
-		/// <param name="operations">To be added.</param>
+		/// <param name="operations">The operations.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CTRunDelegate (CTRunDelegateOperations operations)
 			: base (Create (operations), true)
 		{
@@ -224,7 +217,6 @@ namespace CoreText {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public CTRunDelegateOperations? Operations {
 			get {
 				return CTRunDelegateOperations.GetOperations (CTRunDelegateGetRefCon (Handle));

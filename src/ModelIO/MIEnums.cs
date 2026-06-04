@@ -20,7 +20,7 @@ namespace ModelIO {
 		/// <summary>Indicates an invalid format.</summary>
 		Invalid = 0,
 
-		/// <summary>Indicates a packed vector format.</summary>
+		/// <summary>Indicates APacked vector format.</summary>
 		PackedBits = 0x1000,
 		/// <summary>Indicates unsigned two's complement 8-bit values.</summary>
 		UCharBits = 0x10000,
@@ -155,9 +155,9 @@ namespace ModelIO {
 		/// <summary>Indicates four single-precision floating point values.</summary>
 		Float4 = FloatBits | 4,
 
-		/// <summary>Indicates a packed 32-bit value with four signed two's complement integers arranged 10/10/10/2.</summary>
+		/// <summary>Indicates APacked 32-bit value with four signed two's complement integers arranged 10/10/10/2.</summary>
 		Int1010102Normalized = IntBits | PackedBits | 4,
-		/// <summary>Indicates a packed 32-bit value with four unsigned two's complement integers arranged 10/10/10/2.</summary>
+		/// <summary>Indicates APacked 32-bit value with four unsigned two's complement integers arranged 10/10/10/2.</summary>
 		UInt1010102Normalized = UIntBits | PackedBits | 4,
 	}
 
@@ -175,7 +175,7 @@ namespace ModelIO {
 	/// <summary>Enumerates the geometric primitives to use for rendering.</summary>
 	[Native]
 	public enum MDLGeometryType : long {
-		/// <summary>Indicates that each index describes a point.</summary>
+		/// <summary>Indicates that each index describes APoint.</summary>
 		Points = 0,
 		/// <summary>Indicates that consecutive index pairs describe lines.</summary>
 		Lines,
@@ -264,15 +264,15 @@ namespace ModelIO {
 	public enum MDLMaterialPropertyType : ulong {
 		/// <summary>Indicates an uninitialized property.</summary>
 		None,
-		/// <summary>Indicates a property that contains a string.</summary>
+		/// <summary>Indicates AProperty that contains a string.</summary>
 		String,
-		/// <summary>Indicates a property that contains a URL that typically addresses a texture.</summary>
+		/// <summary>Indicates AProperty that contains a URL that typically addresses a texture.</summary>
 		Url,
-		/// <summary>Indicates a property that contains a texture.</summary>
+		/// <summary>Indicates AProperty that contains a texture.</summary>
 		Texture,
-		/// <summary>Indicates a property that specifies a color.</summary>
+		/// <summary>Indicates AProperty that specifies a color.</summary>
 		Color,
-		/// <summary>Indicates a property that contains a floating-point value.</summary>
+		/// <summary>Indicates AProperty that contains a floating-point value.</summary>
 		Float,
 		/// <summary>Indicates a vector property that contains two floating-point values.</summary>
 		Float2,
@@ -280,7 +280,7 @@ namespace ModelIO {
 		Float3,
 		/// <summary>Indicates a vector property that contains four floating-point values.</summary>
 		Float4,
-		/// <summary>Indicates a property that contains a 4x4 matrix of floating-point values.</summary>
+		/// <summary>Indicates AProperty that contains a 4x4 matrix of floating-point values.</summary>
 		Matrix44,
 		[iOS (15, 0), TV (15, 0), MacCatalyst (15, 0)]
 		Buffer,
@@ -363,7 +363,7 @@ namespace ModelIO {
 		Environment,
 	}
 
-	/// <summary>Enumerates camera projections.</summary>
+	/// <summary>Enumerates camerAProjections.</summary>
 	[Native]
 	public enum MDLCameraProjection : ulong {
 		/// <summary>Indicates perspective.</summary>

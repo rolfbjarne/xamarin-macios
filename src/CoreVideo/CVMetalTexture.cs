@@ -16,7 +16,6 @@ using Metal;
 namespace CoreVideo {
 
 	/// <summary>This type exposes a CoreVideo buffer as a Metal texture.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -42,7 +41,6 @@ namespace CoreVideo {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public IMTLTexture? Texture {
 			get {
 				return Runtime.GetINativeObject<IMTLTexture> (CVMetalTextureGetTexture (Handle), owns: false);
@@ -51,19 +49,17 @@ namespace CoreVideo {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool IsFlipped {
 			get {
 				return CVMetalTextureIsFlipped (Handle) != 0;
 			}
 		}
 
-		/// <param name="lowerLeft">To be added.</param>
-		///         <param name="lowerRight">To be added.</param>
-		///         <param name="upperRight">To be added.</param>
-		///         <param name="upperLeft">To be added.</param>
+		/// <param name="lowerLeft">The lower left.</param>
+		///         <param name="lowerRight">The lower right.</param>
+		///         <param name="upperRight">The upper right.</param>
+		///         <param name="upperLeft">The upper left.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void GetCleanTexCoords (out float [] lowerLeft, out float [] lowerRight, out float [] upperRight, out float [] upperLeft)
 		{
 			lowerLeft = new float [2];

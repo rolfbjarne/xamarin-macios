@@ -26,11 +26,10 @@
 using System.IO;
 
 namespace ObjCRuntime {
-	/// <summary>To be added.</summary>
+	/// <summary>Base class for attributes that control delayed type registration with the Objective-C runtime.</summary>
 	[AttributeUsage (AttributeTargets.Assembly)]
 	public abstract class DelayedRegistrationAttribute : Attribute {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets whether registration should be delayed.</summary>
 		public abstract bool Delay { get; }
 	}
 }

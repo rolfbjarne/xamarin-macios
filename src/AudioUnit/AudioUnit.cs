@@ -367,7 +367,7 @@ namespace AudioUnit {
 		[SupportedOSPlatform ("tvos")]
 		[StructLayout (LayoutKind.Explicit)]
 		public struct EventValuesStruct {
-			/// <summary>Contains values that describe a linear ramp change in a parameter value.</summary>
+			/// <summary>Contains values that describe a linear ramp change in AParameter value.</summary>
 			///     <remarks>To be added.</remarks>
 			[StructLayout (LayoutKind.Sequential)]
 			public struct RampStruct {
@@ -391,7 +391,7 @@ namespace AudioUnit {
 			[FieldOffset (0)]
 			public RampStruct Ramp;
 
-			/// <summary>Contains values that describe a step change in a parameter value.</summary>
+			/// <summary>Contains values that describe a step change in AParameter value.</summary>
 			///     <remarks>To be added.</remarks>
 			[StructLayout (LayoutKind.Sequential)]
 			public struct ImmediateStruct {
@@ -1506,7 +1506,7 @@ namespace AudioUnit {
 	[SupportedOSPlatform ("tvos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AUParameterObserverToken {
-		/// <summary>The token that represents a parameter or parameter recording observer delegate.</summary>
+		/// <summary>The token that represents AParameter or parameter recording observer delegate.</summary>
 		///         <remarks>To be added.</remarks>
 		public IntPtr ObserverToken;
 		/// <param name="observerToken">To be added.</param>
@@ -1617,7 +1617,7 @@ namespace AudioUnit {
 		// 		public AUMidiEvent Midi;
 	}
 
-	/// <summary>An event that represents the change and time of change for a parameter value.</summary>
+	/// <summary>An event that represents the change and time of change for AParameter value.</summary>
 	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]

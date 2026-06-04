@@ -7,7 +7,6 @@ using CoreMedia;
 
 namespace MediaToolbox {
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -21,10 +20,9 @@ namespace MediaToolbox {
 		static extern /* CFStringRef CM_NULLABLE */ IntPtr MTCopyLocalizedNameForMediaType (
 			CMMediaType mediaType);
 
-		/// <param name="mediaType">To be added.</param>
+		/// <param name="mediaType">The media type.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -42,11 +40,10 @@ namespace MediaToolbox {
 		static extern /* CFStringRef CM_NULLABLE */ IntPtr MTCopyLocalizedNameForMediaSubType (
 			CMMediaType mediaType, uint mediaSubType);
 
-		/// <param name="mediaType">To be added.</param>
-		///         <param name="mediaSubType">To be added.</param>
+		/// <param name="mediaType">The media type.</param>
+		///         <param name="mediaSubType">The media sub type.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]

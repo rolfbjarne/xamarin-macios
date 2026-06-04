@@ -13,16 +13,14 @@ namespace GameplayKit {
 	public partial class GKStateMachine : NSObject {
 
 		/// <param name="stateType">The state type.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets state.</summary>
 		public GKState? GetState (Type stateType)
 		{
 			return GetState (GKState.GetClass (stateType, "stateType"));
 		}
 
 		/// <param name="state">The state.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets state.</summary>
 		public GKState? GetState (GKState state)
 		{
 			return GetState (GKState.GetClass (state, "state"));
@@ -30,7 +28,6 @@ namespace GameplayKit {
 
 		/// <param name="stateType">Must be a subclass of <see cref="GameplayKit.GKState" /></param>
 		///         <summary>Whether a transition from <see cref="GameplayKit.GKStateMachine.CurrentState" /> to <paramref name="stateType" /> is valid.</summary>
-		///         <returns>To be added.</returns>
 		public bool CanEnterState (Type stateType)
 		{
 			return CanEnterState (GKState.GetClass (stateType, "stateType"));
@@ -38,7 +35,6 @@ namespace GameplayKit {
 
 		/// <param name="state">The state.</param>
 		///         <summary>Returns <see langword="true" /> if a transition from the current state of the state machine leads to <paramref name="state" />. Otherwise, returns <see langword="false" />.</summary>
-		///         <returns>To be added.</returns>
 		public bool CanEnterState (GKState state)
 		{
 			return CanEnterState (GKState.GetClass (state, "state"));
@@ -55,7 +51,6 @@ namespace GameplayKit {
 
 		/// <param name="state">The state.</param>
 		///         <summary>Attempts to transition from the current state to the specified <paramref name="state" />.</summary>
-		///         <returns>To be added.</returns>
 		public virtual bool EnterState (GKState state)
 		{
 			return EnterState (GKState.GetClass (state, "state"));

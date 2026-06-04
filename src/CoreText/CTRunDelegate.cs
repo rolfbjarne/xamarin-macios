@@ -61,7 +61,7 @@ namespace CoreText {
 			get { return GCHandle.ToIntPtr (handle); }
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Initializes a new instance of the <see cref="CTRunDelegateOperations" /> class.</summary>
 		protected CTRunDelegateOperations ()
 		{
 			handle = GCHandle.Alloc (this);
@@ -88,19 +88,19 @@ namespace CoreText {
 		{
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the ascent for the run delegate.</summary>
 		public virtual nfloat GetAscent ()
 		{
 			return 0;
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the descent for the run delegate.</summary>
 		public virtual nfloat GetDescent ()
 		{
 			return 0;
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the width for the run delegate.</summary>
 		public virtual nfloat GetWidth ()
 		{
 			return 0;

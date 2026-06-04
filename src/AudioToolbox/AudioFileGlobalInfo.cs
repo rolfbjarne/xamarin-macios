@@ -42,7 +42,7 @@ namespace AudioToolbox {
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public unsafe static class AudioFileGlobalInfo {
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the readable audio file types supported by the system.</summary>
 		public static AudioFileType []? ReadableTypes {
 			get {
 				uint size;
@@ -56,7 +56,7 @@ namespace AudioToolbox {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the writable audio file types supported by the system.</summary>
 		public static AudioFileType []? WritableTypes {
 			get {
 				uint size;
@@ -71,7 +71,7 @@ namespace AudioToolbox {
 		}
 
 		/// <param name="fileType">The file type.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the display name for the specified audio file type.</summary>
 		public static string? GetFileTypeName (AudioFileType fileType)
 		{
 			if (!TryGetGlobalInfo (AudioFileGlobalProperty.FileTypeName, fileType, out var ptr))
@@ -81,7 +81,7 @@ namespace AudioToolbox {
 		}
 
 		/// <param name="fileType">The file type.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the available audio format types for the specified file type.</summary>
 		public static AudioFormatType []? GetAvailableFormats (AudioFileType fileType)
 		{
 			if (!TryGetGlobalInfoSize (AudioFileGlobalProperty.AvailableFormatIDs, fileType, out var size))
@@ -95,7 +95,7 @@ namespace AudioToolbox {
 
 		/// <param name="fileType">The file type.</param>
 		///         <param name="formatType">The format type.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the available stream descriptions for the specified file type and format.</summary>
 		public static AudioStreamBasicDescription []? GetAvailableStreamDescriptions (AudioFileType fileType, AudioFormatType formatType)
 		{
 			AudioFileTypeAndFormatID input;
@@ -111,7 +111,7 @@ namespace AudioToolbox {
 			return data;
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets all file extensions supported by the audio file system.</summary>
 		public static string? []? AllExtensions {
 			get {
 				if (!TryGetGlobalInfo (AudioFileGlobalProperty.AllExtensions, out var ptr))
@@ -121,7 +121,7 @@ namespace AudioToolbox {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets all UTIs supported by the audio file system.</summary>
 		public static string? []? AllUTIs {
 			get {
 				if (!TryGetGlobalInfo (AudioFileGlobalProperty.AllUTIs, out var ptr))
@@ -131,7 +131,7 @@ namespace AudioToolbox {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets all MIME types supported by the audio file system.</summary>
 		public static string? []? AllMIMETypes {
 			get {
 				if (!TryGetGlobalInfo (AudioFileGlobalProperty.AllMIMETypes, out var ptr))
@@ -162,7 +162,7 @@ namespace AudioToolbox {
 		*/
 
 		/// <param name="fileType">The file type.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the file extensions for the specified audio file type.</summary>
 		public static string? []? GetExtensions (AudioFileType fileType)
 		{
 			if (!TryGetGlobalInfo (AudioFileGlobalProperty.ExtensionsForType, fileType, out var ptr))
@@ -172,7 +172,7 @@ namespace AudioToolbox {
 		}
 
 		/// <param name="fileType">The file type.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the UTIs for the specified audio file type.</summary>
 		public static string? []? GetUTIs (AudioFileType fileType)
 		{
 			if (!TryGetGlobalInfo (AudioFileGlobalProperty.UTIsForType, fileType, out var ptr))
@@ -182,7 +182,7 @@ namespace AudioToolbox {
 		}
 
 		/// <param name="fileType">The file type.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the MIME types for the specified audio file type.</summary>
 		public static string? []? GetMIMETypes (AudioFileType fileType)
 		{
 			if (!TryGetGlobalInfo (AudioFileGlobalProperty.MIMETypesForType, fileType, out var ptr))

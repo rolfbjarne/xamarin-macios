@@ -30,8 +30,7 @@ namespace AppKit {
 	public partial class NSTreeController {
 
 		// note: if needed override the protected Get|Set methods
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the selection index path.</summary>
 		public NSIndexPath SelectionIndexPath {
 			get { return GetSelectionIndexPath (); }
 			// ignore return value (bool)
@@ -40,7 +39,6 @@ namespace AppKit {
 
 		// note: if needed override the protected Get|Set methods
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public NSIndexPath [] SelectionIndexPaths {
 			get { return GetSelectionIndexPaths (); }
 			// ignore return value (bool)

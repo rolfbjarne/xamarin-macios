@@ -37,20 +37,18 @@ namespace CoreGraphics {
 
 	// convenience enum mapped to kCGImagePropertyColorModelXXX fields (see imageio.cs)
 	/// <summary>An enumeration of valid color models.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum CGImageColorModel {
-		/// <summary>To be added.</summary>
+		/// <summary>R G B.</summary>
 		RGB,
-		/// <summary>To be added.</summary>
+		/// <summary>Gray.</summary>
 		Gray,
-		/// <summary>To be added.</summary>
+		/// <summary>C M Y K.</summary>
 		CMYK,
-		/// <summary>To be added.</summary>
+		/// <summary>Lab.</summary>
 		Lab,
 	}
 
 	/// <summary>Properties of bitmap images.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -58,23 +56,20 @@ namespace CoreGraphics {
 	public class CGImageProperties : DictionaryContainer {
 #if !COREBUILD
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a new CGImageProperties instance.</summary>
 		public CGImageProperties ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
-		/// <param name="dictionary">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="dictionary">The dictionary.</param>
+		/// <summary>Creates a CGImageProperties from a dictionary.</summary>
 		public CGImageProperties (NSDictionary? dictionary)
 			: base (dictionary)
 		{
 		}
 
 		/// <summary>Gets or sets whether an image has an alpha channel.</summary>
-		///         <remarks>To be added.</remarks>
 		public bool? Alpha {
 			get {
 				return GetBoolValue (Keys.HasAlpha);
@@ -85,7 +80,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>Gets or sets the color model for an image, as a <see cref="CoreGraphics.CGImageColorModel" /> object.</summary>
-		///         <remarks>To be added.</remarks>
 		public CGImageColorModel? ColorModel {
 			get {
 				var v = GetNSStringValue (Keys.ColorModel);
@@ -123,7 +117,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>Gets or sets the number of bits in the color sample of each pixel for an image.</summary>
-		///         <remarks>To be added.</remarks>
 		public int? Depth {
 			get {
 				return GetInt32Value (Keys.Depth);
@@ -134,7 +127,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>Gets or sets the resolution, in dots per inch, of an image for the x axis.</summary>
-		///         <remarks>To be added.</remarks>
 		public float? DPIHeightF {
 			get {
 				return GetFloatValue (Keys.DPIHeight);
@@ -145,7 +137,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>Gets or sets the resolution, in dots per inch, of an image for the y axis.</summary>
-		///         <remarks>To be added.</remarks>
 		public float? DPIWidthF {
 			get {
 				return GetFloatValue (Keys.DPIWidth);
@@ -156,7 +147,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>Gets or sets the size of the image file, in bytes.</summary>
-		///         <remarks>To be added.</remarks>
 		public int? FileSize {
 			get {
 				return GetInt32Value (Keys.FileSize);
@@ -167,7 +157,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>Gets or sets whether an image contains floating-point pixel samples.</summary>
-		///         <remarks>To be added.</remarks>
 		public bool? IsFloat {
 			get {
 				return GetBoolValue (Keys.IsFloat);
@@ -178,7 +167,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>Gets or sets whether an image contains indexed pixel samples.</summary>
-		///         <remarks>To be added.</remarks>
 		public bool? IsIndexed {
 			get {
 				return GetBoolValue (Keys.IsIndexed);
@@ -189,7 +177,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>Gets or sets the orientation of an image, as a <see cref="CoreImage.CIImageOrientation" /> object.</summary>
-		///         <remarks>To be added.</remarks>
 		public CIImageOrientation? Orientation {
 			get {
 				return (CIImageOrientation?) GetInt32Value (Keys.Orientation);
@@ -200,7 +187,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>Gets or sets the number of pixels in an image for the y axis.</summary>
-		///         <remarks>To be added.</remarks>
 		public int? PixelHeight {
 			get {
 				return GetInt32Value (Keys.PixelHeight);
@@ -211,7 +197,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>Gets or sets the number of pixels in an image for the x axis.</summary>
-		///         <remarks>To be added.</remarks>
 		public int? PixelWidth {
 			get {
 				return GetInt32Value (Keys.PixelWidth);
@@ -222,7 +207,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>Gets or sets name of the ICC profile for an image.</summary>
-		///         <remarks>To be added.</remarks>
 		public string? ProfileName {
 			get {
 				return GetStringValue (Keys.ProfileName);
@@ -232,8 +216,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the EXIF properties.</summary>
 		public CGImagePropertiesExif? Exif {
 			get {
 				var dict = GetNSDictionary (Keys.ExifDictionary);
@@ -241,8 +224,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the GPS properties.</summary>
 		public CGImagePropertiesGps? Gps {
 			get {
 				var dict = GetNSDictionary (Keys.GPSDictionary);
@@ -250,8 +232,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IPTC properties.</summary>
 		public CGImagePropertiesIptc? Iptc {
 			get {
 				var dict = GetNSDictionary (Keys.IPTCDictionary);
@@ -259,8 +240,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the PNG properties.</summary>
 		public CGImagePropertiesPng? Png {
 			get {
 				var dict = GetNSDictionary (Keys.PNGDictionary);
@@ -268,8 +248,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the JFIF properties.</summary>
 		public CGImagePropertiesJfif? Jfif {
 			get {
 				var dict = GetNSDictionary (Keys.JFIFDictionary);
@@ -277,8 +256,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TIFF properties.</summary>
 		public CGImagePropertiesTiff? Tiff {
 			get {
 				var dict = GetNSDictionary (Keys.TIFFDictionary);
@@ -291,7 +269,6 @@ namespace CoreGraphics {
 
 #if !COREBUILD
 	/// <summary>Standard Exif metadata of an image. </summary>
-	///     <remarks>To be added.</remarks>
 	///     <altmember cref="CoreGraphics.CGImageProperties" />
 	///     <altmember cref="CoreGraphics.CGImagePropertiesIptc" />
 	[SupportedOSPlatform ("ios")]
@@ -299,23 +276,20 @@ namespace CoreGraphics {
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public class CGImagePropertiesExif : DictionaryContainer {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a new CGImagePropertiesExif instance.</summary>
 		public CGImagePropertiesExif ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
-		/// <param name="dictionary">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="dictionary">The dictionary.</param>
+		/// <summary>Creates a CGImagePropertiesExif from a dictionary.</summary>
 		public CGImagePropertiesExif (NSDictionary dictionary)
 			: base (dictionary)
 		{
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the aperture.</summary>
 		public float? Aperture {
 			get {
 				return GetFloatValue (Keys.ExifApertureValue);
@@ -325,8 +299,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the brightness.</summary>
 		public float? Brightness {
 			get {
 				return GetFloatValue (Keys.ExifBrightnessValue);
@@ -336,8 +309,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the compressed bits per pixel.</summary>
 		public float? CompressedBitsPerPixel {
 			get {
 				return GetFloatValue (Keys.ExifCompressedBitsPerPixel);
@@ -347,8 +319,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the digital zoom ratio.</summary>
 		public float? DigitalZoomRatio {
 			get {
 				return GetFloatValue (Keys.ExifDigitalZoomRatio);
@@ -358,8 +329,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the exposure bias.</summary>
 		public float? ExposureBias {
 			get {
 				return GetFloatValue (Keys.ExifExposureBiasValue);
@@ -369,8 +339,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the exposure index.</summary>
 		public float? ExposureIndex {
 			get {
 				return GetFloatValue (Keys.ExifExposureIndex);
@@ -380,8 +349,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the exposure time.</summary>
 		public float? ExposureTime {
 			get {
 				return GetFloatValue (Keys.ExifExposureTime);
@@ -391,8 +359,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the exposure program.</summary>
 		public int? ExposureProgram {
 			get {
 				return GetInt32Value (Keys.ExifExposureProgram);
@@ -402,8 +369,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the flash.</summary>
 		public bool? Flash {
 			get {
 				return GetBoolValue (Keys.ExifFlash);
@@ -413,8 +379,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the flash energy.</summary>
 		public float? FlashEnergy {
 			get {
 				return GetFloatValue (Keys.ExifFlashEnergy);
@@ -424,8 +389,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the focal plane x resolution.</summary>
 		public float? FocalPlaneXResolution {
 			get {
 				return GetFloatValue (Keys.ExifFocalPlaneXResolution);
@@ -435,8 +399,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the focal plane y resolution.</summary>
 		public float? FocalPlaneYResolution {
 			get {
 				return GetFloatValue (Keys.ExifFocalPlaneYResolution);
@@ -446,8 +409,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the gain control.</summary>
 		public float? GainControl {
 			get {
 				return GetFloatValue (Keys.ExifGainControl);
@@ -457,16 +419,14 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the i s o speed ratings.</summary>
 		public int []? ISOSpeedRatings {
 			get {
 				return GetArray (Keys.ExifISOSpeedRatings, l => new NSNumber (l).Int32Value);
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the maximum lens aperture.</summary>
 		public float? MaximumLensAperture {
 			get {
 				return GetFloatValue (Keys.ExifMaxApertureValue);
@@ -476,8 +436,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the pixel x dimension.</summary>
 		public int? PixelXDimension {
 			get {
 				return GetInt32Value (Keys.ExifPixelXDimension);
@@ -487,8 +446,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the pixel y dimension.</summary>
 		public int? PixelYDimension {
 			get {
 				return GetInt32Value (Keys.ExifPixelYDimension);
@@ -498,8 +456,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the subject distance.</summary>
 		public float? SubjectDistance {
 			get {
 				return GetFloatValue (Keys.ExifSubjectDistance);
@@ -509,8 +466,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the shutter speed.</summary>
 		public float? ShutterSpeed {
 			get {
 				return GetFloatValue (Keys.ExifShutterSpeedValue);
@@ -524,30 +480,26 @@ namespace CoreGraphics {
 	}
 
 	/// <summary>Properties associated with TIFF images.</summary>
-	///     <remarks>To be added.</remarks>
 	///     <altmember cref="CoreGraphics.CGImageProperties" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public class CGImagePropertiesTiff : DictionaryContainer {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a new CGImagePropertiesTiff instance.</summary>
 		public CGImagePropertiesTiff ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
-		/// <param name="dictionary">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="dictionary">The dictionary.</param>
+		/// <summary>Creates a CGImagePropertiesTiff from a dictionary.</summary>
 		public CGImagePropertiesTiff (NSDictionary dictionary)
 			: base (dictionary)
 		{
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the orientation.</summary>
 		public CIImageOrientation? Orientation {
 			get {
 				return (CIImageOrientation?) GetInt32Value (Keys.TIFFOrientation);
@@ -557,8 +509,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the x resolution.</summary>
 		public int? XResolution {
 			get {
 				return GetInt32Value (Keys.TIFFXResolution);
@@ -568,8 +519,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the y resolution.</summary>
 		public int? YResolution {
 			get {
 				return GetInt32Value (Keys.TIFFYResolution);
@@ -579,8 +529,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the software.</summary>
 		public string? Software {
 			get {
 				return GetStringValue (Keys.TIFFSoftware);
@@ -594,30 +543,26 @@ namespace CoreGraphics {
 	}
 
 	/// <summary>Properties associated with JFIF bitmap images.</summary>
-	///     <remarks>To be added.</remarks>
 	///     <altmember cref="CoreGraphics.CGImageProperties" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public class CGImagePropertiesJfif : DictionaryContainer {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a new CGImagePropertiesJfif instance.</summary>
 		public CGImagePropertiesJfif ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
-		/// <param name="dictionary">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="dictionary">The dictionary.</param>
+		/// <summary>Creates a CGImagePropertiesJfif from a dictionary.</summary>
 		public CGImagePropertiesJfif (NSDictionary dictionary)
 			: base (dictionary)
 		{
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the x density.</summary>
 		public int? XDensity {
 			get {
 				return GetInt32Value (Keys.JFIFXDensity);
@@ -627,8 +572,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the y density.</summary>
 		public int? YDensity {
 			get {
 				return GetInt32Value (Keys.JFIFYDensity);
@@ -642,30 +586,26 @@ namespace CoreGraphics {
 	}
 
 	/// <summary>Properties associated with PNG bitmap images.</summary>
-	///     <remarks>To be added.</remarks>
 	///     <altmember cref="CoreGraphics.CGImageProperties" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public class CGImagePropertiesPng : DictionaryContainer {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a new CGImagePropertiesPng instance.</summary>
 		public CGImagePropertiesPng ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
-		/// <param name="dictionary">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="dictionary">The dictionary.</param>
+		/// <summary>Creates a CGImagePropertiesPng from a dictionary.</summary>
 		public CGImagePropertiesPng (NSDictionary dictionary)
 			: base (dictionary)
 		{
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the author.</summary>
 		public string? Author {
 			get {
 				return GetStringValue (Keys.PNGAuthor);
@@ -675,8 +615,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the description.</summary>
 		public string? Description {
 			get {
 				return GetStringValue (Keys.PNGDescription);
@@ -686,8 +625,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the gamma.</summary>
 		public float? Gamma {
 			get {
 				return GetFloatValue (Keys.PNGGamma);
@@ -697,8 +635,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the software.</summary>
 		public string? Software {
 			get {
 				return GetStringValue (Keys.PNGSoftware);
@@ -708,8 +645,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the x pixels per meter.</summary>
 		public int? XPixelsPerMeter {
 			get {
 				return GetInt32Value (Keys.PNGXPixelsPerMeter);
@@ -719,8 +655,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the y pixels per meter.</summary>
 		public int? YPixelsPerMeter {
 			get {
 				return GetInt32Value (Keys.PNGYPixelsPerMeter);
@@ -730,8 +665,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the title.</summary>
 		public string? Title {
 			get {
 				return GetStringValue (Keys.PNGTitle);
@@ -745,30 +679,26 @@ namespace CoreGraphics {
 	}
 
 	/// <summary>Location properties associated with an image.</summary>
-	///     <remarks>To be added.</remarks>
 	///     <altmember cref="CoreGraphics.CGImageProperties" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public class CGImagePropertiesGps : DictionaryContainer {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a new CGImagePropertiesGps instance.</summary>
 		public CGImagePropertiesGps ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
-		/// <param name="dictionary">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="dictionary">The dictionary.</param>
+		/// <summary>Creates a CGImagePropertiesGps from a dictionary.</summary>
 		public CGImagePropertiesGps (NSDictionary dictionary)
 			: base (dictionary)
 		{
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the altitude.</summary>
 		public int? Altitude {
 			get {
 				return GetInt32Value (Keys.GPSAltitude);
@@ -778,8 +708,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the latitude.</summary>
 		public float? Latitude {
 			get {
 				return GetFloatValue (Keys.GPSLatitude);
@@ -798,8 +727,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the longitude.</summary>
 		public float? Longitude {
 			get {
 				return GetFloatValue (Keys.GPSLongitude);
@@ -822,7 +750,6 @@ namespace CoreGraphics {
 	}
 
 	/// <summary>Properties with IPTC metadata in an image.</summary>
-	///     <remarks>To be added.</remarks>
 	///     <altmember cref="CoreGraphics.CGImageProperties" />
 	///     <altmember cref="CoreGraphics.CGImagePropertiesExif" />
 	[SupportedOSPlatform ("ios")]
@@ -830,23 +757,20 @@ namespace CoreGraphics {
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public class CGImagePropertiesIptc : DictionaryContainer {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a new CGImagePropertiesIptc instance.</summary>
 		public CGImagePropertiesIptc ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
-		/// <param name="dictionary">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="dictionary">The dictionary.</param>
+		/// <summary>Creates a CGImagePropertiesIptc from a dictionary.</summary>
 		public CGImagePropertiesIptc (NSDictionary dictionary)
 			: base (dictionary)
 		{
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the byline.</summary>
 		public string? Byline {
 			get {
 				return GetStringValue (Keys.IPTCByline);
@@ -856,8 +780,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the byline title.</summary>
 		public string? BylineTitle {
 			get {
 				return GetStringValue (Keys.IPTCBylineTitle);
@@ -867,8 +790,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the caption abstract.</summary>
 		public string? CaptionAbstract {
 			get {
 				return GetStringValue (Keys.IPTCCaptionAbstract);
@@ -878,8 +800,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the city.</summary>
 		public string? City {
 			get {
 				return GetStringValue (Keys.IPTCCity);
@@ -889,8 +810,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the content location name.</summary>
 		public string? ContentLocationName {
 			get {
 				return GetStringValue (Keys.IPTCContentLocationName);
@@ -900,8 +820,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the country primary location name.</summary>
 		public string? CountryPrimaryLocationName {
 			get {
 				return GetStringValue (Keys.IPTCCountryPrimaryLocationName);
@@ -911,8 +830,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the copyright notice.</summary>
 		public string? CopyrightNotice {
 			get {
 				return GetStringValue (Keys.IPTCCopyrightNotice);
@@ -922,8 +840,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the credit.</summary>
 		public string? Credit {
 			get {
 				return GetStringValue (Keys.IPTCCredit);
@@ -933,8 +850,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the source.</summary>
 		public string? Source {
 			get {
 				return GetStringValue (Keys.IPTCSource);
@@ -944,8 +860,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the writer editor.</summary>
 		public string? WriterEditor {
 			get {
 				return GetStringValue (Keys.IPTCWriterEditor);

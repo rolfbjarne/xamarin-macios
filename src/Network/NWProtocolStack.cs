@@ -31,7 +31,7 @@ namespace Network {
 		static extern void nw_protocol_stack_prepend_application_protocol (nw_protocol_stack_t stack, nw_protocol_options_t options);
 
 		/// <param name="options">The options to use.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Prepends application protocol.</summary>
 		public void PrependApplicationProtocol (NWProtocolOptions options)
 		{
 			if (options is null)
@@ -43,7 +43,7 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		static extern void nw_protocol_stack_clear_application_protocols (nw_protocol_stack_t stack);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Clears application protocols.</summary>
 		public void ClearApplicationProtocols ()
 		{
 			nw_protocol_stack_clear_application_protocols (GetCheckedHandle ());
@@ -84,7 +84,7 @@ namespace Network {
 		unsafe extern static void nw_protocol_stack_iterate_application_protocols (nw_protocol_stack_t stack, BlockLiteral* completion);
 
 		/// <param name="callback">The callback to invoke.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Iterates protocols.</summary>
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public void IterateProtocols (Action<NWProtocolOptions> callback)
 		{
@@ -101,8 +101,7 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		extern static void nw_protocol_stack_set_transport_protocol (nw_protocol_stack_t stack, IntPtr value);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the transport protocol.</summary>
 		public NWProtocolOptions? TransportProtocol {
 			get {
 				var pHandle = nw_protocol_stack_copy_transport_protocol (GetCheckedHandle ());
@@ -135,8 +134,7 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		extern static IntPtr nw_protocol_stack_copy_internet_protocol (nw_protocol_stack_t stack);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the internet protocol.</summary>
 		[SupportedOSPlatform ("tvos13.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios13.0")]

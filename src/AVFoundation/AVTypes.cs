@@ -977,7 +977,7 @@ namespace AVFoundation {
 		[DllImport (Constants.AVFoundationLibrary)]
 		static extern IntPtr /* CMSampleBufferRef */ AVCaptureTimecodeCreateMetadataSampleBufferAssociatedWithPresentationTimeStamp (AVCaptureTimecode timecode, CMTime presentationTimeStamp);
 
-		/// <summary>Creates a sample buffer containing timecode metadata associated with a presentation timestamp.</summary>
+		/// <summary>Creates a sample buffer containing timecode metadata associated with APresentation timestamp.</summary>
 		/// <param name="presentationTimeStamp">The presentation time stamp that determines when the metadata should be applied in the media timeline.</param>
 		/// <returns>A sample buffer with encoded timecode metadata for video synchronization, or <see langword="null" /> if creation fails.</returns>
 		/// <remarks>This method creates a <see cref="CMSampleBuffer" /> with metadata for integration with a video track at a specific moment in time.</remarks>

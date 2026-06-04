@@ -31,33 +31,28 @@ namespace AudioToolbox {
 			Dictionary = d;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the name.</summary>
 		public string? Name {
 			get { return Dictionary [NameKey]?.ToString (); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the m s b.</summary>
 		public int MSB {
 			get { return (Dictionary [MSBKey] as NSNumber)!.Int32Value; }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the l s b.</summary>
 		public int LSB {
 			get { return (Dictionary [LSBKey] as NSNumber)!.Int32Value; }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the program.</summary>
 		public int Program {
 			get { return (Dictionary [ProgramKey] as NSNumber)!.Int32Value; }
 		}
 
 		// some API likely wants the [CF|NS]Dictionary
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the dictionary.</summary>
 		public NSDictionary Dictionary { get; private set; }
 	}
 
@@ -76,8 +71,7 @@ namespace AudioToolbox {
 		unsafe extern static OSStatus CopyNameFromSoundBank (/* CFURLRef */ IntPtr inURL, /* CFStringRef */ IntPtr* outName);
 
 		/// <param name="url">The URL to use.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets name.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -106,7 +100,6 @@ namespace AudioToolbox {
 
 		/// <param name="url">The URL to use.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]

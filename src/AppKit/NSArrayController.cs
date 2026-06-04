@@ -46,7 +46,7 @@ namespace AppKit {
 		}
 
 		// note: if needed override the protected Get|Set methods
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets the currently selected objects.</summary>
 		public NSObject [] SelectedObjects {
 			get { return GetSelectedObjects (); }
 			// ignore return value (bool)

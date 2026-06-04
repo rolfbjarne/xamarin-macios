@@ -203,7 +203,7 @@ namespace AVKit {
 
 		/// <param name="pictureInPictureController">The picture in picture controller.</param>
 		/// <param name="completionHandler">The completion handler to call when the operation completes.</param>
-		/// <summary>Picture In Picture playback is about to stop. Called to give the app the opportunity to provide a playback user interface by passing <see langword="true" /> to <paramref name="completionHandler" />.</summary>
+		/// <summary>Picture In Picture playback is about to stop. Called to give the app the opportunity to provide APlayback user interface by passing <see langword="true" /> to <paramref name="completionHandler" />.</summary>
 		[Export ("pictureInPictureController:restoreUserInterfaceForPictureInPictureStopWithCompletionHandler:")]
 		void RestoreUserInterfaceForPictureInPicture (AVPictureInPictureController pictureInPictureController, Action<bool> completionHandler);
 	}
@@ -487,7 +487,7 @@ namespace AVKit {
 
 		/// <param name="playerViewController">The player view controller.</param>
 		/// <param name="completionHandler">The completion handler to call when the operation completes.</param>
-		/// <summary>Picture In Picture playback is about to stop. Called to give the app the opportunity to provide a playback user interface by passing <see langword="true" /> to <paramref name="completionHandler" />.</summary>
+		/// <summary>Picture In Picture playback is about to stop. Called to give the app the opportunity to provide APlayback user interface by passing <see langword="true" /> to <paramref name="completionHandler" />.</summary>
 		[TV (14, 0)]
 		[MacCatalyst (13, 1)]
 		[Export ("playerViewController:restoreUserInterfaceForPictureInPictureStopWithCompletionHandler:")]

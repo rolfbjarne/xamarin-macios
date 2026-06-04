@@ -38,7 +38,7 @@ namespace AppKit {
 		}
 
 		// note: if needed override the protected Get|Set methods
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets the selection index paths for the tree controller.</summary>
 		public NSIndexPath [] SelectionIndexPaths {
 			get { return GetSelectionIndexPaths (); }
 			// ignore return value (bool)

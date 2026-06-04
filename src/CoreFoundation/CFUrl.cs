@@ -66,7 +66,7 @@ namespace CoreFoundation {
 		}
 
 		/// <param name="filename">The filename.</param>
-		///         <summary>Creates a CFUrl from a pathname.</summary>
+		///         <summary>Creates a CFUrl from APathname.</summary>
 		static public CFUrl? FromFile (string filename)
 		{
 			if (filename is null)

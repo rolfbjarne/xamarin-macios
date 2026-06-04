@@ -48,7 +48,7 @@ namespace CloudKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets the notification IDs to mark as read.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
@@ -63,10 +63,9 @@ namespace CloudKit {
 		}
 	} /* class CKMarkNotificationsReadOperation */
 
-	/// <param name="notificationIDsMarkedRead">To be added.</param>
-	///     <param name="operationError">To be added.</param>
+	/// <param name="notificationIDsMarkedRead">The notification IDs that were marked as read.</param>
+	/// <param name="operationError">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 	///     <summary>Delegate for the <see cref="CloudKit.CKMarkNotificationsReadOperation.Completed" /> property.</summary>
-	///     <remarks>To be added.</remarks>
 	[EditorBrowsable (EditorBrowsableState.Never)]
 	public delegate void CKMarkNotificationsReadHandler (CKNotificationID [] notificationIDsMarkedRead, NSError operationError);
 }

@@ -102,23 +102,23 @@ namespace ContactsUI {
 	interface CNContactPickerDelegate {
 		/// <param name="picker">The picker.</param>
 		///         <param name="contact">The contact.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Called when the user selects a contact.</summary>
 		[Export ("contactPicker:didSelectContact:")]
 		void ContactSelected (CNContactPicker picker, CNContact contact);
 
 		/// <param name="picker">The picker.</param>
 		///         <param name="contactProperty">The contact property.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Called when the user selects a contact property.</summary>
 		[Export ("contactPicker:didSelectContactProperty:")]
 		void ContactPropertySelected (CNContactPicker picker, CNContactProperty contactProperty);
 
 		/// <param name="picker">The picker.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Called when the contact picker will close.</summary>
 		[Export ("contactPickerWillClose:")]
 		void WillClose (CNContactPicker picker);
 
 		/// <param name="picker">The picker.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Called when the contact picker did close.</summary>
 		[Export ("contactPickerDidClose:")]
 		void DidClose (CNContactPicker picker);
 	}

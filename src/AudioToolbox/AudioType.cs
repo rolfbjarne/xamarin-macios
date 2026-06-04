@@ -281,7 +281,7 @@ namespace AudioToolbox {
 		const int AudioUnitSampleFractionBits = 24;
 		const AudioFormatFlags AudioFormatFlagIsBigEndian = 0;
 
-		/// <summary>Developers should not use this deprecated field. Canonical is no longer encouraged, since fixed-point no longer provides a performance advantage over floating point. 'AudioFormatFlagsNativeFloatPacked' is preferred instead.</summary>
+		/// <summary>Developers should not use this deprecated field. Canonical is no longer encouraged, since fixed-point no longer provides APerformance advantage over floating point. 'AudioFormatFlagsNativeFloatPacked' is preferred instead.</summary>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -1834,7 +1834,7 @@ namespace AudioToolbox {
 		Hvxc = 9,
 	}
 
-	/// <summary>SMPTE-based time representation. SMPTE times are used to synchronize a point in the audio stream with some external event.</summary>
+	/// <summary>SMPTE-based time representation. SMPTE times are used to synchronize APoint in the audio stream with some external event.</summary>
 	///     <remarks>SMPTE stands for "Society of Motion Picture and Television Engineers"</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -2061,14 +2061,14 @@ namespace AudioToolbox {
 	/// <summary>This struct represents the native <see href="https://developer.apple.com/documentation/coreaudiotypes/audiobufferlist">AudioBufferList</see> struct.</summary>
 	/// <remarks>
 	///   <para>
-	///     Typically it's better to use the <see cref="AudioBuffers" /> class to wrap a pointer to a native AudioBufferList,
+	///     Typically it's better to use the <see cref="AudioBuffers" /> class to wrap APointer to a native AudioBufferList,
 	///     but some audio code needs to minimize memory allocations due to being executed in a realtime thread. In that case,
 	///     using this struct is better, because it's possible to use it without incurring any memory allocations.
 	///   </para>
 	///
 	///   <para>
-	///     Note that this struct should never be created in C#, the only valid way to use it is to cast a pointer (<see cref="IntPtr" />)
-	///     to a pointer of this struct:
+	///     Note that this struct should never be created in C#, the only valid way to use it is to cast APointer (<see cref="IntPtr" />)
+	///     to APointer of this struct:
 	///   </para>
 	///
 	///   <example>
@@ -2094,7 +2094,7 @@ namespace AudioToolbox {
 		/// <summary>Returns the number of audio buffers in this list.</summary>
 		public uint Count { get => mNumberOfBuffers; }
 
-		/// <summary>Return a pointer to the <see cref="AudioBuffer" /> at the specified index.</summary>
+		/// <summary>Return APointer to the <see cref="AudioBuffer" /> at the specified index.</summary>
 		/// <param name="index">The index of the <see cref="AudioBuffer" /> to retrieve.</param>
 		/// <returns>A pointer to the <see cref="AudioBuffer" /> at the specified index.</returns>
 		public AudioBuffer* GetBuffer (int index)

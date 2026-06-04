@@ -115,7 +115,7 @@ namespace PushKit {
 		/// <param name="registry">The registry.</param>
 		/// <param name="credentials">The credentials.</param>
 		/// <param name="type">The type.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Called when push credentials have been updated for the specified type.</summary>
 		[Abstract]
 		[Export ("pushRegistry:didUpdatePushCredentials:forType:"), EventArgs ("PKPushRegistryUpdated"), EventName ("CredentialsUpdated")]
 		void DidUpdatePushCredentials (PKPushRegistry registry, PKPushCredentials credentials, string type);
@@ -135,7 +135,7 @@ namespace PushKit {
 		/// <param name="payload">The payload.</param>
 		/// <param name="type">The type.</param>
 		/// <param name="completion">The completion.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Called when an incoming push notification is received, with a completion handler.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("pushRegistry:didReceiveIncomingPushWithPayload:forType:withCompletionHandler:")]
 		void DidReceiveIncomingPush (PKPushRegistry registry, PKPushPayload payload, string type, Action completion);
@@ -151,7 +151,7 @@ namespace PushKit {
 
 		/// <param name="registry">The registry.</param>
 		/// <param name="type">The type.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Called when the push token for the specified type has been invalidated.</summary>
 		[Export ("pushRegistry:didInvalidatePushTokenForType:"), EventArgs ("PKPushRegistryRecieved"), EventName ("PushTokenInvalidated")]
 		void DidInvalidatePushToken (PKPushRegistry registry, string type);
 	}

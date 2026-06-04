@@ -38,11 +38,11 @@ using System.Threading;
 namespace CoreFoundation {
 
 	/// <param name="data">The data to use.</param>
-	///     <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-	///     <summary>To be added.</summary>
+	/// <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
+	/// <summary>A handler invoked when a dispatch I/O operation completes.</summary>
 	public delegate void DispatchIOHandler (DispatchData? data, int error);
 
-	/// <summary>To be added.</summary>
+	/// <summary>Provides channel-based I/O operations using Grand Central Dispatch.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -91,8 +91,8 @@ namespace CoreFoundation {
 		/// <param name="fd">The fd.</param>
 		///         <param name="dispatchData">The dispatch data.</param>
 		///         <param name="dispatchQueue">The dispatch queue.</param>
-		///         <param name="handler">The completion handler to call when the operation completes.</param>
-		///         <summary>To be added.</summary>
+		/// <param name="handler">The completion handler to call when the operation completes.</param>
+		/// <summary>Writes the specified data to the file descriptor.</summary>
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public static void Write (int fd, DispatchData dispatchData, DispatchQueue dispatchQueue, DispatchIOHandler handler)
 		{

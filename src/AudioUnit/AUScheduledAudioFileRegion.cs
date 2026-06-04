@@ -14,14 +14,12 @@ using AudioToolbox;
 
 namespace AudioUnit {
 
-	/// <param name="audioFileRegion">To be added.</param>
-	///     <param name="status">To be added.</param>
+	/// <param name="audioFileRegion">The audio file region.</param>
+	///     <param name="status">The status.</param>
 	///     <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	public delegate void AUScheduledAudioFileRegionCompletionHandler (AUScheduledAudioFileRegion audioFileRegion, AudioUnitStatus status);
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -45,29 +43,23 @@ namespace AudioUnit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public AudioTimeStamp TimeStamp { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public AudioFile AudioFile { get; private set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public uint LoopCount { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public long StartFrame { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public uint FramesToPlay { get; set; }
 
-		/// <param name="audioFile">To be added.</param>
-		///         <param name="completionHandler">To be added.</param>
+		/// <param name="audioFile">The audio file.</param>
+		///         <param name="completionHandler">The completion handler to call when the operation completes.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public AUScheduledAudioFileRegion (AudioFile audioFile, AUScheduledAudioFileRegionCompletionHandler? completionHandler = null)
 		{
 			if (audioFile is null)

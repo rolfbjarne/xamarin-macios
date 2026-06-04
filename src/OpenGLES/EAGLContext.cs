@@ -3,21 +3,19 @@ using System.Runtime.CompilerServices;
 namespace OpenGLES {
 	public partial class EAGLContext {
 		/// <summary>To be added.</summary>
-		///     <remarks>To be added.</remarks>
 		public enum PresentationMode {
-			/// <summary>To be added.</summary>
+			/// <summary>Indicates at time.</summary>
 			AtTime = 0,
-			/// <summary>To be added.</summary>
+			/// <summary>Indicates after minimum duration.</summary>
 			AfterMinimumDuration = 1,
 		}
 
 		[DllImport (Constants.OpenGLESLibrary)]
 		unsafe extern static void EAGLGetVersion (nuint* major, nuint* minor);
 
-		/// <param name="major">To be added.</param>
-		/// <param name="minor">To be added.</param>
+		/// <param name="major">The major.</param>
+		/// <param name="minor">The minor.</param>
 		/// <summary>Writes the major and minor version numbers in the provided <see langword="out" /> parameters.</summary>
-		/// <remarks>To be added.</remarks>
 		public unsafe static void EAGLGetVersion (out nuint major, out nuint minor)
 		{
 			major = default;
@@ -26,8 +24,8 @@ namespace OpenGLES {
 				EAGLGetVersion (majorPtr, minorPtr);
 		}
 
-		/// <param name="target">To be added.</param>
-		/// <param name="presentationTime">To be added.</param>
+		/// <param name="target">The target.</param>
+		/// <param name="presentationTime">The presentation time.</param>
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
@@ -41,9 +39,9 @@ namespace OpenGLES {
 			return _PresentRenderbufferAtTime (target, presentationTime);
 		}
 
-		/// <param name="target">To be added.</param>
-		/// <param name="presentationTime">To be added.</param>
-		/// <param name="mode">To be added.</param>
+		/// <param name="target">The target.</param>
+		/// <param name="presentationTime">The presentation time.</param>
+		/// <param name="mode">The mode.</param>
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>

@@ -479,7 +479,7 @@ namespace AVKit {
 
 		/// <param name="playerViewController">The player view controller.</param>
 		/// <summary>App developers should return <see langword="true" /> to indicate that the player viewer should dismiss when Picture In Picture playback starts, or <see langword="false" /> to prevent this.</summary>
-		/// <returns>To be added.</returns>
+		/// <returns><see langword="true" /> if the player view controller should automatically dismiss; otherwise, <see langword="false" />.</returns>
 		[TV (14, 0)]
 		[MacCatalyst (13, 1)]
 		[Export ("playerViewControllerShouldAutomaticallyDismissAtPictureInPictureStart:")]

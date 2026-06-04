@@ -29,46 +29,46 @@ namespace GameController {
 	public struct GCExtendedGamepadSnapShotDataV100 {
 
 		// Standard information
-		/// <summary>To be added.</summary>
+		/// <summary>The snapshot data format version.</summary>
 		public ushort /* uint16_t */ Version; // 0x0100
-		/// <summary>To be added.</summary>
+		/// <summary>The size of the snapshot data structure.</summary>
 		public ushort /* uint16_t */ Size;    // sizeof(GCExtendedGamepadSnapShotDataV100) or larger
 
 		// Extended gamepad data
 		// Axes in the range [-1.0, 1.0]
-		/// <summary>To be added.</summary>
+		/// <summary>The directional pad X-axis value in the range [-1.0, 1.0].</summary>
 		public float /* float_t = float */ DPadX;
-		/// <summary>To be added.</summary>
+		/// <summary>The directional pad Y-axis value in the range [-1.0, 1.0].</summary>
 		public float /* float_t = float */ DPadY;
 
 		// Buttons in the range [0.0, 1.0]
-		/// <summary>To be added.</summary>
+		/// <summary>The A button pressure value in the range [0.0, 1.0].</summary>
 		public float /* float_t = float */ ButtonA;
-		/// <summary>To be added.</summary>
+		/// <summary>The B button pressure value in the range [0.0, 1.0].</summary>
 		public float /* float_t = float */ ButtonB;
-		/// <summary>To be added.</summary>
+		/// <summary>The X button pressure value in the range [0.0, 1.0].</summary>
 		public float /* float_t = float */ ButtonX;
-		/// <summary>To be added.</summary>
+		/// <summary>The Y button pressure value in the range [0.0, 1.0].</summary>
 		public float /* float_t = float */ ButtonY;
-		/// <summary>To be added.</summary>
+		/// <summary>The left shoulder button pressure value in the range [0.0, 1.0].</summary>
 		public float /* float_t = float */ LeftShoulder;
-		/// <summary>To be added.</summary>
+		/// <summary>The right shoulder button pressure value in the range [0.0, 1.0].</summary>
 		public float /* float_t = float */ RightShoulder;
 
 		// Axes in the range [-1.0, 1.0]
-		/// <summary>To be added.</summary>
+		/// <summary>The left thumbstick X-axis value in the range [-1.0, 1.0].</summary>
 		public float /* float_t = float */ LeftThumbstickX;
-		/// <summary>To be added.</summary>
+		/// <summary>The left thumbstick Y-axis value in the range [-1.0, 1.0].</summary>
 		public float /* float_t = float */ LeftThumbstickY;
-		/// <summary>To be added.</summary>
+		/// <summary>The right thumbstick X-axis value in the range [-1.0, 1.0].</summary>
 		public float /* float_t = float */ RightThumbstickX;
-		/// <summary>To be added.</summary>
+		/// <summary>The right thumbstick Y-axis value in the range [-1.0, 1.0].</summary>
 		public float /* float_t = float */ RightThumbstickY;
 
 		// Buttons in the range [0.0, 1.0]
-		/// <summary>To be added.</summary>
+		/// <summary>The left trigger pressure value in the range [0.0, 1.0].</summary>
 		public float /* float_t = float */ LeftTrigger;
-		/// <summary>To be added.</summary>
+		/// <summary>The right trigger pressure value in the range [0.0, 1.0].</summary>
 		public float /* float_t = float */ RightTrigger;
 
 		// radar: https://trello.com/c/7FoGTORD (GCExtendedGamepadSnapShotDataV100 struct size / alignment not backward compatible)
@@ -87,7 +87,7 @@ namespace GameController {
 		unsafe static extern /* NSData * __nullable */ IntPtr NSDataFromGCExtendedGamepadSnapShotDataV100 (
 			/* GCExtendedGamepadSnapShotDataV100 * __nullable */ GCExtendedGamepadSnapShotDataV100* snapshotData);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Converts this snapshot data to an NSData object.</summary>
 		public NSData? ToNSData ()
 		{
 			unsafe {
@@ -99,7 +99,7 @@ namespace GameController {
 		}
 	}
 
-	/// <summary>To be added.</summary>
+	/// <summary>Snapshot data for an extended gamepad controller.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
@@ -113,46 +113,46 @@ namespace GameController {
 	public struct GCExtendedGamepadSnapshotData {
 
 		// Standard information
-		/// <summary>To be added.</summary>
+		/// <summary>The snapshot data format version.</summary>
 		public ushort /* uint16_t */ Version;
-		/// <summary>To be added.</summary>
+		/// <summary>The size of the snapshot data structure.</summary>
 		public ushort /* uint16_t */ Size;
 
 		// Extended gamepad data
 		// Axes in the range [-1.0, 1.0]
-		/// <summary>To be added.</summary>
+		/// <summary>The directional pad X-axis value in the range [-1.0, 1.0].</summary>
 		public float /* float_t = float */ DPadX;
-		/// <summary>To be added.</summary>
+		/// <summary>The directional pad Y-axis value in the range [-1.0, 1.0].</summary>
 		public float /* float_t = float */ DPadY;
 
 		// Buttons in the range [0.0, 1.0]
-		/// <summary>To be added.</summary>
+		/// <summary>The A button pressure value in the range [0.0, 1.0].</summary>
 		public float /* float_t = float */ ButtonA;
-		/// <summary>To be added.</summary>
+		/// <summary>The B button pressure value in the range [0.0, 1.0].</summary>
 		public float /* float_t = float */ ButtonB;
-		/// <summary>To be added.</summary>
+		/// <summary>The X button pressure value in the range [0.0, 1.0].</summary>
 		public float /* float_t = float */ ButtonX;
-		/// <summary>To be added.</summary>
+		/// <summary>The Y button pressure value in the range [0.0, 1.0].</summary>
 		public float /* float_t = float */ ButtonY;
-		/// <summary>To be added.</summary>
+		/// <summary>The left shoulder button pressure value in the range [0.0, 1.0].</summary>
 		public float /* float_t = float */ LeftShoulder;
-		/// <summary>To be added.</summary>
+		/// <summary>The right shoulder button pressure value in the range [0.0, 1.0].</summary>
 		public float /* float_t = float */ RightShoulder;
 
 		// Axes in the range [-1.0, 1.0]
-		/// <summary>To be added.</summary>
+		/// <summary>The left thumbstick X-axis value in the range [-1.0, 1.0].</summary>
 		public float /* float_t = float */ LeftThumbstickX;
-		/// <summary>To be added.</summary>
+		/// <summary>The left thumbstick Y-axis value in the range [-1.0, 1.0].</summary>
 		public float /* float_t = float */ LeftThumbstickY;
-		/// <summary>To be added.</summary>
+		/// <summary>The right thumbstick X-axis value in the range [-1.0, 1.0].</summary>
 		public float /* float_t = float */ RightThumbstickX;
-		/// <summary>To be added.</summary>
+		/// <summary>The right thumbstick Y-axis value in the range [-1.0, 1.0].</summary>
 		public float /* float_t = float */ RightThumbstickY;
 
 		// Buttons in the range [0.0, 1.0]
-		/// <summary>To be added.</summary>
+		/// <summary>The left trigger pressure value in the range [0.0, 1.0].</summary>
 		public float /* float_t = float */ LeftTrigger;
-		/// <summary>To be added.</summary>
+		/// <summary>The right trigger pressure value in the range [0.0, 1.0].</summary>
 		public float /* float_t = float */ RightTrigger;
 
 		[SupportedOSPlatform ("ios")]
@@ -210,7 +210,7 @@ namespace GameController {
 			/* GCExtendedGamepadSnapshotData * __nullable */ GCExtendedGamepadSnapshotData_Blittable* snapshotData);
 #endif
 
-		/// <summary>To be added.</summary>
+		/// <summary>Converts this snapshot data to an NSData object.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -339,7 +339,7 @@ namespace GameController {
 
 		/// <param name="data">The data to use.</param>
 		/// <param name="snapshotData">The snapshot data.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Attempts to parse snapshot data from the specified NSData.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -362,7 +362,7 @@ namespace GameController {
 
 		/// <param name="data">The data to use.</param>
 		///         <param name="snapshotData">The snapshot data.</param>
-		///         <summary>To be added.</summary>
+	/// <summary>Attempts to parse snapshot data from the specified NSData.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]

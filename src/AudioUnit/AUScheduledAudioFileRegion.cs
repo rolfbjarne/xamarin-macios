@@ -16,10 +16,10 @@ namespace AudioUnit {
 
 	/// <param name="audioFileRegion">The audio file region.</param>
 	///     <param name="status">The status.</param>
-	///     <summary>To be added.</summary>
+	/// <summary>A handler that is called when a scheduled audio file region completes playback.</summary>
 	public delegate void AUScheduledAudioFileRegionCompletionHandler (AUScheduledAudioFileRegion audioFileRegion, AudioUnitStatus status);
 
-	/// <summary>To be added.</summary>
+	/// <summary>Represents a region of an audio file scheduled for playback.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

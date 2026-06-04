@@ -55,8 +55,7 @@ namespace GameController {
 		unsafe static extern /* NSData * __nullable */ IntPtr NSDataFromGCGamepadSnapShotDataV100 (
 			/* GCGamepadSnapShotDataV100 * __nullable */ GCGamepadSnapShotDataV100* snapshotData);
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Tos n s data.</summary>
 		public NSData? ToNSData ()
 		{
 			unsafe {
@@ -79,7 +78,6 @@ namespace GameController {
 		/// <param name="data">The data to use.</param>
 		///         <param name="snapshotData">The snapshot data.</param>
 		///         <summary>Attempts to map the data into <paramref name="snapshotData" />.</summary>
-		///         <returns>To be added.</returns>
 		public static bool TryGetSnapshotData (NSData? data, out GCGamepadSnapShotDataV100 snapshotData)
 		{
 			snapshotData = default;

@@ -33,7 +33,7 @@ namespace Security {
 		static extern void sec_protocol_options_set_local_identity (sec_protocol_options_t handle, sec_identity_t identity);
 
 		/// <param name="identity">The identity.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Sets local identity.</summary>
 		public void SetLocalIdentity (SecIdentity2 identity)
 		{
 			if (identity is null)
@@ -219,7 +219,7 @@ namespace Security {
 		static extern void sec_protocol_options_add_tls_application_protocol (sec_protocol_options_t handle, IntPtr applicationProtocol);
 
 		/// <param name="applicationProtocol">The application protocol.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Adds tls application protocol.</summary>
 		public void AddTlsApplicationProtocol (string applicationProtocol)
 		{
 			if (applicationProtocol is null)
@@ -232,7 +232,7 @@ namespace Security {
 		static extern void sec_protocol_options_set_tls_server_name (sec_protocol_options_t handle, IntPtr serverName);
 
 		/// <param name="serverName">The server name.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Sets tls server name.</summary>
 		public void SetTlsServerName (string serverName)
 		{
 			if (serverName is null)
@@ -295,56 +295,56 @@ namespace Security {
 		static extern void sec_protocol_options_set_tls_tickets_enabled (IntPtr handle, byte ticketsEnabled);
 
 		/// <param name="ticketsEnabled">The tickets enabled.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Sets tls tickets enabled.</summary>
 		public void SetTlsTicketsEnabled (bool ticketsEnabled) => sec_protocol_options_set_tls_tickets_enabled (GetCheckedHandle (), (byte) (ticketsEnabled ? 1 : 0));
 
 		[DllImport (Constants.SecurityLibrary)]
 		static extern void sec_protocol_options_set_tls_is_fallback_attempt (IntPtr handle, byte isFallbackAttempt);
 
 		/// <param name="isFallbackAttempt">The is fallback attempt.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Sets tls is fallback attempt.</summary>
 		public void SetTlsIsFallbackAttempt (bool isFallbackAttempt) => sec_protocol_options_set_tls_is_fallback_attempt (GetCheckedHandle (), (byte) (isFallbackAttempt ? 1 : 0));
 
 		[DllImport (Constants.SecurityLibrary)]
 		static extern void sec_protocol_options_set_tls_resumption_enabled (IntPtr handle, byte resumptionEnabled);
 
 		/// <param name="resumptionEnabled">The resumption enabled.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Sets tls resumption enabled.</summary>
 		public void SetTlsResumptionEnabled (bool resumptionEnabled) => sec_protocol_options_set_tls_resumption_enabled (GetCheckedHandle (), (byte) (resumptionEnabled ? 1 : 0));
 
 		[DllImport (Constants.SecurityLibrary)]
 		static extern void sec_protocol_options_set_tls_false_start_enabled (IntPtr handle, byte falseStartEnabled);
 
 		/// <param name="falseStartEnabled">The false start enabled.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Sets tls false start enabled.</summary>
 		public void SetTlsFalseStartEnabled (bool falseStartEnabled) => sec_protocol_options_set_tls_false_start_enabled (GetCheckedHandle (), (byte) (falseStartEnabled ? 1 : 0));
 
 		[DllImport (Constants.SecurityLibrary)]
 		static extern void sec_protocol_options_set_tls_ocsp_enabled (IntPtr handle, byte ocspEnabled);
 
 		/// <param name="ocspEnabled">The ocsp enabled.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Sets tls ocsp enabled.</summary>
 		public void SetTlsOcspEnabled (bool ocspEnabled) => sec_protocol_options_set_tls_ocsp_enabled (GetCheckedHandle (), (byte) (ocspEnabled ? 1 : 0));
 
 		[DllImport (Constants.SecurityLibrary)]
 		static extern void sec_protocol_options_set_tls_sct_enabled (IntPtr handle, byte sctEnabled);
 
 		/// <param name="sctEnabled">The sct enabled.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Sets tls sign certificate timestamp enabled.</summary>
 		public void SetTlsSignCertificateTimestampEnabled (bool sctEnabled) => sec_protocol_options_set_tls_sct_enabled (GetCheckedHandle (), (byte) (sctEnabled ? 1 : 0));
 
 		[DllImport (Constants.SecurityLibrary)]
 		static extern void sec_protocol_options_set_tls_renegotiation_enabled (IntPtr handle, byte renegotiationEnabled);
 
 		/// <param name="renegotiationEnabled">The renegotiation enabled.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Sets tls renegotiation enabled.</summary>
 		public void SetTlsRenegotiationEnabled (bool renegotiationEnabled) => sec_protocol_options_set_tls_renegotiation_enabled (GetCheckedHandle (), (byte) (renegotiationEnabled ? 1 : 0));
 
 		[DllImport (Constants.SecurityLibrary)]
 		static extern void sec_protocol_options_set_peer_authentication_required (IntPtr handle, byte peerAuthenticationRequired);
 
 		/// <param name="peerAuthenticationRequired">The peer authentication required.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Sets peer authentication required.</summary>
 		public void SetPeerAuthenticationRequired (bool peerAuthenticationRequired) => sec_protocol_options_set_peer_authentication_required (GetCheckedHandle (), (byte) (peerAuthenticationRequired ? 1 : 0));
 
 		[DllImport (Constants.SecurityLibrary)]
@@ -352,7 +352,7 @@ namespace Security {
 
 		/// <param name="keyUpdate">The key update.</param>
 		///         <param name="keyUpdateQueue">The key update queue.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Sets key update callback.</summary>
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public void SetKeyUpdateCallback (SecProtocolKeyUpdate keyUpdate, DispatchQueue keyUpdateQueue)
 		{

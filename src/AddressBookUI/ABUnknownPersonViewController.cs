@@ -32,7 +32,6 @@ namespace AddressBookUI {
 		}
 
 		/// <summary>Gets or sets the person.</summary>
-		///         <value>To be added.</value>
 		public ABPerson? Person { get; private set; }
 	}
 
@@ -117,7 +116,7 @@ namespace AddressBookUI {
 		}
 
 		/// <param name="e">The event arguments.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Raises the PersonCreated event.</summary>
 		protected internal virtual void OnPersonCreated (ABUnknownPersonCreatedEventArgs e)
 		{
 			var h = EnsureEventDelegate ().personCreated;

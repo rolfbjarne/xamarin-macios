@@ -589,13 +589,13 @@ namespace MapKit {
 		[Export ("convertRect:toRegionFromView:")]
 		MKCoordinateRegion ConvertRect (CGRect rect, [NullAllowed] UIView toRegionFromView);
 
-		/// <summary>Controls if the user can zoom in and out of the map using a pinch gesture.</summary>
+		/// <summary>Controls if the user can zoom in and out of the map using APinch gesture.</summary>
 		///         <value>Default is <see langword="true" />.</value>
 		///         <remarks>The default value of <see langword="true" /> allows zooming. This property only controls if the user can interactively zoom. It has no affect on zooming the map in code, which can be done by changing either the <see cref="MapKit.MKMapView.Region" /> or <see cref="MapKit.MKMapView.VisibleMapRect" /> properties.</remarks>
 		[Export ("zoomEnabled")]
 		bool ZoomEnabled { [Bind ("isZoomEnabled")] get; set; }
 
-		/// <summary>Control if the map can be scrolled with a pan gesture.</summary>
+		/// <summary>Control if the map can be scrolled with APan gesture.</summary>
 		///         <value>
 		///         </value>
 		///         <remarks>Only controls interactive scrolling. The region can be changed in code regardless of this property.</remarks>
@@ -1242,7 +1242,7 @@ namespace MapKit {
 	}
 
 	// This requires the AddressBook framework, which afaict isn't bound on Mac, tvOS and watchOS yet
-	/// <summary>Class that contains address data for a place mark.</summary>
+	/// <summary>Class that contains address data for APlace mark.</summary>
 	[NoMac]
 	[NoTV]
 	[MacCatalyst (13, 1)]

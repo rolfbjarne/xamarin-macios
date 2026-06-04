@@ -57,7 +57,7 @@ namespace Foundation {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Returns an enumerator that iterates through the bytes.</summary>
 		IEnumerator IEnumerable.GetEnumerator ()
 		{
 			IntPtr source = Bytes;

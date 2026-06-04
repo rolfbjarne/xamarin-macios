@@ -134,7 +134,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>Indicates that the CMTime value stored is invalid.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsInvalid {
 			get {
@@ -143,7 +142,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>Indicates if the CMTime is numeric.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsNumeric {
 			get {
@@ -153,7 +151,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>Indicates that the CMTime was rounded.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool HasBeenRounded {
 			get {
@@ -162,7 +159,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>Indicates that the CMTime is indefinite.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsIndefinite {
 			get {
@@ -171,7 +167,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>Indicates if the CMTime represents positive infinity.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsPositiveInfinity {
 			get {
@@ -180,7 +175,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>Indicates if the CMTime represents negative infinity.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsNegativeInfinity {
 			get {
@@ -192,7 +186,6 @@ namespace CoreMedia {
 		extern static CMTime CMTimeAbsoluteValue (CMTime time);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CMTime AbsoluteValue {
 			get {
@@ -206,7 +199,6 @@ namespace CoreMedia {
 		/// <param name="time1">To be added.</param>
 		///         <param name="time2">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static int Compare (CMTime time1, CMTime time2)
 		{
@@ -247,7 +239,6 @@ namespace CoreMedia {
 
 		/// <param name="obj">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override bool Equals (object? obj)
 		{
@@ -257,7 +248,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override int GetHashCode ()
 		{
@@ -270,7 +260,6 @@ namespace CoreMedia {
 		/// <param name="time1">To be added.</param>
 		///         <param name="time2">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static CMTime Add (CMTime time1, CMTime time2)
 		{
@@ -283,7 +272,6 @@ namespace CoreMedia {
 		/// <param name="minuend">To be added.</param>
 		///         <param name="subtraend">To be added.</param>
 		///         <summary>Substracts a CMTime from another CMTime.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static CMTime Subtract (CMTime minuend, CMTime subtraend)
 		{
@@ -296,7 +284,6 @@ namespace CoreMedia {
 		/// <param name="time">To be added.</param>
 		///         <param name="multiplier">To be added.</param>
 		///         <summary>Multiples a CMTime by an integer value.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static CMTime Multiply (CMTime time, int multiplier)
 		{
@@ -309,7 +296,6 @@ namespace CoreMedia {
 		/// <param name="time">To be added.</param>
 		///         <param name="multiplier">To be added.</param>
 		///         <summary>Multiples a CMTime by a double value.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static CMTime Multiply (CMTime time, double multiplier)
 		{
@@ -327,7 +313,6 @@ namespace CoreMedia {
 		///         <param name="multiplier">To be added.</param>
 		///         <param name="divisor">To be added.</param>
 		///         <summary>Multiples a CMTime by a fraction expressed as a multiplier and a divisor.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
@@ -364,7 +349,6 @@ namespace CoreMedia {
 		/// <param name="newScale">To be added.</param>
 		///         <param name="method">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CMTime ConvertScale (int newScale, CMTimeRoundingMethod method)
 		{
@@ -375,7 +359,6 @@ namespace CoreMedia {
 		extern static /* Float64 */ double CMTimeGetSeconds (CMTime time);
 
 		/// <summary>Number of seconds</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public double Seconds {
 			get {
@@ -403,7 +386,6 @@ namespace CoreMedia {
 		/// <param name="time1">To be added.</param>
 		///         <param name="time2">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static CMTime GetMaximum (CMTime time1, CMTime time2)
 		{
@@ -416,7 +398,6 @@ namespace CoreMedia {
 		/// <param name="time1">To be added.</param>
 		///         <param name="time2">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static CMTime GetMinimum (CMTime time1, CMTime time2)
 		{
@@ -433,7 +414,6 @@ namespace CoreMedia {
 		/// <param name="time">To be added.</param>
 		///         <param name="foldRange">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
@@ -471,7 +451,6 @@ namespace CoreMedia {
 		extern static /* CFDictionaryRef */ IntPtr CMTimeCopyAsDictionary (CMTime time, /* CFAllocatorRef */ IntPtr allocator);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public NSDictionary ToDictionary ()
 		{
@@ -482,7 +461,6 @@ namespace CoreMedia {
 		extern static /* CFStringRef */ IntPtr CMTimeCopyDescription (/* CFAllocatorRef */ IntPtr allocator, CMTime time);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Description {
 			get {
@@ -491,7 +469,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>Human readable description of the CMTime.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override string? ToString ()
 		{
@@ -503,7 +480,6 @@ namespace CoreMedia {
 
 		/// <param name="dict">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static CMTime FromDictionary (NSDictionary dict)
 		{

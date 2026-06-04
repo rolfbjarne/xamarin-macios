@@ -6,7 +6,6 @@ namespace MapKit {
 
 	public partial class MKMultiPoint {
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public unsafe MKMapPoint [] Points {
 			get {
 				var source = (MKMapPoint*) _Points;
@@ -22,7 +21,6 @@ namespace MapKit {
 		/// <param name="first">The first.</param>
 		///         <param name="count">The count.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public unsafe CLLocationCoordinate2D [] GetCoordinates (int first, int count)
 		{
 			var range = new NSRange (first, count);

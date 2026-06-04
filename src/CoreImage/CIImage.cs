@@ -87,7 +87,6 @@ namespace CoreImage {
 		public CIImageOrientation? ImageOrientation;
 
 		/// <summary>Whether or not to automatically crop the image.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -95,7 +94,6 @@ namespace CoreImage {
 		public bool? AutoAdjustCrop;
 
 		/// <summary>Gets or sets the automatic adjustment level.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -173,8 +171,6 @@ namespace CoreImage {
 		/// <param name="image">CoreGraphics image.</param>
 		///         <param name="colorSpace">Colorspace to use.</param>
 		///         <summary>Creates a <see cref="CoreImage.CIImage" /> in <paramref name="colorSpace" /> from a <see cref="CoreGraphics.CGImage" />.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CIImage FromCGImage (CGImage image, CGColorSpace colorSpace)
 		{
 			if (colorSpace is null)
@@ -259,8 +255,6 @@ namespace CoreImage {
 		/// <summary>Implicit constructor that wraps a CGImage as a CIImage.</summary>
 		/// <returns>
 		///         </returns>
-		/// <remarks>
-		///         </remarks>
 		public static implicit operator CIImage (CGImage image)
 		{
 			return FromCGImage (image);
@@ -278,41 +272,36 @@ namespace CoreImage {
 			return rv.Value;
 		}
 
-		/// <param name="bitmapData">To be added.</param>
-		/// <param name="bytesPerRow">To be added.</param>
-		/// <param name="size">To be added.</param>
-		/// <param name="pixelFormat">To be added.</param>
-		/// <param name="colorSpace">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="bitmapData">The bitmap data.</param>
+		/// <param name="bytesPerRow">The bytes per row.</param>
+		/// <param name="size">The size.</param>
+		/// <param name="pixelFormat">The pixel format.</param>
+		/// <param name="colorSpace">The color space.</param>
+		/// <summary>FromData.</summary>
 		public static CIImage FromData (NSData bitmapData, nint bytesPerRow, CGSize size, CIFormat pixelFormat, CGColorSpace colorSpace)
 		{
 			return FromData (bitmapData, bytesPerRow, size, CIImage.CIFormatToInt (pixelFormat), colorSpace);
 		}
 
-		/// <param name="provider">To be added.</param>
-		/// <param name="width">To be added.</param>
-		/// <param name="height">To be added.</param>
-		/// <param name="pixelFormat">To be added.</param>
-		/// <param name="colorSpace">To be added.</param>
-		/// <param name="options">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="provider">The provider.</param>
+		/// <param name="width">The width.</param>
+		/// <param name="height">The height.</param>
+		/// <param name="pixelFormat">The pixel format.</param>
+		/// <param name="colorSpace">The color space.</param>
+		/// <param name="options">The options.</param>
+		/// <summary>FromProvider.</summary>
 		public static CIImage FromProvider (ICIImageProvider provider, nuint width, nuint height, CIFormat pixelFormat, CGColorSpace colorSpace, CIImageProviderOptions options)
 		{
 			return FromProvider (provider, width, height, CIImage.CIFormatToInt (pixelFormat), colorSpace, options?.Dictionary);
 		}
 
-		/// <param name="provider">To be added.</param>
-		/// <param name="width">To be added.</param>
-		/// <param name="height">To be added.</param>
-		/// <param name="pixelFormat">To be added.</param>
-		/// <param name="colorSpace">To be added.</param>
-		/// <param name="options">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="provider">The provider.</param>
+		/// <param name="width">The width.</param>
+		/// <param name="height">The height.</param>
+		/// <param name="pixelFormat">The pixel format.</param>
+		/// <param name="colorSpace">The color space.</param>
+		/// <param name="options">The options.</param>
+		/// <summary>CIImage.</summary>
 		public CIImage (ICIImageProvider provider, nuint width, nuint height, CIFormat pixelFormat, CGColorSpace colorSpace, CIImageProviderOptions options)
 			: this (provider, width, height, CIImage.CIFormatToInt (pixelFormat), colorSpace, options?.Dictionary)
 		{

@@ -796,7 +796,7 @@ namespace AVKit {
 	[BaseType (typeof (NSView))]
 	interface AVCaptureView {
 		/// <param name="frameRect">The frame rect.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new capture view with the specified frame rectangle.</summary>
 		[Export ("initWithFrame:")]
 		NativeHandle Constructor (CGRect frameRect);
 

@@ -14,20 +14,16 @@ using ModelIO;
 
 namespace Metal {
 	/// <summary>The location of APixel in an image or texture.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public struct MTLOrigin {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The x.</summary>
 		public nint X;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The y.</summary>
 		public nint Y;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The z.</summary>
 		public nint Z;
 
 		public MTLOrigin (nint x, nint y, nint z)
@@ -37,8 +33,7 @@ namespace Metal {
 			Z = z;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns a string representation of this instance.</summary>
 		public override string ToString ()
 		{
 			return String.Format ("({0},{1},{2})", X, Y, Z);
@@ -46,20 +41,16 @@ namespace Metal {
 	}
 
 	/// <summary>The dimensions of a grid, image, texture, or threadgroup.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public struct MTLSize {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The width.</summary>
 		public nint Width;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The height.</summary>
 		public nint Height;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The depth.</summary>
 		public nint Depth;
 
 		public MTLSize (nint width, nint height, nint depth)
@@ -72,7 +63,6 @@ namespace Metal {
 
 #if !COREBUILD
 	/// <summary>Extension methods for <see cref="Metal.MTLVertexFormat" />.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -86,9 +76,8 @@ namespace Metal {
 		[DllImport (Constants.MetalKitLibrary)]
 		static extern /* MDLVertexFormat */ nuint MTKModelIOVertexFormatFromMetal (/* MTLVertexFormat */ nuint modelIODescriptor);
 
-		/// <param name="vertexFormat">To be added.</param>
+		/// <param name="vertexFormat">The target vertex format.</param>
 		///         <summary>Converts from the current to the desired <paramref name="vertexFormat" />.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -102,23 +91,18 @@ namespace Metal {
 #endif
 
 	/// <summary>The retangle used for the scissor fragment test.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public struct MTLScissorRect {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The x.</summary>
 		public nuint X;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The y.</summary>
 		public nuint Y;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The width.</summary>
 		public nuint Width;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The height.</summary>
 		public nuint Height;
 
 		public MTLScissorRect (nuint x, nuint y, nuint width, nuint height)
@@ -129,8 +113,7 @@ namespace Metal {
 			Height = height;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns a string representation of this instance.</summary>
 		public override string ToString ()
 		{
 			return String.Format ("({0},{1},{2},{3}", X, Y, Width, Height);
@@ -138,39 +121,31 @@ namespace Metal {
 	}
 
 	/// <summary>Defines the clipping viewport.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public struct MTLViewport {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The origin x.</summary>
 		public double OriginX;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The origin y.</summary>
 		public double OriginY;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The width.</summary>
 		public double Width;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The height.</summary>
 		public double Height;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The z near.</summary>
 		public double ZNear;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The z far.</summary>
 		public double ZFar;
 
-		/// <param name="originX">To be added.</param>
-		///         <param name="originY">To be added.</param>
-		///         <param name="width">To be added.</param>
-		///         <param name="height">To be added.</param>
-		///         <param name="znear">To be added.</param>
-		///         <param name="zfar">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="originX">The x origin.</param>
+		/// <param name="originY">The y origin.</param>
+		/// <param name="width">The width.</param>
+		/// <param name="height">The height.</param>
+		/// <param name="znear">The near depth value.</param>
+		/// <param name="zfar">The far depth value.</param>
+		/// <summary>Creates a viewport with the specified dimensions.</summary>
 		public MTLViewport (double originX, double originY, double width, double height, double znear, double zfar)
 		{
 			OriginX = originX;
@@ -181,8 +156,7 @@ namespace Metal {
 			ZFar = zfar;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns a string representation of this instance.</summary>
 		public override string ToString ()
 		{
 			return String.Format ("({0},{1},{2},{3} Znear={4} Zfar={5})", OriginX, OriginY, Width, Height, ZNear, ZFar);
@@ -190,7 +164,6 @@ namespace Metal {
 	}
 
 	/// <summary>A sample position.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -198,17 +171,14 @@ namespace Metal {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct MTLSamplePosition {
 		/// <summary>The X value, in the range [0.0, 1.0).</summary>
-		///         <remarks>To be added.</remarks>
 		public float X;
 
 		/// <summary>The Y value, in the range [0.0, 1.0).</summary>
-		///         <remarks>To be added.</remarks>
 		public float Y;
 
-		/// <param name="x">To be added.</param>
-		///         <param name="y">To be added.</param>
+		/// <param name="x">The x coordinate.</param>
+		/// <param name="y">The y coordinate.</param>
 		///         <summary>Creates a new normalized sample position.</summary>
-		///         <remarks>To be added.</remarks>
 		public MTLSamplePosition (float x, float y)
 		{
 			this.X = x;
@@ -217,31 +187,25 @@ namespace Metal {
 	}
 
 	/// <summary>An RGBA color representing a clear pixel.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public struct MTLClearColor {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The red.</summary>
 		public double Red;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The green.</summary>
 		public double Green;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The blue.</summary>
 		public double Blue;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The alpha.</summary>
 		public double Alpha;
 
-		/// <param name="red">To be added.</param>
-		///         <param name="green">To be added.</param>
-		///         <param name="blue">To be added.</param>
-		///         <param name="alpha">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="red">The red component.</param>
+		/// <param name="green">The green component.</param>
+		/// <param name="blue">The blue component.</param>
+		/// <param name="alpha">The alpha component.</param>
+		/// <summary>Creates a clear color with the specified RGBA values.</summary>
 		public MTLClearColor (double red, double green, double blue, double alpha)
 		{
 			Red = red;
@@ -252,23 +216,19 @@ namespace Metal {
 	}
 
 	/// <summary>A rectangle of pixels in an image or texture.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public struct MTLRegion {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The origin of the region.</summary>
 		public MTLOrigin Origin;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The size of the region.</summary>
 		public MTLSize Size;
 
-		/// <param name="origin">To be added.</param>
-		///         <param name="size">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="origin">The origin.</param>
+		/// <param name="size">The size.</param>
+		/// <summary>Creates a region with the specified origin and size.</summary>
 		public MTLRegion (MTLOrigin origin, MTLSize size)
 		{
 			Origin = origin;
@@ -328,29 +288,24 @@ namespace Metal {
 	}
 
 	/// <summary>Struct that contains values that are used to clear various buffers and stencils.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	[StructLayout (LayoutKind.Explicit)]
 	public struct MTLClearValue {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The clear color value.</summary>
 		[FieldOffset (0)]
 		public MTLClearColor Color;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The depth.</summary>
 		[FieldOffset (0)]
 		public double Depth;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The stencil clear value.</summary>
 		[FieldOffset (0)]
 		public ulong Stencil;
 
-		/// <param name="color">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="color">The color.</param>
+		/// <summary>Creates a clear value with the specified color.</summary>
 		public MTLClearValue (MTLClearColor color)
 		{
 			Depth = 0;
@@ -358,9 +313,8 @@ namespace Metal {
 			Color = color;
 		}
 
-		/// <param name="depth">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="depth">The depth.</param>
+		/// <summary>Creates a clear value with the specified depth.</summary>
 		public MTLClearValue (double depth)
 		{
 			Color.Red = 0;
@@ -372,9 +326,8 @@ namespace Metal {
 			Color.Alpha = 0;
 		}
 
-		/// <param name="stencil">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="stencil">The stencil.</param>
+		/// <summary>Creates a clear value with the specified stencil.</summary>
 		public MTLClearValue (ulong stencil)
 		{
 			Color.Red = 0;
@@ -388,110 +341,85 @@ namespace Metal {
 	}
 
 	/// <summary>Represents the number of threadgroups in each grid dimension for indirectly dispatched threadgroups.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public struct MTLDispatchThreadgroupsIndirectArguments {
 		/// <summary>Gets the threadgrops for the first dimension of the grid.</summary>
-		///         <remarks>To be added.</remarks>
 		public uint ThreadGroupsPerGrid1;
 		/// <summary>Gets the threadgrops for the second dimension of the grid.</summary>
-		///         <remarks>To be added.</remarks>
 		public uint ThreadGroupsPerGrid2;
 		/// <summary>Gets the threadgrops for the third dimension of the grid.</summary>
-		///         <remarks>To be added.</remarks>
 		public uint ThreadGroupsPerGrid3;
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Represents a Metal stage in region indirect arguments.</summary>
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct MTLStageInRegionIndirectArguments {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The stage in origin1.</summary>
 		public uint StageInOrigin1;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The stage in origin2.</summary>
 		public uint StageInOrigin2;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The stage in origin3.</summary>
 		public uint StageInOrigin3;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The stage in size1.</summary>
 		public uint StageInSize1;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The stage in size2.</summary>
 		public uint StageInSize2;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The stage in size3.</summary>
 		public uint StageInSize3;
 	}
 
 	/// <summary>Represents the data layout needed to draw primitives.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public struct MTLDrawPrimitivesIndirectArguments {
 		/// <summary>The number of vertices.</summary>
-		///         <remarks>To be added.</remarks>
 		public uint VertexCount;
 		/// <summary>The number instances.</summary>
-		///         <remarks>To be added.</remarks>
 		public uint InstanceCount;
 		/// <summary>The first vertex.</summary>
-		///         <remarks>To be added.</remarks>
 		public uint VertexStart;
 		/// <summary>The first primitive.</summary>
-		///         <remarks>To be added.</remarks>
 		public uint BaseInstance;
 	}
 
 	/// <summary>Represents the data layout needed to draw indexed primitives.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public struct MTLDrawIndexedPrimitivesIndirectArguments {
 		/// <summary>The number of indices to read from the index buffer for each instance.</summary>
-		///         <remarks>To be added.</remarks>
 		public uint IndexCount;
 		/// <summary>The number of instances.</summary>
-		///         <remarks>To be added.</remarks>
 		public uint InstanceCount;
 		/// <summary>The first index.</summary>
-		///         <remarks>To be added.</remarks>
 		public uint IndexStart;
 		/// <summary>The first vertex.</summary>
-		///         <remarks>To be added.</remarks>
 		public uint BaseVertex;
 		/// <summary>The first primitive.</summary>
-		///         <remarks>To be added.</remarks>
 		public uint BaseInstance;
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Represents a Metal size and align.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct MTLSizeAndAlign {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The size.</summary>
 		public nuint Size;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The align.</summary>
 		public nuint Align;
 
 		public MTLSizeAndAlign (nuint size, nuint align)
@@ -502,33 +430,27 @@ namespace Metal {
 
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Represents a Metal draw patch indirect arguments.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct MTLDrawPatchIndirectArguments {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The patch count.</summary>
 		public uint PatchCount;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The instance count.</summary>
 		public uint InstanceCount;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The patch start.</summary>
 		public uint PatchStart;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The base instance.</summary>
 		public uint BaseInstance;
 
-		/// <param name="pathCount">To be added.</param>
-		///         <param name="instanceCount">To be added.</param>
-		///         <param name="patchStart">To be added.</param>
-		///         <param name="baseInstance">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="pathCount">The pathCount.</param>
+		/// <param name="instanceCount">The instanceCount.</param>
+		/// <param name="patchStart">The patchStart.</param>
+		/// <param name="baseInstance">The baseInstance.</param>
+		/// <summary>Creates draw patch indirect arguments.</summary>
 		public MTLDrawPatchIndirectArguments (uint pathCount, uint instanceCount, uint patchStart, uint baseInstance)
 		{
 			PatchCount = pathCount;
@@ -539,8 +461,7 @@ namespace Metal {
 
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Represents a Metal quad tessellation factors half.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
@@ -579,20 +500,17 @@ namespace Metal {
 			}
 		}
 #else
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The edge tessellation factors.</summary>
 		[MarshalAs (UnmanagedType.ByValArray, SizeConst = 4)]
 		public ushort [] EdgeTessellationFactor;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The inside tessellation factors.</summary>
 		[MarshalAs (UnmanagedType.ByValArray, SizeConst = 2)]
 		public ushort [] InsideTessellationFactor;
 #endif
 
-		/// <param name="edgeTessellationFactor">To be added.</param>
-		///         <param name="insideTessellationFactor">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="edgeTessellationFactor">The edgeTessellationFactor.</param>
+		/// <param name="insideTessellationFactor">The insideTessellationFactor.</param>
+		/// <summary>Creates quad tessellation factors with the specified values.</summary>
 		public MTLQuadTessellationFactorsHalf (ushort [] edgeTessellationFactor, ushort [] insideTessellationFactor)
 		{
 			if (edgeTessellationFactor.Length > 4)
@@ -615,8 +533,7 @@ namespace Metal {
 
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Represents a Metal triangle tessellation factors half.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
@@ -639,19 +556,16 @@ namespace Metal {
 			}
 		}
 #else
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The edge tessellation factors.</summary>
 		[MarshalAs (UnmanagedType.ByValArray, SizeConst = 3)]
 		public ushort [] EdgeTessellationFactor;
 #endif
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The inside tessellation factor.</summary>
 		public ushort InsideTessellationFactor;
 
-		/// <param name="edgeTessellationFactor">To be added.</param>
-		///         <param name="insideTessellationFactor">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="edgeTessellationFactor">The edgeTessellationFactor.</param>
+		/// <param name="insideTessellationFactor">The insideTessellationFactor.</param>
+		/// <summary>Creates triangle tessellation factors with the specified values.</summary>
 		public MTLTriangleTessellationFactorsHalf (ushort [] edgeTessellationFactor, ushort insideTessellationFactor)
 		{
 			if (edgeTessellationFactor.Length > 3)

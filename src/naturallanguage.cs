@@ -169,7 +169,7 @@ namespace NaturalLanguage {
 		[Export ("configuration", ArgumentSemantic.Copy)]
 		NLModelConfiguration Configuration { get; }
 
-		/// <param name="string">The string for which to get a prediction.</param>
+		/// <param name="string">The string for which to get APrediction.</param>
 		///         <summary>Returns the prediction for the string.</summary>
 		///         <returns>The prediction for the string.</returns>
 		///         <remarks>To be added.</remarks>
@@ -177,7 +177,7 @@ namespace NaturalLanguage {
 		[return: NullAllowed]
 		string GetPredictedLabel (string @string);
 
-		/// <param name="tokens">The strings for which to get a prediction.</param>
+		/// <param name="tokens">The strings for which to get APrediction.</param>
 		///         <summary>Returns the prediction for the strings.</summary>
 		///         <returns>The prediction for the strings.</returns>
 		///         <remarks>To be added.</remarks>

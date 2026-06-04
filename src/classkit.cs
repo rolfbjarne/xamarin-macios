@@ -407,7 +407,6 @@ namespace ClassKit {
 			<param name="identifierPath">The identifier path for the context to retrieve.</param>
 			<summary>Returns a task that contains the context that is represented by the provided identifier path.</summary>
 			<returns>A task that contains the context that is represented by the provided identifier path.</returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Export ("descendantMatchingIdentifierPath:completion:")]
 		void FindDescendantMatching (string [] identifierPath, Action<CLSContext, NSError> completion);

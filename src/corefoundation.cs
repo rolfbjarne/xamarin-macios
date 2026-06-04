@@ -80,8 +80,8 @@ namespace CoreFoundation {
 	[Partial]
 	interface CFNetwork {
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the error domain for CFNetwork errors.</summary>
+		/// <value>The <see cref="T:Foundation.NSString" /> representing the CFNetwork error domain.</value>
 		[Field ("kCFErrorDomainCFNetwork", "CFNetwork")]
 		NSString ErrorDomain { get; }
 	}

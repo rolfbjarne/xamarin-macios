@@ -10,8 +10,7 @@ namespace Intents {
 		/// <param name="profileNumber">The profile number.</param>
 		///         <param name="profileLabel">The profile label.</param>
 		///         <param name="defaultProfile">The default profile.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a new intent to set a profile in a car.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[ObsoletedOSPlatform ("ios12.0", "Use the overload that takes 'INSpeakableString carName'.")]

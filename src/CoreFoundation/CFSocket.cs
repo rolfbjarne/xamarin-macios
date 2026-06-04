@@ -100,7 +100,7 @@ namespace CoreFoundation {
 			this.handle = handle;
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Returns a string representation of this socket.</summary>
 		public override string ToString ()
 		{
 			return string.Format ("[CFSocketNativeHandle {0}]", handle);

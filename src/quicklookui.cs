@@ -42,23 +42,23 @@ namespace QuickLookUI {
 	interface QLPreviewPanelDelegate : NSWindowDelegate {
 		/// <param name="panel">The panel.</param>
 		/// <param name="theEvent">The the event.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Called to determine whether the delegate handles the specified event.</summary>
+		/// <returns><see langword="true" /> if the event was handled; otherwise, <see langword="false" />.</returns>
 		[Export ("previewPanel:handleEvent:")]
 		bool HandleEvent (QLPreviewPanel panel, NSEvent theEvent);
 
 		/// <param name="panel">The panel.</param>
 		/// <param name="item">The item.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Returns the source frame on screen for the specified preview item.</summary>
+		/// <returns>The source frame rectangle on screen.</returns>
 		[Export ("previewPanel:sourceFrameOnScreenForPreviewItem:")]
 		CGRect SourceFrameOnScreenForPreviewItem (QLPreviewPanel panel, IQLPreviewItem item);
 
 		/// <param name="panel">The panel.</param>
 		/// <param name="item">The item.</param>
 		/// <param name="contentRect">The content rect.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Returns the transition image for the specified preview item.</summary>
+		/// <returns>The transition image.</returns>
 		[Export ("previewPanel:transitionImageForPreviewItem:contentRect:")]
 		NSObject TransitionImageForPreviewItem (QLPreviewPanel panel, IQLPreviewItem item, CGRect contentRect);
 	}

@@ -13,50 +13,50 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSPrintRenderingQuality : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates best.</summary>
 		Best,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates responsive.</summary>
 		Responsive,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSCorrectionIndicatorType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates default.</summary>
 		Default = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates reversion.</summary>
 		Reversion,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates guesses.</summary>
 		Guesses,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSCorrectionResponse : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates accepted.</summary>
 		Accepted,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates rejected.</summary>
 		Rejected,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates ignored.</summary>
 		Ignored,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates edited.</summary>
 		Edited,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates reverted.</summary>
 		Reverted,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSTextFinderMatchingType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates contains.</summary>
 		Contains = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates starts with.</summary>
 		StartsWith = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates full word.</summary>
 		FullWord = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates ends with.</summary>
 		EndsWith = 3,
 	}
 
@@ -86,11 +86,11 @@ namespace AppKit {
 	[Flags]
 	[Native]
 	public enum NSSpellingState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0x0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates spelling.</summary>
 		Spelling = 0x1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates grammar.</summary>
 		Grammar = 0x2,
 	}
 }

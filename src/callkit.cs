@@ -45,7 +45,7 @@ namespace CallKit {
 	public enum CXErrorCodeIncomingCallError : long {
 		/// <summary>An unknown error occurred.</summary>
 		Unknown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unentitled.</summary>
 		Unentitled = 1,
 		/// <summary>The UUID for the call already exists.</summary>
 		CallUuidAlreadyExists = 2,
@@ -66,7 +66,7 @@ namespace CallKit {
 	public enum CXErrorCodeRequestTransactionError : long {
 		/// <summary>An unknown error occurred.</summary>
 		Unknown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unentitled.</summary>
 		Unentitled = 1,
 		/// <summary>The call provider was unknown.</summary>
 		UnknownCallProvider = 2,
@@ -74,7 +74,7 @@ namespace CallKit {
 		EmptyTransaction = 3,
 		/// <summary>The call UUID was unknown.</summary>
 		UnknownCallUuid = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates call uuid already exists.</summary>
 		CallUuidAlreadyExists = 5,
 		/// <summary>The action was invalid.</summary>
 		InvalidAction = 6,
@@ -95,17 +95,17 @@ namespace CallKit {
 		NoExtensionFound = 1,
 		/// <summary>The loading of the directory extension was interrupted.</summary>
 		LoadingInterrupted = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates entries out of order.</summary>
 		EntriesOutOfOrder = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates duplicate entries.</summary>
 		DuplicateEntries = 4,
 		/// <summary>The maximum number of directory entries was exceeded.</summary>
 		MaximumEntriesExceeded = 5,
 		/// <summary>The directory extension was disabled.</summary>
 		ExtensionDisabled = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates currently loading.</summary>
 		CurrentlyLoading = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unexpected incremental removal.</summary>
 		UnexpectedIncrementalRemoval = 8,
 	}
 
@@ -143,9 +143,9 @@ namespace CallKit {
 		RemoteEnded = 2,
 		/// <summary>The call went unanswered.</summary>
 		Unanswered = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates answered elsewhere.</summary>
 		AnsweredElsewhere = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates declined elsewhere.</summary>
 		DeclinedElsewhere = 5,
 	}
 
@@ -204,7 +204,6 @@ namespace CallKit {
 
 		/// <summary>Gets or sets a value that tells whether the action has already completed.</summary>
 		///         <value>A value that tells whether the action has already completed.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("complete", ArgumentSemantic.Assign)]
 		bool Complete { [Bind ("isComplete")] get; }
 
@@ -250,13 +249,11 @@ namespace CallKit {
 
 		/// <summary>Gets a <see langword="bool" /> that tells whether the call is an outgoing call.</summary>
 		///         <value>A <see langword="bool" /> that tells whether the call is an outgoing call.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("outgoing")]
 		bool Outgoing { [Bind ("isOutgoing")] get; }
 
 		/// <summary>Gets a <see langword="bool" /> that tells whether the call is on hold.</summary>
 		///         <value>A <see langword="bool" /> that tells whether the call is on hold.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("onHold")]
 		bool OnHold { [Bind ("isOnHold")] get; }
 
@@ -366,7 +363,6 @@ namespace CallKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("incremental")]
 		bool Incremental { [Bind ("isIncremental")] get; }
@@ -398,10 +394,9 @@ namespace CallKit {
 	[BaseType (typeof (NSObject))]
 	interface CXCallDirectoryExtensionContextDelegate {
 
-		/// <param name="extensionContext">To be added.</param>
-		/// <param name="error">To be added.</param>
+		/// <param name="extensionContext">The extension context.</param>
+		/// <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("requestFailedForExtensionContext:withError:")]
 		void RequestFailed (CXCallDirectoryExtensionContext extensionContext, NSError error);
@@ -470,7 +465,6 @@ namespace CallKit {
 		/// <param name="callObserver">The object on which this method operates.</param>
 		/// <param name="call">The new call.</param>
 		/// <summary>Method that is called when the call changes.</summary>
-		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("callObserver:callChanged:")]
 		void CallChanged (CXCallObserver callObserver, CXCall call);
@@ -570,14 +564,12 @@ namespace CallKit {
 
 		/// <param name="provider">The provider to which the provider delegate belongs.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("providerDidReset:")]
 		void DidReset (CXProvider provider);
 
 		/// <param name="provider">The provider to which the provider delegate belongs.</param>
 		/// <summary>The system began a call for the app.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("providerDidBegin:")]
 		void DidBegin (CXProvider provider);
 
@@ -586,28 +578,24 @@ namespace CallKit {
 		/// <summary>Atomically runs the actions that are contained in the <paramref name="transaction" />.</summary>
 		/// <returns>
 		///           <see langword="true" /> if the transaction succeeded. Otherwise, <see langword="false" />.</returns>
-		/// <remarks>To be added.</remarks>
 		[Export ("provider:executeTransaction:")]
 		bool ExecuteTransaction (CXProvider provider, CXTransaction transaction);
 
 		/// <param name="provider">The provider to which the provider delegate belongs.</param>
 		/// <param name="action">The start call action to perform.</param>
 		/// <summary>Performs a start call action.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("provider:performStartCallAction:")]
 		void PerformStartCallAction (CXProvider provider, CXStartCallAction action);
 
 		/// <param name="provider">The provider to which the provider delegate belongs.</param>
 		/// <param name="action">The answer call action to perform.</param>
 		/// <summary>Performs an answer call action.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("provider:performAnswerCallAction:")]
 		void PerformAnswerCallAction (CXProvider provider, CXAnswerCallAction action);
 
 		/// <param name="provider">The provider to which the provider delegate belongs.</param>
 		/// <param name="action">The end call action to perform.</param>
 		/// <summary>Performs an end call action.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("provider:performEndCallAction:")]
 		void PerformEndCallAction (CXProvider provider, CXEndCallAction action);
 
@@ -635,22 +623,19 @@ namespace CallKit {
 		/// <param name="provider">The provider to which the provider delegate belongs.</param>
 		/// <param name="action">The DTMF play call action to perform.</param>
 		/// <summary>Performs a DTMF play call action.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("provider:performPlayDTMFCallAction:")]
 		void PerformPlayDtmfCallAction (CXProvider provider, CXPlayDtmfCallAction action);
 
 		/// <param name="provider">The provider to which the provider delegate belongs.</param>
 		/// <param name="action">The action that timed out.</param>
 		/// <summary>Method that is called when a timeout is hit before an action is finished performing.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("provider:timedOutPerformingAction:")]
 		void TimedOutPerformingAction (CXProvider provider, CXAction action);
 
 		// Xcode 12 beta 1 issue, AVAudioSession does not appear on Mac OS X but this methods do: https://github.com/xamarin/maccore/issues/2257 
 		/// <param name="provider">The provider to which the provider delegate belongs.</param>
-		/// <param name="audioSession">To be added.</param>
+		/// <param name="audioSession">The audio session.</param>
 		/// <summary>The system activated a telephony-priority audio session for the call.</summary>
-		/// <remarks>To be added.</remarks>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Export ("provider:didActivateAudioSession:")]
@@ -659,7 +644,6 @@ namespace CallKit {
 		/// <param name="provider">The provider to which the provider delegate belongs.</param>
 		/// <param name="audioSession">The audio session that was deactivated.</param>
 		/// <summary>The system deactivated an audio session that the app had been using for a call.</summary>
-		/// <remarks>To be added.</remarks>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Export ("provider:didDeactivateAudioSession:")]
@@ -820,7 +804,6 @@ namespace CallKit {
 
 		/// <summary>Gets or sets a value that tells whether the call is on hold.</summary>
 		///         <value>A value that tells whether the call is on hold.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("onHold")]
 		bool OnHold { [Bind ("isOnHold")] get; set; }
 	}
@@ -844,7 +827,6 @@ namespace CallKit {
 
 		/// <summary>Gets or sets a value that controls whether the call is muted.</summary>
 		///         <value>A value that controls whether the call is muted.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("muted")]
 		bool Muted { [Bind ("isMuted")] get; set; }
 	}
@@ -872,7 +854,6 @@ namespace CallKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("video")]
 		bool Video { [Bind ("isVideo")] get; set; }
 
@@ -902,7 +883,6 @@ namespace CallKit {
 		/// <summary>Gets a value that tells whether the transaction is complete.</summary>
 		///         <value>
 		///           <see langword="true" /> if the transaction is complete. Otherwise, <see langword="false" />.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("complete", ArgumentSemantic.Assign)]
 		bool Complete { [Bind ("isComplete")] get; }
 

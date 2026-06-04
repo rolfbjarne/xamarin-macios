@@ -8,7 +8,6 @@ namespace CoreMidi {
 
 #if !XAMCORE_5_0
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -17,23 +16,18 @@ namespace CoreMidi {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct MidiCIDeviceIdentification {
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[MarshalAs (UnmanagedType.ByValArray, SizeConst = 3)]
 		public byte [] Manufacturer;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[MarshalAs (UnmanagedType.ByValArray, SizeConst = 2)]
 		public byte [] Family;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[MarshalAs (UnmanagedType.ByValArray, SizeConst = 2)]
 		public byte [] ModelNumber;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[MarshalAs (UnmanagedType.ByValArray, SizeConst = 4)]
 		public byte [] RevisionLevel;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[MarshalAs (UnmanagedType.ByValArray, SizeConst = 5)]
 		public byte [] Reserved;
 	}

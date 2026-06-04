@@ -46,7 +46,7 @@ namespace AddressBook {
 	public enum ABAddressBookError {
 		/// <summary>The operation is not permitted.</summary>
 		OperationNotPermittedByStore = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates operation not permitted by user error.</summary>
 		OperationNotPermittedByUserError,
 	}
 
@@ -209,7 +209,7 @@ namespace AddressBook {
 		///           multi-value property.
 		///         </summary>
 		Url,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates social profile.</summary>
 		SocialProfile,
 	}
 
@@ -217,9 +217,9 @@ namespace AddressBook {
 	[Deprecated (PlatformName.iOS, 9, 0, message: "Use the 'Contacts' API instead.")]
 	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use the 'Contacts' API instead.")]
 	public enum ABPersonImageFormat {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates thumbnail.</summary>
 		Thumbnail = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates original size.</summary>
 		OriginalSize = 2,
 	}
 
@@ -254,7 +254,7 @@ namespace AddressBook {
 		Person = 0,
 		/// <summary>A <see cref="AddressBook.ABGroup" /> record.</summary>
 		Group = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates source.</summary>
 		Source = 2,
 	}
 
@@ -323,22 +323,22 @@ namespace AddressBook {
 	[Deprecated (PlatformName.iOS, 9, 0, message: "Use the 'Contacts' API instead.")]
 	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use the 'Contacts' API instead.")]
 	public enum ABSourceType : int /* typedef int */ {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates local.</summary>
 		Local = 0x0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates exchange.</summary>
 		Exchange = 0x1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates exchange g a l.</summary>
 		ExchangeGAL = Exchange | SearchableMask,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates mobile me.</summary>
 		MobileMe = 0x2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates l d a p.</summary>
 		LDAP = 0x3 | SearchableMask,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates card d a v.</summary>
 		CardDAV = 0x4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates d a v search.</summary>
 		DAVSearch = CardDAV | SearchableMask,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates searchable mask.</summary>
 		SearchableMask = 0x01000000,
 	};
 
@@ -348,9 +348,9 @@ namespace AddressBook {
 	[Deprecated (PlatformName.iOS, 9, 0, message: "Use the 'Contacts' API instead.")]
 	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use the 'Contacts' API instead.")]
 	public enum ABSourceProperty {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates name.</summary>
 		Name,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates type.</summary>
 		Type,
 	}
 

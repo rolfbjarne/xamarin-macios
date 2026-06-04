@@ -126,7 +126,7 @@ namespace Security {
 
 		/// <param name="accessible">The accessible.</param>
 		///         <param name="flags">The flags.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="SecAccessControl" /> instance.</summary>
 		public SecAccessControl (SecAccessible accessible, SecAccessControlCreateFlags flags = SecAccessControlCreateFlags.UserPresence)
 			: base (SecAccessControlCreateWithFlags (IntPtr.Zero, KeysAccessible.FromSecAccessible (accessible), (nint) (long) flags, out var _), true)
 		{
@@ -134,11 +134,9 @@ namespace Security {
 			Flags = flags;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the accessible.</summary>
 		public SecAccessible Accessible { get; private set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the flags.</summary>
 		public SecAccessControlCreateFlags Flags { get; private set; }
 
 		[DllImport (Constants.SecurityLibrary)]

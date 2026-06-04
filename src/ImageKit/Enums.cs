@@ -31,7 +31,7 @@
 
 namespace ImageKit {
 
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies the display mode for the camera device view.</summary>
 	[Native]
 	public enum IKCameraDeviceViewDisplayMode : long {
 		None = -1,
@@ -41,7 +41,7 @@ namespace ImageKit {
 		Icon = 1,
 	};
 
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies the transfer mode for the camera device view.</summary>
 	[Native]
 	public enum IKCameraDeviceViewTransferMode : long {
 		/// <summary>Indicates file.</summary>
@@ -50,7 +50,7 @@ namespace ImageKit {
 		Memory = 1,
 	};
 
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies the display mode for the device browser view.</summary>
 	[Native]
 	public enum IKDeviceBrowserViewDisplayMode : long {
 		/// <summary>Indicates table.</summary>
@@ -62,7 +62,7 @@ namespace ImageKit {
 	};
 
 	// Untyped enum in ObjC
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies the state of an image browser cell.</summary>
 	public enum IKImageBrowserCellState : int {
 		/// <summary>Indicates no image.</summary>
 		NoImage = 0,
@@ -72,7 +72,7 @@ namespace ImageKit {
 		Ready = 2,
 	};
 
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies the resampling mode for image browser cells.</summary>
 	[Flags]
 	[Native]
 	public enum IKCellsStyle : ulong {
@@ -89,7 +89,7 @@ namespace ImageKit {
 	};
 
 	//used as a value for the IKImageBrowserGroupStyleKey in the NSDictionary that defines a group in IKImageBrowserView
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies the style of a group in the image browser.</summary>
 	[Native]
 	public enum IKGroupStyle : long {
 		/// <summary>Indicates bezel.</summary>
@@ -99,7 +99,7 @@ namespace ImageKit {
 	};
 
 	// Untyped enum in ObjC
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies the drop operation for the image browser.</summary>
 	public enum IKImageBrowserDropOperation : int {
 		/// <summary>Indicates on.</summary>
 		On = 0,
@@ -107,7 +107,7 @@ namespace ImageKit {
 		Before = 1,
 	};
 
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies the transfer mode for the scanner device view.</summary>
 	[Native]
 	public enum IKScannerDeviceViewTransferMode : long {
 		/// <summary>Indicates file.</summary>
@@ -116,7 +116,7 @@ namespace ImageKit {
 		Memory = 1,
 	};
 
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies the display mode for the scanner device view.</summary>
 	[Native]
 	public enum IKScannerDeviceViewDisplayMode : long {
 		None = -1,
@@ -126,7 +126,7 @@ namespace ImageKit {
 		Advanced = 1,
 	};
 
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies style mask options for the filter browser panel.</summary>
 	[Flags]
 	public enum IKFilterBrowserPanelStyleMask : uint {
 		/// <summary>Indicates normal.</summary>

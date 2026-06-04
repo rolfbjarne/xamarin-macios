@@ -34,23 +34,23 @@ namespace ScriptingBridge {
 	interface SBObject : NSCoding {
 
 		/// <param name="properties">The properties.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="ScriptingBridge.SBObject" /> with the specified properties.</summary>
 		[Export ("initWithProperties:")]
 		NativeHandle Constructor (NSDictionary properties);
 
 		/// <param name="data">The data to use.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="ScriptingBridge.SBObject" /> with the specified data.</summary>
 		[Export ("initWithData:")]
 		NativeHandle Constructor (NSObject data);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the object by evaluating the reference.</summary>
+		/// <value>The evaluated object.</value>
 		[Export ("get")]
 		NSObject Get { get; }
 
 		// part of SBObject.h include file, not in the official documentation
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the last error that occurred.</summary>
+		/// <value>The last error, or <see langword="null" /> if no error occurred.</value>
 		[Export ("lastError")]
 		NSError LastError { get; }
 	}

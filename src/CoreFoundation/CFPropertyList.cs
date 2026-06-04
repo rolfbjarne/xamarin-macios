@@ -42,8 +42,7 @@ namespace CoreFoundation {
 
 		/// <param name="data">The data to use.</param>
 		///         <param name="options">The options to use.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Creates a new <see cref="static" /> instance.</summary>
 		public static (CFPropertyList? PropertyList, CFPropertyListFormat Format, NSError? Error)
 			FromData (NSData data, CFPropertyListMutabilityOptions options = CFPropertyListMutabilityOptions.Immutable)
 		{
@@ -68,8 +67,7 @@ namespace CoreFoundation {
 		extern static IntPtr CFPropertyListCreateDeepCopy (IntPtr allocator, IntPtr propertyList, nuint mutabilityOption);
 
 		/// <param name="options">The options to use.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Deeps copy.</summary>
 		public CFPropertyList DeepCopy (CFPropertyListMutabilityOptions options = CFPropertyListMutabilityOptions.MutableContainersAndLeaves)
 		{
 			return new CFPropertyList (CFPropertyListCreateDeepCopy (IntPtr.Zero, Handle, (nuint) (ulong) options), owns: true);
@@ -80,7 +78,6 @@ namespace CoreFoundation {
 
 		/// <param name="format">The format.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public (NSData? Data, NSError? Error) AsData (CFPropertyListFormat format = CFPropertyListFormat.BinaryFormat1)
 		{
 			IntPtr error;
@@ -97,15 +94,13 @@ namespace CoreFoundation {
 		extern static byte CFPropertyListIsValid (IntPtr plist, nint format);
 
 		/// <param name="format">The format.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Iss valid.</summary>
 		public bool IsValid (CFPropertyListFormat format)
 		{
 			return CFPropertyListIsValid (Handle, (nint) (long) format) != 0;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the value.</summary>
 		public object? Value {
 			get {
 				if (Handle == IntPtr.Zero) {

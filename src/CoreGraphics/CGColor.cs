@@ -121,7 +121,7 @@ namespace CoreGraphics {
 		}
 
 		/// <param name="name">The name to use.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a new color from the specified named color.</summary>
 		public CGColor (string name)
 			: base (Create (name), true)
 		{
@@ -296,7 +296,6 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGPatternRef */ IntPtr CGColorGetPattern (/* CGColorRef */ IntPtr color);
 		/// <summary>If present, the pattern for this color.</summary>
-		///         <value>To be added.</value>
 		public CGPattern? Pattern {
 			get {
 				var h = CGColorGetPattern (Handle);

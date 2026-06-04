@@ -7,7 +7,7 @@
 namespace CoreLocation {
 	/// <summary>This enum is used to select how to initialize a new instance of a <see cref="CLBeaconRegion" />.</summary>
 	public enum CLBeaconRegionUuidType {
-		/// <summary>The specified <see cref="NSUuid" /> is a proximity uuid.</summary>
+		/// <summary>The specified <see cref="NSUuid" /> is AProximity uuid.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -16,7 +16,7 @@ namespace CoreLocation {
 		[ObsoletedOSPlatform ("maccatalyst", "Use 'CLBeaconRegionUuidType.Uuid' instead, the constructor for this value deprecated.")]
 		[ObsoletedOSPlatform ("macos", "Use 'CLBeaconRegionUuidType.Uuid' instead, the constructor for this value deprecated.")]
 		ProximityUuid,
-		/// <summary>The specified <see cref="NSUuid" /> is not a proximity uuid.</summary>
+		/// <summary>The specified <see cref="NSUuid" /> is not AProximity uuid.</summary>
 		Uuid,
 	}
 
@@ -40,7 +40,7 @@ namespace CoreLocation {
 		/// <summary>Constructor that produces a region identified by <paramref name="identifier" /> that reports iBeacons associated with the <paramref name="uuid" />.</summary>
 		/// <param name="uuid">The unique ID of the iBeacons of interest.</param>
 		/// <param name="identifier">The name of the region to be created.</param>
-		/// <param name="uuidType">Specifies whether the beacon is a proximity uuid or not.</param>
+		/// <param name="uuidType">Specifies whether the beacon is AProximity uuid or not.</param>
 		public CLBeaconRegion (NSUuid uuid, string identifier, CLBeaconRegionUuidType uuidType)
 			: base (NSObjectFlag.Empty)
 		{
@@ -77,7 +77,7 @@ namespace CoreLocation {
 		/// <param name="uuid">The unique ID of the iBeacons of interest.</param>
 		/// <param name="major">Can be used by the app developer for any purpose.</param>
 		/// <param name="identifier">The name of the region to be created.</param>
-		/// <param name="uuidType">Specifies whether the beacon is a proximity uuid or not.</param>
+		/// <param name="uuidType">Specifies whether the beacon is AProximity uuid or not.</param>
 		public CLBeaconRegion (NSUuid uuid, ushort major, string identifier, CLBeaconRegionUuidType uuidType)
 			: base (NSObjectFlag.Empty)
 		{
@@ -116,7 +116,7 @@ namespace CoreLocation {
 		/// <param name="major">Can be used by the app developer for any purpose.</param>
 		/// <param name="minor">Can be used by the app developer for any purpose.</param>
 		/// <param name="identifier">The name of the region to be created.</param>
-		/// <param name="uuidType">Specifies whether the beacon is a proximity uuid or not.</param>
+		/// <param name="uuidType">Specifies whether the beacon is AProximity uuid or not.</param>
 		public CLBeaconRegion (NSUuid uuid, ushort major, ushort minor, string identifier, CLBeaconRegionUuidType uuidType)
 			: base (NSObjectFlag.Empty)
 		{

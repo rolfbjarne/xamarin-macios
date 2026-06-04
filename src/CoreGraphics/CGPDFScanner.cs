@@ -57,8 +57,7 @@ namespace CoreGraphics {
 		{
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the user info.</summary>
 		public object? UserInfo {
 			get { return info; }
 		}
@@ -85,7 +84,6 @@ namespace CoreGraphics {
 		extern static /* CGPDFContentStreamRef */ IntPtr CGPDFScannerGetContentStream (/* CGPDFScannerRef */ IntPtr scanner);
 
 		/// <summary>Gets the content stream for <c>this</c> <see cref="CoreGraphics.CGPDFScanner" /> object.</summary>
-		///         <returns>To be added.</returns>
 		public CGPDFContentStream GetContentStream ()
 		{
 			return new CGPDFContentStream (CGPDFScannerGetContentStream (Handle), false);
@@ -95,7 +93,6 @@ namespace CoreGraphics {
 		extern static byte CGPDFScannerScan (/* CGPDFScannerRef */ IntPtr scanner);
 
 		/// <summary>Parses <c>this</c> <see cref="CoreGraphics.CGPDFScanner" /> object, and then returns whether the parsing succeeded.</summary>
-		///         <returns>To be added.</returns>
 		public bool Scan ()
 		{
 			return CGPDFScannerScan (Handle) != 0;
@@ -106,7 +103,6 @@ namespace CoreGraphics {
 
 		/// <param name="value">The value to set.</param>
 		///         <summary>Pops an object from the stack of <c>this</c> <see cref="CoreGraphics.CGPDFScanner" /> object, returns that object by using the <paramref name="value" /> parameter, and then returns whether this method succeeded.</summary>
-		///         <returns>To be added.</returns>
 		public bool TryPop (out CGPDFObject? value)
 		{
 			IntPtr ip;
@@ -123,7 +119,6 @@ namespace CoreGraphics {
 
 		/// <param name="value">The value to set.</param>
 		///         <summary>Pops a <see cref="System.Boolean" /> object from the stack of <c>this</c> <see cref="CoreGraphics.CGPDFScanner" /> object, returns that object by using the <paramref name="value" /> parameter, and then returns whether this method succeeded.</summary>
-		///         <returns>To be added.</returns>
 		public unsafe bool TryPop (out bool value)
 		{
 			byte bytevalue;
@@ -165,7 +160,6 @@ namespace CoreGraphics {
 		// not to be confusing with CGPDFScannerPopString (value)
 		/// <param name="name">The name to use.</param>
 		///         <summary>Pops a character string object from the stack of <c>this</c><see cref="CoreGraphics.CGPDFScanner" /> object, returns that object by using the <paramref name="name" /> parameter, and then returns whether this method succeeded.</summary>
-		///         <returns>To be added.</returns>
 		public bool TryPopName (out string? name)
 		{
 			IntPtr ip;
@@ -182,7 +176,6 @@ namespace CoreGraphics {
 
 		/// <param name="value">The value to set.</param>
 		///         <summary>Pops a <see cref="System.String" /> object from the stack of <c>this</c> <see cref="CoreGraphics.CGPDFScanner" /> object, returns that object by using the <paramref name="value" /> parameter, and then returns whether this method succeeded.</summary>
-		///         <returns>To be added.</returns>
 		public bool TryPop (out string? value)
 		{
 			IntPtr ip;
@@ -199,7 +192,6 @@ namespace CoreGraphics {
 
 		/// <param name="value">The value to set.</param>
 		///         <summary>Pops an array from the stack of <c>this</c> <see cref="CoreGraphics.CGPDFScanner" /> object, returns that array by using the <paramref name="value" /> parameter, and then returns whether this method succeeded.</summary>
-		///         <returns>To be added.</returns>
 		public bool TryPop (out CGPDFArray? value)
 		{
 			IntPtr ip;
@@ -216,7 +208,6 @@ namespace CoreGraphics {
 
 		/// <param name="value">The value to set.</param>
 		///         <summary>Pops a PDF dictionary from the stack of <c>this</c> <see cref="CoreGraphics.CGPDFScanner" /> object, returns that dictionary by using the <paramref name="value" /> parameter, and then returns whether this method succeeded.</summary>
-		///         <returns>To be added.</returns>
 		public bool TryPop (out CGPDFDictionary? value)
 		{
 			IntPtr ip;
@@ -233,7 +224,6 @@ namespace CoreGraphics {
 
 		/// <param name="value">The value to set.</param>
 		///         <summary>Pops a PDF stream from the stack of <c>this</c> <see cref="CoreGraphics.CGPDFScanner" /> object, returns that stream by using the <paramref name="value" /> parameter, and then returns whether this method succeeded.</summary>
-		///         <returns>To be added.</returns>
 		public bool TryPop (out CGPDFStream? value)
 		{
 			IntPtr ip;

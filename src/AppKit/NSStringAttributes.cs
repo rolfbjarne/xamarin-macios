@@ -13,8 +13,7 @@ using CoreFoundation;
 #nullable enable
 
 namespace AppKit {
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+/// <summary>Provides strongly-typed access to AppKit string attributes used with attributed strings.</summary>
 	public partial class NSStringAttributes : DictionaryContainer {
 		static internal NSDictionary? ToDictionary (
 			NSFont? font,
@@ -164,15 +163,13 @@ namespace AppKit {
 			return dict.Count == 0 ? null : dict;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Initializes a new instance of the <see cref="NSStringAttributes" /> class.</summary>
 		public NSStringAttributes () : base (new NSMutableDictionary ())
 		{
 		}
 
-		/// <param name="dictionary">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <param name="dictionary">The dictionary containing the string attributes.</param>
+		/// <summary>Initializes a new instance from an existing attributes dictionary.</summary>
 		public NSStringAttributes (NSDictionary dictionary) : base (dictionary)
 		{
 		}
@@ -217,43 +214,37 @@ namespace AppKit {
 			return value;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the link URL.</summary>
 		public NSUrl? LinkUrl {
 			get { return Link as NSUrl; }
 			set { Link = value; }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the link as a string value.</summary>
 		public NSString? LinkString {
 			get { return Link as NSString; }
 			set { Link = value; }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the font.</summary>
 		public NSFont? Font {
 			get { return Get (NSStringAttributeKey.Font, handle => new NSFont (handle)); }
 			set { SetNativeValue (NSStringAttributeKey.Font, value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the paragraph style.</summary>
 		public NSParagraphStyle? ParagraphStyle {
 			get { return Get (NSStringAttributeKey.ParagraphStyle, handle => new NSParagraphStyle (handle)); }
 			set { SetNativeValue (NSStringAttributeKey.ParagraphStyle, value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the foreground color.</summary>
 		public NSColor? ForegroundColor {
 			get { return Get (NSStringAttributeKey.ForegroundColor, handle => new NSColor (handle)); }
 			set { SetNativeValue (NSStringAttributeKey.ForegroundColor, value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the underline style.</summary>
 		public int? UnderlineStyle {
 			get { return GetInt32Value (NSStringAttributeKey.UnderlineStyle); }
 			set { SetNumberValue (NSStringAttributeKey.UnderlineStyle, value); }
@@ -265,43 +256,37 @@ namespace AppKit {
 			return SetUnderlineStyle (NSStringAttributeKey.UnderlineStyle, style, pattern, byWord);
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets a value indicating whether the text is superscript.</summary>
 		public bool? Superscript {
 			get { return GetBool (NSStringAttributeKey.Superscript); }
 			set { Set (NSStringAttributeKey.Superscript, value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the background color.</summary>
 		public NSColor? BackgroundColor {
 			get { return Get (NSStringAttributeKey.BackgroundColor, handle => new NSColor (handle)); }
 			set { SetNativeValue (NSStringAttributeKey.BackgroundColor, value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the text attachment.</summary>
 		public NSTextAttachment? Attachment {
 			get { return Get (NSStringAttributeKey.Attachment, handle => new NSTextAttachment (handle)); }
 			set { SetNativeValue (NSStringAttributeKey.Attachment, value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the ligature type.</summary>
 		public NSLigatureType? Ligature {
 			get { return (NSLigatureType?) GetInt32Value (NSStringAttributeKey.Ligature); }
 			set { SetNumberValue (NSStringAttributeKey.Ligature, (int?) value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the baseline offset.</summary>
 		public float? BaselineOffset {
 			get { return GetFloatValue (NSStringAttributeKey.BaselineOffset); }
 			set { SetNumberValue (NSStringAttributeKey.BaselineOffset, value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the kerning adjustment.</summary>
 		public float? KerningAdjustment {
 			get { return GetFloatValue (NSStringAttributeKey.KerningAdjustment); }
 			set { SetNumberValue (NSStringAttributeKey.KerningAdjustment, value); }
@@ -316,29 +301,25 @@ namespace AppKit {
 			set { SetNativeValue (NSStringAttributeKey.Link, value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the stroke width.</summary>
 		public float? StrokeWidth {
 			get { return GetFloatValue (NSStringAttributeKey.StrokeWidth); }
 			set { SetNumberValue (NSStringAttributeKey.StrokeWidth, value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the stroke color.</summary>
 		public NSColor? StrokeColor {
 			get { return Get (NSStringAttributeKey.StrokeColor, handle => new NSColor (handle)); }
 			set { SetNativeValue (NSStringAttributeKey.StrokeColor, value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the underline color.</summary>
 		public NSColor? UnderlineColor {
 			get { return Get (NSStringAttributeKey.UnderlineColor, handle => new NSColor (handle)); }
 			set { SetNativeValue (NSStringAttributeKey.UnderlineColor, value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the strikethrough style.</summary>
 		public int? StrikethroughStyle {
 			get { return GetInt32Value (NSStringAttributeKey.StrikethroughStyle); }
 			set { SetNumberValue (NSStringAttributeKey.StrikethroughStyle, value); }
@@ -350,92 +331,79 @@ namespace AppKit {
 			return SetUnderlineStyle (NSStringAttributeKey.StrikethroughStyle, style, pattern, byWord);
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the strikethrough color.</summary>
 		public NSColor? StrikethroughColor {
 			get { return Get (NSStringAttributeKey.StrikethroughColor, handle => new NSColor (handle)); }
 			set { SetNativeValue (NSStringAttributeKey.StrikethroughColor, value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the shadow.</summary>
 		public NSShadow? Shadow {
 			get { return Get (NSStringAttributeKey.Shadow, handle => new NSShadow (handle)); }
 			set { SetNativeValue (NSStringAttributeKey.Shadow, value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the obliqueness (italic slant).</summary>
 		public float? Obliqueness {
 			get { return GetFloatValue (NSStringAttributeKey.Obliqueness); }
 			set { SetNumberValue (NSStringAttributeKey.Obliqueness, value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the expansion factor.</summary>
 		public float? Expansion {
 			get { return GetFloatValue (NSStringAttributeKey.Expansion); }
 			set { SetNumberValue (NSStringAttributeKey.Expansion, value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the cursor to display when hovering over the text.</summary>
 		public NSCursor? Cursor {
 			get { return Get (NSStringAttributeKey.Cursor, handle => new NSCursor (handle)); }
 			set { SetNativeValue (NSStringAttributeKey.Cursor, value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the tooltip string.</summary>
 		public string? ToolTip {
 			get { return Get (NSStringAttributeKey.ToolTip, handle => new NSString (handle)); }
 			set { SetNativeValue (NSStringAttributeKey.ToolTip, (NSString?) value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the character shape.</summary>
 		public int? CharacterShape {
 			get { return GetInt32Value (NSStringAttributeKey.CharacterShape); }
 			set { SetNumberValue (NSStringAttributeKey.CharacterShape, value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the glyph info.</summary>
 		public NSGlyphInfo? GlyphInfo {
 			get { return Get (NSStringAttributeKey.GlyphInfo, handle => new NSGlyphInfo (handle)); }
 			set { SetNativeValue (NSStringAttributeKey.GlyphInfo, value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the writing direction.</summary>
 		public NSArray? WritingDirection {
 			get { return Get (NSStringAttributeKey.WritingDirection, handle => new NSArray (handle)); }
 			set { SetNativeValue (NSStringAttributeKey.GlyphInfo, value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets a value indicating whether this is a marked clause segment.</summary>
 		public bool? MarkedClauseSegment {
 			get { return GetBool (NSStringAttributeKey.MarkedClauseSegment); }
 			set { Set (NSStringAttributeKey.MarkedClauseSegment, value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the vertical glyph form (text layout orientation).</summary>
 		public NSTextLayoutOrientation? VerticalGlyphForm {
 			get { return (NSTextLayoutOrientation?) GetInt32Value (NSStringAttributeKey.VerticalGlyphForm); }
 			set { SetNumberValue (NSStringAttributeKey.VerticalGlyphForm, (int?) value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the text alternatives.</summary>
 		public NSTextAlternatives? TextAlternatives {
 			get { return Get (NSStringAttributeKey.TextAlternatives, handle => new NSTextAlternatives (handle)); }
 			set { SetNativeValue (NSStringAttributeKey.TextAlternatives, value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the spelling state.</summary>
 		public NSSpellingState? SpellingState {
 			get { return (NSSpellingState?) GetInt32Value (NSStringAttributeKey.SpellingState); }
 			set { SetNumberValue (NSStringAttributeKey.SpellingState, (int?) value); }

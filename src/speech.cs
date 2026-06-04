@@ -169,7 +169,7 @@ namespace Speech {
 		SFTranscription [] Transcriptions { get; }
 
 		/// <summary>Gets whether this is the final attempt at recognition.</summary>
-		///         <value>To be added.</value>
+		/// <value><see langword="true" /> if this is the final recognition result; otherwise, <see langword="false" />.</value>
 		[Export ("final")]
 		bool Final { [Bind ("isFinal")] get; }
 

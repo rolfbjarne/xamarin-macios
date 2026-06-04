@@ -153,7 +153,6 @@ namespace AVFoundation {
 		/// <param name="pattern">The pattern.</param>
 		///         <param name="outError">The out error.</param>
 		///         <summary>Sets the preferred directivity for the data source.</summary>
-		///         <returns>To be added.</returns>
 		public bool SetPreferredPolarPattern (AVAudioDataSourcePolarPattern pattern, out NSError outError)
 		{
 			return SetPreferredPolarPattern_ (ToToken (pattern), out outError);

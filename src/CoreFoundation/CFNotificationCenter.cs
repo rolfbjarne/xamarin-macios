@@ -127,7 +127,6 @@ namespace CoreFoundation {
 		extern static CFNotificationCenterRef CFNotificationCenterGetDistributedCenter ();
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		static public CFNotificationCenter Distributed {
 			get {
 				return distributednc ?? (distributednc = new CFNotificationCenter (CFNotificationCenterGetDistributedCenter (), false));
@@ -243,7 +242,7 @@ namespace CoreFoundation {
 		///         <param name="userInfo">The user info.</param>
 		///         <param name="deliverImmediately">The deliver immediately.</param>
 		///         <param name="postOnAllSessions">The post on all sessions.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Posts notification.</summary>
 		public void PostNotification (string notification, INativeObject objectToObserve, NSDictionary? userInfo = null, bool deliverImmediately = false, bool postOnAllSessions = false)
 		{
 			// The name of the notification to post.This value must not be NULL.
@@ -295,7 +294,7 @@ namespace CoreFoundation {
 			token.nameHandle = IntPtr.Zero;
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Removes every observer.</summary>
 		public void RemoveEveryObserver ()
 		{
 			lock (listeners) {

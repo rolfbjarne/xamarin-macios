@@ -41,9 +41,8 @@ namespace BusinessChat {
 	interface BCChatAction {
 
 		/// <param name="businessIdentifier">The business identifier.</param>
-		///         <param name="intentParameters">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="intentParameters">The intent parameters for the transcript.</param>
+		/// <summary>Opens the Business Chat transcript for the specified business.</summary>
 		[Static]
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Export ("openTranscript:intentParameters:")]

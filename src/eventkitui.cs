@@ -185,13 +185,13 @@ namespace EventKitUI {
 		   Events = new Type [] { typeof (EKCalendarChooserDelegate) })]
 	interface EKCalendarChooser {
 		/// <param name="nibName">
-		///           <para>To be added.</para>
-		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
-		///         </param>
+		///   <para>The name of the nib file, or <see langword="null" />.</para>
+		///   <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		/// </param>
 		/// <param name="bundle">
-		///           <para>To be added.</para>
-		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
-		///         </param>
+		///   <para>The bundle in which to search for the nib file, or <see langword="null" />.</para>
+		///   <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		/// </param>
 		/// <summary>Creates a new <see cref="EventKitUI.EKCalendarChooser" /> from the specified Nib name in the specified <paramref name="bundle" />.</summary>
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
@@ -213,7 +213,7 @@ namespace EventKitUI {
 		NativeHandle Constructor (EKCalendarChooserSelectionStyle selectionStyle, EKCalendarChooserDisplayStyle displayStyle, EKEntityType entityType, EKEventStore eventStore);
 
 		/// <summary>Gets or sets a value that controls whether multiple selections may be made.</summary>
-		///         <value>To be added.</value>
+		/// <value>The selection style.</value>
 		[Export ("selectionStyle")]
 		EKCalendarChooserSelectionStyle SelectionStyle {
 			get;
@@ -240,12 +240,12 @@ namespace EventKitUI {
 		IEKCalendarChooserDelegate Delegate { get; set; }
 
 		/// <summary>Get or sets a Boolean value that controls whether to display a "Done" button when the picker is displayed modally.</summary>
-		///         <value>To be added.</value>
+		/// <value><see langword="true" /> if the Done button is shown; otherwise, <see langword="false" />.</value>
 		[Export ("showsDoneButton")]
 		bool ShowsDoneButton { get; set; }
 
 		/// <summary>Get or sets a Boolean value that controls whether to display a cancellation button when the picker is displayed modally.</summary>
-		///         <value>To be added.</value>
+		/// <value><see langword="true" /> if the Cancel button is shown; otherwise, <see langword="false" />.</value>
 		[Export ("showsCancelButton")]
 		bool ShowsCancelButton { get; set; }
 

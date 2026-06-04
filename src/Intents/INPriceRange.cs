@@ -25,7 +25,7 @@ namespace Intents {
 		/// <param name="option">The option.</param>
 		///         <param name="price">The price.</param>
 		///         <param name="currencyCode">The currency code.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a new price range with the specified option, price, and currency code.</summary>
 		public INPriceRange (INPriceRangeOption option, NSDecimalNumber price, string currencyCode)
 			: base (NSObjectFlag.Empty)
 		{

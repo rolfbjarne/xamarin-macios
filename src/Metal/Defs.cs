@@ -38,7 +38,6 @@ namespace Metal {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{
@@ -89,7 +88,6 @@ namespace Metal {
 
 		/// <param name="vertexFormat">To be added.</param>
 		///         <summary>Converts from the current to the desired <paramref name="vertexFormat" />.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
@@ -132,7 +130,6 @@ namespace Metal {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{
@@ -185,7 +182,6 @@ namespace Metal {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{

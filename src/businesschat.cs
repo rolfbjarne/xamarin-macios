@@ -24,9 +24,8 @@ namespace BusinessChat {
 	[BaseType (typeof (UIControl))]
 	[DisableDefaultCtor]
 	interface BCChatButton {
-		/// <param name="style">To be added.</param>
+		/// <param name="style">The style.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithStyle:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (BCChatButtonStyle style);
@@ -41,7 +40,7 @@ namespace BusinessChat {
 	[DisableDefaultCtor]
 	interface BCChatAction {
 
-		/// <param name="businessIdentifier">To be added.</param>
+		/// <param name="businessIdentifier">The business identifier.</param>
 		///         <param name="intentParameters">To be added.</param>
 		///         <summary>To be added.</summary>
 		///         <remarks>To be added.</remarks>

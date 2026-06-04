@@ -80,7 +80,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CFArrayRef */ IntPtr CGPDFContentStreamGetStreams (/* CGPDFContentStreamRef */ IntPtr cs);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the streams in this PDF content stream.</summary>
 		public CGPDFStream? []? GetStreams ()
 		{
 			var rv = CGPDFContentStreamGetStreams (Handle);

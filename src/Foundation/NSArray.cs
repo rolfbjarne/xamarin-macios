@@ -369,7 +369,7 @@ namespace Foundation {
 			return Runtime.GetNSObject<NSArray> (CFArray.Create (items), owns: true)!;
 		}
 
-		/// <summary>Creates an NSArray from a potentially null array of strings.</summary>
+		/// <summary>Creates an NSArray from APotentially null array of strings.</summary>
 		/// <param name="items">Array of C# strings, or null.</param>
 		/// <returns>A new <see cref="NSArray" /> containing the strings, or null if <paramref name="items" /> is null.</returns>
 		/// <remarks>If any string in <paramref name="items" /> is null, a <see cref="NSNull" /> entry will be created for that element.</remarks>
@@ -873,7 +873,7 @@ namespace Foundation {
 			return ArrayFromHandle<T> (handle, (v) => createObject (v), releaseHandle);
 		}
 
-		/// <summary>Creates a managed array from a pointer to a native NSArray of NSDictionary objects, dropping null and NSNull elements.</summary>
+		/// <summary>Creates a managed array from APointer to a native NSArray of NSDictionary objects, dropping null and NSNull elements.</summary>
 		/// <typeparam name="T">The type of objects to create from the dictionaries.</typeparam>
 		/// <param name="handle">The pointer to the native NSArray instance containing NSDictionary objects.</param>
 		/// <param name="createObjectFromDictionary">A factory function that creates an instance of type T from an NSDictionary.</param>
@@ -894,7 +894,7 @@ namespace Foundation {
 				releaseHandle);
 		}
 
-		/// <summary>Creates a managed array from a pointer to a native NSArray of NSDictionary objects, dropping null and NSNull elements. Always returns a non-null array.</summary>
+		/// <summary>Creates a managed array from APointer to a native NSArray of NSDictionary objects, dropping null and NSNull elements. Always returns a non-null array.</summary>
 		/// <typeparam name="T">The type of objects to create from the dictionaries.</typeparam>
 		/// <param name="handle">The pointer to the native NSArray instance containing NSDictionary objects.</param>
 		/// <param name="createObjectFromDictionary">A factory function that creates an instance of type T from an NSDictionary.</param>

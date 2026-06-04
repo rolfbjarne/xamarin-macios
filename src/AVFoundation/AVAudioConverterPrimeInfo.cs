@@ -47,7 +47,7 @@ namespace AVFoundation {
 			TrailingFrames = trailingFrames;
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Returns a string representation of this prime info.</summary>
 		public override string ToString ()
 		{
 			return $"({LeadingFrames}:{TrailingFrames})";
@@ -64,7 +64,7 @@ namespace AVFoundation {
 		}
 
 		/// <param name="obj">The obj.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Determines whether this instance is equal to the specified object.</summary>
 		public override bool Equals (object? obj)
 		{
 			if (!(obj is AVAudioConverterPrimeInfo))
@@ -80,7 +80,7 @@ namespace AVFoundation {
 			return LeadingFrames == other.LeadingFrames && TrailingFrames == other.TrailingFrames;
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Returns the hash code for this prime info.</summary>
 		public override int GetHashCode ()
 		{
 			return HashCode.Combine (LeadingFrames, TrailingFrames);

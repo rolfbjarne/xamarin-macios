@@ -57,7 +57,7 @@ namespace Foundation {
 		{
 		}
 
-		/// <summary>Creates an Objective-C NSString from the C# string and returns a pointer to it.</summary>
+		/// <summary>Creates an Objective-C NSString from the C# string and returns APointer to it.</summary>
 		/// <param name="str">C# String to wrap</param>
 		/// <returns>Pointer to the <see cref="NSString" /> object, must be released with <see cref="ReleaseNative" />.</returns>
 		/// <remarks>
@@ -162,7 +162,7 @@ namespace Foundation {
 			return new NSString (str);
 		}
 
-		/// <summary>Utility method that returns a string from a pointer that points to an Objective-C NSString or CFString object.</summary>
+		/// <summary>Utility method that returns a string from APointer that points to an Objective-C NSString or CFString object.</summary>
 		/// <param name="usrhandle">Pointer to an Objective-C NSString or CFString object (not the managed NSString object).</param>
 		/// <returns>The Objective-C string in the NSString as a C# string.</returns>
 		public static string? FromHandle (NativeHandle usrhandle)
@@ -170,7 +170,7 @@ namespace Foundation {
 			return FromHandle (usrhandle, false);
 		}
 
-		/// <summary>Utility method that returns a string from a pointer that points to an Objective-C NSString or CFString object.</summary>
+		/// <summary>Utility method that returns a string from APointer that points to an Objective-C NSString or CFString object.</summary>
 		/// <param name="handle">Pointer to an Objective-C NSString or CFString object (not the managed NSString object).</param>
 		/// <param name="owns">Whether the <paramref name="handle" /> should be released or not.</param>
 		/// <returns>The Objective-C string in the NSString as a C# string.</returns>

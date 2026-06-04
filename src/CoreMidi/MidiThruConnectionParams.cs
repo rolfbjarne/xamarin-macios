@@ -18,45 +18,42 @@ using MidiUniqueID = System.Int32;
 
 namespace CoreMidi {
 	/// <summary>MIDI transform types.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum MidiTransformType : ushort {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates filter out.</summary>
 		FilterOut = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates map control.</summary>
 		MapControl = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates add.</summary>
 		Add = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates scale.</summary>
 		Scale = 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates min value.</summary>
 		MinValue = 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates max value.</summary>
 		MaxValue = 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates map value.</summary>
 		MapValue = 12,
 	}
 
 	/// <summary>MIDI Control Transformation Type.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum MidiTransformControlType : byte {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates seven bit.</summary>
 		SevenBit = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates fourteen bit.</summary>
 		FourteenBit = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates seven bit rpn.</summary>
 		SevenBitRpn = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates fourteen bit rpn.</summary>
 		FourteenBitRpn = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates seven bit n rpn.</summary>
 		SevenBitNRpn = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates fourteen bit n rpn.</summary>
 		FourteenBitNRpn = 5,
 	}
 
 	/// <summary>Object that defines how a MIDI event is transformed.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -64,7 +61,6 @@ namespace CoreMidi {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct MidiTransform {
 		/// <summary>Transformation type to be applied.</summary>
-		///         <remarks>To be added.</remarks>
 		public MidiTransformType Transform;
 		/// <summary>Extra information needed by the transformation.</summary>
 		///         <remarks>This is ignored when <see cref="CoreMidi.MidiTransform.Transform" /> is set to <see cref="CoreMidi.MidiTransformType.None" /> or <see cref="CoreMidi.MidiTransformType.FilterOut" />.</remarks>
@@ -73,7 +69,6 @@ namespace CoreMidi {
 		/// <param name="transform">Transformation type to be applied.</param>
 		///         <param name="param">Extra information needed by the transformation.</param>
 		///         <summary>Creates a new <see cref="CoreMidi.MidiTransform" />.</summary>
-		///         <remarks>To be added.</remarks>
 		public MidiTransform (MidiTransformType transform, short param)
 		{
 			Transform = transform;
@@ -82,7 +77,6 @@ namespace CoreMidi {
 	}
 
 	/// <summary>MIDI Value map.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -92,7 +86,6 @@ namespace CoreMidi {
 		byte [] map_value;
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public byte [] Value {
 			get {
 				return map_value ?? (map_value = new byte [128]);
@@ -108,7 +101,6 @@ namespace CoreMidi {
 	}
 
 	/// <summary>Represents a transformation of a MIDI control.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -116,16 +108,13 @@ namespace CoreMidi {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct MidiControlTransform {
 		/// <summary>MIDI control type.</summary>
-		///         <remarks>To be added.</remarks>
 		public MidiTransformControlType ControlType;
 		/// <summary>Resulting control type.</summary>
 		///         <remarks>This is only set when <see cref="CoreMidi.MidiTransformType.MapControl" /> is used.</remarks>
 		public MidiTransformControlType RemappedControlType;
 		/// <summary>Number of the control to be transformed.</summary>
-		///         <remarks>To be added.</remarks>
 		public ushort ControlNumber;
 		/// <summary>Transformation type to be applied.</summary>
-		///         <remarks>To be added.</remarks>
 		public MidiTransformType Transform;
 		/// <summary>Additional information for the transformation.</summary>
 		///         <remarks>This is ignored when <see cref="CoreMidi.MidiControlTransform.Transform" /> is set to <see cref="CoreMidi.MidiTransformType.None" /> or <see cref="CoreMidi.MidiTransformType.FilterOut" />.</remarks>
@@ -137,7 +126,6 @@ namespace CoreMidi {
 		///         <param name="transform">Transformation type to be applied.</param>
 		///         <param name="param">Additional information for the transformation.</param>
 		///         <summary>Creates a new <see cref="CoreMidi.MidiControlTransform" />.</summary>
-		///         <remarks>To be added.</remarks>
 		public MidiControlTransform (MidiTransformControlType controlType,
 									 MidiTransformControlType remappedControlType,
 									 ushort controlNumber, MidiTransformType transform,
@@ -160,10 +148,8 @@ namespace CoreMidi {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct MidiThruConnectionEndpoint {
 		/// <summary>Endpoint handle.</summary>
-		///         <remarks>To be added.</remarks>
 		public MidiEndpointRef EndpointRef;
 		/// <summary>Endpoint unique ID.</summary>
-		///         <remarks>To be added.</remarks>
 		public MidiUniqueID UniqueID;
 
 		/// <param name="endpointRef">Endpoint ref.</param>
@@ -358,7 +344,6 @@ namespace CoreMidi {
 
 #if !COREBUILD
 	/// <summary>MIDI transformations and routings.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -372,7 +357,6 @@ namespace CoreMidi {
 		unsafe extern static void MIDIThruConnectionParamsInitialize (MidiThruConnectionParamsStruct* inConnectionParams);
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public MidiThruConnectionParams ()
 		{
 			// Always create a valid init point
@@ -385,7 +369,6 @@ namespace CoreMidi {
 
 		/// <summary>Midi input routes.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MidiThruConnectionEndpoint []? Sources {
 			get { return connectionParams.Sources; }
 			set { connectionParams.Sources = value; }
@@ -393,7 +376,6 @@ namespace CoreMidi {
 
 		/// <summary>Midi output destination routes.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MidiThruConnectionEndpoint []? Destinations {
 			get { return connectionParams.Destinations; }
 			set { connectionParams.Destinations = value; }
@@ -411,7 +393,6 @@ namespace CoreMidi {
 
 		/// <summary>Lowest velocity to filter.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public byte LowVelocity {
 			get { return connectionParams.LowVelocity; }
 			set { connectionParams.LowVelocity = value; }
@@ -419,7 +400,6 @@ namespace CoreMidi {
 
 		/// <summary>Highest velocity to filter.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public byte HighVelocity {
 			get { return connectionParams.HighVelocity; }
 			set { connectionParams.HighVelocity = value; }
@@ -457,7 +437,6 @@ namespace CoreMidi {
 
 		/// <summary>Instructs how note numbers are transformed.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MidiTransform NoteNumber {
 			get { return connectionParams.NoteNumber; }
 			set { connectionParams.NoteNumber = value; }
@@ -465,7 +444,6 @@ namespace CoreMidi {
 
 		/// <summary>Instructs how velocity notes are transformed.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MidiTransform Velocity {
 			get { return connectionParams.Velocity; }
 			set { connectionParams.Velocity = value; }
@@ -473,7 +451,6 @@ namespace CoreMidi {
 
 		/// <summary>Instructs how polyphonic key pressure events are transformed.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MidiTransform KeyPressure {
 			get { return connectionParams.KeyPressure; }
 			set { connectionParams.KeyPressure = value; }
@@ -481,7 +458,6 @@ namespace CoreMidi {
 
 		/// <summary>Instructs how monophonic channels pressure are transformed.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MidiTransform ChannelPressure {
 			get { return connectionParams.ChannelPressure; }
 			set { connectionParams.ChannelPressure = value; }
@@ -489,7 +465,6 @@ namespace CoreMidi {
 
 		/// <summary>Instructs how program change events are transformed.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MidiTransform ProgramChange {
 			get { return connectionParams.ProgramChange; }
 			set { connectionParams.ProgramChange = value; }
@@ -497,7 +472,6 @@ namespace CoreMidi {
 
 		/// <summary>Instructs how pitch bend events are transformed.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MidiTransform PitchBend {
 			get { return connectionParams.PitchBend; }
 			set { connectionParams.PitchBend = value; }
@@ -505,7 +479,6 @@ namespace CoreMidi {
 
 		/// <summary>Flag to set all MIDI system exclusive messages to be filtered out.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool FilterOutSysEx {
 			get { return connectionParams.FilterOutSysEx == 1; }
 			set { connectionParams.FilterOutSysEx = value ? (byte) 1 : (byte) 0; }
@@ -513,7 +486,6 @@ namespace CoreMidi {
 
 		/// <summary>Flag to set all MIDI time code messages to be filtered out.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool FilterOutMtc {
 			get { return connectionParams.FilterOutMtc == 1; }
 			set { connectionParams.FilterOutMtc = value ? (byte) 1 : (byte) 0; }
@@ -521,7 +493,6 @@ namespace CoreMidi {
 
 		/// <summary>Flag to set all MIDI play, stop, resume and clock messages to be filtered out.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool FilterOutBeatClock {
 			get { return connectionParams.FilterOutBeatClock == 1; }
 			set { connectionParams.FilterOutBeatClock = value ? (byte) 1 : (byte) 0; }
@@ -529,7 +500,6 @@ namespace CoreMidi {
 
 		/// <summary>Flag to set all MIDI tune request messages to be filtered out.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool FilterOutTuneRequest {
 			get { return connectionParams.FilterOutTuneRequest == 1; }
 			set { connectionParams.FilterOutTuneRequest = value ? (byte) 1 : (byte) 0; }
@@ -537,7 +507,6 @@ namespace CoreMidi {
 
 		/// <summary>Flag to set all MIDI continuous control messages to be filtered out.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool FilterOutAllControls {
 			get { return connectionParams.FilterOutAllControls == 1; }
 			set { connectionParams.FilterOutAllControls = value ? (byte) 1 : (byte) 0; }
@@ -545,7 +514,6 @@ namespace CoreMidi {
 
 		/// <summary>Midi control transformations.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MidiControlTransform []? Controls {
 			get => controls;
 			set {
@@ -557,7 +525,6 @@ namespace CoreMidi {
 
 		/// <summary>MIDI value maps.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MidiValueMap []? Maps {
 			get => maps;
 			set {

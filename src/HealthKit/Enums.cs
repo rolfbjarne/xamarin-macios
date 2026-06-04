@@ -161,7 +161,7 @@ namespace HealthKit {
 		InBed,
 		/// <summary>The user is asleep.</summary>
 		Asleep,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates awake.</summary>
 		[MacCatalyst (13, 1)]
 		Awake,
 		[MacCatalyst (16, 0), Mac (13, 0), iOS (16, 0), NoTV]
@@ -374,55 +374,55 @@ namespace HealthKit {
 		Wrestling,
 		/// <summary>Yoga.</summary>
 		Yoga,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates barre.</summary>
 		[MacCatalyst (13, 1)]
 		Barre,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates core training.</summary>
 		[MacCatalyst (13, 1)]
 		CoreTraining,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates cross country skiing.</summary>
 		[MacCatalyst (13, 1)]
 		CrossCountrySkiing,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates downhill skiing.</summary>
 		[MacCatalyst (13, 1)]
 		DownhillSkiing,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates flexibility.</summary>
 		[MacCatalyst (13, 1)]
 		Flexibility,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates high intensity interval training.</summary>
 		[MacCatalyst (13, 1)]
 		HighIntensityIntervalTraining,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates jump rope.</summary>
 		[MacCatalyst (13, 1)]
 		JumpRope,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates kickboxing.</summary>
 		[MacCatalyst (13, 1)]
 		Kickboxing,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates pilates.</summary>
 		[MacCatalyst (13, 1)]
 		Pilates,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates snowboarding.</summary>
 		[MacCatalyst (13, 1)]
 		Snowboarding,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates stairs.</summary>
 		[MacCatalyst (13, 1)]
 		Stairs,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates step training.</summary>
 		[MacCatalyst (13, 1)]
 		StepTraining,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates wheelchair walk pace.</summary>
 		[MacCatalyst (13, 1)]
 		WheelchairWalkPace,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates wheelchair run pace.</summary>
 		[MacCatalyst (13, 1)]
 		WheelchairRunPace,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates tai chi.</summary>
 		[MacCatalyst (13, 1)]
 		TaiChi,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates mixed cardio.</summary>
 		[MacCatalyst (13, 1)]
 		MixedCardio,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hand cycling.</summary>
 		[MacCatalyst (13, 1)]
 		HandCycling,
 		[iOS (13, 0)]
@@ -463,22 +463,22 @@ namespace HealthKit {
 		Pause = 1,
 		/// <summary>The activity was resumed.</summary>
 		Resume,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates lap.</summary>
 		[MacCatalyst (13, 1)]
 		Lap,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates marker.</summary>
 		[MacCatalyst (13, 1)]
 		Marker,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates motion paused.</summary>
 		[MacCatalyst (13, 1)]
 		MotionPaused,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates motion resumed.</summary>
 		[MacCatalyst (13, 1)]
 		MotionResumed,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates segment.</summary>
 		[MacCatalyst (13, 1)]
 		Segment,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates pause or resume request.</summary>
 		[MacCatalyst (13, 1)]
 		PauseOrResumeRequest,
 	}
@@ -687,11 +687,11 @@ namespace HealthKit {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum HKWorkoutSwimmingLocationType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates pool.</summary>
 		Pool,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates open water.</summary>
 		OpenWater,
 	}
 
@@ -699,17 +699,17 @@ namespace HealthKit {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum HKSwimmingStrokeStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates mixed.</summary>
 		Mixed,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates freestyle.</summary>
 		Freestyle,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates backstroke.</summary>
 		Backstroke,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates breaststroke.</summary>
 		Breaststroke,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates butterfly.</summary>
 		Butterfly,
 		[MacCatalyst (16, 0), Mac (13, 0), iOS (16, 0), NoTV]
 		Kickboard = 6,
@@ -742,11 +742,11 @@ namespace HealthKit {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum HKVO2MaxTestType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates max exercise.</summary>
 		MaxExercise = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates prediction sub max exercise.</summary>
 		PredictionSubMaxExercise,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates prediction non exercise.</summary>
 		PredictionNonExercise,
 		[iOS (26, 0), TV (26, 0), MacCatalyst (26, 0), Mac (26, 0)]
 		PredictionStepTest,

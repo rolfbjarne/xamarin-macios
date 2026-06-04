@@ -14,7 +14,6 @@ namespace Contacts {
 		///         <param name="keys">The keys.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>Retrieves the <see cref="Contacts.CNContact" /> with the specified <paramref name="identifier" />.</summary>
-		///         <returns>To be added.</returns>
 		public CNContact? GetUnifiedContact<T> (string identifier, T [] keys, out NSError? error)
 			where T : INSObjectProtocol, INSSecureCoding, INSCopying
 		{
@@ -27,7 +26,6 @@ namespace Contacts {
 		///         <param name="keys">The keys.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>Retrieves the unified <see cref="Contacts.CNContact" /> objects, populated with data for <paramref name="keys" />, for which the <paramref name="predicate" /> returns <see langword="true" />.</summary>
-		///         <returns>To be added.</returns>
 		public CNContact []? GetUnifiedContacts<T> (NSPredicate predicate, T [] keys, out NSError? error)
 			where T : INSObjectProtocol, INSSecureCoding, INSCopying
 		{
@@ -39,8 +37,7 @@ namespace Contacts {
 		/// <typeparam name="T">To be added.</typeparam>
 		///         <param name="keys">The keys.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets unified me contact.</summary>
 		public NSObject? GetUnifiedMeContact<T> (T [] keys, out NSError? error)
 			where T : INSObjectProtocol, INSSecureCoding, INSCopying
 		{

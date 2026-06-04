@@ -187,7 +187,7 @@ namespace CoreGraphics {
 
 		/// <param name="colorspace">The colorspace.</param>
 		///         <param name="colors">The colors.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a new gradient with the specified color space and colors.</summary>
 		public CGGradient (CGColorSpace? colorspace, CGColor [] colors)
 			: base (Create (colorspace, colors), true)
 		{

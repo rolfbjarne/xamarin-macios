@@ -2,7 +2,7 @@ using System.Runtime.CompilerServices;
 
 namespace OpenGLES {
 	public partial class EAGLContext {
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets the presentation mode.</summary>
 		public enum PresentationMode {
 			/// <summary>Indicates at time.</summary>
 			AtTime = 0,

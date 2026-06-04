@@ -153,7 +153,6 @@ namespace CoreVideo {
 	/// <param name="pixelBuffer">The pixel buffer.</param>
 	///     <param name="refCon">The ref con.</param>
 	///     <summary>A delegate that defines the function used to pad buffers that use a custom pixel format.</summary>
-	///     <returns>To be added.</returns>
 	///     <altmember cref="CoreVideo.CVFillExtendedPixelsCallBackData" />
 	public delegate bool CVFillExtendedPixelsCallBack (IntPtr pixelBuffer, IntPtr refCon);
 #endif // !XAMCORE_5_0

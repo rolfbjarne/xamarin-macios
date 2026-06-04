@@ -16,7 +16,7 @@ using CoreFoundation;
 namespace SceneKit {
 	public partial class SCNSceneSource {
 
-		/// <typeparam name="T">To be added.</typeparam>
+		/// <typeparam name="T">The type of the entry to retrieve.</typeparam>
 		///         <param name="uid">The uid.</param>
 		///         <summary>Gets the entry that is identified by <paramref name="uid" />.</summary>
 		public NSObject? GetEntryWithIdentifier<T> (string uid)
@@ -24,7 +24,7 @@ namespace SceneKit {
 			return GetEntryWithIdentifier (uid, new Class (typeof (T)));
 		}
 
-		/// <typeparam name="T">To be added.</typeparam>
+		/// <typeparam name="T">The type of entries whose identifiers to retrieve.</typeparam>
 		///         <summary>Returns the list of identifiers that identify objects that belong to the specified class.</summary>
 		public string [] GetIdentifiersOfEntries<T> ()
 		{

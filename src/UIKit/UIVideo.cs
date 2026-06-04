@@ -36,12 +36,10 @@ namespace UIKit {
 	}
 
 	/// <summary>Static class that exposes some helper methods for manipulating video.</summary>
-	///     <remarks>To be added.</remarks>
 	public static class UIVideo {
-		/// <param name="path">To be added.</param>
-		///     <param name="error">To be added.</param>
+		/// <param name="path">The path.</param>
+		///     <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///     <summary>A delegate signature that is invoked after the video is saved.</summary>
-		///     <remarks>To be added.</remarks>
 		public delegate void SaveStatus (string path, NSError error);
 
 		[DllImport (Constants.UIKitLibrary)]
@@ -50,7 +48,6 @@ namespace UIKit {
 		/// <param name="path">The path to probe.</param>
 		///         <summary>Determines whether the video file is compatible with the current photos album.</summary>
 		///         <returns />
-		///         <remarks>To be added.</remarks>
 		public static bool IsCompatibleWithSavedPhotosAlbum (string path)
 		{
 			UIApplication.EnsureUIThread ();
@@ -64,7 +61,6 @@ namespace UIKit {
 		/// <param name="path">The path to save.</param>
 		///         <param name="status">Callback that will be invoked when the saving completes.</param>
 		///         <summary>Saves the video to the photos album.</summary>
-		///         <remarks>To be added.</remarks>
 		public static void SaveToPhotosAlbum (string path, SaveStatus status)
 		{
 			if (path is null)

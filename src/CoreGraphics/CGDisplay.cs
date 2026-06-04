@@ -24,7 +24,6 @@ namespace CoreGraphics {
 		static extern uint CGMainDisplayID ();
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public static int MainDisplayID {
 			get {
@@ -33,7 +32,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[DllImport (Constants.CoreGraphicsLibrary, EntryPoint = "CGDisplayModeGetTypeID")]
 		public static extern nint GetTypeID ();
@@ -43,7 +41,6 @@ namespace CoreGraphics {
 
 		/// <param name="display">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static CGRect GetBounds (int display)
 		{
@@ -55,7 +52,6 @@ namespace CoreGraphics {
 
 		/// <param name="display">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static nint GetWidth (int display)
 		{
@@ -67,7 +63,6 @@ namespace CoreGraphics {
 
 		/// <param name="display">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static nint GetHeight (int display)
 		{
@@ -88,7 +83,6 @@ namespace CoreGraphics {
 		///         <param name="blueMax">To be added.</param>
 		///         <param name="blueGamma">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static int SetDisplayTransfer (int display, float redMin, float redMax, float redGamma, float greenMin, float greenMax, float greenGamma, float blueMin, float blueMax, float blueGamma)
 		{
@@ -100,7 +94,6 @@ namespace CoreGraphics {
 
 		/// <param name="display">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static int GetGammaTableCapacity (int display)
 		{
@@ -121,7 +114,6 @@ namespace CoreGraphics {
 
 		/// <param name="display">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -137,7 +129,6 @@ namespace CoreGraphics {
 
 		/// <param name="display">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static int Capture (int display)
 		{
@@ -150,7 +141,6 @@ namespace CoreGraphics {
 		/// <param name="display">To be added.</param>
 		///         <param name="options">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static int Capture (int display, CGCaptureOptions options)
 		{
@@ -162,7 +152,6 @@ namespace CoreGraphics {
 
 		/// <param name="display">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static int Release (int display)
 		{
@@ -170,7 +159,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[DllImport (Constants.CoreGraphicsLibrary, EntryPoint = "CGCaptureAllDisplays")]
 		public static extern int CaptureAllDisplays ();
@@ -180,7 +168,6 @@ namespace CoreGraphics {
 
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[DllImport (Constants.CoreGraphicsLibrary, EntryPoint = "CGReleaseAllDisplays")]
 		public static extern int ReleaseAllDisplays ();
@@ -190,7 +177,6 @@ namespace CoreGraphics {
 
 		/// <param name="display">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static int HideCursor (int display)
 		{
@@ -202,7 +188,6 @@ namespace CoreGraphics {
 
 		/// <param name="display">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static int ShowCursor (int display)
 		{
@@ -215,7 +200,6 @@ namespace CoreGraphics {
 		/// <param name="display">To be added.</param>
 		///         <param name="point">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static int MoveCursor (int display, CGPoint point)
 		{
@@ -227,7 +211,6 @@ namespace CoreGraphics {
 
 		/// <param name="display">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static int GetOpenGLDisplayMask (int display)
 		{
@@ -239,7 +222,6 @@ namespace CoreGraphics {
 
 		/// <param name="displayMask">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static int GetDisplayID (int displayMask)
 		{
@@ -251,7 +233,6 @@ namespace CoreGraphics {
 
 		/// <param name="display">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static int GetShieldingWindowID (int display)
 		{
@@ -262,7 +243,6 @@ namespace CoreGraphics {
 		static extern int CGShieldingWindowLevel ();
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public static int ShieldingWindowLevel {
 			get { return CGShieldingWindowLevel (); }

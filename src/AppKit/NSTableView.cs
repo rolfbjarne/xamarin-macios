@@ -31,8 +31,7 @@
 namespace AppKit {
 
 	public partial class NSTableView {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the source.</summary>
 		public NSTableViewSource? Source {
 			get {
 				var d = WeakDelegate as NSTableViewSource;
@@ -49,7 +48,7 @@ namespace AppKit {
 
 		/// <param name="row">The row.</param>
 		/// <param name="byExtendingSelection">The by extending selection.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Selects row.</summary>
 		public void SelectRow (nint row, bool byExtendingSelection)
 		{
 			SelectRows (NSIndexSet.FromIndex (row), byExtendingSelection);
@@ -57,7 +56,7 @@ namespace AppKit {
 
 		/// <param name="column">The column.</param>
 		/// <param name="byExtendingSelection">The by extending selection.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Selects column.</summary>
 		public void SelectColumn (nint column, bool byExtendingSelection)
 		{
 			SelectColumns (NSIndexSet.FromIndex (column), byExtendingSelection);

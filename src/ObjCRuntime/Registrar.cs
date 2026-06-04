@@ -52,22 +52,18 @@ using ProductException = ObjCRuntime.RuntimeException;
 
 #if MONOMAC
 namespace ObjCRuntime {
-	/// <param name="sender">To be added.</param>
-	///     <param name="args">To be added.</param>
+	/// <param name="sender">The object that raised the event.</param>
+	///     <param name="args">The event arguments.</param>
 	///     <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	public delegate void AssemblyRegistrationHandler (object? sender, AssemblyRegistrationEventArgs args);
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	public class AssemblyRegistrationEventArgs : EventArgs {
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool Register { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public System.Reflection.AssemblyName? AssemblyName { get; internal set; }
 	}
 }

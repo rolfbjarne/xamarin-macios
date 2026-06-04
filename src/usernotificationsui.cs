@@ -67,8 +67,8 @@ namespace UserNotificationsUI {
 		[Export ("mediaPlayPauseButtonType", ArgumentSemantic.Assign)]
 		UNNotificationContentExtensionMediaPlayPauseButtonType MediaPlayPauseButtonType { get; }
 
-		/// <summary>Returns the rectangle that will be used to display a playback button.</summary>
-		/// <returns>The rectangle that will be used to display a playback button.</returns>
+		/// <summary>Returns the rectangle that will be used to display APlayback button.</summary>
+		/// <returns>The rectangle that will be used to display APlayback button.</returns>
 		[Export ("mediaPlayPauseButtonFrame", ArgumentSemantic.Assign)]
 		CGRect MediaPlayPauseButtonFrame { get; }
 

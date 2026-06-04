@@ -9,14 +9,13 @@ namespace NetworkExtension {
 	public class NEVpnConnectionStartOptions : DictionaryContainer {
 
 #if !COREBUILD
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="NEVpnConnectionStartOptions" /> instance.</summary>
 		public NEVpnConnectionStartOptions () : base (new NSMutableDictionary ()) { }
 		/// <param name="dictionary">The dictionary.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NEVpnConnectionStartOptions" /> instance.</summary>
 		public NEVpnConnectionStartOptions (NSDictionary dictionary) : base (dictionary) { }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the username.</summary>
 		public NSString? Username {
 			get {
 				return GetNSStringValue (NEVpnConnectionStartOptionInternal.Username);
@@ -26,8 +25,7 @@ namespace NetworkExtension {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the password.</summary>
 		public NSString? Password {
 			get {
 				return GetNSStringValue (NEVpnConnectionStartOptionInternal.Password);

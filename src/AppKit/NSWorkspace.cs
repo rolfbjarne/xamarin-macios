@@ -6,11 +6,11 @@ namespace AppKit {
 
 	public partial class NSWorkspace {
 
-		/// <param name="urls">To be added.</param>
-		///         <param name="bundleIdentifier">To be added.</param>
-		///         <param name="options">To be added.</param>
-		///         <param name="descriptor">To be added.</param>
-		///         <param name="identifiers">To be added.</param>
+		/// <param name="urls">The urls.</param>
+		///         <param name="bundleIdentifier">The bundle identifier.</param>
+		///         <param name="options">The options to use.</param>
+		///         <param name="descriptor">The descriptor.</param>
+		///         <param name="identifiers">The identifiers.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
@@ -23,10 +23,10 @@ namespace AppKit {
 			return _OpenUrls (urls, bundleIdentifier, options, descriptor, null);
 		}
 
-		/// <param name="urls">To be added.</param>
-		///         <param name="bundleIdentifier">To be added.</param>
-		///         <param name="options">To be added.</param>
-		///         <param name="descriptor">To be added.</param>
+		/// <param name="urls">The urls.</param>
+		///         <param name="bundleIdentifier">The bundle identifier.</param>
+		///         <param name="options">The options to use.</param>
+		///         <param name="descriptor">The descriptor.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>

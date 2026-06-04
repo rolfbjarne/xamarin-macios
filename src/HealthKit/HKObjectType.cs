@@ -17,7 +17,6 @@ namespace HealthKit {
 	public partial class HKQuantityType {
 		/// <param name="kind">The kind.</param>
 		///         <summary>Creates and returns a quantity type for the specified identifier.</summary>
-		///         <returns>To be added.</returns>
 		public static HKQuantityType? Create (HKQuantityTypeIdentifier kind)
 		{
 			return HKObjectType.GetQuantityType (kind.GetConstant ()!);
@@ -27,7 +26,6 @@ namespace HealthKit {
 	public partial class HKCategoryType {
 		/// <param name="kind">The kind.</param>
 		///         <summary>Creates and returns a <see cref="HealthKit.HKCategoryType" /> object of the specified <paramref name="kind" />.</summary>
-		///         <returns>To be added.</returns>
 		public static HKCategoryType? Create (HKCategoryTypeIdentifier kind)
 		{
 			return HKObjectType.GetCategoryType (kind.GetConstant ()!);
@@ -37,7 +35,6 @@ namespace HealthKit {
 	public partial class HKCharacteristicType {
 		/// <param name="kind">The kind.</param>
 		///         <summary>Creates and returns a <see cref="HealthKit.HKCharacteristicType" /> for the specified <paramref name="kind" />.</summary>
-		///         <returns>To be added.</returns>
 		public static HKCharacteristicType? Create (HKCharacteristicTypeIdentifier kind)
 		{
 			return HKObjectType.GetCharacteristicType (kind.GetConstant ()!);
@@ -46,8 +43,7 @@ namespace HealthKit {
 
 	public partial class HKCorrelationType {
 		/// <param name="kind">The kind.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Create.</summary>
 		public static HKCorrelationType? Create (HKCorrelationTypeIdentifier kind)
 		{
 			return HKObjectType.GetCorrelationType (kind.GetConstant ()!);
@@ -58,7 +54,6 @@ namespace HealthKit {
 	public partial class HKDocumentType {
 		/// <param name="kind">The kind.</param>
 		///         <summary>Creates a new <see cref="HealthKit.HKDocumentType" /> from the specified type identifier.</summary>
-		///         <returns>To be added.</returns>
 		public static HKDocumentType? Create (HKDocumentTypeIdentifier kind)
 		{
 			var constant = kind.GetConstant ();

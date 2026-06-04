@@ -1,7 +1,7 @@
 #nullable enable
 
 namespace NetworkExtension {
-	/// <summary>To be added.</summary>
+	/// <summary>Provides options for starting a VPN connection.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

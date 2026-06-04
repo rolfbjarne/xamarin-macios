@@ -298,10 +298,10 @@ namespace Speech {
 		NativeHandle Constructor (NSLocale locale);
 
 		/// <summary>Gets whether speech recognition is currently available.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>
-		///           <para>Speech recognition is not supported on all devices and is always reliant on Internet access.</para>
-		///         </remarks>
+		/// <value><see langword="true" /> if speech recognition is available; otherwise, <see langword="false" />.</value>
+		/// <remarks>
+		///   <para>Speech recognition is not supported on all devices and is always reliant on Internet access.</para>
+		/// </remarks>
 		[Export ("available")]
 		bool Available { [Bind ("isAvailable")] get; }
 

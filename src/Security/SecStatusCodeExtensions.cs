@@ -11,7 +11,6 @@
 
 namespace Security {
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -26,10 +25,9 @@ namespace Security {
 			/* OSStatus */ SecStatusCode status,
 			/* void * */ IntPtr reserved); /* always null */
 
-		/// <param name="status">To be added.</param>
+		/// <param name="status">The status.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("maccatalyst")]

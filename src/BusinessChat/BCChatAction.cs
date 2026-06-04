@@ -3,11 +3,11 @@
 using System.Collections.Generic;
 
 namespace BusinessChat {
-	/// <summary>To be added.</summary>
+	/// <summary>Provides methods for opening Business Chat transcripts.</summary>
 	public partial class BCChatAction {
 		/// <param name="businessIdentifier">The business identifier.</param>
-		///         <param name="intentParameters">The intent parameters.</param>
-		///         <summary>To be added.</summary>
+		/// <param name="intentParameters">The intent parameters.</param>
+		/// <summary>Opens a Business Chat transcript with the specified business and intent parameters.</summary>
 		public static void OpenTranscript (string businessIdentifier, Dictionary<BCParameterName, string> intentParameters)
 		{
 			var keys = new NSString [intentParameters.Keys.Count];

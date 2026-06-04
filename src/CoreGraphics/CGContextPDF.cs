@@ -36,23 +36,18 @@ namespace CoreGraphics {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public CGRect? MediaBox { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public CGRect? CropBox { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public CGRect? BleedBox { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public CGRect? TrimBox { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public CGRect? ArtBox { get; set; }
 
 		static void Add (NSMutableDictionary dict, IntPtr key, CGRect? val)
@@ -84,47 +79,36 @@ namespace CoreGraphics {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? Title { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? Author { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? Subject { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string []? Keywords { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? Creator { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? OwnerPassword { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? UserPassword { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public int? EncryptionKeyLength { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool? AllowsPrinting { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool? AllowsCopying { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public CGPDFAccessPermissions? AccessPermissions { get; set; }
 		//public NSDictionary OutputIntent { get; set; }
 		[SupportedOSPlatform ("macos")]
@@ -214,37 +198,33 @@ namespace CoreGraphics {
 		{
 		}
 
-		/// <param name="dataConsumer">To be added.</param>
-		///         <param name="mediaBox">To be added.</param>
-		///         <param name="info">To be added.</param>
+		/// <param name="dataConsumer">The data consumer.</param>
+		///         <param name="mediaBox">The media box.</param>
+		///         <param name="info">The info.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public unsafe CGContextPDF (CGDataConsumer dataConsumer, CGRect mediaBox, CGPDFInfo? info) :
 			this (dataConsumer, &mediaBox, info)
 		{
 		}
 
-		/// <param name="dataConsumer">To be added.</param>
-		///         <param name="mediaBox">To be added.</param>
+		/// <param name="dataConsumer">The data consumer.</param>
+		///         <param name="mediaBox">The media box.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public unsafe CGContextPDF (CGDataConsumer dataConsumer, CGRect mediaBox) :
 			this (dataConsumer, &mediaBox, null)
 		{
 		}
 
-		/// <param name="dataConsumer">To be added.</param>
-		///         <param name="info">To be added.</param>
+		/// <param name="dataConsumer">The data consumer.</param>
+		///         <param name="info">The info.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public unsafe CGContextPDF (CGDataConsumer dataConsumer, CGPDFInfo? info) :
 			this (dataConsumer, null, info)
 		{
 		}
 
-		/// <param name="dataConsumer">To be added.</param>
+		/// <param name="dataConsumer">The data consumer.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public unsafe CGContextPDF (CGDataConsumer dataConsumer) :
 			this (dataConsumer, null, null)
 		{
@@ -263,11 +243,10 @@ namespace CoreGraphics {
 		{
 		}
 
-		/// <param name="url">To be added.</param>
-		///         <param name="mediaBox">To be added.</param>
-		///         <param name="info">To be added.</param>
+		/// <param name="url">The URL to use.</param>
+		///         <param name="mediaBox">The media box.</param>
+		///         <param name="info">The info.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public unsafe CGContextPDF (NSUrl url, CGRect mediaBox, CGPDFInfo? info) :
 			this (url, &mediaBox, info)
 		{
@@ -306,7 +285,6 @@ namespace CoreGraphics {
 		extern static void CGPDFContextClose (/* CGContextRef */ IntPtr context);
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void Close ()
 		{
 			if (closed)
@@ -320,7 +298,6 @@ namespace CoreGraphics {
 
 		/// <param name="info">PDF Configuration options</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void BeginPage (CGPDFPageInfo? info)
 		{
 			using (var dict = info?.ToDictionary ())
@@ -331,7 +308,6 @@ namespace CoreGraphics {
 		extern static void CGPDFContextEndPage (/* CGContextRef */ IntPtr context);
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void EndPage ()
 		{
 			CGPDFContextEndPage (Handle);
@@ -358,7 +334,6 @@ namespace CoreGraphics {
 		/// <param name="url">The target url.</param>
 		///         <param name="region">The region.</param>
 		///         <summary>Associates a region in the screen with a url.   When the user clicks or taps in that region, he will be redirected to that url on their PDF viewer.</summary>
-		///         <remarks>To be added.</remarks>
 		public void SetUrl (NSUrl url, CGRect region)
 		{
 			if (url is null)
@@ -393,7 +368,6 @@ namespace CoreGraphics {
 		/// <param name="name">The name for the destination.</param>
 		///         <param name="rect">The region that will respond to user input.</param>
 		///         <summary>If the user clicks or taps in the specified region, the PDF viewer will jump to the named destination</summary>
-		///         <remarks>To be added.</remarks>
 		public void SetDestination (string name, CGRect rect)
 		{
 			if (name is null)

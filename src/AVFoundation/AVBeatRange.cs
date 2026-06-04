@@ -48,7 +48,7 @@ namespace AVFoundation {
 			Length = lengthInBeats;
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Returns a string representation of this beat range.</summary>
 		public override string ToString ()
 		{
 			return $"(Start={Start},Length={Length})";
@@ -65,7 +65,7 @@ namespace AVFoundation {
 		}
 
 		/// <param name="obj">The obj.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Determines whether this instance is equal to the specified object.</summary>
 		public override bool Equals (object? obj)
 		{
 			if (!(obj is AVBeatRange))
@@ -81,7 +81,7 @@ namespace AVFoundation {
 			return Start == other.Start && Length == other.Length;
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Returns the hash code for this beat range.</summary>
 		public override int GetHashCode ()
 		{
 			return HashCode.Combine (Start, Length);

@@ -201,7 +201,7 @@ namespace CoreGraphics {
 			return size.width == width && size.height == height;
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Returns the hash code for this size.</summary>
 		public override int GetHashCode ()
 		{
 			return HashCode.Combine (width, height);
@@ -226,7 +226,7 @@ namespace CoreGraphics {
 			return (CGPoint) this;
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Returns a string representation of this size.</summary>
 		public override string? ToString ()
 		{
 			return CFString.FromHandle (NSStringFromCGSize (this));

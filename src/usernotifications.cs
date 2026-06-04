@@ -909,7 +909,7 @@ namespace UserNotifications {
 	}
 
 	/// <summary>Class for processing push notification payloads before delivery.</summary>
-	///     <remarks>Developers can use this class to, for example, replace a payload, download a large payload in parts, or etc.</remarks>
+	///     <remarks>Developers can use this class to, for example, replace APayload, download a large payload in parts, or etc.</remarks>
 	///     <related type="externalDocumentation" href="https://developer.apple.com/reference/UserNotifications/UNNotificationServiceExtension">Apple documentation for <c>UNNotificationServiceExtension</c></related>
 	[Unavailable (PlatformName.TvOS)]
 	[MacCatalyst (13, 1)]

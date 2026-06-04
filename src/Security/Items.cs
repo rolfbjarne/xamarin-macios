@@ -47,7 +47,7 @@ namespace Security {
 	public enum SecKind {
 		/// <summary>The SecRecord stores an internet password.</summary>
 		InternetPassword,
-		/// <summary>The SecRecord stores a password.</summary>
+		/// <summary>The SecRecord stores APassword.</summary>
 		GenericPassword,
 		/// <summary>The SecRecord represents a certificate.</summary>
 		Certificate,
@@ -61,9 +61,9 @@ namespace Security {
 	/// <summary>An enumeration whose values specify when a keychain item should be readable.</summary>
 	///     <remarks>
 	///       <para>There are a number of axis to consider for the accessible settings of an item.</para>
-	///       <para>Whether the information should be made accessible without entering a passcode, the device being unlocked or always available.</para>
+	///       <para>Whether the information should be made accessible without entering APasscode, the device being unlocked or always available.</para>
 	///       <para>Another one is whether the information should be locked to this device, or whether the information can migrate to a new device via a backup restore.</para>
-	///       <para>This value is used by the <see cref="Security.SecAccessControl" /> constructor and surfaced as a property of the <see cref="Security.SecRecord" />.</para>
+	///       <para>This value is used by the <see cref="Security.SecAccessControl" /> constructor and surfaced as AProperty of the <see cref="Security.SecRecord" />.</para>
 	///     </remarks>
 	public enum SecAccessible {
 		/// <summary>Invalid value.</summary>
@@ -96,7 +96,7 @@ namespace Security {
 		[ObsoletedOSPlatform ("tvos", "Use 'AfterFirstUnlockThisDeviceOnly' or a better suited option instead.")]
 		[ObsoletedOSPlatform ("maccatalyst", "Use 'AfterFirstUnlockThisDeviceOnly' or a better suited option instead.")]
 		AlwaysThisDeviceOnly,
-		/// <summary>Limits access to the item to both this device and requires a passcode to be set and the data is only available if the device is currently unlocked.</summary>
+		/// <summary>Limits access to the item to both this device and requires APasscode to be set and the data is only available if the device is currently unlocked.</summary>
 		WhenPasscodeSetThisDeviceOnly,
 	}
 

@@ -55,7 +55,7 @@ namespace ObjCBindings {
 		public BindingTypeAttribute () { }
 
 		/// <summary>
-		/// Get/set the model name for a protocol model class.
+		/// Get/set the model name for AProtocol model class.
 		/// </summary>
 		public string ModelName { get; set; } = string.Empty;
 

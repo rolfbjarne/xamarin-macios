@@ -121,7 +121,7 @@ namespace CloudKit {
 		ParticipantMayNeedVerification = 33,
 		/// <summary>Indicates that the response was lost.</summary>
 		ResponseLost = 34,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates asset not available.</summary>
 		AssetNotAvailable = 35,
 		TemporarilyUnavailable = 36,
 		ParticipantAlreadyInvited = 37,
@@ -151,7 +151,7 @@ namespace CloudKit {
 		RecordZone = 2,
 		/// <summary>A notification was marked as having been read.</summary>
 		ReadNotification = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates database.</summary>
 		[MacCatalyst (13, 1)]
 		Database = 4,
 	}
@@ -179,7 +179,7 @@ namespace CloudKit {
 		FetchChanges = 1 << 0,
 		/// <summary>The zone supports atomic operations on sets of records.</summary>
 		Atomic = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates sharing.</summary>
 		[MacCatalyst (13, 1)]
 		Sharing = 1 << 2,
 		[iOS (15, 0), TV (15, 0)]
@@ -208,7 +208,7 @@ namespace CloudKit {
 		Query = 1,
 		/// <summary>The subscription tracks data lifecycle events for records in a particular record zone.</summary>
 		RecordZone = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates database.</summary>
 		[MacCatalyst (13, 1)]
 		Database = 3,
 	}
@@ -277,47 +277,47 @@ namespace CloudKit {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum CKQuerySubscriptionOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates record creation.</summary>
 		RecordCreation = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates record update.</summary>
 		RecordUpdate = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates record deletion.</summary>
 		RecordDeletion = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates fires once.</summary>
 		FiresOnce = 1 << 3,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum CKOperationGroupTransferSize : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates kilobytes.</summary>
 		Kilobytes,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates megabytes.</summary>
 		Megabytes,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates tens of megabytes.</summary>
 		TensOfMegabytes,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hundreds of megabytes.</summary>
 		HundredsOfMegabytes,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates gigabytes.</summary>
 		Gigabytes,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates tens of gigabytes.</summary>
 		TensOfGigabytes,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hundreds of gigabytes.</summary>
 		HundredsOfGigabytes,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum CKShareParticipantRole : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates owner.</summary>
 		Owner = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates private user.</summary>
 		PrivateUser = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates public user.</summary>
 		PublicUser = 4,
 		[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
 		Administrator = 2,

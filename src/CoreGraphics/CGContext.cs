@@ -406,7 +406,6 @@ namespace CoreGraphics {
 		/// <param name="point">To be added.</param>
 		///         <param name="mode">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public bool PathContainsPoint (CGPoint point, CGPathDrawingMode mode)
 		{
@@ -609,7 +608,6 @@ namespace CoreGraphics {
 		extern static CGRect CGContextGetClipBoundingBox (/* CGContextRef */ IntPtr c);
 
 		/// <summary>The bounding box of the current clipping path.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CGRect GetClipBoundingBox ()
 		{
@@ -857,7 +855,6 @@ namespace CoreGraphics {
 		extern static void CGContextSetInterpolationQuality (/* CGContextRef */ IntPtr context, CGInterpolationQuality quality);
 
 		/// <summary>A hint for the level of quality used when interpolating images (for example, when scaling).</summary>
-		///         <value>To be added.</value>
 		///         <remarks>
 		///           <para>
 		///             <see cref="CoreGraphics.CGContext.InterpolationQuality" /> is only a hint. Not all contexts support all <see cref="CoreGraphics.CGInterpolationQuality" /> values.</para>
@@ -946,7 +943,6 @@ namespace CoreGraphics {
 		extern static CGPoint CGContextGetTextPosition (/* CGContextRef */ IntPtr context);
 
 		/// <summary>The location, in user space coordinates, at which to draw text.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CGPoint TextPosition {
 			get {
@@ -964,7 +960,6 @@ namespace CoreGraphics {
 		extern static CGAffineTransform CGContextGetTextMatrix (/* CGContextRef */ IntPtr c);
 
 		/// <summary>Defines the transform between text space and user space. Independent of the <see cref="CoreGraphics.CGContext" />'s state.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CGAffineTransform TextMatrix {
 			get {
@@ -1423,7 +1418,6 @@ namespace CoreGraphics {
 		extern static CGAffineTransform CGContextGetUserSpaceToDeviceSpaceTransform (/* CGContextRef */ IntPtr context);
 
 		/// <summary>The <see cref="CoreGraphics.CGAffineTransform" /> that maps user-space coordinates into device-space coordinates.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CGAffineTransform GetUserSpaceToDeviceSpaceTransform ()
 		{
@@ -1435,7 +1429,6 @@ namespace CoreGraphics {
 
 		/// <param name="point">A point in user-space coordinates.</param>
 		///         <summary>Returns a new <see cref="CGPoint" /> that converts the user-space <paramref name="point" /> into device space.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CGPoint PointToDeviceSpace (CGPoint point)
 		{
@@ -1447,7 +1440,6 @@ namespace CoreGraphics {
 
 		/// <param name="point">A point.</param>
 		///         <summary>Converts APoint from device space coordinates to user space coordinates.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CGPoint ConvertPointToUserSpace (CGPoint point)
 		{
@@ -1459,7 +1451,6 @@ namespace CoreGraphics {
 
 		/// <param name="size">A size.</param>
 		///         <summary>Converts a size from user space coordinates to device space coordinates.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CGSize ConvertSizeToDeviceSpace (CGSize size)
 		{
@@ -1471,7 +1462,6 @@ namespace CoreGraphics {
 
 		/// <param name="size">A size.</param>
 		///         <summary>Converts a size from device space coordinates to user space coordinates.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CGSize ConvertSizeToUserSpace (CGSize size)
 		{
@@ -1483,7 +1473,6 @@ namespace CoreGraphics {
 
 		/// <param name="rect">A rectangle.</param>
 		///         <summary>Converts a rectangle from user space coordinates to device space coordinates.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CGRect ConvertRectToDeviceSpace (CGRect rect)
 		{
@@ -1495,7 +1484,6 @@ namespace CoreGraphics {
 
 		/// <param name="rect">A rectangle</param>
 		///         <summary>Converts a rectangle from device space coordinates to user space coordinates.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CGRect ConvertRectToUserSpace (CGRect rect)
 		{
@@ -1537,7 +1525,6 @@ namespace CoreGraphics {
 		extern static /* CGPathRef */ IntPtr CGContextCopyPath (/* CGContextRef */ IntPtr context);
 
 		/// <summary>Returns a deep copy of the current path in the current context.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CGPath CopyPath ()
 		{

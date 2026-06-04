@@ -37,7 +37,7 @@ namespace AppKit {
 			MarkDirty ();
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Represents a token for a gesture recognizer action.</summary>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 		[Register ("__NSGestureRecognizerToken")]
@@ -50,7 +50,7 @@ namespace AppKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Represents a token for a parameterless gesture recognizer action.</summary>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 		[Register ("__NSGestureRecognizerParameterlessToken")]
@@ -72,7 +72,7 @@ namespace AppKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Represents a token for a parametrized gesture recognizer action.</summary>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 		[Register ("__NSGestureRecognizerParametrizedToken")]

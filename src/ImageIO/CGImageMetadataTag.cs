@@ -15,7 +15,6 @@ namespace ImageIO {
 
 	// CGImageMetadata.h
 	/// <summary>An EXIF, IPTC, or XMP property and value.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -41,13 +40,12 @@ namespace ImageIO {
 		// CFArrayRef	-> NSArray (NSObject)
 		// CFDictionary	-> NSDictionary (NSObject)
 
-		/// <param name="xmlns">To be added.</param>
-		///         <param name="prefix">To be added.</param>
-		///         <param name="name">To be added.</param>
-		///         <param name="type">To be added.</param>
-		///         <param name="value">To be added.</param>
+		/// <param name="xmlns">The xmlns.</param>
+		///         <param name="prefix">The prefix.</param>
+		///         <param name="name">The name to use.</param>
+		///         <param name="type">The type.</param>
+		///         <param name="value">The value to set.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CGImageMetadataTag (NSString xmlns, NSString? prefix, NSString name, CGImageMetadataType type, NSObject? value) :
 			this (xmlns, prefix, name, type, value.GetHandle ())
 		{
@@ -55,13 +53,12 @@ namespace ImageIO {
 		}
 
 		// CFBoolean support
-		/// <param name="xmlns">To be added.</param>
-		///         <param name="prefix">To be added.</param>
-		///         <param name="name">To be added.</param>
-		///         <param name="type">To be added.</param>
-		///         <param name="value">To be added.</param>
+		/// <param name="xmlns">The xmlns.</param>
+		///         <param name="prefix">The prefix.</param>
+		///         <param name="name">The name to use.</param>
+		///         <param name="type">The type.</param>
+		///         <param name="value">The value to set.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CGImageMetadataTag (NSString xmlns, NSString? prefix, NSString name, CGImageMetadataType type, bool value) :
 			this (xmlns, prefix, name, type, value ? CFBoolean.TrueHandle : CFBoolean.FalseHandle)
 		{
@@ -103,7 +100,6 @@ namespace ImageIO {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NSString? Namespace {
 			get {
 				var result = CGImageMetadataTagCopyNamespace (Handle);
@@ -117,7 +113,6 @@ namespace ImageIO {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NSString? Prefix {
 			get {
 				var result = CGImageMetadataTagCopyPrefix (Handle);
@@ -131,7 +126,6 @@ namespace ImageIO {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NSString? Name {
 			get {
 				var result = CGImageMetadataTagCopyName (Handle);
@@ -146,7 +140,6 @@ namespace ImageIO {
 		// a boolean is returned as a NSString, i.e. type CGImageMetadataType.String, so NSObject is fine
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NSObject? Value {
 			get { return Runtime.GetNSObject<NSObject> (CGImageMetadataTagCopyValue (Handle), true); }
 		}
@@ -157,7 +150,6 @@ namespace ImageIO {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public CGImageMetadataType Type {
 			get { return CGImageMetadataTagGetType (Handle); }
 		}
@@ -168,7 +160,6 @@ namespace ImageIO {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CGImageMetadataTag? []? GetQualifiers ()
 		{
 			IntPtr result = CGImageMetadataTagCopyQualifiers (Handle);

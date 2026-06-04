@@ -18,24 +18,20 @@ namespace Foundation {
 			return new NSSet<NSString> (tags);
 		}
 
-		/// <param name="tags">To be added.</param>
+		/// <param name="tags">The tags.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public NSBundleResourceRequest (params string [] tags) : this (MakeSetFromTags (tags)) { }
-		/// <param name="bundle">To be added.</param>
-		///         <param name="tags">To be added.</param>
+		/// <param name="bundle">The bundle.</param>
+		///         <param name="tags">The tags.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public NSBundleResourceRequest (NSBundle bundle, params string [] tags) : this (MakeSetFromTags (tags), bundle) { }
 
-		/// <param name="tags">To be added.</param>
+		/// <param name="tags">The tags.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public NSBundleResourceRequest (params NSString [] tags) : this (MakeSetFromTags (tags)) { }
-		/// <param name="bundle">To be added.</param>
-		///         <param name="tags">To be added.</param>
+		/// <param name="bundle">The bundle.</param>
+		///         <param name="tags">The tags.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public NSBundleResourceRequest (NSBundle bundle, params NSString [] tags) : this (MakeSetFromTags (tags), bundle) { }
 
 	}

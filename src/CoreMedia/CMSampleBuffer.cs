@@ -27,7 +27,6 @@ using UIKit;
 namespace CoreMedia {
 
 	/// <summary>A container of zero-or-more samples of AParticular media type.</summary>
-	///     <remarks>To be added.</remarks>
 	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/AVCaptureFrames/">avcaptureframes</related>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -82,14 +81,13 @@ namespace CoreMedia {
 			/* AudioStreamPacketDescription* */ AudioStreamPacketDescription* packetDescriptions,
 			/* CMSampleBufferRef* */ IntPtr* sBufOut);
 
-		/// <param name="dataBuffer">To be added.</param>
-		///         <param name="formatDescription">To be added.</param>
-		///         <param name="samplesCount">To be added.</param>
-		///         <param name="sampleTimestamp">To be added.</param>
-		///         <param name="packetDescriptions">To be added.</param>
-		///         <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="dataBuffer">The data buffer.</param>
+		/// <param name="formatDescription">The format description.</param>
+		/// <param name="samplesCount">The samplesCount.</param>
+		/// <param name="sampleTimestamp">The sampleTimestamp.</param>
+		/// <param name="packetDescriptions">The packetDescriptions.</param>
+		/// <param name="error">On return, contains the error if any.</param>
+		/// <summary>Creates a new sample buffer.</summary>
 		public static CMSampleBuffer? CreateWithPacketDescriptions (CMBlockBuffer? dataBuffer, CMFormatDescription formatDescription, int samplesCount,
 			CMTime sampleTimestamp, AudioStreamPacketDescription [] packetDescriptions, out CMSampleBufferError error)
 		{
@@ -133,7 +131,6 @@ namespace CoreMedia {
 		///         <param name="timing">The timing information for the new sample buffer.</param>
 		///         <summary>Clones a sample buffer, using the provided timing information.</summary>
 		///         <returns>An identical sample buffer as the original one, except with the provided timing information.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CMSampleBuffer? CreateWithNewTiming (CMSampleBuffer original, CMSampleTimingInfo []? timing)
 		{
 			OSStatus status;
@@ -190,9 +187,8 @@ namespace CoreMedia {
 			return obj.Item1 (obj.Item2, index);
 		}
 
-		/// <param name="callback">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="callback">The callback.</param>
+		/// <summary>Calls the specified callback for each sample in the buffer.</summary>
 		public CMSampleBufferError CallForEachSample (Func<CMSampleBuffer, int, CMSampleBufferError> callback)
 		{
 			// it makes no sense not to provide a callback - and it also crash the app
@@ -254,13 +250,12 @@ namespace CoreMedia {
 			/* CMSampleBufferRef* */ IntPtr* bufOut
 		);
 
-		/// <param name="imageBuffer">To be added.</param>
-		///         <param name="dataReady">To be added.</param>
-		///         <param name="formatDescription">To be added.</param>
-		///         <param name="sampleTiming">To be added.</param>
-		///         <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="imageBuffer">The image buffer.</param>
+		/// <param name="dataReady">Whether the data is ready.</param>
+		/// <param name="formatDescription">The format description.</param>
+		/// <param name="sampleTiming">The sample timing.</param>
+		/// <param name="error">On return, contains the error if any.</param>
+		/// <summary>Creates a new sample buffer.</summary>
 		public static CMSampleBuffer? CreateForImageBuffer (CVImageBuffer imageBuffer, bool dataReady, CMVideoFormatDescription formatDescription, CMSampleTimingInfo sampleTiming, out CMSampleBufferError error)
 		{
 			if (imageBuffer is null)
@@ -290,8 +285,7 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static /* Boolean */ byte CMSampleBufferDataIsReady (/* CMSampleBufferRef */ IntPtr sbuf);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets whether the data is ready.</summary>
 		public bool DataIsReady {
 			get {
 				return CMSampleBufferDataIsReady (Handle) != 0;
@@ -328,8 +322,7 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static /* CMBlockBufferRef */ IntPtr CMSampleBufferGetDataBuffer (/* CMSampleBufferRef */ IntPtr sbuf);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the data buffer.</summary>
 		public CMBlockBuffer? GetDataBuffer ()
 		{
 			var blockHandle = CMSampleBufferGetDataBuffer (Handle);
@@ -343,8 +336,7 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static CMTime CMSampleBufferGetDecodeTimeStamp (/* CMSampleBufferRef */ IntPtr sbuf);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the decode time stamp.</summary>
 		public CMTime DecodeTimeStamp {
 			get {
 				return CMSampleBufferGetDecodeTimeStamp (Handle);
@@ -354,8 +346,7 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static CMTime CMSampleBufferGetDuration (/* CMSampleBufferRef */ IntPtr sbuf);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the total duration of this sample buffer.</summary>
 		public CMTime Duration {
 			get {
 				return CMSampleBufferGetDuration (Handle);
@@ -365,8 +356,7 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static /* CMFormatDescriptionRef */ IntPtr CMSampleBufferGetFormatDescription (/* CMSampleBufferRef */ IntPtr sbuf);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the audio format description.</summary>
 		public CMAudioFormatDescription? GetAudioFormatDescription ()
 		{
 			var descHandle = CMSampleBufferGetFormatDescription (Handle);
@@ -376,8 +366,7 @@ namespace CoreMedia {
 			return new CMAudioFormatDescription (descHandle, false);
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the video format description.</summary>
 		public CMVideoFormatDescription? GetVideoFormatDescription ()
 		{
 			var descHandle = CMSampleBufferGetFormatDescription (Handle);
@@ -390,8 +379,7 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static /* CVImageBufferRef */ IntPtr CMSampleBufferGetImageBuffer (/* CMSampleBufferRef */ IntPtr sbuf);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the image buffer.</summary>
 		public CVImageBuffer? GetImageBuffer ()
 		{
 			IntPtr ib = CMSampleBufferGetImageBuffer (Handle);
@@ -407,8 +395,7 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static /* CMItemCount */ nint CMSampleBufferGetNumSamples (/* CMSampleBufferRef */ IntPtr sbuf);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the number of samples in this buffer.</summary>
 		public nint NumSamples {
 			get {
 				return CMSampleBufferGetNumSamples (Handle);
@@ -418,8 +405,7 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static CMTime CMSampleBufferGetOutputDecodeTimeStamp (/* CMSampleBufferRef */ IntPtr sbuf);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the output decode time stamp.</summary>
 		public CMTime OutputDecodeTimeStamp {
 			get {
 				return CMSampleBufferGetOutputDecodeTimeStamp (Handle);
@@ -429,8 +415,7 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static CMTime CMSampleBufferGetOutputDuration (/* CMSampleBufferRef */ IntPtr sbuf);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the output duration.</summary>
 		public CMTime OutputDuration {
 			get {
 				return CMSampleBufferGetOutputDuration (Handle);
@@ -440,8 +425,7 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static CMTime CMSampleBufferGetOutputPresentationTimeStamp (/* CMSampleBufferRef */ IntPtr sbuf);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the output presentation time stamp.</summary>
 		public CMTime OutputPresentationTimeStamp {
 			get {
 				return CMSampleBufferGetOutputPresentationTimeStamp (Handle);
@@ -462,8 +446,7 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static CMTime CMSampleBufferGetPresentationTimeStamp (/* CMSampleBufferRef */ IntPtr sbuf);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the presentation time stamp.</summary>
 		public CMTime PresentationTimeStamp {
 			get {
 				return CMSampleBufferGetPresentationTimeStamp (Handle);
@@ -478,9 +461,8 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static /* CFArrayRef */ IntPtr CMSampleBufferGetSampleAttachmentsArray (/* CMSampleBufferRef */ IntPtr sbuf, /* Boolean */ byte createIfNecessary);
 
-		/// <param name="createIfNecessary">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="createIfNecessary">The createIfNecessary.</param>
+		/// <summary>Gets the per-sample attachment settings.</summary>
 		public CMSampleBufferAttachmentSettings? [] GetSampleAttachments (bool createIfNecessary)
 		{
 			var cfArrayRef = CMSampleBufferGetSampleAttachmentsArray (Handle, createIfNecessary.AsByte ());
@@ -525,7 +507,6 @@ namespace CoreMedia {
 
 		/// <summary>Fetches the timing information for the sample buffer.</summary>
 		///         <returns>An array of CMSampleTimingInfo.</returns>
-		///         <remarks>To be added.</remarks>
 		public CMSampleTimingInfo []? GetSampleTimingInfo ()
 		{
 			OSStatus status;
@@ -580,8 +561,7 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static /* size_t */ nuint CMSampleBufferGetTotalSampleSize (/* CMSampleBufferRef */ IntPtr sbuf);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the total size of all samples.</summary>
 		public nuint TotalSampleSize {
 			get {
 				return CMSampleBufferGetTotalSampleSize (Handle);
@@ -608,8 +588,7 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static /* OSStatus */ CMSampleBufferError CMSampleBufferInvalidate (/* CMSampleBufferRef */ IntPtr sbuf);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Invalidates the sample buffer.</summary>
 		public CMSampleBufferError Invalidate ()
 		{
 			return CMSampleBufferInvalidate (Handle);
@@ -618,8 +597,7 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static /* Boolean */ byte CMSampleBufferIsValid (/* CMSampleBufferRef */ IntPtr sbuf);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets whether this sample buffer is valid.</summary>
 		public bool IsValid {
 			get {
 				return CMSampleBufferIsValid (Handle) != 0;
@@ -629,8 +607,7 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static /* OSStatus */ CMSampleBufferError CMSampleBufferMakeDataReady (IntPtr handle);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Makes the data ready for the sample buffer.</summary>
 		public CMSampleBufferError MakeDataReady ()
 		{
 			return CMSampleBufferMakeDataReady (Handle);
@@ -639,9 +616,8 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static /* OSStatus */ CMSampleBufferError CMSampleBufferSetDataBuffer (IntPtr handle, IntPtr dataBufferHandle);
 
-		/// <param name="dataBuffer">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="dataBuffer">The data buffer.</param>
+		/// <summary>Sets the data buffer for this sample buffer.</summary>
 		public CMSampleBufferError SetDataBuffer (CMBlockBuffer dataBuffer)
 		{
 			CMSampleBufferError result = CMSampleBufferSetDataBuffer (Handle, dataBuffer.GetHandle ());
@@ -661,8 +637,7 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static /* OSStatus */ CMSampleBufferError CMSampleBufferSetDataReady (/* CMSampleBufferRef */ IntPtr sbuf);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Marks the sample buffer data as ready.</summary>
 		public CMSampleBufferError SetDataReady ()
 		{
 			return CMSampleBufferSetDataReady (Handle);
@@ -692,9 +667,8 @@ namespace CoreMedia {
 				obj.Item1 (obj.Item2);
 		}
 
-		/// <param name="invalidateHandler">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="invalidateHandler">The invalidateHandler.</param>
+		/// <summary>Sets the invalidation callback.</summary>
 		public CMSampleBufferError SetInvalidateCallback (Action<CMSampleBuffer> invalidateHandler)
 		{
 			if (invalidateHandler is null) {
@@ -720,9 +694,8 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static /* OSStatus */ CMSampleBufferError CMSampleBufferTrackDataReadiness (/* CMSampleBufferRef */ IntPtr sbuf, /* CMSampleBufferRef */ IntPtr sbufToTrack);
 
-		/// <param name="bufferToTrack">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="bufferToTrack">The bufferToTrack.</param>
+		/// <summary>Tracks data readiness against another sample buffer.</summary>
 		public CMSampleBufferError TrackDataReadiness (CMSampleBuffer bufferToTrack)
 		{
 			CMSampleBufferError result = CMSampleBufferTrackDataReadiness (Handle, bufferToTrack.GetHandle ());
@@ -737,11 +710,10 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static /* OSStatus */ CMSampleBufferError CMSampleBufferCopyPCMDataIntoAudioBufferList (/* CMSampleBufferRef */ IntPtr sbuf, /* int32_t */ int frameOffset, /* int32_t */ int numFrames, /* AudioBufferList* */ IntPtr bufferList);
 
-		/// <param name="frameOffset">To be added.</param>
-		///         <param name="numFrames">To be added.</param>
-		///         <param name="bufferList">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="frameOffset">The frameOffset.</param>
+		/// <param name="numFrames">The numFrames.</param>
+		/// <param name="bufferList">The bufferList.</param>
+		/// <summary>Copies PCM audio data from this sample buffer.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -768,14 +740,13 @@ namespace CoreMedia {
 			/* AudioStreamPacketDescription* */ AudioStreamPacketDescription* packetDescriptions,
 			/* CMSampleBufferRef* */ IntPtr* sBufOut);
 
-		/// <param name="dataBuffer">To be added.</param>
-		///         <param name="formatDescription">To be added.</param>
-		///         <param name="samplesCount">To be added.</param>
-		///         <param name="sampleTimestamp">To be added.</param>
-		///         <param name="packetDescriptions">To be added.</param>
-		///         <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="dataBuffer">The data buffer.</param>
+		/// <param name="formatDescription">The format description.</param>
+		/// <param name="samplesCount">The samplesCount.</param>
+		/// <param name="sampleTimestamp">The sampleTimestamp.</param>
+		/// <param name="packetDescriptions">The packetDescriptions.</param>
+		/// <param name="error">On return, contains the error if any.</param>
+		/// <summary>Creates a sample buffer with data ready.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -882,12 +853,11 @@ namespace CoreMedia {
 			/* const CMSampleTimingInfo * CM_NONNULL */ CMSampleTimingInfo* sampleTiming,
 			/* CMSampleBufferRef* */ IntPtr* sBufOut);
 
-		/// <param name="imageBuffer">To be added.</param>
-		///         <param name="formatDescription">To be added.</param>
-		///         <param name="sampleTiming">To be added.</param>
-		///         <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="imageBuffer">The image buffer.</param>
+		/// <param name="formatDescription">The format description.</param>
+		/// <param name="sampleTiming">The sample timing.</param>
+		/// <param name="error">On return, contains the error if any.</param>
+		/// <summary>Creates a sample buffer from an image buffer with data ready.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -930,8 +900,7 @@ namespace CoreMedia {
 		{
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets whether the sample is not a sync sample.</summary>
 		public bool? NotSync {
 			get {
 				return GetBoolValue (CMSampleAttachmentKey.NotSync);
@@ -941,8 +910,7 @@ namespace CoreMedia {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets whether the sample is a partial sync sample.</summary>
 		public bool? PartialSync {
 			get {
 				return GetBoolValue (CMSampleAttachmentKey.PartialSync);
@@ -952,8 +920,7 @@ namespace CoreMedia {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets whether the sample has redundant coding.</summary>
 		public bool? RedundantCoding {
 			get {
 				return GetBoolValue (CMSampleAttachmentKey.HasRedundantCoding);
@@ -963,8 +930,7 @@ namespace CoreMedia {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets whether other samples depend on this sample.</summary>
 		public bool? DependedOnByOthers {
 			get {
 				return GetBoolValue (CMSampleAttachmentKey.IsDependedOnByOthers);
@@ -974,8 +940,7 @@ namespace CoreMedia {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets whether this sample depends on other samples.</summary>
 		public bool? DependsOnOthers {
 			get {
 				return GetBoolValue (CMSampleAttachmentKey.DependsOnOthers);
@@ -985,8 +950,7 @@ namespace CoreMedia {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets whether earlier display times are allowed.</summary>
 		public bool? EarlierDisplayTimesAllowed {
 			get {
 				return GetBoolValue (CMSampleAttachmentKey.EarlierDisplayTimesAllowed);
@@ -996,8 +960,7 @@ namespace CoreMedia {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets whether this sample should be displayed immediately.</summary>
 		public bool? DisplayImmediately {
 			get {
 				return GetBoolValue (CMSampleAttachmentKey.DisplayImmediately);
@@ -1007,8 +970,7 @@ namespace CoreMedia {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets whether this sample should not be displayed.</summary>
 		public bool? DoNotDisplay {
 			get {
 				return GetBoolValue (CMSampleAttachmentKey.DoNotDisplay);
@@ -1018,8 +980,7 @@ namespace CoreMedia {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets whether the decoder should be reset before decoding.</summary>
 		public bool? ResetDecoderBeforeDecoding {
 			get {
 				return GetBoolValue (CMSampleAttachmentKey.ResetDecoderBeforeDecoding);
@@ -1029,8 +990,7 @@ namespace CoreMedia {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets whether the decoder should drain after decoding.</summary>
 		public bool? DrainAfterDecoding {
 			get {
 				return GetBoolValue (CMSampleAttachmentKey.DrainAfterDecoding);
@@ -1040,8 +1000,7 @@ namespace CoreMedia {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets whether this sample should be decoded in reverse.</summary>
 		public bool? Reverse {
 			get {
 				return GetBoolValue (CMSampleAttachmentKey.Reverse);
@@ -1051,8 +1010,7 @@ namespace CoreMedia {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets whether discontinuities should be filled with silence.</summary>
 		public bool? FillDiscontinuitiesWithSilence {
 			get {
 				return GetBoolValue (CMSampleAttachmentKey.FillDiscontinuitiesWithSilence);
@@ -1062,8 +1020,7 @@ namespace CoreMedia {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets whether this is an empty media sample.</summary>
 		public bool? EmptyMedia {
 			get {
 				return GetBoolValue (CMSampleAttachmentKey.EmptyMedia);
@@ -1073,8 +1030,7 @@ namespace CoreMedia {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets whether this is a permanent empty media sample.</summary>
 		public bool? PermanentEmptyMedia {
 			get {
 				return GetBoolValue (CMSampleAttachmentKey.PermanentEmptyMedia);
@@ -1084,8 +1040,7 @@ namespace CoreMedia {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets whether empty media should be displayed immediately.</summary>
 		public bool? DisplayEmptyMediaImmediately {
 			get {
 				return GetBoolValue (CMSampleAttachmentKey.DisplayEmptyMediaImmediately);
@@ -1095,8 +1050,7 @@ namespace CoreMedia {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets whether this sample ends the previous sample duration.</summary>
 		public bool? EndsPreviousSampleDuration {
 			get {
 				return GetBoolValue (CMSampleAttachmentKey.EndsPreviousSampleDuration);
@@ -1107,8 +1061,7 @@ namespace CoreMedia {
 		}
 
 #if !MONOMAC
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the reason the frame was dropped.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("macos")]
@@ -1119,8 +1072,7 @@ namespace CoreMedia {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the lens stabilization status for a still image.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]

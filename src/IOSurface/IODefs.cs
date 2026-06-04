@@ -11,7 +11,7 @@
 
 namespace IOSurface {
 
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies lock options for IOSurface operations.</summary>
 	public enum IOSurfaceLockOptions : uint {
 		/// <summary>Indicates read only.</summary>
 		ReadOnly = 1,
@@ -19,7 +19,7 @@ namespace IOSurface {
 		AvoidSync = 2,
 	}
 
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies purgeability states for IOSurface memory.</summary>
 	public enum IOSurfacePurgeabilityState : uint {
 		/// <summary>Indicates non volatile.</summary>
 		NonVolatile = 0,
@@ -32,7 +32,7 @@ namespace IOSurface {
 	}
 
 	// To be used with kIOSurfaceCacheMode or IOSurfacePropertyKeyCacheMode
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies memory mapping modes for IOSurface.</summary>
 	public enum IOSurfaceMemoryMap {
 		/// <summary>Indicates default cache.</summary>
 		DefaultCache = 0,

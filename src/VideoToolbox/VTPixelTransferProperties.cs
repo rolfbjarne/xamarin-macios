@@ -21,7 +21,6 @@ namespace VideoToolbox {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public VTScalingMode ScalingMode {
 			get {
 				var key = GetNSStringValue (VTPixelTransferPropertyKeys.ScalingMode);
@@ -61,7 +60,6 @@ namespace VideoToolbox {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public VTDownsamplingMode DownsamplingMode {
 			get {
 				var key = GetNSStringValue (VTPixelTransferPropertyKeys.DownsamplingMode);
@@ -91,7 +89,6 @@ namespace VideoToolbox {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -135,7 +132,6 @@ namespace VideoToolbox {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -174,7 +170,6 @@ namespace VideoToolbox {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public VTYCbCrMatrix DestinationYCbCrMatrix {
 			get {
 				var key = GetNSStringValue (VTPixelTransferPropertyKeys.DestinationYCbCrMatrix);

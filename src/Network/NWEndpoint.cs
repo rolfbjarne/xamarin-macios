@@ -17,7 +17,6 @@ using OS_nw_txt_record = System.IntPtr;
 
 namespace Network {
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
@@ -33,17 +32,15 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NWEndpointType Type => nw_endpoint_get_type (GetCheckedHandle ());
 
 		[DllImport (Constants.NetworkLibrary)]
 		extern static OS_nw_endpoint nw_endpoint_create_host (IntPtr hostname, IntPtr port);
 
-		/// <param name="hostname">To be added.</param>
-		///         <param name="port">To be added.</param>
+		/// <param name="hostname">The hostname.</param>
+		///         <param name="port">The port.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static NWEndpoint? Create (string hostname, string port)
 		{
 			if (hostname is null)
@@ -63,7 +60,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? Hostname => Marshal.PtrToStringAnsi (nw_endpoint_get_hostname (GetCheckedHandle ()));
 
 		[DllImport (Constants.NetworkLibrary, EntryPoint = "nw_endpoint_copy_port_string")]
@@ -77,7 +73,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string Port => nw_endpoint_copy_port_string (GetCheckedHandle ());
 
 		[DllImport (Constants.NetworkLibrary)]
@@ -85,7 +80,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public ushort PortNumber => nw_endpoint_get_port (GetCheckedHandle ());
 
 		[DllImport (Constants.NetworkLibrary)]
@@ -106,7 +100,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string Address => nw_endpoint_copy_address_string (GetCheckedHandle ());
 
 #if false
@@ -119,12 +112,11 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		static extern unsafe OS_nw_endpoint nw_endpoint_create_bonjour_service (IntPtr name, IntPtr type, IntPtr domain);
 
-		/// <param name="name">To be added.</param>
-		///         <param name="serviceType">To be added.</param>
-		///         <param name="domain">To be added.</param>
+		/// <param name="name">The name to use.</param>
+		///         <param name="serviceType">The service type.</param>
+		///         <param name="domain">The domain.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static NWEndpoint? CreateBonjourService (string name, string serviceType, string domain)
 		{
 			if (serviceType is null)
@@ -143,7 +135,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? BonjourServiceName => Marshal.PtrToStringAnsi (nw_endpoint_get_bonjour_service_name (GetCheckedHandle ()));
 
 		[DllImport (Constants.NetworkLibrary)]
@@ -151,7 +142,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? BonjourServiceType => Marshal.PtrToStringAnsi (nw_endpoint_get_bonjour_service_type (GetCheckedHandle ()));
 
 		[DllImport (Constants.NetworkLibrary)]
@@ -159,7 +149,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? BonjourServiceDomain => Marshal.PtrToStringAnsi (nw_endpoint_get_bonjour_service_domain (GetCheckedHandle ()));
 
 		[SupportedOSPlatform ("tvos13.0")]

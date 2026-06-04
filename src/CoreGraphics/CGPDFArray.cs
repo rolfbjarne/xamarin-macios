@@ -194,7 +194,7 @@ namespace CoreGraphics {
 		/// <param name="index">The zero-based index.</param>
 		///     <param name="value">The value to set.</param>
 		///     <param name="info">The info.</param>
-		///     <summary>To be added.</summary>
+		/// <summary>A callback invoked for each element in a PDF array.</summary>
 		public delegate bool ApplyCallback (nint index, object? value, object? info);
 
 		[SupportedOSPlatform ("ios")]

@@ -43,7 +43,7 @@ namespace AVFoundation {
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public class AVErrorEventArgs : EventArgs {
-		/// <param name="error">To be added.</param>
+		/// <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>Initializes a new instance of the AVErrorEventArgs class.</summary>
 		///         <remarks>
 		///         </remarks>
@@ -54,7 +54,6 @@ namespace AVFoundation {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NSError Error { get; private set; }
 	}
 
@@ -73,7 +72,7 @@ namespace AVFoundation {
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public class AVStatusEventArgs : EventArgs {
-		/// <param name="status">To be added.</param>
+		/// <param name="status">The status.</param>
 		///         <summary>Initializes a new instance of the AVStatusEventArgs class.</summary>
 		///         <remarks>
 		///         </remarks>
@@ -84,7 +83,6 @@ namespace AVFoundation {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool Status { get; private set; }
 	}
 
@@ -135,7 +133,6 @@ namespace AVFoundation {
 #pragma warning restore 672
 
 	/// <summary>An audio player that can play audio from memory or the local file system.</summary>
-	///     <remarks>To be added.</remarks>
 	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/AVTouchSample/">avTouch</related>
 	/// <related type="externalDocumentation" href="https://developer.apple.com/documentation/avfaudio/avaudioplayer">Apple documentation for <c>AVAudioPlayer</c></related>
 	public partial class AVAudioPlayer {
@@ -263,7 +260,6 @@ namespace AVFoundation {
 		}
 
 		/// <summary>Event indicating an error during encoding.</summary>
-		/// <remarks>To be added.</remarks>
 		public event EventHandler<AVErrorEventArgs> EncoderError {
 			add {
 				EnsureEventDelegate ().cbEncoderError += value;
@@ -276,7 +272,6 @@ namespace AVFoundation {
 		}
 
 		/// <summary>Event raised when an interruption begins.</summary>
-		/// <remarks>To be added.</remarks>
 		public event EventHandler BeginInterruption {
 			add {
 				EnsureEventDelegate ().cbBeginInterruption += value;
@@ -289,7 +284,6 @@ namespace AVFoundation {
 		}
 
 		/// <summary>An event indicating an interruption has ended.</summary>
-		/// <remarks>To be added.</remarks>
 		public event EventHandler EndInterruption {
 			add {
 				EnsureEventDelegate ().cbEndInterruption += value;
@@ -317,7 +311,7 @@ namespace AVFoundation {
 	[SupportedOSPlatform ("macos")]
 #endif
 	public class AVSampleRateEventArgs : EventArgs {
-		/// <param name="sampleRate">To be added.</param>
+		/// <param name="sampleRate">The sample rate.</param>
 		///         <summary>Initializes a new instance of the AVSampleRateEventArgs class.</summary>
 		///         <remarks>
 		///         </remarks>
@@ -327,7 +321,6 @@ namespace AVFoundation {
 		}
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public double SampleRate { get; private set; }
 	}
 
@@ -344,7 +337,7 @@ namespace AVFoundation {
 	[SupportedOSPlatform ("macos")]
 #endif
 	public class AVChannelsEventArgs : EventArgs {
-		/// <param name="numberOfChannels">To be added.</param>
+		/// <param name="numberOfChannels">The number of channels.</param>
 		///         <summary>Initializes a new instance of the AVChannelsEventArgs class.</summary>
 		///         <remarks>
 		///         </remarks>
@@ -354,7 +347,6 @@ namespace AVFoundation {
 		}
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public int NumberOfChannels { get; private set; }
 	}
 
@@ -371,7 +363,7 @@ namespace AVFoundation {
 	[SupportedOSPlatform ("macos")]
 #endif
 	public class AVCategoryEventArgs : EventArgs {
-		/// <param name="category">To be added.</param>
+		/// <param name="category">The category.</param>
 		///         <summary>Initializes a new instance of the AVCategoryEventArgs class.</summary>
 		///         <remarks>
 		///         </remarks>
@@ -382,7 +374,6 @@ namespace AVFoundation {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string Category { get; private set; }
 	}
 #endif // !(XAMCORE_5_0 && (__TVOS__ || __MACOS__)

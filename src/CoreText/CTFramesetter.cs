@@ -50,7 +50,7 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTFramesetterCreateWithAttributedString (IntPtr @string);
 		/// <param name="value">The value to set.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CTFramesetter" /> instance.</summary>
 		public CTFramesetter (NSAttributedString value)
 			: base (CTFramesetterCreateWithAttributedString (value.GetNonNullHandle (nameof (value))), true, true)
 		{
@@ -64,8 +64,7 @@ namespace CoreText {
 		/// <param name="stringRange">The string range.</param>
 		///         <param name="path">The path.</param>
 		///         <param name="frameAttributes">The frame attributes.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets frame.</summary>
 		public CTFrame? GetFrame (NSRange stringRange, CGPath path, CTFrameAttributes? frameAttributes)
 		{
 			if (path is null)
@@ -80,8 +79,7 @@ namespace CoreText {
 
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTFramesetterGetTypesetter (IntPtr framesetter);
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Gets typesetter.</summary>
 		public CTTypesetter? GetTypesetter ()
 		{
 			var h = CTFramesetterGetTypesetter (Handle);
@@ -100,8 +98,7 @@ namespace CoreText {
 		///         <param name="frameAttributes">The frame attributes.</param>
 		///         <param name="constraints">The constraints.</param>
 		///         <param name="fitRange">The fit range.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Suggests frame size.</summary>
 		public CGSize SuggestFrameSize (NSRange stringRange, CTFrameAttributes? frameAttributes, CGSize constraints, out NSRange fitRange)
 		{
 			fitRange = default;
@@ -123,8 +120,7 @@ namespace CoreText {
 		static extern IntPtr CTFramesetterCreateWithTypesetter (IntPtr typesetter);
 
 		/// <param name="typesetter">The typesetter.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Create.</summary>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]

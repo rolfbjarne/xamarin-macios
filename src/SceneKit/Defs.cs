@@ -269,7 +269,7 @@ namespace SceneKit {
 		AutoReverse,
 	}
 
-	/// <summary>Enumerates how a particle property is animated (over the lifetime of the particle, as the particle travels over a distance, or based on another property). Used with <see cref="SceneKit.SCNParticlePropertyController.InputMode" />.</summary>
+	/// <summary>Enumerates how AParticle property is animated (over the lifetime of the particle, as the particle travels over a distance, or based on another property). Used with <see cref="SceneKit.SCNParticlePropertyController.InputMode" />.</summary>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum SCNParticleInputMode : long {

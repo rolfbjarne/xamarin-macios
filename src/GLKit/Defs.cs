@@ -179,7 +179,7 @@ namespace GLKit {
 		UnsupportedBitDepth = 10,
 		/// <summary>Indicates unsupported p v r format.</summary>
 		UnsupportedPVRFormat = 11,
-		/// <summary>Indicates data preprocessing failure.</summary>
+		/// <summary>Indicates datAPreprocessing failure.</summary>
 		DataPreprocessingFailure = 12,
 		/// <summary>Indicates mipmap unsupported.</summary>
 		MipmapUnsupported = 13,
@@ -187,7 +187,7 @@ namespace GLKit {
 		UnsupportedOrientation = 14,
 		/// <summary>Indicates reorientation failure.</summary>
 		ReorientationFailure = 15,
-		/// <summary>Indicates alpha premultiplication failure.</summary>
+		/// <summary>Indicates alphAPremultiplication failure.</summary>
 		AlphaPremultiplicationFailure = 16,
 		/// <summary>Indicates invalid e a g l context.</summary>
 		InvalidEAGLContext = 17,

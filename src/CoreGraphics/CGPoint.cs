@@ -17,7 +17,7 @@ namespace CoreGraphics {
 		nfloat x;
 		nfloat y;
 
-		/// <summary>To be added.</summary>
+	/// <summary>Represents an empty point with both coordinates set to zero.</summary>
 		public static readonly CGPoint Empty;
 
 #if !COREBUILD
@@ -64,7 +64,7 @@ namespace CoreGraphics {
 
 		/// <param name="point">The point.</param>
 		///         <param name="size">The size.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Adds a size to a point and returns the resulting point.</summary>
 		public static CGPoint Add (CGPoint point, CGSize size)
 		{
 			return point + size;
@@ -72,25 +72,25 @@ namespace CoreGraphics {
 
 		/// <param name="point">The point.</param>
 		///         <param name="size">The size.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Subtracts a size from a point and returns the resulting point.</summary>
 		public static CGPoint Subtract (CGPoint point, CGSize size)
 		{
 			return point - size;
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the x-coordinate of this point.</summary>
 		public nfloat X {
 			get { return x; }
 			set { x = value; }
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the y-coordinate of this point.</summary>
 		public nfloat Y {
 			get { return y; }
 			set { y = value; }
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets a value indicating whether both coordinates are zero.</summary>
 		public bool IsEmpty {
 			get { return x == 0.0 && y == 0.0; }
 		}
@@ -105,7 +105,7 @@ namespace CoreGraphics {
 #if !COREBUILD
 		/// <param name="x">The x.</param>
 		///         <param name="y">The y.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Initializes a new point with the specified coordinates.</summary>
 		public CGPoint (double x, double y)
 		{
 			this.x = (nfloat) x;
@@ -114,7 +114,7 @@ namespace CoreGraphics {
 
 		/// <param name="x">The x.</param>
 		///         <param name="y">The y.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Initializes a new point with the specified coordinates.</summary>
 		public CGPoint (float x, float y)
 		{
 			this.x = x;
@@ -122,7 +122,7 @@ namespace CoreGraphics {
 		}
 
 		/// <param name="point">The point.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Initializes a new point by copying the coordinates from another point.</summary>
 		public CGPoint (CGPoint point)
 		{
 			this.x = point.x;
@@ -178,20 +178,20 @@ namespace CoreGraphics {
 #endif // !COREBUILD
 
 		/// <param name="obj">The obj.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Determines whether this point is equal to the specified object.</summary>
 		public override bool Equals (object? obj)
 		{
 			return (obj is CGPoint t) && Equals (t);
 		}
 
 		/// <param name="point">The point.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Determines whether this point is equal to the specified point.</summary>
 		public bool Equals (CGPoint point)
 		{
 			return point.x == x && point.y == y;
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Returns the hash code for this point.</summary>
 		public override int GetHashCode ()
 		{
 			return HashCode.Combine (x, y);
@@ -204,7 +204,7 @@ namespace CoreGraphics {
 			y = Y;
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Returns a string representation of this point.</summary>
 		public override string? ToString ()
 		{
 			return CFString.FromHandle (NSStringFromCGPoint (this));

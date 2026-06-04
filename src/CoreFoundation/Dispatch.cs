@@ -842,7 +842,7 @@ namespace CoreFoundation {
 	///       <para>with dispatch functions that need timeouts or operate on a schedule.</para>
 	///       <para>
 	///       </para>
-	///       <para>To create an absolute wall time, invoke the DispatchTime constructor with the number of nanoseconds for a particular point in time with a negative time.</para>
+	///       <para>To create an absolute wall time, invoke the DispatchTime constructor with the number of nanoseconds for AParticular point in time with a negative time.</para>
 	///     </remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]

@@ -8,7 +8,7 @@
 using AppKit;
 
 namespace Foundation {
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies the type of Apple event descriptor to create.</summary>
 	public enum NSAppleEventDescriptorType {
 		/// <summary>Indicates record.</summary>
 		Record,
@@ -18,7 +18,7 @@ namespace Foundation {
 
 	public partial class NSAppleEventDescriptor {
 		/// <param name="type">The type.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a new Apple event descriptor of the specified type.</summary>
 		public NSAppleEventDescriptor (NSAppleEventDescriptorType type)
 		{
 			switch (type) {

@@ -15,17 +15,17 @@ namespace CoreBluetooth {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum CBManagerState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates resetting.</summary>
 		Resetting,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unsupported.</summary>
 		Unsupported,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unauthorized.</summary>
 		Unauthorized,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates powered off.</summary>
 		PoweredOff,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates powered on.</summary>
 		PoweredOn,
 	}
 
@@ -36,17 +36,17 @@ namespace CoreBluetooth {
 	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'CBManagerState' instead.")]
 	[Native]
 	public enum CBCentralManagerState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown = CBManagerState.Unknown,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates resetting.</summary>
 		Resetting = CBManagerState.Resetting,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unsupported.</summary>
 		Unsupported = CBManagerState.Unsupported,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unauthorized.</summary>
 		Unauthorized = CBManagerState.Unauthorized,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates powered off.</summary>
 		PoweredOff = CBManagerState.PoweredOff,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates powered on.</summary>
 		PoweredOn = CBManagerState.PoweredOn,
 	}
 
@@ -57,17 +57,17 @@ namespace CoreBluetooth {
 	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'CBManagerState' instead.")]
 	[Native]
 	public enum CBPeripheralManagerState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown = CBManagerState.Unknown,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates resetting.</summary>
 		Resetting = CBManagerState.Resetting,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unsupported.</summary>
 		Unsupported = CBManagerState.Unsupported,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unauthorized.</summary>
 		Unauthorized = CBManagerState.Unauthorized,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates powered off.</summary>
 		PoweredOff = CBManagerState.PoweredOff,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates powered on.</summary>
 		PoweredOn = CBManagerState.PoweredOn,
 	}
 
@@ -93,26 +93,26 @@ namespace CoreBluetooth {
 	[Flags]
 	[Native]
 	public enum CBCharacteristicProperties : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates broadcast.</summary>
 		Broadcast = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates read.</summary>
 		Read = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates write without response.</summary>
 		WriteWithoutResponse = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates write.</summary>
 		Write = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates notify.</summary>
 		Notify = 16,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates indicate.</summary>
 		Indicate = 32,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates authenticated signed writes.</summary>
 		AuthenticatedSignedWrites = 64,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates extended properties.</summary>
 		ExtendedProperties = 128,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates notify encryption required.</summary>
 		[MacCatalyst (13, 1)]
 		NotifyEncryptionRequired = 0x100,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates indicate encryption required.</summary>
 		[MacCatalyst (13, 1)]
 		IndicateEncryptionRequired = 0x200,
 	}
@@ -122,35 +122,35 @@ namespace CoreBluetooth {
 	[ErrorDomain ("CBErrorDomain")]
 	[Native] // NSInteger -> CBError.h
 	public enum CBError : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid parameters.</summary>
 		InvalidParameters,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid handle.</summary>
 		InvalidHandle,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates not connected.</summary>
 		NotConnected,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates out of space.</summary>
 		OutOfSpace,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates operation cancelled.</summary>
 		OperationCancelled,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates connection timeout.</summary>
 		ConnectionTimeout,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates peripheral disconnected.</summary>
 		PeripheralDisconnected,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates u u i d not allowed.</summary>
 		UUIDNotAllowed,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates already advertising.</summary>
 		AlreadyAdvertising,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates connection failed.</summary>
 		ConnectionFailed,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates connection limit reached.</summary>
 		ConnectionLimitReached,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown device.</summary>
 		UnknownDevice,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates operation not supported.</summary>
 		OperationNotSupported,
 		PeerRemovedPairingInformation,
 		EncryptionTimedOut,
@@ -164,41 +164,41 @@ namespace CoreBluetooth {
 	[ErrorDomain ("CBATTErrorDomain")]
 	[Native] // NSInteger -> CBError.h
 	public enum CBATTError : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates success.</summary>
 		Success = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid handle.</summary>
 		InvalidHandle,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates read not permitted.</summary>
 		ReadNotPermitted,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates write not permitted.</summary>
 		WriteNotPermitted,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid pdu.</summary>
 		InvalidPdu,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates insufficient authentication.</summary>
 		InsufficientAuthentication,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates request not supported.</summary>
 		RequestNotSupported,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid offset.</summary>
 		InvalidOffset,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates insufficient authorization.</summary>
 		InsufficientAuthorization,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates prepare queue full.</summary>
 		PrepareQueueFull,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates attribute not found.</summary>
 		AttributeNotFound,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates attribute not long.</summary>
 		AttributeNotLong,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates insufficient encryption key size.</summary>
 		InsufficientEncryptionKeySize,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid attribute value length.</summary>
 		InvalidAttributeValueLength,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unlikely error.</summary>
 		UnlikelyError,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates insufficient encryption.</summary>
 		InsufficientEncryption,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unsupported group type.</summary>
 		UnsupportedGroupType,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates insufficient resources.</summary>
 		InsufficientResources,
 	}
 
@@ -207,9 +207,9 @@ namespace CoreBluetooth {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum CBCharacteristicWriteType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates with response.</summary>
 		WithResponse,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates without response.</summary>
 		WithoutResponse,
 	}
 
@@ -219,13 +219,13 @@ namespace CoreBluetooth {
 	[Flags]
 	[Native]
 	public enum CBAttributePermissions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates readable.</summary>
 		Readable = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates writeable.</summary>
 		Writeable = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates read encryption required.</summary>
 		ReadEncryptionRequired = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates write encryption required.</summary>
 		WriteEncryptionRequired = 1 << 3,
 	}
 
@@ -234,11 +234,11 @@ namespace CoreBluetooth {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum CBPeripheralManagerConnectionLatency : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates low.</summary>
 		Low = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates medium.</summary>
 		Medium,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates high.</summary>
 		High,
 	}
 

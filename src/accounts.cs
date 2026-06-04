@@ -182,7 +182,7 @@ namespace Accounts {
 		void RemoveAccount (ACAccount account, ACAccountStoreRemoveCompletionHandler completionHandler);
 	}
 
-	/// <summary>A class that contains information about <see cref="Accounts.ACAccount" />s of a particular type.</summary>
+	/// <summary>A class that contains information about <see cref="Accounts.ACAccount" />s of AParticular type.</summary>
 	///     <remarks>
 	///       <para>Application developers do not instantiate <see cref="Accounts.ACAccountType" /> directly. Rather, they can retrieve an appropriate object with the <see cref="Accounts.ACAccountStore.FindAccountType(System.String)" /> method.
 	/// 	</para>
@@ -280,7 +280,7 @@ namespace Accounts {
 		NSString Audience { get; }
 	}
 
-	/// <summary>An enumeration whose values specify the visibility of a post to Facebook.</summary>
+	/// <summary>An enumeration whose values specify the visibility of APost to Facebook.</summary>
 	[Deprecated (PlatformName.iOS, 11, 0, message: "Use Facebook SDK instead.")]
 	[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use Facebook SDK instead.")]
 	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use Facebook SDK instead.")]

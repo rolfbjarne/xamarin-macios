@@ -7,7 +7,6 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace CloudKit {
 	/// <summary>A <see cref="CloudKit.CKOperation" /> that modifies the badge of the app's icon, either on the current device or all the user's devices.</summary>
-	///     <remarks>To be added.</remarks>
 	[Register ("CKModifyBadgeOperation", SkipRegistration = true)]
 	[UnsupportedOSPlatform ("ios", "Modifying badge counts is no longer supported.")]
 	[UnsupportedOSPlatform ("macos", "Modifying badge counts is no longer supported.")]
@@ -21,7 +20,6 @@ namespace CloudKit {
 		public override NativeHandle ClassHandle { get => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms); }
 
 		/// <summary>Default constructor, initializes a new instance of this class.</summary>
-		///         <remarks>To be added.</remarks>
 		public CKModifyBadgeOperation () : base (NSObjectFlag.Empty)
 		{
 			throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
@@ -46,7 +44,6 @@ namespace CloudKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public virtual nuint BadgeValue {
 			get {
 				throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
@@ -61,7 +58,6 @@ namespace CloudKit {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		public unsafe virtual global::System.Action<NSError>? Completed {
 			get {
 				throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);

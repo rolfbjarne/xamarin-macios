@@ -24,35 +24,32 @@ using System.Runtime.CompilerServices;
 using CoreFoundation;
 
 namespace SearchKit {
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Specifies the type of Search Kit index.</summary>
 	public enum SKIndexType {
-		/// <summary>To be added.</summary>
+		/// <summary>An unknown index type.</summary>
 		Unknown,
-		/// <summary>To be added.</summary>
+		/// <summary>An inverted index.</summary>
 		Inverted,
-		/// <summary>To be added.</summary>
+		/// <summary>A vector index.</summary>
 		Vector,
-		/// <summary>To be added.</summary>
+		/// <summary>A combined inverted and vector index.</summary>
 		InvertedVector,
 	};
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Specifies search behavior options.</summary>
 	[Flags]
 	public enum SKSearchOptions {
-		/// <summary>To be added.</summary>
+		/// <summary>Default search options.</summary>
 		Default = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Do not compute relevance scores.</summary>
 		NoRelevanceScores = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Treat spaces as OR operators.</summary>
 		SpaceMeansOr = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Find similar documents.</summary>
 		FindSimilar = 1 << 2,
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Performs asynchronous searches on a Search Kit index.</summary>
 	[SupportedOSPlatform ("macos")]
 	public class SKSearch : NativeObject {
 		[Preserve (Conditional = true)]
@@ -115,16 +112,14 @@ namespace SearchKit {
 
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static void SKSearchCancel (IntPtr h);
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Cancels the search.</summary>
 		public void Cancel ()
 		{
 			SKSearchCancel (Handle);
 		}
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Represents a document in a Search Kit index.</summary>
 	[SupportedOSPlatform ("macos")]
 	public class SKDocument : NativeObject {
 		[DllImport (Constants.SearchKitLibrary)]
@@ -148,11 +143,10 @@ namespace SearchKit {
 			}
 		}
 
-		/// <param name="name">To be added.</param>
-		///         <param name="parent">To be added.</param>
-		///         <param name="scheme">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="name">The name.</param>
+		/// <param name="parent">The parent.</param>
+		/// <param name="scheme">The scheme.</param>
+		/// <summary>Creates an SKDocument with a name and parent document.</summary>
 		public SKDocument (string name, SKDocument? parent = null, string? scheme = null)
 			: base (Create (name, parent, scheme), true, true)
 		{
@@ -164,9 +158,8 @@ namespace SearchKit {
 		{
 		}
 
-		/// <param name="url">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="url">The URL of the document.</param>
+		/// <summary>Creates an SKDocument from a URL.</summary>
 		public SKDocument (NSUrl url)
 			: base (SKDocumentCreateWithURL (url.GetNonNullHandle (nameof (url))), true, true)
 		{
@@ -175,8 +168,7 @@ namespace SearchKit {
 
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static IntPtr SKDocumentCopyURL (IntPtr h);
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the URL of the document.</summary>
 		public NSUrl? Url {
 			get {
 				var url = SKDocumentCopyURL (GetCheckedHandle ());
@@ -186,8 +178,7 @@ namespace SearchKit {
 
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static IntPtr SKDocumentGetName (IntPtr h);
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the name of the document.</summary>
 		public string? Name {
 			get {
 				var n = SKDocumentGetName (GetCheckedHandle ());
@@ -197,8 +188,7 @@ namespace SearchKit {
 
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static IntPtr SKDocumentGetParent (IntPtr h);
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the parent document.</summary>
 		public SKDocument? GetParent ()
 		{
 			var parent = SKDocumentGetParent (GetCheckedHandle ());
@@ -208,8 +198,7 @@ namespace SearchKit {
 		}
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static IntPtr SKDocumentGetSchemeName (IntPtr h);
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the URL scheme of the document.</summary>
 		public string? Scheme {
 			get {
 				var s = SKDocumentGetSchemeName (GetCheckedHandle ());
@@ -218,8 +207,7 @@ namespace SearchKit {
 		}
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Represents a Search Kit index for full-text search.</summary>
 	[SupportedOSPlatform ("macos")]
 	public class SKIndex : DisposableObject {
 		[DllImport (Constants.SearchKitLibrary)]
@@ -242,12 +230,11 @@ namespace SearchKit {
 		{
 		}
 
-		/// <param name="url">To be added.</param>
-		///         <param name="indexName">To be added.</param>
-		///         <param name="type">To be added.</param>
-		///         <param name="analysisProperties">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="url">The URL of the document.</param>
+		/// <param name="indexName">The index name.</param>
+		/// <param name="type">The type.</param>
+		/// <param name="analysisProperties">The analysisProperties.</param>
+		/// <summary>Creates a new index at the specified URL.</summary>
 		public static SKIndex? CreateWithUrl (NSUrl url, string indexName, SKIndexType type, SKTextAnalysis analysisProperties)
 		{
 			if (url is null)
@@ -265,11 +252,10 @@ namespace SearchKit {
 			}
 		}
 
-		/// <param name="url">To be added.</param>
-		///         <param name="indexName">To be added.</param>
-		///         <param name="writeAccess">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="url">The URL of the document.</param>
+		/// <param name="indexName">The index name.</param>
+		/// <param name="writeAccess">The writeAccess.</param>
+		/// <summary>Opens an existing index at the specified URL.</summary>
 		public static SKIndex? FromUrl (NSUrl url, string indexName, bool writeAccess)
 		{
 			if (url is null)
@@ -288,12 +274,11 @@ namespace SearchKit {
 			}
 		}
 
-		/// <param name="data">To be added.</param>
-		///         <param name="indexName">To be added.</param>
-		///         <param name="type">To be added.</param>
-		///         <param name="analysisProperties">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="data">The data containing the index.</param>
+		/// <param name="indexName">The index name.</param>
+		/// <param name="type">The type.</param>
+		/// <param name="analysisProperties">The analysisProperties.</param>
+		/// <summary>Creates a new index backed by mutable data.</summary>
 		public static SKIndex? CreateWithMutableData (NSMutableData data, string indexName, SKIndexType type, SKTextAnalysis analysisProperties)
 		{
 			if (data is null)
@@ -313,10 +298,9 @@ namespace SearchKit {
 			}
 		}
 
-		/// <param name="data">To be added.</param>
-		///         <param name="indexName">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="data">The data containing the index.</param>
+		/// <param name="indexName">The index name.</param>
+		/// <summary>Opens an existing index from mutable data.</summary>
 		public static SKIndex? FromMutableData (NSMutableData data, string indexName)
 		{
 			if (data is null)
@@ -335,10 +319,9 @@ namespace SearchKit {
 			}
 		}
 
-		/// <param name="data">To be added.</param>
-		///         <param name="indexName">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="data">The data containing the index.</param>
+		/// <param name="indexName">The index name.</param>
+		/// <summary>Opens an existing index from data.</summary>
 		public static SKIndex? FromData (NSData data, string indexName)
 		{
 			if (data is null)
@@ -357,8 +340,7 @@ namespace SearchKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Closes the index.</summary>
 		public void Close ()
 		{
 			Dispose ();
@@ -376,11 +358,10 @@ namespace SearchKit {
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static byte SKIndexAddDocumentWithText (IntPtr h, IntPtr doc, IntPtr str, byte canreplace);
 
-		/// <param name="document">To be added.</param>
-		///         <param name="text">To be added.</param>
-		///         <param name="canReplace">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="document">The document.</param>
+		/// <param name="text">The text content.</param>
+		/// <param name="canReplace">The canReplace.</param>
+		/// <summary>Adds a document to the index with the specified text content.</summary>
 		public bool AddDocumentWithText (SKDocument document, string text, bool canReplace)
 		{
 			if (document is null)
@@ -398,11 +379,10 @@ namespace SearchKit {
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static byte SKIndexAddDocument (IntPtr h, IntPtr doc, IntPtr mimeHintStr, byte canReplace);
 
-		/// <param name="document">To be added.</param>
-		///         <param name="mimeHint">To be added.</param>
-		///         <param name="canReplace">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="document">The document.</param>
+		/// <param name="mimeHint">The mimeHint.</param>
+		/// <param name="canReplace">The canReplace.</param>
+		/// <summary>Adds a document to the index with the specified text content.</summary>
 		public bool AddDocument (SKDocument document, string mimeHint, bool canReplace)
 		{
 			if (document is null)
@@ -417,23 +397,20 @@ namespace SearchKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Loads the default text extractor plug-ins.</summary>
 		[DllImport (Constants.SearchKitLibrary, EntryPoint = "SKLoadDefaultExtractorPlugIns")]
 		public extern static void LoadDefaultExtractorPlugIns ();
 
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static byte SKIndexFlush (IntPtr h);
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Flushes pending changes to the index.</summary>
 		public bool Flush ()
 		{
 			return SKIndexFlush (Handle) != 0;
 		}
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static byte SKIndexCompact (IntPtr h);
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Compacts the index to recover space.</summary>
 		public bool Compact ()
 		{
 			return SKIndexCompact (Handle) != 0;
@@ -441,8 +418,7 @@ namespace SearchKit {
 
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static nint SKIndexGetDocumentCount (IntPtr handle);
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the number of documents in the index.</summary>
 		public nint DocumentCount {
 			get {
 				return SKIndexGetDocumentCount (Handle);
@@ -452,8 +428,7 @@ namespace SearchKit {
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static nint SKIndexGetMaximumDocumentID (IntPtr handle);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the maximum document ID in the index.</summary>
 		public nint MaximumDocumentID {
 			get {
 				return SKIndexGetMaximumDocumentID (Handle);
@@ -462,8 +437,7 @@ namespace SearchKit {
 
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static nint SKIndexGetMaximumTermID (IntPtr handle);
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the maximum term ID in the index.</summary>
 		public nint MaximumTermID {
 			get {
 				return SKIndexGetMaximumTermID (Handle);
@@ -472,8 +446,7 @@ namespace SearchKit {
 
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static IntPtr SKIndexGetAnalysisProperties (IntPtr h);
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the text analysis properties for this index.</summary>
 		public SKTextAnalysis AnalysisProperties {
 			get {
 				return new SKTextAnalysis (Runtime.GetNSObject<NSDictionary> (SKIndexGetAnalysisProperties (Handle)));
@@ -482,10 +455,9 @@ namespace SearchKit {
 
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static byte SKIndexMoveDocument (IntPtr h, IntPtr document, IntPtr newParent);
-		/// <param name="document">To be added.</param>
-		///         <param name="newParent">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="document">The document.</param>
+		/// <param name="newParent">The newParent.</param>
+		/// <summary>Moves a document to a new parent in the index.</summary>
 		public bool MoveDocument (SKDocument document, SKDocument newParent)
 		{
 			if (document is null)
@@ -502,9 +474,8 @@ namespace SearchKit {
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static byte SKIndexRemoveDocument (IntPtr h, IntPtr doc);
 
-		/// <param name="document">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="document">The document.</param>
+		/// <summary>Removes a document from the index.</summary>
 		public bool RemoveDocument (SKDocument document)
 		{
 			if (document is null)
@@ -517,10 +488,9 @@ namespace SearchKit {
 
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static byte SKIndexRenameDocument (IntPtr h, IntPtr doc, IntPtr newName);
-		/// <param name="document">To be added.</param>
-		///         <param name="newName">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="document">The document.</param>
+		/// <param name="newName">The newName.</param>
+		/// <summary>Renames a document in the index.</summary>
 		public bool RenameDocument (SKDocument document, string newName)
 		{
 			if (document is null)
@@ -543,8 +513,7 @@ namespace SearchKit {
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static nint SKIndexGetMaximumBytesBeforeFlush (IntPtr h);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the maximum bytes before an automatic flush.</summary>
 		[Advice ("Apple recommends to use Flush instead of setting these parameters.")]
 		public nint MaximumBytesBeforeFlush {
 			get {
@@ -558,10 +527,9 @@ namespace SearchKit {
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static IntPtr SKSearchCreate (IntPtr h, IntPtr str, SKSearchOptions options);
 
-		/// <param name="query">To be added.</param>
-		///         <param name="options">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="query">The search query.</param>
+		/// <param name="options">The options.</param>
+		/// <summary>Creates a search on this index with the specified query.</summary>
 		public SKSearch Search (string query, SKSearchOptions options = SKSearchOptions.Default)
 		{
 			if (query is null)
@@ -587,10 +555,9 @@ namespace SearchKit {
 
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static void SKIndexSetDocumentProperties (IntPtr h, IntPtr doc, IntPtr dict);
-		/// <param name="document">To be added.</param>
-		///         <param name="dict">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="document">The document.</param>
+		/// <param name="dict">The dict.</param>
+		/// <summary>Sets the properties of a document in the index.</summary>
 		public void SetDocumentProperties (SKDocument document, NSDictionary dict)
 		{
 			if (document is null)
@@ -603,8 +570,7 @@ namespace SearchKit {
 		}
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Provides text summarization capabilities.</summary>
 	[SupportedOSPlatform ("macos")]
 	public class SKSummary : NativeObject {
 		[Preserve (Conditional = true)]
@@ -616,9 +582,8 @@ namespace SearchKit {
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static IntPtr SKSummaryCreateWithString (/* NSString */ IntPtr str);
 
-		/// <param name="text">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="text">The text content.</param>
+		/// <summary>Creates a summary from the specified text.</summary>
 		public static SKSummary? Create (string text)
 		{
 			if (text is null)
@@ -634,9 +599,8 @@ namespace SearchKit {
 			}
 		}
 
-		/// <param name="nsString">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="nsString">The nsString.</param>
+		/// <summary>Creates a summary from the specified string.</summary>
 		public static SKSummary? Create (NSString nsString)
 		{
 			if (nsString is null)
@@ -733,15 +697,13 @@ namespace SearchKit {
 		[DllImport (Constants.SearchKitLibrary)]
 		extern static nint SKSummaryGetParagraphCount (IntPtr summary);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the number of sentences in the text.</summary>
 		public nint SentenceCount {
 			get {
 				return SKSummaryGetSentenceCount (GetCheckedHandle ());
 			}
 		}
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the number of paragraphs in the text.</summary>
 		public nint ParagraphCount {
 			get {
 				return SKSummaryGetParagraphCount (GetCheckedHandle ());

@@ -26,7 +26,7 @@
 #nullable enable
 
 namespace AVFoundation {
-	/// <summary>Encapsulates the aspect ratio of a pixel. Used with <see cref="AVFoundation.AVVideoCompositionRenderContext.PixelAspectRatio" />.</summary>
+	/// <summary>Encapsulates the aspect ratio of APixel. Used with <see cref="AVFoundation.AVVideoCompositionRenderContext.PixelAspectRatio" />.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

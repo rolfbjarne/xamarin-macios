@@ -22,7 +22,7 @@ namespace ImageIO {
 		[DllImport (Constants.ImageIOLibrary)]
 		extern static /* CGMutableImageMetadataRef __nonnull */ IntPtr CGImageMetadataCreateMutable ();
 
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="CGMutableImageMetadata" /> instance.</summary>
 		public CGMutableImageMetadata ()
 			: base (CGImageMetadataCreateMutable (), true)
 		{
@@ -33,7 +33,7 @@ namespace ImageIO {
 			/* CGImageMetadataRef __nonnull */ IntPtr metadata);
 
 		/// <param name="metadata">The metadata.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CGMutableImageMetadata" /> instance.</summary>
 		public CGMutableImageMetadata (CGImageMetadata metadata)
 			: base (CGImageMetadataCreateMutableCopy (metadata.GetNonNullHandle (nameof (metadata))), true)
 		{
@@ -48,8 +48,7 @@ namespace ImageIO {
 		/// <param name="xmlns">The xmlns.</param>
 		///         <param name="prefix">The prefix.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Registers namespace.</summary>
 		public bool RegisterNamespace (NSString xmlns, NSString prefix, out NSError? error)
 		{
 			if (xmlns is null)
@@ -75,8 +74,7 @@ namespace ImageIO {
 		/// <param name="parent">The parent.</param>
 		///         <param name="path">The path.</param>
 		///         <param name="tag">The tag.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Sets tag.</summary>
 		public bool SetTag (CGImageMetadataTag? parent, NSString path, CGImageMetadataTag tag)
 		{
 			if (path is null)
@@ -98,8 +96,7 @@ namespace ImageIO {
 		/// <param name="parent">The parent.</param>
 		///         <param name="path">The path.</param>
 		///         <param name="value">The value to set.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Sets value.</summary>
 		public bool SetValue (CGImageMetadataTag? parent, NSString path, NSObject value)
 		{
 			if (value is null)
@@ -112,8 +109,7 @@ namespace ImageIO {
 		/// <param name="parent">The parent.</param>
 		///         <param name="path">The path.</param>
 		///         <param name="value">The value to set.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Sets value.</summary>
 		public bool SetValue (CGImageMetadataTag? parent, NSString path, bool value)
 		{
 			return SetValue (parent, path, value ? CFBoolean.TrueHandle : CFBoolean.FalseHandle);
@@ -135,8 +131,7 @@ namespace ImageIO {
 
 		/// <param name="parent">The parent.</param>
 		///         <param name="path">The path.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Removes tag.</summary>
 		public bool RemoveTag (CGImageMetadataTag? parent, NSString path)
 		{
 			if (path is null)
@@ -156,8 +151,7 @@ namespace ImageIO {
 		/// <param name="dictionaryName">The dictionary name.</param>
 		///         <param name="propertyName">The property name.</param>
 		///         <param name="value">The value to set.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Sets value matching image property.</summary>
 		public bool SetValueMatchingImageProperty (NSString dictionaryName, NSString propertyName, NSObject value)
 		{
 			if (value is null)
@@ -170,8 +164,7 @@ namespace ImageIO {
 		/// <param name="dictionaryName">The dictionary name.</param>
 		///         <param name="propertyName">The property name.</param>
 		///         <param name="value">The value to set.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Sets value matching image property.</summary>
 		public bool SetValueMatchingImageProperty (NSString dictionaryName, NSString propertyName, bool value)
 		{
 			return SetValueMatchingImageProperty (dictionaryName, propertyName, value ? CFBoolean.TrueHandle : CFBoolean.FalseHandle);

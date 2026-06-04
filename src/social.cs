@@ -129,11 +129,11 @@ namespace Social {
 		SLRequest Create (NSString serviceType, SLRequestMethod requestMethod, NSUrl url, [NullAllowed] NSDictionary parameters);
 
 		/// <param name="serviceKind">The service kind.</param>
-		///         <param name="method">The method.</param>
-		///         <param name="url">The URL to use.</param>
-		///         <param name="parameters">The parameters.</param>
-		///         <summary>Creates a new request object with the specified values.</summary>
-		///         <returns>To be added.</returns>
+		/// <param name="method">The method.</param>
+		/// <param name="url">The URL to use.</param>
+		/// <param name="parameters">The parameters.</param>
+		/// <summary>Creates a new request object with the specified values.</summary>
+		/// <returns>A new <see cref="T:Social.SLRequest" /> configured for the specified service and parameters.</returns>
 		[Static]
 		[Wrap ("Create (serviceKind.GetConstant ()!, method, url, parameters)")]
 		SLRequest Create (SLServiceKind serviceKind, SLRequestMethod method, NSUrl url, [NullAllowed] NSDictionary parameters);
@@ -173,7 +173,6 @@ namespace Social {
 			        </returns>
 			<remarks>
 			          <para copied="true">The PerformRequestAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
 			        </remarks>
 			""")]
 		void PerformRequest (Action<NSData, NSHttpUrlResponse, NSError> handler);

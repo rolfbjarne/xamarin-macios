@@ -34,7 +34,6 @@
 namespace PdfKit {
 
 	/// <summary>Enumerates named PDF action names.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	[TV (18, 2)]
 	public enum PdfActionNamedName : long {
@@ -65,7 +64,6 @@ namespace PdfKit {
 	}
 
 	/// <summary>Enumerates annotation widget controls.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	[TV (18, 2)]
 	public enum PdfWidgetControlType : long {
@@ -80,7 +78,6 @@ namespace PdfKit {
 	}
 
 	/// <summary>Enumerates line ending styles</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	[TV (18, 2)]
 	public enum PdfLineStyle : long {
@@ -99,7 +96,6 @@ namespace PdfKit {
 	}
 
 	/// <summary>Indicates annotation markup types.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	[TV (18, 2)]
 	public enum PdfMarkupType : long {
@@ -113,7 +109,6 @@ namespace PdfKit {
 	}
 
 	/// <summary>Enumerates annotation icon types.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	[TV (18, 2)]
 	public enum PdfTextAnnotationIconType : long {
@@ -134,7 +129,6 @@ namespace PdfKit {
 	}
 
 	/// <summary>Enumerates annotation border styles.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	[TV (18, 2)]
 	public enum PdfBorderStyle : long {
@@ -167,16 +161,15 @@ namespace PdfKit {
 	[Native]
 	[TV (18, 2)]
 	public enum PdfDocumentPermissions : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates user.</summary>
 		User = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates owner.</summary>
 		Owner = 2,
 	}
 
 	/// <summary>Enumerates Adobe-specified PDF display box boundaries.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	[TV (18, 2)]
 	public enum PdfDisplayBox : long {
@@ -193,7 +186,6 @@ namespace PdfKit {
 	}
 
 	/// <summary>Enumerated PDF display modes.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	[TV (18, 2)]
 	public enum PdfDisplayMode : long {
@@ -208,7 +200,6 @@ namespace PdfKit {
 	}
 
 	/// <summary>Orable flags that describe areas of interest for a touch position.</summary>
-	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	[TV (18, 2)]
@@ -240,20 +231,20 @@ namespace PdfKit {
 	[Native]
 	[TV (18, 2)]
 	public enum PdfDisplayDirection : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates vertical.</summary>
 		Vertical = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates horizontal.</summary>
 		Horizontal = 1,
 	}
 
 	[Native]
 	[TV (18, 2)]
 	public enum PdfInterpolationQuality : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates low.</summary>
 		Low = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates high.</summary>
 		High = 2,
 	}
 
@@ -261,20 +252,20 @@ namespace PdfKit {
 	[Native]
 	[TV (18, 2)]
 	public enum PdfThumbnailLayoutMode : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates vertical.</summary>
 		Vertical = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates horizontal.</summary>
 		Horizontal = 1,
 	}
 
 	[Native]
 	[TV (18, 2)]
 	public enum PdfWidgetCellState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates mixed.</summary>
 		Mixed = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates off.</summary>
 		Off = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates on.</summary>
 		On = 1,
 	}
 }

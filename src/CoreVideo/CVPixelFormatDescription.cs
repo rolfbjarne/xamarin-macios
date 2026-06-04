@@ -39,176 +39,147 @@ namespace CoreVideo {
 	public partial class CVPixelFormatDescription {
 #if !COREBUILD
 #if !XAMCORE_5_0
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for the pixel format name.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.Name' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString NameKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for the pixel format constant.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.Constant' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString ConstantKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for the codec type.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.CodecType' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString CodecTypeKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for the FourCC code.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.FourCCKey' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString FourCCKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for the number of planes.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.Planes' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString PlanesKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for the block width.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.BlockWidth' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString BlockWidthKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for the block height.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.BlockHeight' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString BlockHeightKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for the bits per block.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.BitsPerBlock' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString BitsPerBlockKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for the block horizontal alignment.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.BlockHorizontalAlignment' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString BlockHorizontalAlignmentKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for the block vertical alignment.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.BlockVerticalAlignment' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString BlockVerticalAlignmentKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for the black block data.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.BlackBlock' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString BlackBlockKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for horizontal subsampling.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.HorizontalSubsampling' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString HorizontalSubsamplingKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for vertical subsampling.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.VerticalSubsampling' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString VerticalSubsamplingKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for the OpenGL format.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.OpenGLFormat' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString OpenGLFormatKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for the OpenGL type.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.OpenGLType' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString OpenGLTypeKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for the OpenGL internal format.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.OpenGLInternalFormat' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString OpenGLInternalFormatKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for the CGBitmapInfo.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.CGBitmapInfo' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString CGBitmapInfoKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for QuickDraw compatibility.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.QDCompatibility' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString QDCompatibilityKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for CGBitmapContext compatibility.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.CGBitmapContextCompatibility' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString CGBitmapContextCompatibilityKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for CGImage compatibility.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.CGImageCompatibility' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString CGImageCompatibilityKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for OpenGL compatibility.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.OpenGLCompatibility' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString OpenGLCompatibilityKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for the fill extended pixels callback.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.FillExtendedPixelsCallback' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString FillExtendedPixelsCallbackKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key indicating whether the format contains RGB data.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.ContainsRgb' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString ContainsRgb;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key indicating whether the format contains YCbCr data.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.ContainsYCbCr' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString ContainsYCbCr;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for the component range.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.ComponentRange' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString ComponentRangeKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for full range component values.</summary>
 		[Obsolete ("Use 'CVPixelFormatComponentRangeKeys.FullRange' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString ComponentRangeFullRangeKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for video range component values.</summary>
 		[Obsolete ("Use 'CVPixelFormatComponentRangeKeys.VideoRange' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString ComponentRangeVideoRangeKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key for wide range component values.</summary>
 		[Obsolete ("Use 'CVPixelFormatComponentRangeKeys.WideRange' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static readonly NSString ComponentRangeWideRangeKey;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>The key indicating whether the format contains grayscale data.</summary>
 		[Obsolete ("Use 'CVPixelFormatKeys.ContainsGrayscale' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		[SupportedOSPlatform ("ios")]

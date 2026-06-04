@@ -927,7 +927,7 @@ namespace AddressBook {
 		/// 	  </para>
 		///           <para>
 		/// 	    This method is typically used on callbacks that provide an
-		/// 	    "int propertyId" as a parameter.
+		/// 	    "int propertyId" as AParameter.
 		/// 	  </para>
 		///         </remarks>
 		public static string? LocalizedPropertyName (int propertyId)
@@ -971,7 +971,7 @@ namespace AddressBook {
 		/// 	  </para>
 		///           <para>
 		/// 	    This method is typically used on callbacks that provide an
-		/// 	    "int propertyId" as a parameter.
+		/// 	    "int propertyId" as AParameter.
 		/// 	  </para>
 		///         </remarks>
 		public static ABPropertyType GetPropertyType (int propertyId)
@@ -1015,11 +1015,11 @@ namespace AddressBook {
 		extern static byte ABPersonHasImageData (IntPtr person);
 		/// <summary>
 		///           Gets a value indicating whether the
-		///           <see cref="AddressBook.ABPerson" /> has a picture.
+		///           <see cref="AddressBook.ABPerson" /> has APicture.
 		///         </summary>
 		///         <value>
 		///           <see langword="true" /> if the
-		///           <see cref="AddressBook.ABPerson" /> has a picture;
+		///           <see cref="AddressBook.ABPerson" /> has APicture;
 		///           otherwise, <see langword="false" />.
 		///         </value>
 		///         <remarks>
@@ -1499,7 +1499,7 @@ namespace AddressBook {
 		///         <remarks>
 		///           <para>
 		///             The <see cref="AddressBook.ABPersonKind" />
-		///             controls whether the instance is a person or an organization.
+		///             controls whether the instance is APerson or an organization.
 		///           </para>
 		///         </remarks>
 		public ABPersonKind PersonKind {

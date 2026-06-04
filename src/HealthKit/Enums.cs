@@ -777,7 +777,7 @@ namespace HealthKit {
 		/// <summary>Indicates information about a medical observation.</summary>
 		[Field ("HKFHIRResourceTypeObservation")]
 		Observation,
-		/// <summary>Indicates information about a procedure performed.</summary>
+		/// <summary>Indicates information about AProcedure performed.</summary>
 		[Field ("HKFHIRResourceTypeProcedure")]
 		Procedure,
 		[iOS (14, 0)]
@@ -816,7 +816,7 @@ namespace HealthKit {
 		/// <summary>Indicates a record of medication</summary>
 		[Field ("HKClinicalTypeIdentifierMedicationRecord")]
 		MedicationRecord,
-		/// <summary>Indicates a record of a procedure.</summary>
+		/// <summary>Indicates a record of AProcedure.</summary>
 		[Field ("HKClinicalTypeIdentifierProcedureRecord")]
 		ProcedureRecord,
 		/// <summary>Indicates a record of a vital sign.</summary>

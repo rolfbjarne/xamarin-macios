@@ -64,9 +64,8 @@ namespace AudioToolbox {
 			this.ownsHandle = ownsHandle;
 		}
 
-		/// <param name="soundId">To be added.</param>
+		/// <param name="soundId">The sound id.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public SystemSound (uint soundId) : this (soundId, false) { }
 
 
@@ -84,7 +83,6 @@ namespace AudioToolbox {
 
 		/// <summary>Gets or sets whether to override user preferences when calling <see cref="PlaySystemSound()" /> or <see cref="PlaySystemSound(Action)" />.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool IsUISound {
 			get {
 				uint out_size = sizeof (uint);
@@ -116,7 +114,6 @@ namespace AudioToolbox {
 
 		/// <summary>Controls whether the sound will complete playing, even if the application dies.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool CompletePlaybackIfAppDies {
 			get {
 				uint out_size = sizeof (uint);
@@ -193,7 +190,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>Closes this system sound.</summary>
-		///         <remarks>To be added.</remarks>
 		public void Close ()
 		{
 			Cleanup (true);
@@ -219,9 +215,8 @@ namespace AudioToolbox {
 			AudioServicesPlaySystemSound (soundId);
 		}
 
-		/// <param name="onCompletion">To be added.</param>
+		/// <param name="onCompletion">The on completion.</param>
 		///         <summary>Plays a sound or alert and then calls the <paramref name="onCompletion" /> handler.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -242,7 +237,6 @@ namespace AudioToolbox {
 
 		/// <summary>Asynchronously plays a sound or alert, returning a <see cref="Task" /> that completes after the sound ends.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -256,9 +250,8 @@ namespace AudioToolbox {
 			return tcs.Task;
 		}
 
-		/// <param name="onCompletion">To be added.</param>
+		/// <param name="onCompletion">The on completion.</param>
 		///         <summary>Plays the system sound and calls <paramref name="onCompletion" /> afterwards.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -279,7 +272,6 @@ namespace AudioToolbox {
 
 		/// <summary>Asynchronously plays a system sound and returns a <see cref="System.Threading.Tasks.Task" /> that is completed when the sound ends.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]

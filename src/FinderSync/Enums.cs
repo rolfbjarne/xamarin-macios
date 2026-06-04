@@ -2,16 +2,15 @@
 
 namespace FinderSync {
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[Native]
 	public enum FIMenuKind : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates contextual menu for items.</summary>
 		ContextualMenuForItems = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates contextual menu for container.</summary>
 		ContextualMenuForContainer = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates contextual menu for sidebar.</summary>
 		ContextualMenuForSidebar = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates toolbar item menu.</summary>
 		ToolbarItemMenu = 3,
 	}
 }

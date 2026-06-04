@@ -360,7 +360,6 @@ namespace Security {
 		///         <param name="max">To be added.</param>
 		///         <param name="result">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static INativeObject []? QueryAsReference (SecRecord query, int max, out SecStatusCode result)
 		{
@@ -537,7 +536,6 @@ namespace Security {
 		///         <param name="authenticationType">To be added.</param>
 		///         <param name="securityDomain">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos")]
@@ -599,7 +597,6 @@ namespace Security {
 		///         <param name="authenticationType">To be added.</param>
 		///         <param name="securityDomain">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos")]
@@ -685,7 +682,6 @@ namespace Security {
 		///         <param name="accountName">To be added.</param>
 		///         <param name="password">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos")]
@@ -719,7 +715,6 @@ namespace Security {
 		///         <param name="accountName">To be added.</param>
 		///         <param name="password">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos")]
@@ -843,7 +838,6 @@ namespace Security {
 		/// <param name="certificate">To be added.</param>
 		///         <param name="throwOnError">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static SecIdentity? FindIdentity (SecCertificate certificate, bool throwOnError = false)
 		{
@@ -978,7 +972,6 @@ namespace Security {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public SecCertificate? GetCertificate ()
 		{
@@ -987,7 +980,6 @@ namespace Security {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public SecIdentity? GetIdentity ()
 		{
@@ -996,7 +988,6 @@ namespace Security {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public SecKey? GetKey ()
 		{
@@ -1021,7 +1012,6 @@ namespace Security {
 
 		// some API are unusable without this (e.g. SecKey.GenerateKeyPair) without duplicating much of SecRecord logic
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public NSDictionary ToDictionary ()
 		{
@@ -1125,7 +1115,6 @@ namespace Security {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool Synchronizable {
 			get {
@@ -1137,7 +1126,6 @@ namespace Security {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool SynchronizableAny {
 			get {
@@ -1150,7 +1138,6 @@ namespace Security {
 
 #if !MONOMAC
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -1166,7 +1153,6 @@ namespace Security {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -1199,7 +1185,6 @@ namespace Security {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSDate? ModificationDate {
 			get {
@@ -1374,7 +1359,6 @@ namespace Security {
 		}
 #endif
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
@@ -1392,7 +1376,6 @@ namespace Security {
 
 #if !TVOS
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
@@ -1415,7 +1398,6 @@ namespace Security {
 		// it is ever returned from a dictionary, so return what we cached.
 		SecAccessControl? _secAccessControl;
 		/// <summary>Access control for the item.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public SecAccessControl? AccessControl {
 			get {
@@ -1446,7 +1428,6 @@ namespace Security {
 		}
 
 		/// <summary>Security domain for InternetPassword items.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? SecurityDomain {
 			get {
@@ -1459,7 +1440,6 @@ namespace Security {
 		}
 
 		/// <summary>Server component for an InternetPassword</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Server {
 			get {
@@ -1630,7 +1610,6 @@ namespace Security {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsPermanent {
 			get {
@@ -1643,7 +1622,6 @@ namespace Security {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsSensitive {
 			get {
@@ -1656,7 +1634,6 @@ namespace Security {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsExtractable {
 			get {
@@ -1834,7 +1811,6 @@ namespace Security {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
@@ -1867,7 +1843,6 @@ namespace Security {
 		//
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public SecPolicy? MatchPolicy {
 			get {
@@ -1884,7 +1859,6 @@ namespace Security {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public SecKeyChain? []? MatchItemList {
 			get {
@@ -1900,7 +1874,6 @@ namespace Security {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSData? []? MatchIssuers {
 			get {
@@ -1915,7 +1888,6 @@ namespace Security {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? MatchEmailAddressIfPresent {
 			get {
@@ -1928,7 +1900,6 @@ namespace Security {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? MatchSubjectContains {
 			get {
@@ -1954,7 +1925,6 @@ namespace Security {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool MatchTrustedOnly {
 			get {
@@ -1967,7 +1937,6 @@ namespace Security {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSDate? MatchValidOnDate {
 			get {
@@ -1982,7 +1951,6 @@ namespace Security {
 		}
 
 		/// <summary>The value data to store.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSData? ValueData {
 			get {

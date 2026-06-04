@@ -18,7 +18,6 @@ using CoreFoundation;
 namespace CoreMedia {
 
 	/// <summary>A contiguous range of data offsets over a possibly non-contiguous memory region.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -35,12 +34,11 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		unsafe extern static /* OSStatus */ CMBlockBufferError CMBlockBufferCreateEmpty (/* CFAllocatorRef */ IntPtr allocator, /* uint32_t */ uint subBlockCapacity, CMBlockBufferFlags flags, /* CMBlockBufferRef* */ IntPtr* output);
 
-		/// <param name="subBlockCapacity">To be added.</param>
-		///         <param name="flags">To be added.</param>
-		///         <param name="error">To be added.</param>
+		/// <param name="subBlockCapacity">The sub block capacity.</param>
+		///         <param name="flags">The flags.</param>
+		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CMBlockBuffer? CreateEmpty (uint subBlockCapacity, CMBlockBufferFlags flags, out CMBlockBufferError error)
 		{
 			IntPtr buffer;
@@ -106,7 +104,6 @@ namespace CoreMedia {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CMBlockBufferError AssureBlockMemory ()
 		{
 			return CMBlockBufferAssureBlockMemory (GetCheckedHandle ());
@@ -216,7 +213,6 @@ namespace CoreMedia {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public nuint DataLength {
 			get {
 				return CMBlockBufferGetDataLength (Handle);
@@ -239,7 +235,6 @@ namespace CoreMedia {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool IsEmpty {
 			get {
 				return CMBlockBufferIsEmpty (GetCheckedHandle ()) != 0;

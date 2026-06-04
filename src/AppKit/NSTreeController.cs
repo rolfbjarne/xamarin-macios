@@ -32,7 +32,6 @@ namespace AppKit {
 		// note: if needed override the protected Get|Set methods
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NSIndexPath SelectionIndexPath {
 			get { return GetSelectionIndexPath (); }
 			// ignore return value (bool)
@@ -42,7 +41,6 @@ namespace AppKit {
 		// note: if needed override the protected Get|Set methods
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NSIndexPath [] SelectionIndexPaths {
 			get { return GetSelectionIndexPaths (); }
 			// ignore return value (bool)

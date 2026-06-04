@@ -62,7 +62,7 @@ namespace CoreFoundation {
 		static extern void CFStringAppendCharacters (/* CFMutableStringRef* */ IntPtr theString, IntPtr chars, nint numChars);
 
 		/// <param name="string">The string.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Append.</summary>
 		public void Append (string @string)
 		{
 			if (@string is null)
@@ -78,8 +78,7 @@ namespace CoreFoundation {
 		/// <param name="range">The range.</param>
 		///         <param name="transform">The transform.</param>
 		///         <param name="reverse">The reverse.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Transform.</summary>
 		public bool Transform (ref CFRange range, CFStringTransform transform, bool reverse)
 		{
 			return Transform (ref range, transform.GetConstant ().GetHandle (), reverse);
@@ -89,8 +88,7 @@ namespace CoreFoundation {
 		/// <param name="range">The range.</param>
 		///         <param name="transform">The transform.</param>
 		///         <param name="reverse">The reverse.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Transform.</summary>
 		public bool Transform (ref CFRange range, CFString transform, bool reverse)
 		{
 			bool result = Transform (ref range, transform.GetHandle (), reverse);
@@ -101,8 +99,7 @@ namespace CoreFoundation {
 		/// <param name="range">The range.</param>
 		///         <param name="transform">The transform.</param>
 		///         <param name="reverse">The reverse.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Transform.</summary>
 		public bool Transform (ref CFRange range, NSString transform, bool reverse)
 		{
 			bool result = Transform (ref range, transform.GetHandle (), reverse);
@@ -113,8 +110,7 @@ namespace CoreFoundation {
 		/// <param name="range">The range.</param>
 		///         <param name="transform">The transform.</param>
 		///         <param name="reverse">The reverse.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Transform.</summary>
 		public bool Transform (ref CFRange range, string transform, bool reverse)
 		{
 			var t = CreateNative (transform);
@@ -139,8 +135,7 @@ namespace CoreFoundation {
 
 		/// <param name="transform">The transform.</param>
 		///         <param name="reverse">The reverse.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Transform.</summary>
 		public bool Transform (CFStringTransform transform, bool reverse)
 		{
 			return Transform (transform.GetConstant ().GetHandle (), reverse);
@@ -149,8 +144,7 @@ namespace CoreFoundation {
 		// constant documentation mention it also accept any ICT transform
 		/// <param name="transform">The transform.</param>
 		///         <param name="reverse">The reverse.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Transform.</summary>
 		public bool Transform (CFString transform, bool reverse)
 		{
 			bool result = Transform (transform.GetHandle (), reverse);
@@ -160,8 +154,7 @@ namespace CoreFoundation {
 
 		/// <param name="transform">The transform.</param>
 		///         <param name="reverse">The reverse.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Transform.</summary>
 		public bool Transform (NSString transform, bool reverse)
 		{
 			bool result = Transform (transform.GetHandle (), reverse);
@@ -171,8 +164,7 @@ namespace CoreFoundation {
 
 		/// <param name="transform">The transform.</param>
 		///         <param name="reverse">The reverse.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Transform.</summary>
 		public bool Transform (string transform, bool reverse)
 		{
 			var t = CreateNative (transform);

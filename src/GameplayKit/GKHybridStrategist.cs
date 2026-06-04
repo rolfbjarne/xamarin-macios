@@ -21,7 +21,7 @@ namespace GameplayKit {
 		protected GKHybridStrategist (NSObjectFlag t) : base (t) => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 		/// <summary>Do not use</summary>
 		protected internal GKHybridStrategist (NativeHandle handle) : base (handle) => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the best move for the active player.</summary>
 		public virtual IGKGameModelUpdate GetBestMoveForActivePlayer () => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 		/// <summary>Gets or sets the budget.</summary>
 		public virtual nuint Budget {

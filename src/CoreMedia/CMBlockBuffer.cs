@@ -17,7 +17,7 @@ using CoreFoundation;
 
 namespace CoreMedia {
 
-	/// <summary>A contiguous range of data offsets over a possibly non-contiguous memory region.</summary>
+	/// <summary>A contiguous range of data offsets over APossibly non-contiguous memory region.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

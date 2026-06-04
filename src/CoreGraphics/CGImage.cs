@@ -612,7 +612,6 @@ namespace CoreGraphics {
 		extern static /* CGDataProviderRef */ IntPtr CGImageGetDataProvider (/* CGImageRef */ IntPtr image);
 
 		/// <summary>Returns the image's data provider.</summary>
-		///         <value>To be added.</value>
 		public CGDataProvider DataProvider {
 			get {
 				return new CGDataProvider (CGImageGetDataProvider (Handle), false);
@@ -623,7 +622,6 @@ namespace CoreGraphics {
 		unsafe extern static /* CGFloat* */ nfloat* CGImageGetDecode (/* CGImageRef */ IntPtr image);
 
 		/// <summary>Returns an array of values that consist of upper and lower limits, into which the corresponding image pixel data are linearly interpolated for decoding.</summary>
-		///         <value>To be added.</value>
 		public unsafe nfloat* Decode {
 			get {
 				return CGImageGetDecode (Handle);
@@ -678,7 +676,6 @@ namespace CoreGraphics {
 
 		// we return an NSString, instead of a string, as all our UTType constants are NSString (see mobilecoreservices.cs)
 		/// <summary>Gets the image's universal type identifier.</summary>
-		///         <value>To be added.</value>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -697,8 +694,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		static extern CGImagePixelFormatInfo CGImageGetPixelFormatInfo (/* __nullable CGImageRef */ IntPtr handle);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>The pixel format info.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -712,8 +708,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		static extern CGImageByteOrderInfo CGImageGetByteOrderInfo (/* __nullable CGImageRef */ IntPtr handle);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>The byte order info.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]

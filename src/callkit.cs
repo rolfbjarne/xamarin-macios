@@ -303,17 +303,15 @@ namespace CallKit {
 			<param name="transaction">The transaction to run.</param>
 			<summary>Requests that the system run a transaction.</summary>
 			<returns>A task that represents the asynchronous RequestTransaction operation</returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Export ("requestTransaction:completion:")]
 		void RequestTransaction (CXTransaction transaction, Action<NSError> completion);
 
 		[MacCatalyst (13, 1)]
 		[Async (XmlDocs = """
-			<param name="actions">To be added.</param>
+			<param name="actions">The actions to request.</param>
 			<summary>Requests that the specified actions be performed by the provider, and runs a handler on the call controller's queue when the operation is complete.</summary>
 			<returns>A task that represents the asynchronous RequestTransaction operation</returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Export ("requestTransactionWithActions:completion:")]
 		void RequestTransaction (CXAction [] actions, Action<NSError> completion);
@@ -325,7 +323,6 @@ namespace CallKit {
 			<returns>A task that represents the asynchronous RequestTransaction operation</returns>
 			<remarks>
 			          <para copied="true">The RequestTransactionAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
 			        </remarks>
 			""")]
 		[Export ("requestTransactionWithAction:completion:")]

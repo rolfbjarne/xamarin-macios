@@ -57,11 +57,11 @@ namespace CoreWlan {
 		InvalidAKMP = -3920,
 		/// <summary>Indicates unsupported RSN version.</summary>
 		UnsupportedRSNVersion = -3921,
-		/// <summary>Indicates invalid r s n capabilities.</summary>
+		/// <summary>Indicates invalid RSN capabilities.</summary>
 		InvalidRSNCapabilities = -3922,
 		/// <summary>Indicates cipher suite rejected.</summary>
 		CipherSuiteRejected = -3923,
-		/// <summary>Indicates invalid p m k.</summary>
+		/// <summary>Indicates invalid PMK.</summary>
 		InvalidPMK = -3924,
 		/// <summary>Indicates supplicant timeout.</summary>
 		SupplicantTimeout = -3925,
@@ -109,7 +109,7 @@ namespace CoreWlan {
 		Station = 1,
 		/// <summary>Indicates ibss.</summary>
 		Ibss = 2,
-		/// <summary>Indicates host a p.</summary>
+		/// <summary>Indicates host AP.</summary>
 		HostAP = 3,
 	}
 
@@ -128,7 +128,7 @@ namespace CoreWlan {
 		WPA2Personal = 4,
 		/// <summary>Indicates personal.</summary>
 		Personal = 5,
-		/// <summary>Indicates dynamic w e p.</summary>
+		/// <summary>Indicates dynamic WEP.</summary>
 		DynamicWEP = 6,
 		/// <summary>Indicates WPA enterprise.</summary>
 		WPAEnterprise = 7,
@@ -166,13 +166,13 @@ namespace CoreWlan {
 	public enum CWChannelWidth : ulong {
 		/// <summary>Indicates unknown.</summary>
 		Unknown = 0,
-		/// <summary>Indicates twenty m hz.</summary>
+		/// <summary>Indicates 20 MHz.</summary>
 		TwentyMHz = 1,
-		/// <summary>Indicates fourty m hz.</summary>
+		/// <summary>Indicates 40 MHz.</summary>
 		FourtyMHz = 2,
-		/// <summary>Indicates eighty m hz.</summary>
+		/// <summary>Indicates 80 MHz.</summary>
 		EightyMHz = 3,
-		/// <summary>Indicates one hundred sixty m hz.</summary>
+		/// <summary>Indicates 160 MHz.</summary>
 		OneHundredSixtyMHz = 4,
 	}
 
@@ -181,9 +181,9 @@ namespace CoreWlan {
 	public enum CWChannelBand : ulong {
 		/// <summary>Indicates unknown.</summary>
 		Unknown = 0,
-		/// <summary>Indicates two g hz.</summary>
+		/// <summary>Indicates 2.4 GHz.</summary>
 		TwoGHz = 1,
-		/// <summary>Indicates five g hz.</summary>
+		/// <summary>Indicates 5 GHz.</summary>
 		FiveGHz = 2,
 		SixGHz = 3,
 	}

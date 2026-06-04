@@ -157,7 +157,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary, CharSet = CharSet.Unicode)]
 		extern static unsafe IntPtr CFStringGetCharacters (IntPtr handle, CFRange range, char* buffer);
 
-		/// <summary>Creates a <see cref="CFString" /> from the C# string and returns a pointer to it.</summary>
+		/// <summary>Creates a <see cref="CFString" /> from the C# string and returns APointer to it.</summary>
 		/// <param name="value">C# String to wrap</param>
 		/// <param name="start">The offset of the managed string to create the native string from.</param>
 		/// <param name="length">The length of the managed string to create the native string from.</param>
@@ -264,7 +264,7 @@ namespace CoreFoundation {
 		{
 		}
 
-		/// <summary>Utility method that returns a string from a pointer that points to an Objective-C NSString or CFString object.</summary>
+		/// <summary>Utility method that returns a string from APointer that points to an Objective-C NSString or CFString object.</summary>
 		/// <param name="handle">Pointer to an Objective-C NSString or CFString object.</param>
 		/// <returns>The Objective-C string in the NSString as a C# string.</returns>
 		public static string? FromHandle (NativeHandle handle)
@@ -303,7 +303,7 @@ namespace CoreFoundation {
 			return str;
 		}
 
-		/// <summary>Utility method that returns a string from a pointer that points to an Objective-C NSString or CFString object.</summary>
+		/// <summary>Utility method that returns a string from APointer that points to an Objective-C NSString or CFString object.</summary>
 		/// <param name="handle">Pointer to an Objective-C NSString or CFString object.</param>
 		/// <param name="releaseHandle">Whether the <paramref name="handle" /> should be released or not.</param>
 		/// <returns>The Objective-C string in the NSString as a C# string.</returns>

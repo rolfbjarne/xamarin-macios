@@ -227,7 +227,7 @@ namespace Foundation {
 		#endregion
 
 		#region IEnumerable implementation
-		/// <summary>To be added.</summary>
+		/// <summary>Returns a non-generic enumerator that iterates through the array.</summary>
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator ()
 		{
 			return GetEnumerator ();

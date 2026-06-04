@@ -356,13 +356,13 @@ namespace QuickLook {
 		/// <param name="identifier">The identifier to use.</param>
 		/// <param name="queryString">The query string.</param>
 		/// <param name="handler">The completion handler to call when the operation completes.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Prepares a preview of the searchable item with the specified identifier.</summary>
 		[Export ("preparePreviewOfSearchableItemWithIdentifier:queryString:completionHandler:")]
 		void PreparePreviewOfSearchableItem (string identifier, [NullAllowed] string queryString, Action<NSError> handler);
 
 		/// <param name="url">The URL to use.</param>
 		/// <param name="handler">The completion handler to call when the operation completes.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Prepares a preview of the file at the specified URL.</summary>
 		[Export ("preparePreviewOfFileAtURL:completionHandler:")]
 		void PreparePreviewOfFile (NSUrl url, Action<NSError> handler);
 

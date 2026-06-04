@@ -83,8 +83,8 @@ namespace Contacts {
 			}
 		}
 
-		/// <typeparam name="T">To be added.</typeparam>
-		///         <param name="keyDescriptors">The key descriptors.</param>
+		/// <typeparam name="T">The type of contact value to check.</typeparam>
+		/// <param name="keyDescriptors">The key descriptors.</param>
 		///         <summary>Whether the keys described in <paramref name="keyDescriptors" /> are available.</summary>
 		public bool AreKeysAvailable<T> (T [] keyDescriptors)
 			where T : INSObjectProtocol, INSSecureCoding, INSCopying

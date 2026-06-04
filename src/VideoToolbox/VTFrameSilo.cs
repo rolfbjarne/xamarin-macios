@@ -16,7 +16,6 @@ using CoreMedia;
 
 namespace VideoToolbox {
 	/// <summary>Sample buffers storage object, used in conjuction of a multi pass compression session</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
@@ -36,11 +35,10 @@ namespace VideoToolbox {
 			/* CFDictionaryRef */ IntPtr options, /* Reserved, always null */
 			/* VTFrameSiloRef */ IntPtr* siloOut);
 
-		/// <param name="fileUrl">To be added.</param>
-		///         <param name="timeRange">To be added.</param>
+		/// <param name="fileUrl">The file url.</param>
+		///         <param name="timeRange">The time range.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static VTFrameSilo? Create (NSUrl? fileUrl = null, CMTimeRange? timeRange = null)
 		{
 			VTStatus status;
@@ -66,10 +64,9 @@ namespace VideoToolbox {
 			/* VTFrameSiloRef */ IntPtr silo,
 			/* CMSampleBufferRef */ IntPtr sampleBuffer);
 
-		/// <param name="sampleBuffer">To be added.</param>
+		/// <param name="sampleBuffer">The sample buffer.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public VTStatus AddSampleBuffer (CMSampleBuffer sampleBuffer)
 		{
 			if (sampleBuffer is null)
@@ -86,10 +83,9 @@ namespace VideoToolbox {
 			/* CMItemCount */ nint timeRangeCount,
 			/* const CMTimeRange * */ IntPtr timeRangeArray);
 
-		/// <param name="ranges">To be added.</param>
+		/// <param name="ranges">The ranges.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public unsafe VTStatus SetTimeRangesForNextPass (CMTimeRange [] ranges)
 		{
 			if (ranges is null)
@@ -108,10 +104,9 @@ namespace VideoToolbox {
 			/* VTFrameSiloRef */ IntPtr silo,
 			/* Float32* */ float* progressOut);
 
-		/// <param name="progress">To be added.</param>
+		/// <param name="progress">The progress.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public VTStatus GetProgressOfCurrentPass (out float progress)
 		{
 			progress = default;
@@ -139,11 +134,10 @@ namespace VideoToolbox {
 			/* void* */ IntPtr callbackInfo,
 			/* */ delegate* unmanaged<IntPtr, IntPtr, VTStatus> callback);
 
-		/// <param name="callback">To be added.</param>
-		///         <param name="range">To be added.</param>
+		/// <param name="callback">The callback to invoke.</param>
+		///         <param name="range">The range.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public unsafe VTStatus ForEach (Func<CMSampleBuffer, VTStatus> callback, CMTimeRange? range = null)
 		{
 			var callbackHandle = GCHandle.Alloc (callback);

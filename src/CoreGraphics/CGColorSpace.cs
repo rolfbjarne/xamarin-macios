@@ -66,7 +66,7 @@ namespace CoreGraphics {
 		DeviceN,
 		/// <summary>Indexed color model, up to 256 values that are looked up.</summary>
 		Indexed,
-		/// <summary>Pattern color space, used when stroking or filling with a pattern.</summary>
+		/// <summary>Pattern color space, used when stroking or filling with APattern.</summary>
 		Pattern,
 		/// <summary>Indicates xyz.</summary>
 		Xyz,
@@ -240,7 +240,7 @@ namespace CoreGraphics {
 		extern static /* CGColorSpaceRef */ IntPtr CGColorSpaceCreatePattern (/* CGColorSpaceRef */ IntPtr baseSpace);
 
 		/// <param name="baseSpace">The base space.</param>
-		///         <summary>Creates and returns a pattern color space.</summary>
+		///         <summary>Creates and returns APattern color space.</summary>
 		///         <returns>To be added.</returns>
 		public static CGColorSpace? CreatePattern (CGColorSpace? baseSpace)
 		{
@@ -808,7 +808,7 @@ namespace CoreGraphics {
 		extern static /* CGColorSpaceRef */ IntPtr CGColorSpaceCopyBaseColorSpace (/* CGColorSpaceRef */ IntPtr space);
 
 		/// <summary>Get the base color space, or a new color space without any image-specific metadata.</summary>
-		/// <returns>If the current color space is a pattern or an indexed color space, get the base color space. If the current color space contains image-specific metadata associated with the gain map, get a new color space without the metadata. Otherwise returns a null value.</returns>
+		/// <returns>If the current color space is APattern or an indexed color space, get the base color space. If the current color space contains image-specific metadata associated with the gain map, get a new color space without the metadata. Otherwise returns a null value.</returns>
 		[SupportedOSPlatform ("macos15.0")]
 		[SupportedOSPlatform ("ios18.0")]
 		[SupportedOSPlatform ("tvos18.0")]

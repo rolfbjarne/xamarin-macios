@@ -464,17 +464,17 @@ namespace HomeKit {
 		[Field ("HMCharacteristicTypeFirmwareVersion")]
 		FirmwareVersion,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The hardware version characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeHardwareVersion")]
 		HardwareVersion,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The hold position characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeHoldPosition")]
 		HoldPosition,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The input event characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeInputEvent")]
 		InputEvent,
@@ -489,7 +489,7 @@ namespace HomeKit {
 		[Field ("HMCharacteristicTypeOccupancyDetected")]
 		OccupancyDetected,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The output state characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeOutputState")]
 		OutputState,
@@ -534,7 +534,7 @@ namespace HomeKit {
 		[Field ("HMCharacteristicTypeStatusTampered")]
 		StatusTampered,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The target security system state characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeTargetSecuritySystemState")]
 		TargetSecuritySystemState,
@@ -544,7 +544,7 @@ namespace HomeKit {
 		[Field ("HMCharacteristicTypeTargetHorizontalTilt")]
 		TargetHorizontalTilt,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The target position characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeTargetPosition")]
 		TargetPosition,
@@ -554,67 +554,67 @@ namespace HomeKit {
 		[Field ("HMCharacteristicTypeTargetVerticalTilt")]
 		TargetVerticalTilt,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The streaming status characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeStreamingStatus")]
 		StreamingStatus,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The setup stream endpoint characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeSetupStreamEndpoint")]
 		SetupStreamEndpoint,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The supported video stream configuration characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeSupportedVideoStreamConfiguration")]
 		SupportedVideoStreamConfiguration,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The supported audio stream configuration characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeSupportedAudioStreamConfiguration")]
 		SupportedAudioStreamConfiguration,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The supported rtp configuration characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeSupportedRTPConfiguration")]
 		SupportedRtpConfiguration,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The selected stream configuration characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeSelectedStreamConfiguration")]
 		SelectedStreamConfiguration,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The volume characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeVolume")]
 		Volume,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The mute characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeMute")]
 		Mute,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The night vision characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeNightVision")]
 		NightVision,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The optical zoom characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeOpticalZoom")]
 		OpticalZoom,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The digital zoom characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeDigitalZoom")]
 		DigitalZoom,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The image rotation characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeImageRotation")]
 		ImageRotation,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The image mirroring characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeImageMirroring")]
 		ImageMirroring,
@@ -629,7 +629,7 @@ namespace HomeKit {
 		[Field ("HMCharacteristicTypeCurrentAirPurifierState")]
 		CurrentAirPurifierState,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The target air purifier state characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeTargetAirPurifierState")]
 		TargetAirPurifierState,
@@ -654,52 +654,52 @@ namespace HomeKit {
 		[Field ("HMCharacteristicTypeCurrentSlatState")]
 		CurrentSlatState,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The water level characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeWaterLevel")]
 		WaterLevel,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The filter change indication characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeFilterChangeIndication")]
 		FilterChangeIndication,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The filter life level characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeFilterLifeLevel")]
 		FilterLifeLevel,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The filter reset change indication characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeFilterResetChangeIndication")]
 		FilterResetChangeIndication,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The lock physical controls characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeLockPhysicalControls")]
 		LockPhysicalControls,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The swing mode characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeSwingMode")]
 		SwingMode,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The target heater cooler state characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeTargetHeaterCoolerState")]
 		TargetHeaterCoolerState,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The target humidifier dehumidifier state characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeTargetHumidifierDehumidifierState")]
 		TargetHumidifierDehumidifierState,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The target fan state characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeTargetFanState")]
 		TargetFanState,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The slat type characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeSlatType")]
 		SlatType,
@@ -709,37 +709,37 @@ namespace HomeKit {
 		[Field ("HMCharacteristicTypeCurrentTilt")]
 		CurrentTilt,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The target tilt characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeTargetTilt")]
 		TargetTilt,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The ozone density characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeOzoneDensity")]
 		OzoneDensity,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The nitrogen dioxide density characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeNitrogenDioxideDensity")]
 		NitrogenDioxideDensity,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The sulphur dioxide density characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeSulphurDioxideDensity")]
 		SulphurDioxideDensity,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The p m2_5 density characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypePM2_5Density")]
 		PM2_5Density,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The p m10 density characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypePM10Density")]
 		PM10Density,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The volatile organic compound density characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeVolatileOrganicCompoundDensity")]
 		VolatileOrganicCompoundDensity,
@@ -754,17 +754,17 @@ namespace HomeKit {
 		[Field ("HMCharacteristicTypeHumidifierThreshold")]
 		HumidifierThreshold,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The security system alarm type characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeSecuritySystemAlarmType")]
 		SecuritySystemAlarmType,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The label namespace characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeLabelNamespace")]
 		LabelNamespace,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The label index characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeLabelIndex")]
 		LabelIndex,
@@ -774,32 +774,32 @@ namespace HomeKit {
 		[Field ("HMCharacteristicTypeColorTemperature")]
 		ColorTemperature,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The program mode characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeProgramMode")]
 		ProgramMode,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The in use characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeInUse")]
 		InUse,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The set duration characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeSetDuration")]
 		SetDuration,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The remaining duration characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeRemainingDuration")]
 		RemainingDuration,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The valve type characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeValveType")]
 		ValveType,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The is configured characteristic.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeIsConfigured")]
 		IsConfigured,
@@ -1064,52 +1064,52 @@ namespace HomeKit {
 		[Field ("HMServiceTypeDoorbell")]
 		Doorbell,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The air purifier service.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeAirPurifier")]
 		AirPurifier,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The ventilation fan service.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeVentilationFan")]
 		VentilationFan,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The filter maintenance service.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeFilterMaintenance")]
 		FilterMaintenance,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The heater cooler service.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeHeaterCooler")]
 		HeaterCooler,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The humidifier dehumidifier service.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeHumidifierDehumidifier")]
 		HumidifierDehumidifier,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The slats service.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeSlats")]
 		Slats,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The label service.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeLabel")]
 		Label,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The irrigation system service.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeIrrigationSystem")]
 		IrrigationSystem,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The valve service.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeValve")]
 		Valve,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The faucet service.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeFaucet")]
 		Faucet,
@@ -1366,7 +1366,7 @@ namespace HomeKit {
 		None = 0,
 		/// <summary>The battery is charging.</summary>
 		InProgress,
-		/// <summary>To be added.</summary>
+		/// <summary>Not chargeable.</summary>
 		[MacCatalyst (14, 0)]
 		NotChargeable,
 	}
@@ -1539,42 +1539,42 @@ namespace HomeKit {
 		[Field ("HMAccessoryCategoryTypeVideoDoorbell")]
 		VideoDoorbell,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The air purifier accessory category.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMAccessoryCategoryTypeAirPurifier")]
 		AirPurifier,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The air heater accessory category.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMAccessoryCategoryTypeAirHeater")]
 		AirHeater,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The air conditioner accessory category.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMAccessoryCategoryTypeAirConditioner")]
 		AirConditioner,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The air humidifier accessory category.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMAccessoryCategoryTypeAirHumidifier")]
 		AirHumidifier,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The air dehumidifier accessory category.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMAccessoryCategoryTypeAirDehumidifier")]
 		AirDehumidifier,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The sprinkler accessory category.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMAccessoryCategoryTypeSprinkler")]
 		Sprinkler,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The faucet accessory category.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMAccessoryCategoryTypeFaucet")]
 		Faucet,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The shower head accessory category.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMAccessoryCategoryTypeShowerHead")]
 		ShowerHead,
@@ -1678,9 +1678,9 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueLockPhysicalControlsState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Not locked.</summary>
 		NotLocked = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Locked.</summary>
 		Locked,
 	}
 
@@ -1688,11 +1688,11 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueCurrentAirPurifierState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Inactive.</summary>
 		Inactive = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Idle.</summary>
 		Idle,
-		/// <summary>To be added.</summary>
+		/// <summary>Active.</summary>
 		Active,
 	}
 
@@ -1700,9 +1700,9 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueTargetAirPurifierState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Manual.</summary>
 		Manual = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Automatic.</summary>
 		Automatic,
 	}
 
@@ -1710,11 +1710,11 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueCurrentSlatState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Stationary.</summary>
 		Stationary = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Jammed.</summary>
 		Jammed,
-		/// <summary>To be added.</summary>
+		/// <summary>Oscillating.</summary>
 		Oscillating,
 	}
 
@@ -1722,9 +1722,9 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueSlatType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Horizontal.</summary>
 		Horizontal = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Vertical.</summary>
 		Vertical,
 	}
 
@@ -1732,9 +1732,9 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueFilterChange : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Not needed.</summary>
 		NotNeeded = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Needed.</summary>
 		Needed,
 	}
 
@@ -1742,11 +1742,11 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueCurrentFanState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Inactive.</summary>
 		Inactive = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Idle.</summary>
 		Idle,
-		/// <summary>To be added.</summary>
+		/// <summary>Active.</summary>
 		Active,
 	}
 
@@ -1754,9 +1754,9 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueTargetFanState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Manual.</summary>
 		Manual = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Automatic.</summary>
 		Automatic,
 	}
 
@@ -1764,13 +1764,13 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueCurrentHeaterCoolerState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Inactive.</summary>
 		Inactive = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Idle.</summary>
 		Idle,
-		/// <summary>To be added.</summary>
+		/// <summary>Heating.</summary>
 		Heating,
-		/// <summary>To be added.</summary>
+		/// <summary>Cooling.</summary>
 		Cooling,
 	}
 
@@ -1778,11 +1778,11 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueTargetHeaterCoolerState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Automatic.</summary>
 		Automatic = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Heat.</summary>
 		Heat,
-		/// <summary>To be added.</summary>
+		/// <summary>Cool.</summary>
 		Cool,
 	}
 
@@ -1790,13 +1790,13 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueCurrentHumidifierDehumidifierState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Inactive.</summary>
 		Inactive = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Idle.</summary>
 		Idle,
-		/// <summary>To be added.</summary>
+		/// <summary>Humidifying.</summary>
 		Humidifying,
-		/// <summary>To be added.</summary>
+		/// <summary>Dehumidifying.</summary>
 		Dehumidifying,
 	}
 
@@ -1804,11 +1804,11 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueTargetHumidifierDehumidifierState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Automatic.</summary>
 		Automatic = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Humidify.</summary>
 		Humidify,
-		/// <summary>To be added.</summary>
+		/// <summary>Dehumidify.</summary>
 		Dehumidify,
 	}
 
@@ -1816,9 +1816,9 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueSwingMode : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Disabled.</summary>
 		Disabled = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Enabled.</summary>
 		Enabled,
 	}
 
@@ -1826,9 +1826,9 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueActivationState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Inactive.</summary>
 		Inactive = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Active.</summary>
 		Active,
 	}
 
@@ -1836,11 +1836,11 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueInputEvent : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Single press.</summary>
 		SinglePress = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Double press.</summary>
 		DoublePress,
-		/// <summary>To be added.</summary>
+		/// <summary>Long press.</summary>
 		LongPress,
 	}
 
@@ -1848,9 +1848,9 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueLabelNamespace : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Dot.</summary>
 		Dot = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Numeral.</summary>
 		Numeral,
 	}
 
@@ -1858,15 +1858,15 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMEventTriggerActivationState : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Disabled.</summary>
 		Disabled = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Disabled no home hub.</summary>
 		DisabledNoHomeHub = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Disabled no compatible home hub.</summary>
 		DisabledNoCompatibleHomeHub = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Disabled no location services authorization.</summary>
 		DisabledNoLocationServicesAuthorization = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Enabled.</summary>
 		Enabled = 4,
 	}
 
@@ -1874,11 +1874,11 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMHomeHubState : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Not available.</summary>
 		NotAvailable = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Connected.</summary>
 		Connected,
-		/// <summary>To be added.</summary>
+		/// <summary>Disconnected.</summary>
 		Disconnected,
 	}
 
@@ -1886,17 +1886,17 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMPresenceEventType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Every entry.</summary>
 		EveryEntry = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Every exit.</summary>
 		EveryExit = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>First entry.</summary>
 		FirstEntry = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Last exit.</summary>
 		LastExit = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>At home.</summary>
 		AtHome = FirstEntry,
-		/// <summary>To be added.</summary>
+		/// <summary>Not at home.</summary>
 		NotAtHome = LastExit,
 	}
 
@@ -1904,11 +1904,11 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMPresenceEventUserType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Current user.</summary>
 		CurrentUser = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Home users.</summary>
 		HomeUsers = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Custom users.</summary>
 		CustomUsers = 3,
 	}
 
@@ -1916,11 +1916,11 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueProgramMode : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Not scheduled.</summary>
 		NotScheduled = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Scheduled.</summary>
 		Scheduled,
-		/// <summary>To be added.</summary>
+		/// <summary>Schedule overridden to manual.</summary>
 		ScheduleOverriddenToManual,
 	}
 
@@ -1928,9 +1928,9 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueUsageState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Not in use.</summary>
 		NotInUse = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>In use.</summary>
 		InUse,
 	}
 
@@ -1938,13 +1938,13 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueValveType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Generic valve.</summary>
 		GenericValve = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Irrigation.</summary>
 		Irrigation,
-		/// <summary>To be added.</summary>
+		/// <summary>Shower head.</summary>
 		ShowerHead,
-		/// <summary>To be added.</summary>
+		/// <summary>Water faucet.</summary>
 		WaterFaucet,
 	}
 
@@ -1952,9 +1952,9 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueConfigurationState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Not configured.</summary>
 		NotConfigured = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Configured.</summary>
 		Configured,
 	}
 

@@ -37,7 +37,6 @@ using System.IO;
 namespace Foundation {
 	public partial class NSData : IEnumerable, IEnumerable<byte> {
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public byte [] ToArray ()
 		{
 			var res = new byte [Length];
@@ -295,8 +294,7 @@ namespace Foundation {
 		/// <param name="file">The file.</param>
 		///         <param name="auxiliaryFile">The auxiliary file.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Save.</summary>
 		public bool Save (string file, bool auxiliaryFile, out NSError? error)
 		{
 			return Save (file, auxiliaryFile ? NSDataWritingOptions.Atomic : (NSDataWritingOptions) 0, out error);
@@ -305,8 +303,7 @@ namespace Foundation {
 		/// <param name="file">The file.</param>
 		///         <param name="options">The options to use.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Save.</summary>
 		public bool Save (string file, NSDataWritingOptions options, out NSError? error)
 		{
 			unsafe {
@@ -323,8 +320,7 @@ namespace Foundation {
 		/// <param name="url">The URL to use.</param>
 		///         <param name="auxiliaryFile">The auxiliary file.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Save.</summary>
 		public bool Save (NSUrl url, bool auxiliaryFile, out NSError? error)
 		{
 			return Save (url, auxiliaryFile ? NSDataWritingOptions.Atomic : (NSDataWritingOptions) 0, out error);
@@ -333,8 +329,7 @@ namespace Foundation {
 		/// <param name="url">The URL to use.</param>
 		///         <param name="options">The options to use.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Save.</summary>
 		public bool Save (NSUrl url, NSDataWritingOptions options, out NSError? error)
 		{
 			unsafe {

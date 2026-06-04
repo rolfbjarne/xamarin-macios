@@ -1076,8 +1076,7 @@ void Setup ()
       </Docs>
   <Docs DocId="P:UIKit.UIView.VoiceOverStatusChanged">
         <summary>An accessibility notification indicating that the status of voice-over has changed.</summary>
-        <value>To be added.</value>
-        <remarks>To be added.</remarks>
+        <value>An <see cref="T:Foundation.NSString" /> representing the notification name.</value>
         <altmember cref="UIKit.UIView.AnnouncementNotification" />
         <altmember cref="UIKit.UIView.AnnouncementDidFinishNotification" />
         <altmember cref="UIKit.UIView.ClosedCaptioningStatusDidChangeNotification" />
@@ -1273,8 +1272,7 @@ void Setup ()
       </Docs>
   <Docs DocId="P:UIKit.UIView.LayoutChangedNotification">
         <summary>An accessibility notification indicating that the layout has changed.</summary>
-        <value>The layer that the view is being rendered on..</value>
-        <remarks>To be added.</remarks>
+        <value>An <see cref="T:Foundation.NSString" /> representing the notification name.</value>
         <altmember cref="UIKit.UIView.AnnouncementNotification" />
         <altmember cref="UIKit.UIView.AnnouncementDidFinishNotification" />
         <altmember cref="UIKit.UIView.ClosedCaptioningStatusDidChangeNotification" />

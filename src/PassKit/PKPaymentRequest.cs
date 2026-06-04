@@ -6,7 +6,6 @@ namespace PassKit {
 
 		/// <param name="set">The set.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		static public PKContactFields GetValue (NSSet set)
 		{
 			if (set is null)
@@ -16,7 +15,6 @@ namespace PassKit {
 
 		/// <param name="values">The values.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		static public NSSet GetSet (PKContactFields values)
 		{
 			return new NSMutableSet (values.ToArray ());
@@ -24,8 +22,7 @@ namespace PassKit {
 	}
 
 	public partial class PKPaymentRequest {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the required billing contact fields.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -35,8 +32,7 @@ namespace PassKit {
 			set { WeakRequiredBillingContactFields = PKContactFieldsExtensions.GetSet (value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the required shipping contact fields.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]

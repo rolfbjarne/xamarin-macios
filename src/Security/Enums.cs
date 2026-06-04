@@ -112,7 +112,7 @@ namespace Security {
 		KeyIsSensitive = -25258,
 		/// <summary>Indicates that a module failed to load.</summary>
 		MultiplePrivateKeys = -25259,
-		/// <summary>Indicates that a pass phrase is required.</summary>
+		/// <summary>Indicates that APass phrase is required.</summary>
 		PassphraseRequired = -25260,
 		/// <summary>Indicates an invalid password reference.</summary>
 		InvalidPasswordRef = -25261,
@@ -137,7 +137,7 @@ namespace Security {
 		DeviceFailed = -67588,
 		/// <summary>Indicates that an application ACL subject could not be added..</summary>
 		AppleAddAppACLSubject = -67589,
-		/// <summary>Indicates that a public key was incomplete.</summary>
+		/// <summary>Indicates that APublic key was incomplete.</summary>
 		ApplePublicKeyIncomplete = -67590,
 		/// <summary>Indicates a signature mismatch.</summary>
 		AppleSignatureMismatch = -67591,
@@ -173,13 +173,13 @@ namespace Security {
 		InvalidAuthorityKeyID = -67606,
 		/// <summary>Indicates an invalid subject key ID.</summary>
 		InvalidSubjectKeyID = -67607,   /* The subject key ID is not valid. */
-		/// <summary>Indicates an invalid key usage for a particular policy.</summary>
+		/// <summary>Indicates an invalid key usage for AParticular policy.</summary>
 		InvalidKeyUsageForPolicy = -67608,  /* The key usage is not valid for the specified policy. */
 		/// <summary>Indicate an invalid extended key usage.</summary>
 		InvalidExtendedKeyUsage = -67609,   /* The extended key usage is not valid. */
 		/// <summary>Indicates an invalid linkage to an ID.</summary>
 		InvalidIDLinkage = -67610,  /* The ID linkage is not valid. */
-		/// <summary>Indicates that a path was too long.</summary>
+		/// <summary>Indicates that APath was too long.</summary>
 		PathLengthConstraintExceeded = -67611,  /* The path length constraint was exceeded. */
 		/// <summary>Indicates an invalid root.</summary>
 		InvalidRoot = -67612,   /* The root or anchor certificate is not valid. */
@@ -467,7 +467,7 @@ namespace Security {
 		MissingAttributeSalt = -67753,  /* A salt attribute was missing. */
 		/// <summary>Indicates that the padding attribute was not valid.</summary>
 		InvalidAttributePadding = -67754,   /* A padding attribute was not valid. */
-		/// <summary>Indicates that a padding attribute was missing.</summary>
+		/// <summary>Indicates that APadding attribute was missing.</summary>
 		MissingAttributePadding = -67755,   /* A padding attribute was missing. */
 		/// <summary>Indicates that the random attribute was not valid.</summary>
 		InvalidAttributeRandom = -67756,    /* A random number attribute was not valid. */
@@ -479,7 +479,7 @@ namespace Security {
 		MissingAttributeSeed = -67759,  /* A seed attribute was missing. */
 		/// <summary>Indicates that the passphrase attribute was not valid.</summary>
 		InvalidAttributePassphrase = -67760,    /* A passphrase attribute was not valid. */
-		/// <summary>Indicates that a pass phrase attribute was missing.</summary>
+		/// <summary>Indicates that APass phrase attribute was missing.</summary>
 		MissingAttributePassphrase = -67761,    /* A passphrase attribute was missing. */
 		/// <summary>Indicates that the key length attribute was not valid.</summary>
 		InvalidAttributeKeyLength = -67762, /* A key length attribute was not valid. */
@@ -529,9 +529,9 @@ namespace Security {
 		InvalidAttributeVersion = -67784,   /* A version attribute was not valid. */
 		/// <summary>Indicates that a versions attribute was missing.</summary>
 		MissingAttributeVersion = -67785,   /* A version attribute was missing. */
-		/// <summary>Indicates that a prime attribute was not valid.</summary>
+		/// <summary>Indicates that APrime attribute was not valid.</summary>
 		InvalidAttributePrime = -67786, /* A prime attribute was not valid. */
-		/// <summary>Indicates that a prime attribute was missing.</summary>
+		/// <summary>Indicates that APrime attribute was missing.</summary>
 		MissingAttributePrime = -67787, /* A prime attribute was missing. */
 		/// <summary>Indicates that the base attribute was not valid.</summary>
 		InvalidAttributeBase = -67788,  /* A base attribute was not valid. */
@@ -555,11 +555,11 @@ namespace Security {
 		MissingAttributeAccessCredentials = -67797, /* An access credentials attribute was missing. */
 		/// <summary>Indicates that the public key format attribute was not valid.</summary>
 		InvalidAttributePublicKeyFormat = -67798,   /* A public key format attribute was not valid. */
-		/// <summary>Indicates that a public key format attribute was missing.</summary>
+		/// <summary>Indicates that APublic key format attribute was missing.</summary>
 		MissingAttributePublicKeyFormat = -67799,   /* A public key format attribute was missing. */
 		/// <summary>Indicates that the private key attribute was not valid.</summary>
 		InvalidAttributePrivateKeyFormat = -67800,  /* A private key format attribute was not valid. */
-		/// <summary>Indicates that a private key format attribute was missing.</summary>
+		/// <summary>Indicates that APrivate key format attribute was missing.</summary>
 		MissingAttributePrivateKeyFormat = -67801,  /* A private key format attribute was missing. */
 		/// <summary>Indicates that the symmetric key format attribute was not valid.</summary>
 		InvalidAttributeSymmetricKeyFormat = -67802,    /* A symmetric key format attribute was not valid. */
@@ -579,7 +579,7 @@ namespace Security {
 		QuerySizeUnknown = -67809,  /* The query size is unknown. */
 		/// <summary>Indicates mismatched block sizes.</summary>
 		BlockSizeMismatch = -67810, /* A block size mismatch occurred. */
-		/// <summary>Indicates that a public key was inconsistent.</summary>
+		/// <summary>Indicates that APublic key was inconsistent.</summary>
 		PublicKeyInconsistent = -67811, /* The public key was inconsistent. */
 		/// <summary>Indicates that a device could not be verified.</summary>
 		DeviceVerifyFailed = -67812,    /* A device verification failure has occurred. */

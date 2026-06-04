@@ -97,13 +97,13 @@ namespace EventKitUI {
 	[BaseType (typeof (UINavigationController), Delegates = new string [] { "WeakEditViewDelegate" }, Events = new Type [] { typeof (EKEventEditViewDelegate) })]
 	interface EKEventEditViewController : UIAppearance {
 		/// <param name="nibName">
-		///           <para>To be added.</para>
-		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
-		///         </param>
+		///   <para>The name of the nib file, or <see langword="null" />.</para>
+		///   <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		/// </param>
 		/// <param name="bundle">
-		///           <para>To be added.</para>
-		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
-		///         </param>
+		///   <para>The bundle in which to search for the nib file, or <see langword="null" />.</para>
+		///   <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		/// </param>
 		/// <summary>Creates a new <see cref="EventKitUI.EKEventEditViewController" /> from the specified Nib name in the specified <paramref name="bundle" />.</summary>
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
@@ -132,12 +132,12 @@ namespace EventKitUI {
 		IEKEventEditViewDelegate EditViewDelegate { get; set; }
 
 		/// <summary>Gets or sets the event store in which the event is saved.</summary>
-		///         <value>To be added.</value>
+		/// <value>The event store.</value>
 		[Export ("eventStore")]
 		EKEventStore EventStore { get; set; }
 
 		/// <summary>Gets or sets the event to edit.</summary>
-		///         <value>To be added.</value>
+		/// <value>The event, or <see langword="null" />.</value>
 		[NullAllowed]
 		[Export ("event")]
 		EKEvent Event { get; set; }

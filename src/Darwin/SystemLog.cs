@@ -39,7 +39,6 @@ namespace Darwin {
 		static SystemLog? _default;
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public static SystemLog Default {
 			get {
@@ -166,7 +165,6 @@ namespace Darwin {
 		///         <param name="text">To be added.</param>
 		///         <param name="args">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public int Log (Message msg, string text, params object [] args)
 		{
@@ -180,7 +178,6 @@ namespace Darwin {
 
 		/// <param name="text">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public int Log (string text)
 		{
@@ -195,7 +192,6 @@ namespace Darwin {
 
 		/// <param name="msg">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public int Log (Message msg)
 		{
@@ -212,7 +208,6 @@ namespace Darwin {
 
 		/// <param name="level">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public int SetFilter (int level)
 		{
@@ -230,7 +225,6 @@ namespace Darwin {
 
 		/// <param name="msg">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public IEnumerable<Message> Search (Message msg)
 		{
@@ -365,7 +359,6 @@ namespace Darwin {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string Time {
 			get { return this ["Time"]; }
@@ -373,7 +366,6 @@ namespace Darwin {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string Host {
 			get { return this ["Host"]; }
@@ -381,7 +373,6 @@ namespace Darwin {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string Sender {
 			get { return this ["Sender"]; }
@@ -389,7 +380,6 @@ namespace Darwin {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string Facility {
 			get { return this ["Facility"]; }
@@ -397,7 +387,6 @@ namespace Darwin {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string PID {
 			get { return this ["PID"]; }
@@ -405,7 +394,6 @@ namespace Darwin {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string UID {
 			get { return this ["UID"]; }
@@ -413,7 +401,6 @@ namespace Darwin {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string GID {
 			get { return this ["GID"]; }
@@ -421,7 +408,6 @@ namespace Darwin {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string Level {
 			get { return this ["Level"]; }
@@ -429,7 +415,6 @@ namespace Darwin {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string Msg {
 			get { return this ["Message"]; }
@@ -443,7 +428,6 @@ namespace Darwin {
 		///         <param name="op">To be added.</param>
 		///         <param name="value">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public bool SetQuery (string key, Op op, string value)
 		{

@@ -144,7 +144,7 @@ namespace Foundation {
 	}
 
 	/// <summary>
-	/// Provides data for an event based on a posted <see cref="NSNotification"/> object.
+	/// Provides data for an event based on APosted <see cref="NSNotification"/> object.
 	/// </summary>
 	public class NSNotificationEventArgs : EventArgs {
 		/// <summary>

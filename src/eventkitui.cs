@@ -27,7 +27,6 @@ namespace EventKitUI {
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <summary>Creates a new <see cref="EventKitUI.EKEventViewController" /> from the specified Nib name in the specified <paramref name="bundle" />.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
 		NativeHandle Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);
@@ -37,20 +36,17 @@ namespace EventKitUI {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed] // by default this property is null
 		[Export ("event")]
 		EKEvent Event { get; set; }
 
 		/// <summary>Gets or sets a Boolean value that controls whether the user can edit the event.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("allowsEditing")]
 		bool AllowsEditing { get; set; }
 
 		/// <summary>Gets or sets a Boolean value that controls whether the event can be viewed in the day preview.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("allowsCalendarPreview")]
 		bool AllowsCalendarPreview { get; set; }
 
@@ -84,10 +80,9 @@ namespace EventKitUI {
 	[Model]
 	[Protocol]
 	interface EKEventViewDelegate {
-		/// <param name="controller">To be added.</param>
-		///         <param name="action">To be added.</param>
+		/// <param name="controller">The controller.</param>
+		///         <param name="action">The action to perform.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("eventViewController:didCompleteWithAction:"), EventArgs ("EKEventView", XmlDocs = """
 			<summary>Event raised by the object.</summary>
@@ -110,14 +105,12 @@ namespace EventKitUI {
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <summary>Creates a new <see cref="EventKitUI.EKEventEditViewController" /> from the specified Nib name in the specified <paramref name="bundle" />.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
 		NativeHandle Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);
 
-		/// <param name="rootViewController">To be added.</param>
+		/// <param name="rootViewController">The root view controller.</param>
 		/// <summary>Creates a new <see cref="EventKitUI.EKEventEditViewController" /> with the specified root view controller.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithRootViewController:")]
 		[PostGet ("ViewControllers")] // that will PostGet TopViewController and VisibleViewController too
 		NativeHandle Constructor (UIViewController rootViewController);
@@ -127,7 +120,6 @@ namespace EventKitUI {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Export ("editViewDelegate", ArgumentSemantic.Weak), NullAllowed]
 		NSObject WeakEditViewDelegate { get; set; }
 
@@ -136,25 +128,21 @@ namespace EventKitUI {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Wrap ("WeakEditViewDelegate")]
 		IEKEventEditViewDelegate EditViewDelegate { get; set; }
 
 		/// <summary>Gets or sets the event store in which the event is saved.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("eventStore")]
 		EKEventStore EventStore { get; set; }
 
 		/// <summary>Gets or sets the event to edit.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed]
 		[Export ("event")]
 		EKEvent Event { get; set; }
 
 		/// <summary>Cancels the editing operation, discarding any changes.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("cancelEditing")]
 		void CancelEditing ();
 	}
@@ -168,10 +156,9 @@ namespace EventKitUI {
 	[Model]
 	[Protocol]
 	interface EKEventEditViewDelegate {
-		/// <param name="controller">To be added.</param>
-		///         <param name="action">To be added.</param>
+		/// <param name="controller">The controller.</param>
+		///         <param name="action">The action to perform.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("eventEditViewController:didCompleteWithAction:"), EventArgs ("EKEventEdit", XmlDocs = """
 			<summary>Event raised by the object.</summary>
@@ -179,13 +166,11 @@ namespace EventKitUI {
 			""")]
 		void Completed (EKEventEditViewController controller, EKEventEditViewAction action);
 
-		/// <param name="controller">To be added.</param>
+		/// <param name="controller">The controller.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>Delegate invoked by the object to get a value.</summary>
-			<value>To be added.</value>
 			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakEditViewDelegate property to an internal handler that maps delegates to events.</remarks>
 			""")]
 		[Export ("eventEditViewControllerDefaultCalendarForNewEvents:"), DelegateName ("EKEventEditController"), DefaultValue (null)]
@@ -208,31 +193,27 @@ namespace EventKitUI {
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <summary>Creates a new <see cref="EventKitUI.EKCalendarChooser" /> from the specified Nib name in the specified <paramref name="bundle" />.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
 		NativeHandle Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);
 
-		/// <param name="selectionStyle">To be added.</param>
-		/// <param name="displayStyle">To be added.</param>
-		/// <param name="eventStore">To be added.</param>
+		/// <param name="selectionStyle">The selection style.</param>
+		/// <param name="displayStyle">The display style.</param>
+		/// <param name="eventStore">The event store.</param>
 		/// <summary>Creates a new <see cref="EventKitUI.EKCalendarChooser" /> with the specified selection style, display style, and event store.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithSelectionStyle:displayStyle:eventStore:")]
 		NativeHandle Constructor (EKCalendarChooserSelectionStyle selectionStyle, EKCalendarChooserDisplayStyle displayStyle, EKEventStore eventStore);
 
-		/// <param name="selectionStyle">To be added.</param>
-		/// <param name="displayStyle">To be added.</param>
-		/// <param name="entityType">To be added.</param>
-		/// <param name="eventStore">To be added.</param>
+		/// <param name="selectionStyle">The selection style.</param>
+		/// <param name="displayStyle">The display style.</param>
+		/// <param name="entityType">The entity type.</param>
+		/// <param name="eventStore">The event store.</param>
 		/// <summary>Creates a new <see cref="EventKitUI.EKCalendarChooser" /> with the provided data.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithSelectionStyle:displayStyle:entityType:eventStore:")]
 		NativeHandle Constructor (EKCalendarChooserSelectionStyle selectionStyle, EKCalendarChooserDisplayStyle displayStyle, EKEntityType entityType, EKEventStore eventStore);
 
 		/// <summary>Gets or sets a value that controls whether multiple selections may be made.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("selectionStyle")]
 		EKCalendarChooserSelectionStyle SelectionStyle {
 			get;
@@ -260,13 +241,11 @@ namespace EventKitUI {
 
 		/// <summary>Get or sets a Boolean value that controls whether to display a "Done" button when the picker is displayed modally.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("showsDoneButton")]
 		bool ShowsDoneButton { get; set; }
 
 		/// <summary>Get or sets a Boolean value that controls whether to display a cancellation button when the picker is displayed modally.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("showsCancelButton")]
 		bool ShowsCancelButton { get; set; }
 
@@ -275,7 +254,6 @@ namespace EventKitUI {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed] // by default this property is null
 		[Export ("selectedCalendars", ArgumentSemantic.Copy)]
 		NSSet SelectedCalendars { get; set; }
@@ -290,9 +268,8 @@ namespace EventKitUI {
 	[Model]
 	[Protocol]
 	interface EKCalendarChooserDelegate {
-		/// <param name="calendarChooser">To be added.</param>
+		/// <param name="calendarChooser">The calendar chooser.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>Event raised by the object.</summary>
 			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
@@ -300,9 +277,8 @@ namespace EventKitUI {
 		[Export ("calendarChooserSelectionDidChange:")]
 		void SelectionChanged (EKCalendarChooser calendarChooser);
 
-		/// <param name="calendarChooser">To be added.</param>
+		/// <param name="calendarChooser">The calendar chooser.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>Event raised by the object.</summary>
 			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
@@ -310,9 +286,8 @@ namespace EventKitUI {
 		[Export ("calendarChooserDidFinish:")]
 		void Finished (EKCalendarChooser calendarChooser);
 
-		/// <param name="calendarChooser">To be added.</param>
+		/// <param name="calendarChooser">The calendar chooser.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>Event raised by the object.</summary>
 			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>

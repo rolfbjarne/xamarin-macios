@@ -213,7 +213,7 @@ namespace Foundation {
 
 		[DllImport (Constants.FoundationLibrary)]
 		unsafe static extern nuint NSDecimalMultiplyByPowerOf10 (NSDecimal* result, NSDecimal* number, short power10, nuint mode);
-		/// <summary>Multiplies an <see cref="NSDecimal"/> value by a power of 10.</summary>
+		/// <summary>Multiplies an <see cref="NSDecimal"/> value by APower of 10.</summary>
 		/// <param name="result">The result of the multiplication.</param>
 		/// <param name="number">The value to multiply.</param>
 		/// <param name="power10">The power of 10 to multiply by.</param>

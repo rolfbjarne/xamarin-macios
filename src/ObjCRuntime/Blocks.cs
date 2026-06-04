@@ -68,7 +68,7 @@ namespace ObjCRuntime {
 	///   In the C#/ECMA CLI world, delegates are automatically turned into blocks that can be consumed by Objective-C block-aware APIs.
 	///   </para>
 	///   <para>
-	///     If you need to P/Invoke a native C method that takes a block parameter, you would need to manually setup the <see cref="BlockLiteral" /> object and declare a proxy method that is invoked by the block handler and will invoke your managed code.
+	///     If you need to P/Invoke a native C method that takes a block parameter, you would need to manually setup the <see cref="BlockLiteral" /> object and declare AProxy method that is invoked by the block handler and will invoke your managed code.
 	///   </para>
 	///   <example>
 	///     <code lang="csharp lang-csharp"><![CDATA[

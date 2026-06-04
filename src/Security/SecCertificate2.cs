@@ -31,7 +31,7 @@ namespace Security {
 		extern static IntPtr sec_certificate_create (IntPtr seccertificateHandle);
 
 		/// <param name="certificate">The certificate.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="SecCertificate2" /> instance.</summary>
 		public SecCertificate2 (SecCertificate certificate)
 		{
 			if (certificate is null)
@@ -43,8 +43,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static /* SecCertificateRef */ IntPtr sec_certificate_copy_ref (/* OS_sec_certificate */ IntPtr handle);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>The certificate.</summary>
 		public SecCertificate Certificate => new SecCertificate (sec_certificate_copy_ref (GetCheckedHandle ()), owns: true);
 	}
 }

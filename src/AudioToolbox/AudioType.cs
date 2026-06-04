@@ -339,7 +339,6 @@ namespace AudioToolbox {
 
 		/// <param name="format">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public unsafe static AudioChannelLayoutTag []? GetAvailableEncodeChannelLayoutTags (AudioStreamBasicDescription format)
 		{
@@ -360,7 +359,6 @@ namespace AudioToolbox {
 
 		/// <param name="format">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public unsafe static int []? GetAvailableEncodeNumberChannels (AudioStreamBasicDescription format)
 		{
@@ -380,7 +378,6 @@ namespace AudioToolbox {
 
 		/// <param name="magicCookie">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public unsafe AudioFormat []? GetOutputFormatList (byte []? magicCookie = null)
 		{
@@ -407,7 +404,6 @@ namespace AudioToolbox {
 
 		/// <param name="magicCookie">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public unsafe AudioFormat []? GetFormatList (byte [] magicCookie)
 		{
@@ -442,7 +438,6 @@ namespace AudioToolbox {
 
 		/// <param name="format">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static AudioFormatError GetFormatInfo (ref AudioStreamBasicDescription format)
 		{
@@ -454,7 +449,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public unsafe string? FormatName {
 			get {
@@ -471,7 +465,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public unsafe bool IsEncrypted {
 			get {
@@ -488,7 +481,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public unsafe bool IsExternallyFramed {
 			get {
@@ -505,7 +497,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public unsafe bool IsVariableBitrate {
 			get {
@@ -844,7 +835,6 @@ namespace AudioToolbox {
 	public static class AudioChannelLabelExtensions {
 		/// <param name="value">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static bool IsReserved (this AudioChannelLabel value)
 		{
@@ -928,7 +918,6 @@ namespace AudioToolbox {
 #if !COREBUILD
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float [] Coords {
 			get {
@@ -944,7 +933,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public unsafe string? Name {
 			get {
@@ -963,7 +951,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public unsafe string? ShortName {
 			get {
@@ -1401,7 +1388,6 @@ namespace AudioToolbox {
 	public static class AudioChannelLayoutTagExtensions {
 		/// <param name="layoutTag">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static AudioChannelBit? ToAudioChannel (this AudioChannelLayoutTag layoutTag)
 		{
@@ -1419,7 +1405,6 @@ namespace AudioToolbox {
 
 		/// <param name="inLayoutTag">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static uint GetNumberOfChannels (this AudioChannelLayoutTag inLayoutTag)
 		{
@@ -1428,7 +1413,6 @@ namespace AudioToolbox {
 
 		/// <param name="value">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static bool IsReserved (this AudioChannelLayoutTag value)
 		{
@@ -1466,7 +1450,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[Advice ("Use the strongly typed 'AudioTag' instead.")]
 		public int Tag {
@@ -1479,7 +1462,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[Advice ("Use 'ChannelUsage' instead.")]
 		public int Bitmap {
@@ -1502,7 +1484,6 @@ namespace AudioToolbox {
 		public AudioChannelDescription []? Channels;
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public unsafe string? Name {
 			get {
@@ -1521,7 +1502,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public unsafe string? SimpleName {
 			get {
@@ -1541,7 +1521,6 @@ namespace AudioToolbox {
 
 		/// <param name="channelBitmap">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static AudioChannelLayout? FromAudioChannelBitmap (AudioChannelBit channelBitmap)
 		{
@@ -1550,7 +1529,6 @@ namespace AudioToolbox {
 
 		/// <param name="channelLayoutTag">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static AudioChannelLayout? FromAudioChannelLayoutTag (AudioChannelLayoutTag channelLayoutTag)
 		{
@@ -1589,7 +1567,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>Renders a human-readable version of the object.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{
@@ -1621,7 +1598,6 @@ namespace AudioToolbox {
 
 		/// <param name="layout">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static AudioFormatError Validate (AudioChannelLayout layout)
 		{
@@ -1639,7 +1615,6 @@ namespace AudioToolbox {
 		/// <param name="inputLayout">To be added.</param>
 		///         <param name="outputLayout">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public unsafe static int []? GetChannelMap (AudioChannelLayout inputLayout, AudioChannelLayout outputLayout)
 		{
@@ -1678,7 +1653,6 @@ namespace AudioToolbox {
 		/// <param name="inputLayout">To be added.</param>
 		///         <param name="outputLayout">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public unsafe static float [,]? GetMatrixMixMap (AudioChannelLayout inputLayout, AudioChannelLayout outputLayout)
 		{
@@ -1720,7 +1694,6 @@ namespace AudioToolbox {
 
 		/// <param name="layout">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static int? GetNumberOfChannels (AudioChannelLayout layout)
 		{
@@ -1741,7 +1714,6 @@ namespace AudioToolbox {
 
 		/// <param name="layout">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static AudioChannelLayoutTag? GetTagForChannelLayout (AudioChannelLayout layout)
 		{
@@ -1763,7 +1735,6 @@ namespace AudioToolbox {
 
 		/// <param name="count">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public unsafe static AudioChannelLayoutTag []? GetTagsForNumberOfChannels (int count)
 		{
@@ -1871,7 +1842,6 @@ namespace AudioToolbox {
 		public short Frames;
 
 		/// <summary>Gets a value that tells whether the time code is complete or is running.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public SmpteTimeFlags FlagsStrong {
 			get {
@@ -1882,7 +1852,6 @@ namespace AudioToolbox {
 			}
 		}
 		/// <summary>Gets or sets the SMPTE time code type</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public SmpteTimeType TypeStrong {
 			get {
@@ -1894,7 +1863,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>Returns a string representation of the time code.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{
@@ -1985,7 +1953,6 @@ namespace AudioToolbox {
 		public uint Reserved;
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{
@@ -2050,7 +2017,6 @@ namespace AudioToolbox {
 		public IntPtr Data;
 
 		/// <summary>Debugging method that display information about the AudioBuffer.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{

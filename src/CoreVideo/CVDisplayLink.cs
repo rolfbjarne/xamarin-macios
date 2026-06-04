@@ -218,7 +218,6 @@ namespace CoreVideo {
 
 		/// <param name="displayId">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[ObsoletedOSPlatform ("macos15.0", "Use 'NSView.GetDisplayLink', 'NSWindow.GetDisplayLink' or 'NSScreen.GetDisplayLink' instead.")]
 		[SupportedOSPlatform ("macos")]
@@ -235,7 +234,6 @@ namespace CoreVideo {
 		/// <param name="cglContext">The cgl context.</param>
 		///         <param name="cglPixelFormat">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[ObsoletedOSPlatform ("macos15.0", "Use 'NSView.GetDisplayLink', 'NSWindow.GetDisplayLink' or 'NSScreen.GetDisplayLink' instead.")]
 		[SupportedOSPlatform ("macos")]
@@ -253,7 +251,6 @@ namespace CoreVideo {
 		extern static int /* CGDirectDisplayID = uint32_t */ CVDisplayLinkGetCurrentCGDisplay (IntPtr displayLink);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[ObsoletedOSPlatform ("macos15.0", "Use 'NSView.GetDisplayLink', 'NSWindow.GetDisplayLink' or 'NSScreen.GetDisplayLink' instead.")]
 		[SupportedOSPlatform ("macos")]
@@ -268,7 +265,6 @@ namespace CoreVideo {
 		extern static CVReturn CVDisplayLinkStart (IntPtr displayLink);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[ObsoletedOSPlatform ("macos15.0", "Use 'NSView.GetDisplayLink', 'NSWindow.GetDisplayLink' or 'NSScreen.GetDisplayLink' instead.")]
 		[SupportedOSPlatform ("macos")]
@@ -283,7 +279,6 @@ namespace CoreVideo {
 		extern static CVReturn CVDisplayLinkStop (IntPtr displayLink);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[ObsoletedOSPlatform ("macos15.0", "Use 'NSView.GetDisplayLink', 'NSWindow.GetDisplayLink' or 'NSScreen.GetDisplayLink' instead.")]
 		[SupportedOSPlatform ("macos")]
@@ -298,7 +293,6 @@ namespace CoreVideo {
 		extern static CVTime CVDisplayLinkGetNominalOutputVideoRefreshPeriod (IntPtr displayLink);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[ObsoletedOSPlatform ("macos15.0", "Use 'NSView.GetDisplayLink', 'NSWindow.GetDisplayLink' or 'NSScreen.GetDisplayLink' instead.")]
 		[SupportedOSPlatform ("macos")]
@@ -314,7 +308,6 @@ namespace CoreVideo {
 		extern static CVTime CVDisplayLinkGetOutputVideoLatency (IntPtr displayLink);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[ObsoletedOSPlatform ("macos15.0", "Use 'NSView.GetDisplayLink', 'NSWindow.GetDisplayLink' or 'NSScreen.GetDisplayLink' instead.")]
 		[SupportedOSPlatform ("macos")]
@@ -330,7 +323,6 @@ namespace CoreVideo {
 		extern static double CVDisplayLinkGetActualOutputVideoRefreshPeriod (IntPtr displayLink);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[ObsoletedOSPlatform ("macos15.0", "Use 'NSView.GetDisplayLink', 'NSWindow.GetDisplayLink' or 'NSScreen.GetDisplayLink' instead.")]
 		[SupportedOSPlatform ("macos")]
@@ -346,7 +338,6 @@ namespace CoreVideo {
 		extern static byte CVDisplayLinkIsRunning (IntPtr displayLink);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[ObsoletedOSPlatform ("macos15.0", "Use 'NSView.GetDisplayLink', 'NSWindow.GetDisplayLink' or 'NSScreen.GetDisplayLink' instead.")]
 		[SupportedOSPlatform ("macos")]
@@ -363,7 +354,6 @@ namespace CoreVideo {
 
 		/// <param name="outTime">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[ObsoletedOSPlatform ("macos15.0", "Use 'NSView.GetDisplayLink', 'NSWindow.GetDisplayLink' or 'NSScreen.GetDisplayLink' instead.")]
 		[SupportedOSPlatform ("macos")]
@@ -385,7 +375,6 @@ namespace CoreVideo {
 		///     <param name="flagsIn">The flags in.</param>
 		///     <param name="flagsOut">The flags out.</param>
 		///     <summary>To be added.</summary>
-		///     <returns>To be added.</returns>
 		public delegate CVReturn DisplayLinkOutputCallback (CVDisplayLink displayLink, ref CVTimeStamp inNow, ref CVTimeStamp inOutputTime, CVOptionFlags flagsIn, ref CVOptionFlags flagsOut);
 		delegate CVReturn CVDisplayLinkOutputCallback (IntPtr displayLink, ref CVTimeStamp inNow, ref CVTimeStamp inOutputTime, CVOptionFlags flagsIn, ref CVOptionFlags flagsOut, IntPtr displayLinkContext);
 
@@ -408,7 +397,6 @@ namespace CoreVideo {
 
 		/// <param name="callback">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[ObsoletedOSPlatform ("macos15.0", "Use 'NSView.GetDisplayLink', 'NSWindow.GetDisplayLink' or 'NSScreen.GetDisplayLink' instead.")]
 		[SupportedOSPlatform ("macos")]

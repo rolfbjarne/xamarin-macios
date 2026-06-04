@@ -54,7 +54,7 @@ namespace NetworkExtension {
 	[MacCatalyst (13, 1)]
 	[Native ("NEVPNIKEv2EncryptionAlgorithm")]
 	public enum NEVpnIke2EncryptionAlgorithm : long {
-		/// <summary>To be added.</summary>
+		/// <summary>The DES encryption algorithm.</summary>
 		[NoTV]
 		[Deprecated (PlatformName.iOS, 26, 0, "Not supported anymore.")]
 		[Deprecated (PlatformName.MacOSX, 26, 0, "Not supported anymore.")]

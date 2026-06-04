@@ -60,7 +60,7 @@ namespace UserNotificationsUI {
 
 		/// <param name="response">The response.</param>
 		/// <param name="completion">The completion.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Called when the user taps a notification action.</summary>
 		[Export ("didReceiveNotificationResponse:completionHandler:")]
 		void DidReceiveNotificationResponse (UNNotificationResponse response, Action<UNNotificationContentExtensionResponseOption> completion);
 

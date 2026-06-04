@@ -28,8 +28,7 @@ namespace Metal {
 
 		static IMTLDevice? system_default;
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the system default.</summary>
 		public static IMTLDevice? SystemDefault {
 			get {
 				// Metal could be unavailable on the hardware (and we don't want to return an invalid instance)
@@ -55,7 +54,6 @@ namespace Metal {
 		unsafe static extern IntPtr MTLCopyAllDevices ();
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios18.0")]
@@ -100,7 +98,7 @@ namespace Metal {
 		/// <param name="block">The block.</param>
 		///         <param name="device">The device.</param>
 		///         <param name="notifyName">The notify name.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Trampolines notification handler.</summary>
 		[UnmanagedCallersOnly]
 		public static unsafe void TrampolineNotificationHandler (IntPtr block, IntPtr device, IntPtr notifyName)
 		{
@@ -117,7 +115,7 @@ namespace Metal {
 		static extern void MTLRemoveDeviceObserver (IntPtr observer);
 
 		/// <param name="observer">The observer.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Removes observer.</summary>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("tvos")]
@@ -143,7 +141,6 @@ namespace Metal {
 		///         <param name="data">The data to copy into the buffer.</param>
 		///         <param name="options">Options for creating the buffer.</param>
 		///         <summary>Creates and returns a new buffer with a copy of the specified data.</summary>
-		///         <returns>To be added.</returns>
 		public static IMTLBuffer? CreateBuffer<T> (this IMTLDevice This, T [] data, MTLResourceOptions options) where T : struct
 		{
 			if (data is null)

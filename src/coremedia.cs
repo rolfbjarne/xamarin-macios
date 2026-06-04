@@ -926,57 +926,57 @@ namespace CoreMedia {
 	[StrongDictionary ("CMSampleAttachmentKey")]
 	interface CMSampleBufferAttachmentSettings {
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the dictionary to post when the buffer is consumed.</summary>
+		/// <value>The notification dictionary.</value>
 		NSDictionary PostNotificationWhenConsumed { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets whether output should resume.</summary>
+		/// <value><see langword="true" /> to resume output; otherwise, <see langword="false" />.</value>
 		bool ResumeOutput { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the transition identifier.</summary>
+		/// <value>The transition identifier.</value>
 		int TransitionId { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the trim duration at the start.</summary>
+		/// <value>A dictionary representing the trim duration.</value>
 		NSDictionary TrimDurationAtStart { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the trim duration at the end.</summary>
+		/// <value>A dictionary representing the trim duration.</value>
 		NSDictionary TrimDurationAtEnd { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the speed multiplier.</summary>
+		/// <value>The speed multiplier value.</value>
 		float SpeedMultiplier { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the sample reference URL.</summary>
+		/// <value>The URL referencing the sample data.</value>
 		NSUrl SampleReferenceUrl { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the sample reference byte offset.</summary>
+		/// <value>The byte offset into the referenced data.</value>
 		int SampleReferenceByteOffset { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the gradual decoder refresh value.</summary>
+		/// <value>The gradual decoder refresh value.</value>
 		NSNumber GradualDecoderRefresh { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the HEVC temporal level info settings.</summary>
+		/// <value>The temporal level info settings.</value>
 		[MacCatalyst (13, 1)]
 		[StrongDictionary]
 		CMHevcTemporalLevelInfoSettings HevcTemporalLevelInfo { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets whether HEVC temporal sub-layer access is enabled.</summary>
+		/// <value><see langword="true" /> if temporal sub-layer access is enabled; otherwise, <see langword="false" />.</value>
 		[MacCatalyst (13, 1)]
 		bool HevcTemporalSubLayerAccess { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets whether HEVC stepwise temporal sub-layer access is enabled.</summary>
+		/// <value><see langword="true" /> if stepwise temporal sub-layer access is enabled; otherwise, <see langword="false" />.</value>
 		[MacCatalyst (13, 1)]
 		bool HevcStepwiseTemporalSubLayerAccess { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the HEVC sync sample NAL unit type.</summary>
+		/// <value>The NAL unit type value.</value>
 		[MacCatalyst (13, 1)]
 		int HevcSyncSampleNalUnitType { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the camera intrinsic matrix data.</summary>
+		/// <value>The camera intrinsic matrix as NSData.</value>
 		[MacCatalyst (13, 1)]
 		NSData CameraIntrinsicMatrix { get; set; }
 

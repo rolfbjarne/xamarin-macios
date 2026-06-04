@@ -1297,7 +1297,7 @@ namespace NetworkExtension {
 		[NullAllowed, Export ("passwordReference", ArgumentSemantic.Copy)]
 		NSData PasswordReference { get; set; }
 
-		/// <summary>Gets or sets the persistent reference to a private key and certificate in the keychain.</summary>
+		/// <summary>Gets or sets the persistent reference to APrivate key and certificate in the keychain.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
@@ -2004,7 +2004,7 @@ namespace NetworkExtension {
 		string [] MatchDomains { get; set; }
 	}
 
-	/// <summary>Settings for a proxy server.</summary>
+	/// <summary>Settings for AProxy server.</summary>
 	/// <remarks>To be added.</remarks>
 	/// <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/NetworkExtension/Reference/NEProxyServerClassRef/index.html">Apple documentation for <c>NEProxyServer</c></related>
 	[MacCatalyst (13, 1)]
@@ -2501,7 +2501,7 @@ namespace NetworkExtension {
 		[Export ("identityData", ArgumentSemantic.Copy)]
 		NSData IdentityData { get; set; }
 
-		/// <summary>Gets or sets the password for the PKCS12 data in the IdentityData property</summary>
+		/// <summary>Gets or sets the password for the PKCS12 data in the IdentityDatAProperty</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
@@ -3437,7 +3437,7 @@ namespace NetworkExtension {
 		nuint MaximumSslProtocolVersion { get; set; }
 	}
 
-	/// <summary>Establishes a UDP connection and and transmits UDP data packets.</summary>
+	/// <summary>Establishes a UDP connection and and transmits UDP datAPackets.</summary>
 	/// <remarks>To be added.</remarks>
 	/// <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/NetworkExtension/Reference/NWUDPSessionClassRef/index.html">Apple documentation for <c>NWUDPSession</c></related>
 	[Deprecated (PlatformName.iOS, 18, 0, message: "Use 'Network.NWConnection' instead.")]

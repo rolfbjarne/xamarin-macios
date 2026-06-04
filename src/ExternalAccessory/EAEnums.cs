@@ -12,11 +12,11 @@ namespace ExternalAccessory {
 	[Native]
 	[Flags]
 	public enum EAWiFiUnconfiguredAccessoryProperties : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates supports air play.</summary>
 		SupportsAirPlay = (1 << 0),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates supports air print.</summary>
 		SupportsAirPrint = (1 << 1),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates supports home kit.</summary>
 		SupportsHomeKit = (1 << 2), // iOS 8 beta 5
 	}
 
@@ -25,13 +25,13 @@ namespace ExternalAccessory {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum EAWiFiUnconfiguredAccessoryBrowserState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates wi fi unavailable.</summary>
 		WiFiUnavailable = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates stopped.</summary>
 		Stopped,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates searching.</summary>
 		Searching,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates configuring.</summary>
 		Configuring,
 	}
 
@@ -41,11 +41,11 @@ namespace ExternalAccessory {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum EAWiFiUnconfiguredAccessoryConfigurationStatus : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates success.</summary>
 		Success,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates user cancelled configuration.</summary>
 		UserCancelledConfiguration,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates failed.</summary>
 		Failed,
 	}
 
@@ -54,13 +54,13 @@ namespace ExternalAccessory {
 	[Native ("EABluetoothAccessoryPickerErrorCode")]
 	[ErrorDomain ("EABluetoothAccessoryPickerErrorDomain")]
 	public enum EABluetoothAccessoryPickerError : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates already connected.</summary>
 		AlreadyConnected,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates not found.</summary>
 		NotFound,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates cancelled.</summary>
 		Cancelled,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates failed.</summary>
 		Failed,
 	}
 }

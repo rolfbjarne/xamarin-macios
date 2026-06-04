@@ -28,17 +28,17 @@ namespace CoreData {
 	/// <summary>Enumerates specific types of entity mapping.</summary>
 	[Native]
 	public enum NSEntityMappingType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates undefined.</summary>
 		Undefined = 0x00,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates custom.</summary>
 		Custom = 0x01,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates add.</summary>
 		Add = 0x02,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates remove.</summary>
 		Remove = 0x03,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates copy.</summary>
 		Copy = 0x04,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates transform.</summary>
 		Transform = 0x05,
 	}
 
@@ -87,13 +87,13 @@ namespace CoreData {
 	[Flags]
 	[Native]
 	public enum NSFetchRequestResultType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates managed object.</summary>
 		ManagedObject = 0x00,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates managed object i d.</summary>
 		ManagedObjectID = 0x01,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates dictionary result type.</summary>
 		DictionaryResultType = 0x02,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates n s count result type.</summary>
 		NSCountResultType = 0x04,
 	}
 
@@ -101,13 +101,13 @@ namespace CoreData {
 	/// <summary>An enumeration whose values specify cascade options after deletion of an object.</summary>
 	[Native]
 	public enum NSDeleteRule : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates no action.</summary>
 		NoAction,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates nullify.</summary>
 		Nullify,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates cascade.</summary>
 		Cascade,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates deny.</summary>
 		Deny,
 	}
 
@@ -133,11 +133,11 @@ namespace CoreData {
 	/// <summary>Enumerates types of concurrenty patterns that can be used by a <see cref="CoreData.NSManagedObjectContext" />.</summary>
 	[Native]
 	public enum NSManagedObjectContextConcurrencyType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates confinement.</summary>
 		Confinement,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates private queue.</summary>
 		PrivateQueue,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates main queue.</summary>
 		MainQueue,
 	}
 
@@ -145,15 +145,15 @@ namespace CoreData {
 	/// <summary>Enumerates policies for merging.</summary>
 	[Native]
 	public enum NSMergePolicyType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates error.</summary>
 		Error,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates property store trump.</summary>
 		PropertyStoreTrump,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates property object trump.</summary>
 		PropertyObjectTrump,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates overwrite.</summary>
 		Overwrite,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates rollback merge.</summary>
 		RollbackMerge,
 	}
 
@@ -161,24 +161,24 @@ namespace CoreData {
 	/// <summary>Enumerates kinds of batch requests.</summary>
 	[Native]
 	public enum NSFetchedResultsChangeType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates insert.</summary>
 		Insert = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates delete.</summary>
 		Delete = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates move.</summary>
 		Move = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates update.</summary>
 		Update = 4,
 	}
 
 	/// <summary>Enumerates the kind of results that can be returned from a batched update request.</summary>
 	[Native]
 	public enum NSBatchUpdateRequestResultType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates status only.</summary>
 		StatusOnly = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates updated object i ds.</summary>
 		UpdatedObjectIDs = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates updated objects count.</summary>
 		UpdatedObjectsCount = 2,
 	}
 
@@ -186,11 +186,11 @@ namespace CoreData {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NSBatchDeleteRequestResultType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates status only.</summary>
 		StatusOnly = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates object i ds.</summary>
 		ObjectIDs = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates count.</summary>
 		Count = 2,
 	}
 
@@ -225,7 +225,7 @@ namespace CoreData {
 		StringTooShort = 1670,
 		/// <summary>Indicates that a pattern failed to match a string.</summary>
 		StringPatternMatching = 1680,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid uri.</summary>
 		[MacCatalyst (13, 1)]
 		InvalidUri = 1690,
 	}
@@ -291,7 +291,7 @@ namespace CoreData {
 		InferredMappingModel = 134190,
 		/// <summary>An error occurred while importing an external record.</summary>
 		ExternalRecordImport = 134200,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates history token expired.</summary>
 		[MacCatalyst (13, 1)]
 		HistoryTokenExpired = 134301,
 	}
@@ -309,28 +309,28 @@ namespace CoreData {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NSPersistentHistoryChangeType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates insert.</summary>
 		Insert,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates update.</summary>
 		Update,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates delete.</summary>
 		Delete,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NSPersistentHistoryResultType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates status only.</summary>
 		StatusOnly = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates object ids.</summary>
 		ObjectIds = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates count.</summary>
 		Count = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates transactions only.</summary>
 		TransactionsOnly = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates changes only.</summary>
 		ChangesOnly = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates transactions and changes.</summary>
 		TransactionsAndChanges = 5,
 	}
 

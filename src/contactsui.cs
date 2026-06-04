@@ -38,7 +38,6 @@ namespace ContactsUI {
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <summary>Creates a new <see cref="ContactsUI.CNContactPickerViewController" /> from the specified <paramref name="nibName" /> in the specified <paramref name="bundle" />.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
 		NativeHandle Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);
@@ -48,7 +47,6 @@ namespace ContactsUI {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed] // TODO: Maybe we can Strongify this puppy
 		[Export ("displayedPropertyKeys")]
 		NSString [] DisplayedPropertyKeys { get; set; }
@@ -69,7 +67,6 @@ namespace ContactsUI {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed]
 		[Export ("predicateForEnablingContact", ArgumentSemantic.Copy)]
 		NSPredicate PredicateForEnablingContact { get; set; }
@@ -79,7 +76,6 @@ namespace ContactsUI {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed]
 		[Export ("predicateForSelectionOfContact", ArgumentSemantic.Copy)]
 		NSPredicate PredicateForSelectionOfContact { get; set; }
@@ -89,7 +85,6 @@ namespace ContactsUI {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed]
 		[Export ("predicateForSelectionOfProperty", ArgumentSemantic.Copy)]
 		NSPredicate PredicateForSelectionOfProperty { get; set; }
@@ -105,29 +100,25 @@ namespace ContactsUI {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface CNContactPickerDelegate {
-		/// <param name="picker">To be added.</param>
-		///         <param name="contact">To be added.</param>
+		/// <param name="picker">The picker.</param>
+		///         <param name="contact">The contact.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("contactPicker:didSelectContact:")]
 		void ContactSelected (CNContactPicker picker, CNContact contact);
 
-		/// <param name="picker">To be added.</param>
-		///         <param name="contactProperty">To be added.</param>
+		/// <param name="picker">The picker.</param>
+		///         <param name="contactProperty">The contact property.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("contactPicker:didSelectContactProperty:")]
 		void ContactPropertySelected (CNContactPicker picker, CNContactProperty contactProperty);
 
-		/// <param name="picker">To be added.</param>
+		/// <param name="picker">The picker.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("contactPickerWillClose:")]
 		void WillClose (CNContactPicker picker);
 
-		/// <param name="picker">To be added.</param>
+		/// <param name="picker">The picker.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("contactPickerDidClose:")]
 		void DidClose (CNContactPicker picker);
 	}
@@ -141,37 +132,32 @@ namespace ContactsUI {
 	[BaseType (typeof (NSObject))]
 	interface CNContactPickerDelegate {
 
-		/// <param name="picker">To be added.</param>
+		/// <param name="picker">The picker.</param>
 		///         <summary>Called after the user selects the "Cancel" button.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("contactPickerDidCancel:")]
 		void ContactPickerDidCancel (CNContactPickerViewController picker);
 
-		/// <param name="picker">To be added.</param>
-		///         <param name="contact">To be added.</param>
+		/// <param name="picker">The picker.</param>
+		///         <param name="contact">The contact.</param>
 		///         <summary>Called after the user selects the <paramref name="contact" />.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("contactPicker:didSelectContact:")]
 		void DidSelectContact (CNContactPickerViewController picker, CNContact contact);
 
-		/// <param name="picker">To be added.</param>
-		///         <param name="contactProperty">To be added.</param>
+		/// <param name="picker">The picker.</param>
+		///         <param name="contactProperty">The contact property.</param>
 		///         <summary>Called after the user selects a property of the contact.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("contactPicker:didSelectContactProperty:")]
 		void DidSelectContactProperty (CNContactPickerViewController picker, CNContactProperty contactProperty);
 
-		/// <param name="picker">To be added.</param>
-		///         <param name="contacts">To be added.</param>
+		/// <param name="picker">The picker.</param>
+		///         <param name="contacts">The contacts.</param>
 		///         <summary>Called after the user selects multiple contacts. Devs must override this method to configure the <see cref="ContactsUI.CNContactPickerViewController" /> for multiple selection.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("contactPicker:didSelectContacts:")]
 		void DidSelectContacts (CNContactPickerViewController picker, CNContact [] contacts);
 
-		/// <param name="picker">To be added.</param>
-		///         <param name="contactProperties">To be added.</param>
+		/// <param name="picker">The picker.</param>
+		///         <param name="contactProperties">The contact properties.</param>
 		///         <summary>Called after the user selects multiple properties. Devs must override this method to configure the <see cref="ContactsUI.CNContactPickerViewController" /> for multiple selection.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("contactPicker:didSelectContactProperties:")]
 		void DidSelectContactProperties (CNContactPickerViewController picker, CNContactProperty [] contactProperties);
 	}
@@ -191,7 +177,6 @@ namespace ContactsUI {
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <summary>Creates a new <see cref="ContactsUI.CNContactViewController" /> from the specified <paramref name="nibName" /> in the specified <paramref name="bundle" />.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithNibName:bundle:")]
 #if !MONOMAC
 		[PostGet ("NibBundle")]
@@ -200,7 +185,6 @@ namespace ContactsUI {
 
 		/// <summary>Describes all the keys that must be fetched for display in a <see cref="ContactsUI.CNContactViewController" />. For use with <see cref="Contacts.CNContactFetchRequest.KeysToFetch" />.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Static]
 		[Export ("descriptorForRequiredKeys")]
 		ICNKeyDescriptor DescriptorForRequiredKeys { get; }
@@ -208,7 +192,6 @@ namespace ContactsUI {
 #if MONOMAC
 		/// <summary>The <see cref="Contacts.CNContact" /> that is displayed.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed]
 		[Export ("contact", ArgumentSemantic.Copy)]
 #else
@@ -222,20 +205,18 @@ namespace ContactsUI {
 			set;
 		}
 
-		/// <param name="contact">To be added.</param>
+		/// <param name="contact">The contact.</param>
 		///         <summary>Creates a <see cref="ContactsUI.CNContactViewController" /> to display <paramref name="contact" />.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("viewControllerForContact:")]
 		CNContactViewController FromContact (CNContact contact);
 
-		/// <param name="contact">To be added.</param>
+		/// <param name="contact">The contact.</param>
 		///         <summary>Creates a <see cref="ContactsUI.CNContactViewController" /> to display <paramref name="contact" /> when it is not known if <paramref name="contact" /> was fetched or newly created.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Static]
@@ -248,7 +229,6 @@ namespace ContactsUI {
 		///         </param>
 		///         <summary>Creates a <see cref="ContactsUI.CNContactViewController" /> to display the newly-created <paramref name="contact" />.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Static]
@@ -260,7 +240,6 @@ namespace ContactsUI {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[NullAllowed] // TODO: Maybe we can Strongify this puppy
@@ -285,7 +264,6 @@ namespace ContactsUI {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[NullAllowed]
@@ -297,7 +275,6 @@ namespace ContactsUI {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[NullAllowed]
@@ -309,7 +286,6 @@ namespace ContactsUI {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[NullAllowed]
@@ -335,7 +311,6 @@ namespace ContactsUI {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[NullAllowed]
@@ -344,7 +319,6 @@ namespace ContactsUI {
 
 		/// <summary>Whether editing the contact is allowed.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Export ("allowsEditing", ArgumentSemantic.Assign)]
@@ -352,7 +326,6 @@ namespace ContactsUI {
 
 		/// <summary>Whether buttons triggering actions (such as sending a text) are displayed.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Export ("allowsActions", ArgumentSemantic.Assign)]
@@ -360,19 +333,17 @@ namespace ContactsUI {
 
 		/// <summary>Whether to show data from contacts linked to the <see cref="ContactsUI.CNContactViewController.Contact" />.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Export ("shouldShowLinkedContacts", ArgumentSemantic.Assign)]
 		bool ShouldShowLinkedContacts { get; set; }
 
-		/// <param name="key">To be added.</param>
+		/// <param name="key">The key to use.</param>
 		///         <param name="identifier">
 		///           <para>To be added.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		///         <summary>Highlights the property identified by <paramref name="key" />. If <paramref name="key" /> is multivalued, <paramref name="identifier" /> specifies which to highlight. (See <see cref="Contacts.CNContactKey" /> for values for <paramref name="key" />.)</summary>
-		///         <remarks>To be added.</remarks>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Export ("highlightPropertyWithKey:identifier:")] //TODO: Maybe we can mNullallowedake a strongly type version
@@ -390,21 +361,19 @@ namespace ContactsUI {
 	[BaseType (typeof (NSObject))]
 	interface CNContactViewControllerDelegate {
 
-		/// <param name="viewController">To be added.</param>
-		///         <param name="property">To be added.</param>
+		/// <param name="viewController">The view controller.</param>
+		///         <param name="property">The property.</param>
 		///         <summary>Return <see langword="true" /> if the default action for the property should be triggered when it is selected by the user.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[Export ("contactViewController:shouldPerformDefaultActionForContactProperty:")]
 		bool ShouldPerformDefaultAction (CNContactViewController viewController, CNContactProperty property);
 
-		/// <param name="viewController">To be added.</param>
+		/// <param name="viewController">The view controller.</param>
 		///         <param name="contact">
 		///           <para>To be added.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		///         <summary>Method that is called after the view is presented.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("contactViewController:didCompleteWithContact:")]
 		void DidComplete (CNContactViewController viewController, [NullAllowed] CNContact contact);
 	}
@@ -416,26 +385,22 @@ namespace ContactsUI {
 	interface CNContactPicker {
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("displayedKeys", ArgumentSemantic.Copy)]
 		string [] DisplayedKeys { get; set; }
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed, Export ("delegate", ArgumentSemantic.Weak)]
 		ICNContactPickerDelegate Delegate { get; set; }
 
-		/// <param name="positioningRect">To be added.</param>
-		///         <param name="positioningView">To be added.</param>
-		///         <param name="preferredEdge">To be added.</param>
+		/// <param name="positioningRect">The positioning rect.</param>
+		///         <param name="positioningView">The positioning view.</param>
+		///         <param name="preferredEdge">The preferred edge.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("showRelativeToRect:ofView:preferredEdge:")]
 		void Show (CGRect positioningRect, NSView positioningView, NSRectEdge preferredEdge);
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("close")]
 		void Close ();
 	}

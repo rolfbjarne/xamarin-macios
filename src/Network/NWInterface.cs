@@ -16,7 +16,6 @@ using OS_nw_interface = System.IntPtr;
 
 namespace Network {
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
@@ -31,7 +30,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NWInterfaceType InterfaceType => nw_interface_get_type (GetCheckedHandle ());
 
 		[DllImport (Constants.NetworkLibrary)]
@@ -39,7 +37,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? Name => Marshal.PtrToStringAnsi (nw_interface_get_name (GetCheckedHandle ()));
 
 		[DllImport (Constants.NetworkLibrary)]
@@ -47,7 +44,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public uint Index => nw_interface_get_index (GetCheckedHandle ());
 #endif // !COREBUILD
 	}

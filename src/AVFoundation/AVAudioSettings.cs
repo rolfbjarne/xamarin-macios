@@ -43,15 +43,13 @@ namespace AVFoundation {
 	public class AudioSettings : DictionaryContainer {
 #if !COREBUILD
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public AudioSettings ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
-		/// <param name="dictionary">To be added.</param>
+		/// <param name="dictionary">The dictionary.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public AudioSettings (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -219,7 +217,6 @@ namespace AVFoundation {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -263,7 +260,6 @@ namespace AVFoundation {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -297,7 +293,6 @@ namespace AVFoundation {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]

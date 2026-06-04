@@ -548,7 +548,7 @@ namespace CoreBluetooth {
 		void DidDisconnectPeripheral (CBCentralManager central, CBPeripheral peripheral, double timestamp, bool isReconnecting, [NullAllowed] NSError error);
 	}
 
-	/// <summary>Keys used to lookup dictionary values from the NSDictionary received as a parameter in <see cref="CoreBluetooth.CBCentralManagerDelegate.DiscoveredPeripheral(CoreBluetooth.CBCentralManager,CoreBluetooth.CBPeripheral,Foundation.NSDictionary,Foundation.NSNumber)" />.</summary>
+	/// <summary>Keys used to lookup dictionary values from the NSDictionary received as AParameter in <see cref="CoreBluetooth.CBCentralManagerDelegate.DiscoveredPeripheral(CoreBluetooth.CBCentralManager,CoreBluetooth.CBPeripheral,Foundation.NSDictionary,Foundation.NSNumber)" />.</summary>
 	[MacCatalyst (13, 1)]
 	[Static]
 	interface CBAdvertisement {
@@ -733,7 +733,7 @@ namespace CoreBluetooth {
 		CBCentral [] SubscribedCentrals { get; }
 	}
 
-	/// <summary>An immutable description of a peripheral's characteristic. See also <see cref="CoreBluetooth.CBMutableDescriptor" />.</summary>
+	/// <summary>An immutable description of APeripheral's characteristic. See also <see cref="CoreBluetooth.CBMutableDescriptor" />.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/CoreBluetooth/Reference/CBDescriptor_Class/index.html">Apple documentation for <c>CBDescriptor</c></related>
 	[MacCatalyst (13, 1)]

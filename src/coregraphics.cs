@@ -122,70 +122,59 @@ namespace CoreGraphics {
 	interface CGColorSpaceNames {
 		/// <summary>Gets the name of the generic gray color space.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("kCGColorSpaceGenericGray")]
 		NSString GenericGray { get; }
 
 		/// <summary>Gets a string constant that identifies the GenericRgb color space.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("kCGColorSpaceGenericRGB")]
 		NSString GenericRgb { get; }
 
 		/// <summary>Gets a string constant that identifies the GenericCmyk color space.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("kCGColorSpaceGenericCMYK")]
 		NSString GenericCmyk { get; }
 
 		/// <summary>Gets a string constant that identifies the DisplayP3 color space.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceDisplayP3")]
 		NSString DisplayP3 { get; }
 
 		/// <summary>Gets a string constant that identifies the GenericRgbLinear color space.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("kCGColorSpaceGenericRGBLinear")]
 		NSString GenericRgbLinear { get; }
 
 		/// <summary>Gets a string constant that identifies the AdobeRgb1998 color space.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("kCGColorSpaceAdobeRGB1998")]
 		NSString AdobeRgb1998 { get; }
 
 		/// <summary>Gets a string constant that identifies the Srgb color space.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("kCGColorSpaceSRGB")]
 		NSString Srgb { get; }
 
 		/// <summary>Gets the name of the generic gray color space that has a gamma value of 2.2.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("kCGColorSpaceGenericGrayGamma2_2")]
 		NSString GenericGrayGamma2_2 { get; }
 
 		/// <summary>Gets a string constant that identifies the GenericXyz color space.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceGenericXYZ")]
 		NSString GenericXyz { get; }
 
 		/// <summary>Gets a string constant that identifies the AcesCGLinear color space.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceACESCGLinear")]
 		NSString AcesCGLinear { get; }
 
 		/// <summary>Gets a string constant that identifies the ItuR_709 color space.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceITUR_709")]
 		NSString ItuR_709 { get; }
@@ -201,7 +190,6 @@ namespace CoreGraphics {
 
 		/// <summary>Gets a string constant that identifies the ItuR_2020 color space.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceITUR_2020")]
 		NSString ItuR_2020 { get; }
@@ -213,56 +201,48 @@ namespace CoreGraphics {
 
 		/// <summary>Gets a string constant that identifies the RommRgb color space.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceROMMRGB")]
 		NSString RommRgb { get; }
 
 		/// <summary>Gets a string constant that identifies the Dcip3 color space.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceDCIP3")]
 		NSString Dcip3 { get; }
 
 		/// <summary>Gets a string constant that identifies the ExtendedSrgb color space.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceExtendedSRGB")]
 		NSString ExtendedSrgb { get; }
 
 		/// <summary>Gets a string constant that identifies the LinearSrgb color space.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceLinearSRGB")]
 		NSString LinearSrgb { get; }
 
 		/// <summary>Gets a string constant that identifies the ExtendedLinearSrgb color space.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceExtendedLinearSRGB")]
 		NSString ExtendedLinearSrgb { get; }
 
 		/// <summary>Gets a string constant that identifies the ExtendedGray color space.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceExtendedGray")]
 		NSString ExtendedGray { get; }
 
 		/// <summary>Gets a string constant that identifies the LinearGray color space.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceLinearGray")]
 		NSString LinearGray { get; }
 
 		/// <summary>Gets a string constant that identifies the ExtendedLinearGray color space.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceExtendedLinearGray")]
 		NSString ExtendedLinearGray { get; }
@@ -319,7 +299,6 @@ namespace CoreGraphics {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceGenericLab")]
 		NSString GenericLab { get; }
@@ -441,11 +420,9 @@ namespace CoreGraphics {
 	interface CGColorConversionOptions {
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		bool BlackPointCompensation { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		CGSize TrcSize { get; set; }
 	}
 
@@ -479,19 +456,15 @@ namespace CoreGraphics {
 	interface CGPDFOutlineOptions {
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		string OutlineTitle { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		NSDictionary [] OutlineChildren { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		NSObject OutlineDestination { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		CGRect DestinationRect { get; set; }
 	}
 

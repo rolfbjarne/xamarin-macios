@@ -5,114 +5,114 @@ namespace CoreMedia {
 	// keys names got changed at some point, but they all refer to a CMSampleBuffer (there is not CMSample obj)
 	[MacCatalyst (13, 1)]
 	enum CMSampleBufferAttachmentKey {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates not sync.</summary>
 		[Field ("kCMSampleAttachmentKey_NotSync")]
 		NotSync,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates partial sync.</summary>
 		[Field ("kCMSampleAttachmentKey_PartialSync")]
 		PartialSync,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates has redundant coding.</summary>
 		[Field ("kCMSampleAttachmentKey_HasRedundantCoding")]
 		HasRedundantCoding,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates is depended on by others.</summary>
 		[Field ("kCMSampleAttachmentKey_IsDependedOnByOthers")]
 		IsDependedOnByOthers,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates depends on others.</summary>
 		[Field ("kCMSampleAttachmentKey_DependsOnOthers")]
 		DependsOnOthers,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates earlier display times allowed.</summary>
 		[Field ("kCMSampleAttachmentKey_EarlierDisplayTimesAllowed")]
 		EarlierDisplayTimesAllowed,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates display immediately.</summary>
 		[Field ("kCMSampleAttachmentKey_DisplayImmediately")]
 		DisplayImmediately,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates do not display.</summary>
 		[Field ("kCMSampleAttachmentKey_DoNotDisplay")]
 		DoNotDisplay,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hevc temporal level info.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("kCMSampleAttachmentKey_HEVCTemporalLevelInfo")]
 		HevcTemporalLevelInfo,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hevc temporal sub layer access.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("kCMSampleAttachmentKey_HEVCTemporalSubLayerAccess")]
 		HevcTemporalSubLayerAccess,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hevc stepwise temporal sub layer access.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("kCMSampleAttachmentKey_HEVCStepwiseTemporalSubLayerAccess")]
 		HevcStepwiseTemporalSubLayerAccess,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hevc sync sample nal unit type.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("kCMSampleAttachmentKey_HEVCSyncSampleNALUnitType")]
 		HevcSyncSampleNalUnitType,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates reset decoder before decoding.</summary>
 		[Field ("kCMSampleBufferAttachmentKey_ResetDecoderBeforeDecoding")]
 		ResetDecoderBeforeDecoding,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates drain after decoding.</summary>
 		[Field ("kCMSampleBufferAttachmentKey_DrainAfterDecoding")]
 		DrainAfterDecoding,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates post notification when consumed.</summary>
 		[Field ("kCMSampleBufferAttachmentKey_PostNotificationWhenConsumed")]
 		PostNotificationWhenConsumed,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates resume output.</summary>
 		[Field ("kCMSampleBufferAttachmentKey_ResumeOutput")]
 		ResumeOutput,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates transition id.</summary>
 		[Field ("kCMSampleBufferAttachmentKey_TransitionID")]
 		TransitionId,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates trim duration at start.</summary>
 		[Field ("kCMSampleBufferAttachmentKey_TrimDurationAtStart")]
 		TrimDurationAtStart,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates trim duration at end.</summary>
 		[Field ("kCMSampleBufferAttachmentKey_TrimDurationAtEnd")]
 		TrimDurationAtEnd,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates speed multiplier.</summary>
 		[Field ("kCMSampleBufferAttachmentKey_SpeedMultiplier")]
 		SpeedMultiplier,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates reverse.</summary>
 		[Field ("kCMSampleBufferAttachmentKey_Reverse")]
 		Reverse,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates fill discontinuities with silence.</summary>
 		[Field ("kCMSampleBufferAttachmentKey_FillDiscontinuitiesWithSilence")]
 		FillDiscontinuitiesWithSilence,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates empty media.</summary>
 		[Field ("kCMSampleBufferAttachmentKey_EmptyMedia")]
 		EmptyMedia,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates permanent empty media.</summary>
 		[Field ("kCMSampleBufferAttachmentKey_PermanentEmptyMedia")]
 		PermanentEmptyMedia,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates display empty media immediately.</summary>
 		[Field ("kCMSampleBufferAttachmentKey_DisplayEmptyMediaImmediately")]
 		DisplayEmptyMediaImmediately,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates ends previous sample duration.</summary>
 		[Field ("kCMSampleBufferAttachmentKey_EndsPreviousSampleDuration")]
 		EndsPreviousSampleDuration,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates sample reference url.</summary>
 		[Field ("kCMSampleBufferAttachmentKey_SampleReferenceURL")]
 		SampleReferenceUrl,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates sample reference byte offset.</summary>
 		[Field ("kCMSampleBufferAttachmentKey_SampleReferenceByteOffset")]
 		SampleReferenceByteOffset,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates gradual decoder refresh.</summary>
 		[Field ("kCMSampleBufferAttachmentKey_GradualDecoderRefresh")]
 		GradualDecoderRefresh,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates dropped frame reason.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("kCMSampleBufferAttachmentKey_DroppedFrameReason")]
 		DroppedFrameReason,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates still image lens stabilization info.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("kCMSampleBufferAttachmentKey_StillImageLensStabilizationInfo")]
 		StillImageLensStabilizationInfo,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates camera intrinsic matrix.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("kCMSampleBufferAttachmentKey_CameraIntrinsicMatrix")]
 		CameraIntrinsicMatrix,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates dropped frame reason info.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("kCMSampleBufferAttachmentKey_DroppedFrameReasonInfo")]
 		DroppedFrameReasonInfo,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates force key frame.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("kCMSampleBufferAttachmentKey_ForceKeyFrame")]
 		ForceKeyFrame,

@@ -79,7 +79,7 @@ namespace AppKit {
 		DetachToWindow,
 	}
 
-	/// <summary>To be added.</summary>
+	/// <summary>Provides event data for the popover close event.</summary>
 	public partial class NSPopoverCloseEventArgs {
 		/// <summary>Gets or sets the reason.</summary>
 		public NSPopoverCloseReason Reason {

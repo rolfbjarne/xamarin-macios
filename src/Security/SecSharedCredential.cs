@@ -36,8 +36,8 @@ namespace Security {
 		/// <param name="domainName">The domain name.</param>
 		///         <param name="account">The account.</param>
 		///         <param name="password">The password.</param>
-		///         <param name="handler">The completion handler to call when the operation completes.</param>
-		///         <summary>To be added.</summary>
+		/// <param name="handler">The completion handler to call when the operation completes.</param>
+		/// <summary>Adds shared web credentials for the specified server, account, and password.</summary>
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -140,8 +140,8 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static IntPtr /* CFStringRef */ SecCreateSharedWebCredentialPassword ();
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Creates a new random password suitable for use as a shared web credential.</summary>
+		/// <returns>A randomly generated password string, or <see langword="null" /> if creation failed.</returns>
 		public static string? CreateSharedWebCredentialPassword ()
 		{
 			var handle = SecCreateSharedWebCredentialPassword ();

@@ -48,7 +48,6 @@ namespace SceneKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -57,14 +56,13 @@ namespace SceneKit {
 			get { return FromNSArray (_BoneInverseBindTransforms); }
 		}
 
-		/// <param name="baseGeometry">To be added.</param>
-		///         <param name="bones">To be added.</param>
-		///         <param name="boneInverseBindTransforms">To be added.</param>
-		///         <param name="boneWeights">To be added.</param>
-		///         <param name="boneIndices">To be added.</param>
+		/// <param name="baseGeometry">The base geometry.</param>
+		///         <param name="bones">The bones.</param>
+		///         <param name="boneInverseBindTransforms">The bone inverse bind transforms.</param>
+		///         <param name="boneWeights">The bone weights.</param>
+		///         <param name="boneIndices">The bone indices.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]

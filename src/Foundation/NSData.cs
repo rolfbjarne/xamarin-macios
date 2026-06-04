@@ -36,7 +36,7 @@ using System.IO;
 
 namespace Foundation {
 	public partial class NSData : IEnumerable, IEnumerable<byte> {
-		/// <summary>To be added.</summary>
+		/// <summary>Returns the contents of this data object as a byte array.</summary>
 		public byte [] ToArray ()
 		{
 			var res = new byte [Length];

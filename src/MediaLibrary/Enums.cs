@@ -24,21 +24,21 @@
 namespace MediaLibrary {
 	[Native]
 	public enum MLMediaSourceType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates audio.</summary>
 		Audio = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates image.</summary>
 		Image = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates movie.</summary>
 		Movie = 1 << 2,
 	}
 
 	[Native]
 	public enum MLMediaType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates audio.</summary>
 		Audio = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates image.</summary>
 		Image = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates movie.</summary>
 		Movie = 1 << 2,
 	}
 }

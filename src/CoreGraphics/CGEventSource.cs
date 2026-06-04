@@ -42,7 +42,6 @@ namespace CoreGraphics {
 		extern static void CGEventSourceSetKeyboardType (IntPtr handle, int /* CGEventSourceKeyboardType = uint32_t */ keyboardType);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public int KeyboardType {
 			get {
 				return CGEventSourceGetKeyboardType (Handle);
@@ -56,7 +55,6 @@ namespace CoreGraphics {
 		extern static CGEventSourceStateID CGEventSourceGetSourceStateID (IntPtr handle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public CGEventSourceStateID StateID {
 			get {
 				return CGEventSourceGetSourceStateID (Handle);
@@ -71,7 +69,6 @@ namespace CoreGraphics {
 		extern static void CGEventSourceSetPixelsPerLine (IntPtr handle, double value);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public double PixelsPerLine {
 			get {
 				return CGEventSourceGetPixelsPerLine (Handle);
@@ -87,7 +84,6 @@ namespace CoreGraphics {
 		/// <param name="stateID">The state i d.</param>
 		///         <param name="button">The button.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static bool GetButtonState (CGEventSourceStateID stateID, CGMouseButton button)
 			=> CGEventSourceButtonState (stateID, button) != 0;
 
@@ -97,27 +93,23 @@ namespace CoreGraphics {
 		/// <param name="stateID">The state i d.</param>
 		///         <param name="keycode">The keycode.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static bool GetKeyState (CGEventSourceStateID stateID, ushort keycode)
 			=> CGEventSourceKeyState (stateID, keycode) != 0;
 
 		/// <param name="stateID">The state i d.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary, EntryPoint = "CGEventSourceFlagsState")]
 		public extern static CGEventFlags GetFlagsState (CGEventSourceStateID stateID);
 
 		/// <param name="stateID">The state i d.</param>
 		///         <param name="eventType">The event type.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary, EntryPoint = "CGEventSourceSecondsSinceLastEventType")]
 		public extern static double GetSecondsSinceLastEventType (CGEventSourceStateID stateID, CGEventType eventType);
 
 		/// <param name="stateID">The state i d.</param>
 		///         <param name="eventType">The event type.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary, EntryPoint = "CGEventSourceCounterForEventType")]
 		public extern static uint /* uint32_t */ GetCounterForEventType (CGEventSourceStateID stateID, CGEventType eventType);
 
@@ -128,7 +120,6 @@ namespace CoreGraphics {
 		extern static long CGEventSourceGetUserData (IntPtr handle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public long UserData {
 			get {
 				return CGEventSourceGetUserData (Handle);
@@ -155,7 +146,6 @@ namespace CoreGraphics {
 
 		/// <param name="state">The state.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public CGEventFilterMask GetLocalEventsFilterDuringSupressionState (CGEventSuppressionState state)
 		{
 			return CGEventSourceGetLocalEventsFilterDuringSuppressionState (Handle, state);
@@ -168,7 +158,6 @@ namespace CoreGraphics {
 		extern static double CGEventSourceGetLocalEventsSuppressionInterval (IntPtr handle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public double LocalEventsSupressionInterval {
 			get {
 				return CGEventSourceGetLocalEventsSuppressionInterval (Handle);

@@ -29,13 +29,13 @@ namespace ReplayKit {
 	[BaseType (typeof (UIViewController))]
 	interface RPPreviewViewController {
 		/// <param name="nibName">
-		///           <para>To be added.</para>
-		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
-		///         </param>
+		///   <para>The name of the nib file, or <see langword="null" />.</para>
+		///   <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		/// </param>
 		/// <param name="bundle">
-		///           <para>To be added.</para>
-		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
-		///         </param>
+		///   <para>The bundle in which to search for the nib file, or <see langword="null" />.</para>
+		///   <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		/// </param>
 		/// <summary>Creates a new Replay Kit preview controller from the named NIB in the specified <paramref name="bundle" />.</summary>
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]

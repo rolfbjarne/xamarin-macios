@@ -19,7 +19,6 @@ using CoreFoundation;
 
 namespace Security {
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
@@ -31,9 +30,8 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static IntPtr sec_trust_create (IntPtr sectrustHandle);
 
-		/// <param name="trust">To be added.</param>
+		/// <param name="trust">The trust.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public SecTrust2 (SecTrust trust)
 		{
 			if (trust is null)
@@ -48,7 +46,6 @@ namespace Security {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public SecTrust Trust => new SecTrust (sec_trust_copy_ref (GetCheckedHandle ()), owns: true);
 	}
 }

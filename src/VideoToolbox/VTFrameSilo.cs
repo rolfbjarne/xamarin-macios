@@ -37,8 +37,7 @@ namespace VideoToolbox {
 
 		/// <param name="fileUrl">The file url.</param>
 		///         <param name="timeRange">The time range.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Create.</summary>
 		public static VTFrameSilo? Create (NSUrl? fileUrl = null, CMTimeRange? timeRange = null)
 		{
 			VTStatus status;
@@ -65,8 +64,7 @@ namespace VideoToolbox {
 			/* CMSampleBufferRef */ IntPtr sampleBuffer);
 
 		/// <param name="sampleBuffer">The sample buffer.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Adds sample buffer.</summary>
 		public VTStatus AddSampleBuffer (CMSampleBuffer sampleBuffer)
 		{
 			if (sampleBuffer is null)
@@ -84,8 +82,7 @@ namespace VideoToolbox {
 			/* const CMTimeRange * */ IntPtr timeRangeArray);
 
 		/// <param name="ranges">The ranges.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Sets time ranges for next pass.</summary>
 		public unsafe VTStatus SetTimeRangesForNextPass (CMTimeRange [] ranges)
 		{
 			if (ranges is null)
@@ -105,8 +102,7 @@ namespace VideoToolbox {
 			/* Float32* */ float* progressOut);
 
 		/// <param name="progress">The progress.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets progress of current pass.</summary>
 		public VTStatus GetProgressOfCurrentPass (out float progress)
 		{
 			progress = default;
@@ -136,8 +132,7 @@ namespace VideoToolbox {
 
 		/// <param name="callback">The callback to invoke.</param>
 		///         <param name="range">The range.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Fors each.</summary>
 		public unsafe VTStatus ForEach (Func<CMSampleBuffer, VTStatus> callback, CMTimeRange? range = null)
 		{
 			var callbackHandle = GCHandle.Alloc (callback);

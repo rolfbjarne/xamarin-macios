@@ -48,7 +48,7 @@ namespace CoreGraphics {
 	/// <summary>Gradient definitions.</summary>
 	/// <remarks>
 	///   <para>A <see cref="CoreGraphics.CGGradient" /> defines a smooth transition between colors. </para>
-	///   <para>To use a <see cref="CoreGraphics.CGGradient" />, application developers will typically have to create a custom <see cref="AppKit.NSView" /> and override its <see cref="AppKit.NSView.DrawRect(CoreGraphics.CGRect)" /> method. Application developers should consider a <see cref="CoreAnimation.CAGradientLayer" /> as a possible easier-to-use alternative.</para>
+	///   <para>To use a <see cref="CoreGraphics.CGGradient" />, application developers will typically have to create a custom <see cref="AppKit.NSView" /> and override its <see cref="AppKit.NSView.DrawRect(CoreGraphics.CGRect)" /> method. Application developers should consider a <see cref="CoreAnimation.CAGradientLayer" /> as APossible easier-to-use alternative.</para>
 	/// </remarks>
 	/// <altmember cref="CoreGraphics.CGContext.DrawLinearGradient" />
 	/// <altmember cref="CoreGraphics.CGContext.DrawRadialGradient" />
@@ -57,7 +57,7 @@ namespace CoreGraphics {
 	/// <summary>Gradient definitions.</summary>
 	/// <remarks>
 	///   <para>A <see cref="CoreGraphics.CGGradient" /> defines a smooth transition between colors. </para>
-	///   <para>To use a <see cref="CoreGraphics.CGGradient" />, application developers will typically have to create a custom <see cref="UIKit.UIView" /> and override its <see cref="UIKit.UIView.Draw(CoreGraphics.CGRect)" /> method. Application developers should consider a <see cref="CoreAnimation.CAGradientLayer" /> as a possible easier-to-use alternative.</para>
+	///   <para>To use a <see cref="CoreGraphics.CGGradient" />, application developers will typically have to create a custom <see cref="UIKit.UIView" /> and override its <see cref="UIKit.UIView.Draw(CoreGraphics.CGRect)" /> method. Application developers should consider a <see cref="CoreAnimation.CAGradientLayer" /> as APossible easier-to-use alternative.</para>
 	/// </remarks>
 	/// <altmember cref="CoreGraphics.CGContext.DrawLinearGradient" />
 	/// <altmember cref="CoreGraphics.CGContext.DrawRadialGradient" />

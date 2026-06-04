@@ -52,7 +52,6 @@ namespace MetalPerformanceShaders {
 		}
 
 		/// <summary>Gets a region that represents the default clipping rectangle.</summary>
-		///         <value>To be added.</value>
 		[Field ("MPSRectNoClip", "MetalPerformanceShaders")]
 		public unsafe static MTLRegion RectNoClip {
 			get {
@@ -75,7 +74,7 @@ namespace MetalPerformanceShaders {
 
 		/// <param name="commandBuffer">The command buffer.</param>
 		/// <param name="sizeInBytes">The size in bytes.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Hints temporary memory high water mark.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -95,7 +94,7 @@ namespace MetalPerformanceShaders {
 
 		/// <param name="commandBuffer">The command buffer.</param>
 		///         <param name="seconds">The seconds.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Sets heap cache duration.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -130,7 +129,7 @@ namespace MetalPerformanceShaders {
 		/// <param name="kernelWidth">The kernel width.</param>
 		/// <param name="kernelHeight">The kernel height.</param>
 		/// <param name="values">The values.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="MPSImageDilate" /> instance.</summary>
 		[DesignatedInitializer]
 		public MPSImageDilate (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, float [] values)
 			: base (NSObjectFlag.Empty)
@@ -151,7 +150,7 @@ namespace MetalPerformanceShaders {
 		/// <param name="kernelWidth">The kernel width.</param>
 		/// <param name="kernelHeight">The kernel height.</param>
 		/// <param name="values">The values.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="MPSImageErode" /> instance.</summary>
 		public MPSImageErode (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, float [] values)
 			: base (device, kernelWidth, kernelHeight, values)
 		{
@@ -213,7 +212,7 @@ namespace MetalPerformanceShaders {
 		///         <param name="thresholdValue">The value to which pixel brightensses will be clamped.</param>
 		///         <param name="transform">A color transform that maps 3-channel pixels to single-channel values.</param>
 		///         <summary>Constructs a new <c>MPSImageThresholdTruncate</c> with the specified values.</summary>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="MPSImageThresholdTruncate" /> instance.</summary>
 		[DesignatedInitializer]
 		public MPSImageThresholdTruncate (IMTLDevice device, float thresholdValue, /*[NullAllowed]*/ float [] transform)
 			: base (NSObjectFlag.Empty)
@@ -309,7 +308,7 @@ namespace MetalPerformanceShaders {
 		///         <param name="kernelWeights">The kernel weights.</param>
 		///         <param name="biasTerms">The bias terms.</param>
 		///         <param name="flags">The flags.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="MPSCnnConvolution" /> instance.</summary>
 		[DesignatedInitializer]
 		public MPSCnnConvolution (IMTLDevice device, MPSCnnConvolutionDescriptor convolutionDescriptor, float [] kernelWeights, float [] biasTerms, MPSCnnConvolutionFlags flags)
 			: base (NSObjectFlag.Empty)
@@ -360,7 +359,7 @@ namespace MetalPerformanceShaders {
 		/// <param name="destAlpha">The dest alpha.</param>
 		/// <param name="backgroundColor">The background color.</param>
 		/// <param name="conversionInfo">The conversion info.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="MPSImageConversion" /> instance.</summary>
 		public MPSImageConversion (IMTLDevice device, MPSAlphaType srcAlpha, MPSAlphaType destAlpha, nfloat [] backgroundColor, CGColorConversionInfo conversionInfo)
 			: base (NSObjectFlag.Empty)
 		{
@@ -377,7 +376,7 @@ namespace MetalPerformanceShaders {
 		/// <param name="kernelWidth">The kernel width.</param>
 		/// <param name="kernelHeight">The kernel height.</param>
 		/// <param name="kernelWeights">The kernel weights.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="MPSImagePyramid" /> instance.</summary>
 		[DesignatedInitializer]
 		public MPSImagePyramid (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, float [] kernelWeights)
 			: base (NSObjectFlag.Empty)
@@ -398,7 +397,7 @@ namespace MetalPerformanceShaders {
 		/// <param name="kernelWidth">The kernel width.</param>
 		/// <param name="kernelHeight">The kernel height.</param>
 		/// <param name="kernelWeights">The kernel weights.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="MPSImageGaussianPyramid" /> instance.</summary>
 		[DesignatedInitializer]
 		public MPSImageGaussianPyramid (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, float [] kernelWeights)
 			: base (NSObjectFlag.Empty)

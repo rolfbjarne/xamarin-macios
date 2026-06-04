@@ -21,7 +21,6 @@ namespace Foundation {
 		public SessionConfigurationType SessionType { get; private set; } = SessionConfigurationType.Default;
 
 		/// <summary>A copy of the default session configuration.</summary>
-		///         <value>To be added.</value>
 		public static NSUrlSessionConfiguration DefaultSessionConfiguration {
 			get {
 				var config = NSUrlSessionConfiguration._DefaultSessionConfiguration;
@@ -31,7 +30,6 @@ namespace Foundation {
 		}
 
 		/// <summary>A session configuration that uses no persistent storage for caches, cookies, or credentials.</summary>
-		///         <value>To be added.</value>
 		public static NSUrlSessionConfiguration EphemeralSessionConfiguration {
 			get {
 				var config = NSUrlSessionConfiguration._EphemeralSessionConfiguration;
@@ -57,8 +55,7 @@ namespace Foundation {
 		}
 
 		/// <param name="identifier">The identifier to use.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Creates background session configuration.</summary>
 		public static NSUrlSessionConfiguration CreateBackgroundSessionConfiguration (string identifier)
 		{
 			var config = NSUrlSessionConfiguration._CreateBackgroundSessionConfiguration (identifier);

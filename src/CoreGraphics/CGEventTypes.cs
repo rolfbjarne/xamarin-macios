@@ -182,7 +182,7 @@ namespace CoreGraphics {
 		/// <summary>The mouse event subtype. This is an integer field.</summary>
 		MouseEventSubtype = 7,
 
-		/// <summary>A value indicating whether the key-down event is an autorepeat of a previous key-down event. This is an integer field. Zero indicates not an autorepeat, non-zero not an autorepeat.</summary>
+		/// <summary>A value indicating whether the key-down event is an autorepeat of APrevious key-down event. This is an integer field. Zero indicates not an autorepeat, non-zero not an autorepeat.</summary>
 		KeyboardEventAutorepeat = 8,
 
 		/// <summary>The virtual keycode of the key-down or key-up event. This is an integer field.</summary>

@@ -18,7 +18,6 @@ using nw_service_class_t = System.IntPtr;
 
 namespace Network {
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
@@ -39,7 +38,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NWProtocolDefinition ProtocolDefinition => new NWProtocolDefinition (nw_protocol_metadata_copy_definition (GetCheckedHandle ()), owns: true);
 
 		[DllImport (Constants.NetworkLibrary)]
@@ -47,7 +45,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool IsIP => nw_protocol_metadata_is_ip (GetCheckedHandle ()) != 0;
 
 		[DllImport (Constants.NetworkLibrary)]
@@ -55,7 +52,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool IsUdp => nw_protocol_metadata_is_udp (GetCheckedHandle ()) != 0;
 
 		[DllImport (Constants.NetworkLibrary)]
@@ -63,7 +59,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool IsTls => nw_protocol_metadata_is_tls (GetCheckedHandle ()) != 0;
 
 		[DllImport (Constants.NetworkLibrary)]
@@ -71,7 +66,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool IsTcp => nw_protocol_metadata_is_tcp (GetCheckedHandle ()) != 0;
 
 		[SupportedOSPlatform ("tvos15.0")]

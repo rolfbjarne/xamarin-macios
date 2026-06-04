@@ -36,7 +36,6 @@ namespace CoreGraphics {
 
 	// untyped enum -> CGColorSpace.h
 	/// <summary>Determines how Quartz maps colors from the source color space to the gamut of the destination.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum CGColorRenderingIntent {
 		/// <summary>The default rendering intent.</summary>
 		Default,
@@ -52,7 +51,6 @@ namespace CoreGraphics {
 
 	// untyped enum -> CGColorSpace.h
 	/// <summary>Color space model.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum CGColorSpaceModel {
 		/// <summary>Unknown color space model.</summary>
 		Unknown = -1,
@@ -70,12 +68,11 @@ namespace CoreGraphics {
 		Indexed,
 		/// <summary>Pattern color space, used when stroking or filling with a pattern.</summary>
 		Pattern,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates xyz.</summary>
 		Xyz,
 	}
 
 	/// <summary>Colorspace, determines how Quartz interprets color information.</summary>
-	///     <remarks>To be added.</remarks>
 	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/Drawing/">Example_Drawing</related>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -92,9 +89,8 @@ namespace CoreGraphics {
 			return result;
 		}
 
-		/// <param name="propertyList">To be added.</param>
+		/// <param name="propertyList">The property list.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CGColorSpace (CFPropertyList propertyList)
 			: base (Create (propertyList), true)
 		{
@@ -134,7 +130,6 @@ namespace CoreGraphics {
 
 		/// <summary>Creates a new gray device dependent color space.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CGColorSpace CreateDeviceGray ()
 		{
 			return new CGColorSpace (CGColorSpaceCreateDeviceGray (), true);
@@ -145,7 +140,6 @@ namespace CoreGraphics {
 
 		/// <summary>Creates and returns a device dependent RGB color space.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CGColorSpace CreateDeviceRGB ()
 		{
 			return new CGColorSpace (CGColorSpaceCreateDeviceRGB (), true);
@@ -156,7 +150,6 @@ namespace CoreGraphics {
 
 		/// <summary>Creates and returns a <see cref="CoreGraphics.CGColorSpace" /> that represents a device dependent CMYK color space.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static /* CGColorSpaceRef */ CGColorSpace CreateDeviceCmyk ()
 		{
 			return new CGColorSpace (CGColorSpaceCreateDeviceCMYK (), true);
@@ -246,10 +239,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGColorSpaceRef */ IntPtr CGColorSpaceCreatePattern (/* CGColorSpaceRef */ IntPtr baseSpace);
 
-		/// <param name="baseSpace">To be added.</param>
+		/// <param name="baseSpace">The base space.</param>
 		///         <summary>Creates and returns a pattern color space.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CGColorSpace? CreatePattern (CGColorSpace? baseSpace)
 		{
 			var ptr = CGColorSpaceCreatePattern (baseSpace.GetHandle ());
@@ -260,10 +252,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGColorSpaceRef */ IntPtr CGColorSpaceCreateWithName (/* CFStringRef */ IntPtr name);
 
-		/// <param name="name">To be added.</param>
+		/// <param name="name">The name to use.</param>
 		///         <summary>Creates a named color space. Valid names are available in <see cref="CoreGraphics.CGColorSpaceNames" />.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CGColorSpace? CreateWithName (string name)
 		{
 			if (name is null)
@@ -284,7 +275,6 @@ namespace CoreGraphics {
 
 		/// <summary>Creates and returns a generic Gray color space.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -296,7 +286,6 @@ namespace CoreGraphics {
 
 		/// <summary>Creates and returns a <see cref="CoreGraphics.CGColorSpace" /> that represents a generic RGB color space.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -308,7 +297,6 @@ namespace CoreGraphics {
 
 		/// <summary>Creates and returns a <see cref="CoreGraphics.CGColorSpace" /> that represents a generic CMYK color space.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -320,7 +308,6 @@ namespace CoreGraphics {
 
 		/// <summary>Creates and returns a <see cref="CoreGraphics.CGColorSpace" /> that represents a generic linear RGB color space.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -332,7 +319,6 @@ namespace CoreGraphics {
 
 		/// <summary>Creates and returns a <see cref="CoreGraphics.CGColorSpace" /> that represents an Adobe RGB (1998) color space.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -344,7 +330,6 @@ namespace CoreGraphics {
 
 		/// <summary>Creates and returns a <see cref="CoreGraphics.CGColorSpace" /> that represents an sRGB color space.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -356,7 +341,6 @@ namespace CoreGraphics {
 
 		/// <summary>Creates and returns a generic Gray color space with a gamma value of 2.2.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -368,7 +352,6 @@ namespace CoreGraphics {
 
 		/// <summary>Creates and returns a <see cref="CoreGraphics.CGColorSpace" /> that represents an device dependent CMYK color space.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -380,7 +363,6 @@ namespace CoreGraphics {
 
 		/// <summary>Creates and returns a <see cref="CoreGraphics.CGColorSpace" /> that represents an ACEScg color space.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -392,7 +374,6 @@ namespace CoreGraphics {
 
 		/// <summary>Creates and returns a <see cref="CoreGraphics.CGColorSpace" /> that represents an ITU-R BT.709 color space.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -404,7 +385,6 @@ namespace CoreGraphics {
 
 		/// <summary>Creates and returns a <see cref="CoreGraphics.CGColorSpace" /> that represents an ITU-R BT.2020 color space.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -416,7 +396,6 @@ namespace CoreGraphics {
 
 		/// <summary>Creates and returns a <see cref="CoreGraphics.CGColorSpace" /> that represents a ROMM RGB color space.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -431,7 +410,6 @@ namespace CoreGraphics {
 
 		/// <summary>Tthe base colorspace.</summary>
 		///         <returns />
-		///         <remarks>To be added.</remarks>
 		public CGColorSpace? GetBaseColorSpace ()
 		{
 			var h = CGColorSpaceGetBaseColorSpace (Handle);
@@ -443,7 +421,6 @@ namespace CoreGraphics {
 
 		/// <summary>The colorspace model.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public CGColorSpaceModel Model {
 			get {
 				return CGColorSpaceGetModel (Handle);
@@ -455,7 +432,6 @@ namespace CoreGraphics {
 
 		/// <summary>Number of components on this colorspace.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public nint Components {
 			get {
 				return CGColorSpaceGetNumberOfComponents (Handle);
@@ -513,10 +489,9 @@ namespace CoreGraphics {
 			return FromHandle (ptr, true);
 		}
 
-		/// <param name="data">To be added.</param>
+		/// <param name="data">The data to use.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -528,10 +503,9 @@ namespace CoreGraphics {
 			return result;
 		}
 
-		/// <param name="provider">To be added.</param>
+		/// <param name="provider">The provider.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -600,7 +574,6 @@ namespace CoreGraphics {
 
 		/// <summary>Gets the ICC data for the color space.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -620,7 +593,6 @@ namespace CoreGraphics {
 
 		/// <summary>Gets the color space name.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -640,7 +612,6 @@ namespace CoreGraphics {
 
 		/// <summary>Gets a value that tells whether the color space supports wide gamut colors.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -660,7 +631,6 @@ namespace CoreGraphics {
 
 		/// <summary>Gets a Boolean value that tells whether the color space supports output.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -687,7 +657,6 @@ namespace CoreGraphics {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]

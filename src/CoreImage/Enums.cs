@@ -54,13 +54,13 @@ namespace CoreImage {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum CIQRCodeErrorCorrectionLevel : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates l.</summary>
 		L = 76,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates m.</summary>
 		M = 77,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates q.</summary>
 		Q = 81,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates h.</summary>
 		H = 72,
 	}
 
@@ -68,28 +68,28 @@ namespace CoreImage {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum CIDataMatrixCodeEccVersion : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates v000.</summary>
 		V000 = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates v050.</summary>
 		V050 = 50,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates v080.</summary>
 		V080 = 80,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates v100.</summary>
 		V100 = 100,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates v140.</summary>
 		V140 = 140,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates v200.</summary>
 		V200 = 200,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum CIRenderDestinationAlphaMode : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates premultiplied.</summary>
 		Premultiplied = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unpremultiplied.</summary>
 		Unpremultiplied = 2,
 	}
 }

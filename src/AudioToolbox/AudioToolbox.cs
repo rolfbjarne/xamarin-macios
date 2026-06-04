@@ -10,7 +10,6 @@ using CoreFoundation;
 
 namespace AudioToolbox {
 	/// <summary>Information on an instrument. Returned by <see cref="AudioToolbox.SoundBank.GetInstrumentInfo(Foundation.NSUrl)" />.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -19,16 +18,12 @@ namespace AudioToolbox {
 
 		// defines, not NSString, are used for the key names
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public const string NameKey = "name";
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public const string MSBKey = "MSB";
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public const string LSBKey = "LSB";
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public const string ProgramKey = "program";
 
 		internal InstrumentInfo (NSDictionary d)
@@ -38,28 +33,24 @@ namespace AudioToolbox {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? Name {
 			get { return Dictionary [NameKey]?.ToString (); }
 		}
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public int MSB {
 			get { return (Dictionary [MSBKey] as NSNumber)!.Int32Value; }
 		}
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public int LSB {
 			get { return (Dictionary [LSBKey] as NSNumber)!.Int32Value; }
 		}
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public int Program {
 			get { return (Dictionary [ProgramKey] as NSNumber)!.Int32Value; }
 		}
@@ -67,12 +58,10 @@ namespace AudioToolbox {
 		// some API likely wants the [CF|NS]Dictionary
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NSDictionary Dictionary { get; private set; }
 	}
 
 	/// <summary>A MIDI sound bank.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -86,10 +75,9 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		unsafe extern static OSStatus CopyNameFromSoundBank (/* CFURLRef */ IntPtr inURL, /* CFStringRef */ IntPtr* outName);
 
-		/// <param name="url">To be added.</param>
+		/// <param name="url">The URL to use.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -116,10 +104,9 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		unsafe extern static OSStatus CopyInstrumentInfoFromSoundBank (/* CFURLRef */ IntPtr inURL, /* CFSArrayRef */ IntPtr* outInstrumentInfo);
 
-		/// <param name="url">To be added.</param>
+		/// <param name="url">The URL to use.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]

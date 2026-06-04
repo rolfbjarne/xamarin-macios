@@ -2212,7 +2212,7 @@ namespace AudioToolbox {
 			}
 		}
 
-		/// <summary>Gets the number of audio data packets in the audio file.</summary>
+		/// <summary>Gets the number of audio datAPackets in the audio file.</summary>
 		public long DataPacketCount {
 			get {
 				return GetLong (AudioFileProperty.AudioDataPacketCount);
@@ -2400,7 +2400,7 @@ namespace AudioToolbox {
 			}
 		}
 
-		/// <summary>Converts an audio frame into a packet offset.</summary>
+		/// <summary>Converts an audio frame into APacket offset.</summary>
 		/// <param name="frame">The frame whose packet offset to get.</param>
 		/// <param name="frameOffsetInPacket">The offset inside the packet that the frame points to.</param>
 		/// <returns>-1 on failure, otherwise the packet that represents the specified frame. Additionally, the offset within the packet is returned in <paramref name="frameOffsetInPacket" />.</returns>
@@ -2440,7 +2440,7 @@ namespace AudioToolbox {
 			}
 		}
 
-		/// <summary>Converts a position on a stream to its packet location.</summary>
+		/// <summary>Converts APosition on a stream to its packet location.</summary>
 		/// <param name="byteval">The byte position.</param>
 		/// <param name="byteOffsetInPacket">Offset within the packet.</param>
 		/// <param name="isEstimate"><see langword="true" /> if the return value is an estimate.</param>
@@ -2464,7 +2464,7 @@ namespace AudioToolbox {
 		}
 	}
 
-	/// <summary>Metadata-like information relating to a particular audio file.</summary>
+	/// <summary>Metadata-like information relating to AParticular audio file.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

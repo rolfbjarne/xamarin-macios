@@ -21,17 +21,17 @@ namespace MediaPlayer {
 	[Deprecated (PlatformName.MacCatalyst, 13, 1)]
 	[Native]
 	public enum MPMoviePlaybackState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Playback is stopped.</summary>
 		Stopped,
-		/// <summary>To be added.</summary>
+		/// <summary>Playback is playing.</summary>
 		Playing,
-		/// <summary>To be added.</summary>
+		/// <summary>Playback is paused.</summary>
 		Paused,
-		/// <summary>To be added.</summary>
+		/// <summary>Playback was interrupted.</summary>
 		Interrupted,
-		/// <summary>To be added.</summary>
+		/// <summary>Seeking forward.</summary>
 		SeekingForward,
-		/// <summary>To be added.</summary>
+		/// <summary>Seeking backward.</summary>
 		SeekingBackward,
 	}
 
@@ -44,13 +44,13 @@ namespace MediaPlayer {
 	[Deprecated (PlatformName.MacCatalyst, 13, 1)]
 	[Native]
 	public enum MPMovieLoadState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>The load state is unknown.</summary>
 		Unknown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>The media is playable.</summary>
 		Playable = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>The media can play through to the end.</summary>
 		PlaythroughOK = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Loading has stalled.</summary>
 		Stalled = 1 << 2,
 	}
 
@@ -63,9 +63,9 @@ namespace MediaPlayer {
 	[Deprecated (PlatformName.MacCatalyst, 13, 1)]
 	[Native]
 	public enum MPMovieRepeatMode : long {
-		/// <summary>To be added.</summary>
+		/// <summary>No repeat.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Repeat one.</summary>
 		One,
 	}
 
@@ -78,13 +78,13 @@ namespace MediaPlayer {
 	[Deprecated (PlatformName.MacCatalyst, 13, 1)]
 	[Native]
 	public enum MPMovieControlStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>No repeat.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Embedded controls.</summary>
 		Embedded,
-		/// <summary>To be added.</summary>
+		/// <summary>Fullscreen controls.</summary>
 		Fullscreen,
-		/// <summary>To be added.</summary>
+		/// <summary>Default controls.</summary>
 		Default = Embedded,
 	}
 
@@ -97,11 +97,11 @@ namespace MediaPlayer {
 	[Deprecated (PlatformName.MacCatalyst, 13, 1)]
 	[Native]
 	public enum MPMovieFinishReason : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Playback ended normally.</summary>
 		PlaybackEnded,
-		/// <summary>To be added.</summary>
+		/// <summary>Playback ended due to an error.</summary>
 		PlaybackError,
-		/// <summary>To be added.</summary>
+		/// <summary>The user exited playback.</summary>
 		UserExited,
 	}
 
@@ -115,11 +115,11 @@ namespace MediaPlayer {
 	[Native ("MPMovieMediaTypeMask")]
 	[Flags]
 	public enum MPMovieMediaType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>No controls.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Video media.</summary>
 		Video = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Audio media.</summary>
 		Audio = 1 << 1,
 	}
 
@@ -132,11 +132,11 @@ namespace MediaPlayer {
 	[Deprecated (PlatformName.MacCatalyst, 13, 1)]
 	[Native]
 	public enum MPMovieSourceType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>The source type is unknown.</summary>
 		Unknown,
-		/// <summary>To be added.</summary>
+		/// <summary>A file source.</summary>
 		File,
-		/// <summary>To be added.</summary>
+		/// <summary>A streaming source.</summary>
 		Streaming,
 	}
 
@@ -149,52 +149,51 @@ namespace MediaPlayer {
 	[Deprecated (PlatformName.MacCatalyst, 13, 1)]
 	[Native]
 	public enum MPMovieTimeOption : long {
-		/// <summary>To be added.</summary>
+		/// <summary>The nearest key frame.</summary>
 		NearestKeyFrame,
-		/// <summary>To be added.</summary>
+		/// <summary>The exact time.</summary>
 		Exact,
 	}
 
 	// NSUInteger -> MPMediaItem.h
 	/// <summary>An enumeration whose values specify various types of media.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	[Flags]
 	public enum MPMediaType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Music media.</summary>
 		Music = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Podcast media.</summary>
 		Podcast = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Audio media.</summary>
 		AudioBook = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Audio media.</summary>
 		AudioITunesU = 1 << 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Any audio media type.</summary>
 		AnyAudio = 0x00ff,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Movie media.</summary>
 		[MacCatalyst (13, 1)]
 		Movie = 1 << 8,
-		/// <summary>To be added.</summary>
+		/// <summary>TV show media.</summary>
 		[MacCatalyst (13, 1)]
 		TVShow = 1 << 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Video media.</summary>
 		[MacCatalyst (13, 1)]
 		VideoPodcast = 1 << 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Music video media.</summary>
 		[MacCatalyst (13, 1)]
 		MusicVideo = 1 << 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Video media.</summary>
 		[MacCatalyst (13, 1)]
 		VideoITunesU = 1 << 12,
-		/// <summary>To be added.</summary>
+		/// <summary>Home video media.</summary>
 		[MacCatalyst (13, 1)]
 		HomeVideo = 1 << 13,
-		/// <summary>To be added.</summary>
+		/// <summary>Any video media type.</summary>
 		[MacCatalyst (13, 1)]
 		TypeAnyVideo = 0xff00,
-		/// <summary>To be added.</summary>
+		/// <summary>Any media type.</summary>
 		Any = 0xFFFFFFFFFFFFFFFF,
 	}
 
@@ -206,13 +205,13 @@ namespace MediaPlayer {
 	[Native]
 	[Flags]
 	public enum MPMediaPlaylistAttribute : long {
-		/// <summary>To be added.</summary>
+		/// <summary>No controls.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>The playlist was created on the device.</summary>
 		OnTheGo = (1 << 0), // if set, the playlist was created on a device rather than synced from iTunes
-		/// <summary>To be added.</summary>
+		/// <summary>A smart playlist.</summary>
 		Smart = (1 << 1),
-		/// <summary>To be added.</summary>
+		/// <summary>A Genius playlist.</summary>
 		Genius = (1 << 2),
 	};
 
@@ -223,21 +222,21 @@ namespace MediaPlayer {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MPMediaGrouping : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Group by title.</summary>
 		Title,
-		/// <summary>To be added.</summary>
+		/// <summary>Group by album.</summary>
 		Album,
-		/// <summary>To be added.</summary>
+		/// <summary>Group by artist.</summary>
 		Artist,
-		/// <summary>To be added.</summary>
+		/// <summary>Group by album artist.</summary>
 		AlbumArtist,
-		/// <summary>To be added.</summary>
+		/// <summary>Group by composer.</summary>
 		Composer,
-		/// <summary>To be added.</summary>
+		/// <summary>Group by genre.</summary>
 		Genre,
-		/// <summary>To be added.</summary>
+		/// <summary>Group by playlist.</summary>
 		Playlist,
-		/// <summary>To be added.</summary>
+		/// <summary>Group by podcast title.</summary>
 		PodcastTitle,
 	}
 
@@ -248,9 +247,9 @@ namespace MediaPlayer {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MPMediaPredicateComparison : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Matches items equal to the value.</summary>
 		EqualsTo,
-		/// <summary>To be added.</summary>
+		/// <summary>Matches items that contain the value.</summary>
 		Contains,
 	}
 
@@ -263,85 +262,81 @@ namespace MediaPlayer {
 	[Deprecated (PlatformName.MacCatalyst, 13, 1)]
 	[Native]
 	public enum MPMovieScalingMode : long {
-		/// <summary>To be added.</summary>
+		/// <summary>No repeat.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Scale to fit within bounds, preserving aspect ratio.</summary>
 		AspectFit,
-		/// <summary>To be added.</summary>
+		/// <summary>Scale to fill bounds, preserving aspect ratio.</summary>
 		AspectFill,
-		/// <summary>To be added.</summary>
+		/// <summary>Scale to fill bounds, stretching if needed.</summary>
 		Fill,
 	}
 
 	// untyped enum -> MPMoviePlayerController.h
 	/// <summary>Application developers should not use this deprecated class, but instead use <see cref="MediaPlayer.MPMovieControlStyle" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[NoMac]
 	[MacCatalyst (13, 1)]
 	public enum MPMovieControlMode {
-		/// <summary>To be added.</summary>
+		/// <summary>The default repeat mode.</summary>
 		Default,
-		/// <summary>To be added.</summary>
+		/// <summary>Show only volume controls.</summary>
 		VolumeOnly,
-		/// <summary>To be added.</summary>
+		/// <summary>Hide all controls.</summary>
 		Hidden,
 	}
 
 	// NSInteger -> /MPMusicPlayerController.h
 	/// <summary>An enumeration of states in which the <see cref="MediaPlayer.MPMusicPlayerController" /> may be. Used with the <see cref="MediaPlayer.MPMusicPlayerController.PlaybackState" /> property.</summary>
-	/// <remarks>To be added.</remarks>
 	[NoMac]
 	[TV (14, 0)]
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MPMusicPlaybackState : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Playback is stopped.</summary>
 		Stopped,
-		/// <summary>To be added.</summary>
+		/// <summary>Playback is playing.</summary>
 		Playing,
-		/// <summary>To be added.</summary>
+		/// <summary>Playback is paused.</summary>
 		Paused,
-		/// <summary>To be added.</summary>
+		/// <summary>Playback was interrupted.</summary>
 		Interrupted,
-		/// <summary>To be added.</summary>
+		/// <summary>Seeking forward.</summary>
 		SeekingForward,
-		/// <summary>To be added.</summary>
+		/// <summary>Seeking backward.</summary>
 		SeekingBackward,
 	}
 
 	// NSInteger -> /MPMusicPlayerController.h
 	/// <summary>An enumeration of music repeat modes. Used with the <see cref="MediaPlayer.MPMusicPlayerController.RepeatMode" /> property.</summary>
-	/// <remarks>To be added.</remarks>
 	[NoMac]
 	[TV (14, 0)]
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MPMusicRepeatMode : long {
-		/// <summary>To be added.</summary>
+		/// <summary>The default repeat mode.</summary>
 		Default,
-		/// <summary>To be added.</summary>
+		/// <summary>No repeat.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Repeat one.</summary>
 		One,
-		/// <summary>To be added.</summary>
+		/// <summary>Repeat all tracks.</summary>
 		All,
 	}
 
 	// NSInteger -> /MPMusicPlayerController.h
 	/// <summary>An enumeration of shuffle modes for use with the <see cref="MediaPlayer.MPMusicPlayerController.ShuffleMode" /> property.</summary>
-	/// <remarks>To be added.</remarks>
 	[NoMac]
 	[TV (14, 0)]
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MPMusicShuffleMode : long {
-		/// <summary>To be added.</summary>
+		/// <summary>The default repeat mode.</summary>
 		Default,
-		/// <summary>To be added.</summary>
+		/// <summary>Shuffle is off.</summary>
 		Off,
-		/// <summary>To be added.</summary>
+		/// <summary>Shuffle songs.</summary>
 		Songs,
-		/// <summary>To be added.</summary>
+		/// <summary>Shuffle albums.</summary>
 		Albums,
 	}
 
@@ -361,39 +356,38 @@ namespace MediaPlayer {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MPShuffleType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Shuffle is off.</summary>
 		Off,
-		/// <summary>To be added.</summary>
+		/// <summary>Shuffle individual items.</summary>
 		Items,
-		/// <summary>To be added.</summary>
+		/// <summary>Shuffle collections.</summary>
 		Collections,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MPRepeatType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Shuffle is off.</summary>
 		Off,
-		/// <summary>To be added.</summary>
+		/// <summary>Repeat one.</summary>
 		One,
-		/// <summary>To be added.</summary>
+		/// <summary>Repeat all tracks.</summary>
 		All,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MPChangeLanguageOptionSetting : long {
-		/// <summary>To be added.</summary>
+		/// <summary>No repeat.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Apply to the now-playing item only.</summary>
 		NowPlayingItemOnly,
-		/// <summary>To be added.</summary>
+		/// <summary>Apply permanently.</summary>
 		Permanent,
 	}
 
 	// NSInteger -> MPRemoteCommand.h
 	/// <summary>Enumerates values that indicate whether a command succeeded, failed, or cannot play the kind of media requested.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MPRemoteCommandHandlerStatus : long {
@@ -404,7 +398,7 @@ namespace MediaPlayer {
 		/// <summary>Indicates that no item was playing, so the command could not be meaningfuly received.</summary>
 		[MacCatalyst (13, 1)]
 		NoActionableNowPlayingItem = 110,
-		/// <summary>To be added.</summary>
+		/// <summary>The device was not found.</summary>
 		[MacCatalyst (13, 1)]
 		DeviceNotFound = 120,
 		/// <summary>Indicates that the command failed.</summary>
@@ -413,27 +407,25 @@ namespace MediaPlayer {
 
 	// NSUInteger -> MPRemoteCommandEvent.h
 	/// <summary>Enumerates values that indicate whether the command began or ended a seek operation.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MPSeekCommandEventType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Seeking has begun.</summary>
 		BeginSeeking,
-		/// <summary>To be added.</summary>
+		/// <summary>Seeking has ended.</summary>
 		EndSeeking,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MPNowPlayingInfoLanguageOptionType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>An audible language option.</summary>
 		Audible,
-		/// <summary>To be added.</summary>
+		/// <summary>A legible (subtitle) language option.</summary>
 		Legible,
 	}
 
 	/// <summary>Enumerates error codes in the Media Player domain.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	[ErrorDomain ("MPErrorDomain")]
@@ -475,26 +467,26 @@ namespace MediaPlayer {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MPNowPlayingInfoMediaType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>No controls.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Audio media.</summary>
 		Audio,
-		/// <summary>To be added.</summary>
+		/// <summary>Video media.</summary>
 		Video,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MPNowPlayingPlaybackState : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>The load state is unknown.</summary>
 		Unknown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Playback is playing.</summary>
 		Playing,
-		/// <summary>To be added.</summary>
+		/// <summary>Playback is paused.</summary>
 		Paused,
-		/// <summary>To be added.</summary>
+		/// <summary>Playback is stopped.</summary>
 		Stopped,
-		/// <summary>To be added.</summary>
+		/// <summary>Playback was interrupted.</summary>
 		Interrupted,
 	}
 }

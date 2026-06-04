@@ -138,7 +138,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* size_t */ nint CGFontGetNumberOfGlyphs (/* CGFontRef */ IntPtr font);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the number of glyphs in this font.</summary>
 		public nint NumberOfGlyphs {
 			get {
 				return CGFontGetNumberOfGlyphs (Handle);
@@ -148,7 +148,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* int */ int CGFontGetUnitsPerEm (/* CGFontRef */ IntPtr font);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the number of font design units per em.</summary>
 		public int UnitsPerEm {
 			get {
 				return CGFontGetUnitsPerEm (Handle);
@@ -158,7 +158,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CFStringRef __nullable */ IntPtr CGFontCopyPostScriptName (/* CGFontRef __nullable */ IntPtr font);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the PostScript name of this font.</summary>
 		public string? PostScriptName {
 			get {
 				return CFString.FromHandle (CGFontCopyPostScriptName (Handle), releaseHandle: true);
@@ -198,7 +198,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* int */ int CGFontGetLeading (/* CGFontRef */ IntPtr font);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the leading value of this font.</summary>
 		public int Leading {
 			get {
 				return CGFontGetLeading (Handle);
@@ -218,7 +218,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* int */ int CGFontGetXHeight (/* CGFontRef */ IntPtr font);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the x-height of this font.</summary>
 		public int XHeight {
 			get {
 				return CGFontGetXHeight (Handle);
@@ -238,7 +238,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGFloat */ nfloat CGFontGetItalicAngle (/* CGFontRef */ IntPtr font);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the italic angle of this font.</summary>
 		public nfloat ItalicAngle {
 			get {
 				return CGFontGetItalicAngle (Handle);
@@ -248,7 +248,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGFloat */ nfloat CGFontGetStemV (/* CGFontRef */ IntPtr font);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the dominant stem vertical width of this font.</summary>
 		public nfloat StemV {
 			get {
 				return CGFontGetStemV (Handle);
@@ -290,7 +290,7 @@ namespace CoreGraphics {
 		extern static /* CFStringRef __nullable */ IntPtr CGFontCopyGlyphNameForGlyph (/* CGFontRef __nullable */ IntPtr font, /* CGGlyph */ ushort glyph);
 
 		/// <param name="glyph">The glyph.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the name of the specified glyph.</summary>
 		public string? GlyphNameForGlyph (ushort glyph)
 		{
 			return CFString.FromHandle (CGFontCopyGlyphNameForGlyph (Handle, glyph), releaseHandle: true);

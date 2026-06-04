@@ -3,15 +3,15 @@ using System.ComponentModel;
 #nullable enable
 
 namespace Metal {
-	/// <summary>To be added.</summary>
+	/// <summary>Provides extension methods for <see cref="IMTLRenderCommandEncoder" />.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public static class IMTLRenderCommandEncoder_Extensions {
-		/// <param name="This">The this.</param>
-		///         <param name="viewports">The viewports.</param>
-		///         <summary>To be added.</summary>
+		/// <param name="This">The render command encoder.</param>
+		/// <param name="viewports">The viewports.</param>
+		/// <summary>Sets the viewports for the render command encoder.</summary>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("ios")]
@@ -22,9 +22,9 @@ namespace Metal {
 				This.SetViewports ((IntPtr) handle, (nuint) (viewports?.Length ?? 0));
 		}
 
-		/// <param name="This">The this.</param>
-		///         <param name="scissorRects">The scissor rects.</param>
-		///         <summary>To be added.</summary>
+		/// <param name="This">The render command encoder.</param>
+		/// <param name="scissorRects">The scissor rects.</param>
+		/// <summary>Sets the scissor rectangles for the render command encoder.</summary>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("ios")]

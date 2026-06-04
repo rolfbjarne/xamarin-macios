@@ -16,10 +16,10 @@ using CoreGraphics;
 #nullable enable
 
 namespace AppKit {
-	/// <summary>To be added.</summary>
+/// <summary>Interface for types that support accessibility.</summary>
 	public partial interface INSAccessibility { }
 
-	/// <summary>To be added.</summary>
+/// <summary>Provides accessibility helper methods for AppKit elements.</summary>
 	[SupportedOSPlatform ("macos")]
 	public partial class NSAccessibility {
 #if !COREBUILD
@@ -28,7 +28,7 @@ namespace AppKit {
 
 		/// <param name="parentView">The parent view.</param>
 		///         <param name="frame">The frame.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Converts a frame from window coordinates to view coordinates for accessibility.</summary>
 		public static CGRect GetFrameInView (NSView parentView, CGRect frame)
 		{
 			CGRect result = NSAccessibilityFrameInView (parentView.GetHandle (), frame);
@@ -41,7 +41,7 @@ namespace AppKit {
 
 		/// <param name="parentView">The parent view.</param>
 		///         <param name="point">The point.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Converts a point from window coordinates to view coordinates for accessibility.</summary>
 		public static CGPoint GetPointInView (NSView parentView, CGPoint point)
 		{
 			CGPoint result = NSAccessibilityPointInView (parentView.GetHandle (), point);
@@ -55,7 +55,7 @@ namespace AppKit {
 		/// <param name="element">The element.</param>
 		///         <param name="notification">The notification.</param>
 		///         <param name="userInfo">The user info.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Posts an accessibility notification for the specified element with additional information.</summary>
 		public static void PostNotification (NSObject element, NSString notification, NSDictionary? userInfo)
 		{
 			if (element is null)
@@ -75,7 +75,7 @@ namespace AppKit {
 
 		/// <param name="element">The element.</param>
 		///         <param name="notification">The notification.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Posts an accessibility notification for the specified element.</summary>
 		public static void PostNotification (NSObject element, NSString notification)
 		{
 			if (element is null)
@@ -94,7 +94,7 @@ namespace AppKit {
 
 		/// <param name="role">The role.</param>
 		///         <param name="subrole">The subrole.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the accessibility role description for the specified role and subrole.</summary>
 		public static string? GetRoleDescription (NSString role, NSString? subrole)
 		{
 			if (role is null)
@@ -110,7 +110,7 @@ namespace AppKit {
 		static extern IntPtr NSAccessibilityRoleDescriptionForUIElement (IntPtr element);
 
 		/// <param name="element">The element.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the accessibility role description for the specified element.</summary>
 		public static string? GetRoleDescription (NSObject element)
 		{
 			if (element is null)
@@ -125,7 +125,7 @@ namespace AppKit {
 		static extern IntPtr NSAccessibilityActionDescription (IntPtr action);
 
 		/// <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the description for the specified accessibility action.</summary>
 		public static string? GetActionDescription (NSString action)
 		{
 			if (action is null)
@@ -140,7 +140,7 @@ namespace AppKit {
 		static extern IntPtr NSAccessibilityUnignoredAncestor (IntPtr element);
 
 		/// <param name="element">The element.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the first unignored ancestor of the specified element.</summary>
 		public static NSObject? GetUnignoredAncestor (NSObject element)
 		{
 			if (element is null)
@@ -155,7 +155,7 @@ namespace AppKit {
 		static extern IntPtr NSAccessibilityUnignoredDescendant (IntPtr element);
 
 		/// <param name="element">The element.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the first unignored descendant of the specified element.</summary>
 		public static NSObject? GetUnignoredDescendant (NSObject element)
 		{
 			if (element is null)
@@ -170,7 +170,7 @@ namespace AppKit {
 		static extern IntPtr NSAccessibilityUnignoredChildren (IntPtr originalChildren);
 
 		/// <param name="originalChildren">The original children.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the unignored children from the specified array of children.</summary>
 		public static NSObject []? GetUnignoredChildren (NSArray originalChildren)
 		{
 			if (originalChildren is null)
@@ -185,7 +185,7 @@ namespace AppKit {
 		static extern IntPtr NSAccessibilityUnignoredChildrenForOnlyChild (IntPtr originalChild);
 
 		/// <param name="originalChild">The original child.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the unignored children of the specified element.</summary>
 		public static NSObject []? GetUnignoredChildren (NSObject originalChild)
 		{
 			if (originalChild is null)
@@ -200,7 +200,7 @@ namespace AppKit {
 		static extern byte NSAccessibilitySetMayContainProtectedContent (byte flag);
 
 		/// <param name="flag">The flag.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Sets whether the application may contain protected content.</summary>
 		public static bool SetMayContainProtectedContent (bool flag)
 		{
 			return NSAccessibilitySetMayContainProtectedContent (flag ? (byte) 1 : (byte) 0) != 0;

@@ -34,11 +34,10 @@ namespace AVFoundation {
 
 	// Convenience enum for native strings - AVVideoSettings.h
 	/// <summary>An enumeration that specifies whether the video code is H264 or JPEG</summary>
-	///     <remarks>To be added.</remarks>
 	public enum AVVideoCodec : int {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates h264.</summary>
 		H264 = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates j p e g.</summary>
 		JPEG = 2,
 	}
 
@@ -80,11 +79,11 @@ namespace AVFoundation {
 		High40,
 		/// <summary>Specifies a high level 4.1 profile.</summary>
 		High41,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates baseline auto level.</summary>
 		BaselineAutoLevel,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates main auto level.</summary>
 		MainAutoLevel,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates high auto level.</summary>
 		HighAutoLevel,
 	}
 
@@ -104,9 +103,8 @@ namespace AVFoundation {
 		{
 		}
 
-		/// <param name="dictionary">To be added.</param>
+		/// <param name="dictionary">The dictionary.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public AVVideoSettingsUncompressed (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -170,11 +168,10 @@ namespace AVFoundation {
 #if !MONOMAC
 	// Convenience enum for native strings - AVVideoSettings.h
 	/// <summary>An enumeration whose values specify values for <see cref="AVFoundation.AVVideoSettingsCompressed.EntropyEncoding" />.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum AVVideoH264EntropyMode {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates adaptive variable length.</summary>
 		AdaptiveVariableLength,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates adaptive binary arithmetic.</summary>
 		AdaptiveBinaryArithmetic,
 	}
 #endif
@@ -189,15 +186,13 @@ namespace AVFoundation {
 	public class AVVideoSettingsCompressed : DictionaryContainer {
 #if !COREBUILD
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public AVVideoSettingsCompressed ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
-		/// <param name="dictionary">To be added.</param>
+		/// <param name="dictionary">The dictionary.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public AVVideoSettingsCompressed (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -297,7 +292,6 @@ namespace AVFoundation {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -314,7 +308,6 @@ namespace AVFoundation {
 #if !MONOMAC
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
@@ -330,7 +323,6 @@ namespace AVFoundation {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
@@ -372,7 +364,6 @@ namespace AVFoundation {
 		// frame rate can be floating point (29.97 is common for instance)
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
@@ -389,7 +380,6 @@ namespace AVFoundation {
 		// frame rate can be floating point (29.97 is common for instance)
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
@@ -471,15 +461,13 @@ namespace AVFoundation {
 	public class AVVideoCodecSettings : DictionaryContainer {
 #if !COREBUILD
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public AVVideoCodecSettings ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
-		/// <param name="dictionary">To be added.</param>
+		/// <param name="dictionary">The dictionary.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public AVVideoCodecSettings (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -669,15 +657,13 @@ namespace AVFoundation {
 	public class AVVideoPixelAspectRatioSettings : DictionaryContainer {
 #if !COREBUILD
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public AVVideoPixelAspectRatioSettings ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
-		/// <param name="dictionary">To be added.</param>
+		/// <param name="dictionary">The dictionary.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public AVVideoPixelAspectRatioSettings (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -721,15 +707,13 @@ namespace AVFoundation {
 	public class AVVideoCleanApertureSettings : DictionaryContainer {
 #if !COREBUILD
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public AVVideoCleanApertureSettings ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
-		/// <param name="dictionary">To be added.</param>
+		/// <param name="dictionary">The dictionary.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public AVVideoCleanApertureSettings (NSDictionary dictionary)
 			: base (dictionary)
 		{

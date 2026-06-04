@@ -73,7 +73,6 @@ namespace CoreMedia {
 	}
 
 	/// <summary>Manages the attributes used by <see cref="AVFoundation.AVTextStyleRule" />.</summary>
-	///     <summary>To be added.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

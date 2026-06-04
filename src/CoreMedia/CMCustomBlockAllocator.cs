@@ -13,8 +13,7 @@ using CoreFoundation;
 
 namespace CoreMedia {
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Provides custom memory allocation for Core Media block buffers.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -23,8 +22,7 @@ namespace CoreMedia {
 
 		GCHandle gch;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Initializes a new instance of the <see cref="CMCustomBlockAllocator" /> class.</summary>
 		public CMCustomBlockAllocator ()
 		{
 			gch = GCHandle.Alloc (this);

@@ -22,7 +22,6 @@ namespace MediaToolbox {
 
 		/// <param name="mediaType">The media type.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -43,7 +42,6 @@ namespace MediaToolbox {
 		/// <param name="mediaType">The media type.</param>
 		///         <param name="mediaSubType">The media sub type.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]

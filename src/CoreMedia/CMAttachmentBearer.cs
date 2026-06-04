@@ -34,8 +34,8 @@ namespace CoreMedia {
 
 		// There is some API that needs a more strongly typed version of a NSDictionary
 		// and there is no easy way to downcast from NSDictionary to NSDictionary<TKey, TValue>
-		/// <typeparam name="TKey">To be added.</typeparam>
-		///         <typeparam name="TValue">To be added.</typeparam>
+		/// <typeparam name="TKey">The type of the dictionary keys.</typeparam>
+		/// <typeparam name="TValue">The type of the dictionary values.</typeparam>
 		///         <param name="target">The target.</param>
 		///         <param name="attachmentMode">The attachment mode.</param>
 		///         <summary>Ns s dictionary.</summary>
@@ -81,7 +81,7 @@ namespace CoreMedia {
 				return Runtime.GetINativeObject<T> (attchm, false);
 			return default (T);
 		}
-		/// <typeparam name="T">To be added.</typeparam>
+		/// <typeparam name="T">The type of the attachment value to retrieve.</typeparam>
 		///         <param name="target">The target.</param>
 		///         <param name="key">The key to use.</param>
 		///         <param name="attachmentModeOut">The attachment mode out.</param>

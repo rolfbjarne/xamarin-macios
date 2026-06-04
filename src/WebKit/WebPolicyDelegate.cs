@@ -27,7 +27,7 @@
 
 namespace WebKit {
 
-	/// <summary>To be added.</summary>
+	/// <summary>Provides methods for handling web navigation policy decisions.</summary>
 	public partial class WebPolicyDelegate {
 		static IntPtr selUse = Selector.GetHandle ("use");
 		static IntPtr selDownload = Selector.GetHandle ("download");

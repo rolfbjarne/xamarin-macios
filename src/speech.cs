@@ -242,7 +242,7 @@ namespace Speech {
 		void FinishedReadingAudio (SFSpeechRecognitionTask task);
 
 		/// <param name="task">The task.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Called when the speech recognition task was cancelled.</summary>
 		[Export ("speechRecognitionTaskWasCancelled:")]
 		void WasCancelled (SFSpeechRecognitionTask task);
 

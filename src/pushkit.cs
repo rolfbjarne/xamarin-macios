@@ -15,7 +15,7 @@ namespace PushKit {
 		NSData Token { get; }
 	}
 
-	/// <summary>Contains a dictionary of data for a push operation.</summary>
+	/// <summary>Contains a dictionary of data for APush operation.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/PushKit/Reference/PKPushPayload_Class/index.html">Apple documentation for <c>PKPushPayload</c></related>
 	[MacCatalyst (13, 1)]
@@ -104,7 +104,7 @@ namespace PushKit {
 
 	interface IPKPushRegistryDelegate { }
 
-	/// <summary>Completion handler for registering a push operation.</summary>
+	/// <summary>Completion handler for registering APush operation.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/PushKit/Reference/PKPushRegistryDelegate_Protocol/index.html">Apple documentation for <c>PKPushRegistryDelegate</c></related>
 	[MacCatalyst (13, 1)]

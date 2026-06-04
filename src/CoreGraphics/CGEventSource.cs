@@ -15,7 +15,7 @@
 using CoreFoundation;
 
 namespace CoreGraphics {
-	/// <summary>To be added.</summary>
+/// <summary>Represents a source of Quartz events, used to create and manage event generation.</summary>
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	public sealed class CGEventSource : NativeObject {
@@ -29,7 +29,7 @@ namespace CoreGraphics {
 		extern static IntPtr CGEventSourceCreate (CGEventSourceStateID stateID);
 
 		/// <param name="stateID">The state i d.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a new event source with the specified state ID.</summary>
 		public CGEventSource (CGEventSourceStateID stateID)
 			: base (CGEventSourceCreate (stateID), true)
 		{
@@ -41,7 +41,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static void CGEventSourceSetKeyboardType (IntPtr handle, int /* CGEventSourceKeyboardType = uint32_t */ keyboardType);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the keyboard type associated with this event source.</summary>
 		public int KeyboardType {
 			get {
 				return CGEventSourceGetKeyboardType (Handle);
@@ -54,7 +54,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static CGEventSourceStateID CGEventSourceGetSourceStateID (IntPtr handle);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the state ID of this event source.</summary>
 		public CGEventSourceStateID StateID {
 			get {
 				return CGEventSourceGetSourceStateID (Handle);
@@ -68,7 +68,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static void CGEventSourceSetPixelsPerLine (IntPtr handle, double value);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the number of pixels per scroll line for this event source.</summary>
 		public double PixelsPerLine {
 			get {
 				return CGEventSourceGetPixelsPerLine (Handle);
@@ -83,7 +83,7 @@ namespace CoreGraphics {
 
 		/// <param name="stateID">The state i d.</param>
 		///         <param name="button">The button.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the current button state for the specified state ID and mouse button.</summary>
 		public static bool GetButtonState (CGEventSourceStateID stateID, CGMouseButton button)
 			=> CGEventSourceButtonState (stateID, button) != 0;
 
@@ -92,24 +92,24 @@ namespace CoreGraphics {
 
 		/// <param name="stateID">The state i d.</param>
 		///         <param name="keycode">The keycode.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the current key state for the specified state ID and keycode.</summary>
 		public static bool GetKeyState (CGEventSourceStateID stateID, ushort keycode)
 			=> CGEventSourceKeyState (stateID, keycode) != 0;
 
 		/// <param name="stateID">The state i d.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the current modifier flags state for the specified state ID.</summary>
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary, EntryPoint = "CGEventSourceFlagsState")]
 		public extern static CGEventFlags GetFlagsState (CGEventSourceStateID stateID);
 
 		/// <param name="stateID">The state i d.</param>
 		///         <param name="eventType">The event type.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the seconds since the last event of the specified type for the given state ID.</summary>
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary, EntryPoint = "CGEventSourceSecondsSinceLastEventType")]
 		public extern static double GetSecondsSinceLastEventType (CGEventSourceStateID stateID, CGEventType eventType);
 
 		/// <param name="stateID">The state i d.</param>
 		///         <param name="eventType">The event type.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the event counter for the specified event type and state ID.</summary>
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary, EntryPoint = "CGEventSourceCounterForEventType")]
 		public extern static uint /* uint32_t */ GetCounterForEventType (CGEventSourceStateID stateID, CGEventType eventType);
 
@@ -119,7 +119,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static long CGEventSourceGetUserData (IntPtr handle);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the user data associated with this event source.</summary>
 		public long UserData {
 			get {
 				return CGEventSourceGetUserData (Handle);
@@ -135,7 +135,7 @@ namespace CoreGraphics {
 
 		/// <param name="filter">The filter.</param>
 		///         <param name="state">The state.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Sets the local events filter for the specified suppression state.</summary>
 		public void SetLocalEventsFilterDuringSupressionState (CGEventFilterMask filter, CGEventSuppressionState state)
 		{
 			CGEventSourceSetLocalEventsFilterDuringSuppressionState (Handle, filter, state);
@@ -145,7 +145,7 @@ namespace CoreGraphics {
 		extern static CGEventFilterMask CGEventSourceGetLocalEventsFilterDuringSuppressionState (IntPtr handle, CGEventSuppressionState state);
 
 		/// <param name="state">The state.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the local events filter for the specified suppression state.</summary>
 		public CGEventFilterMask GetLocalEventsFilterDuringSupressionState (CGEventSuppressionState state)
 		{
 			return CGEventSourceGetLocalEventsFilterDuringSuppressionState (Handle, state);
@@ -157,7 +157,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static double CGEventSourceGetLocalEventsSuppressionInterval (IntPtr handle);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the local events suppression interval.</summary>
 		public double LocalEventsSupressionInterval {
 			get {
 				return CGEventSourceGetLocalEventsSuppressionInterval (Handle);

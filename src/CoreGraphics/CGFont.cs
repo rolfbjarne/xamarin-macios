@@ -139,7 +139,6 @@ namespace CoreGraphics {
 		extern static /* size_t */ nint CGFontGetNumberOfGlyphs (/* CGFontRef */ IntPtr font);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public nint NumberOfGlyphs {
 			get {
 				return CGFontGetNumberOfGlyphs (Handle);
@@ -150,7 +149,6 @@ namespace CoreGraphics {
 		extern static /* int */ int CGFontGetUnitsPerEm (/* CGFontRef */ IntPtr font);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public int UnitsPerEm {
 			get {
 				return CGFontGetUnitsPerEm (Handle);
@@ -161,7 +159,6 @@ namespace CoreGraphics {
 		extern static /* CFStringRef __nullable */ IntPtr CGFontCopyPostScriptName (/* CGFontRef __nullable */ IntPtr font);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public string? PostScriptName {
 			get {
 				return CFString.FromHandle (CGFontCopyPostScriptName (Handle), releaseHandle: true);
@@ -172,7 +169,6 @@ namespace CoreGraphics {
 		extern static /* CFStringRef __nullable */ IntPtr CGFontCopyFullName (/* CGFontRef __nullable */ IntPtr font);
 
 		/// <summary>Returns the full name of the font.</summary>
-		///         <value>To be added.</value>
 		public string? FullName {
 			get {
 				return CFString.FromHandle (CGFontCopyFullName (Handle), releaseHandle: true);
@@ -183,7 +179,6 @@ namespace CoreGraphics {
 		extern static /* int */ int CGFontGetAscent (/* CGFontRef */ IntPtr font);
 
 		/// <summary>Returns the ascent of the font.</summary>
-		///         <value>To be added.</value>
 		public int Ascent {
 			get {
 				return CGFontGetAscent (Handle);
@@ -194,7 +189,6 @@ namespace CoreGraphics {
 		extern static /* int */ int CGFontGetDescent (/* CGFontRef */ IntPtr font);
 
 		/// <summary>Returns the descent of the font.</summary>
-		///         <value>To be added.</value>
 		public int Descent {
 			get {
 				return CGFontGetDescent (Handle);
@@ -205,7 +199,6 @@ namespace CoreGraphics {
 		extern static /* int */ int CGFontGetLeading (/* CGFontRef */ IntPtr font);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public int Leading {
 			get {
 				return CGFontGetLeading (Handle);
@@ -216,7 +209,6 @@ namespace CoreGraphics {
 		extern static /* int */ int CGFontGetCapHeight (/* CGFontRef */ IntPtr font);
 
 		/// <summary>Returns the cap height of the font.</summary>
-		///         <value>To be added.</value>
 		public int CapHeight {
 			get {
 				return CGFontGetCapHeight (Handle);
@@ -227,7 +219,6 @@ namespace CoreGraphics {
 		extern static /* int */ int CGFontGetXHeight (/* CGFontRef */ IntPtr font);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public int XHeight {
 			get {
 				return CGFontGetXHeight (Handle);
@@ -238,7 +229,6 @@ namespace CoreGraphics {
 		extern static CGRect CGFontGetFontBBox (/* CGFontRef */ IntPtr font);
 
 		/// <summary>Returns a rectangle specifing the bounding box of the font.</summary>
-		///         <value>To be added.</value>
 		public CGRect FontBBox {
 			get {
 				return CGFontGetFontBBox (Handle);
@@ -249,7 +239,6 @@ namespace CoreGraphics {
 		extern static /* CGFloat */ nfloat CGFontGetItalicAngle (/* CGFontRef */ IntPtr font);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public nfloat ItalicAngle {
 			get {
 				return CGFontGetItalicAngle (Handle);
@@ -260,7 +249,6 @@ namespace CoreGraphics {
 		extern static /* CGFloat */ nfloat CGFontGetStemV (/* CGFontRef */ IntPtr font);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public nfloat StemV {
 			get {
 				return CGFontGetStemV (Handle);
@@ -285,7 +273,6 @@ namespace CoreGraphics {
 
 		/// <param name="s">The s.</param>
 		///         <summary>Returns the glyph for the specified glyph name.</summary>
-		///         <returns>To be added.</returns>
 		public ushort GetGlyphWithGlyphName (string s)
 		{
 			// note: the API is marked to accept a null CFStringRef but it currently (iOS9 beta 4) crash when provided one
@@ -304,7 +291,6 @@ namespace CoreGraphics {
 
 		/// <param name="glyph">The glyph.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public string? GlyphNameForGlyph (ushort glyph)
 		{
 			return CFString.FromHandle (CGFontCopyGlyphNameForGlyph (Handle, glyph), releaseHandle: true);
@@ -344,7 +330,6 @@ namespace CoreGraphics {
 #endif // TODO
 
 		/// <summary>Type identifier for the CoreGraphics.CGFont type.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>
 		///           <para>The returned token is the CoreFoundation type identifier (CFType) that has been assigned to this class.</para>
 		///           <para>This can be used to determine type identity between different CoreFoundation objects.</para>

@@ -26,8 +26,8 @@ namespace Foundation {
 	public partial class NSKeyedUnarchiver {
 
 		/// <param name="kls">The kls.</param>
-		///         <param name="codedName">The coded name.</param>
-		///         <summary>To be added.</summary>
+		/// <param name="codedName">The coded name.</param>
+		/// <summary>Globally sets the class to use when unarchiving objects with the specified coded name.</summary>
 		public static void GlobalSetClass (Class kls, string codedName)
 		{
 			if (codedName is null)
@@ -42,8 +42,8 @@ namespace Foundation {
 		}
 
 		/// <param name="codedName">The coded name.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Gets the class globally associated with the specified coded name.</summary>
+		/// <returns>The class associated with the coded name.</returns>
 		public static Class GlobalGetClass (string codedName)
 		{
 			if (codedName is null)

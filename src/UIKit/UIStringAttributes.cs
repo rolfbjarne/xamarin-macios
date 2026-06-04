@@ -158,7 +158,7 @@ namespace UIKit {
 		}
 
 		/// <summary>Gets or sets the stroke width for drawing the text.</summary>
-		/// <value>Expressed as a percentage of the font size. Positive values stroke the text; negative values stroke and fill the text.</value>
+		/// <value>Expressed as APercentage of the font size. Positive values stroke the text; negative values stroke and fill the text.</value>
 		public float? StrokeWidth {
 			get {
 				return GetFloatValue (UIStringAttributeKey.StrokeWidth);

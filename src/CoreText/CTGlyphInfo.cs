@@ -195,7 +195,7 @@ namespace CoreText {
 		}
 		#endregion
 
-		/// <summary>To be added.</summary>
+		/// <summary>Returns a string representation of this glyph info.</summary>
 		public override string? ToString ()
 		{
 			return GlyphName;

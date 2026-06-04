@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace AVFoundation {
 	/// <summary>This enum is used to select how to initialize a new <see cref="AVSpeechUtterance" /> instance.</summary>
 	public enum AVSpeechUtteranceInitializationOption {
-		/// <summary>The <c>string</c> parameter passed to the constructor is a plain text string.</summary>
+		/// <summary>The <c>string</c> parameter passed to the constructor is APlain text string.</summary>
 		PlainText,
 		/// <summary>The <c>string</c> parameter passed to the constructor is an SSML (Speech Synthesis Markup Language) string.</summary>
 		[SupportedOSPlatform ("ios16.0")]

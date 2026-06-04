@@ -47,10 +47,10 @@ namespace GameController {
 
 		// NOTE: ArgumentSemantic.Weak if ARC, ArgumentSemantic.Assign otherwise;
 		// currently MonoTouch is not ARC, neither is Xammac, so go with assign.
-		/// <summary>The <see cref="GameController.GCControllerElement" /> that <c>this</c> is a part of.</summary>
+		/// <summary>The <see cref="GameController.GCControllerElement" /> that <c>this</c> is APart of.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>
-		///           <para>If <c>this</c> is an element of another <see cref="GameController.GCControllerElement" />, this will hold the "parent" <see cref="GameController.GCControllerElement" />. (The D-Pad can be read as either a pair of <see cref="GameController.GCControllerAxisInput" /> elements or as four <see cref="GameController.GCControllerButtonInput" /> elements.)</para>
+		///           <para>If <c>this</c> is an element of another <see cref="GameController.GCControllerElement" />, this will hold the "parent" <see cref="GameController.GCControllerElement" />. (The D-Pad can be read as either APair of <see cref="GameController.GCControllerAxisInput" /> elements or as four <see cref="GameController.GCControllerButtonInput" /> elements.)</para>
 		///         </remarks>
 		[NullAllowed]
 		[Export ("collection", ArgumentSemantic.Assign)]

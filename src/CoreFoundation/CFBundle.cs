@@ -43,11 +43,9 @@ namespace CoreFoundation {
 			}
 
 			/// <summary>To be added.</summary>
-			///         <value>To be added.</value>
 			///         <remarks>To be added.</remarks>
 			public PackageType Type { get; private set; }
 			/// <summary>To be added.</summary>
-			///         <value>To be added.</value>
 			///         <remarks>To be added.</remarks>
 			public string Creator { get; private set; }
 		}
@@ -85,7 +83,6 @@ namespace CoreFoundation {
 		/// <param name="directoryUrl">To be added.</param>
 		///         <param name="bundleType">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static CFBundle []? GetBundlesFromDirectory (NSUrl directoryUrl, string bundleType)
 		{
@@ -107,7 +104,6 @@ namespace CoreFoundation {
 		extern static IntPtr CFBundleGetAllBundles ();
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static CFBundle []? GetAll ()
 		{
@@ -132,7 +128,6 @@ namespace CoreFoundation {
 
 		/// <param name="bundleID">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static CFBundle? Get (string bundleID)
 		{
@@ -154,7 +149,6 @@ namespace CoreFoundation {
 		extern static IntPtr CFBundleGetMainBundle ();
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static CFBundle? GetMain ()
 		{
@@ -169,7 +163,6 @@ namespace CoreFoundation {
 		extern static byte CFBundleIsExecutableLoaded (IntPtr bundle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool HasLoadedExecutable {
 			get { return CFBundleIsExecutableLoaded (Handle) != 0; }
@@ -180,7 +173,6 @@ namespace CoreFoundation {
 
 		/// <param name="error">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public bool PreflightExecutable (out NSError? error)
 		{
@@ -199,7 +191,6 @@ namespace CoreFoundation {
 
 		/// <param name="error">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public bool LoadExecutable (out NSError? error)
 		{
@@ -228,7 +219,6 @@ namespace CoreFoundation {
 
 		/// <param name="executableName">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public NSUrl? GetAuxiliaryExecutableUrl (string executableName)
 		{
@@ -248,7 +238,6 @@ namespace CoreFoundation {
 		extern static /* CFUrlRef */ IntPtr CFBundleCopyBuiltInPlugInsURL (IntPtr bundle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSUrl? BuiltInPlugInsUrl {
 			get {
@@ -260,7 +249,6 @@ namespace CoreFoundation {
 		extern static /* CFUrlRef */ IntPtr CFBundleCopyExecutableURL (IntPtr bundle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSUrl? ExecutableUrl {
 			get {
@@ -272,7 +260,6 @@ namespace CoreFoundation {
 		extern static /* CFUrlRef */ IntPtr CFBundleCopyPrivateFrameworksURL (IntPtr bundle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSUrl? PrivateFrameworksUrl {
 			get {
@@ -284,7 +271,6 @@ namespace CoreFoundation {
 		extern static /* CFUrlRef */ IntPtr CFBundleCopyResourcesDirectoryURL (IntPtr bundle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSUrl? ResourcesDirectoryUrl {
 			get {
@@ -296,7 +282,6 @@ namespace CoreFoundation {
 		extern static /* CFUrlRef */ IntPtr CFBundleCopySharedFrameworksURL (IntPtr bundle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSUrl? SharedFrameworksUrl {
 			get {
@@ -308,7 +293,6 @@ namespace CoreFoundation {
 		extern static /* CFUrlRef */ IntPtr CFBundleCopySharedSupportURL (IntPtr bundle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSUrl? SharedSupportUrl {
 			get {
@@ -320,7 +304,6 @@ namespace CoreFoundation {
 		extern static /* CFUrlRef */ IntPtr CFBundleCopySupportFilesDirectoryURL (IntPtr bundle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSUrl? SupportFilesDirectoryUrl {
 			get {
@@ -336,7 +319,6 @@ namespace CoreFoundation {
 		///         <param name="resourceType">To be added.</param>
 		///         <param name="subDirName">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public NSUrl? GetResourceUrl (string resourceName, string resourceType, string subDirName)
 		{
@@ -368,7 +350,6 @@ namespace CoreFoundation {
 		///         <param name="resourceType">To be added.</param>
 		///         <param name="subDirName">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSUrl? GetResourceUrl (NSUrl bundleUrl, string resourceName, string resourceType, string subDirName)
 		{
@@ -402,7 +383,6 @@ namespace CoreFoundation {
 		/// <param name="resourceType">To be added.</param>
 		///         <param name="subDirName">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public NSUrl? []? GetResourceUrls (string resourceType, string subDirName)
 		{
@@ -427,7 +407,6 @@ namespace CoreFoundation {
 		///         <param name="resourceType">To be added.</param>
 		///         <param name="subDirName">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSUrl? []? GetResourceUrls (NSUrl bundleUrl, string resourceType, string subDirName)
 		{
@@ -458,7 +437,6 @@ namespace CoreFoundation {
 		///         <param name="subDirName">To be added.</param>
 		///         <param name="localizationName">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public NSUrl? GetResourceUrl (string resourceName, string resourceType, string subDirName, string localizationName)
 		{
@@ -494,7 +472,6 @@ namespace CoreFoundation {
 		///         <param name="subDirName">To be added.</param>
 		///         <param name="localizationName">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public NSUrl? []? GetResourceUrls (string resourceType, string subDirName, string localizationName)
 		{
@@ -607,7 +584,6 @@ namespace CoreFoundation {
 		/// <param name="locArray">To be added.</param>
 		///         <param name="prefArray">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static string? []? GetLocalizationsForPreferences (string [] locArray, string [] prefArray)
 		{
@@ -637,7 +613,6 @@ namespace CoreFoundation {
 
 		/// <param name="bundle">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static string? []? GetLocalizations (NSUrl bundle)
 		{
@@ -653,7 +628,6 @@ namespace CoreFoundation {
 
 		/// <param name="locArray">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static string? []? GetPreferredLocalizations (string [] locArray)
 		{
@@ -674,7 +648,6 @@ namespace CoreFoundation {
 		extern static /* CFUrlRef */ IntPtr CFBundleCopyBundleURL (IntPtr bundle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSUrl? Url {
 			get {
@@ -686,7 +659,6 @@ namespace CoreFoundation {
 		extern static /* CFString */ IntPtr CFBundleGetDevelopmentRegion (IntPtr bundle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? DevelopmentRegion {
 			get { return CFString.FromHandle (CFBundleGetDevelopmentRegion (Handle)); }
@@ -696,7 +668,6 @@ namespace CoreFoundation {
 		extern static /* CFString */ IntPtr CFBundleGetIdentifier (IntPtr bundle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Identifier {
 			get { return CFString.FromHandle (CFBundleGetIdentifier (Handle)); }
@@ -706,7 +677,6 @@ namespace CoreFoundation {
 		extern static /* CFDictionary */ IntPtr CFBundleGetInfoDictionary (IntPtr bundle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSDictionary? InfoDictionary {
 			get {
@@ -719,7 +689,6 @@ namespace CoreFoundation {
 		extern static /* NSDictionary */ IntPtr CFBundleGetLocalInfoDictionary (IntPtr bundle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSDictionary? LocalInfoDictionary {
 			get {
@@ -737,7 +706,6 @@ namespace CoreFoundation {
 
 		/// <param name="url">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSDictionary? GetInfoDictionary (NSUrl url)
 		{
@@ -752,7 +720,6 @@ namespace CoreFoundation {
 		unsafe extern static void CFBundleGetPackageInfo (IntPtr bundle, uint* packageType, uint* packageCreator);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public PackageInfo Info {
 			get {
@@ -779,7 +746,6 @@ namespace CoreFoundation {
 		extern static /* CFArray */ IntPtr CFBundleCopyExecutableArchitectures (IntPtr bundle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CFBundle.Architecture []? Architectures {
 			get {

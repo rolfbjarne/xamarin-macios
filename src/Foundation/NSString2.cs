@@ -35,10 +35,10 @@ namespace Foundation {
 		static IntPtr selDataUsingEncodingAllowHandle = Selector.GetHandle (selDataUsingEncodingAllow);
 #endif
 
-		/// <param name="enc">The enc.</param>
-		///         <param name="allowLossyConversion">The allow lossy conversion.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <param name="enc">The string encoding to use.</param>
+		/// <param name="allowLossyConversion">Whether to allow lossy conversion.</param>
+		/// <summary>Encodes this string using the specified encoding.</summary>
+		/// <returns>The encoded data.</returns>
 		public NSData Encode (NSStringEncoding enc, bool allowLossyConversion = false)
 		{
 			return new NSData (Messaging.NativeHandle_objc_msgSend_NativeHandle_bool (Handle, Selector.GetHandle (selDataUsingEncodingAllow), (IntPtr) (int) enc, allowLossyConversion ? (byte) 1 : (byte) 0));

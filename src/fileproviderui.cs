@@ -58,20 +58,20 @@ namespace FileProviderUI {
 	interface FPUIActionExtensionViewController {
 
 		/// <param name="nibName">
-		///           <para>To be added.</para>
-		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
-		///         </param>
+		///   <para>The name of the NIB file to load.</para>
+		///   <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		/// </param>
 		/// <param name="bundle">
-		///           <para>To be added.</para>
-		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
-		///         </param>
+		///   <para>The bundle in which to search for the NIB file.</para>
+		///   <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		/// </param>
 		/// <summary>Creates a new action extension view controller from the specified NIB in the specified <paramref name="bundle" />.</summary>
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
 		NativeHandle Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);
 
 		/// <summary>Gets the host app's extension context.</summary>
-		///         <value>To be added.</value>
+		/// <value>The <see cref="T:FileProviderUI.FPUIActionExtensionContext" /> for this extension.</value>
 		[Export ("extensionContext", ArgumentSemantic.Strong)]
 		FPUIActionExtensionContext ExtensionContext { get; }
 

@@ -9,7 +9,6 @@ namespace GameController {
 	// GCMicroGamepadSnapshot.h
 	// float_t are 4 bytes (at least for ARM64)
 	/// <summary>Represents the instantaneous state of a micro gamepad in V100 format at a point in time.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -22,27 +21,21 @@ namespace GameController {
 
 		// Standard information
 		/// <summary>The micro gamepad version.</summary>
-		///         <remarks>To be added.</remarks>
 		public ushort /* uint16_t */ Version; // 0x0100
 		/// <summary>The size of the snapshot, in bytes.</summary>
-		///         <remarks>To be added.</remarks>
 		public ushort /* uint16_t */ Size;    // sizeof(GCMicroGamepadSnapShotDataV100) or larger
 
 		// Standard gamepad data
 		// Axes in the range [-1.0, 1.0]
 		/// <summary>The <c>X</c>v alue of the D-pad input when the snapshot was taken.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ DPadX;
 		/// <summary>The <c>Y</c> value of the D-pad input when the snapshot was taken.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ DPadY;
 
 		// Buttons in the range [0.0, 1.0]
 		/// <summary>The value of ButtonA when the snapshot was taken.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ ButtonA;
 		/// <summary>The value of ButtonX when the snapshot was taken.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ ButtonX;
 
 		[SupportedOSPlatform ("ios")]
@@ -58,7 +51,6 @@ namespace GameController {
 
 		/// <summary>Converts the snapshot to an <see cref="Foundation.NSData" /> object.</summary>
 		///         <returns>An <see cref="Foundation.NSData" /> object that contains the snapshot data.</returns>
-		///         <remarks>To be added.</remarks>
 		public NSData? ToNSData ()
 		{
 			unsafe {
@@ -73,7 +65,6 @@ namespace GameController {
 	// GCMicroGamepadSnapshot.h
 	// float_t are 4 bytes (at least for ARM64)
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -86,27 +77,21 @@ namespace GameController {
 
 		// Standard information
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public ushort /* uint16_t */ Version;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public ushort /* uint16_t */ Size;
 
 		// Standard gamepad data
 		// Axes in the range [-1.0, 1.0]
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ DPadX;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ DPadY;
 
 		// Buttons in the range [0.0, 1.0]
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ ButtonA;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ ButtonX;
 
 		[SupportedOSPlatform ("tvos")]
@@ -122,7 +107,6 @@ namespace GameController {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -189,11 +173,10 @@ namespace GameController {
 		[DllImport (Constants.GameControllerLibrary)]
 		unsafe static extern byte GCMicroGamepadSnapshotDataFromNSData (GCMicroGamepadSnapshotData* snapshotData, /* NSData */ IntPtr data);
 
-		/// <param name="data">To be added.</param>
-		///         <param name="snapshotData">To be added.</param>
+		/// <param name="data">The data to use.</param>
+		///         <param name="snapshotData">The snapshot data.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]

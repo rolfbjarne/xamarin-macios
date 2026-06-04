@@ -25,18 +25,16 @@ namespace UIKit {
 		public UITextFieldDidEndEditingReason Reason { get; set; }
 	}
 
-	/// <param name="textField">To be added.</param>
-	///     <param name="range">To be added.</param>
-	///     <param name="replacementString">To be added.</param>
+	/// <param name="textField">The text field.</param>
+	///     <param name="range">The range.</param>
+	///     <param name="replacementString">The replacement string.</param>
 	///     <summary>A delegate used to respond to changes on the UITextField.</summary>
 	///     <returns>To be added.</returns>
-	///     <remarks>To be added.</remarks>
 	public delegate bool UITextFieldChange (UITextField textField, NSRange range, string replacementString);
 
-	/// <param name="textField">To be added.</param>
+	/// <param name="textField">The text field.</param>
 	///     <summary>A delegate used to get the condition for a UITextField.</summary>
 	///     <returns>To be added.</returns>
-	///     <remarks>To be added.</remarks>
 	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/MapDemo">Example_ContentControls</related>
 	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/MonoCatalog-MonoDevelop/">monocatalog</related>
 	public delegate bool UITextFieldCondition (UITextField textField);

@@ -13,10 +13,9 @@ using CoreGraphics;
 
 namespace SpriteKit {
 	public partial class SKShapeNode : SKNode {
-		/// <param name="points">To be added.</param>
+		/// <param name="points">The points.</param>
 		///         <summary>Creates a new shape node from the specified <paramref name="points" />.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -29,12 +28,11 @@ namespace SpriteKit {
 			return FromPoints (ref points [0], (nuint) points.Length);
 		}
 
-		/// <param name="points">To be added.</param>
-		///         <param name="offset">To be added.</param>
-		///         <param name="length">To be added.</param>
+		/// <param name="points">The points.</param>
+		///         <param name="offset">The offset.</param>
+		///         <param name="length">The length.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -49,10 +47,9 @@ namespace SpriteKit {
 			return FromPoints (ref points [offset], (nuint) length);
 		}
 
-		/// <param name="points">To be added.</param>
+		/// <param name="points">The points.</param>
 		///         <summary>Creates a new shape node from the specified spline <paramref name="points" />.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -65,12 +62,11 @@ namespace SpriteKit {
 			return FromSplinePoints (ref points [0], (nuint) points.Length);
 		}
 
-		/// <param name="points">To be added.</param>
-		///         <param name="offset">To be added.</param>
-		///         <param name="length">To be added.</param>
+		/// <param name="points">The points.</param>
+		///         <param name="offset">The offset.</param>
+		///         <param name="length">The length.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]

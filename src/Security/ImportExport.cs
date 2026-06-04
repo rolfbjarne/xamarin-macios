@@ -41,7 +41,7 @@ namespace Security {
 		/// <param name="buffer">The buffer.</param>
 		///         <param name="options">The options to use.</param>
 		///         <param name="array">The array.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Imports a PKCS#12 formatted blob from a byte array.</summary>
 		static public SecStatusCode ImportPkcs12 (byte [] buffer, NSDictionary options, out NSDictionary []? array)
 		{
 			using (NSData data = NSData.FromArray (buffer)) {
@@ -52,7 +52,7 @@ namespace Security {
 		/// <param name="data">The data to use.</param>
 		///         <param name="options">The options to use.</param>
 		///         <param name="array">The array.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Imports a PKCS#12 formatted blob from an NSData instance.</summary>
 		static public SecStatusCode ImportPkcs12 (NSData data, NSDictionary options, out NSDictionary []? array)
 		{
 			if (options is null)

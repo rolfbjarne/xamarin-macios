@@ -507,29 +507,29 @@ namespace PhotosUI {
 	[BaseType (typeof (NSObject))]
 	interface PHProjectTypeDescriptionDataSource {
 		/// <param name="projectType">The project type.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Returns the subtypes for the specified project type.</summary>
+		/// <returns>An array of project type descriptions.</returns>
 		[Abstract]
 		[Export ("subtypesForProjectType:")]
 		PHProjectTypeDescription [] GetSubtypes (NSString projectType);
 
 		/// <param name="projectType">The project type.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Returns the type description for the specified project type.</summary>
+		/// <returns>The type description, or <see langword="null" />.</returns>
 		[Abstract]
 		[Export ("typeDescriptionForProjectType:")]
 		[return: NullAllowed]
 		PHProjectTypeDescription GetTypeDescription (NSString projectType);
 
 		/// <param name="projectType">The project type.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Returns the footer text for subtypes of the specified project type.</summary>
+		/// <returns>The footer text, or <see langword="null" />.</returns>
 		[Abstract]
 		[Export ("footerTextForSubtypesOfProjectType:")]
 		[return: NullAllowed]
 		NSAttributedString GetFooterTextForSubtypes (NSString projectType);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Called when the extension will discard this data source.</summary>
 		[Export ("extensionWillDiscardDataSource")]
 		void WillDiscardDataSource ();
 	}

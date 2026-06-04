@@ -52,10 +52,9 @@ namespace MobileCoreServices {
 		[DllImport (Constants.CoreServicesLibrary)]
 		extern static byte /* Boolean */ UTTypeIsDeclared (IntPtr /* CFStringRef */ handle);
 
-		/// <param name="utType">To be added.</param>
+		/// <param name="utType">The ut type.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -74,10 +73,9 @@ namespace MobileCoreServices {
 			return result != 0;
 		}
 
-		/// <param name="utType">To be added.</param>
+		/// <param name="utType">The ut type.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -99,12 +97,11 @@ namespace MobileCoreServices {
 		[DllImport (Constants.CoreServicesLibrary)]
 		extern static IntPtr /* NSString */ UTTypeCreatePreferredIdentifierForTag (IntPtr /* CFStringRef */ tagClassStr, IntPtr /* CFStringRef */ tagStr, IntPtr /* CFStringRef */ conformingToUtiStr);
 
-		/// <param name="tagClass">To be added.</param>
-		///         <param name="tag">To be added.</param>
-		///         <param name="conformingToUti">To be added.</param>
+		/// <param name="tagClass">The tag class.</param>
+		///         <param name="tag">The tag.</param>
+		///         <param name="conformingToUti">The conforming to uti.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static string? CreatePreferredIdentifier (string tagClass, string tag, string conformingToUti)
 		{
 			var a = CFString.CreateNative (tagClass);
@@ -120,12 +117,11 @@ namespace MobileCoreServices {
 		[DllImport (Constants.CoreServicesLibrary)]
 		extern static IntPtr /* NSString Array */ UTTypeCreateAllIdentifiersForTag (IntPtr /* CFStringRef */ tagClassStr, IntPtr /* CFStringRef */ tagStr, IntPtr /* CFStringRef */ conformingToUtiStr);
 
-		/// <param name="tagClass">To be added.</param>
-		///         <param name="tag">To be added.</param>
-		///         <param name="conformingToUti">To be added.</param>
+		/// <param name="tagClass">The tag class.</param>
+		///         <param name="tag">The tag.</param>
+		///         <param name="conformingToUti">The conforming to uti.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static string? []? CreateAllIdentifiers (string tagClass, string tag, string conformingToUti)
 		{
 			if (tagClass is null)
@@ -153,11 +149,10 @@ namespace MobileCoreServices {
 		[DllImport (Constants.CoreServicesLibrary)]
 		extern static IntPtr /* NSString Array */ UTTypeCopyAllTagsWithClass (IntPtr /* CFStringRef */ utiStr, IntPtr /* CFStringRef */ tagClassStr);
 
-		/// <param name="uti">To be added.</param>
-		///         <param name="tagClass">To be added.</param>
+		/// <param name="uti">The uti.</param>
+		///         <param name="tagClass">The tag class.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -183,11 +178,10 @@ namespace MobileCoreServices {
 		[DllImport (Constants.CoreServicesLibrary)]
 		extern static byte /* Boolean */ UTTypeConformsTo (IntPtr /* CFStringRef */ utiStr, IntPtr /* CFStringRef */ conformsToUtiStr);
 
-		/// <param name="uti">To be added.</param>
-		///         <param name="conformsToUti">To be added.</param>
+		/// <param name="uti">The uti.</param>
+		///         <param name="conformsToUti">The conforms to uti.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static bool ConformsTo (string uti, string conformsToUti)
 		{
 			if (uti is null)
@@ -206,10 +200,9 @@ namespace MobileCoreServices {
 		[DllImport (Constants.CoreServicesLibrary)]
 		extern static IntPtr /* NSString */ UTTypeCopyDescription (IntPtr /* CFStringRef */ utiStr);
 
-		/// <param name="uti">To be added.</param>
+		/// <param name="uti">The uti.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static string? GetDescription (string uti)
 		{
 			if (uti is null)
@@ -224,11 +217,10 @@ namespace MobileCoreServices {
 		[DllImport (Constants.CoreServicesLibrary)]
 		extern static IntPtr /* CFStringRef */ UTTypeCopyPreferredTagWithClass (IntPtr /* CFStringRef */ uti, IntPtr /* CFStringRef */ tagClass);
 
-		/// <param name="uti">To be added.</param>
-		///         <param name="tagClass">To be added.</param>
+		/// <param name="uti">The uti.</param>
+		///         <param name="tagClass">The tag class.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static string? GetPreferredTag (string uti, string tagClass)
 		{
 			if (uti is null)
@@ -247,10 +239,9 @@ namespace MobileCoreServices {
 		[DllImport (Constants.CoreServicesLibrary)]
 		extern static IntPtr /* NSDictionary */ UTTypeCopyDeclaration (IntPtr utiStr);
 
-		/// <param name="uti">To be added.</param>
+		/// <param name="uti">The uti.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static NSDictionary? GetDeclaration (string uti)
 		{
 			if (uti is null)
@@ -279,11 +270,10 @@ namespace MobileCoreServices {
 		[DllImport (Constants.CoreServicesLibrary)]
 		static extern unsafe byte /* Boolean */ UTTypeEqual (/* CFStringRef */ IntPtr inUTI1, /* CFStringRef */ IntPtr inUTI2);
 
-		/// <param name="uti1">To be added.</param>
-		///         <param name="uti2">To be added.</param>
+		/// <param name="uti1">The uti1.</param>
+		///         <param name="uti2">The uti2.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("maccatalyst")]

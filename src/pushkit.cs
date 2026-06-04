@@ -77,7 +77,7 @@ namespace PushKit {
 		NSString Voip { get; }
 
 		/// <summary>Gets the WatchKit complication push type, <c>PKPushTypeComplication</c>.</summary>
-		///         <value>To be added.</value>
+		/// <value>The <see cref="T:Foundation.NSString" /> constant representing the complication push type.</value>
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Use directly from watchOS instead.")]
 		[NoMac]
 		[NoMacCatalyst]
@@ -85,8 +85,8 @@ namespace PushKit {
 		[Field ("PKPushTypeComplication")]
 		NSString Complication { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the file provider push type.</summary>
+		/// <value>The <see cref="T:Foundation.NSString" /> constant representing the file provider push type.</value>
 		[MacCatalyst (13, 1)]
 		[Field ("PKPushTypeFileProvider")]
 		NSString FileProvider { get; }

@@ -131,7 +131,7 @@ namespace ObjCRuntime {
 #if !__MACCATALYST__
 	/// <summary>Used to represent the host on which this app is running.</summary>
 	public enum Arch {
-		/// <summary>Running on a physical device.</summary>
+		/// <summary>Running on APhysical device.</summary>
 		DEVICE,
 		/// <summary>Running on the desktop simulator.</summary>
 		SIMULATOR,

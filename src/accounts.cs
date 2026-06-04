@@ -95,7 +95,6 @@ namespace Accounts {
 			<returns>
 			          <para>A task that represents the asynchronous SaveAccount operation.   The value of the TResult parameter is a Accounts.ACAccountStoreSaveCompletionHandler.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
 			""")]
 		void SaveAccount (ACAccount account, ACAccountStoreSaveCompletionHandler completionHandler);
 
@@ -110,7 +109,6 @@ namespace Accounts {
 			<returns>
 			          <para>A task that represents the asynchronous RequestAccess operation.   The value of the TResult parameter is a Accounts.ACRequestCompletionHandler.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
 			""")]
 		void RequestAccess (ACAccountType accountType, ACRequestCompletionHandler completionHandler);
 
@@ -128,17 +126,15 @@ namespace Accounts {
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous RenewCredentials operation.  The value of the TResult parameter is of type System.Action&lt;Accounts.ACAccountCredentialRenewResult,Foundation.NSError&gt;.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
 			""")]
 		void RenewCredentials (ACAccount account, Action<ACAccountCredentialRenewResult, NSError?> completionHandler);
 
 		[Protected]
 		[Export ("requestAccessToAccountsWithType:options:completion:")]
 		[Async (XmlDocs = """
-			<param name="accountType">To be added.</param>
-			<param name="options">To be added.</param>
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<param name="accountType">The type of account for which access is being requested.</param>
+			<param name="options">Options for the request.</param>
+			<summary>Requests access to a type of social account with options.</summary>
 			""")]
 		void RequestAccess (ACAccountType accountType, [NullAllowed] NSDictionary options, ACRequestCompletionHandler completion);
 
@@ -160,10 +156,9 @@ namespace Accounts {
 		///         <altmember cref="Accounts.AccountStoreOptions" />
 		[Wrap ("RequestAccess (accountType, options.GetDictionary (), completion)")]
 		[Async (XmlDocs = """
-			<param name="accountType">To be added.</param>
-			<param name="options">To be added.</param>
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<param name="accountType">The type of account for which access is being requested.</param>
+			<param name="options">Options for the request.</param>
+			<summary>Requests access to a type of social account with options.</summary>
 			""")]
 		void RequestAccess (ACAccountType accountType, [NullAllowed] AccountStoreOptions options, ACRequestCompletionHandler completion);
 
@@ -176,7 +171,6 @@ namespace Accounts {
 			        </returns>
 			<remarks>
 			          <para copied="true">The RemoveAccountAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
 			        </remarks>
 			""")]
 		void RemoveAccount (ACAccount account, ACAccountStoreRemoveCompletionHandler completionHandler);

@@ -15,7 +15,7 @@ namespace AVFoundation {
 		Word,
 		/// <summary>The <c>range</c> parameter passed to the constructor is a sentence range.</summary>
 		Sentence,
-		/// <summary>The <c>range</c> parameter passed to the constructor is a paragraph range.</summary>
+		/// <summary>The <c>range</c> parameter passed to the constructor is AParagraph range.</summary>
 		Paragraph,
 	}
 
@@ -25,7 +25,7 @@ namespace AVFoundation {
 	[SupportedOSPlatform ("macos14.0")]
 	[SupportedOSPlatform ("tvos17.0")]
 	public enum AVSpeechSynthesisMarkerStringOption {
-		/// <summary>The <c>value</c> parameter passed to the constructor is a phoneme.</summary>
+		/// <summary>The <c>value</c> parameter passed to the constructor is APhoneme.</summary>
 		Phoneme,
 		/// <summary>The <c>value</c> parameter passed to the constructor is a bookmark name.</summary>
 		Bookmark,

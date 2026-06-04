@@ -7,7 +7,7 @@ namespace ScriptingBridge {
 	/// <summary>This class provides API to send Apple events to scriptable applications and get Apple events back.</summary>
 	/// <remarks>
 	///   <para>There are multiple steps to use this API successfully.</para>
-	///   <para>First step is to create a binding project, which will define a protocol for the specific application to interact with, and the corresponding API. The code in the API definition for the binding project should look something like this:</para>
+	///   <para>First step is to create a binding project, which will define AProtocol for the specific application to interact with, and the corresponding API. The code in the API definition for the binding project should look something like this:</para>
 	///   <example>
 	///     <code lang="csharp lang-csharp"><![CDATA[
 	/// namespace Finder {

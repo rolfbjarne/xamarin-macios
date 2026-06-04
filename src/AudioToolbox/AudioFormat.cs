@@ -57,7 +57,7 @@ namespace AudioToolbox {
 		public AudioChannelLayoutTag AudioChannelLayoutTag;
 
 		/// <param name="formatList">The format list.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the first playable format from the specified format list.</summary>
 		public unsafe static AudioFormat? GetFirstPlayableFormat (AudioFormat [] formatList)
 		{
 			if (formatList is null)
@@ -110,9 +110,9 @@ namespace AudioToolbox {
 	[SupportedOSPlatform ("tvos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AudioValueRange {
-		/// <summary>To be added.</summary>
+	/// <summary>The minimum value of the range.</summary>
 		public double Minimum;
-		/// <summary>To be added.</summary>
+	/// <summary>The maximum value of the range.</summary>
 		public double Maximum;
 	}
 
@@ -141,7 +141,7 @@ namespace AudioToolbox {
 		}
 
 		/// <param name="channelLayout">The channel layout.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Initializes a new instance with the specified channel layout.</summary>
 		public AudioBalanceFade (AudioChannelLayout channelLayout)
 		{
 			if (channelLayout is null)
@@ -150,16 +150,16 @@ namespace AudioToolbox {
 			this.ChannelLayout = channelLayout;
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the left-right balance value.</summary>
 		public float LeftRightBalance { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the back-front fade value.</summary>
 		public float BackFrontFade { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the balance fade type.</summary>
 		public AudioBalanceFadeType Type { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the channel layout used for balance fade calculation.</summary>
 		public AudioChannelLayout ChannelLayout { get; private set; }
 
-		/// <summary>To be added.</summary>
+	/// <summary>Computes and returns the balance fade values for each channel.</summary>
 		public unsafe float []? GetBalanceFade ()
 		{
 			var type_size = sizeof (Layout);
@@ -230,7 +230,7 @@ namespace AudioToolbox {
 		}
 
 		/// <param name="outputChannelMap">The output channel map.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Initializes a new instance with the specified output channel map.</summary>
 		public AudioPanningInfo (AudioChannelLayout outputChannelMap)
 		{
 			if (outputChannelMap is null)
@@ -239,18 +239,18 @@ namespace AudioToolbox {
 			this.OutputChannelMap = outputChannelMap;
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the panning mode.</summary>
 		public PanningMode PanningMode { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the coordinate flags for panning.</summary>
 		public AudioChannelFlags CoordinateFlags { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the panning coordinates.</summary>
 		public float [] Coordinates { get; private set; } = Array.Empty<float> ();
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the gain scale factor.</summary>
 		public float GainScale { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the output channel map layout.</summary>
 		public AudioChannelLayout OutputChannelMap { get; private set; }
 
-		/// <summary>To be added.</summary>
+	/// <summary>Computes and returns the panning matrix for the configured panning parameters.</summary>
 		public unsafe float []? GetPanningMatrix ()
 		{
 			var type_size = sizeof (Layout);

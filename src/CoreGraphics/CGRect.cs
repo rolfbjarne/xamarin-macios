@@ -42,14 +42,12 @@ namespace CoreGraphics {
 
 #if !COREBUILD
 		/// <summary>Gets an invalid, or null, rectangle.</summary>
-		///         <value>To be added.</value>
 		[Field ("CGRectNull", "CoreGraphics")] // unused but helps xtro
 		public static CGRect Null {
 			get { return Dlfcn.GetCGRect (Libraries.CoreGraphics.Handle, "CGRectNull"); }
 		}
 
 		/// <summary>Gets an infinitely large rectangle.</summary>
-		///         <value>To be added.</value>
 		[Field ("CGRectInfinite", "CoreGraphics")] // unused but helps xtro
 		public static CGRect Infinite {
 			get { return Dlfcn.GetCGRect (Libraries.CoreGraphics.Handle, "CGRectInfinite"); }
@@ -193,7 +191,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>The Y coordinate of the top of the rectangle.</summary>
-		///         <value>To be added.</value>
 		public nfloat Top {
 			get { return Y; }
 		}
@@ -321,7 +318,6 @@ namespace CoreGraphics {
 		/// <param name="x">The x.</param>
 		///         <param name="y">The y.</param>
 		///         <summary>Determines if the specified point is contained within this <see cref="CoreGraphics.CGRect" /> structure.</summary>
-		///         <returns>To be added.</returns>
 		public bool Contains (float x, float y)
 		{
 			return Contains ((nfloat) x, (nfloat) y);
@@ -331,7 +327,6 @@ namespace CoreGraphics {
 		///         <param name="y">The y.</param>
 		///         <summary>
 		///           <see langword="true" /> if the point [<paramref name="x" />, <paramref name="y" />] is within the rectangle.</summary>
-		///         <returns>To be added.</returns>
 		public bool Contains (double x, double y)
 		{
 			return Contains ((nfloat) x, (nfloat) y);
@@ -383,7 +378,7 @@ namespace CoreGraphics {
 
 		/// <param name="x">The x.</param>
 		///         <param name="y">The y.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Inflate.</summary>
 		public void Inflate (float x, float y)
 		{
 			Inflate ((nfloat) x, (nfloat) y);

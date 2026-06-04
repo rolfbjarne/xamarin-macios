@@ -22,34 +22,28 @@ namespace GameplayKit {
 		/// <summary>Do not use</summary>
 		protected internal GKHybridStrategist (NativeHandle handle) : base (handle) => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public virtual IGKGameModelUpdate GetBestMoveForActivePlayer () => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the budget.</summary>
 		public virtual nuint Budget {
 			get => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 			set => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 		}
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the exploration parameter.</summary>
 		public virtual nuint ExplorationParameter {
 			get => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 			set => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 		}
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the game model.</summary>
 		public virtual IGKGameModel? GameModel {
 			get => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 			set => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 		}
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the max look ahead depth.</summary>
 		public virtual nuint MaxLookAheadDepth {
 			get => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 			set => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 		}
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the random source.</summary>
 		public virtual IGKRandom? RandomSource {
 			get => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 			set => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);

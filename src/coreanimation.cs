@@ -1334,7 +1334,7 @@ namespace CoreAnimation {
 
 	interface ICAMetalDrawable { }
 
-	/// <summary>Interface that defines a protocol for a display buffer at the metal layer.</summary>
+	/// <summary>Interface that defines AProtocol for a display buffer at the metal layer.</summary>
 	[Protocol]
 	[MacCatalyst (13, 1)]
 	interface CAMetalDrawable : MTLDrawable {

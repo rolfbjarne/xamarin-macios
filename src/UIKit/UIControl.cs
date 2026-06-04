@@ -78,7 +78,7 @@ namespace UIKit {
 			}
 		}
 
-		/// <summary>Removes a previously installed event handler for the specified event list.</summary>
+		/// <summary>Removes APreviously installed event handler for the specified event list.</summary>
 		/// <param name="notification">The event handler previously specified in <see cref="AddTarget(EventHandler, UIControlEvent)" />.</param>
 		/// <param name="events">The event mask to remove.</param>
 		public void RemoveTarget (EventHandler notification, UIControlEvent events)

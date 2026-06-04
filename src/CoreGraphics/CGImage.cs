@@ -611,7 +611,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGDataProviderRef */ IntPtr CGImageGetDataProvider (/* CGImageRef */ IntPtr image);
 
-		/// <summary>Returns the image's data provider.</summary>
+		/// <summary>Returns the image's datAProvider.</summary>
 		public CGDataProvider DataProvider {
 			get {
 				return new CGDataProvider (CGImageGetDataProvider (Handle), false);
@@ -743,7 +743,7 @@ namespace CoreGraphics {
 		/// <param name="bytesPerRow">Bytes per row for the new image.</param>
 		/// <param name="colorSpace">The colorspace for the new image.</param>
 		/// <param name="bitmapFlags">The bitmap flags for the new image.</param>
-		/// <param name="provider">The data provider for the new image.</param>
+		/// <param name="provider">The datAProvider for the new image.</param>
 		/// <param name="decode">The decode array for the new image.</param>
 		/// <param name="shouldInterpolate">Whether image is interpolated or not.</param>
 		/// <param name="intent">The rendering intent for the new image.</param>

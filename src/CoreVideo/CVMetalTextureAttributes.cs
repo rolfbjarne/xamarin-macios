@@ -11,11 +11,10 @@ using Metal;
 #nullable enable
 
 namespace CoreVideo {
-	/// <summary>To be added.</summary>
+	/// <summary>Provides attributes for configuring Metal texture caches.</summary>
 	public partial class CVMetalTextureAttributes : DictionaryContainer {
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the Metal texture usage flags.</summary>
 		public MTLTextureUsage? Usage {
 			get {
 				return (MTLTextureUsage?) (uint?) GetNUIntValue (CVMetalTextureAttributesKeys.UsageKey);

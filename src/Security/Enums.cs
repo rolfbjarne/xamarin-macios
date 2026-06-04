@@ -614,7 +614,7 @@ namespace Security {
 		/// <summary>Indicates that the CRL authority was not valid.</summary>
 		InvalidCRLAuthority = -67827,   /* The CRL authority was not valid. */
 #if MONOMAC
-		/// <summary>To be added.</summary>
+		/// <summary>A misspelled alias for InvalidCRLAuthority.</summary>
 		[Obsolete ("Use InvalidCRLAuthority.")]
 		InvaldCRLAuthority = InvalidCRLAuthority,
 #endif
@@ -669,7 +669,7 @@ namespace Security {
 		/// <summary>Indicates an invalid credentials tuple.</summary>
 		InvalidTupleCredentials = -67852,   /* The tuple credentials are not valid. */
 #if MONOMAC
-		/// <summary>To be added.</summary>
+		/// <summary>A misspelled alias for InvalidTupleCredentials.</summary>
 		[Obsolete ("Use InvalidTupleCredentials.")]
 		InvalidTupleCredendtials = InvalidTupleCredentials,
 #endif
@@ -791,13 +791,13 @@ namespace Security {
 		[MacCatalyst (13, 1)]
 		Raw = 0x4000,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The PKCS#1 MD2 padding algorithm.</summary>
 		[Obsolete ("Don't use hash algorithm.")]
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		PKCS1MD2 = 0x8000,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The PKCS#1 MD5 padding algorithm.</summary>
 		[Obsolete ("Don't use hash algorithm.")]
 		[NoTV]
 		[MacCatalyst (13, 1)]

@@ -22,7 +22,7 @@ namespace AppKit {
 			return ret;
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets the swap rectangle for this OpenGL context.</summary>
 		unsafe public Rectangle SwapRectangle {
 			get {
 				Rectangle ret;

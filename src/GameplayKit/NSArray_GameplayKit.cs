@@ -11,7 +11,6 @@
 
 namespace GameplayKit {
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
@@ -20,10 +19,9 @@ namespace GameplayKit {
 
 		/// <typeparam name="T">To be added.</typeparam>
 		///         <param name="This">The instance on which this method operates.</param>
-		///         <param name="randomSource">To be added.</param>
+		///         <param name="randomSource">The random source.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[Export ("shuffledArrayWithRandomSource:")]
 		public static T [] GetShuffledArray<T> (this NSArray This, GKRandomSource randomSource) where T : class, INativeObject
 		{
@@ -39,7 +37,6 @@ namespace GameplayKit {
 		///         <param name="This">The instance on which this method operates.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[Export ("shuffledArray")]
 		public static T [] GetShuffledArray<T> (this NSArray This) where T : class, INativeObject
 		{

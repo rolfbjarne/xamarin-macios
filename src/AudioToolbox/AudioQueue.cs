@@ -117,7 +117,7 @@ namespace AudioToolbox {
 		GeneralParamError = -50,
 	}
 
-	/// <summary>An exception thrown by the AudioQueue class if there is a problem with the configuration parameters.</summary>
+	/// <summary>An exception thrown by the AudioQueue class if there is AProblem with the configuration parameters.</summary>
 	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -346,7 +346,7 @@ namespace AudioToolbox {
 		/// <summary>The tap is a siphon tap, it can only examine the AudioBuffers provided to the callback, but should not modify its contents.</summary>
 		Siphon = (1 << 2),
 
-		/// <summary>Indicates the start of audio and is returned by GetSourceAudio.  As a flag passed to a tap processor, this indicates a discontinuity in the audio.   Either because it is starting, or because there is a playback gap.  For the tap processor this means  that the data being requested should correspond to the first frame in the audio source.   This should reset any internal state in the tap processor that might have been saved from previous invocations to the tap handler.</summary>
+		/// <summary>Indicates the start of audio and is returned by GetSourceAudio.  As a flag passed to a tap processor, this indicates a discontinuity in the audio.   Either because it is starting, or because there is APlayback gap.  For the tap processor this means  that the data being requested should correspond to the first frame in the audio source.   This should reset any internal state in the tap processor that might have been saved from previous invocations to the tap handler.</summary>
 		StartOfStream = (1 << 8),
 		/// <summary>Indicates the end of the audio stream, it happens when the queue is being stopped asynchronosuly and is returned by a call to GetSourceAudio.  You must propagate this value to the caller.</summary>
 		EndOfStream = (1 << 9),
@@ -486,7 +486,7 @@ namespace AudioToolbox {
 
 #if !(XAMCORE_5_0 && __MACOS__)
 #if !__MACOS__
-	/// <summary>Channel assignments used as a parameter to the <see cref="AudioToolbox.AudioQueue.SetChannelAssignments(AudioToolbox.AudioQueueChannelAssignment[])" /> method.</summary>
+	/// <summary>Channel assignments used as AParameter to the <see cref="AudioToolbox.AudioQueue.SetChannelAssignments(AudioToolbox.AudioQueueChannelAssignment[])" /> method.</summary>
 #endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -766,7 +766,7 @@ namespace AudioToolbox {
 #if !XAMCORE_5_0
 		/// <summary>Allocates an audio buffer associated with this <see cref="AudioQueue" />, used for fixed bit rate buffers.</summary>
 		/// <param name="bufferSize">The audio buffer size to allocate (in bytes).</param>
-		/// <param name="audioQueueBuffer">The allocated buffer on return. Cast this to a pointer to a <see cref="AudioQueueBuffer" /> to use it.</param>
+		/// <param name="audioQueueBuffer">The allocated buffer on return. Cast this to APointer to a <see cref="AudioQueueBuffer" /> to use it.</param>
 		/// <returns><see cref="AudioQueueStatus.Ok" /> on success and the <paramref name="audioQueueBuffer" /> pointing to the buffer, otherwise the error code.</returns>
 		/// <remarks>
 		///   <para>Use the <see cref="AllocateBuffer(int,int,out AudioQueueBuffer*)" /> to allocate buffers that will be used with variable bit rate encodings.</para>
@@ -809,7 +809,7 @@ namespace AudioToolbox {
 		/// <summary>Allocates an audio queue object for variable-bit-rate buffers.</summary>
 		/// <param name="bufferSize">Size of the audio data in the allocated buffer, in bytes.</param>
 		/// <param name="nPackets">The number of elements in the packet descriptions array in the returned buffer.</param>
-		/// <param name="audioQueueBuffer">The allocated buffer on return. Cast this to a pointer to a <see cref="AudioQueueBuffer" /> to use it.</param>
+		/// <param name="audioQueueBuffer">The allocated buffer on return. Cast this to APointer to a <see cref="AudioQueueBuffer" /> to use it.</param>
 		/// <returns><see cref="AudioQueueStatus.Ok" /> on success and the <paramref name="audioQueueBuffer" /> pointing to the buffer, otherwise the error code.</returns>
 		/// <remarks>
 		///   <para>Use the <see cref="AllocateBuffer(int,out AudioQueueBuffer*)" /> to allocate buffers that will be used with fixed bit rate encodings.</para>
@@ -978,7 +978,7 @@ namespace AudioToolbox {
 		///         <param name="trimFramesAtEnd">The number of frames to skip at the end of the buffer.</param>
 		///         <param name="parameterEvents">An array of parameter events for the buffer.</param>
 		///         <param name="actualStartTime">The time when the buffer will start playing.</param>
-		///         <summary>Adds a buffer that should play as soon as possible to the buffer queue of a playback audio queue.</summary>
+		///         <summary>Adds a buffer that should play as soon as possible to the buffer queue of APlayback audio queue.</summary>
 		///         <returns>AudioQueueStatus.Ok on success, otherwise the error.</returns>
 		///         <remarks>
 		///         </remarks>
@@ -1039,7 +1039,7 @@ namespace AudioToolbox {
 		///         <param name="trimFramesAtEnd">The number of frames to skip at the end of the buffer.</param>
 		///         <param name="parameterEvents">An array of parameter events for the buffer.</param>
 		///         <param name="actualStartTime">The time when the buffer will start playing.</param>
-		///         <summary>Adds a buffer that should play as soon as possible to the buffer queue of a playback audio queue.</summary>
+		///         <summary>Adds a buffer that should play as soon as possible to the buffer queue of APlayback audio queue.</summary>
 		///         <returns>AudioQueueStatus.Ok on success, otherwise the error.</returns>
 		///         <remarks>
 		///         </remarks>

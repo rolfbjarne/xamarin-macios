@@ -92,7 +92,7 @@ namespace CoreText {
 		/// <param name="glyphName">The glyph name.</param>
 		///         <param name="font">The font.</param>
 		///         <param name="baseString">The base string.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CTGlyphInfo" /> instance.</summary>
 		public CTGlyphInfo (string glyphName, CTFont font, string baseString)
 			: base (Create (glyphName, font, baseString), true, verify: true)
 		{
@@ -121,7 +121,7 @@ namespace CoreText {
 		/// <param name="glyph">The glyph.</param>
 		///         <param name="font">The font.</param>
 		///         <param name="baseString">The base string.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CTGlyphInfo" /> instance.</summary>
 		public CTGlyphInfo (CGGlyph glyph, CTFont font, string baseString)
 			: base (Create (glyph, font, baseString), true, verify: true)
 		{
@@ -146,7 +146,7 @@ namespace CoreText {
 		/// <param name="cid">The cid.</param>
 		///         <param name="collection">The collection.</param>
 		///         <param name="baseString">The base string.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CTGlyphInfo" /> instance.</summary>
 		public CTGlyphInfo (CGFontIndex cid, CTCharacterCollection collection, string baseString)
 			: base (Create (cid, collection, baseString), true, true)
 		{
@@ -156,8 +156,7 @@ namespace CoreText {
 		#region Glyph Info Access
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTGlyphInfoGetGlyphName (IntPtr glyphInfo);
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the glyph name.</summary>
 		public string? GlyphName {
 			get {
 				var cfStringRef = CTGlyphInfoGetGlyphName (Handle);
@@ -167,16 +166,14 @@ namespace CoreText {
 
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern CGFontIndex CTGlyphInfoGetCharacterIdentifier (IntPtr glyphInfo);
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the character identifier.</summary>
 		public CGFontIndex CharacterIdentifier {
 			get { return CTGlyphInfoGetCharacterIdentifier (Handle); }
 		}
 
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern CTCharacterCollection CTGlyphInfoGetCharacterCollection (IntPtr glyphInfo);
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the character collection.</summary>
 		public CTCharacterCollection CharacterCollection {
 			get { return CTGlyphInfoGetCharacterCollection (Handle); }
 		}
@@ -199,7 +196,6 @@ namespace CoreText {
 		#endregion
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override string? ToString ()
 		{
 			return GlyphName;

@@ -46,7 +46,7 @@ namespace UIKit {
 	public static class UIInterfaceOrientationExtensions {
 		/// <param name="orientation">The value to operate on.</param>
 		///         <summary>Determines if the orientation is one of the portrait orientations.</summary>
-		///         <returns>true if this is a portrait orientation.</returns>
+		///         <returns>true if this is APortrait orientation.</returns>
 		public static bool IsPortrait (this UIInterfaceOrientation orientation)
 		{
 			return orientation == UIInterfaceOrientation.PortraitUpsideDown ||

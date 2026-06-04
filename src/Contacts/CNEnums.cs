@@ -16,7 +16,7 @@ namespace Contacts {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum CNContactType : long {
-		/// <summary>The <see cref="Contacts.CNContact" /> is a person.</summary>
+		/// <summary>The <see cref="Contacts.CNContact" /> is APerson.</summary>
 		Person,
 		/// <summary>The <see cref="Contacts.CNContact" /> is an organization.</summary>
 		Organization,

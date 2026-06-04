@@ -69,7 +69,7 @@ namespace PdfKit {
 	public enum PdfWidgetControlType : long {
 		/// <summary>Indicates that the control type is not known.</summary>
 		Unknown = -1,
-		/// <summary>Indicates a push button.</summary>
+		/// <summary>Indicates APush button.</summary>
 		PushButton = 0,
 		/// <summary>Indicates a radio button.</summary>
 		RadioButton = 1,
@@ -122,7 +122,7 @@ namespace PdfKit {
 		Help = 3,
 		/// <summary>Indicates a new paragraph icon.</summary>
 		NewParagraph = 4,
-		/// <summary>Indicates a paragraph icon.</summary>
+		/// <summary>Indicates AParagraph icon.</summary>
 		Paragraph = 5,
 		/// <summary>Indicates an insert icon.</summary>
 		Insert = 6,
@@ -173,7 +173,7 @@ namespace PdfKit {
 	[Native]
 	[TV (18, 2)]
 	public enum PdfDisplayBox : long {
-		/// <summary>Indicates a rectangle around a physical medium in user space.</summary>
+		/// <summary>Indicates a rectangle around APhysical medium in user space.</summary>
 		Media = 0,
 		/// <summary>Indicates a crop rectangle around the visible portion of the page.</summary>
 		Crop = 1,
@@ -181,7 +181,7 @@ namespace PdfKit {
 		Bleed = 2,
 		/// <summary>Indicates a box around intended finish boundaries.</summary>
 		Trim = 3,
-		/// <summary>Indicates a rectangle around the boundaries of a page's content for display.</summary>
+		/// <summary>Indicates a rectangle around the boundaries of APage's content for display.</summary>
 		Art = 4,
 	}
 
@@ -206,7 +206,7 @@ namespace PdfKit {
 	public enum PdfAreaOfInterest : long {
 		/// <summary>Indicates that the touch position is over an ordinary area.</summary>
 		NoArea = 0,
-		/// <summary>Indicates that the touch position is over a page.</summary>
+		/// <summary>Indicates that the touch position is over APage.</summary>
 		PageArea = 1 << 0,
 		/// <summary>Indicates that the touch position is over a text area.</summary>
 		TextArea = 1 << 1,
@@ -220,7 +220,7 @@ namespace PdfKit {
 		TextFieldArea = 1 << 5,
 		/// <summary>Indicates that the touch position is over an icon.</summary>
 		IconArea = 1 << 6,
-		/// <summary>Indicates that the touch position is over a popup.</summary>
+		/// <summary>Indicates that the touch position is over APopup.</summary>
 		PopupArea = 1 << 7,
 		/// <summary>Indicates that the touch position is over an image.</summary>
 		ImageArea = 1 << 8,

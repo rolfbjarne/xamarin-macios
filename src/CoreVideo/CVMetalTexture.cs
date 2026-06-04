@@ -39,16 +39,14 @@ namespace CoreVideo {
 			/* float[2] */ IntPtr lowerLeft, /* float[2] */ IntPtr lowerRight, /* float[2] */ IntPtr upperRight,
 			/* float[2] */ IntPtr upperLeft);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the texture.</summary>
 		public IMTLTexture? Texture {
 			get {
 				return Runtime.GetINativeObject<IMTLTexture> (CVMetalTextureGetTexture (Handle), owns: false);
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the is flipped.</summary>
 		public bool IsFlipped {
 			get {
 				return CVMetalTextureIsFlipped (Handle) != 0;
@@ -59,7 +57,7 @@ namespace CoreVideo {
 		///         <param name="lowerRight">The lower right.</param>
 		///         <param name="upperRight">The upper right.</param>
 		///         <param name="upperLeft">The upper left.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Gets clean tex coords.</summary>
 		public void GetCleanTexCoords (out float [] lowerLeft, out float [] lowerRight, out float [] upperRight, out float [] upperLeft)
 		{
 			lowerLeft = new float [2];

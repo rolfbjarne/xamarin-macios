@@ -83,8 +83,7 @@ namespace CoreMidi {
 		/// <param name="persistentOwnerID">The persistent owner i d.</param>
 		///         <param name="connectionParams">The connection params.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Create.</summary>
 		public static MidiThruConnection? Create (string persistentOwnerID, MidiThruConnectionParams connectionParams, out MidiError error)
 		{
 			MidiThruConnectionRef ret;
@@ -104,8 +103,7 @@ namespace CoreMidi {
 
 		/// <param name="persistentOwnerID">The persistent owner i d.</param>
 		///         <param name="connectionParams">The connection params.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Create.</summary>
 		public static MidiThruConnection? Create (string persistentOwnerID, MidiThruConnectionParams connectionParams)
 		{
 			MidiError error;
@@ -118,8 +116,7 @@ namespace CoreMidi {
 			/* CFDataRef */ IntPtr* outConnectionParams);
 
 		/// <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets params.</summary>
 		public MidiThruConnectionParams? GetParams (out MidiError error)
 		{
 			IntPtr ret;
@@ -137,8 +134,7 @@ namespace CoreMidi {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Gets params.</summary>
 		public MidiThruConnectionParams? GetParams ()
 		{
 			MidiError error;
@@ -151,8 +147,7 @@ namespace CoreMidi {
 			/* CFDataRef */ IntPtr inConnectionParams);
 
 		/// <param name="connectionParams">The connection params.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Sets params.</summary>
 		public MidiError SetParams (MidiThruConnectionParams connectionParams)
 		{
 			if (connectionParams is null)
@@ -172,7 +167,6 @@ namespace CoreMidi {
 		/// <param name="persistentOwnerID">The persistent owner i d.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static MidiThruConnection []? Find (string persistentOwnerID, out MidiError error)
 		{
 			if (persistentOwnerID is null)
@@ -205,7 +199,6 @@ namespace CoreMidi {
 
 		/// <param name="persistentOwnerID">The persistent owner i d.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static MidiThruConnection []? Find (string persistentOwnerID)
 		{
 			MidiError error;

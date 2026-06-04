@@ -392,7 +392,7 @@ namespace CallKit {
 
 		/// <param name="extensionContext">The extension context.</param>
 		/// <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Called when a request to the extension context has failed.</summary>
 		[Abstract]
 		[Export ("requestFailedForExtensionContext:withError:")]
 		void RequestFailed (CXCallDirectoryExtensionContext extensionContext, NSError error);

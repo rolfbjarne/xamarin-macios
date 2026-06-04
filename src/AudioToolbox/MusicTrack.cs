@@ -23,36 +23,29 @@ namespace AudioToolbox {
 
 	// MusicPlayer.h
 	/// <summary>Encapsulates a MIDI musical note.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct MidiNoteMessage {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The MIDI channel.</summary>
 		public byte Channel;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The MIDI note number.</summary>
 		public byte Note;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The note velocity.</summary>
 		public byte Velocity;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The release velocity.</summary>
 		public byte ReleaseVelocity;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The note duration in beats.</summary>
 		public /* Float32 */ float Duration;
 
-		/// <param name="channel">To be added.</param>
-		///         <param name="note">To be added.</param>
-		///         <param name="velocity">To be added.</param>
-		///         <param name="releaseVelocity">To be added.</param>
-		///         <param name="duration">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="channel">The channel.</param>
+		/// <param name="note">The note.</param>
+		/// <param name="velocity">The velocity.</param>
+		/// <param name="releaseVelocity">The releaseVelocity.</param>
+		/// <param name="duration">The duration.</param>
+		/// <summary>Creates a MIDI note message with the specified parameters.</summary>
 		public MidiNoteMessage (byte channel, byte note, byte velocity, byte releaseVelocity, float duration)
 		{
 			Channel = channel;
@@ -65,31 +58,25 @@ namespace AudioToolbox {
 
 	// MusicPlayer.h
 	/// <summary>A struct describing a MIDI channel message. Used by the <see cref="AudioToolbox.MusicTrack.AddMidiChannelEvent(System.Double,AudioToolbox.MidiChannelMessage)" /> method.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct MidiChannelMessage {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The MIDI status byte.</summary>
 		public byte Status;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The first data byte.</summary>
 		public byte Data1;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The second data byte.</summary>
 		public byte Data2;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Reserved for future use.</summary>
 		public byte Reserved;
 
-		/// <param name="status">To be added.</param>
-		///         <param name="data1">To be added.</param>
-		///         <param name="data2">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="status">The status.</param>
+		/// <param name="data1">The data1.</param>
+		/// <param name="data2">The data2.</param>
+		/// <summary>Creates a MIDI channel message with the specified parameters.</summary>
 		public MidiChannelMessage (byte status, byte data1, byte data2)
 		{
 			Status = status;
@@ -105,7 +92,6 @@ namespace AudioToolbox {
 	// IntPtr buffer with the data
 	//
 	/// <summary>An abstract base class for <see cref="AudioToolbox.MidiMetaEvent" /> and <see cref="AudioToolbox.MidiRawData" />.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -152,14 +138,12 @@ namespace AudioToolbox {
 
 #if !COREBUILD
 	/// <summary>Encapsulates a MIDI System-Exclusive (SysEx) message.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public class MidiRawData : MidiData {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a new empty MIDI raw data instance.</summary>
 		public MidiRawData () { }
 
 		internal override IntPtr ToUnmanaged ()
@@ -180,14 +164,12 @@ namespace AudioToolbox {
 	}
 
 	/// <summary>A subclass of <see cref="AudioToolbox.MidiRawData" /> that describes a user-defined event.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public class MusicEventUserData : MidiRawData {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a new empty user data event.</summary>
 		public MusicEventUserData () { }
 
 		internal MusicEventUserData (IntPtr handle)
@@ -211,14 +193,12 @@ namespace AudioToolbox {
 	// IntPtr buffer with the data
 	//
 	/// <summary>Encapsulates a MIDI meta-event such as a time signature, lyrics, etc.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public class MidiMetaEvent : MidiData {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The meta event type.</summary>
 		public byte MetaEventType;
 
 		internal override IntPtr ToUnmanaged ()
@@ -242,21 +222,17 @@ namespace AudioToolbox {
 
 	// MusicPlayer.h
 	/// <summary>A struct that describes a note-on event with extended parameters.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct ExtendedNoteOnEvent {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The instrument identifier.</summary>
 		public /* MusicDeviceInstrumentID */ uint InstrumentID;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The device group identifier.</summary>
 		public /* MusicDeviceGroupID */ uint DeviceGroupID;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The note duration.</summary>
 		public /* Float32 */ float Duration;
 
 		// MusicDeviceNoteParams extendedParams
@@ -265,17 +241,14 @@ namespace AudioToolbox {
 #pragma warning disable 169
 		int argCount;
 #pragma warning restore 169
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The pitch value.</summary>
 		public float Pitch;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The velocity value.</summary>
 		public float Velocity;
 	}
 #endif
 
 	/// <summary>A music track is a series of time-stamped music events and is a component of a <see cref="AudioToolbox.MusicSequence" />.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -304,9 +277,8 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus MusicSequenceDisposeTrack (/* MusicSequence */ IntPtr inSequence, /* MusicTrack */ IntPtr inTrack);
 
-		/// <param name="sequence">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="sequence">The music sequence.</param>
+		/// <summary>Creates a music track from the specified sequence.</summary>
 		public static MusicTrack? FromSequence (MusicSequence sequence)
 		{
 			if (sequence is null)
@@ -317,8 +289,7 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		unsafe extern static /* OSStatus */ MusicPlayerStatus MusicTrackGetSequence (/* MusicTrack */ IntPtr inTrack, /* MusicSequence* */ IntPtr* outSequence);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the music sequence that owns this track.</summary>
 		public MusicSequence? Sequence {
 			get {
 				IntPtr seqHandle;
@@ -334,9 +305,8 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus MusicTrackSetDestMIDIEndpoint (/* MusicTrack */ IntPtr inTrack, MidiEndpointRef inEndpoint);
 
-		/// <param name="endpoint">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="endpoint">The endpoint.</param>
+		/// <summary>Sets the destination MIDI endpoint for this track.</summary>
 		public MusicPlayerStatus SetDestMidiEndpoint (MidiEndpoint endpoint)
 		{
 			return MusicTrackSetDestMIDIEndpoint (Handle, endpoint is null ? MidiObject.InvalidRef : endpoint.MidiHandle);
@@ -360,9 +330,8 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus MusicTrackSetDestNode (/* MusicTrack */ IntPtr inTrack, /* AUNode */ int inNode);
 
-		/// <param name="node">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="node">The node.</param>
+		/// <summary>Sets the destination Audio Unit node for this track.</summary>
 		public MusicPlayerStatus SetDestNode (int node)
 		{
 			return MusicTrackSetDestNode (Handle, node);
@@ -391,8 +360,7 @@ namespace AudioToolbox {
 			TimeResolution,
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether this track is muted.</summary>
 		public bool MuteStatus {
 			get {
 				byte val;
@@ -410,8 +378,7 @@ namespace AudioToolbox {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether this track is soloed.</summary>
 		public bool SoloStatus {
 			get {
 				byte val;
@@ -429,8 +396,7 @@ namespace AudioToolbox {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the track length in beats.</summary>
 		public double TrackLength {
 			get {
 				double value = 0;
@@ -450,10 +416,9 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		unsafe extern static /* OSStatus */ MusicPlayerStatus MusicTrackNewMIDINoteEvent (/* MusicTrack */ IntPtr inTrack, /* MusicTimeStamp */ double inTimeStamp, MidiNoteMessage* inMessage);
 
-		/// <param name="timeStamp">To be added.</param>
-		///         <param name="message">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="timeStamp">The timestamp in beats.</param>
+		/// <param name="message">The MIDI channel message.</param>
+		/// <summary>Adds a MIDI note event to the track.</summary>
 		public unsafe MusicPlayerStatus AddMidiNoteEvent (double timeStamp, MidiNoteMessage message)
 		{
 			return MusicTrackNewMIDINoteEvent (Handle, timeStamp, &message);
@@ -462,10 +427,9 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		unsafe extern static /* OSStatus */ MusicPlayerStatus MusicTrackNewMIDIChannelEvent (/* MusicTrack */ IntPtr inTrack, /* MusicTimeStamp */ double inTimeStamp, MidiChannelMessage* inMessage);
 
-		/// <param name="timestamp">To be added.</param>
-		///         <param name="channelMessage">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="timestamp">The timestamp in beats.</param>
+		/// <param name="channelMessage">The channelMessage.</param>
+		/// <summary>Adds a MIDI channel event to the track.</summary>
 		public unsafe MusicPlayerStatus AddMidiChannelEvent (double timestamp, MidiChannelMessage channelMessage)
 		{
 			return MusicTrackNewMIDIChannelEvent (Handle, timestamp, &channelMessage);
@@ -474,10 +438,9 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus MusicTrackNewMIDIRawDataEvent (/* MusicTrack */ IntPtr inTrack, /* MusicTimeStamp */ double inTimestamp, /* MIDIRawData* */ IntPtr inRawData);
 
-		/// <param name="timestamp">To be added.</param>
-		///         <param name="rawData">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="timestamp">The timestamp in beats.</param>
+		/// <param name="rawData">The rawData.</param>
+		/// <summary>Adds raw MIDI data to the track.</summary>
 		public MusicPlayerStatus AddMidiRawDataEvent (double timestamp, MidiRawData rawData)
 		{
 			if (rawData is null)
@@ -492,10 +455,9 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		unsafe extern static /* OSStatus */ MusicPlayerStatus MusicTrackNewExtendedNoteEvent (/* MusicTrack */ IntPtr inTrack, /* MusicTimeStamp */ double inTimeStamp, ExtendedNoteOnEvent* inInfo);
 
-		/// <param name="timestamp">To be added.</param>
-		///         <param name="evt">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="timestamp">The timestamp in beats.</param>
+		/// <param name="evt">The evt.</param>
+		/// <summary>Adds an extended note event to the track.</summary>
 		public MusicPlayerStatus AddNewExtendedNoteEvent (double timestamp, ExtendedNoteOnEvent evt)
 		{
 			unsafe {
@@ -506,10 +468,9 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus MusicTrackNewExtendedTempoEvent (/* MusicTrack */ IntPtr inTrack, /* MusicTimeStamp */ double inTimeStamp, /* Float64 */ double bpm);
 
-		/// <param name="timestamp">To be added.</param>
-		///         <param name="bmp">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="timestamp">The timestamp in beats.</param>
+		/// <param name="bmp">The bmp.</param>
+		/// <summary>Adds an extended tempo event at the specified timestamp.</summary>
 		public MusicPlayerStatus AddExtendedTempoEvent (double timestamp, double bmp)
 		{
 			return MusicTrackNewExtendedTempoEvent (Handle, timestamp, bmp);
@@ -518,10 +479,9 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus MusicTrackNewMetaEvent (/* MusicTrack */ IntPtr inTrack, /* MusicTimeStamp */ double inTimeStamp, /* MIDIMetaEvent* */ IntPtr inMetaEvent);
 
-		/// <param name="timestamp">To be added.</param>
-		///         <param name="metaEvent">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="timestamp">The timestamp in beats.</param>
+		/// <param name="metaEvent">The metaEvent.</param>
+		/// <summary>Adds a meta event at the specified timestamp.</summary>
 		public MusicPlayerStatus AddMetaEvent (double timestamp, MidiMetaEvent metaEvent)
 		{
 			if (metaEvent is null)
@@ -536,10 +496,9 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus MusicTrackNewUserEvent (/* MusicTrack */ IntPtr inTrack, /* MusicTimeStamp */ double inTimeStamp, /* MusicEventUserData* */ IntPtr inUserData);
 
-		/// <param name="timestamp">To be added.</param>
-		///         <param name="userData">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="timestamp">The timestamp in beats.</param>
+		/// <param name="userData">The userData.</param>
+		/// <summary>Adds a user event at the specified timestamp.</summary>
 		public MusicPlayerStatus AddUserEvent (double timestamp, MusicEventUserData userData)
 		{
 			if (userData is null)
@@ -553,11 +512,10 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus MusicTrackMoveEvents (/* MusicTrack */ IntPtr inTrack, /* MusicTimeStamp */ double inStartTime, /* MusicTimeStamp */ double inEndTime, /* MusicTimeStamp */ double inMoveTime);
 
-		/// <param name="startTime">To be added.</param>
-		///         <param name="endTime">To be added.</param>
-		///         <param name="moveTime">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="startTime">The start time in beats.</param>
+		/// <param name="endTime">The end time in beats.</param>
+		/// <param name="moveTime">The amount to move in beats.</param>
+		/// <summary>Moves events within a time range by the specified amount.</summary>
 		public MusicPlayerStatus MoveEvents (double startTime, double endTime, double moveTime)
 		{
 			return MusicTrackMoveEvents (Handle, startTime, endTime, moveTime);
@@ -566,10 +524,9 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus MusicTrackClear (/* MusicTrack */ IntPtr inTrack, /* MusicTimeStamp */ double inStartTime, /* MusicTimeStamp */ double inEndTime);
 
-		/// <param name="startTime">To be added.</param>
-		///         <param name="endTime">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="startTime">The start time in beats.</param>
+		/// <param name="endTime">The end time in beats.</param>
+		/// <summary>Clears events within the specified time range.</summary>
 		public MusicPlayerStatus Clear (double startTime, double endTime)
 		{
 			return MusicTrackClear (Handle, startTime, endTime);
@@ -578,10 +535,9 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus MusicTrackCut (/* MusicTrack */ IntPtr inTrack, /* MusicTimeStamp */ double inStartTime, /* MusicTimeStamp */ double inEndTime);
 
-		/// <param name="startTime">To be added.</param>
-		///         <param name="endTime">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="startTime">The start time in beats.</param>
+		/// <param name="endTime">The end time in beats.</param>
+		/// <summary>Cuts events within the specified time range.</summary>
 		public MusicPlayerStatus Cut (double startTime, double endTime)
 		{
 			return MusicTrackCut (Handle, startTime, endTime);
@@ -590,12 +546,11 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus MusicTrackCopyInsert (/* MusicTrack */ IntPtr inSourceTrack, /* MusicTimeStamp */ double inSourceStartTime, double /* MusicTimeStamp */ inSourceEndTime, /* MusicTrack */ IntPtr inDestTrack, /* MusicTimeStamp */ double inDestInsertTime);
 
-		/// <param name="sourceStartTime">To be added.</param>
-		///         <param name="sourceEndTime">To be added.</param>
-		///         <param name="targetTrack">To be added.</param>
-		///         <param name="targetInsertTime">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="sourceStartTime">The sourceStartTime.</param>
+		/// <param name="sourceEndTime">The sourceEndTime.</param>
+		/// <param name="targetTrack">The targetTrack.</param>
+		/// <param name="targetInsertTime">The targetInsertTime.</param>
+		/// <summary>Copies events from a source track and inserts them.</summary>
 		public MusicPlayerStatus CopyInsert (double sourceStartTime, double sourceEndTime, MusicTrack targetTrack, double targetInsertTime)
 		{
 			if (targetTrack is null)
@@ -608,12 +563,11 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus MusicTrackMerge (/* MusicTrack */ IntPtr inSourceTrack, /* MusicTimeStamp */ double inSourceStartTime, double /* MusicTimeStamp */ inSourceEndTime, /* MusicTrack */ IntPtr inDestTrack, /* MusicTimeStamp */ double inDestInsertTime);
 
-		/// <param name="sourceStartTime">To be added.</param>
-		///         <param name="sourceEndTime">To be added.</param>
-		///         <param name="targetTrack">To be added.</param>
-		///         <param name="targetInsertTime">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="sourceStartTime">The sourceStartTime.</param>
+		/// <param name="sourceEndTime">The sourceEndTime.</param>
+		/// <param name="targetTrack">The targetTrack.</param>
+		/// <param name="targetInsertTime">The targetInsertTime.</param>
+		/// <summary>Merges events from a source track into this track.</summary>
 		public MusicPlayerStatus Merge (double sourceStartTime, double sourceEndTime, MusicTrack targetTrack, double targetInsertTime)
 		{
 			if (targetTrack is null)

@@ -10,7 +10,6 @@ namespace AppKit {
 		/// <param name="green">To be added.</param>
 		/// <param name="blue">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static NSColor FromRgb (nfloat red, nfloat green, nfloat blue)
 		{
@@ -21,7 +20,6 @@ namespace AppKit {
 		///         <param name="green">To be added.</param>
 		///         <param name="blue">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromRgb (byte red, byte green, byte blue)
 		{
@@ -32,7 +30,6 @@ namespace AppKit {
 		///         <param name="green">To be added.</param>
 		///         <param name="blue">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromRgb (int red, int green, int blue)
 		{
@@ -44,7 +41,6 @@ namespace AppKit {
 		///         <param name="blue">To be added.</param>
 		///         <param name="alpha">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromRgba (byte red, byte green, byte blue, byte alpha)
 		{
@@ -56,7 +52,6 @@ namespace AppKit {
 		///         <param name="blue">To be added.</param>
 		///         <param name="alpha">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromRgba (int red, int green, int blue, int alpha)
 		{
@@ -67,7 +62,6 @@ namespace AppKit {
 		/// <param name="saturation">To be added.</param>
 		/// <param name="brightness">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static NSColor FromHsb (nfloat hue, nfloat saturation, nfloat brightness)
 		{
@@ -79,7 +73,6 @@ namespace AppKit {
 		///         <param name="brightness">To be added.</param>
 		///         <param name="alpha">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromHsba (byte hue, byte saturation, byte brightness, byte alpha)
 		{
@@ -90,7 +83,6 @@ namespace AppKit {
 		///         <param name="saturation">To be added.</param>
 		///         <param name="brightness">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromHsb (byte hue, byte saturation, byte brightness)
 		{
@@ -102,7 +94,6 @@ namespace AppKit {
 		///         <param name="brightness">To be added.</param>
 		///         <param name="alpha">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromHsba (int hue, int saturation, int brightness, int alpha)
 		{
@@ -113,7 +104,6 @@ namespace AppKit {
 		///         <param name="saturation">To be added.</param>
 		///         <param name="brightness">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromHsb (int hue, int saturation, int brightness)
 		{
@@ -124,7 +114,6 @@ namespace AppKit {
 		/// <param name="green">To be added.</param>
 		/// <param name="blue">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static NSColor FromDeviceRgb (nfloat red, nfloat green, nfloat blue)
 		{
@@ -135,7 +124,6 @@ namespace AppKit {
 		///         <param name="green">To be added.</param>
 		///         <param name="blue">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromDeviceRgb (byte red, byte green, byte blue)
 		{
@@ -146,7 +134,6 @@ namespace AppKit {
 		///         <param name="green">To be added.</param>
 		///         <param name="blue">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromDeviceRgb (int red, int green, int blue)
 		{
@@ -158,7 +145,6 @@ namespace AppKit {
 		///         <param name="blue">To be added.</param>
 		///         <param name="alpha">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromDeviceRgba (byte red, byte green, byte blue, byte alpha)
 		{
@@ -170,7 +156,6 @@ namespace AppKit {
 		///         <param name="blue">To be added.</param>
 		///         <param name="alpha">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromDeviceRgba (int red, int green, int blue, int alpha)
 		{
@@ -181,7 +166,6 @@ namespace AppKit {
 		/// <param name="saturation">To be added.</param>
 		/// <param name="brightness">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static NSColor FromDeviceHsb (nfloat hue, nfloat saturation, nfloat brightness)
 		{
@@ -193,7 +177,6 @@ namespace AppKit {
 		///         <param name="brightness">To be added.</param>
 		///         <param name="alpha">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromDeviceHsba (byte hue, byte saturation, byte brightness, byte alpha)
 		{
@@ -204,7 +187,6 @@ namespace AppKit {
 		///         <param name="saturation">To be added.</param>
 		///         <param name="brightness">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromDeviceHsb (byte hue, byte saturation, byte brightness)
 		{
@@ -216,7 +198,6 @@ namespace AppKit {
 		///         <param name="brightness">To be added.</param>
 		///         <param name="alpha">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromDeviceHsba (int hue, int saturation, int brightness, int alpha)
 		{
@@ -227,7 +208,6 @@ namespace AppKit {
 		///         <param name="saturation">To be added.</param>
 		///         <param name="brightness">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromDeviceHsb (int hue, int saturation, int brightness)
 		{
@@ -239,7 +219,6 @@ namespace AppKit {
 		/// <param name="yellow">To be added.</param>
 		/// <param name="black">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static NSColor FromDeviceCymk (nfloat cyan, nfloat magenta, nfloat yellow, nfloat black)
 		{
@@ -252,7 +231,6 @@ namespace AppKit {
 		///         <param name="black">To be added.</param>
 		///         <param name="alpha">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromDeviceCymka (byte cyan, byte magenta, byte yellow, byte black, byte alpha)
 		{
@@ -264,7 +242,6 @@ namespace AppKit {
 		///         <param name="yellow">To be added.</param>
 		///         <param name="black">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromDeviceCymk (byte cyan, byte magenta, byte yellow, byte black)
 		{
@@ -277,7 +254,6 @@ namespace AppKit {
 		///         <param name="black">To be added.</param>
 		///         <param name="alpha">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromDeviceCymka (int cyan, int magenta, int yellow, int black, int alpha)
 		{
@@ -289,7 +265,6 @@ namespace AppKit {
 		///         <param name="yellow">To be added.</param>
 		///         <param name="black">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromDeviceCymk (int cyan, int magenta, int yellow, int black)
 		{
@@ -300,7 +275,6 @@ namespace AppKit {
 		/// <param name="green">To be added.</param>
 		/// <param name="blue">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static NSColor FromCalibratedRgb (nfloat red, nfloat green, nfloat blue)
 		{
@@ -311,7 +285,6 @@ namespace AppKit {
 		///         <param name="green">To be added.</param>
 		///         <param name="blue">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromCalibratedRgb (byte red, byte green, byte blue)
 		{
@@ -322,7 +295,6 @@ namespace AppKit {
 		///         <param name="green">To be added.</param>
 		///         <param name="blue">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromCalibratedRgb (int red, int green, int blue)
 		{
@@ -334,7 +306,6 @@ namespace AppKit {
 		///         <param name="blue">To be added.</param>
 		///         <param name="alpha">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromCalibratedRgba (byte red, byte green, byte blue, byte alpha)
 		{
@@ -346,7 +317,6 @@ namespace AppKit {
 		///         <param name="blue">To be added.</param>
 		///         <param name="alpha">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromCalibratedRgba (int red, int green, int blue, int alpha)
 		{
@@ -357,7 +327,6 @@ namespace AppKit {
 		/// <param name="saturation">To be added.</param>
 		/// <param name="brightness">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static NSColor FromCalibratedHsb (nfloat hue, nfloat saturation, nfloat brightness)
 		{
@@ -369,7 +338,6 @@ namespace AppKit {
 		///         <param name="brightness">To be added.</param>
 		///         <param name="alpha">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromCalibratedHsba (byte hue, byte saturation, byte brightness, byte alpha)
 		{
@@ -380,7 +348,6 @@ namespace AppKit {
 		///         <param name="saturation">To be added.</param>
 		///         <param name="brightness">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromCalibratedHsb (byte hue, byte saturation, byte brightness)
 		{
@@ -392,7 +359,6 @@ namespace AppKit {
 		///         <param name="brightness">To be added.</param>
 		///         <param name="alpha">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromCalibratedHsba (int hue, int saturation, int brightness, int alpha)
 		{
@@ -403,7 +369,6 @@ namespace AppKit {
 		///         <param name="saturation">To be added.</param>
 		///         <param name="brightness">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSColor FromCalibratedHsb (int hue, int saturation, int brightness)
 		{
@@ -413,7 +378,6 @@ namespace AppKit {
 		/// <param name="space">To be added.</param>
 		/// <param name="components">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static NSColor FromColorSpace (NSColorSpace space, nfloat []? components)
 		{
@@ -440,7 +404,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override string? ToString ()
 		{

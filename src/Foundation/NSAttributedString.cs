@@ -209,38 +209,38 @@ namespace Foundation {
 		: this (data, new NSDictionary (), out var _, out error) { }
 #else
 		/// <param name="url">The URL to use.</param>
-		///         <param name="documentAttributes">To be added.</param>
-		///         <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="documentAttributes">The document attributes to use when loading.</param>
+		/// <param name="error">On return, contains the error if one occurred.</param>
+		/// <summary>Creates an attributed string from the content at the specified URL.</summary>
+		/// <remarks>Use the <c>Create</c> method instead.</remarks>
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		[Obsolete ("Use the 'Create' method instead, because there's no way to return an error from a constructor.")]
 		public NSAttributedString (NSUrl url, NSAttributedStringDocumentAttributes documentAttributes, ref NSError error)
 		: this (url, documentAttributes, out var _, ref error) { }
 
 		/// <param name="data">The data to use.</param>
-		///         <param name="documentAttributes">To be added.</param>
-		///         <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="documentAttributes">The document attributes to use when loading.</param>
+		/// <param name="error">On return, contains the error if one occurred.</param>
+		/// <summary>Creates an attributed string from the specified data.</summary>
+		/// <remarks>Use the <c>Create</c> method instead.</remarks>
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		[Obsolete ("Use the 'Create' method instead, because there's no way to return an error from a constructor.")]
 		public NSAttributedString (NSData data, NSAttributedStringDocumentAttributes documentAttributes, ref NSError error)
 		: this (data, documentAttributes, out var _, ref error) { }
 
-		/// <param name="url">To be added.</param>
-		///         <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <param name="url">The URL from which to load content.</param>
+		/// <param name="error">On return, contains the error if one occurred.</param>
+		/// <summary>Creates an attributed string from the content at the specified URL.</summary>
+		/// <remarks>Use the <c>Create</c> method instead.</remarks>
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		[Obsolete ("Use the 'Create' method instead, because there's no way to return an error from a constructor.")]
 		public NSAttributedString (NSUrl url, ref NSError error)
 		: this (url, new NSDictionary (), out var _, ref error) { }
 
-		/// <param name="data">To be added.</param>
-		///         <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <param name="data">The data from which to create the attributed string.</param>
+		/// <param name="error">On return, contains the error if one occurred.</param>
+		/// <summary>Creates an attributed string from the specified data.</summary>
+		/// <remarks>Use the <c>Create</c> method instead.</remarks>
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		[Obsolete ("Use the 'Create' method instead, because there's no way to return an error from a constructor.")]
 		public NSAttributedString (NSData data, ref NSError error)
@@ -250,7 +250,7 @@ namespace Foundation {
 #if __MACOS__
 		/// <param name="str">The str.</param>
 		///         <param name="attributes">The attributes.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates an attributed string with the specified string and Core Text attributes.</summary>
 		public NSAttributedString (string str, NSStringAttributes? attributes)
 			: this (str, attributes?.Dictionary)
 		{
@@ -271,7 +271,7 @@ namespace Foundation {
 
 		/// <param name="location">The location.</param>
 		/// <param name="effectiveRange">The effective range.</param>
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the attributes at the specified location.</summary>
 		public NSDictionary? GetAttributes (nint location, out NSRange effectiveRange)
 		{
 			return Runtime.GetNSObject<NSDictionary> (LowLevelGetAttributes (location, out effectiveRange));
@@ -299,7 +299,7 @@ namespace Foundation {
 
 		/// <param name="location">The location.</param>
 		/// <param name="effectiveRange">The effective range.</param>
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the Core Text attributes at the specified location.</summary>
 		public CTStringAttributes? GetCoreTextAttributes (nint location, out NSRange effectiveRange)
 		{
 			var attr = GetAttributes (location, out effectiveRange);
@@ -309,7 +309,7 @@ namespace Foundation {
 		/// <param name="location">The location.</param>
 		/// <param name="longestEffectiveRange">The longest effective range.</param>
 		/// <param name="rangeLimit">The range limit.</param>
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the Core Text attributes at the specified location within the given range limit.</summary>
 		public CTStringAttributes? GetCoreTextAttributes (nint location, out NSRange longestEffectiveRange, NSRange rangeLimit)
 		{
 			var attr = GetAttributes (location, out longestEffectiveRange, rangeLimit);
@@ -318,7 +318,7 @@ namespace Foundation {
 
 		/// <param name="start">The start.</param>
 		/// <param name="len">The len.</param>
-		/// <summary>To be added.</summary>
+	/// <summary>Returns a substring of this attributed string starting at the specified position with the given length.</summary>
 		public NSAttributedString Substring (nint start, nint len)
 		{
 			return Substring (new NSRange (start, len));
@@ -327,7 +327,7 @@ namespace Foundation {
 #if !MONOMAC
 		/// <param name="str">The str.</param>
 		///         <param name="attributes">The attributes.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates an attributed string with the specified string and UIKit attributes.</summary>
 		public NSAttributedString (string str, UIStringAttributes? attributes)
 			: this (str, attributes?.Dictionary)
 		{
@@ -335,7 +335,7 @@ namespace Foundation {
 
 		/// <param name="location">The location.</param>
 		/// <param name="effectiveRange">The effective range.</param>
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the UIKit attributes at the specified location.</summary>
 		public UIStringAttributes? GetUIKitAttributes (nint location, out NSRange effectiveRange)
 		{
 			var attr = GetAttributes (location, out effectiveRange);
@@ -345,7 +345,7 @@ namespace Foundation {
 		/// <param name="location">The location.</param>
 		/// <param name="longestEffectiveRange">The longest effective range.</param>
 		/// <param name="rangeLimit">The range limit.</param>
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the UIKit attributes at the specified location within the given range limit.</summary>
 		public UIStringAttributes? GetUIKitAttributes (nint location, out NSRange longestEffectiveRange, NSRange rangeLimit)
 		{
 			var attr = GetAttributes (location, out longestEffectiveRange, rangeLimit);

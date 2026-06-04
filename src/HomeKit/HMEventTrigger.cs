@@ -3,8 +3,8 @@
 namespace HomeKit {
 
 	partial class HMEventTrigger {
-		/// <param name="significantEvent">To be added.</param>
-		///         <param name="offset">To be added.</param>
+		/// <param name="significantEvent">The significant event.</param>
+		///         <param name="offset">The offset.</param>
 		///         <summary>Creates a predicate that causes a trigger to evaluate <paramref name="offset" /> before the specified significant event.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
@@ -21,8 +21,8 @@ namespace HomeKit {
 			return CreatePredicateForEvaluatingTriggerOccurringBeforeSignificantEvent (constant, offset);
 		}
 
-		/// <param name="significantEvent">To be added.</param>
-		///         <param name="offset">To be added.</param>
+		/// <param name="significantEvent">The significant event.</param>
+		///         <param name="offset">The offset.</param>
 		///         <summary>Factory method to create an <see cref="Foundation.NSPredicate" /> that evaluates to <see langword="true" /> if the <paramref name="significantEvent" /> occurred.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>

@@ -10,43 +10,37 @@ using CoreFoundation;
 
 namespace CoreFoundation {
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Provides access to Core Foundation bundle resources and information.</summary>
 	public partial class CFBundle : NativeObject {
 
-		/// <summary>To be added.</summary>
-		///     <remarks>To be added.</remarks>
+		/// <summary>Specifies the type of bundle package.</summary>
 		public enum PackageType {
-			/// <summary>To be added.</summary>
+			/// <summary>An application bundle.</summary>
 			Application,
-			/// <summary>To be added.</summary>
+			/// <summary>A framework bundle.</summary>
 			Framework,
-			/// <summary>To be added.</summary>
+			/// <summary>A generic bundle.</summary>
 			Bundle,
 		}
 
-		/// <summary>To be added.</summary>
-		///     <remarks>To be added.</remarks>
+		/// <summary>Contains bundle package type and creator information.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 		public struct PackageInfo {
-			/// <param name="type">To be added.</param>
-			///         <param name="creator">To be added.</param>
-			///         <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <param name="type">The type.</param>
+			/// <param name="creator">The creator.</param>
+			///         <summary>Creates a new PackageInfo with the specified type and creator.</summary>
 			public PackageInfo (CFBundle.PackageType type, string creator)
 			{
 				this.Type = type;
 				this.Creator = creator;
 			}
 
-			/// <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <summary>Gets the bundle package type.</summary>
 			public PackageType Type { get; private set; }
-			/// <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <summary>Gets the bundle creator code.</summary>
 			public string Creator { get; private set; }
 		}
 
@@ -69,9 +63,8 @@ namespace CoreFoundation {
 			return result;
 		}
 
-		/// <param name="bundleUrl">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="bundleUrl">The bundleUrl.</param>
+		/// <summary>Creates a CFBundle from a URL.</summary>
 		public CFBundle (NSUrl bundleUrl)
 			: base (Create (bundleUrl), true)
 		{
@@ -80,10 +73,9 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFArrayRef */ IntPtr CFBundleCreateBundlesFromDirectory (/* CFAllocatorRef can be null */ IntPtr allocator, /* CFUrlRef */ IntPtr directoryURL, /* CFStringRef */ IntPtr bundleType);
 
-		/// <param name="directoryUrl">To be added.</param>
-		///         <param name="bundleType">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="directoryUrl">The directoryUrl.</param>
+		/// <param name="bundleType">The bundleType.</param>
+		///         <summary>Gets bundles from the specified directory.</summary>
 		public static CFBundle []? GetBundlesFromDirectory (NSUrl directoryUrl, string bundleType)
 		{
 			if (directoryUrl is null) // NSUrl cannot be "" by definition
@@ -103,8 +95,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static IntPtr CFBundleGetAllBundles ();
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets all registered bundles.</summary>
 		public static CFBundle []? GetAll ()
 		{
 			// as per apple documentation: 
@@ -126,9 +117,8 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static IntPtr CFBundleGetBundleWithIdentifier (/* CFStringRef */ IntPtr bundleID);
 
-		/// <param name="bundleID">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="bundleID">The bundle identifier.</param>
+		///         <summary>Gets a bundle by its identifier.</summary>
 		public static CFBundle? Get (string bundleID)
 		{
 			if (String.IsNullOrEmpty (bundleID))
@@ -148,8 +138,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static IntPtr CFBundleGetMainBundle ();
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the main bundle.</summary>
 		public static CFBundle? GetMain ()
 		{
 			var cfBundle = CFBundleGetMainBundle ();
@@ -162,8 +151,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static byte CFBundleIsExecutableLoaded (IntPtr bundle);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets whether the bundle executable has been loaded.</summary>
 		public bool HasLoadedExecutable {
 			get { return CFBundleIsExecutableLoaded (Handle) != 0; }
 		}
@@ -171,9 +159,8 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		unsafe extern static byte CFBundlePreflightExecutable (IntPtr bundle, IntPtr* error);
 
-		/// <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="error">The error.</param>
+		/// <summary>Checks whether the bundle executable can be loaded.</summary>
 		public bool PreflightExecutable (out NSError? error)
 		{
 			IntPtr errorPtr = IntPtr.Zero;
@@ -189,9 +176,8 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		unsafe extern static byte CFBundleLoadExecutableAndReturnError (IntPtr bundle, IntPtr* error);
 
-		/// <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="error">The error.</param>
+		/// <summary>Loads the bundle executable.</summary>
 		public bool LoadExecutable (out NSError? error)
 		{
 			IntPtr errorPtr = IntPtr.Zero;
@@ -207,8 +193,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static void CFBundleUnloadExecutable (IntPtr bundle);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Unloads the bundle executable.</summary>
 		public void UnloadExecutable ()
 		{
 			CFBundleUnloadExecutable (Handle);
@@ -217,9 +202,8 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFUrlRef */ IntPtr CFBundleCopyAuxiliaryExecutableURL (IntPtr bundle, /* CFStringRef */ IntPtr executableName);
 
-		/// <param name="executableName">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="executableName">The executableName.</param>
+		/// <summary>Gets the URL for an auxiliary executable.</summary>
 		public NSUrl? GetAuxiliaryExecutableUrl (string executableName)
 		{
 			if (String.IsNullOrEmpty (executableName))
@@ -237,8 +221,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFUrlRef */ IntPtr CFBundleCopyBuiltInPlugInsURL (IntPtr bundle);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the URL for the built-in plug-ins directory.</summary>
 		public NSUrl? BuiltInPlugInsUrl {
 			get {
 				return Runtime.GetNSObject<NSUrl> (CFBundleCopyBuiltInPlugInsURL (Handle), true);
@@ -248,8 +231,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFUrlRef */ IntPtr CFBundleCopyExecutableURL (IntPtr bundle);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the URL for the bundle executable.</summary>
 		public NSUrl? ExecutableUrl {
 			get {
 				return Runtime.GetNSObject<NSUrl> (CFBundleCopyExecutableURL (Handle), true);
@@ -259,8 +241,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFUrlRef */ IntPtr CFBundleCopyPrivateFrameworksURL (IntPtr bundle);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the URL for the private frameworks directory.</summary>
 		public NSUrl? PrivateFrameworksUrl {
 			get {
 				return Runtime.GetNSObject<NSUrl> (CFBundleCopyPrivateFrameworksURL (Handle), true);
@@ -270,8 +251,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFUrlRef */ IntPtr CFBundleCopyResourcesDirectoryURL (IntPtr bundle);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the URL for the resources directory.</summary>
 		public NSUrl? ResourcesDirectoryUrl {
 			get {
 				return Runtime.GetNSObject<NSUrl> (CFBundleCopyResourcesDirectoryURL (Handle), true);
@@ -281,8 +261,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFUrlRef */ IntPtr CFBundleCopySharedFrameworksURL (IntPtr bundle);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the URL for the shared frameworks directory.</summary>
 		public NSUrl? SharedFrameworksUrl {
 			get {
 				return Runtime.GetNSObject<NSUrl> (CFBundleCopySharedFrameworksURL (Handle), true);
@@ -292,8 +271,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFUrlRef */ IntPtr CFBundleCopySharedSupportURL (IntPtr bundle);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the URL for the shared support directory.</summary>
 		public NSUrl? SharedSupportUrl {
 			get {
 				return Runtime.GetNSObject<NSUrl> (CFBundleCopySharedSupportURL (Handle), true);
@@ -303,8 +281,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFUrlRef */ IntPtr CFBundleCopySupportFilesDirectoryURL (IntPtr bundle);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the URL for the support files directory.</summary>
 		public NSUrl? SupportFilesDirectoryUrl {
 			get {
 				return Runtime.GetNSObject<NSUrl> (CFBundleCopySupportFilesDirectoryURL (Handle), true);
@@ -315,11 +292,10 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFUrlRef */ IntPtr CFBundleCopyResourceURL (IntPtr bundle, /* CFStringRef */ IntPtr resourceName, /* CFString */ IntPtr resourceType, /* CFString */ IntPtr subDirName);
 
-		/// <param name="resourceName">To be added.</param>
-		///         <param name="resourceType">To be added.</param>
-		///         <param name="subDirName">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="resourceName">The resource name.</param>
+		/// <param name="resourceType">The resource type.</param>
+		/// <param name="subDirName">The subdirectory name.</param>
+		/// <summary>Gets the URL for a bundle resource.</summary>
 		public NSUrl? GetResourceUrl (string resourceName, string resourceType, string subDirName)
 		{
 			if (String.IsNullOrEmpty (resourceName))
@@ -345,12 +321,11 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFUrlRef */ IntPtr CFBundleCopyResourceURLInDirectory (/* CFUrlRef */ IntPtr bundleURL, /* CFStringRef */ IntPtr resourceName, /* CFStringRef */ IntPtr resourceType, /* CFStringRef */ IntPtr subDirName);
 
-		/// <param name="bundleUrl">To be added.</param>
-		///         <param name="resourceName">To be added.</param>
-		///         <param name="resourceType">To be added.</param>
-		///         <param name="subDirName">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="bundleUrl">The bundleUrl.</param>
+		/// <param name="resourceName">The resource name.</param>
+		/// <param name="resourceType">The resource type.</param>
+		/// <param name="subDirName">The subdirectory name.</param>
+		/// <summary>Gets the URL for a bundle resource.</summary>
 		public static NSUrl? GetResourceUrl (NSUrl bundleUrl, string resourceName, string resourceType, string subDirName)
 		{
 			if (bundleUrl is null)
@@ -380,10 +355,9 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFArray */ IntPtr CFBundleCopyResourceURLsOfType (IntPtr bundle, /* CFStringRef */ IntPtr resourceType, /* CFStringRef */ IntPtr subDirName);
 
-		/// <param name="resourceType">To be added.</param>
-		///         <param name="subDirName">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="resourceType">The resource type.</param>
+		/// <param name="subDirName">The subdirectory name.</param>
+		/// <summary>Gets the URL for a bundle resource.</summary>
 		public NSUrl? []? GetResourceUrls (string resourceType, string subDirName)
 		{
 			if (String.IsNullOrEmpty (resourceType))
@@ -403,11 +377,10 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFArray */ IntPtr CFBundleCopyResourceURLsOfTypeInDirectory (/* CFUrlRef */ IntPtr bundleURL, /* CFStringRef */ IntPtr resourceType, /* CFStringRef */ IntPtr subDirName);
 
-		/// <param name="bundleUrl">To be added.</param>
-		///         <param name="resourceType">To be added.</param>
-		///         <param name="subDirName">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="bundleUrl">The bundleUrl.</param>
+		/// <param name="resourceType">The resource type.</param>
+		/// <param name="subDirName">The subdirectory name.</param>
+		/// <summary>Gets the URL for a bundle resource.</summary>
 		public static NSUrl? []? GetResourceUrls (NSUrl bundleUrl, string resourceType, string subDirName)
 		{
 			if (bundleUrl is null)
@@ -432,12 +405,11 @@ namespace CoreFoundation {
 		extern static /* CFUrlRef */ IntPtr CFBundleCopyResourceURLForLocalization (IntPtr bundle, /* CFStringRef */ IntPtr resourceName, /* CFStringRef */ IntPtr resourceType, /* CFStringRef */ IntPtr subDirName,
 																					/* CFStringRef */ IntPtr localizationName);
 
-		/// <param name="resourceName">To be added.</param>
-		///         <param name="resourceType">To be added.</param>
-		///         <param name="subDirName">To be added.</param>
-		///         <param name="localizationName">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="resourceName">The resource name.</param>
+		/// <param name="resourceType">The resource type.</param>
+		/// <param name="subDirName">The subdirectory name.</param>
+		/// <param name="localizationName">The localization name.</param>
+		/// <summary>Gets the URL for a bundle resource.</summary>
 		public NSUrl? GetResourceUrl (string resourceName, string resourceType, string subDirName, string localizationName)
 		{
 			if (String.IsNullOrEmpty (resourceName))
@@ -468,11 +440,10 @@ namespace CoreFoundation {
 		extern static /* CFArray */ IntPtr CFBundleCopyResourceURLsOfTypeForLocalization (IntPtr bundle, /* CFStringRef */ IntPtr resourceType, /* CFStringRef */ IntPtr subDirName,
 																						  /* CFStringRef */ IntPtr localizationName);
 
-		/// <param name="resourceType">To be added.</param>
-		///         <param name="subDirName">To be added.</param>
-		///         <param name="localizationName">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="resourceType">The resource type.</param>
+		/// <param name="subDirName">The subdirectory name.</param>
+		/// <param name="localizationName">The localization name.</param>
+		/// <summary>Gets the URL for a bundle resource.</summary>
 		public NSUrl? []? GetResourceUrls (string resourceType, string subDirName, string localizationName)
 		{
 			if (String.IsNullOrEmpty (resourceType))
@@ -581,10 +552,9 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFArray */ IntPtr CFBundleCopyLocalizationsForPreferences (/* CFArrayRef */ IntPtr locArray, /* CFArrayRef */ IntPtr prefArray);
 
-		/// <param name="locArray">To be added.</param>
-		///         <param name="prefArray">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="locArray">The locArray.</param>
+		/// <param name="prefArray">The prefArray.</param>
+		/// <summary>Gets the available localizations.</summary>
 		public static string? []? GetLocalizationsForPreferences (string [] locArray, string [] prefArray)
 		{
 			if (locArray is null)
@@ -611,9 +581,8 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFArray */ IntPtr CFBundleCopyLocalizationsForURL (/* CFUrlRef */ IntPtr url);
 
-		/// <param name="bundle">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="bundle">The bundle.</param>
+		/// <summary>Gets the available localizations.</summary>
 		public static string? []? GetLocalizations (NSUrl bundle)
 		{
 			if (bundle is null)
@@ -626,9 +595,8 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFArray */ IntPtr CFBundleCopyPreferredLocalizationsFromArray (/* CFArrayRef */ IntPtr locArray);
 
-		/// <param name="locArray">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="locArray">The locArray.</param>
+		/// <summary>Gets the preferred localizations.</summary>
 		public static string? []? GetPreferredLocalizations (string [] locArray)
 		{
 			if (locArray is null)
@@ -647,8 +615,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFUrlRef */ IntPtr CFBundleCopyBundleURL (IntPtr bundle);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the bundle URL.</summary>
 		public NSUrl? Url {
 			get {
 				return Runtime.GetNSObject<NSUrl> (CFBundleCopyBundleURL (Handle), true);
@@ -658,8 +625,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFString */ IntPtr CFBundleGetDevelopmentRegion (IntPtr bundle);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the development region.</summary>
 		public string? DevelopmentRegion {
 			get { return CFString.FromHandle (CFBundleGetDevelopmentRegion (Handle)); }
 		}
@@ -667,8 +633,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFString */ IntPtr CFBundleGetIdentifier (IntPtr bundle);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the bundle identifier.</summary>
 		public string? Identifier {
 			get { return CFString.FromHandle (CFBundleGetIdentifier (Handle)); }
 		}
@@ -676,8 +641,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFDictionary */ IntPtr CFBundleGetInfoDictionary (IntPtr bundle);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the bundle info dictionary.</summary>
 		public NSDictionary? InfoDictionary {
 			get {
 				// follows the Get rule, we need to retain
@@ -688,8 +652,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* NSDictionary */ IntPtr CFBundleGetLocalInfoDictionary (IntPtr bundle);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the bundle info dictionary.</summary>
 		public NSDictionary? LocalInfoDictionary {
 			get {
 				// follows the Get rule, we need to retain
@@ -704,9 +667,8 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* NSDictionary */ IntPtr CFBundleCopyInfoDictionaryForURL (/* CFUrlRef */ IntPtr url);
 
-		/// <param name="url">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="url">The URL of the bundle.</param>
+		/// <summary>Gets the bundle info dictionary.</summary>
 		public static NSDictionary? GetInfoDictionary (NSUrl url)
 		{
 			if (url is null)
@@ -719,8 +681,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		unsafe extern static void CFBundleGetPackageInfo (IntPtr bundle, uint* packageType, uint* packageCreator);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the package information for this bundle.</summary>
 		public PackageInfo Info {
 			get {
 				uint type = 0;
@@ -745,8 +706,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFArray */ IntPtr CFBundleCopyExecutableArchitectures (IntPtr bundle);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the executable architectures for this bundle.</summary>
 		public CFBundle.Architecture []? Architectures {
 			get {
 				var rv = CFBundleCopyExecutableArchitectures (Handle);

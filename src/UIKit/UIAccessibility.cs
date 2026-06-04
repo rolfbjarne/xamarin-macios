@@ -231,7 +231,7 @@ namespace UIKit {
 
 		/// <summary>Requests that the system enter or leave Guided Access mode.</summary>
 		/// <param name="enable"><see langword="true"/> to enter Guided Access mode; <see langword="false"/> to leave it.</param>
-		/// <param name="completionHandler">A callback invoked when the transition completes, with a parameter indicating success.</param>
+		/// <param name="completionHandler">A callback invoked when the transition completes, with AParameter indicating success.</param>
 		/// <remarks>
 		///   <para>When an application is running in Guided Access mode, it can prevent the home button from working, and can control other features of the operating system from working.</para>
 		///   <para>For this API call to succeed, the application must be Supervised, and the application must have been enabled for single app mode using Mobile Device Management.</para>

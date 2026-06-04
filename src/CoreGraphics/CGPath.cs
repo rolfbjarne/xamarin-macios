@@ -204,7 +204,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override int GetHashCode ()
 		{
@@ -216,7 +215,6 @@ namespace CoreGraphics {
 
 		/// <param name="o">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public override bool Equals (object? o)
 		{
@@ -557,7 +555,6 @@ namespace CoreGraphics {
 		extern static byte CGPathIsEmpty (/* CGPathRef */ IntPtr path);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsEmpty {
 			get {
@@ -570,7 +567,6 @@ namespace CoreGraphics {
 
 		/// <param name="rect">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public bool IsRect (out CGRect rect)
 		{
@@ -586,7 +582,6 @@ namespace CoreGraphics {
 		extern static CGPoint CGPathGetCurrentPoint (/* CGPathRef */ IntPtr path);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CGPoint CurrentPoint {
 			get {
@@ -598,7 +593,6 @@ namespace CoreGraphics {
 		extern static CGRect CGPathGetBoundingBox (/* CGPathRef */IntPtr path);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CGRect BoundingBox {
 			get {
@@ -610,7 +604,6 @@ namespace CoreGraphics {
 		extern static CGRect CGPathGetPathBoundingBox (/* CGPathRef */ IntPtr path);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CGRect PathBoundingBox {
 			get {
@@ -625,7 +618,6 @@ namespace CoreGraphics {
 		///         <param name="point">To be added.</param>
 		///         <param name="eoFill">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public unsafe bool ContainsPoint (CGAffineTransform m, CGPoint point, bool eoFill)
 		{
@@ -635,7 +627,6 @@ namespace CoreGraphics {
 		/// <param name="point">To be added.</param>
 		///         <param name="eoFill">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public unsafe bool ContainsPoint (CGPoint point, bool eoFill)
 		{
@@ -920,7 +911,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public unsafe CGPath Copy ()
 		{
@@ -945,7 +935,6 @@ namespace CoreGraphics {
 
 		/// <param name="transform">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CGPath CopyByTransformingPath (CGAffineTransform transform)
 		{
@@ -960,7 +949,6 @@ namespace CoreGraphics {
 		/// <param name="boundingRect">To be added.</param>
 		///         <param name="transform">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		static public unsafe CGPath EllipseFromRect (CGRect boundingRect, CGAffineTransform transform)
 		{
@@ -969,7 +957,6 @@ namespace CoreGraphics {
 
 		/// <param name="boundingRect">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		static public unsafe CGPath EllipseFromRect (CGRect boundingRect)
 		{
@@ -982,7 +969,6 @@ namespace CoreGraphics {
 		/// <param name="rectangle">To be added.</param>
 		///         <param name="transform">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		static public unsafe CGPath FromRect (CGRect rectangle, CGAffineTransform transform)
 		{
@@ -991,7 +977,6 @@ namespace CoreGraphics {
 
 		/// <param name="rectangle">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		static public unsafe CGPath FromRect (CGRect rectangle)
 		{

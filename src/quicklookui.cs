@@ -86,18 +86,18 @@ namespace QuickLookUI {
 	interface QLPreviewPanelController {
 
 		/// <param name="panel">The panel.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Returns whether this object accepts control of the preview panel.</summary>
+		/// <returns><see langword="true" /> if this object accepts control of the panel; otherwise, <see langword="false" />.</returns>
 		[Export ("acceptsPreviewPanelControl:")]
 		bool AcceptsPreviewPanelControl (QLPreviewPanel panel);
 
 		/// <param name="panel">The panel.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Called when this object takes control of the preview panel.</summary>
 		[Export ("beginPreviewPanelControl:")]
 		void BeginPreviewPanelControl (QLPreviewPanel panel);
 
 		/// <param name="panel">The panel.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Called when this object relinquishes control of the preview panel.</summary>
 		[Export ("endPreviewPanelControl:")]
 		void EndPreviewPanelControl (QLPreviewPanel panel);
 	}

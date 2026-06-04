@@ -65,7 +65,6 @@ namespace CoreGraphics {
 		/// <param name="point">The point.</param>
 		///         <param name="size">The size.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static CGPoint Add (CGPoint point, CGSize size)
 		{
 			return point + size;
@@ -74,28 +73,24 @@ namespace CoreGraphics {
 		/// <param name="point">The point.</param>
 		///         <param name="size">The size.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static CGPoint Subtract (CGPoint point, CGSize size)
 		{
 			return point - size;
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public nfloat X {
 			get { return x; }
 			set { x = value; }
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public nfloat Y {
 			get { return y; }
 			set { y = value; }
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public bool IsEmpty {
 			get { return x == 0.0 && y == 0.0; }
 		}
@@ -184,7 +179,6 @@ namespace CoreGraphics {
 
 		/// <param name="obj">The obj.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override bool Equals (object? obj)
 		{
 			return (obj is CGPoint t) && Equals (t);
@@ -192,14 +186,12 @@ namespace CoreGraphics {
 
 		/// <param name="point">The point.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public bool Equals (CGPoint point)
 		{
 			return point.x == x && point.y == y;
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override int GetHashCode ()
 		{
 			return HashCode.Combine (x, y);
@@ -213,7 +205,6 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override string? ToString ()
 		{
 			return CFString.FromHandle (NSStringFromCGPoint (this));

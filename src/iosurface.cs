@@ -93,89 +93,89 @@ namespace IOSurface {
 
 	[StrongDictionary ("IOSurfacePropertyKey")]
 	partial interface IOSurfaceOptions {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the total allocation size of the IOSurface.</summary>
+		/// <value>The allocation size in bytes.</value>
+		
 		nint AllocSize { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the width of the IOSurface.</summary>
+		/// <value>The width in pixels.</value>
+		
 		nint Width { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the height of the IOSurface.</summary>
+		/// <value>The height in pixels.</value>
+		
 		nint Height { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the number of bytes per row.</summary>
+		/// <value>The number of bytes per row.</value>
+		
 		nint BytesPerRow { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the number of bytes per element.</summary>
+		/// <value>The number of bytes per element.</value>
+		
 		nint BytesPerElement { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the element width.</summary>
+		/// <value>The width of each element in pixels.</value>
+		
 		nint ElementWidth { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the element height.</summary>
+		/// <value>The height of each element in pixels.</value>
+		
 		nint ElementHeight { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the byte offset from the base address to the start of the buffer data.</summary>
+		/// <value>The offset in bytes.</value>
+		
 		nint Offset { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the array of plane information dictionaries.</summary>
+		/// <value>An array of dictionaries describing each plane.</value>
+		
 		NSDictionary [] PlaneInfo { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the width of the specified plane.</summary>
+		/// <value>The plane width in pixels.</value>
+		
 		nint PlaneWidth { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the height of the specified plane.</summary>
+		/// <value>The plane height in pixels.</value>
+		
 		nint PlaneHeight { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the bytes per row of the specified plane.</summary>
+		/// <value>The number of bytes per row in the plane.</value>
+		
 		nint PlaneBytesPerRow { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the byte offset of the specified plane.</summary>
+		/// <value>The offset in bytes for the plane.</value>
+		
 		nint PlaneOffset { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the size of the specified plane.</summary>
+		/// <value>The plane size in bytes.</value>
+		
 		nint PlaneSize { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the base address of the specified plane.</summary>
+		/// <value>The base address offset for the plane.</value>
+		
 		nint PlaneBase { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the bytes per element of the specified plane.</summary>
+		/// <value>The number of bytes per element in the plane.</value>
+		
 		nint PlaneBytesPerElement { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the element width of the specified plane.</summary>
+		/// <value>The element width in pixels for the plane.</value>
+		
 		nint PlaneElementWidth { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the element height of the specified plane.</summary>
+		/// <value>The element height in pixels for the plane.</value>
+		
 		nint PlaneElementHeight { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the cache mode for the IOSurface.</summary>
+		/// <value>The memory cache mode.</value>
+		
 		IOSurfaceMemoryMap CacheMode { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the pixel format of the IOSurface.</summary>
+		/// <value>The pixel format as a four-character code.</value>
+		
 		uint PixelFormat { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether pixel size casting is allowed.</summary>
+		/// <value><see langword="true" /> if pixel size casting is allowed; otherwise, <see langword="false" />.</value>
+		
 		bool PixelSizeCastingAllowed { get; set; }
 		[iOS (16, 0), TV (16, 0), Mac (13, 0), MacCatalyst (16, 0)]
 		string Name { get; set; }

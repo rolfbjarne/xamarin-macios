@@ -465,12 +465,12 @@ namespace AddressBookUI {
 	[Protocol]
 	interface ABPersonViewControllerDelegate {
 
-		/// <param name="personViewController">To be added.</param>
-		///         <param name="person">To be added.</param>
-		///         <param name="propertyId">To be added.</param>
-		///         <param name="identifier">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <param name="personViewController">The person view controller.</param>
+		/// <param name="person">The person whose property was selected.</param>
+		/// <param name="propertyId">The identifier of the selected property.</param>
+		/// <param name="identifier">The multi-value identifier.</param>
+		/// <summary>Called to determine whether the default action for the property should be performed.</summary>
+		/// <returns><see langword="true" /> if the default action should be performed; otherwise, <see langword="false" />.</returns>
 		[Export ("personViewController:shouldPerformDefaultActionForPerson:property:identifier:")]
 		[Abstract]
 		bool ShouldPerformDefaultActionForPerson (ABPersonViewController personViewController, ABPerson person, int /* ABPropertyID = int32 */ propertyId, int /* ABMultiValueIdentifier = int32 */ identifier);

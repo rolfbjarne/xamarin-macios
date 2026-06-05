@@ -1280,9 +1280,9 @@ namespace Photos {
 	[BaseType (typeof (NSObject))]
 	interface PHPhotoLibraryChangeObserver {
 
-		/// <param name="changeInstance">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="changeInstance">The change details for the photo library.</param>
+		/// <summary>Called when changes occur in the photo library.</summary>
+		
 		[Abstract]
 		[Export ("photoLibraryDidChange:")]
 		void PhotoLibraryDidChange (PHChange changeInstance);

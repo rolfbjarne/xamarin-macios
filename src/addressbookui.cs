@@ -96,22 +96,22 @@ namespace AddressBookUI {
 	[BaseType (typeof (UINavigationController))]
 	interface ABPeoplePickerNavigationController : UIAppearance {
 		/// <param name="nibName">
-		///           <para>To be added.</para>
+		///   <para>The name of the nib file, or <see langword="null" />.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <param name="bundle">
-		///           <para>To be added.</para>
+		///   <para>The bundle containing the nib, or <see langword="null" />.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Creates the view controller from the specified nib and bundle.</summary>
+		
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
 		NativeHandle Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);
 
-		/// <param name="rootViewController">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="rootViewController">The root view controller for the navigation stack.</param>
+		/// <summary>Creates the navigation controller with the specified root view controller.</summary>
+		
 		[Export ("initWithRootViewController:")]
 		[PostGet ("ViewControllers")] // that will PostGet TopViewController and VisibleViewController too
 		NativeHandle Constructor (UIViewController rootViewController);
@@ -167,12 +167,12 @@ namespace AddressBookUI {
 		[NullAllowed]
 		NSPredicate PredicateForSelectionOfPerson { get; set; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets a predicate that determines whether a property should be selected.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
+		
 		[Export ("predicateForSelectionOfProperty", ArgumentSemantic.Copy)]
 		[NullAllowed]
 		NSPredicate PredicateForSelectionOfProperty { get; set; }

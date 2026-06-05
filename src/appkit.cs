@@ -223,9 +223,7 @@ namespace AppKit {
 	}
 
 	interface NSAnimationProgressMarkEventArgs {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Progress value.</summary>
 		[Export ("NSAnimationProgressMark")]
 		float Progress { get; } /* float, not CGFloat */
 	}
@@ -243,9 +241,8 @@ namespace AppKit {
 		[Export ("stopAnimation")]
 		void StopAnimation ();
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Performs the is animating operation.</summary>
+		///         <returns>The result of the operation.</returns>
 		[Export ("isAnimating")]
 		bool IsAnimating ();
 
@@ -270,9 +267,7 @@ namespace AppKit {
 		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSAnimationDelegate Delegate { get; set; }
 
@@ -303,21 +298,15 @@ namespace AppKit {
 		[Notification (typeof (NSAnimationProgressMarkEventArgs)), Field ("NSAnimationProgressMarkNotification")]
 		NSString ProgressMarkNotification { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ProgressMark key constant.</summary>
 		[Field ("NSAnimationProgressMark")]
 		NSString ProgressMark { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TriggerOrderIn key constant.</summary>
 		[Field ("NSAnimationTriggerOrderIn")]
 		NSString TriggerOrderIn { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TriggerOrderOut key constant.</summary>
 		[Field ("NSAnimationTriggerOrderOut")]
 		NSString TriggerOrderOut { get; }
 	}
@@ -330,56 +319,44 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSAnimationDelegate {
-		/// <param name="animation">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="animation">The animation.</param>
+		/// <summary>Performs the animation should start operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the animation should start operation.</summary>
 			""")]
 		[Export ("animationShouldStart:"), DelegateName ("NSAnimationPredicate"), DefaultValue (true)]
 		bool AnimationShouldStart (NSAnimation animation);
 
-		/// <param name="animation">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="animation">The animation.</param>
+		/// <summary>Performs the animation did stop operation.</summary>
 		[Export ("animationDidStop:"), EventArgs ("NSAnimation", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the animation did stop operation.</summary>
 			""")]
 		void AnimationDidStop (NSAnimation animation);
 
-		/// <param name="animation">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="animation">The animation.</param>
+		/// <summary>Performs the animation did end operation.</summary>
 		[Export ("animationDidEnd:"), EventArgs ("NSAnimation", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the animation did end operation.</summary>
 			""")]
 		void AnimationDidEnd (NSAnimation animation);
 
-		/// <param name="animation">To be added.</param>
-		/// <param name="progress">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="animation">The animation.</param>
+		/// <param name="progress">The progress.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the specified operation.</summary>
 			""")]
 		[Export ("animation:valueForProgress:"), DelegateName ("NSAnimationProgress"), DefaultValueFromArgumentAttribute ("progress")]
 		float /* float, not CGFloat */ ComputeAnimationCurve (NSAnimation animation, float /* NSAnimationProgress = float */ progress);
 
-		/// <param name="animation">To be added.</param>
-		/// <param name="progress">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="animation">The animation.</param>
+		/// <param name="progress">The progress.</param>
+		/// <summary>Performs the animation did reach progress mark operation.</summary>
 		[Export ("animation:didReachProgressMark:"), EventArgs ("NSAnimation", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the animation did reach progress mark operation.</summary>
 			""")]
 		void AnimationDidReachProgressMark (NSAnimation animation, float /* NSAnimationProgress = float */ progress);
 	}
@@ -458,9 +435,7 @@ namespace AppKit {
 		[Export ("delegate", ArgumentSemantic.Weak), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSAlertDelegate Delegate { get; set; }
 
@@ -485,10 +460,9 @@ namespace AppKit {
 
 		[Export ("beginSheetModalForWindow:completionHandler:")]
 		[Async (XmlDocs = """
-			<param name="Window">To be added.</param>
-			<summary>To be added.</summary>
-			<returns>To be added.</returns>
-			<remarks>To be added.</remarks>
+			<param name="Window">The window.</param>
+			<summary>Performs the begin sheet operation.</summary>
+			<returns>The result of the operation.</returns>
 			""")]
 		void BeginSheet ([NullAllowed] NSWindow Window, [NullAllowed] Action<NSModalResponse> handler);
 
@@ -503,14 +477,11 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSAlertDelegate {
-		/// <param name="alert">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="alert">The alert.</param>
+		/// <summary>Performs the show help operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the show help operation.</summary>
 			""")]
 		[Export ("alertShowHelp:"), DelegateName ("NSAlertPredicate"), DefaultValue (false)]
 		bool ShowHelp (NSAlert alert);
@@ -518,15 +489,11 @@ namespace AppKit {
 
 	[NoMacCatalyst]
 	interface NSApplicationDidFinishLaunchingEventArgs {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsLaunchDefault value.</summary>
 		[Export ("NSApplicationLaunchIsDefaultLaunchKey")]
 		bool IsLaunchDefault { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsLaunchFromUserNotification value.</summary>
 		[ProbePresence, Export ("NSApplicationLaunchUserNotificationKey")]
 		bool IsLaunchFromUserNotification { get; }
 	}
@@ -559,58 +526,40 @@ namespace AppKit {
 		[Static, Export ("appearanceNamed:")]
 		NSAppearance GetAppearance (NSString name);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NameAqua key constant.</summary>
 		[Field ("NSAppearanceNameAqua")]
 		NSString NameAqua { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NameDarkAqua key constant.</summary>
 		[Field ("NSAppearanceNameDarkAqua")]
 		NSString NameDarkAqua { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NameLightContent key constant.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 10)]
 		[Field ("NSAppearanceNameLightContent")]
 		NSString NameLightContent { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NameVibrantDark key constant.</summary>
 		[Field ("NSAppearanceNameVibrantDark")]
 		NSString NameVibrantDark { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NameVibrantLight key constant.</summary>
 		[Field ("NSAppearanceNameVibrantLight")]
 		NSString NameVibrantLight { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NameAccessibilityHighContrastAqua key constant.</summary>
 		[Field ("NSAppearanceNameAccessibilityHighContrastAqua")]
 		NSString NameAccessibilityHighContrastAqua { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NameAccessibilityHighContrastDarkAqua key constant.</summary>
 		[Field ("NSAppearanceNameAccessibilityHighContrastDarkAqua")]
 		NSString NameAccessibilityHighContrastDarkAqua { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NameAccessibilityHighContrastVibrantLight key constant.</summary>
 		[Field ("NSAppearanceNameAccessibilityHighContrastVibrantLight")]
 		NSString NameAccessibilityHighContrastVibrantLight { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NameAccessibilityHighContrastVibrantDark key constant.</summary>
 		[Field ("NSAppearanceNameAccessibilityHighContrastVibrantDark")]
 		NSString NameAccessibilityHighContrastVibrantDark { get; }
 
@@ -646,9 +595,7 @@ namespace AppKit {
 		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSApplicationDelegate Delegate { get; set; }
 
@@ -674,21 +621,15 @@ namespace AppKit {
 		[Export ("keyWindow")]
 		NSWindow KeyWindow { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Active value.</summary>
 		[Export ("isActive")]
 		bool Active { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Hidden value.</summary>
 		[Export ("isHidden")]
 		bool Hidden { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Running value.</summary>
 		[Export ("isRunning")]
 		bool Running { get; }
 
@@ -763,13 +704,12 @@ namespace AppKit {
 		NSEvent NextEvent (NSEventMask mask, [NullAllowed] NSDate expiration, NSString runLoopMode, bool deqFlag);
 
 		// NSEventMask must be casted to nuint to preserve the NSEventMask.Any special value on 64 bit systems. NSEventMask is not [Native].
-		/// <param name="mask">To be added.</param>
-		///         <param name="expiration">To be added.</param>
-		///         <param name="runLoopMode">To be added.</param>
-		///         <param name="deqFlag">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="mask">The mask.</param>
+		///         <param name="expiration">The expiration.</param>
+		///         <param name="runLoopMode">The run loop mode.</param>
+		///         <param name="deqFlag">The deq flag.</param>
+		///         <summary>Performs the next event operation.</summary>
+		///         <returns>The result of the operation.</returns>
 		[Wrap ("NextEvent (mask, expiration, runLoopMode.GetConstant ()!, deqFlag)")]
 		NSEvent NextEvent (NSEventMask mask, NSDate expiration, NSRunLoopMode runLoopMode, bool deqFlag);
 
@@ -881,9 +821,7 @@ namespace AppKit {
 		[Export ("miniaturizeAll:")]
 		void MiniaturizeAll (NSObject sender);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the FullKeyboardAccessEnabled value.</summary>
 		[Export ("isFullKeyboardAccessEnabled")]
 		bool FullKeyboardAccessEnabled { get; }
 
@@ -918,9 +856,7 @@ namespace AppKit {
 		[Export ("registerForRemoteNotifications")]
 		void RegisterForRemoteNotifications ();
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsRegisteredForRemoteNotifications value.</summary>
 		[Export ("registeredForRemoteNotifications")]
 		bool IsRegisteredForRemoteNotifications { [Bind ("isRegisteredForRemoteNotifications")] get; }
 
@@ -982,21 +918,15 @@ namespace AppKit {
 		[Field ("NSApplicationProtectedDataDidBecomeAvailableNotification")]
 		NSString ProtectedDataDidBecomeAvailableNotification { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the LaunchIsDefaultLaunchKey key constant.</summary>
 		[Field ("NSApplicationLaunchIsDefaultLaunchKey")]
 		NSString LaunchIsDefaultLaunchKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the LaunchRemoteNotificationKey key constant.</summary>
 		[Field ("NSApplicationLaunchRemoteNotificationKey")]
 		NSString LaunchRemoteNotificationKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the LaunchUserNotificationKey key constant.</summary>
 		[Field ("NSApplicationLaunchUserNotificationKey")]
 		NSString LaunchUserNotificationKey { get; }
 
@@ -1085,33 +1015,23 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Static]
 	interface NSAboutPanelOption {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Credits key constant.</summary>
 		[Field ("NSAboutPanelOptionCredits")]
 		NSString Credits { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ApplicationName key constant.</summary>
 		[Field ("NSAboutPanelOptionApplicationName")]
 		NSString ApplicationName { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ApplicationIcon key constant.</summary>
 		[Field ("NSAboutPanelOptionApplicationIcon")]
 		NSString ApplicationIcon { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Version key constant.</summary>
 		[Field ("NSAboutPanelOptionVersion")]
 		NSString Version { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ApplicationVersion key constant.</summary>
 		[Field ("NSAboutPanelOptionApplicationVersion")]
 		NSString ApplicationVersion { get; }
 	}
@@ -1128,423 +1048,330 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSApplicationDelegate {
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the application should terminate operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the application should terminate operation.</summary>
 			""")]
 		[Export ("applicationShouldTerminate:"), DelegateName ("NSApplicationTermination"), DefaultValue (NSApplicationTerminateReply.Now)]
 		NSApplicationTerminateReply ApplicationShouldTerminate (NSApplication sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <param name="filename">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <param name="filename">The filename.</param>
+		/// <summary>Performs the open file operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the open file operation.</summary>
 			""")]
 		[Export ("application:openFile:"), DelegateName ("NSApplicationFile"), DefaultValue (false)]
 		bool OpenFile (NSApplication sender, string filename);
 
-		/// <param name="sender">To be added.</param>
-		/// <param name="filenames">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <param name="filenames">The filenames.</param>
+		/// <summary>Performs the open files operation.</summary>
 		[Export ("application:openFiles:"), EventArgs ("NSApplicationFiles", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the open files operation.</summary>
 			""")]
 		void OpenFiles (NSApplication sender, string [] filenames);
 
-		/// <param name="sender">To be added.</param>
-		/// <param name="filename">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <param name="filename">The filename.</param>
+		/// <summary>Performs the open temp file operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the open temp file operation.</summary>
 			""")]
 		[Export ("application:openTempFile:"), DelegateName ("NSApplicationFile"), DefaultValue (false)]
 		bool OpenTempFile (NSApplication sender, string filename);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the application should open untitled file operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the application should open untitled file operation.</summary>
 			""")]
 		[Export ("applicationShouldOpenUntitledFile:"), DelegateName ("NSApplicationPredicate"), DefaultValue (false)]
 		bool ApplicationShouldOpenUntitledFile (NSApplication sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the application open untitled file operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the application open untitled file operation.</summary>
 			""")]
 		[Export ("applicationOpenUntitledFile:"), DelegateName ("NSApplicationPredicate"), DefaultValue (false)]
 		bool ApplicationOpenUntitledFile (NSApplication sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <param name="filename">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <param name="filename">The filename.</param>
+		/// <summary>Performs the open file without u i operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the open file without u i operation.</summary>
 			""")]
 		[Export ("application:openFileWithoutUI:"), DelegateName ("NSApplicationFileCommand"), DefaultValue (false)]
 		bool OpenFileWithoutUI (NSObject sender, string filename);
 
-		/// <param name="sender">To be added.</param>
-		/// <param name="filename">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <param name="filename">The filename.</param>
+		/// <summary>Performs the print file operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the print file operation.</summary>
 			""")]
 		[Export ("application:printFile:"), DelegateName ("NSApplicationFile"), DefaultValue (false)]
 		bool PrintFile (NSApplication sender, string filename);
 
-		/// <param name="application">To be added.</param>
-		/// <param name="fileNames">To be added.</param>
-		/// <param name="printSettings">To be added.</param>
-		/// <param name="showPrintPanels">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="application">The application.</param>
+		/// <param name="fileNames">The file names.</param>
+		/// <param name="printSettings">The print settings.</param>
+		/// <param name="showPrintPanels">The show print panels.</param>
+		/// <summary>Performs the print files operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the print files operation.</summary>
 			""")]
 		[Export ("application:printFiles:withSettings:showPrintPanels:"), DelegateName ("NSApplicationPrint"), DefaultValue (NSApplicationPrintReply.Failure)]
 		NSApplicationPrintReply PrintFiles (NSApplication application, string [] fileNames, NSDictionary printSettings, bool showPrintPanels);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the application should terminate after last window closed operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the application should terminate after last window closed operation.</summary>
 			""")]
 		[Export ("applicationShouldTerminateAfterLastWindowClosed:"), DelegateName ("NSApplicationPredicate"), DefaultValue (false)]
 		bool ApplicationShouldTerminateAfterLastWindowClosed (NSApplication sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <param name="hasVisibleWindows">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <param name="hasVisibleWindows">The has visible windows.</param>
+		/// <summary>Performs the application should handle reopen operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the application should handle reopen operation.</summary>
 			""")]
 		[Export ("applicationShouldHandleReopen:hasVisibleWindows:"), DelegateName ("NSApplicationReopen"), DefaultValue (false)]
 		bool ApplicationShouldHandleReopen (NSApplication sender, bool hasVisibleWindows);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the application dock menu operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the application dock menu operation.</summary>
 			""")]
 		[Export ("applicationDockMenu:"), DelegateName ("NSApplicationMenu"), DefaultValue (null)]
 		NSMenu ApplicationDockMenu (NSApplication sender);
 
-		/// <param name="application">To be added.</param>
-		/// <param name="error">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="application">The application.</param>
+		/// <param name="error">The error.</param>
+		/// <summary>Performs the will present error operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will present error operation.</summary>
 			""")]
 		[Export ("application:willPresentError:"), DelegateName ("NSApplicationError"), DefaultValue (null)]
 		NSError WillPresentError (NSApplication application, NSError error);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the will finish launching operation.</summary>
 		[Export ("applicationWillFinishLaunching:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will finish launching operation.</summary>
 			""")]
 		void WillFinishLaunching (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did finish launching operation.</summary>
 		[Export ("applicationDidFinishLaunching:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did finish launching operation.</summary>
 			""")]
 		void DidFinishLaunching (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the will hide operation.</summary>
 		[Export ("applicationWillHide:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will hide operation.</summary>
 			""")]
 		void WillHide (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did hide operation.</summary>
 		[Export ("applicationDidHide:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did hide operation.</summary>
 			""")]
 		void DidHide (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the will unhide operation.</summary>
 		[Export ("applicationWillUnhide:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will unhide operation.</summary>
 			""")]
 		void WillUnhide (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did unhide operation.</summary>
 		[Export ("applicationDidUnhide:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did unhide operation.</summary>
 			""")]
 		void DidUnhide (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the will become active operation.</summary>
 		[Export ("applicationWillBecomeActive:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will become active operation.</summary>
 			""")]
 		void WillBecomeActive (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did become active operation.</summary>
 		[Export ("applicationDidBecomeActive:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did become active operation.</summary>
 			""")]
 		void DidBecomeActive (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the will resign active operation.</summary>
 		[Export ("applicationWillResignActive:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will resign active operation.</summary>
 			""")]
 		void WillResignActive (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did resign active operation.</summary>
 		[Export ("applicationDidResignActive:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did resign active operation.</summary>
 			""")]
 		void DidResignActive (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the will update operation.</summary>
 		[Export ("applicationWillUpdate:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will update operation.</summary>
 			""")]
 		void WillUpdate (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did update operation.</summary>
 		[Export ("applicationDidUpdate:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did update operation.</summary>
 			""")]
 		void DidUpdate (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the will terminate operation.</summary>
 		[Export ("applicationWillTerminate:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will terminate operation.</summary>
 			""")]
 		void WillTerminate (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the screen parameters changed operation.</summary>
 		[Export ("applicationDidChangeScreenParameters:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the screen parameters changed operation.</summary>
 			""")]
 		void ScreenParametersChanged (NSNotification notification);
 
-		/// <param name="application">To be added.</param>
-		/// <param name="deviceToken">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="application">The application.</param>
+		/// <param name="deviceToken">The device token.</param>
+		/// <summary>Performs the registered for remote notifications operation.</summary>
 		[Export ("application:didRegisterForRemoteNotificationsWithDeviceToken:"), EventArgs ("NSData", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the registered for remote notifications operation.</summary>
 			""")]
 		void RegisteredForRemoteNotifications (NSApplication application, NSData deviceToken);
 
-		/// <param name="application">To be added.</param>
-		/// <param name="error">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="application">The application.</param>
+		/// <param name="error">The error.</param>
+		/// <summary>Performs the failed to register for remote notifications operation.</summary>
 		[Export ("application:didFailToRegisterForRemoteNotificationsWithError:"), EventArgs ("NSError", true, XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the failed to register for remote notifications operation.</summary>
 			""")]
 		void FailedToRegisterForRemoteNotifications (NSApplication application, NSError error);
 
-		/// <param name="application">To be added.</param>
-		/// <param name="userInfo">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="application">The application.</param>
+		/// <param name="userInfo">The user info.</param>
+		/// <summary>Performs the received remote notification operation.</summary>
 		[Export ("application:didReceiveRemoteNotification:"), EventArgs ("NSDictionary", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the received remote notification operation.</summary>
 			""")]
 		void ReceivedRemoteNotification (NSApplication application, NSDictionary userInfo);
 
-		/// <param name="app">To be added.</param>
-		/// <param name="encoder">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="app">The app.</param>
+		/// <param name="encoder">The encoder.</param>
+		/// <summary>Performs the will encode restorable state operation.</summary>
 		[Export ("application:willEncodeRestorableState:"), EventArgs ("NSCoder", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will encode restorable state operation.</summary>
 			""")]
 		void WillEncodeRestorableState (NSApplication app, NSCoder encoder);
 
-		/// <param name="app">To be added.</param>
-		/// <param name="state">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="app">The app.</param>
+		/// <param name="state">The state.</param>
+		/// <summary>Performs the decoded restorable state operation.</summary>
 		[Export ("application:didDecodeRestorableState:"), EventArgs ("NSCoder", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the decoded restorable state operation.</summary>
 			""")]
 		void DecodedRestorableState (NSApplication app, NSCoder state);
 
-		/// <param name="application">To be added.</param>
-		/// <param name="userActivityType">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="application">The application.</param>
+		/// <param name="userActivityType">The user activity type.</param>
+		/// <summary>Performs the will continue user activity operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will continue user activity operation.</summary>
 			""")]
 		[Export ("application:willContinueUserActivityWithType:"), DelegateName ("NSApplicationUserActivityType"), DefaultValue (false)]
 		bool WillContinueUserActivity (NSApplication application, string userActivityType);
 
-		/// <param name="application">To be added.</param>
-		/// <param name="userActivity">To be added.</param>
-		/// <param name="restorationHandler">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="application">The application.</param>
+		/// <param name="userActivity">The user activity.</param>
+		/// <param name="restorationHandler">The restoration handler.</param>
+		/// <summary>Performs the continue user activity operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the continue user activity operation.</summary>
 			""")]
 		[Export ("application:continueUserActivity:restorationHandler:"), DelegateName ("NSApplicationContinueUserActivity"), DefaultValue (false)]
 		bool ContinueUserActivity (NSApplication application, NSUserActivity userActivity, ContinueUserActivityRestorationHandler restorationHandler);
 
-		/// <param name="application">To be added.</param>
-		/// <param name="userActivityType">To be added.</param>
-		/// <param name="error">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="application">The application.</param>
+		/// <param name="userActivityType">The user activity type.</param>
+		/// <param name="error">The error.</param>
+		/// <summary>Performs the failed to continue user activity operation.</summary>
 		[Export ("application:didFailToContinueUserActivityWithType:error:"), EventArgs ("NSApplicationFailed", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the failed to continue user activity operation.</summary>
 			"""), DefaultValue (false)]
 		void FailedToContinueUserActivity (NSApplication application, string userActivityType, NSError error);
 
-		/// <param name="application">To be added.</param>
-		/// <param name="userActivity">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="application">The application.</param>
+		/// <param name="userActivity">The user activity.</param>
+		/// <summary>Performs the updated user activity operation.</summary>
 		[Export ("application:didUpdateUserActivity:"), EventArgs ("NSApplicationUpdatedUserActivity", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the updated user activity operation.</summary>
 			"""), DefaultValue (false)]
 		void UpdatedUserActivity (NSApplication application, NSUserActivity userActivity);
 
-		/// <param name="application">To be added.</param>
-		/// <param name="metadata">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="application">The application.</param>
+		/// <param name="metadata">The metadata.</param>
+		/// <summary>Performs the user did accept cloud kit share operation.</summary>
 		[Export ("application:userDidAcceptCloudKitShareWithMetadata:"), EventArgs ("NSApplicationUserAcceptedCloudKitShare", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the user did accept cloud kit share operation.</summary>
 			""")]
 		void UserDidAcceptCloudKitShare (NSApplication application, CKShareMetadata metadata);
 
-		/// <param name="application">To be added.</param>
-		/// <param name="urls">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="application">The application.</param>
+		/// <param name="urls">The urls.</param>
+		/// <summary>Performs the open urls operation.</summary>
 		[EventArgs ("NSApplicationOpenUrls", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the open urls operation.</summary>
 			""")]
 		[Export ("application:openURLs:")]
 		void OpenUrls (NSApplication application, NSUrl [] urls);
 
-		/// <param name="sender">To be added.</param>
-		/// <param name="key">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <param name="key">The key.</param>
+		/// <summary>Performs the handles key operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the handles key operation.</summary>
 			""")]
 		[Deprecated (PlatformName.MacOSX, 11, 0, message: "Now optional on NSApplicationDelegate.")]
 		[Export ("application:delegateHandlesKey:"), DelegateName ("NSApplicationHandlesKey"), NoDefaultValue]
@@ -1573,18 +1400,16 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSServicesMenuRequestor {
-		/// <param name="pboard">To be added.</param>
-		/// <param name="types">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="pboard">The pboard.</param>
+		/// <param name="types">The types.</param>
+		/// <summary>Performs the write selection to pasteboard operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("writeSelectionToPasteboard:types:")]
 		bool WriteSelectionToPasteboard (NSPasteboard pboard, string [] types);
 
-		/// <param name="pboard">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="pboard">The pboard.</param>
+		/// <summary>Performs the read selection from pasteboard operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("readSelectionFromPasteboard:")]
 		bool ReadSelectionFromPasteboard (NSPasteboard pboard);
 	}
@@ -1593,21 +1418,18 @@ namespace AppKit {
 	[Category]
 	[BaseType (typeof (NSApplication))]
 	interface NSApplication_NSTouchBarCustomization {
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the get automatic customize touch bar menu item enabled operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("isAutomaticCustomizeTouchBarMenuItemEnabled")]
 		bool GetAutomaticCustomizeTouchBarMenuItemEnabled ();
 
-		/// <param name="enabled">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="enabled">The enabled.</param>
+		/// <summary>Performs the set automatic customize touch bar menu item enabled operation.</summary>
 		[Export ("setAutomaticCustomizeTouchBarMenuItemEnabled:")]
 		void SetAutomaticCustomizeTouchBarMenuItemEnabled (bool enabled);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the toggle touch bar customization palette operation.</summary>
 		[Export ("toggleTouchBarCustomizationPalette:")]
 		void ToggleTouchBarCustomizationPalette ([NullAllowed] NSObject sender);
 	}
@@ -1825,9 +1647,7 @@ namespace AppKit {
 		[Export ("transformUsingAffineTransform:")]
 		void TransformUsingAffineTransform (NSAffineTransform transform);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsEmpty value.</summary>
 		[Export ("isEmpty")]
 		bool IsEmpty { get; }
 
@@ -1941,9 +1761,8 @@ namespace AppKit {
 		[Internal]
 		void _AppendBezierPathWithCGGlyphs (IntPtr glyphs, nint count, NSFont font);
 
-		/// <param name="path">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="path">The path.</param>
+		///         <summary>Performs the append operation.</summary>
 		[Wrap ("AppendPath (path)")]
 		void Append (NSBezierPath path);
 
@@ -2005,9 +1824,7 @@ namespace AppKit {
 		[Export ("getBitmapDataPlanes:")]
 		void GetBitmapDataPlanes (IntPtr data);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsPlanar value.</summary>
 		[Export ("isPlanar")]
 		bool IsPlanar { get; }
 
@@ -2104,90 +1921,62 @@ namespace AppKit {
 		[Export ("representationUsingType:properties:")]
 		NSData RepresentationUsingTypeProperties (NSBitmapImageFileType storageType, NSDictionary properties);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CompressionMethod key constant.</summary>
 		[Field ("NSImageCompressionMethod")]
 		NSString CompressionMethod { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CompressionFactor key constant.</summary>
 		[Field ("NSImageCompressionFactor")]
 		NSString CompressionFactor { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the DitherTransparency key constant.</summary>
 		[Field ("NSImageDitherTransparency")]
 		NSString DitherTransparency { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the RGBColorTable key constant.</summary>
 		[Field ("NSImageRGBColorTable")]
 		NSString RGBColorTable { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Interlaced key constant.</summary>
 		[Field ("NSImageInterlaced")]
 		NSString Interlaced { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ColorSyncProfileData key constant.</summary>
 		[Field ("NSImageColorSyncProfileData")]
 		NSString ColorSyncProfileData { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the FrameCount key constant.</summary>
 		[Field ("NSImageFrameCount")]
 		NSString FrameCount { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CurrentFrame key constant.</summary>
 		[Field ("NSImageCurrentFrame")]
 		NSString CurrentFrame { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CurrentFrameDuration key constant.</summary>
 		[Field ("NSImageCurrentFrameDuration")]
 		NSString CurrentFrameDuration { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the LoopCount key constant.</summary>
 		[Field ("NSImageLoopCount")]
 		NSString LoopCount { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Gamma key constant.</summary>
 		[Field ("NSImageGamma")]
 		NSString Gamma { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Progressive key constant.</summary>
 		[Field ("NSImageProgressive")]
 		NSString Progressive { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the EXIFData key constant.</summary>
 		[Field ("NSImageEXIFData")]
 		NSString EXIFData { get; }
 
 		[Field ("NSImageIPTCData")]
 		NSString IptcData { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the FallbackBackgroundColor key constant.</summary>
 		[Field ("NSImageFallbackBackgroundColor")]
 		NSString FallbackBackgroundColor { get; }
 	}
@@ -2235,9 +2024,7 @@ namespace AppKit {
 		[Export ("contentView")]
 		NSObject ContentView { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Transparent value.</summary>
 		[Export ("transparent")]
 		bool Transparent { [Bind ("isTransparent")] get; set; }
 
@@ -2270,9 +2057,7 @@ namespace AppKit {
 		[Export ("loadColumnZero")]
 		void LoadColumnZero ();
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Loaded value.</summary>
 		[Export ("isLoaded")]
 		bool Loaded { get; }
 
@@ -2495,9 +2280,7 @@ namespace AppKit {
 		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSBrowserDelegate Delegate { get; set; }
 
@@ -2510,9 +2293,7 @@ namespace AppKit {
 		[Export ("separatesColumns")]
 		bool SeparatesColumns { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Titled value.</summary>
 		[Export ("titled")]
 		bool Titled { [Bind ("isTitled")] get; set; }
 
@@ -2557,203 +2338,179 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSBrowserDelegate {
-		/// <param name="sender">To be added.</param>
-		/// <param name="column">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <param name="column">The column.</param>
+		/// <summary>Performs the rows in column operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("browser:numberOfRowsInColumn:"), EventArgs ("NSBrowserColumn")]
 		nint RowsInColumn (NSBrowser sender, nint column);
 
-		/// <param name="sender">To be added.</param>
-		/// <param name="column">To be added.</param>
-		/// <param name="matrix">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <param name="column">The column.</param>
+		/// <param name="matrix">The matrix.</param>
+		/// <summary>Performs the create rows for column operation.</summary>
 		[Export ("browser:createRowsForColumn:inMatrix:")]
 		void CreateRowsForColumn (NSBrowser sender, nint column, NSMatrix matrix);
 
-		/// <param name="browser">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="browser">The browser.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the count children operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("browser:numberOfChildrenOfItem:")]
 		nint CountChildren (NSBrowser browser, NSObject item);
 
-		/// <param name="browser">To be added.</param>
-		/// <param name="index">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="browser">The browser.</param>
+		/// <param name="index">The index.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the get child operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("browser:child:ofItem:")]
 		NSObject GetChild (NSBrowser browser, nint index, NSObject item);
 
-		/// <param name="browser">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="browser">The browser.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the is leaf item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("browser:isLeafItem:")]
 		bool IsLeafItem (NSBrowser browser, NSObject item);
 
-		/// <param name="browser">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="browser">The browser.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the object value for item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("browser:objectValueForItem:")]
 		NSObject ObjectValueForItem (NSBrowser browser, NSObject item);
 
-		/// <param name="browser">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <param name="columnIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="browser">The browser.</param>
+		/// <param name="row">The row.</param>
+		/// <param name="columnIndex">The column index.</param>
+		/// <summary>Performs the row height operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("browser:heightOfRow:inColumn:")]
 		nfloat RowHeight (NSBrowser browser, nint row, nint columnIndex);
 
-		/// <param name="browser">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="browser">The browser.</param>
+		/// <summary>Performs the root item for browser operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("rootItemForBrowser:")]
 		NSObject RootItemForBrowser (NSBrowser browser);
 
-		/// <param name="browser">To be added.</param>
-		/// <param name="obj">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="browser">The browser.</param>
+		/// <param name="obj">The obj.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the set object value operation.</summary>
 		[Export ("browser:setObjectValue:forItem:")]
 		void SetObjectValue (NSBrowser browser, NSObject obj, NSObject item);
 
-		/// <param name="browser">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="browser">The browser.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the should edit item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("browser:shouldEditItem:")]
 		bool ShouldEditItem (NSBrowser browser, NSObject item);
 
-		/// <param name="sender">To be added.</param>
-		/// <param name="cell">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <param name="column">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <param name="cell">The cell.</param>
+		/// <param name="row">The row.</param>
+		/// <param name="column">The column.</param>
+		/// <summary>Performs the will display cell operation.</summary>
 		[Export ("browser:willDisplayCell:atRow:column:")]
 		void WillDisplayCell (NSBrowser sender, NSObject cell, nint row, nint column);
 
-		/// <param name="sender">To be added.</param>
-		/// <param name="column">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <param name="column">The column.</param>
+		/// <summary>Performs the column title operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("browser:titleOfColumn:")]
 		string ColumnTitle (NSBrowser sender, nint column);
 
-		/// <param name="sender">To be added.</param>
-		/// <param name="title">To be added.</param>
-		/// <param name="column">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <param name="title">The title.</param>
+		/// <param name="column">The column.</param>
+		/// <summary>Performs the select cell with string operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("browser:selectCellWithString:inColumn:")]
 		bool SelectCellWithString (NSBrowser sender, string title, nint column);
 
-		/// <param name="sender">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <param name="column">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <param name="row">The row.</param>
+		/// <param name="column">The column.</param>
+		/// <summary>Performs the select row in column operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("browser:selectRow:inColumn:")]
 		bool SelectRowInColumn (NSBrowser sender, nint row, nint column);
 
-		/// <param name="sender">To be added.</param>
-		/// <param name="column">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <param name="column">The column.</param>
+		/// <summary>Performs the is column valid operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("browser:isColumnValid:")]
 		bool IsColumnValid (NSBrowser sender, nint column);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the will scroll operation.</summary>
 		[Export ("browserWillScroll:")]
 		void WillScroll (NSBrowser sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the did scroll operation.</summary>
 		[Export ("browserDidScroll:")]
 		void DidScroll (NSBrowser sender);
 
-		/// <param name="browser">To be added.</param>
-		/// <param name="columnIndex">To be added.</param>
-		/// <param name="userResize">To be added.</param>
-		/// <param name="suggestedWidth">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="browser">The browser.</param>
+		/// <param name="columnIndex">The column index.</param>
+		/// <param name="userResize">The user resize.</param>
+		/// <param name="suggestedWidth">The suggested width.</param>
+		/// <summary>Performs the should size column operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("browser:shouldSizeColumn:forUserResize:toWidth:")]
 		nfloat ShouldSizeColumn (NSBrowser browser, nint columnIndex, bool userResize, nfloat suggestedWidth);
 
-		/// <param name="browser">To be added.</param>
-		/// <param name="columnIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="browser">The browser.</param>
+		/// <param name="columnIndex">The column index.</param>
+		/// <summary>Performs the size to fit width operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("browser:sizeToFitWidthOfColumn:")]
 		nfloat SizeToFitWidth (NSBrowser browser, nint columnIndex);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the column configuration did change operation.</summary>
 		[Export ("browserColumnConfigurationDidChange:")]
 		void ColumnConfigurationDidChange (NSNotification notification);
 
-		/// <param name="browser">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <param name="column">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="browser">The browser.</param>
+		/// <param name="row">The row.</param>
+		/// <param name="column">The column.</param>
+		/// <summary>Performs the should show cell expansion operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("browser:shouldShowCellExpansionForRow:column:")]
 		bool ShouldShowCellExpansion (NSBrowser browser, nint row, nint column);
 
-		/// <param name="browser">To be added.</param>
-		/// <param name="rowIndexes">To be added.</param>
-		/// <param name="column">To be added.</param>
-		/// <param name="pasteboard">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="browser">The browser.</param>
+		/// <param name="rowIndexes">The row indexes.</param>
+		/// <param name="column">The column.</param>
+		/// <param name="pasteboard">The pasteboard.</param>
+		/// <summary>Performs the write rows with indexes to pasteboard operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("browser:writeRowsWithIndexes:inColumn:toPasteboard:")]
 		bool WriteRowsWithIndexesToPasteboard (NSBrowser browser, NSIndexSet rowIndexes, nint column, NSPasteboard pasteboard);
 
-		/// <param name="browser">To be added.</param>
-		/// <param name="dropDestination">To be added.</param>
-		/// <param name="rowIndexes">To be added.</param>
-		/// <param name="column">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="browser">The browser.</param>
+		/// <param name="dropDestination">The drop destination.</param>
+		/// <param name="rowIndexes">The row indexes.</param>
+		/// <param name="column">The column.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use 'NSFilePromiseReceiver' objects instead.")]
 		[Export ("browser:namesOfPromisedFilesDroppedAtDestination:forDraggedRowsWithIndexes:inColumn:")]
 		string [] PromisedFilesDroppedAtDestination (NSBrowser browser, NSUrl dropDestination, NSIndexSet rowIndexes, nint column);
 
-		/// <param name="browser">To be added.</param>
-		/// <param name="rowIndexes">To be added.</param>
-		/// <param name="column">To be added.</param>
-		/// <param name="theEvent">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="browser">The browser.</param>
+		/// <param name="rowIndexes">The row indexes.</param>
+		/// <param name="column">The column.</param>
+		/// <param name="theEvent">The the event.</param>
+		/// <summary>Performs the can drag rows with indexes operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("browser:canDragRowsWithIndexes:inColumn:withEvent:")]
 		bool CanDragRowsWithIndexes (NSBrowser browser, NSIndexSet rowIndexes, nint column, NSEvent theEvent);
 
@@ -2767,66 +2524,59 @@ namespace AppKit {
 		[Export ("browser:acceptDrop:atRow:column:dropOperation:")]
 		bool AcceptDrop (NSBrowser browser, INSDraggingInfo info, nint row, nint column, NSBrowserDropOperation dropOperation);
 
-		/// <param name="browser">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <param name="column">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="browser">The browser.</param>
+		/// <param name="row">The row.</param>
+		/// <param name="column">The column.</param>
+		/// <summary>Performs the type select string operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[return: NullAllowed]
 		[Export ("browser:typeSelectStringForRow:inColumn:")]
 		string TypeSelectString (NSBrowser browser, nint row, nint column);
 
-		/// <param name="browser">To be added.</param>
-		/// <param name="theEvent">To be added.</param>
-		/// <param name="currentSearchString">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="browser">The browser.</param>
+		/// <param name="theEvent">The the event.</param>
+		/// <param name="currentSearchString">The current search string.</param>
+		/// <summary>Performs the should type select for event operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("browser:shouldTypeSelectForEvent:withCurrentSearchString:")]
 		bool ShouldTypeSelectForEvent (NSBrowser browser, NSEvent theEvent, string currentSearchString);
 
-		/// <param name="browser">To be added.</param>
-		/// <param name="startRow">To be added.</param>
-		/// <param name="endRow">To be added.</param>
-		/// <param name="column">To be added.</param>
-		/// <param name="searchString">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="browser">The browser.</param>
+		/// <param name="startRow">The start row.</param>
+		/// <param name="endRow">The end row.</param>
+		/// <param name="column">The column.</param>
+		/// <param name="searchString">The search string.</param>
+		/// <summary>Performs the next type select match operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("browser:nextTypeSelectMatchFromRow:toRow:inColumn:forString:")]
 		nint NextTypeSelectMatch (NSBrowser browser, nint startRow, nint endRow, nint column, string searchString);
 
-		/// <param name="browser">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="browser">The browser.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the preview view controller for leaf item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("browser:previewViewControllerForLeafItem:")]
 		NSViewController PreviewViewControllerForLeafItem (NSBrowser browser, NSObject item);
 
-		/// <param name="browser">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="browser">The browser.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the header view controller for item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("browser:headerViewControllerForItem:")]
 		NSViewController HeaderViewControllerForItem (NSBrowser browser, NSObject item);
 
-		/// <param name="browser">To be added.</param>
-		/// <param name="oldLastColumn">To be added.</param>
-		/// <param name="toColumn">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="browser">The browser.</param>
+		/// <param name="oldLastColumn">The old last column.</param>
+		/// <param name="toColumn">The to column.</param>
+		/// <summary>Performs the did change last column operation.</summary>
 		[Export ("browser:didChangeLastColumn:toColumn:")]
 		void DidChangeLastColumn (NSBrowser browser, nint oldLastColumn, nint toColumn);
 
-		/// <param name="browser">To be added.</param>
-		/// <param name="proposedSelectionIndexes">To be added.</param>
-		/// <param name="inColumn">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="browser">The browser.</param>
+		/// <param name="proposedSelectionIndexes">The proposed selection indexes.</param>
+		/// <param name="inColumn">The in column.</param>
+		/// <summary>Performs the selection indexes for proposed selection operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("browser:selectionIndexesForProposedSelection:inColumn:")]
 		NSIndexSet SelectionIndexesForProposedSelection (NSBrowser browser, NSIndexSet proposedSelectionIndexes, nint inColumn);
 
@@ -2861,15 +2611,11 @@ namespace AppKit {
 		void Set ();
 
 		//Detected properties
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Leaf value.</summary>
 		[Export ("leaf")]
 		bool Leaf { [Bind ("isLeaf")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Loaded value.</summary>
 		[Export ("loaded")]
 		bool Loaded { [Bind ("isLoaded")] get; set; }
 
@@ -2916,21 +2662,16 @@ namespace AppKit {
 		[Export ("setButtonType:")]
 		void SetButtonType (NSButtonType aType);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsOpaque value.</summary>
 		[Export ("isOpaque")]
 		bool IsOpaque { get; }
 
-		/// <param name="fontObj">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="fontObj">The font obj.</param>
+		///         <summary>Performs the set font operation.</summary>
 		[Export ("setFont:")]
 		void SetFont (NSFont fontObj);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Transparent value.</summary>
 		[Export ("transparent")]
 		bool Transparent { [Bind ("isTransparent")] get; set; }
 
@@ -2974,9 +2715,8 @@ namespace AppKit {
 		[Deprecated (PlatformName.MacOSX, 10, 8, message: "This method still will set Title with the ampersand stripped from the value, but does nothing else. Set the Title directly.")]
 		string AlternateMnemonic { get; [Bind ("setAlternateTitleWithMnemonic:")] set; }
 
-		/// <param name="type">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="type">The type.</param>
+		///         <summary>Performs the set gradient type operation.</summary>
 		[Export ("setGradientType:")]
 		[Deprecated (PlatformName.MacOSX, 10, 12, message: "The GradientType property is unused, and setting it has no effect.")]
 		void SetGradientType (NSGradientType type);
@@ -3066,9 +2806,7 @@ namespace AppKit {
 		[Export ("bordered")]
 		bool Bordered { [Bind ("isBordered")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Transparent value.</summary>
 		[Export ("transparent")]
 		bool Transparent { [Bind ("isTransparent")] get; set; }
 
@@ -3115,9 +2853,7 @@ namespace AppKit {
 		[Export ("sound")]
 		NSSound Sound { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the IsSpringLoaded value.</summary>
 		[Export ("springLoaded")]
 		bool IsSpringLoaded { [Bind ("isSpringLoaded")] get; set; }
 
@@ -3210,36 +2946,26 @@ namespace AppKit {
 		[Export ("title")]
 		string Title { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsOpaque value.</summary>
 		[Export ("isOpaque")]
 		bool IsOpaque { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Enabled value.</summary>
 		[Export ("enabled")]
 		bool Enabled { [Bind ("isEnabled")] get; set; }
 
 		[Export ("sendActionOn:")]
 		nint SendActionOn (NSEventType mask);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the IsContinuous value.</summary>
 		[Export ("continuous")]
 		bool IsContinuous { [Bind ("isContinuous")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Editable value.</summary>
 		[Export ("editable")]
 		bool Editable { [Bind ("isEditable")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Selectable value.</summary>
 		[Export ("selectable")]
 		bool Selectable { [Bind ("isSelectable")] get; set; }
 
@@ -3252,9 +2978,7 @@ namespace AppKit {
 		[Export ("scrollable")]
 		bool Scrollable { [Bind ("isScrollable")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Highlighted value.</summary>
 		[Export ("highlighted")]
 		bool Highlighted { [Bind ("isHighlighted")] get; set; }
 
@@ -3411,9 +3135,8 @@ namespace AppKit {
 		[NullAllowed]
 		NSMenu DefaultMenu { get; }
 
-		/// <param name="flag">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="flag">The flag.</param>
+		///         <summary>Performs the set sends action on end editing operation.</summary>
 		[Export ("setSendsActionOnEndEditing:")]
 		void SetSendsActionOnEndEditing (bool flag);
 
@@ -3618,9 +3341,8 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Category, BaseType (typeof (NSCoder))]
 	partial interface NSCoderAppKitAddons {
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the decode n x color operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Deprecated (PlatformName.MacOSX, 10, 9)]
 		[Export ("decodeNXColor")]
 		NSColor DecodeNXColor ();
@@ -3636,9 +3358,7 @@ namespace AppKit {
 		[NullAllowed]
 		NSCollectionView CollectionView { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Selected value.</summary>
 		[Export ("selected")]
 		bool Selected { [Bind ("isSelected")] get; set; }
 
@@ -3661,9 +3381,7 @@ namespace AppKit {
 		[Export ("initWithFrame:")]
 		NativeHandle Constructor (CGRect frameRect);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsFirstResponder value.</summary>
 		[Export ("isFirstResponder")]
 		bool IsFirstResponder { get; }
 
@@ -3689,18 +3407,14 @@ namespace AppKit {
 		[Export ("delegate", ArgumentSemantic.Weak), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSCollectionViewDelegate Delegate { get; set; }
 
 		[Export ("content", ArgumentSemantic.Copy)]
 		NSObject [] Content { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Selectable value.</summary>
 		[Export ("selectable")]
 		bool Selectable { [Bind ("isSelectable")] get; set; }
 
@@ -3882,37 +3596,33 @@ namespace AppKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NSCollectionViewDataSource {
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="section">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="section">The section.</param>
+		/// <summary>Performs the get numberof items operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("collectionView:numberOfItemsInSection:")]
 		nint GetNumberofItems (NSCollectionView collectionView, nint section);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="indexPath">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="indexPath">The index path.</param>
+		/// <summary>Performs the get item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("collectionView:itemForRepresentedObjectAtIndexPath:")]
 		NSCollectionViewItem GetItem (NSCollectionView collectionView, NSIndexPath indexPath);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <summary>Performs the get number of sections operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("numberOfSectionsInCollectionView:")]
 		nint GetNumberOfSections (NSCollectionView collectionView);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="kind">To be added.</param>
-		/// <param name="indexPath">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="kind">The kind.</param>
+		/// <param name="indexPath">The index path.</param>
+		/// <summary>Performs the get view operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("collectionView:viewForSupplementaryElementOfKind:atIndexPath:")]
 		NSView GetView (NSCollectionView collectionView, NSString kind, NSIndexPath indexPath);
 	}
@@ -3924,31 +3634,28 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	partial interface NSCollectionViewDelegate {
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="indexes">To be added.</param>
-		/// <param name="evt">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="indexes">The indexes.</param>
+		/// <param name="evt">The evt.</param>
+		/// <summary>Performs the can drag items operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("collectionView:canDragItemsAtIndexes:withEvent:")]
 		bool CanDragItems (NSCollectionView collectionView, NSIndexSet indexes, NSEvent evt);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="indexes">To be added.</param>
-		/// <param name="toPasteboard">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="indexes">The indexes.</param>
+		/// <param name="toPasteboard">The to pasteboard.</param>
+		/// <summary>Performs the write items operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("collectionView:writeItemsAtIndexes:toPasteboard:")]
 		[Deprecated (PlatformName.MacOSX, 10, 15, message: "Use the 'GetPasteboardWriter' method instead.")]
 		bool WriteItems (NSCollectionView collectionView, NSIndexSet indexes, NSPasteboard toPasteboard);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="dropUrl">To be added.</param>
-		/// <param name="indexes">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="dropUrl">The drop url.</param>
+		/// <param name="indexes">The indexes.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use 'NSFilePromiseReceiver' objects instead.")]
 		[Export ("collectionView:namesOfPromisedFilesDroppedAtDestination:forDraggedItemsAtIndexes:")]
 		string [] NamesOfPromisedFilesDroppedAtDestination (NSCollectionView collectionView, NSUrl dropUrl, NSIndexSet indexes);
@@ -3962,42 +3669,38 @@ namespace AppKit {
 		[Export ("collectionView:acceptDrop:index:dropOperation:")]
 		bool AcceptDrop (NSCollectionView collectionView, INSDraggingInfo draggingInfo, nint index, NSCollectionViewDropOperation dropOperation);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="indexPaths">To be added.</param>
-		/// <param name="theEvent">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="indexPaths">The index paths.</param>
+		/// <param name="theEvent">The the event.</param>
+		/// <summary>Performs the can drag items operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("collectionView:canDragItemsAtIndexPaths:withEvent:")]
 		bool CanDragItems (NSCollectionView collectionView, NSSet indexPaths, NSEvent theEvent);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="indexPaths">To be added.</param>
-		/// <param name="pasteboard">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="indexPaths">The index paths.</param>
+		/// <param name="pasteboard">The pasteboard.</param>
+		/// <summary>Performs the write items operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("collectionView:writeItemsAtIndexPaths:toPasteboard:")]
 		[Deprecated (PlatformName.MacOSX, 10, 15, message: "Use the 'GetPasteboardWriter' method instead.")]
 		bool WriteItems (NSCollectionView collectionView, NSSet indexPaths, NSPasteboard pasteboard);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="dropURL">To be added.</param>
-		/// <param name="indexPaths">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="dropURL">The drop u r l.</param>
+		/// <param name="indexPaths">The index paths.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use 'NSFilePromiseReceiver' objects instead.")]
 		[Export ("collectionView:namesOfPromisedFilesDroppedAtDestination:forDraggedItemsAtIndexPaths:")]
 		string [] GetNamesOfPromisedFiles (NSCollectionView collectionView, NSUrl dropURL, NSSet indexPaths);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="indexPaths">To be added.</param>
-		/// <param name="theEvent">To be added.</param>
-		/// <param name="dragImageOffset">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="indexPaths">The index paths.</param>
+		/// <param name="theEvent">The the event.</param>
+		/// <param name="dragImageOffset">The drag image offset.</param>
+		/// <summary>Performs the get dragging image operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("collectionView:draggingImageForItemsAtIndexPaths:withEvent:offset:")]
 		NSImage GetDraggingImage (NSCollectionView collectionView, NSSet indexPaths, NSEvent theEvent, ref CGPoint dragImageOffset);
 
@@ -4007,111 +3710,98 @@ namespace AppKit {
 		[Export ("collectionView:acceptDrop:indexPath:dropOperation:")]
 		bool AcceptDrop (NSCollectionView collectionView, INSDraggingInfo draggingInfo, NSIndexPath indexPath, NSCollectionViewDropOperation dropOperation);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="indexPath">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="indexPath">The index path.</param>
+		/// <summary>Performs the get pasteboard writer operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("collectionView:pasteboardWriterForItemAtIndexPath:")]
 		[return: NullAllowed]
 		INSPasteboardWriting GetPasteboardWriter (NSCollectionView collectionView, NSIndexPath indexPath);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="session">To be added.</param>
-		/// <param name="screenPoint">To be added.</param>
-		/// <param name="indexPaths">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="session">The session.</param>
+		/// <param name="screenPoint">The screen point.</param>
+		/// <param name="indexPaths">The index paths.</param>
+		/// <summary>Performs the dragging session will begin operation.</summary>
 		[Export ("collectionView:draggingSession:willBeginAtPoint:forItemsAtIndexPaths:")]
 		void DraggingSessionWillBegin (NSCollectionView collectionView, NSDraggingSession session, CGPoint screenPoint, NSSet indexPaths);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="indexPaths">To be added.</param>
-		/// <param name="highlightState">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="indexPaths">The index paths.</param>
+		/// <param name="highlightState">The highlight state.</param>
+		/// <summary>Performs the should change items operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("collectionView:shouldChangeItemsAtIndexPaths:toHighlightState:")]
 		NSSet ShouldChangeItems (NSCollectionView collectionView, NSSet indexPaths, NSCollectionViewItemHighlightState highlightState);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="indexPaths">To be added.</param>
-		/// <param name="highlightState">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="indexPaths">The index paths.</param>
+		/// <param name="highlightState">The highlight state.</param>
+		/// <summary>Performs the items changed operation.</summary>
 		[Export ("collectionView:didChangeItemsAtIndexPaths:toHighlightState:")]
 		void ItemsChanged (NSCollectionView collectionView, NSSet indexPaths, NSCollectionViewItemHighlightState highlightState);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="indexPaths">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="indexPaths">The index paths.</param>
+		/// <summary>Performs the should select items operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("collectionView:shouldSelectItemsAtIndexPaths:")]
 		NSSet ShouldSelectItems (NSCollectionView collectionView, NSSet indexPaths);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="indexPaths">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="indexPaths">The index paths.</param>
+		/// <summary>Performs the should deselect items operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("collectionView:shouldDeselectItemsAtIndexPaths:")]
 		NSSet ShouldDeselectItems (NSCollectionView collectionView, NSSet indexPaths);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="indexPaths">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="indexPaths">The index paths.</param>
+		/// <summary>Performs the items selected operation.</summary>
 		[Export ("collectionView:didSelectItemsAtIndexPaths:")]
 		void ItemsSelected (NSCollectionView collectionView, NSSet indexPaths);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="indexPaths">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="indexPaths">The index paths.</param>
+		/// <summary>Performs the items deselected operation.</summary>
 		[Export ("collectionView:didDeselectItemsAtIndexPaths:")]
 		void ItemsDeselected (NSCollectionView collectionView, NSSet indexPaths);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <param name="indexPath">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="item">The item.</param>
+		/// <param name="indexPath">The index path.</param>
+		/// <summary>Performs the will display item operation.</summary>
 		[Export ("collectionView:willDisplayItem:forRepresentedObjectAtIndexPath:")]
 		void WillDisplayItem (NSCollectionView collectionView, NSCollectionViewItem item, NSIndexPath indexPath);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="view">To be added.</param>
-		/// <param name="elementKind">To be added.</param>
-		/// <param name="indexPath">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="view">The view.</param>
+		/// <param name="elementKind">The element kind.</param>
+		/// <param name="indexPath">The index path.</param>
+		/// <summary>Performs the will display supplementary view operation.</summary>
 		[Export ("collectionView:willDisplaySupplementaryView:forElementKind:atIndexPath:")]
 		void WillDisplaySupplementaryView (NSCollectionView collectionView, NSView view, NSString elementKind, NSIndexPath indexPath);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <param name="indexPath">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="item">The item.</param>
+		/// <param name="indexPath">The index path.</param>
+		/// <summary>Performs the displaying item ended operation.</summary>
 		[Export ("collectionView:didEndDisplayingItem:forRepresentedObjectAtIndexPath:")]
 		void DisplayingItemEnded (NSCollectionView collectionView, NSCollectionViewItem item, NSIndexPath indexPath);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="view">To be added.</param>
-		/// <param name="elementKind">To be added.</param>
-		/// <param name="indexPath">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="view">The view.</param>
+		/// <param name="elementKind">The element kind.</param>
+		/// <param name="indexPath">The index path.</param>
+		/// <summary>Performs the displaying supplementary view ended operation.</summary>
 		[Export ("collectionView:didEndDisplayingSupplementaryView:forElementOfKind:atIndexPath:")]
 		void DisplayingSupplementaryViewEnded (NSCollectionView collectionView, NSView view, string elementKind, NSIndexPath indexPath);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="fromLayout">To be added.</param>
-		/// <param name="toLayout">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="fromLayout">The from layout.</param>
+		/// <param name="toLayout">The to layout.</param>
+		/// <summary>Performs the transition layout operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("collectionView:transitionLayoutForOldLayout:newLayout:")]
 		NSCollectionViewTransitionLayout TransitionLayout (NSCollectionView collectionView, NSCollectionViewLayout fromLayout, NSCollectionViewLayout toLayout);
 	}
@@ -4122,35 +3812,30 @@ namespace AppKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NSCollectionViewElement : NSUserInterfaceItemIdentification {
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the prepare for reuse operation.</summary>
 		[Export ("prepareForReuse")]
 		void PrepareForReuse ();
 
-		/// <param name="layoutAttributes">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="layoutAttributes">The layout attributes.</param>
+		/// <summary>Performs the apply layout attributes operation.</summary>
 		[Export ("applyLayoutAttributes:")]
 		void ApplyLayoutAttributes (NSCollectionViewLayoutAttributes layoutAttributes);
 
-		/// <param name="oldLayout">To be added.</param>
-		/// <param name="newLayout">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="oldLayout">The old layout.</param>
+		/// <param name="newLayout">The new layout.</param>
+		/// <summary>Performs the will transition operation.</summary>
 		[Export ("willTransitionFromLayout:toLayout:")]
 		void WillTransition (NSCollectionViewLayout oldLayout, NSCollectionViewLayout newLayout);
 
-		/// <param name="oldLayout">To be added.</param>
-		/// <param name="newLayout">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="oldLayout">The old layout.</param>
+		/// <param name="newLayout">The new layout.</param>
+		/// <summary>Performs the did transition operation.</summary>
 		[Export ("didTransitionFromLayout:toLayout:")]
 		void DidTransition (NSCollectionViewLayout oldLayout, NSCollectionViewLayout newLayout);
 
-		/// <param name="layoutAttributes">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="layoutAttributes">The layout attributes.</param>
+		/// <summary>Performs the get preferred layout attributes operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("preferredLayoutAttributesFittingAttributes:")]
 		NSCollectionViewLayoutAttributes GetPreferredLayoutAttributes (NSCollectionViewLayoutAttributes layoutAttributes);
 	}
@@ -4158,21 +3843,15 @@ namespace AppKit {
 	[Static]
 	[NoMacCatalyst]
 	interface NSCollectionElementKind {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the InterItemGapIndicator key constant.</summary>
 		[Field ("NSCollectionElementKindInterItemGapIndicator")]
 		NSString InterItemGapIndicator { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SectionHeader key constant.</summary>
 		[Field ("NSCollectionElementKindSectionHeader")]
 		NSString SectionHeader { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SectionFooter key constant.</summary>
 		[Field ("NSCollectionElementKindSectionFooter")]
 		NSString SectionFooter { get; }
 	}
@@ -4192,9 +3871,7 @@ namespace AppKit {
 		[Export ("zIndex", ArgumentSemantic.Assign)]
 		nint ZIndex { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Hidden value.</summary>
 		[Export ("hidden")]
 		bool Hidden { [Bind ("isHidden")] get; set; }
 
@@ -4431,57 +4108,51 @@ namespace AppKit {
 	[BaseType (typeof (NSObject))]
 	[Protocol, Model]
 	interface NSCollectionViewDelegateFlowLayout : NSCollectionViewDelegate {
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="collectionViewLayout">To be added.</param>
-		/// <param name="indexPath">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="collectionViewLayout">The collection view layout.</param>
+		/// <param name="indexPath">The index path.</param>
+		/// <summary>Performs the size for item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("collectionView:layout:sizeForItemAtIndexPath:")]
 		CGSize SizeForItem (NSCollectionView collectionView, NSCollectionViewLayout collectionViewLayout, NSIndexPath indexPath);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="collectionViewLayout">To be added.</param>
-		/// <param name="section">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="collectionViewLayout">The collection view layout.</param>
+		/// <param name="section">The section.</param>
+		/// <summary>Performs the inset for section operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("collectionView:layout:insetForSectionAtIndex:")]
 		NSEdgeInsets InsetForSection (NSCollectionView collectionView, NSCollectionViewLayout collectionViewLayout, nint section);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="collectionViewLayout">To be added.</param>
-		/// <param name="section">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="collectionViewLayout">The collection view layout.</param>
+		/// <param name="section">The section.</param>
+		/// <summary>Performs the minimum line spacing operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("collectionView:layout:minimumLineSpacingForSectionAtIndex:")]
 		nfloat MinimumLineSpacing (NSCollectionView collectionView, NSCollectionViewLayout collectionViewLayout, nint section);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="collectionViewLayout">To be added.</param>
-		/// <param name="section">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="collectionViewLayout">The collection view layout.</param>
+		/// <param name="section">The section.</param>
+		/// <summary>Performs the minimum interitem spacing for section operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("collectionView:layout:minimumInteritemSpacingForSectionAtIndex:")]
 		nfloat MinimumInteritemSpacingForSection (NSCollectionView collectionView, NSCollectionViewLayout collectionViewLayout, nint section);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="collectionViewLayout">To be added.</param>
-		/// <param name="section">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="collectionViewLayout">The collection view layout.</param>
+		/// <param name="section">The section.</param>
+		/// <summary>Performs the reference size for header operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("collectionView:layout:referenceSizeForHeaderInSection:")]
 		CGSize ReferenceSizeForHeader (NSCollectionView collectionView, NSCollectionViewLayout collectionViewLayout, nint section);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="collectionViewLayout">To be added.</param>
-		/// <param name="section">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="collectionViewLayout">The collection view layout.</param>
+		/// <param name="section">The section.</param>
+		/// <summary>Performs the reference size for footer operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("collectionView:layout:referenceSizeForFooterInSection:")]
 		CGSize ReferenceSizeForFooter (NSCollectionView collectionView, NSCollectionViewLayout collectionViewLayout, nint section);
 	}
@@ -5212,9 +4883,7 @@ namespace AppKit {
 		[Export ("allKeys")]
 		string [] AllKeys ();
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsEditable value.</summary>
 		[Export ("isEditable")]
 		bool IsEditable { get; }
 
@@ -5232,9 +4901,8 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSColorChanging {
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the change color operation.</summary>
 		[Abstract]
 		[Export ("changeColor:")]
 		void ChangeColor ([NullAllowed] NSColorPanel sender);
@@ -5281,9 +4949,7 @@ namespace AppKit {
 		[Export ("accessoryView", ArgumentSemantic.Retain), NullAllowed]
 		NSView AccessoryView { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Continuous value.</summary>
 		[Export ("continuous")]
 		bool Continuous { [Bind ("isContinuous")] get; set; }
 
@@ -5420,63 +5086,43 @@ namespace AppKit {
 		[Export ("displayP3ColorSpace")]
 		NSColorSpace DisplayP3ColorSpace { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CalibratedWhite key constant.</summary>
 		[Field ("NSCalibratedWhiteColorSpace")]
 		NSString CalibratedWhite { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CalibratedBlack key constant.</summary>
 		[Field ("NSCalibratedBlackColorSpace")]
 		NSString CalibratedBlack { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CalibratedRGB key constant.</summary>
 		[Field ("NSCalibratedRGBColorSpace")]
 		NSString CalibratedRGB { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the DeviceWhite key constant.</summary>
 		[Field ("NSDeviceWhiteColorSpace")]
 		NSString DeviceWhite { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the DeviceBlack key constant.</summary>
 		[Field ("NSDeviceBlackColorSpace")]
 		NSString DeviceBlack { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the DeviceRGB key constant.</summary>
 		[Field ("NSDeviceRGBColorSpace")]
 		NSString DeviceRGB { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the DeviceCMYK key constant.</summary>
 		[Field ("NSDeviceCMYKColorSpace")]
 		NSString DeviceCMYK { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Named key constant.</summary>
 		[Field ("NSNamedColorSpace")]
 		NSString Named { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Pattern key constant.</summary>
 		[Field ("NSPatternColorSpace")]
 		NSString Pattern { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Custom key constant.</summary>
 		[Field ("NSCustomColorSpace")]
 		NSString Custom { get; }
 	}
@@ -5493,9 +5139,7 @@ namespace AppKit {
 		[Export ("activate:")]
 		void Activate (bool exclusive);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsActive value.</summary>
 		[Export ("isActive")]
 		bool IsActive { get; }
 
@@ -5556,9 +5200,7 @@ namespace AppKit {
 		[Export ("initWithFrame:")]
 		NativeHandle Constructor (CGRect frameRect);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSComboBoxDelegate Delegate { get; set; }
 
@@ -5574,9 +5216,7 @@ namespace AppKit {
 		[Export ("numberOfVisibleItems")]
 		nint VisibleItems { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the ButtonBordered value.</summary>
 		[Export ("buttonBordered")]
 		bool ButtonBordered { [Bind ("isButtonBordered")] get; set; }
 
@@ -5667,34 +5307,30 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSComboBoxDataSource {
-		/// <param name="comboBox">To be added.</param>
-		/// <param name="index">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="comboBox">The combo box.</param>
+		/// <param name="index">The index.</param>
+		/// <summary>Performs the object value for item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("comboBox:objectValueForItemAtIndex:")]
 		NSObject ObjectValueForItem (NSComboBox comboBox, nint index);
 
-		/// <param name="comboBox">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="comboBox">The combo box.</param>
+		/// <summary>Performs the item count operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("numberOfItemsInComboBox:")]
 		nint ItemCount (NSComboBox comboBox);
 
-		/// <param name="comboBox">To be added.</param>
-		/// <param name="uncompletedString">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="comboBox">The combo box.</param>
+		/// <param name="uncompletedString">The uncompleted string.</param>
+		/// <summary>Performs the completed string operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("comboBox:completedString:")]
 		string CompletedString (NSComboBox comboBox, string uncompletedString);
 
-		/// <param name="comboBox">To be added.</param>
-		/// <param name="value">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="comboBox">The combo box.</param>
+		/// <param name="value">The value.</param>
+		/// <summary>Performs the index of item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("comboBox:indexOfItemWithStringValue:")]
 		nint IndexOfItem (NSComboBox comboBox, string value);
 	}
@@ -5717,9 +5353,7 @@ namespace AppKit {
 		[Export ("numberOfVisibleItems")]
 		nint VisibleItems { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the ButtonBordered value.</summary>
 		[Export ("buttonBordered")]
 		bool ButtonBordered { [Bind ("isButtonBordered")] get; set; }
 
@@ -5802,34 +5436,30 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	partial interface NSComboBoxCellDataSource {
-		/// <param name="comboBox">To be added.</param>
-		/// <param name="index">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="comboBox">The combo box.</param>
+		/// <param name="index">The index.</param>
+		/// <summary>Performs the object value for item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("comboBoxCell:objectValueForItemAtIndex:")]
 		NSObject ObjectValueForItem (NSComboBoxCell comboBox, nint index);
 
-		/// <param name="comboBox">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="comboBox">The combo box.</param>
+		/// <summary>Performs the item count operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("numberOfItemsInComboBoxCell:")]
 		nint ItemCount (NSComboBoxCell comboBox);
 
-		/// <param name="comboBox">To be added.</param>
-		/// <param name="uncompletedString">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="comboBox">The combo box.</param>
+		/// <param name="uncompletedString">The uncompleted string.</param>
+		/// <summary>Performs the completed string operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("comboBoxCell:completedString:")]
 		string CompletedString (NSComboBoxCell comboBox, string uncompletedString);
 
-		/// <param name="comboBox">To be added.</param>
-		/// <param name="value">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="comboBox">The combo box.</param>
+		/// <param name="value">The value.</param>
+		/// <summary>Performs the index of item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("comboBoxCell:indexOfItemWithStringValue:")]
 		nuint IndexOfItem (NSComboBoxCell comboBox, string value);
 	}
@@ -5941,15 +5571,11 @@ namespace AppKit {
 		[Export ("ignoresMultiClick")]
 		bool IgnoresMultiClick { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Continuous value.</summary>
 		[Export ("continuous")]
 		bool Continuous { [Bind ("isContinuous")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Enabled value.</summary>
 		[Export ("enabled")]
 		bool Enabled { [Bind ("isEnabled")] get; set; }
 
@@ -5992,9 +5618,7 @@ namespace AppKit {
 		[Export ("refusesFirstResponder")]
 		bool RefusesFirstResponder { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Highlighted value.</summary>
 		[Export ("highlighted")]
 		bool Highlighted { [Bind ("isHighlighted")] get; [Bind ("setHighlighted:")] set; }
 
@@ -6026,15 +5650,13 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSEditorRegistration {
-		/// <param name="editor">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="editor">The editor.</param>
+		/// <summary>Performs the object did begin editing operation.</summary>
 		[Export ("objectDidBeginEditing:")]
 		void ObjectDidBeginEditing (INSEditor editor);
 
-		/// <param name="editor">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="editor">The editor.</param>
+		/// <summary>Performs the object did end editing operation.</summary>
 		[Export ("objectDidEndEditing:")]
 		void ObjectDidEndEditing (INSEditor editor);
 	}
@@ -6043,16 +5665,14 @@ namespace AppKit {
 	[Category]
 	[BaseType (typeof (NSObject))]
 	interface NSObject_NSEditorRegistration {
-		/// <param name="editor">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="editor">The editor.</param>
+		/// <summary>Performs the object did begin editing operation.</summary>
 		[Export ("objectDidBeginEditing:")]
 		[Deprecated (PlatformName.MacOSX, 11, 0, message: "Use 'NSEditorRegistration' instead.")]
 		void ObjectDidBeginEditing (INSEditor editor);
 
-		/// <param name="editor">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="editor">The editor.</param>
+		/// <summary>Performs the object did end editing operation.</summary>
 		[Export ("objectDidEndEditing:")]
 		[Deprecated (PlatformName.MacOSX, 11, 0, message: "Use 'NSEditorRegistration' instead.")]
 		void ObjectDidEndEditing (INSEditor editor);
@@ -6063,32 +5683,28 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSEditor {
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the discard editing operation.</summary>
 		[Abstract]
 		[Export ("discardEditing")]
 		void DiscardEditing ();
 
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the commit editing operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("commitEditing")]
 		bool CommitEditing ();
 
-		/// <param name="delegateObject">To be added.</param>
-		/// <param name="didCommitSelector">To be added.</param>
-		/// <param name="contextInfo">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="delegateObject">The delegate object.</param>
+		/// <param name="didCommitSelector">The did commit selector.</param>
+		/// <param name="contextInfo">The context info.</param>
+		/// <summary>Performs the commit editing operation.</summary>
 		[Abstract]
 		[Export ("commitEditingWithDelegate:didCommitSelector:contextInfo:")]
 		void CommitEditing ([NullAllowed] NSObject delegateObject, [NullAllowed] Selector didCommitSelector, IntPtr contextInfo);
 
-		/// <param name="error">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="error">The error.</param>
+		/// <summary>Performs the commit editing operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("commitEditingAndReturnError:")]
 		bool CommitEditing ([NullAllowed] out NSError error);
@@ -6125,9 +5741,7 @@ namespace AppKit {
 		bool CommitEditing ();
 #pragma warning restore
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsEditing value.</summary>
 		[Export ("isEditing")]
 		bool IsEditing { get; }
 	}
@@ -6314,9 +5928,8 @@ namespace AppKit {
 #if XAMCORE_5_0
 		[NoMacCatalyst]
 #else
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Performs the specified operation.</summary>
+		///         <returns>The result of the operation.</returns>
 		[Obsoleted (PlatformName.MacCatalyst, 13, 1, message: "Do not use; this API does not exist on this platform.")]
 #endif
 		[Export ("isSetOnMouseExited")]
@@ -6326,9 +5939,8 @@ namespace AppKit {
 #if XAMCORE_5_0
 		[NoMacCatalyst]
 #else
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Performs the specified operation.</summary>
+		///         <returns>The result of the operation.</returns>
 		[Obsoleted (PlatformName.MacCatalyst, 13, 1, message: "Do not use; this API does not exist on this platform.")]
 #endif
 		[Deprecated (PlatformName.MacOSX, 10, 13)]
@@ -6433,9 +6045,7 @@ namespace AppKit {
 		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSDatePickerCellDelegate Delegate { get; set; }
 	}
@@ -6493,9 +6103,7 @@ namespace AppKit {
 		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSDatePickerCellDelegate Delegate { get; set; }
 
@@ -6508,14 +6116,12 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSDatePickerCellDelegate {
-		/// <param name="aDatePickerCell">To be added.</param>
-		/// <param name="proposedDateValue">To be added.</param>
-		/// <param name="proposedTimeInterval">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="aDatePickerCell">The a date picker cell.</param>
+		/// <param name="proposedDateValue">The proposed date value.</param>
+		/// <param name="proposedTimeInterval">The proposed time interval.</param>
+		/// <summary>Performs the validate proposed date value operation.</summary>
 		[Export ("datePickerCell:validateProposedDateValue:timeInterval:"), EventArgs ("NSDatePickerValidator", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the validate proposed date value operation.</summary>
 			""")]
 		void ValidateProposedDateValue (NSDatePickerCell aDatePickerCell, ref NSDate proposedDateValue, double proposedTimeInterval);
 	}
@@ -6533,9 +6139,7 @@ namespace AppKit {
 		[NullAllowed, Export ("localizedKey")]
 		string LocalizedKey { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ExplicitlyIncluded value.</summary>
 		[Export ("explicitlyIncluded")]
 		bool ExplicitlyIncluded { [Bind ("isExplicitlyIncluded")] get; }
 	}
@@ -6595,16 +6199,14 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSDockTilePlugIn {
-		/// <param name="dockTile">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="dockTile">The dock tile.</param>
+		/// <summary>Performs the set dock tile operation.</summary>
 		[Abstract]
 		[Export ("setDockTile:")]
 		void SetDockTile (NSDockTile dockTile);
 
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the dock menu operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("dockMenu")]
 		NSMenu DockMenu ();
 	}
@@ -6749,9 +6351,7 @@ namespace AppKit {
 		[Export ("runModalPrintOperation:delegate:didRunSelector:contextInfo:")]
 		void RunModalPrintOperation (NSPrintOperation printOperation, [NullAllowed] NSObject delegateObject, [NullAllowed] Selector didRunSelector, [NullAllowed] IntPtr contextInfo);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsDocumentEdited value.</summary>
 		[Export ("isDocumentEdited")]
 		bool IsDocumentEdited { get; }
 
@@ -6865,9 +6465,7 @@ namespace AppKit {
 		[Export ("performAsynchronousFileAccessUsingBlock:")]
 		void PerformAsynchronousFileAccess (Action ioCode);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsEntireFileLoaded value.</summary>
 		[Export ("isEntireFileLoaded")]
 		bool IsEntireFileLoaded { get; }
 
@@ -6909,9 +6507,7 @@ namespace AppKit {
 		[Export ("duplicateAndReturnError:")]
 		NSDocument Duplicate ([NullAllowed] out NSError outError);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsInViewingMode value.</summary>
 		[Export ("isInViewingMode")]
 		bool IsInViewingMode { get; }
 
@@ -6955,18 +6551,15 @@ namespace AppKit {
 		[Export ("updateUserActivityState:")]
 		void UpdateUserActivityState (NSUserActivity userActivity);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsBrowsingVersions value.</summary>
 		[Export ("isBrowsingVersions")]
 		bool IsBrowsingVersions { get; }
 
 
 		[Export ("stopBrowsingVersionsWithCompletionHandler:")]
 		[Async (XmlDocs = """
-			<summary>To be added.</summary>
-			<returns>To be added.</returns>
-			<remarks>To be added.</remarks>
+			<summary>Performs the stop browsing versions operation.</summary>
+			<returns>The result of the operation.</returns>
 			""")]
 		void StopBrowsingVersions ([NullAllowed] Action completionHandler);
 
@@ -6975,10 +6568,9 @@ namespace AppKit {
 
 		[Export ("shareDocumentWithSharingService:completionHandler:")]
 		[Async (XmlDocs = """
-			<param name="sharingService">To be added.</param>
-			<summary>To be added.</summary>
-			<returns>To be added.</returns>
-			<remarks>To be added.</remarks>
+			<param name="sharingService">The sharing service.</param>
+			<summary>Performs the share document operation.</summary>
+			<returns>The result of the operation.</returns>
 			""")]
 		void ShareDocument (NSSharingService sharingService, [NullAllowed] Action<bool> completionHandler);
 
@@ -7139,15 +6731,11 @@ namespace AppKit {
 		[DesignatedInitializer]
 		NativeHandle Constructor (string key);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IconKey key constant.</summary>
 		[Field ("NSDraggingImageComponentIconKey")]
 		NSString IconKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the LabelKey key constant.</summary>
 		[Field ("NSDraggingImageComponentLabelKey")]
 		NSString LabelKey { get; }
 	}
@@ -7171,9 +6759,8 @@ namespace AppKit {
 		[DesignatedInitializer]
 		NativeHandle Constructor (INSPasteboardWriting pasteboardWriter);
 
-		/// <param name="provider">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="provider">The provider.</param>
+		///         <summary>Performs the set images content provider operation.</summary>
 		[Export ("setImageComponentsProvider:")]
 		void SetImagesContentProvider ([NullAllowed] NSDraggingItemImagesContentProvider provider);
 
@@ -7325,54 +6912,46 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSDraggingSource {
-		/// <param name="flag">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="flag">The flag.</param>
+		/// <summary>Performs the dragging source operation mask for local operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("draggingSourceOperationMaskForLocal:"), DefaultValue (NSDragOperation.None)]
 		NSDragOperation DraggingSourceOperationMaskForLocal (bool flag);
 
-		/// <param name="dropDestination">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="dropDestination">The drop destination.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use NSFilePromiseProvider objects instead.")]
 		[Export ("namesOfPromisedFilesDroppedAtDestination:"), DefaultValue (new string [0])]
 		string [] NamesOfPromisedFilesDroppedAtDestination (NSUrl dropDestination);
 
-		/// <param name="image">To be added.</param>
-		/// <param name="screenPoint">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="image">The image.</param>
+		/// <param name="screenPoint">The screen point.</param>
+		/// <summary>Performs the dragged image began at operation.</summary>
 		[Export ("draggedImage:beganAt:")]
 		void DraggedImageBeganAt (NSImage image, CGPoint screenPoint);
 
-		/// <param name="image">To be added.</param>
-		/// <param name="screenPoint">To be added.</param>
-		/// <param name="operation">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="image">The image.</param>
+		/// <param name="screenPoint">The screen point.</param>
+		/// <param name="operation">The operation.</param>
+		/// <summary>Performs the dragged image ended at operation operation.</summary>
 		[Export ("draggedImage:endedAt:operation:")]
 		void DraggedImageEndedAtOperation (NSImage image, CGPoint screenPoint, NSDragOperation operation);
 
-		/// <param name="image">To be added.</param>
-		/// <param name="screenPoint">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="image">The image.</param>
+		/// <param name="screenPoint">The screen point.</param>
+		/// <summary>Performs the dragged image moved to operation.</summary>
 		[Export ("draggedImage:movedTo:")]
 		void DraggedImageMovedTo (NSImage image, CGPoint screenPoint);
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the IgnoreModifierKeysWhileDragging value.</summary>
 		[Export ("ignoreModifierKeysWhileDragging"), DefaultValue (false)]
 		bool IgnoreModifierKeysWhileDragging { get; }
 
-		/// <param name="image">To be added.</param>
-		/// <param name="screenPoint">To be added.</param>
-		/// <param name="deposited">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="image">The image.</param>
+		/// <param name="screenPoint">The screen point.</param>
+		/// <param name="deposited">The deposited.</param>
+		/// <summary>Performs the dragged image ended at deposited operation.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 1, message: "Use DraggedImageEndedAtOperation instead.")]
 		[Export ("draggedImage:endedAt:deposited:")]
 		void DraggedImageEndedAtDeposited (NSImage image, CGPoint screenPoint, bool deposited);
@@ -7397,9 +6976,7 @@ namespace AppKit {
 		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSDrawerDelegate Delegate { get; set; }
 
@@ -7451,75 +7028,58 @@ namespace AppKit {
 	[Protocol]
 	[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use 'NSSplitViewController' instead.")]
 	interface NSDrawerDelegate {
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the drawer did close operation.</summary>
 		[Export ("drawerDidClose:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the drawer did close operation.</summary>
 			""")]
 		void DrawerDidClose (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the drawer did open operation.</summary>
 		[Export ("drawerDidOpen:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the drawer did open operation.</summary>
 			""")]
 		void DrawerDidOpen (NSNotification notification);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the drawer should close operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the drawer should close operation.</summary>
 			""")]
 		[Export ("drawerShouldClose:"), DelegateName ("DrawerShouldCloseDelegate"), DefaultValue (true)]
 		bool DrawerShouldClose (NSDrawer sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the drawer should open operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the drawer should open operation.</summary>
 			""")]
 		[Export ("drawerShouldOpen:"), DelegateName ("DrawerShouldOpenDelegate"), DefaultValue (true)]
 		bool DrawerShouldOpen (NSDrawer sender);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the drawer will close operation.</summary>
 		[Export ("drawerWillClose:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the drawer will close operation.</summary>
 			""")]
 		void DrawerWillClose (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the drawer will open operation.</summary>
 		[Export ("drawerWillOpen:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the drawer will open operation.</summary>
 			""")]
 		void DrawerWillOpen (NSNotification notification);
 
-		/// <param name="sender">To be added.</param>
-		/// <param name="toSize">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <param name="toSize">The to size.</param>
+		/// <summary>Performs the drawer will resize contents operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the drawer will resize contents operation.</summary>
 			""")]
 		[Export ("drawerWillResizeContents:toSize:"), DelegateName ("DrawerWillResizeContentsDelegate"), DefaultValue (null)]
 		CGSize DrawerWillResizeContents (NSDrawer sender, CGSize toSize);
@@ -7529,16 +7089,14 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSFontChanging {
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the change font operation.</summary>
 		[Export ("changeFont:")]
 		void ChangeFont ([NullAllowed] NSFontManager sender);
 
-		/// <param name="fontPanel">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="fontPanel">The font panel.</param>
+		/// <summary>Performs the get valid modes operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Deprecated (PlatformName.MacOSX, 11, 0, message: "Now optional method.")]
 		[Export ("validModesForFontPanel:")]
 		NSFontPanelModeMask GetValidModes (NSFontPanel fontPanel);
@@ -7717,9 +7275,7 @@ namespace AppKit {
 		[Export ("xHeight")]
 		nfloat XHeight { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsFixedPitch value.</summary>
 		[Export ("isFixedPitch")]
 		bool IsFixedPitch { get; }
 
@@ -7766,141 +7322,95 @@ namespace AppKit {
 		[Internal]
 		IntPtr _GetVerticalFont ();
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the FamilyAttribute key constant.</summary>
 		[Field ("NSFontFamilyAttribute")]
 		NSString FamilyAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NameAttribute key constant.</summary>
 		[Field ("NSFontNameAttribute")]
 		NSString NameAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the FaceAttribute key constant.</summary>
 		[Field ("NSFontFaceAttribute")]
 		NSString FaceAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SizeAttribute key constant.</summary>
 		[Field ("NSFontSizeAttribute")]
 		NSString SizeAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the VisibleNameAttribute key constant.</summary>
 		[Field ("NSFontVisibleNameAttribute")]
 		NSString VisibleNameAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MatrixAttribute key constant.</summary>
 		[Field ("NSFontMatrixAttribute")]
 		NSString MatrixAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the VariationAttribute key constant.</summary>
 		[Field ("NSFontVariationAttribute")]
 		NSString VariationAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CharacterSetAttribute key constant.</summary>
 		[Field ("NSFontCharacterSetAttribute")]
 		NSString CharacterSetAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CascadeListAttribute key constant.</summary>
 		[Field ("NSFontCascadeListAttribute")]
 		NSString CascadeListAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TraitsAttribute key constant.</summary>
 		[Field ("NSFontTraitsAttribute")]
 		NSString TraitsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the FixedAdvanceAttribute key constant.</summary>
 		[Field ("NSFontFixedAdvanceAttribute")]
 		NSString FixedAdvanceAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the FeatureSettingsAttribute key constant.</summary>
 		[Field ("NSFontFeatureSettingsAttribute")]
 		NSString FeatureSettingsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SymbolicTrait key constant.</summary>
 		[Field ("NSFontSymbolicTrait")]
 		NSString SymbolicTrait { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the WeightTrait key constant.</summary>
 		[Field ("NSFontWeightTrait")]
 		NSString WeightTrait { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the WidthTrait key constant.</summary>
 		[Field ("NSFontWidthTrait")]
 		NSString WidthTrait { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SlantTrait key constant.</summary>
 		[Field ("NSFontSlantTrait")]
 		NSString SlantTrait { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the VariationAxisIdentifierKey key constant.</summary>
 		[Field ("NSFontVariationAxisIdentifierKey")]
 		NSString VariationAxisIdentifierKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the VariationAxisMinimumValueKey key constant.</summary>
 		[Field ("NSFontVariationAxisMinimumValueKey")]
 		NSString VariationAxisMinimumValueKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the VariationAxisMaximumValueKey key constant.</summary>
 		[Field ("NSFontVariationAxisMaximumValueKey")]
 		NSString VariationAxisMaximumValueKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the VariationAxisDefaultValueKey key constant.</summary>
 		[Field ("NSFontVariationAxisDefaultValueKey")]
 		NSString VariationAxisDefaultValueKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the VariationAxisNameKey key constant.</summary>
 		[Field ("NSFontVariationAxisNameKey")]
 		NSString VariationAxisNameKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the FeatureTypeIdentifierKey key constant.</summary>
 		[Field ("NSFontFeatureTypeIdentifierKey")]
 		NSString FeatureTypeIdentifierKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the FeatureSelectorIdentifierKey key constant.</summary>
 		[Field ("NSFontFeatureSelectorIdentifierKey")]
 		NSString FeatureSelectorIdentifierKey { get; }
 
@@ -7952,15 +7462,11 @@ namespace AppKit {
 		[Internal, Export ("NSFontCollectionActionKey")]
 		NSString _Action { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Name value.</summary>
 		[Export ("NSFontCollectionNameKey")]
 		string Name { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the OldName value.</summary>
 		[Export ("NSFontCollectionOldNameKey")]
 		string OldName { get; }
 
@@ -8025,90 +7531,62 @@ namespace AppKit {
 		[Export ("matchingDescriptorsForFamily:options:")]
 		NSFontDescriptor [] GetMatchingDescriptors (string family, NSDictionary options);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IncludeDisabledFontsOption key constant.</summary>
 		[Field ("NSFontCollectionIncludeDisabledFontsOption")]
 		NSString IncludeDisabledFontsOption { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the RemoveDuplicatesOption key constant.</summary>
 		[Field ("NSFontCollectionRemoveDuplicatesOption")]
 		NSString RemoveDuplicatesOption { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the DisallowAutoActivationOption key constant.</summary>
 		[Field ("NSFontCollectionDisallowAutoActivationOption")]
 		NSString DisallowAutoActivationOption { get; }
 
 		[Notification (typeof (NSFontCollectionChangedEventArgs)), Field ("NSFontCollectionDidChangeNotification")]
 		NSString ChangedNotification { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ActionKey key constant.</summary>
 		[Field ("NSFontCollectionActionKey")]
 		NSString ActionKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NameKey key constant.</summary>
 		[Field ("NSFontCollectionNameKey")]
 		NSString NameKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the OldNameKey key constant.</summary>
 		[Field ("NSFontCollectionOldNameKey")]
 		NSString OldNameKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the VisibilityKey key constant.</summary>
 		[Field ("NSFontCollectionVisibilityKey")]
 		NSString VisibilityKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ActionWasShown key constant.</summary>
 		[Field ("NSFontCollectionWasShown")]
 		NSString ActionWasShown { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ActionWasHidden key constant.</summary>
 		[Field ("NSFontCollectionWasHidden")]
 		NSString ActionWasHidden { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ActionWasRenamed key constant.</summary>
 		[Field ("NSFontCollectionWasRenamed")]
 		NSString ActionWasRenamed { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NameAllFonts key constant.</summary>
 		[Field ("NSFontCollectionAllFonts")]
 		NSString NameAllFonts { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NameUser key constant.</summary>
 		[Field ("NSFontCollectionUser")]
 		NSString NameUser { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NameFavorites key constant.</summary>
 		[Field ("NSFontCollectionFavorites")]
 		NSString NameFavorites { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NameRecentlyUsed key constant.</summary>
 		[Field ("NSFontCollectionRecentlyUsed")]
 		NSString NameRecentlyUsed { get; }
 
@@ -8118,15 +7596,13 @@ namespace AppKit {
 	[BaseType (typeof (NSFontCollection))]
 	[DisableDefaultCtor]
 	interface NSMutableFontCollection {
-		/// <param name="descriptors">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="descriptors">The descriptors.</param>
+		///         <summary>Performs the set query descriptors operation.</summary>
 		[Export ("setQueryDescriptors:")]
 		void SetQueryDescriptors (NSFontDescriptor [] descriptors);
 
-		/// <param name="descriptors">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="descriptors">The descriptors.</param>
+		///         <summary>Performs the set exclusion descriptors operation.</summary>
 		[Export ("setExclusionDescriptors:")]
 		void SetExclusionDescriptors (NSFontDescriptor [] descriptors);
 
@@ -8249,9 +7725,7 @@ namespace AppKit {
 		[Static, Export ("sharedFontManager")]
 		NSFontManager SharedFontManager { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsMultiple value.</summary>
 		[Export ("isMultiple")]
 		bool IsMultiple { get; }
 
@@ -8309,9 +7783,7 @@ namespace AppKit {
 		[Export ("convertWeight:ofFont:")]
 		NSFont ConvertWeight (bool increaseWeight, NSFont fontObj);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Enabled value.</summary>
 		[Export ("enabled")]
 		bool Enabled { [Bind ("isEnabled")] get; set; }
 
@@ -8424,9 +7896,7 @@ namespace AppKit {
 		[Export ("accessoryView", ArgumentSemantic.Retain), NullAllowed]
 		NSView AccessoryView { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Enabled value.</summary>
 		[Export ("enabled")]
 		bool Enabled { [Bind ("isEnabled")] get; set; }
 	}
@@ -8434,57 +7904,39 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Static]
 	interface NSFontWeight {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the UltraLight value.</summary>
 		[Field ("NSFontWeightUltraLight")]
 		nfloat UltraLight { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Thin value.</summary>
 		[Field ("NSFontWeightThin")]
 		nfloat Thin { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Light value.</summary>
 		[Field ("NSFontWeightLight")]
 		nfloat Light { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Regular value.</summary>
 		[Field ("NSFontWeightRegular")]
 		nfloat Regular { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Medium value.</summary>
 		[Field ("NSFontWeightMedium")]
 		nfloat Medium { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Semibold value.</summary>
 		[Field ("NSFontWeightSemibold")]
 		nfloat Semibold { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Bold value.</summary>
 		[Field ("NSFontWeightBold")]
 		nfloat Bold { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Heavy value.</summary>
 		[Field ("NSFontWeightHeavy")]
 		nfloat Heavy { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Black value.</summary>
 		[Field ("NSFontWeightBlack")]
 		nfloat Black { get; }
 	}
@@ -8587,9 +8039,7 @@ namespace AppKit {
 		[Export ("initImageCell:")]
 		NativeHandle Constructor (NSImage image);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsOpaque value.</summary>
 		[Export ("isOpaque")]
 		bool IsOpaque { get; }
 
@@ -8724,9 +8174,7 @@ namespace AppKit {
 		[Export ("attributes")]
 		NSDictionary Attributes { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsDrawingToScreen value.</summary>
 		[Export ("isDrawingToScreen")]
 		bool IsDrawingToScreen { get; }
 
@@ -8859,9 +8307,7 @@ namespace AppKit {
 		[Export ("mergeCellsInHorizontalRange:verticalRange:")]
 		void MergeCells (NSRange hRange, NSRange vRange);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SizeForContent value.</summary>
 		[Field ("NSGridViewSizeForContent")]
 		nfloat SizeForContent { get; }
 	}
@@ -8894,9 +8340,7 @@ namespace AppKit {
 		[Export ("bottomPadding")]
 		nfloat BottomPadding { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Hidden value.</summary>
 		[Export ("hidden")]
 		bool Hidden { [Bind ("isHidden")] get; set; }
 
@@ -8929,9 +8373,7 @@ namespace AppKit {
 		[Export ("trailingPadding")]
 		nfloat TrailingPadding { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Hidden value.</summary>
 		[Export ("hidden")]
 		bool Hidden { [Bind ("isHidden")] get; set; }
 
@@ -9062,9 +8504,7 @@ namespace AppKit {
 		[DebuggerBrowsable (DebuggerBrowsableState.Never)]
 		string CharactersIgnoringModifiers { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsARepeat value.</summary>
 		[Export ("isARepeat")]
 		[DebuggerBrowsable (DebuggerBrowsableState.Never)]
 		bool IsARepeat { get; }
@@ -9197,9 +8637,7 @@ namespace AppKit {
 		[DebuggerBrowsable (DebuggerBrowsableState.Never)]
 		NSPointingDeviceType PointingDeviceType { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsEnteringProximity value.</summary>
 		[Export ("isEnteringProximity")]
 		[DebuggerBrowsable (DebuggerBrowsableState.Never)]
 		bool IsEnteringProximity { get; }
@@ -9268,9 +8706,7 @@ namespace AppKit {
 		void RemoveMonitor (NSObject eventMonitor);
 
 		//Detected properties
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the MouseCoalescingEnabled value.</summary>
 		[Static]
 		[Export ("mouseCoalescingEnabled")]
 		bool MouseCoalescingEnabled { [Bind ("isMouseCoalescingEnabled")] get; set; }
@@ -9291,9 +8727,7 @@ namespace AppKit {
 		[DebuggerBrowsable (DebuggerBrowsableState.Never)]
 		NSEventPhase MomentumPhase { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsDirectionInvertedFromDevice value.</summary>
 		[Export ("isDirectionInvertedFromDevice")]
 		[DebuggerBrowsable (DebuggerBrowsableState.Never)]
 		bool IsDirectionInvertedFromDevice { get; }
@@ -9302,9 +8736,7 @@ namespace AppKit {
 		[DebuggerBrowsable (DebuggerBrowsableState.Never)]
 		NSEventPhase Phase { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsSwipeTrackingFromScrollEventsEnabled value.</summary>
 		[Static]
 		[Export ("isSwipeTrackingFromScrollEventsEnabled")]
 		bool IsSwipeTrackingFromScrollEventsEnabled { get; }
@@ -9371,15 +8803,11 @@ namespace AppKit {
 		[NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSGestureRecognizerDelegate Delegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Enabled value.</summary>
 		[Export ("enabled")]
 		bool Enabled { [Bind ("isEnabled")] get; set; }
 
@@ -9505,79 +8933,61 @@ namespace AppKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NSGestureRecognizerDelegate {
-		/// <param name="gestureRecognizer">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="gestureRecognizer">The gesture recognizer.</param>
+		/// <summary>Performs the should begin operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the should begin operation.</summary>
 			""")]
 		[Export ("gestureRecognizerShouldBegin:"), DelegateName ("NSGestureProbe"), DefaultValue (true)]
 		bool ShouldBegin (NSGestureRecognizer gestureRecognizer);
 
-		/// <param name="gestureRecognizer">To be added.</param>
-		/// <param name="otherGestureRecognizer">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="gestureRecognizer">The gesture recognizer.</param>
+		/// <param name="otherGestureRecognizer">The other gesture recognizer.</param>
+		/// <summary>Performs the should recognize simultaneously operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the should recognize simultaneously operation.</summary>
 			""")]
 		[Export ("gestureRecognizer:shouldRecognizeSimultaneouslyWithGestureRecognizer:"), DelegateName ("NSGesturesProbe"), DefaultValue (false)]
 		bool ShouldRecognizeSimultaneously (NSGestureRecognizer gestureRecognizer, NSGestureRecognizer otherGestureRecognizer);
 
-		/// <param name="gestureRecognizer">To be added.</param>
-		/// <param name="otherGestureRecognizer">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="gestureRecognizer">The gesture recognizer.</param>
+		/// <param name="otherGestureRecognizer">The other gesture recognizer.</param>
+		/// <summary>Performs the should require failure operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the should require failure operation.</summary>
 			""")]
 		[Export ("gestureRecognizer:shouldRequireFailureOfGestureRecognizer:"), DelegateName ("NSGesturesProbe"), DefaultValue (false)]
 		bool ShouldRequireFailure (NSGestureRecognizer gestureRecognizer, NSGestureRecognizer otherGestureRecognizer);
 
-		/// <param name="gestureRecognizer">To be added.</param>
-		/// <param name="otherGestureRecognizer">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="gestureRecognizer">The gesture recognizer.</param>
+		/// <param name="otherGestureRecognizer">The other gesture recognizer.</param>
+		/// <summary>Performs the should be required to fail operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the should be required to fail operation.</summary>
 			""")]
 		[Export ("gestureRecognizer:shouldBeRequiredToFailByGestureRecognizer:"), DelegateName ("NSGesturesProbe"), DefaultValue (false)]
 		bool ShouldBeRequiredToFail (NSGestureRecognizer gestureRecognizer, NSGestureRecognizer otherGestureRecognizer);
 
-		/// <param name="gestureRecognizer">To be added.</param>
-		/// <param name="theEvent">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="gestureRecognizer">The gesture recognizer.</param>
+		/// <param name="theEvent">The the event.</param>
+		/// <summary>Performs the should attempt to recognize operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the should attempt to recognize operation.</summary>
 			""")]
 		[Export ("gestureRecognizer:shouldAttemptToRecognizeWithEvent:"), DelegateName ("NSGestureEvent"), DefaultValue (true)]
 		bool ShouldAttemptToRecognize (NSGestureRecognizer gestureRecognizer, NSEvent theEvent);
 
-		/// <param name="gestureRecognizer">To be added.</param>
-		/// <param name="touch">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="gestureRecognizer">The gesture recognizer.</param>
+		/// <param name="touch">The touch.</param>
+		/// <summary>Performs the should receive touch operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the should receive touch operation.</summary>
 			""")]
 		[Export ("gestureRecognizer:shouldReceiveTouch:"), DelegateName ("NSTouchEvent"), DefaultValue (true)]
 		bool ShouldReceiveTouch (NSGestureRecognizer gestureRecognizer, NSTouch touch);
@@ -9702,9 +9112,7 @@ namespace AppKit {
 		[Export ("helpRequested:")]
 		void HelpRequested (NSEvent eventPtr);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsTornOff value.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 11)]
 		[Export ("isTornOff")]
 		bool IsTornOff { get; }
@@ -9727,9 +9135,7 @@ namespace AppKit {
 		[NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		[NullAllowed]
 		INSMenuDelegate Delegate { get; set; }
@@ -9792,63 +9198,55 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSMenuDelegate {
-		/// <param name="menu">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="menu">The menu.</param>
+		/// <summary>Performs the needs update operation.</summary>
 		[Export ("menuNeedsUpdate:")]
 		void NeedsUpdate (NSMenu menu);
 
-		/// <param name="menu">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="menu">The menu.</param>
+		/// <summary>Performs the menu item count operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("numberOfItemsInMenu:")]
 		nint MenuItemCount (NSMenu menu);
 
-		/// <param name="menu">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <param name="atIndex">To be added.</param>
-		/// <param name="shouldCancel">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="menu">The menu.</param>
+		/// <param name="item">The item.</param>
+		/// <param name="atIndex">The at index.</param>
+		/// <param name="shouldCancel">The should cancel.</param>
+		/// <summary>Performs the update item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("menu:updateItem:atIndex:shouldCancel:")]
 		bool UpdateItem (NSMenu menu, NSMenuItem item, nint atIndex, bool shouldCancel);
 
-		/// <param name="menu">To be added.</param>
-		/// <param name="theEvent">To be added.</param>
-		/// <param name="target">To be added.</param>
-		/// <param name="action">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="menu">The menu.</param>
+		/// <param name="theEvent">The the event.</param>
+		/// <param name="target">The target.</param>
+		/// <param name="action">The action.</param>
+		/// <summary>Performs the has key equivalent for event operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("menuHasKeyEquivalent:forEvent:target:action:")]
 		bool HasKeyEquivalentForEvent (NSMenu menu, NSEvent theEvent, NSObject target, Selector action);
 
-		/// <param name="menu">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="menu">The menu.</param>
+		/// <summary>Performs the menu will open operation.</summary>
 		[Export ("menuWillOpen:")]
 		void MenuWillOpen (NSMenu menu);
 
-		/// <param name="menu">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="menu">The menu.</param>
+		/// <summary>Performs the menu did close operation.</summary>
 		[Export ("menuDidClose:")]
 		void MenuDidClose (NSMenu menu);
 
-		/// <param name="menu">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="menu">The menu.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the menu will highlight item operation.</summary>
 		[Export ("menu:willHighlightItem:")]
 		void MenuWillHighlightItem (NSMenu menu, NSMenuItem item);
 
-		/// <param name="menu">To be added.</param>
-		/// <param name="screen">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="menu">The menu.</param>
+		/// <param name="screen">The screen.</param>
+		/// <summary>Performs the confinement rect for menu operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("confinementRectForMenu:onScreen:")]
 		CGRect ConfinementRectForMenu (NSMenu menu, NSScreen screen);
 	}
@@ -9871,9 +9269,7 @@ namespace AppKit {
 		[Export ("parentItem")]
 		NSMenuItem ParentItem { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsSeparatorItem value.</summary>
 		[Export ("isSeparatorItem")]
 		bool IsSeparatorItem { get; }
 
@@ -9884,15 +9280,11 @@ namespace AppKit {
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use 'Title' instead.")]
 		void SetTitleWithMnemonic (string stringWithAmpersand);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Highlighted value.</summary>
 		[Export ("isHighlighted")]
 		bool Highlighted { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsHiddenOrHasHiddenAncestor value.</summary>
 		[Export ("isHiddenOrHasHiddenAncestor")]
 		bool IsHiddenOrHasHiddenAncestor { get; }
 
@@ -9936,15 +9328,11 @@ namespace AppKit {
 		[Export ("mixedStateImage", ArgumentSemantic.Retain)]
 		NSImage MixedStateImage { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Enabled value.</summary>
 		[Export ("enabled")]
 		bool Enabled { [Bind ("isEnabled")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Alternate value.</summary>
 		[Export ("alternate")]
 		bool Alternate { [Bind ("isAlternate")] get; set; }
 
@@ -9968,9 +9356,7 @@ namespace AppKit {
 		[Export ("view", ArgumentSemantic.Retain)]
 		NSView View { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Hidden value.</summary>
 		[Export ("hidden")]
 		bool Hidden { [Bind ("isHidden")] get; set; }
 
@@ -10132,9 +9518,7 @@ namespace AppKit {
 		[Export ("removeObject:")]
 		void RemoveObject (NSObject object1);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Editable value.</summary>
 		[Export ("editable")]
 		bool Editable { [Bind ("isEditable")] get; set; }
 
@@ -10417,126 +9801,100 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSOpenSavePanelDelegate {
-		/// <param name="panel">To be added.</param>
-		/// <param name="url">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="panel">The panel.</param>
+		/// <param name="url">The url.</param>
+		/// <summary>Performs the should enable url operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the should enable url operation.</summary>
 			""")]
 		[Export ("panel:shouldEnableURL:"), DelegateName ("NSOpenSavePanelUrl"), DefaultValue (true)]
 		bool ShouldEnableUrl (NSSavePanel panel, NSUrl url);
 
-		/// <param name="panel">To be added.</param>
-		/// <param name="url">To be added.</param>
-		/// <param name="outError">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="panel">The panel.</param>
+		/// <param name="url">The url.</param>
+		/// <param name="outError">The out error.</param>
+		/// <summary>Performs the validate url operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the validate url operation.</summary>
 			""")]
 		[Export ("panel:validateURL:error:"), DelegateName ("NSOpenSavePanelValidate"), DefaultValue (true)]
 		bool ValidateUrl (NSSavePanel panel, NSUrl url, [NullAllowed] out NSError outError);
 
-		/// <param name="panel">To be added.</param>
-		/// <param name="newDirectoryUrl">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="panel">The panel.</param>
+		/// <param name="newDirectoryUrl">The new directory url.</param>
+		/// <summary>Performs the did change to directory operation.</summary>
 		[Export ("panel:didChangeToDirectoryURL:"), EventArgs ("NSOpenSavePanelUrl", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did change to directory operation.</summary>
 			""")]
 		void DidChangeToDirectory (NSSavePanel panel, NSUrl newDirectoryUrl);
 
-		/// <param name="panel">To be added.</param>
-		/// <param name="filename">To be added.</param>
-		/// <param name="confirmed">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="panel">The panel.</param>
+		/// <param name="filename">The filename.</param>
+		/// <param name="confirmed">The confirmed.</param>
+		/// <summary>Performs the user entered filename operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the user entered filename operation.</summary>
 			""")]
 		[Export ("panel:userEnteredFilename:confirmed:"), DelegateName ("NSOpenSaveFilenameConfirmation"), DefaultValueFromArgument ("filename")]
 		string UserEnteredFilename (NSSavePanel panel, string filename, bool confirmed);
 
-		/// <param name="panel">To be added.</param>
-		/// <param name="expanding">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="panel">The panel.</param>
+		/// <param name="expanding">The expanding.</param>
+		/// <summary>Performs the will expand operation.</summary>
 		[Export ("panel:willExpand:"), EventArgs ("NSOpenSaveExpanding", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will expand operation.</summary>
 			""")]
 		void WillExpand (NSSavePanel panel, bool expanding);
 
-		/// <param name="panel">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="panel">The panel.</param>
+		/// <summary>Performs the selection did change operation.</summary>
 		[Export ("panelSelectionDidChange:"), EventArgs ("NSOpenSaveSelectionChanged", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the selection did change operation.</summary>
 			""")]
 		void SelectionDidChange (NSSavePanel panel);
 
-		/// <param name="panel">To be added.</param>
-		/// <param name="fileName">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="panel">The panel.</param>
+		/// <param name="fileName">The file name.</param>
+		/// <summary>Performs the is valid filename operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the is valid filename operation.</summary>
 			""")]
 		[Deprecated (PlatformName.MacOSX, 10, 6, message: "Use ValidateUrl instead.")]
 		[Export ("panel:isValidFilename:"), DelegateName ("NSOpenSaveFilename"), DefaultValue (true)]
 		bool IsValidFilename (NSSavePanel panel, string fileName);
 
-		/// <param name="panel">To be added.</param>
-		/// <param name="path">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="panel">The panel.</param>
+		/// <param name="path">The path.</param>
+		/// <summary>Performs the directory did change operation.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 6, message: "Use DidChangeToDirectory instead.")]
 		[Export ("panel:directoryDidChange:"), EventArgs ("NSOpenSaveFilename", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the directory did change operation.</summary>
 			""")]
 		void DirectoryDidChange (NSSavePanel panel, string path);
 
-		/// <param name="panel">To be added.</param>
-		/// <param name="name1">To be added.</param>
-		/// <param name="name2">To be added.</param>
-		/// <param name="caseSensitive">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="panel">The panel.</param>
+		/// <param name="name1">The name1.</param>
+		/// <param name="name2">The name2.</param>
+		/// <param name="caseSensitive">The case sensitive.</param>
+		/// <summary>Performs the compare filenames operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the compare filenames operation.</summary>
 			""")]
 		[Deprecated (PlatformName.MacOSX, 10, 6, message: "This method does not control sorting order.")]
 		[Export ("panel:compareFilename:with:caseSensitive:"), DelegateName ("NSOpenSaveCompare"), DefaultValue (NSComparisonResult.Same)]
 		NSComparisonResult CompareFilenames (NSSavePanel panel, string name1, string name2, bool caseSensitive);
 
-		/// <param name="panel">To be added.</param>
-		/// <param name="filename">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="panel">The panel.</param>
+		/// <param name="filename">The filename.</param>
+		/// <summary>Performs the should show filename operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the should show filename operation.</summary>
 			""")]
 		[Deprecated (PlatformName.MacOSX, 10, 6, message: "Use ShouldEnableUrl instead.")]
 		[Export ("panel:shouldShowFilename:"), DelegateName ("NSOpenSaveFilename"), DefaultValue (true)]
@@ -10625,9 +9983,7 @@ namespace AppKit {
 		[NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		[NullAllowed]
 		INSOutlineViewDelegate Delegate { get; set; }
@@ -10636,9 +9992,7 @@ namespace AppKit {
 		[NullAllowed]
 		NSObject WeakDataSource { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the DataSource value.</summary>
 		[Wrap ("WeakDataSource")]
 		[NullAllowed]
 		INSOutlineViewDataSource DataSource { get; set; }
@@ -10666,291 +10020,255 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	partial interface NSOutlineViewDelegate {
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="cell">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="cell">The cell.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the will display cell operation.</summary>
 		[Export ("outlineView:willDisplayCell:forTableColumn:item:")]
 		void WillDisplayCell (NSOutlineView outlineView, NSObject cell, [NullAllowed] NSTableColumn tableColumn, NSObject item);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the should edit table column operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:shouldEditTableColumn:item:")]
 		[DefaultValue (false)]
 		bool ShouldEditTableColumn (NSOutlineView outlineView, [NullAllowed] NSTableColumn tableColumn, NSObject item);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <summary>Performs the selection should change operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("selectionShouldChangeInOutlineView:")]
 		[DefaultValue (false)]
 		bool SelectionShouldChange (NSOutlineView outlineView);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the should select item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:shouldSelectItem:")]
 		[DefaultValue (true)]
 		bool ShouldSelectItem (NSOutlineView outlineView, NSObject item);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="proposedSelectionIndexes">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="proposedSelectionIndexes">The proposed selection indexes.</param>
+		/// <summary>Performs the get selection indexes operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:selectionIndexesForProposedSelection:")]
 		NSIndexSet GetSelectionIndexes (NSOutlineView outlineView, NSIndexSet proposedSelectionIndexes);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <summary>Performs the should select table column operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:shouldSelectTableColumn:")]
 		bool ShouldSelectTableColumn (NSOutlineView outlineView, [NullAllowed] NSTableColumn tableColumn);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <summary>Performs the mouse down operation.</summary>
 		[Export ("outlineView:mouseDownInHeaderOfTableColumn:")]
 		void MouseDown (NSOutlineView outlineView, NSTableColumn tableColumn);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <summary>Performs the did click table column operation.</summary>
 		[Export ("outlineView:didClickTableColumn:")]
 		void DidClickTableColumn (NSOutlineView outlineView, NSTableColumn tableColumn);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <summary>Performs the did drag table column operation.</summary>
 		[Export ("outlineView:didDragTableColumn:")]
 		void DidDragTableColumn (NSOutlineView outlineView, NSTableColumn tableColumn);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="cell">To be added.</param>
-		/// <param name="rect">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <param name="mouseLocation">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="cell">The cell.</param>
+		/// <param name="rect">The rect.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <param name="item">The item.</param>
+		/// <param name="mouseLocation">The mouse location.</param>
+		/// <summary>Performs the tool tip for cell operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:toolTipForCell:rect:tableColumn:item:mouseLocation:")]
 		string ToolTipForCell (NSOutlineView outlineView, NSCell cell, ref CGRect rect, [NullAllowed] NSTableColumn tableColumn, NSObject item, CGPoint mouseLocation);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the get row height operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:heightOfRowByItem:"), NoDefaultValue]
 		nfloat GetRowHeight (NSOutlineView outlineView, NSObject item);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the get select string operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:typeSelectStringForTableColumn:item:")]
 		string GetSelectString (NSOutlineView outlineView, [NullAllowed] NSTableColumn tableColumn, NSObject item);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="startItem">To be added.</param>
-		/// <param name="endItem">To be added.</param>
-		/// <param name="searchString">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="startItem">The start item.</param>
+		/// <param name="endItem">The end item.</param>
+		/// <param name="searchString">The search string.</param>
+		/// <summary>Performs the get next type select match operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:nextTypeSelectMatchFromItem:toItem:forString:")]
 		NSObject GetNextTypeSelectMatch (NSOutlineView outlineView, NSObject startItem, NSObject endItem, string searchString);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="theEvent">To be added.</param>
-		/// <param name="searchString">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="theEvent">The the event.</param>
+		/// <param name="searchString">The search string.</param>
+		/// <summary>Performs the should type select operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:shouldTypeSelectForEvent:withCurrentSearchString:")]
 		bool ShouldTypeSelect (NSOutlineView outlineView, NSEvent theEvent, [NullAllowed] string searchString);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the should show cell expansion operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:shouldShowCellExpansionForTableColumn:item:")]
 		bool ShouldShowCellExpansion (NSOutlineView outlineView, [NullAllowed] NSTableColumn tableColumn, NSObject item);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="cell">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="cell">The cell.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the should track cell operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:shouldTrackCell:forTableColumn:item:")]
 		bool ShouldTrackCell (NSOutlineView outlineView, NSCell cell, [NullAllowed] NSTableColumn tableColumn, NSObject item);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the get cell operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:dataCellForTableColumn:item:"), NoDefaultValue]
 		NSCell GetCell (NSOutlineView outlineView, NSTableColumn tableColumn, NSObject item);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the get view operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:viewForTableColumn:item:"), NoDefaultValue]
 		NSView GetView (NSOutlineView outlineView, [NullAllowed] NSTableColumn tableColumn, NSObject item);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the is group item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:isGroupItem:")]
 		bool IsGroupItem (NSOutlineView outlineView, NSObject item);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the should expand item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:shouldExpandItem:")]
 		bool ShouldExpandItem (NSOutlineView outlineView, NSObject item);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the should collapse item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:shouldCollapseItem:")]
 		bool ShouldCollapseItem (NSOutlineView outlineView, NSObject item);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="cell">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="cell">The cell.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the will display outline cell operation.</summary>
 		[Export ("outlineView:willDisplayOutlineCell:forTableColumn:item:")]
 		void WillDisplayOutlineCell (NSOutlineView outlineView, NSObject cell, [NullAllowed] NSTableColumn tableColumn, NSObject item);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="column">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="column">The column.</param>
+		/// <summary>Performs the get size to fit column width operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:sizeToFitWidthOfColumn:"), NoDefaultValue]
 		nfloat GetSizeToFitColumnWidth (NSOutlineView outlineView, nint column);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="columnIndex">To be added.</param>
-		/// <param name="newColumnIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="columnIndex">The column index.</param>
+		/// <param name="newColumnIndex">The new column index.</param>
+		/// <summary>Performs the should reorder operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:shouldReorderColumn:toColumn:")]
 		bool ShouldReorder (NSOutlineView outlineView, nint columnIndex, nint newColumnIndex);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the should show outline cell operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:shouldShowOutlineCellForItem:")]
 		bool ShouldShowOutlineCell (NSOutlineView outlineView, NSObject item);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the column did move operation.</summary>
 		[Export ("outlineViewColumnDidMove:")]
 		void ColumnDidMove (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the column did resize operation.</summary>
 		[Export ("outlineViewColumnDidResize:")]
 		void ColumnDidResize (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the selection is changing operation.</summary>
 		[Export ("outlineViewSelectionIsChanging:")]
 		void SelectionIsChanging (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the item will expand operation.</summary>
 		[Export ("outlineViewItemWillExpand:")]
 		void ItemWillExpand (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the item did expand operation.</summary>
 		[Export ("outlineViewItemDidExpand:")]
 		void ItemDidExpand (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the item will collapse operation.</summary>
 		[Export ("outlineViewItemWillCollapse:")]
 		void ItemWillCollapse (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the item did collapse operation.</summary>
 		[Export ("outlineViewItemDidCollapse:")]
 		void ItemDidCollapse (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the selection did change operation.</summary>
 		[Export ("outlineViewSelectionDidChange:")]
 		void SelectionDidChange (NSNotification notification);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the row view for item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:rowViewForItem:")]
 		NSTableRowView RowViewForItem (NSOutlineView outlineView, NSObject item);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="rowView">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="rowView">The row view.</param>
+		/// <param name="row">The row.</param>
+		/// <summary>Performs the did add row view operation.</summary>
 		[Export ("outlineView:didAddRowView:forRow:")]
 		void DidAddRowView (NSOutlineView outlineView, NSTableRowView rowView, nint row);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="rowView">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="rowView">The row view.</param>
+		/// <param name="row">The row.</param>
+		/// <summary>Performs the did remove row view operation.</summary>
 		[Export ("outlineView:didRemoveRowView:forRow:")]
 		void DidRemoveRowView (NSOutlineView outlineView, NSTableRowView rowView, nint row);
 
@@ -10974,78 +10292,69 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	partial interface NSOutlineViewDataSource {
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="childIndex">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="childIndex">The child index.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the get child operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:child:ofItem:")]
 		NSObject GetChild (NSOutlineView outlineView, nint childIndex, [NullAllowed] NSObject item);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the item expandable operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:isItemExpandable:")]
 		bool ItemExpandable (NSOutlineView outlineView, NSObject item);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the get children count operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:numberOfChildrenOfItem:")]
 		nint GetChildrenCount (NSOutlineView outlineView, [NullAllowed] NSObject item);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the get object value operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:objectValueForTableColumn:byItem:")]
 		NSObject GetObjectValue (NSOutlineView outlineView, [NullAllowed] NSTableColumn tableColumn, [NullAllowed] NSObject item);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="theObject">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="theObject">The the object.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the set object value operation.</summary>
 		[Export ("outlineView:setObjectValue:forTableColumn:byItem:")]
 		void SetObjectValue (NSOutlineView outlineView, [NullAllowed] NSObject theObject, [NullAllowed] NSTableColumn tableColumn, [NullAllowed] NSObject item);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="theObject">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="theObject">The the object.</param>
+		/// <summary>Performs the item for persistent object operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:itemForPersistentObject:")]
 		NSObject ItemForPersistentObject (NSOutlineView outlineView, NSObject theObject);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the persistent object for item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:persistentObjectForItem:")]
 		NSObject PersistentObjectForItem (NSOutlineView outlineView, [NullAllowed] NSObject item);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="oldDescriptors">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="oldDescriptors">The old descriptors.</param>
+		/// <summary>Performs the sort descriptors changed operation.</summary>
 		[Export ("outlineView:sortDescriptorsDidChange:")]
 		void SortDescriptorsChanged (NSOutlineView outlineView, NSSortDescriptor [] oldDescriptors);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="items">To be added.</param>
-		/// <param name="pboard">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="items">The items.</param>
+		/// <param name="pboard">The pboard.</param>
+		/// <summary>Performs the outline viewwrite itemsto pasteboard operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:writeItems:toPasteboard:")]
 		[Deprecated (PlatformName.MacOSX, 10, 15)]
 		bool OutlineViewwriteItemstoPasteboard (NSOutlineView outlineView, NSArray items, NSPasteboard pboard);
@@ -11056,12 +10365,11 @@ namespace AppKit {
 		[Export ("outlineView:acceptDrop:item:childIndex:")]
 		bool AcceptDrop (NSOutlineView outlineView, INSDraggingInfo info, [NullAllowed] NSObject item, nint index);
 
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="dropDestination">To be added.</param>
-		/// <param name="items">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="dropDestination">The drop destination.</param>
+		/// <param name="items">The items.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:namesOfPromisedFilesDroppedAtDestination:forDraggedItems:")]
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use 'NSFilePromiseReceiver' objects instead.")]
 		string [] FilesDropped (NSOutlineView outlineView, NSUrl dropDestination, NSArray items);
@@ -11071,10 +10379,9 @@ namespace AppKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NSHapticFeedbackPerformer {
-		/// <param name="pattern">To be added.</param>
-		/// <param name="performanceTime">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="pattern">The pattern.</param>
+		/// <param name="performanceTime">The performance time.</param>
+		/// <summary>Performs the perform feedback operation.</summary>
 		[Abstract]
 		[Export ("performFeedbackPattern:performanceTime:")]
 		void PerformFeedback (NSHapticFeedbackPattern pattern, NSHapticFeedbackPerformanceTime performanceTime);
@@ -11119,9 +10426,7 @@ namespace AppKit {
 		bool RegisterBooks (NSBundle bundle);
 
 		//Detected properties
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the ContextHelpModeActive value.</summary>
 		[Static]
 		[Export ("contextHelpModeActive")]
 		bool ContextHelpModeActive { [Bind ("isContextHelpModeActive")] get; set; }
@@ -11220,9 +10525,7 @@ namespace AppKit {
 		[Export ("removeRepresentation:")]
 		void RemoveRepresentation (NSImageRep imageRep);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsValid value.</summary>
 		[Export ("isValid")]
 		bool IsValid { get; }
 
@@ -11341,9 +10644,7 @@ namespace AppKit {
 		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[NoMacCatalyst]
 		[Wrap ("WeakDelegate")]
 		INSImageDelegate Delegate { get; set; }
@@ -11355,9 +10656,7 @@ namespace AppKit {
 		[Export ("alignmentRect")]
 		CGRect AlignmentRect { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Template value.</summary>
 		[Export ("template")]
 		bool Template { [Bind ("isTemplate")] get; set; }
 
@@ -11378,17 +10677,15 @@ namespace AppKit {
 		[Export ("resizingMode")]
 		NSImageResizingMode ResizingMode { get; set; }
 
-		/// <param name="preferredContentsScale">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="preferredContentsScale">The preferred contents scale.</param>
+		/// <summary>Performs the get recommended layer contents scale operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("recommendedLayerContentsScale:")]
 		nfloat GetRecommendedLayerContentsScale (nfloat preferredContentsScale);
 
-		/// <param name="layerContentsScale">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="layerContentsScale">The layer contents scale.</param>
+		/// <summary>Performs the get layer contents for contents scale operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("layerContentsForContentsScale:")]
 		NSObject GetLayerContentsForContentsScale (nfloat layerContentsScale);
 
@@ -11437,571 +10734,571 @@ namespace AppKit {
 
 	[MacCatalyst (13, 1)]
 	public enum NSImageName {
-		/// <summary>To be added.</summary>
+		/// <summary>Quick Look Template.</summary>
 		[Field ("NSImageNameQuickLookTemplate")]
 		QuickLookTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Bluetooth Template.</summary>
 		[Field ("NSImageNameBluetoothTemplate")]
 		BluetoothTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>I Chat Theater Template.</summary>
 		[NoMacCatalyst]
 		[Field ("NSImageNameIChatTheaterTemplate")]
 		IChatTheaterTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Slideshow Template.</summary>
 		[Field ("NSImageNameSlideshowTemplate")]
 		SlideshowTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Action Template.</summary>
 		[Field ("NSImageNameActionTemplate")]
 		ActionTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Smart Badge Template.</summary>
 		[NoMacCatalyst]
 		[Field ("NSImageNameSmartBadgeTemplate")]
 		SmartBadgeTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Path Template.</summary>
 		[Field ("NSImageNamePathTemplate")]
 		PathTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Data Freestanding Template.</summary>
 		[NoMacCatalyst]
 		[Field ("NSImageNameInvalidDataFreestandingTemplate")]
 		InvalidDataFreestandingTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Lock Locked Template.</summary>
 		[Field ("NSImageNameLockLockedTemplate")]
 		LockLockedTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Lock Unlocked Template.</summary>
 		[Field ("NSImageNameLockUnlockedTemplate")]
 		LockUnlockedTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Go Right Template.</summary>
 		[Field ("NSImageNameGoRightTemplate")]
 		GoRightTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Go Left Template.</summary>
 		[Field ("NSImageNameGoLeftTemplate")]
 		GoLeftTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Right Facing Triangle Template.</summary>
 		[NoMacCatalyst]
 		[Field ("NSImageNameRightFacingTriangleTemplate")]
 		RightFacingTriangleTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Left Facing Triangle Template.</summary>
 		[NoMacCatalyst]
 		[Field ("NSImageNameLeftFacingTriangleTemplate")]
 		LeftFacingTriangleTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Add Template.</summary>
 		[Field ("NSImageNameAddTemplate")]
 		AddTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Remove Template.</summary>
 		[Field ("NSImageNameRemoveTemplate")]
 		RemoveTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Reveal Freestanding Template.</summary>
 		[NoMacCatalyst]
 		[Field ("NSImageNameRevealFreestandingTemplate")]
 		RevealFreestandingTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Follow Link Freestanding Template.</summary>
 		[NoMacCatalyst]
 		[Field ("NSImageNameFollowLinkFreestandingTemplate")]
 		FollowLinkFreestandingTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Enter Full Screen Template.</summary>
 		[NoMacCatalyst]
 		[Field ("NSImageNameEnterFullScreenTemplate")]
 		EnterFullScreenTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Exit Full Screen Template.</summary>
 		[NoMacCatalyst]
 		[Field ("NSImageNameExitFullScreenTemplate")]
 		ExitFullScreenTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Stop Progress Template.</summary>
 		[Field ("NSImageNameStopProgressTemplate")]
 		StopProgressTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Stop Progress Freestanding Template.</summary>
 		[NoMacCatalyst]
 		[Field ("NSImageNameStopProgressFreestandingTemplate")]
 		StopProgressFreestandingTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Refresh Template.</summary>
 		[Field ("NSImageNameRefreshTemplate")]
 		RefreshTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Refresh Freestanding Template.</summary>
 		[NoMacCatalyst]
 		[Field ("NSImageNameRefreshFreestandingTemplate")]
 		RefreshFreestandingTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Folder.</summary>
 		[NoMacCatalyst]
 		[Field ("NSImageNameFolder")]
 		Folder,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Trash Empty.</summary>
 		[NoMacCatalyst]
 		[Field ("NSImageNameTrashEmpty")]
 		TrashEmpty,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Trash Full.</summary>
 		[NoMacCatalyst]
 		[Field ("NSImageNameTrashFull")]
 		TrashFull,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Home Template.</summary>
 		[Field ("NSImageNameHomeTemplate")]
 		HomeTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Bookmarks Template.</summary>
 		[Field ("NSImageNameBookmarksTemplate")]
 		BookmarksTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Caution.</summary>
 		[NoMacCatalyst]
 		[Field ("NSImageNameCaution")]
 		Caution,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Status Available.</summary>
 		[NoMacCatalyst]
 		[Field ("NSImageNameStatusAvailable")]
 		StatusAvailable,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Status Partially Available.</summary>
 		[NoMacCatalyst]
 		[Field ("NSImageNameStatusPartiallyAvailable")]
 		StatusPartiallyAvailable,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Status Unavailable.</summary>
 		[NoMacCatalyst]
 		[Field ("NSImageNameStatusUnavailable")]
 		StatusUnavailable,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Status None.</summary>
 		[NoMacCatalyst]
 		[Field ("NSImageNameStatusNone")]
 		StatusNone,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Application Icon.</summary>
 		[NoMacCatalyst]
 		[Field ("NSImageNameApplicationIcon")]
 		ApplicationIcon,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Menu On State Template.</summary>
 		[NoMacCatalyst]
 		[Field ("NSImageNameMenuOnStateTemplate")]
 		MenuOnStateTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Menu Mixed State Template.</summary>
 		[NoMacCatalyst]
 		[Field ("NSImageNameMenuMixedStateTemplate")]
 		MenuMixedStateTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>User Guest.</summary>
 		[NoMacCatalyst]
 		[Field ("NSImageNameUserGuest")]
 		UserGuest,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Mobile Me.</summary>
 		[NoMacCatalyst]
 		[Field ("NSImageNameMobileMe")]
 		MobileMe,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Share Template.</summary>
 		[Field ("NSImageNameShareTemplate")]
 		ShareTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Add Detail Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarAddDetailTemplate")]
 		TouchBarAddDetailTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Add Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarAddTemplate")]
 		TouchBarAddTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Alarm Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarAlarmTemplate")]
 		TouchBarAlarmTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Audio Input Mute Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarAudioInputMuteTemplate")]
 		TouchBarAudioInputMuteTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Audio Input Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarAudioInputTemplate")]
 		TouchBarAudioInputTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Audio Output Mute Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarAudioOutputMuteTemplate")]
 		TouchBarAudioOutputMuteTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Audio Output Volume High Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarAudioOutputVolumeHighTemplate")]
 		TouchBarAudioOutputVolumeHighTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Audio Output Volume Low Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarAudioOutputVolumeLowTemplate")]
 		TouchBarAudioOutputVolumeLowTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Audio Output Volume Medium Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarAudioOutputVolumeMediumTemplate")]
 		TouchBarAudioOutputVolumeMediumTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Audio Output Volume Off Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarAudioOutputVolumeOffTemplate")]
 		TouchBarAudioOutputVolumeOffTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Bookmarks Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarBookmarksTemplate")]
 		TouchBarBookmarksTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Color Picker Fill.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarColorPickerFill")]
 		TouchBarColorPickerFill,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Color Picker Font.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarColorPickerFont")]
 		TouchBarColorPickerFont,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Color Picker Stroke.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarColorPickerStroke")]
 		TouchBarColorPickerStroke,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Communication Audio Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarCommunicationAudioTemplate")]
 		TouchBarCommunicationAudioTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Communication Video Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarCommunicationVideoTemplate")]
 		TouchBarCommunicationVideoTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Compose Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarComposeTemplate")]
 		TouchBarComposeTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Delete Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarDeleteTemplate")]
 		TouchBarDeleteTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Download Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarDownloadTemplate")]
 		TouchBarDownloadTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Enter Full Screen Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarEnterFullScreenTemplate")]
 		TouchBarEnterFullScreenTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Exit Full Screen Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarExitFullScreenTemplate")]
 		TouchBarExitFullScreenTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Fast Forward Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarFastForwardTemplate")]
 		TouchBarFastForwardTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Folder Copy To Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarFolderCopyToTemplate")]
 		TouchBarFolderCopyToTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Folder Move To Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarFolderMoveToTemplate")]
 		TouchBarFolderMoveToTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Folder Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarFolderTemplate")]
 		TouchBarFolderTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Get Info Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarGetInfoTemplate")]
 		TouchBarGetInfoTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Go Back Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarGoBackTemplate")]
 		TouchBarGoBackTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Go Down Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarGoDownTemplate")]
 		TouchBarGoDownTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Go Forward Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarGoForwardTemplate")]
 		TouchBarGoForwardTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Go Up Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarGoUpTemplate")]
 		TouchBarGoUpTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar History Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarHistoryTemplate")]
 		TouchBarHistoryTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Icon View Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarIconViewTemplate")]
 		TouchBarIconViewTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar List View Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarListViewTemplate")]
 		TouchBarListViewTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Mail Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarMailTemplate")]
 		TouchBarMailTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar New Folder Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarNewFolderTemplate")]
 		TouchBarNewFolderTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar New Message Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarNewMessageTemplate")]
 		TouchBarNewMessageTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Open In Browser Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarOpenInBrowserTemplate")]
 		TouchBarOpenInBrowserTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Pause Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarPauseTemplate")]
 		TouchBarPauseTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Playhead Template.</summary>
 		[NoMacCatalyst]
 		[Field ("NSImageNameTouchBarPlayheadTemplate")]
 		TouchBarPlayheadTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Play Pause Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarPlayPauseTemplate")]
 		TouchBarPlayPauseTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Play Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarPlayTemplate")]
 		TouchBarPlayTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Quick Look Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarQuickLookTemplate")]
 		TouchBarQuickLookTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Record Start Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarRecordStartTemplate")]
 		TouchBarRecordStartTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Record Stop Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarRecordStopTemplate")]
 		TouchBarRecordStopTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Refresh Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarRefreshTemplate")]
 		TouchBarRefreshTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Rewind Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarRewindTemplate")]
 		TouchBarRewindTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Rotate Left Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarRotateLeftTemplate")]
 		TouchBarRotateLeftTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Rotate Right Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarRotateRightTemplate")]
 		TouchBarRotateRightTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Search Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarSearchTemplate")]
 		TouchBarSearchTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Share Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarShareTemplate")]
 		TouchBarShareTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Sidebar Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarSidebarTemplate")]
 		TouchBarSidebarTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Skip Ahead15 Seconds Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarSkipAhead15SecondsTemplate")]
 		TouchBarSkipAhead15SecondsTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Skip Ahead30 Seconds Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarSkipAhead30SecondsTemplate")]
 		TouchBarSkipAhead30SecondsTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Skip Ahead Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarSkipAheadTemplate")]
 		TouchBarSkipAheadTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Skip Back15 Seconds Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarSkipBack15SecondsTemplate")]
 		TouchBarSkipBack15SecondsTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Skip Back30 Seconds Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarSkipBack30SecondsTemplate")]
 		TouchBarSkipBack30SecondsTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Skip Back Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarSkipBackTemplate")]
 		TouchBarSkipBackTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Skip To End Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarSkipToEndTemplate")]
 		TouchBarSkipToEndTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Skip To Start Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarSkipToStartTemplate")]
 		TouchBarSkipToStartTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Slideshow Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarSlideshowTemplate")]
 		TouchBarSlideshowTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Tag Icon Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarTagIconTemplate")]
 		TouchBarTagIconTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Text Bold Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarTextBoldTemplate")]
 		TouchBarTextBoldTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Text Box Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarTextBoxTemplate")]
 		TouchBarTextBoxTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Text Center Align Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarTextCenterAlignTemplate")]
 		TouchBarTextCenterAlignTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Text Italic Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarTextItalicTemplate")]
 		TouchBarTextItalicTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Text Justified Align Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarTextJustifiedAlignTemplate")]
 		TouchBarTextJustifiedAlignTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Text Left Align Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarTextLeftAlignTemplate")]
 		TouchBarTextLeftAlignTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Text List Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarTextListTemplate")]
 		TouchBarTextListTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Text Right Align Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarTextRightAlignTemplate")]
 		TouchBarTextRightAlignTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Text Strikethrough Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarTextStrikethroughTemplate")]
 		TouchBarTextStrikethroughTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Text Underline Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarTextUnderlineTemplate")]
 		TouchBarTextUnderlineTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar User Add Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarUserAddTemplate")]
 		TouchBarUserAddTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar User Group Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarUserGroupTemplate")]
 		TouchBarUserGroupTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar User Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarUserTemplate")]
 		TouchBarUserTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Volume Down Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarVolumeDownTemplate")]
 		TouchBarVolumeDownTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Volume Up Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarVolumeUpTemplate")]
 		TouchBarVolumeUpTemplate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Touch Bar Remove Template.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSImageNameTouchBarRemoveTemplate")]
 		TouchBarRemoveTemplate,
@@ -12029,45 +11326,39 @@ namespace AppKit {
 	[ThreadSafe]
 	[Category, BaseType (typeof (NSString))]
 	interface NSStringDrawing_NSString {
-		/// <param name="attributes">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="attributes">The attributes.</param>
+		/// <summary>Performs the string size operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("sizeWithAttributes:")]
 		CGSize StringSize ([NullAllowed] NSDictionary attributes);
 
-		/// <param name="attributes">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="attributes">The attributes.</param>
+		/// <summary>Performs the string size operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Wrap ("This.StringSize (attributes.GetDictionary ()!)")]
 		CGSize StringSize ([NullAllowed] AppKit.NSStringAttributes attributes);
 
-		/// <param name="point">To be added.</param>
-		/// <param name="attributes">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="point">The point.</param>
+		/// <param name="attributes">The attributes.</param>
+		/// <summary>Performs the draw at point operation.</summary>
 		[Export ("drawAtPoint:withAttributes:")]
 		void DrawAtPoint (CGPoint point, [NullAllowed] NSDictionary attributes);
 
-		/// <param name="point">To be added.</param>
-		/// <param name="attributes">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="point">The point.</param>
+		/// <param name="attributes">The attributes.</param>
+		/// <summary>Performs the draw at point operation.</summary>
 		[Wrap ("This.DrawAtPoint (point, attributes.GetDictionary ()!)")]
 		void DrawAtPoint (CGPoint point, [NullAllowed] AppKit.NSStringAttributes attributes);
 
-		/// <param name="rect">To be added.</param>
-		/// <param name="attributes">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="rect">The rect.</param>
+		/// <param name="attributes">The attributes.</param>
+		/// <summary>Performs the draw in rect operation.</summary>
 		[Export ("drawInRect:withAttributes:")]
 		void DrawInRect (CGRect rect, [NullAllowed] NSDictionary attributes);
 
-		/// <param name="rect">To be added.</param>
-		/// <param name="attributes">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="rect">The rect.</param>
+		/// <param name="attributes">The attributes.</param>
+		/// <summary>Performs the draw in rect operation.</summary>
 		[Wrap ("This.DrawInRect (rect, attributes.GetDictionary ()!)")]
 		void DrawInRect (CGRect rect, [NullAllowed] AppKit.NSStringAttributes attributes);
 	}
@@ -12075,21 +11366,18 @@ namespace AppKit {
 	[ThreadSafe]
 	[Category, BaseType (typeof (NSAttributedString))]
 	interface NSStringDrawing_NSAttributedString {
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the get size operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("size")]
 		CGSize GetSize ();
 
-		/// <param name="point">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="point">The point.</param>
+		/// <summary>Performs the draw at point operation.</summary>
 		[Export ("drawAtPoint:")]
 		void DrawAtPoint (CGPoint point);
 
-		/// <param name="rect">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="rect">The rect.</param>
+		/// <summary>Performs the draw in rect operation.</summary>
 		[Export ("drawInRect:")]
 		void DrawInRect (CGRect rect);
 	}
@@ -12100,20 +11388,18 @@ namespace AppKit {
 	[Category]
 	[BaseType (typeof (NSAttributedString))]
 	interface NSAttributedString_NSExtendedStringDrawing {
-		/// <param name="rect">To be added.</param>
-		/// <param name="options">To be added.</param>
-		/// <param name="context">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="rect">The rect.</param>
+		/// <param name="options">The options.</param>
+		/// <param name="context">The context.</param>
+		/// <summary>Performs the draw with rect operation.</summary>
 		[Export ("drawWithRect:options:context:")]
 		void DrawWithRect (CGRect rect, NSStringDrawingOptions options, [NullAllowed] NSStringDrawingContext context);
 
-		/// <param name="size">To be added.</param>
-		/// <param name="options">To be added.</param>
-		/// <param name="context">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="size">The size.</param>
+		/// <param name="options">The options.</param>
+		/// <param name="context">The context.</param>
+		/// <summary>Performs the bounding rect with size operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("boundingRectWithSize:options:context:")]
 		CGRect BoundingRectWithSize (CGSize size, NSStringDrawingOptions options, [NullAllowed] NSStringDrawingContext context);
 	}
@@ -12123,138 +11409,121 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Category, BaseType (typeof (NSMutableAttributedString))]
 	interface NSMutableAttributedStringAppKitAddons {
-		/// <param name="url">To be added.</param>
-		/// <param name="options">To be added.</param>
-		/// <param name="returnOptions">To be added.</param>
-		/// <param name="error">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="url">The url.</param>
+		/// <param name="options">The options.</param>
+		/// <param name="returnOptions">The return options.</param>
+		/// <param name="error">The error.</param>
+		/// <summary>Performs the read from u r l operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("readFromURL:options:documentAttributes:error:")]
 		bool ReadFromURL (NSUrl url, NSDictionary options, out NSDictionary returnOptions, out NSError error);
 
-		/// <param name="url">To be added.</param>
-		/// <param name="options">To be added.</param>
-		/// <param name="returnOptions">To be added.</param>
-		/// <param name="error">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="url">The url.</param>
+		/// <param name="options">The options.</param>
+		/// <param name="returnOptions">The return options.</param>
+		/// <param name="error">The error.</param>
+		/// <summary>Performs the read from u r l operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Wrap ("This.ReadFromURL (url, options.GetDictionary ()!, out returnOptions, out error)")]
 		bool ReadFromURL (NSUrl url, NSAttributedStringDocumentAttributes options, out NSDictionary returnOptions, out NSError error);
 
-		/// <param name="url">To be added.</param>
-		/// <param name="options">To be added.</param>
-		/// <param name="returnOptions">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="url">The url.</param>
+		/// <param name="options">The options.</param>
+		/// <param name="returnOptions">The return options.</param>
+		/// <summary>Performs the read from u r l operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("readFromURL:options:documentAttributes:")]
 		bool ReadFromURL (NSUrl url, NSDictionary options, out NSDictionary returnOptions);
 
-		/// <param name="url">To be added.</param>
-		/// <param name="options">To be added.</param>
-		/// <param name="returnOptions">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="url">The url.</param>
+		/// <param name="options">The options.</param>
+		/// <param name="returnOptions">The return options.</param>
+		/// <summary>Performs the read from u r l operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Wrap ("This.ReadFromURL (url, options.GetDictionary ()!, out returnOptions)")]
 		bool ReadFromURL (NSUrl url, NSAttributedStringDocumentAttributes options, out NSDictionary returnOptions);
 
-		/// <param name="data">To be added.</param>
-		/// <param name="options">To be added.</param>
-		/// <param name="returnOptions">To be added.</param>
-		/// <param name="error">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="data">The data.</param>
+		/// <param name="options">The options.</param>
+		/// <param name="returnOptions">The return options.</param>
+		/// <param name="error">The error.</param>
+		/// <summary>Performs the read from data operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("readFromData:options:documentAttributes:error:")]
 		bool ReadFromData (NSData data, NSDictionary options, out NSDictionary returnOptions, out NSError error);
 
-		/// <param name="data">To be added.</param>
-		/// <param name="options">To be added.</param>
-		/// <param name="returnOptions">To be added.</param>
-		/// <param name="error">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="data">The data.</param>
+		/// <param name="options">The options.</param>
+		/// <param name="returnOptions">The return options.</param>
+		/// <param name="error">The error.</param>
+		/// <summary>Performs the read from data operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Wrap ("This.ReadFromData (data, options.GetDictionary ()!, out returnOptions, out error)")]
 		bool ReadFromData (NSData data, NSAttributedStringDocumentAttributes options, out NSDictionary returnOptions, out NSError error);
 
-		/// <param name="data">To be added.</param>
-		/// <param name="options">To be added.</param>
-		/// <param name="dict">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="data">The data.</param>
+		/// <param name="options">The options.</param>
+		/// <param name="dict">The dict.</param>
+		/// <summary>Performs the read from data operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("readFromData:options:documentAttributes:")]
 		bool ReadFromData (NSData data, NSDictionary options, out NSDictionary dict);
 
-		/// <param name="data">To be added.</param>
-		/// <param name="options">To be added.</param>
-		/// <param name="returnOptions">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="data">The data.</param>
+		/// <param name="options">The options.</param>
+		/// <param name="returnOptions">The return options.</param>
+		/// <summary>Performs the read from data operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Wrap ("This.ReadFromData (data, options.GetDictionary ()!, out returnOptions)")]
 		bool ReadFromData (NSData data, NSAttributedStringDocumentAttributes options, out NSDictionary returnOptions);
 
-		/// <param name="range">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="range">The range.</param>
+		/// <summary>Performs the superscript range operation.</summary>
 		[Export ("superscriptRange:")]
 		void SuperscriptRange (NSRange range);
 
-		/// <param name="range">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="range">The range.</param>
+		/// <summary>Performs the subscript range operation.</summary>
 		[Export ("subscriptRange:")]
 		void SubscriptRange (NSRange range);
 
-		/// <param name="range">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="range">The range.</param>
+		/// <summary>Performs the unscript range operation.</summary>
 		[Export ("unscriptRange:")]
 		void UnscriptRange (NSRange range);
 
-		/// <param name="traitMask">To be added.</param>
-		/// <param name="range">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="traitMask">The trait mask.</param>
+		/// <param name="range">The range.</param>
+		/// <summary>Performs the apply font traits operation.</summary>
 		[Export ("applyFontTraits:range:")]
 		void ApplyFontTraits (NSFontTraitMask traitMask, NSRange range);
 
-		/// <param name="alignment">To be added.</param>
-		/// <param name="range">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="alignment">The alignment.</param>
+		/// <param name="range">The range.</param>
+		/// <summary>Performs the set alignment operation.</summary>
 		[Export ("setAlignment:range:")]
 		void SetAlignment (NSTextAlignment alignment, NSRange range);
 
 		[Export ("setBaseWritingDirection:range:")]
 		void SetBaseWritingDirection (NSWritingDirection writingDirection, NSRange range);
 
-		/// <param name="range">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="range">The range.</param>
+		/// <summary>Performs the fix font attribute in range operation.</summary>
 		[Export ("fixFontAttributeInRange:")]
 		void FixFontAttributeInRange (NSRange range);
 
-		/// <param name="range">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="range">The range.</param>
+		/// <summary>Performs the fix paragraph style attribute in range operation.</summary>
 		[Export ("fixParagraphStyleAttributeInRange:")]
 		void FixParagraphStyleAttributeInRange (NSRange range);
 
-		/// <param name="range">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="range">The range.</param>
+		/// <summary>Performs the fix attachment attribute in range operation.</summary>
 		[Export ("fixAttachmentAttributeInRange:")]
 		void FixAttachmentAttributeInRange (NSRange range);
 
-		/// <param name="path">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="path">The path.</param>
+		/// <summary>Performs the update attachments from path operation.</summary>
 		[Export ("updateAttachmentsFromPath:")]
 		void UpdateAttachmentsFromPath (string path);
 	}
@@ -12266,58 +11535,47 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSImageDelegate {
-		/// <param name="sender">To be added.</param>
-		/// <param name="aRect">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <param name="aRect">The a rect.</param>
+		/// <summary>Performs the image did not draw operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the image did not draw operation.</summary>
 			""")]
 		[Export ("imageDidNotDraw:inRect:"), DelegateName ("NSImageRect"), DefaultValue (null)]
 		NSImage ImageDidNotDraw (NSObject sender, CGRect aRect);
 
-		/// <param name="image">To be added.</param>
-		/// <param name="rep">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="image">The image.</param>
+		/// <param name="rep">The rep.</param>
+		/// <summary>Performs the will load representation operation.</summary>
 		[Export ("image:willLoadRepresentation:"), EventArgs ("NSImageLoad", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will load representation operation.</summary>
 			""")]
 		void WillLoadRepresentation (NSImage image, NSImageRep rep);
 
-		/// <param name="image">To be added.</param>
-		/// <param name="rep">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="image">The image.</param>
+		/// <param name="rep">The rep.</param>
+		/// <summary>Performs the did load representation header operation.</summary>
 		[Export ("image:didLoadRepresentationHeader:"), EventArgs ("NSImageLoad", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did load representation header operation.</summary>
 			""")]
 		void DidLoadRepresentationHeader (NSImage image, NSImageRep rep);
 
-		/// <param name="image">To be added.</param>
-		/// <param name="rep">To be added.</param>
-		/// <param name="rows">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="image">The image.</param>
+		/// <param name="rep">The rep.</param>
+		/// <param name="rows">The rows.</param>
+		/// <summary>Performs the did load part of representation operation.</summary>
 		[Export ("image:didLoadPartOfRepresentation:withValidRows:"), EventArgs ("NSImagePartial", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did load part of representation operation.</summary>
 			""")]
 		void DidLoadPartOfRepresentation (NSImage image, NSImageRep rep, nint rows);
 
-		/// <param name="image">To be added.</param>
-		/// <param name="rep">To be added.</param>
-		/// <param name="status">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="image">The image.</param>
+		/// <param name="rep">The rep.</param>
+		/// <param name="status">The status.</param>
+		/// <summary>Performs the did load representation operation.</summary>
 		[Export ("image:didLoadRepresentation:withStatus:"), EventArgs ("NSImageLoadRepresentation", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did load representation operation.</summary>
 			""")]
 		void DidLoadRepresentation (NSImage image, NSImageRep rep, NSImageLoadStatus status);
 	}
@@ -12346,21 +11604,15 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Static]
 	partial interface NSImageHint {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Ctm key constant.</summary>
 		[Field ("NSImageHintCTM")]
 		NSString Ctm { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Interpolation key constant.</summary>
 		[Field ("NSImageHintInterpolation")]
 		NSString Interpolation { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the UserInterfaceLayoutDirection key constant.</summary>
 		[Field ("NSImageHintUserInterfaceLayoutDirection")]
 		NSString UserInterfaceLayoutDirection { get; }
 	}
@@ -12381,15 +11633,12 @@ namespace AppKit {
 		[Export ("drawInRect:fromRect:operation:fraction:respectFlipped:hints:")]
 		bool DrawInRect (CGRect dstSpacePortionRect, CGRect srcSpacePortionRect, NSCompositingOperation op, nfloat requestedAlpha, bool respectContextIsFlipped, [NullAllowed] NSDictionary hints);
 
-		/// <param name="alpha">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="alpha">The alpha.</param>
+		///         <summary>Performs the set alpha operation.</summary>
 		[Export ("setAlpha:")]
 		void SetAlpha (bool alpha);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the HasAlpha value.</summary>
 		[Export ("hasAlpha")]
 		bool HasAlpha { get; }
 
@@ -12490,9 +11739,7 @@ namespace AppKit {
 		[Export ("size")]
 		CGSize Size { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Opaque value.</summary>
 		[Export ("opaque")]
 		bool Opaque { [Bind ("isOpaque")] get; set; }
 
@@ -12533,9 +11780,7 @@ namespace AppKit {
 		[Export ("imageFrameStyle")]
 		NSImageFrameStyle ImageFrameStyle { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Editable value.</summary>
 		[Export ("editable")]
 		bool Editable { [Bind ("isEditable")] get; set; }
 
@@ -12819,9 +12064,7 @@ namespace AppKit {
 		[Export ("allowsEmptySelection")]
 		bool AllowsEmptySelection { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the SelectionByRect value.</summary>
 		[Export ("selectionByRect")]
 		bool SelectionByRect { [Bind ("isSelectionByRect")] get; set; }
 
@@ -12850,18 +12093,14 @@ namespace AppKit {
 		[Export ("autosizesCells")]
 		bool AutosizesCells { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Autoscroll value.</summary>
 		[Export ("autoscroll")]
 		bool Autoscroll { [Bind ("isAutoscroll")] get; set; }
 
 		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSMatrixDelegate Delegate { get; set; }
 
@@ -12930,9 +12169,7 @@ namespace AppKit {
 		[NullAllowed, Export ("ratingPlaceholderImage", ArgumentSemantic.Strong)]
 		NSImage RatingPlaceholderImage { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Editable value.</summary>
 		[Export ("editable")]
 		bool Editable { [Bind ("isEditable")] get; set; }
 	}
@@ -12986,12 +12223,11 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol (IsInformal = true)]
 	interface NSLayerDelegateContentsScaleUpdating {
-		/// <param name="layer">To be added.</param>
-		/// <param name="newScale">To be added.</param>
-		/// <param name="fromWindow">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="layer">The layer.</param>
+		/// <param name="newScale">The new scale.</param>
+		/// <param name="fromWindow">The from window.</param>
+		/// <summary>Performs the should inherit contents scale operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("layer:shouldInheritContentsScale:fromWindow:")]
 		bool ShouldInheritContentsScale (CALayer layer, nfloat newScale, NSWindow fromWindow);
 	}
@@ -13088,82 +12324,72 @@ namespace AppKit {
 	[BaseType (typeof (NSObject))]
 	[Protocol]
 	interface NSControlTextEditingDelegate {
-		/// <param name="control">To be added.</param>
-		/// <param name="fieldEditor">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="control">The control.</param>
+		/// <param name="fieldEditor">The field editor.</param>
+		/// <summary>Performs the text should begin editing operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("control:textShouldBeginEditing:"), DelegateName ("NSControlText"), DefaultValue (true)]
 		bool TextShouldBeginEditing (NSControl control, NSText fieldEditor);
 
-		/// <param name="control">To be added.</param>
-		/// <param name="fieldEditor">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="control">The control.</param>
+		/// <param name="fieldEditor">The field editor.</param>
+		/// <summary>Performs the text should end editing operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("control:textShouldEndEditing:"), DelegateName ("NSControlText"), DefaultValue (true)]
 		bool TextShouldEndEditing (NSControl control, NSText fieldEditor);
 
-		/// <param name="control">To be added.</param>
-		/// <param name="str">To be added.</param>
-		/// <param name="error">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="control">The control.</param>
+		/// <param name="str">The str.</param>
+		/// <param name="error">The error.</param>
+		/// <summary>Performs the did fail to format string operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("control:didFailToFormatString:errorDescription:"), DelegateName ("NSControlTextError"), DefaultValue (true)]
 		bool DidFailToFormatString (NSControl control, string str, string error);
 
-		/// <param name="control">To be added.</param>
-		/// <param name="str">To be added.</param>
-		/// <param name="error">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="control">The control.</param>
+		/// <param name="str">The str.</param>
+		/// <param name="error">The error.</param>
+		/// <summary>Performs the did fail to validate partial string operation.</summary>
 		[Export ("control:didFailToValidatePartialString:errorDescription:"), EventArgs ("NSControlTextError")]
 		void DidFailToValidatePartialString (NSControl control, string str, string error);
 
-		/// <param name="control">To be added.</param>
-		/// <param name="objectToValidate">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="control">The control.</param>
+		/// <param name="objectToValidate">The object to validate.</param>
+		/// <summary>Performs the is valid object operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("control:isValidObject:"), DelegateName ("NSControlTextValidation"), DefaultValue (true)]
 		bool IsValidObject (NSControl control, NSObject objectToValidate);
 
-		/// <param name="control">To be added.</param>
-		/// <param name="textView">To be added.</param>
-		/// <param name="commandSelector">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="control">The control.</param>
+		/// <param name="textView">The text view.</param>
+		/// <param name="commandSelector">The command selector.</param>
+		/// <summary>Performs the do command by selector operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("control:textView:doCommandBySelector:"), DelegateName ("NSControlCommand"), DefaultValue (false)]
 		bool DoCommandBySelector (NSControl control, NSTextView textView, Selector commandSelector);
 
-		/// <param name="control">To be added.</param>
-		/// <param name="textView">To be added.</param>
-		/// <param name="words">To be added.</param>
-		/// <param name="charRange">To be added.</param>
-		/// <param name="index">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="control">The control.</param>
+		/// <param name="textView">The text view.</param>
+		/// <param name="words">The words.</param>
+		/// <param name="charRange">The char range.</param>
+		/// <param name="index">The index.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("control:textView:completions:forPartialWordRange:indexOfSelectedItem:"), DelegateName ("NSControlTextCompletion"), DefaultValue (null)]
 		string [] GetCompletions (NSControl control, NSTextView textView, string [] words, NSRange charRange, ref nint index);
 
-		/// <param name="obj">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="obj">The obj.</param>
+		/// <summary>Performs the control text did begin editing operation.</summary>
 		[Export ("controlTextDidBeginEditing:")]
 		void ControlTextDidBeginEditing (NSNotification obj);
 
-		/// <param name="obj">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="obj">The obj.</param>
+		/// <summary>Performs the control text did end editing operation.</summary>
 		[Export ("controlTextDidEndEditing:")]
 		void ControlTextDidEndEditing (NSNotification obj);
 
-		/// <param name="obj">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="obj">The obj.</param>
+		/// <summary>Performs the control text did change operation.</summary>
 		[Export ("controlTextDidChange:")]
 		void ControlTextDidChange (NSNotification obj);
 	}
@@ -13207,9 +12433,7 @@ namespace AppKit {
 	[BaseType (typeof (NSWindow))]
 	interface NSPanel {
 		//Detected properties
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the FloatingPanel value.</summary>
 		[Export ("floatingPanel")]
 		bool FloatingPanel { [Bind ("isFloatingPanel")] get; set; }
 
@@ -13267,17 +12491,15 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSPasteboardTypeOwner {
-		/// <param name="sender">To be added.</param>
-		/// <param name="type">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <param name="type">The type.</param>
+		/// <summary>Performs the provide data operation.</summary>
 		[Abstract]
 		[Export ("pasteboard:provideDataForType:")]
 		void ProvideData (NSPasteboard sender, string type);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the pasteboard changed owner operation.</summary>
 		[Export ("pasteboardChangedOwner:")]
 		void PasteboardChangedOwner (NSPasteboard sender);
 	}
@@ -13364,319 +12586,229 @@ namespace AppKit {
 #if !XAMCORE_5_0
 		// Pasteboard data types
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSStringType key constant.</summary>
 		[Field ("NSStringPboardType")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'NSPasteboardTypeString' instead.")]
 		NSString NSStringType { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSFilenamesType key constant.</summary>
 		[Field ("NSFilenamesPboardType")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Create multiple items with 'NSPasteboardTypeFileUrl' or 'MobileCoreServices.UTType.FileURL' instead.")]
 		NSString NSFilenamesType { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSPostScriptType key constant.</summary>
 		[Field ("NSPostScriptPboardType")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'com.adobe.encapsulated-postscript' instead.")]
 		NSString NSPostScriptType { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSTiffType key constant.</summary>
 		[Field ("NSTIFFPboardType")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'NSPasteboardTypeTIFF' instead.")]
 		NSString NSTiffType { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSRtfType key constant.</summary>
 		[Field ("NSRTFPboardType")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'NSPasteboardTypeRTF' instead.")]
 		NSString NSRtfType { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSTabularTextType key constant.</summary>
 		[Field ("NSTabularTextPboardType")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'NSPasteboardTypeTabularText' instead.")]
 		NSString NSTabularTextType { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSFontType key constant.</summary>
 		[Field ("NSFontPboardType")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'NSPasteboardTypeFont' instead.")]
 		NSString NSFontType { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSRulerType key constant.</summary>
 		[Field ("NSRulerPboardType")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'NSPasteboardTypeRuler' instead.")]
 		NSString NSRulerType { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSFileContentsType key constant.</summary>
 		[Obsolete ("Use the 'NSPasteboardType' enum instead.")]
 		[Field ("NSFileContentsPboardType")]
 		NSString NSFileContentsType { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSColorType key constant.</summary>
 		[Field ("NSColorPboardType")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'NSPasteboardTypeColor' instead.")]
 		NSString NSColorType { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSRtfdType key constant.</summary>
 		[Field ("NSRTFDPboardType")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'NSPasteboardTypeRTFD' instead.")]
 		NSString NSRtfdType { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSHtmlType key constant.</summary>
 		[Field ("NSHTMLPboardType")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'NSPasteboardTypeHTML' instead.")]
 		NSString NSHtmlType { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSPictType key constant.</summary>
 		[Field ("NSPICTPboardType")]
 		[Deprecated (PlatformName.MacOSX, 10, 6 /* Yes, 10.6 */, message: "Do not use, the PICT format was discontinued a long time ago.")]
 		NSString NSPictType { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSUrlType key constant.</summary>
 		[Field ("NSURLPboardType")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'NSPasteboardTypeUrl' instead.")]
 		NSString NSUrlType { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSPdfType key constant.</summary>
 		[Field ("NSPDFPboardType")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'NSPasteboardTypePDF' instead.")]
 		NSString NSPdfType { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSVCardType key constant.</summary>
 		[Field ("NSVCardPboardType")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'MobileCoreServices.UTType.VCard' instead.")]
 		NSString NSVCardType { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSFilesPromiseType key constant.</summary>
 		[Field ("NSFilesPromisePboardType")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'com.apple.pasteboard.promised-file-url' instead.")]
 		NSString NSFilesPromiseType { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSMultipleTextSelectionType key constant.</summary>
 		[Field ("NSMultipleTextSelectionPboardType")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'NSPasteboardTypeMultipleTextSelection' instead.")]
 		NSString NSMultipleTextSelectionType { get; }
 
 		// Pasteboard names: for NSPasteboard.FromName()
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSGeneralPasteboardName key constant.</summary>
 		[Field ("NSGeneralPboard")]
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use 'NSPasteboardNameGeneral' instead.")]
 		NSString NSGeneralPasteboardName { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSFontPasteboardName key constant.</summary>
 		[Field ("NSFontPboard")]
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use 'NSPasteboardNameFont' instead.")]
 		NSString NSFontPasteboardName { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSRulerPasteboardName key constant.</summary>
 		[Field ("NSRulerPboard")]
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use 'NSPasteboardNameRuler' instead.")]
 		NSString NSRulerPasteboardName { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSFindPasteboardName key constant.</summary>
 		[Field ("NSFindPboard")]
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use 'NSPasteboardNameFind' instead.")]
 		NSString NSFindPasteboardName { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSDragPasteboardName key constant.</summary>
 		[Field ("NSDragPboard")]
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use 'NSPasteboardNameDrag' instead.")]
 		NSString NSDragPasteboardName { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSPasteboardNameGeneral key constant.</summary>
 		[Obsolete ("Use the 'NSPasteboardName' enum instead.")]
 		[Field ("NSPasteboardNameGeneral")]
 		NSString NSPasteboardNameGeneral { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSPasteboardNameFont key constant.</summary>
 		[Obsolete ("Use the 'NSPasteboardName' enum instead.")]
 		[Field ("NSPasteboardNameFont")]
 		NSString NSPasteboardNameFont { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSPasteboardNameRuler key constant.</summary>
 		[Obsolete ("Use the 'NSPasteboardName' enum instead.")]
 		[Field ("NSPasteboardNameRuler")]
 		NSString NSPasteboardNameRuler { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSPasteboardNameFind key constant.</summary>
 		[Obsolete ("Use the 'NSPasteboardName' enum instead.")]
 		[Field ("NSPasteboardNameFind")]
 		NSString NSPasteboardNameFind { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSPasteboardNameDrag key constant.</summary>
 		[Obsolete ("Use the 'NSPasteboardName' enum instead.")]
 		[Field ("NSPasteboardNameDrag")]
 		NSString NSPasteboardNameDrag { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSPasteboardTypeString key constant.</summary>
 		[Obsolete ("Use the 'NSPasteboardType' enum instead.")]
 		[Field ("NSPasteboardTypeString")]
 		NSString NSPasteboardTypeString { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSPasteboardTypePDF key constant.</summary>
 		[Obsolete ("Use the 'NSPasteboardType' enum instead.")]
 		[Field ("NSPasteboardTypePDF")]
 		NSString NSPasteboardTypePDF { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSPasteboardTypeTIFF key constant.</summary>
 		[Obsolete ("Use the 'NSPasteboardType' enum instead.")]
 		[Field ("NSPasteboardTypeTIFF")]
 		NSString NSPasteboardTypeTIFF { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSPasteboardTypePNG key constant.</summary>
 		[Obsolete ("Use the 'NSPasteboardType' enum instead.")]
 		[Field ("NSPasteboardTypePNG")]
 		NSString NSPasteboardTypePNG { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSPasteboardTypeRTF key constant.</summary>
 		[Obsolete ("Use the 'NSPasteboardType' enum instead.")]
 		[Field ("NSPasteboardTypeRTF")]
 		NSString NSPasteboardTypeRTF { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSPasteboardTypeRTFD key constant.</summary>
 		[Obsolete ("Use the 'NSPasteboardType' enum instead.")]
 		[Field ("NSPasteboardTypeRTFD")]
 		NSString NSPasteboardTypeRTFD { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSPasteboardTypeHTML key constant.</summary>
 		[Obsolete ("Use the 'NSPasteboardType' enum instead.")]
 		[Field ("NSPasteboardTypeHTML")]
 		NSString NSPasteboardTypeHTML { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSPasteboardTypeTabularText key constant.</summary>
 		[Obsolete ("Use the 'NSPasteboardType' enum instead.")]
 		[Field ("NSPasteboardTypeTabularText")]
 		NSString NSPasteboardTypeTabularText { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSPasteboardTypeFont key constant.</summary>
 		[Obsolete ("Use the 'NSPasteboardType' enum instead.")]
 		[Field ("NSPasteboardTypeFont")]
 		NSString NSPasteboardTypeFont { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSPasteboardTypeRuler key constant.</summary>
 		[Obsolete ("Use the 'NSPasteboardType' enum instead.")]
 		[Field ("NSPasteboardTypeRuler")]
 		NSString NSPasteboardTypeRuler { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSPasteboardTypeColor key constant.</summary>
 		[Obsolete ("Use the 'NSPasteboardType' enum instead.")]
 		[Field ("NSPasteboardTypeColor")]
 		NSString NSPasteboardTypeColor { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSPasteboardTypeSound key constant.</summary>
 		[Obsolete ("Use the 'NSPasteboardType' enum instead.")]
 		[Field ("NSPasteboardTypeSound")]
 		NSString NSPasteboardTypeSound { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSPasteboardTypeMultipleTextSelection key constant.</summary>
 		[Obsolete ("Use the 'NSPasteboardType' enum instead.")]
 		[Field ("NSPasteboardTypeMultipleTextSelection")]
 		NSString NSPasteboardTypeMultipleTextSelection { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSPasteboardTypeFindPanelSearchOptions key constant.</summary>
 		[Field ("NSPasteboardTypeFindPanelSearchOptions")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'NSPasteboardTypeTextFinderOptions' instead.")]
 		NSString NSPasteboardTypeFindPanelSearchOptions { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the PasteboardTypeTextFinderOptions key constant.</summary>
 		[Obsolete ("Use the 'NSPasteboardType' enum instead.")]
 		[Field ("NSPasteboardTypeTextFinderOptions")]
 		NSString PasteboardTypeTextFinderOptions { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSPasteboardTypeUrl key constant.</summary>
 		[Obsolete ("Use the 'NSPasteboardType' enum instead.")]
 		[Field ("NSPasteboardTypeURL")]
 		NSString NSPasteboardTypeUrl { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSPasteboardTypeFileUrl key constant.</summary>
 		[Obsolete ("Use the 'NSPasteboardType' enum instead.")]
 		[Field ("NSPasteboardTypeFileURL")]
 		NSString NSPasteboardTypeFileUrl { get; }
@@ -13860,26 +12992,23 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSPasteboardWriting {
-		/// <param name="pasteboard">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="pasteboard">The pasteboard.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("writableTypesForPasteboard:")]
 		string [] GetWritableTypesForPasteboard (NSPasteboard pasteboard);
 
-		/// <param name="type">To be added.</param>
-		/// <param name="pasteboard">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="type">The type.</param>
+		/// <param name="pasteboard">The pasteboard.</param>
+		/// <summary>Performs the get writing options for type operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("writingOptionsForType:pasteboard:")]
 		NSPasteboardWritingOptions GetWritingOptionsForType (string type, NSPasteboard pasteboard);
 
-		/// <param name="type">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="type">The type.</param>
+		/// <summary>Performs the get pasteboard property list for type operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("pasteboardPropertyListForType:")]
 		NSObject GetPasteboardPropertyListForType (string type);
@@ -13965,18 +13094,16 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSPasteboardItemDataProvider {
-		/// <param name="pasteboard">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <param name="type">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="pasteboard">The pasteboard.</param>
+		/// <param name="item">The item.</param>
+		/// <param name="type">The type.</param>
+		/// <summary>Performs the provide data for type operation.</summary>
 		[Abstract]
 		[Export ("pasteboard:item:provideDataForType:")]
 		void ProvideDataForType (NSPasteboard pasteboard, NSPasteboardItem item, string type);
 
-		/// <param name="pasteboard">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="pasteboard">The pasteboard.</param>
+		/// <summary>Performs the finished with data provider operation.</summary>
 		[Export ("pasteboardFinishedWithDataProvider:")]
 		void FinishedWithDataProvider (NSPasteboard pasteboard);
 	}
@@ -13991,19 +13118,17 @@ namespace AppKit {
 	interface NSPasteboardReading {
 		// This method is required, but we don't generate the correct code for required static methods
 		// [Abstract]
-		/// <param name="pasteboard">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="pasteboard">The pasteboard.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Static]
 		[Export ("readableTypesForPasteboard:")]
 		string [] GetReadableTypesForPasteboard (NSPasteboard pasteboard);
 
-		/// <param name="type">To be added.</param>
-		/// <param name="pasteboard">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="type">The type.</param>
+		/// <param name="pasteboard">The pasteboard.</param>
+		/// <summary>Performs the get reading options for type operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Static]
 		[Export ("readingOptionsForType:pasteboard:")]
 		NSPasteboardReadingOptions GetReadingOptionsForType (string type, NSPasteboard pasteboard);
@@ -14037,9 +13162,7 @@ namespace AppKit {
 		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSPathCellDelegate Delegate { get; set; }
 
@@ -14078,9 +13201,8 @@ namespace AppKit {
 		[Export ("placeholderAttributedString", ArgumentSemantic.Copy)]
 		NSAttributedString PlaceholderAttributedString { get; set; }
 
-		/// <param name="size">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="size">The size.</param>
+		///         <summary>Performs the set control size operation.</summary>
 		[Export ("setControlSize:")]
 		void SetControlSize (NSControlSize size);
 	}
@@ -14092,23 +13214,19 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSPathCellDelegate {
-		/// <param name="pathCell">To be added.</param>
-		/// <param name="openPanel">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="pathCell">The path cell.</param>
+		/// <param name="openPanel">The open panel.</param>
+		/// <summary>Performs the will display open panel operation.</summary>
 		[Export ("pathCell:willDisplayOpenPanel:"), EventArgs ("NSPathCellDisplayPanel", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will display open panel operation.</summary>
 			""")]
 		void WillDisplayOpenPanel (NSPathCell pathCell, NSOpenPanel openPanel);
 
-		/// <param name="pathCell">To be added.</param>
-		/// <param name="menu">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="pathCell">The path cell.</param>
+		/// <param name="menu">The menu.</param>
+		/// <summary>Performs the will popup menu operation.</summary>
 		[Export ("pathCell:willPopUpMenu:"), EventArgs ("NSPathCellMenu", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will popup menu operation.</summary>
 			""")]
 		void WillPopupMenu (NSPathCell pathCell, NSMenu menu);
 	}
@@ -14159,9 +13277,7 @@ namespace AppKit {
 		[Export ("delegate", ArgumentSemantic.Weak), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSPathControlDelegate Delegate { get; set; }
 
@@ -14169,9 +13285,7 @@ namespace AppKit {
 		[NullAllowed]
 		NSMenu Menu { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Editable value.</summary>
 		[Export ("editable")]
 		bool Editable { [Bind ("isEditable")] get; set; }
 
@@ -14199,12 +13313,11 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSPathControlDelegate {
-		/// <param name="pathControl">To be added.</param>
-		/// <param name="pathComponentCell">To be added.</param>
-		/// <param name="pasteboard">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="pathControl">The path control.</param>
+		/// <param name="pathComponentCell">The path component cell.</param>
+		/// <param name="pasteboard">The pasteboard.</param>
+		/// <summary>Performs the should drag path component cell operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("pathControl:shouldDragPathComponentCell:withPasteboard:")]
 		bool ShouldDragPathComponentCell (NSPathControl pathControl, NSPathComponentCell pathComponentCell, NSPasteboard pasteboard);
 
@@ -14214,26 +13327,23 @@ namespace AppKit {
 		[Export ("pathControl:acceptDrop:")]
 		bool AcceptDrop (NSPathControl pathControl, INSDraggingInfo info);
 
-		/// <param name="pathControl">To be added.</param>
-		/// <param name="openPanel">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="pathControl">The path control.</param>
+		/// <param name="openPanel">The open panel.</param>
+		/// <summary>Performs the will display open panel operation.</summary>
 		[Export ("pathControl:willDisplayOpenPanel:")]
 		void WillDisplayOpenPanel (NSPathControl pathControl, NSOpenPanel openPanel);
 
-		/// <param name="pathControl">To be added.</param>
-		/// <param name="menu">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="pathControl">The path control.</param>
+		/// <param name="menu">The menu.</param>
+		/// <summary>Performs the will pop up menu operation.</summary>
 		[Export ("pathControl:willPopUpMenu:")]
 		void WillPopUpMenu (NSPathControl pathControl, NSMenu menu);
 
-		/// <param name="pathControl">To be added.</param>
-		/// <param name="pathItem">To be added.</param>
-		/// <param name="pasteboard">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="pathControl">The path control.</param>
+		/// <param name="pathItem">The path item.</param>
+		/// <param name="pasteboard">The pasteboard.</param>
+		/// <summary>Performs the should drag item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("pathControl:shouldDragItem:withPasteboard:")]
 		bool ShouldDragItem (NSPathControl pathControl, NSPathControlItem pathItem, NSPasteboard pasteboard);
 	}
@@ -14270,9 +13380,7 @@ namespace AppKit {
 		[Export ("contentSize")]
 		CGSize ContentSize { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Shown value.</summary>
 		[Export ("shown")]
 		bool Shown { [Bind ("isShown")] get; }
 
@@ -14282,9 +13390,7 @@ namespace AppKit {
 		[Export ("delegate", ArgumentSemantic.Weak), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSPopoverDelegate Delegate { set; get; }
 
@@ -14297,21 +13403,15 @@ namespace AppKit {
 		[Export ("close")]
 		void Close ();
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CloseReasonKey key constant.</summary>
 		[Field ("NSPopoverCloseReasonKey")]
 		NSString CloseReasonKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CloseReasonStandard key constant.</summary>
 		[Field ("NSPopoverCloseReasonStandard")]
 		NSString CloseReasonStandard { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CloseReasonDetachToWindow key constant.</summary>
 		[Field ("NSPopoverCloseReasonDetachToWindow")]
 		NSString CloseReasonDetachToWindow { get; }
 
@@ -14327,9 +13427,7 @@ namespace AppKit {
 		[Notification (typeof (NSPopoverCloseEventArgs)), Field ("NSPopoverDidCloseNotification")]
 		NSString DidCloseNotification { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Detached value.</summary>
 		[Export ("detached")]
 		bool Detached { [Bind ("isDetached")] get; }
 
@@ -14354,47 +13452,40 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSPopoverDelegate {
-		/// <param name="popover">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="popover">The popover.</param>
+		/// <summary>Performs the should close operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("popoverShouldClose:")]
 		bool ShouldClose (NSPopover popover);
 
-		/// <param name="popover">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="popover">The popover.</param>
+		/// <summary>Performs the get detachable window for popover operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("detachableWindowForPopover:")]
 		NSWindow GetDetachableWindowForPopover (NSPopover popover);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the will show operation.</summary>
 		[Export ("popoverWillShow:")]
 		void WillShow (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did show operation.</summary>
 		[Export ("popoverDidShow:")]
 		void DidShow (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the will close operation.</summary>
 		[Export ("popoverWillClose:")]
 		void WillClose (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did close operation.</summary>
 		[Export ("popoverDidClose:")]
 		void DidClose (NSNotification notification);
 
-		/// <param name="popover">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="popover">The popover.</param>
+		/// <summary>Performs the did detach operation.</summary>
 		[Export ("popoverDidDetach:")]
 		void DidDetach (NSPopover popover);
 	}
@@ -14806,15 +13897,11 @@ namespace AppKit {
 		[Export ("bottomMargin")]
 		nfloat BottomMargin { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the HorizontallyCentered value.</summary>
 		[Export ("horizontallyCentered")]
 		bool HorizontallyCentered { [Bind ("isHorizontallyCentered")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the VerticallyCentered value.</summary>
 		[Export ("verticallyCentered")]
 		bool VerticallyCentered { [Bind ("isVerticallyCentered")] get; set; }
 
@@ -14830,9 +13917,7 @@ namespace AppKit {
 		[Export ("printer", ArgumentSemantic.Copy)]
 		NSPrinter Printer { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the SelectionOnly value.</summary>
 		[Export ("selectionOnly")]
 		bool SelectionOnly { [Bind ("isSelectionOnly")] get; set; }
 
@@ -14873,9 +13958,7 @@ namespace AppKit {
 		[Export ("EPSOperationWithView:insideRect:toData:")]
 		NSPrintOperation EpsFromView (NSView view, CGRect rect, NSMutableData data);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsCopyingOperation value.</summary>
 		[Export ("isCopyingOperation")]
 		bool IsCopyingOperation { get; }
 
@@ -14941,16 +14024,14 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSPrintPanelAccessorizing {
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("localizedSummaryItems")]
 		NSDictionary [] LocalizedSummaryItems ();
 
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the key paths for values affecting preview operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("keyPathsForValuesAffectingPreview")]
 		NSSet KeyPathsForValuesAffectingPreview ();
 	}
@@ -15024,16 +14105,12 @@ namespace AppKit {
 		[Export ("sizeToFit")]
 		void SizeToFit ();
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the IsDisplayedWhenStopped value.</summary>
 		[Export ("displayedWhenStopped")]
 		bool IsDisplayedWhenStopped { [Bind ("isDisplayedWhenStopped")] get; set; }
 
 		//Detected properties
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Indeterminate value.</summary>
 		[Export ("indeterminate")]
 		bool Indeterminate { [Bind ("isIndeterminate")] get; set; }
 
@@ -15071,573 +14148,478 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSStandardKeyBindingResponding {
-		/// <param name="insertString">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="insertString">The insert string.</param>
+		/// <summary>Performs the insert text operation.</summary>
 		[Export ("insertText:")]
 		void InsertText (NSObject insertString);
 
-		/// <param name="selector">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="selector">The selector.</param>
+		/// <summary>Performs the do command by selector operation.</summary>
 		[Export ("doCommandBySelector:")]
 		void DoCommandBySelector (Selector selector);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move forward operation.</summary>
 		[Export ("moveForward:")]
 		void MoveForward ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move right operation.</summary>
 		[Export ("moveRight:")]
 		void MoveRight ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move backward operation.</summary>
 		[Export ("moveBackward:")]
 		void MoveBackward ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move left operation.</summary>
 		[Export ("moveLeft:")]
 		void MoveLeft ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move up operation.</summary>
 		[Export ("moveUp:")]
 		void MoveUp ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move down operation.</summary>
 		[Export ("moveDown:")]
 		void MoveDown ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move word forward operation.</summary>
 		[Export ("moveWordForward:")]
 		void MoveWordForward ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move word backward operation.</summary>
 		[Export ("moveWordBackward:")]
 		void MoveWordBackward ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move to beginning of line operation.</summary>
 		[Export ("moveToBeginningOfLine:")]
 		void MoveToBeginningOfLine ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move to end of line operation.</summary>
 		[Export ("moveToEndOfLine:")]
 		void MoveToEndOfLine ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move to beginning of paragraph operation.</summary>
 		[Export ("moveToBeginningOfParagraph:")]
 		void MoveToBeginningOfParagraph ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move to end of paragraph operation.</summary>
 		[Export ("moveToEndOfParagraph:")]
 		void MoveToEndOfParagraph ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move to end of document operation.</summary>
 		[Export ("moveToEndOfDocument:")]
 		void MoveToEndOfDocument ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move to beginning of document operation.</summary>
 		[Export ("moveToBeginningOfDocument:")]
 		void MoveToBeginningOfDocument ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the page down operation.</summary>
 		[Export ("pageDown:")]
 		void PageDown ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the page up operation.</summary>
 		[Export ("pageUp:")]
 		void PageUp ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the center selection in visible area operation.</summary>
 		[Export ("centerSelectionInVisibleArea:")]
 		void CenterSelectionInVisibleArea ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move backward and modify selection operation.</summary>
 		[Export ("moveBackwardAndModifySelection:")]
 		void MoveBackwardAndModifySelection ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move forward and modify selection operation.</summary>
 		[Export ("moveForwardAndModifySelection:")]
 		void MoveForwardAndModifySelection ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move word forward and modify selection operation.</summary>
 		[Export ("moveWordForwardAndModifySelection:")]
 		void MoveWordForwardAndModifySelection ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move word backward and modify selection operation.</summary>
 		[Export ("moveWordBackwardAndModifySelection:")]
 		void MoveWordBackwardAndModifySelection ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move up and modify selection operation.</summary>
 		[Export ("moveUpAndModifySelection:")]
 		void MoveUpAndModifySelection ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move down and modify selection operation.</summary>
 		[Export ("moveDownAndModifySelection:")]
 		void MoveDownAndModifySelection ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move to beginning of line and modify selection operation.</summary>
 		[Export ("moveToBeginningOfLineAndModifySelection:")]
 		void MoveToBeginningOfLineAndModifySelection ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move to end of line and modify selection operation.</summary>
 		[Export ("moveToEndOfLineAndModifySelection:")]
 		void MoveToEndOfLineAndModifySelection ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move to beginning of paragraph and modify selection operation.</summary>
 		[Export ("moveToBeginningOfParagraphAndModifySelection:")]
 		void MoveToBeginningOfParagraphAndModifySelection ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move to end of paragraph and modify selection operation.</summary>
 		[Export ("moveToEndOfParagraphAndModifySelection:")]
 		void MoveToEndOfParagraphAndModifySelection ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move to end of document and modify selection operation.</summary>
 		[Export ("moveToEndOfDocumentAndModifySelection:")]
 		void MoveToEndOfDocumentAndModifySelection ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move to beginning of document and modify selection operation.</summary>
 		[Export ("moveToBeginningOfDocumentAndModifySelection:")]
 		void MoveToBeginningOfDocumentAndModifySelection ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the page down and modify selection operation.</summary>
 		[Export ("pageDownAndModifySelection:")]
 		void PageDownAndModifySelection ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the page up and modify selection operation.</summary>
 		[Export ("pageUpAndModifySelection:")]
 		void PageUpAndModifySelection ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move paragraph forward and modify selection operation.</summary>
 		[Export ("moveParagraphForwardAndModifySelection:")]
 		void MoveParagraphForwardAndModifySelection ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move paragraph backward and modify selection operation.</summary>
 		[Export ("moveParagraphBackwardAndModifySelection:")]
 		void MoveParagraphBackwardAndModifySelection ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move word right operation.</summary>
 		[Export ("moveWordRight:")]
 		void MoveWordRight ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move word left operation.</summary>
 		[Export ("moveWordLeft:")]
 		void MoveWordLeft ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move right and modify selection operation.</summary>
 		[Export ("moveRightAndModifySelection:")]
 		void MoveRightAndModifySelection ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move left and modify selection operation.</summary>
 		[Export ("moveLeftAndModifySelection:")]
 		void MoveLeftAndModifySelection ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move word right and modify selection operation.</summary>
 		[Export ("moveWordRightAndModifySelection:")]
 		void MoveWordRightAndModifySelection ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move word left and modify selection operation.</summary>
 		[Export ("moveWordLeftAndModifySelection:")]
 		void MoveWordLeftAndModifySelection ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move to left end of line operation.</summary>
 		[Export ("moveToLeftEndOfLine:")]
 		void MoveToLeftEndOfLine ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move to right end of line operation.</summary>
 		[Export ("moveToRightEndOfLine:")]
 		void MoveToRightEndOfLine ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move to left end of line and modify selection operation.</summary>
 		[Export ("moveToLeftEndOfLineAndModifySelection:")]
 		void MoveToLeftEndOfLineAndModifySelection ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the move to right end of line and modify selection operation.</summary>
 		[Export ("moveToRightEndOfLineAndModifySelection:")]
 		void MoveToRightEndOfLineAndModifySelection ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the scroll page up operation.</summary>
 		[Export ("scrollPageUp:")]
 		void ScrollPageUp ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the scroll page down operation.</summary>
 		[Export ("scrollPageDown:")]
 		void ScrollPageDown ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the scroll line up operation.</summary>
 		[Export ("scrollLineUp:")]
 		void ScrollLineUp ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the scroll line down operation.</summary>
 		[Export ("scrollLineDown:")]
 		void ScrollLineDown ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the scroll to beginning of document operation.</summary>
 		[Export ("scrollToBeginningOfDocument:")]
 		void ScrollToBeginningOfDocument ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the scroll to end of document operation.</summary>
 		[Export ("scrollToEndOfDocument:")]
 		void ScrollToEndOfDocument ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the transpose operation.</summary>
 		[Export ("transpose:")]
 		void Transpose ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the transpose words operation.</summary>
 		[Export ("transposeWords:")]
 		void TransposeWords ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the select all operation.</summary>
 		[Export ("selectAll:")]
 		void SelectAll ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the select paragraph operation.</summary>
 		[Export ("selectParagraph:")]
 		void SelectParagraph ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the select line operation.</summary>
 		[Export ("selectLine:")]
 		void SelectLine ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the select word operation.</summary>
 		[Export ("selectWord:")]
 		void SelectWord ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the indent operation.</summary>
 		[Export ("indent:")]
 		void Indent ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the insert tab operation.</summary>
 		[Export ("insertTab:")]
 		void InsertTab ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the insert backtab operation.</summary>
 		[Export ("insertBacktab:")]
 		void InsertBacktab ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the insert newline operation.</summary>
 		[Export ("insertNewline:")]
 		void InsertNewline ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the insert paragraph separator operation.</summary>
 		[Export ("insertParagraphSeparator:")]
 		void InsertParagraphSeparator ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the insert newline ignoring field editor operation.</summary>
 		[Export ("insertNewlineIgnoringFieldEditor:")]
 		void InsertNewlineIgnoringFieldEditor ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the insert tab ignoring field editor operation.</summary>
 		[Export ("insertTabIgnoringFieldEditor:")]
 		void InsertTabIgnoringFieldEditor ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the insert line break operation.</summary>
 		[Export ("insertLineBreak:")]
 		void InsertLineBreak ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the insert container break operation.</summary>
 		[Export ("insertContainerBreak:")]
 		void InsertContainerBreak ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the insert single quote ignoring substitution operation.</summary>
 		[Export ("insertSingleQuoteIgnoringSubstitution:")]
 		void InsertSingleQuoteIgnoringSubstitution ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the insert double quote ignoring substitution operation.</summary>
 		[Export ("insertDoubleQuoteIgnoringSubstitution:")]
 		void InsertDoubleQuoteIgnoringSubstitution ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the change case of letter operation.</summary>
 		[Export ("changeCaseOfLetter:")]
 		void ChangeCaseOfLetter ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the uppercase word operation.</summary>
 		[Export ("uppercaseWord:")]
 		void UppercaseWord ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the lowercase word operation.</summary>
 		[Export ("lowercaseWord:")]
 		void LowercaseWord ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the capitalize word operation.</summary>
 		[Export ("capitalizeWord:")]
 		void CapitalizeWord ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the delete forward operation.</summary>
 		[Export ("deleteForward:")]
 		void DeleteForward ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the delete backward operation.</summary>
 		[Export ("deleteBackward:")]
 		void DeleteBackward ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the delete backward by decomposing previous character operation.</summary>
 		[Export ("deleteBackwardByDecomposingPreviousCharacter:")]
 		void DeleteBackwardByDecomposingPreviousCharacter ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the delete word forward operation.</summary>
 		[Export ("deleteWordForward:")]
 		void DeleteWordForward ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the delete word backward operation.</summary>
 		[Export ("deleteWordBackward:")]
 		void DeleteWordBackward ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the delete to beginning of line operation.</summary>
 		[Export ("deleteToBeginningOfLine:")]
 		void DeleteToBeginningOfLine ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the delete to end of line operation.</summary>
 		[Export ("deleteToEndOfLine:")]
 		void DeleteToEndOfLine ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the delete to beginning of paragraph operation.</summary>
 		[Export ("deleteToBeginningOfParagraph:")]
 		void DeleteToBeginningOfParagraph ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the delete to end of paragraph operation.</summary>
 		[Export ("deleteToEndOfParagraph:")]
 		void DeleteToEndOfParagraph ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the yank operation.</summary>
 		[Export ("yank:")]
 		void Yank ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the complete operation.</summary>
 		[Export ("complete:")]
 		void Complete ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the set mark operation.</summary>
 		[Export ("setMark:")]
 		void SetMark ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the delete to mark operation.</summary>
 		[Export ("deleteToMark:")]
 		void DeleteToMark ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the select to mark operation.</summary>
 		[Export ("selectToMark:")]
 		void SelectToMark ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the swap with mark operation.</summary>
 		[Export ("swapWithMark:")]
 		void SwapWithMark ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the cancel operation operation.</summary>
 		[Export ("cancelOperation:")]
 		void CancelOperation ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the make base writing direction natural operation.</summary>
 		[Export ("makeBaseWritingDirectionNatural:")]
 		void MakeBaseWritingDirectionNatural ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the make base writing direction left to right operation.</summary>
 		[Export ("makeBaseWritingDirectionLeftToRight:")]
 		void MakeBaseWritingDirectionLeftToRight ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the make base writing direction right to left operation.</summary>
 		[Export ("makeBaseWritingDirectionRightToLeft:")]
 		void MakeBaseWritingDirectionRightToLeft ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the make text writing direction natural operation.</summary>
 		[Export ("makeTextWritingDirectionNatural:")]
 		void MakeTextWritingDirectionNatural ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the make text writing direction left to right operation.</summary>
 		[Export ("makeTextWritingDirectionLeftToRight:")]
 		void MakeTextWritingDirectionLeftToRight ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the make text writing direction right to left operation.</summary>
 		[Export ("makeTextWritingDirectionRightToLeft:")]
 		void MakeTextWritingDirectionRightToLeft ([NullAllowed] NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the quick look preview items operation.</summary>
 		[Export ("quickLookPreviewItems:")]
 		void QuickLookPreviewItems ([NullAllowed] NSObject sender);
 
@@ -15823,13 +14805,12 @@ namespace AppKit {
 		[Export ("willPresentError:")]
 		NSError WillPresentError (NSError error);
 
-		/// <param name="error">To be added.</param>
-		///         <param name="window">To be added.</param>
-		///         <param name="delegate">To be added.</param>
-		///         <param name="didPresentSelector">To be added.</param>
-		///         <param name="contextInfo">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="error">The error.</param>
+		///         <param name="window">The window.</param>
+		///         <param name="delegate">The delegate.</param>
+		///         <param name="didPresentSelector">The did present selector.</param>
+		///         <param name="contextInfo">The context info.</param>
+		///         <summary>Performs the present error operation.</summary>
 		[Sealed]
 		[Export ("presentError:modalForWindow:delegate:didPresentSelector:contextInfo:")]
 		void PresentError (NSError error, NSWindow window, [NullAllowed] NSObject @delegate, [NullAllowed] Selector didPresentSelector, IntPtr contextInfo);
@@ -15856,22 +14837,19 @@ namespace AppKit {
 	[Category]
 	[BaseType (typeof (NSResponder))]
 	interface NSResponder_NSTouchBarProvider : INSTouchBarProvider {
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the get touch bar operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("touchBar")]
 		[return: NullAllowed]
 		NSTouchBar GetTouchBar ();
 
-		/// <param name="bar">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="bar">The bar.</param>
+		/// <summary>Performs the set touch bar operation.</summary>
 		[Export ("setTouchBar:")]
 		void SetTouchBar ([NullAllowed] NSTouchBar bar);
 
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the make touch bar operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("makeTouchBar")]
 		NSTouchBar MakeTouchBar ();
 	}
@@ -15899,9 +14877,7 @@ namespace AppKit {
 		[Export ("ruler")]
 		NSRulerView Ruler { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsDragging value.</summary>
 		[Export ("isDragging")]
 		bool IsDragging { get; }
 
@@ -15927,15 +14903,11 @@ namespace AppKit {
 		[Export ("imageOrigin")]
 		CGPoint ImageOrigin { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Movable value.</summary>
 		[Export ("movable")]
 		bool Movable { [Bind ("isMovable")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Removable value.</summary>
 		[Export ("removable")]
 		bool Removable { [Bind ("isRemovable")] get; set; }
 
@@ -16026,19 +14998,19 @@ namespace AppKit {
 
 	[NoMacCatalyst]
 	enum NSRulerViewUnits {
-		/// <summary>To be added.</summary>
+		/// <summary>Inches.</summary>
 		[Field ("NSRulerViewUnitInches")]
 		Inches,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Centimeters.</summary>
 		[Field ("NSRulerViewUnitCentimeters")]
 		Centimeters,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Points.</summary>
 		[Field ("NSRulerViewUnitPoints")]
 		Points,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Picas.</summary>
 		[Field ("NSRulerViewUnitPicas")]
 		Picas,
 	}
@@ -16065,9 +15037,7 @@ namespace AppKit {
 		[Export ("URL")]
 		NSUrl Url { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsExpanded value.</summary>
 		[Export ("isExpanded")]
 		bool IsExpanded { get; }
 
@@ -16110,9 +15080,7 @@ namespace AppKit {
 		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSOpenSavePanelDelegate Delegate { get; set; }
 
@@ -16122,9 +15090,7 @@ namespace AppKit {
 		[Export ("canSelectHiddenExtension")]
 		bool CanSelectHiddenExtension { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the ExtensionHidden value.</summary>
 		[Export ("extensionHidden")]
 		bool ExtensionHidden { [Bind ("isExtensionHidden")] get; set; }
 
@@ -16381,9 +15347,7 @@ namespace AppKit {
 		[Export ("knobProportion")]
 		nfloat KnobProportion { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CompatibleWithOverlayScrollers value.</summary>
 		[Static]
 		[Export ("isCompatibleWithOverlayScrollers")]
 		bool CompatibleWithOverlayScrollers { get; }
@@ -16625,9 +15589,7 @@ namespace AppKit {
 		[Export ("rectForCancelButtonWhenCentered:")]
 		CGRect GetRectForCancelButton (bool isCentered);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		[NullAllowed]
 		INSSearchFieldDelegate Delegate { get; set; }
@@ -16655,22 +15617,18 @@ namespace AppKit {
 	[BaseType (typeof (NSObject))]
 	[Protocol, Model]
 	interface NSSearchFieldDelegate : NSTextFieldDelegate {
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the searching started operation.</summary>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the searching started operation.</summary>
 			""")]
 		[Export ("searchFieldDidStartSearching:")]
 		void SearchingStarted (NSSearchField sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the searching ended operation.</summary>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the searching ended operation.</summary>
 			""")]
 		[Export ("searchFieldDidEndSearching:")]
 		void SearchingEnded (NSSearchField sender);
@@ -16784,9 +15742,7 @@ namespace AppKit {
 		[Export ("segmentStyle")]
 		NSSegmentStyle SegmentStyle { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the IsSpringLoaded value.</summary>
 		[Export ("springLoaded")]
 		bool IsSpringLoaded { [Bind ("isSpringLoaded")] get; set; }
 
@@ -17180,9 +16136,7 @@ namespace AppKit {
 		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSSpeechRecognizerDelegate Delegate { get; set; }
 
@@ -17206,10 +16160,9 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSSpeechRecognizerDelegate {
-		/// <param name="sender">To be added.</param>
-		/// <param name="command">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <param name="command">The command.</param>
+		/// <summary>Performs the did recognize command operation.</summary>
 		[Export ("speechRecognizer:didRecognizeCommand:")]
 		void DidRecognizeCommand (NSSpeechRecognizer sender, string command);
 	}
@@ -17227,9 +16180,7 @@ namespace AppKit {
 		[Export ("startSpeakingString:toURL:")]
 		bool StartSpeakingStringtoURL (string theString, NSUrl url);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsSpeaking value.</summary>
 		[Export ("isSpeaking")]
 		bool IsSpeaking { get; }
 
@@ -17257,9 +16208,7 @@ namespace AppKit {
 		[Export ("setObject:forProperty:error:")]
 		bool SetObjectforProperty (NSObject theObject, string property, out NSError outError);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsAnyApplicationSpeaking value.</summary>
 		[Static]
 		[Export ("isAnyApplicationSpeaking")]
 		bool IsAnyApplicationSpeaking { get; }
@@ -17280,9 +16229,7 @@ namespace AppKit {
 		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSSpeechSynthesizerDelegate Delegate { get; set; }
 
@@ -17310,41 +16257,36 @@ namespace AppKit {
 	[Protocol]
 	[Deprecated (PlatformName.MacOSX, 14, 0, message: "Use 'AVSpeechSynthesizer' in AVFoundation instead.")]
 	interface NSSpeechSynthesizerDelegate {
-		/// <param name="sender">To be added.</param>
-		/// <param name="finishedSpeaking">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <param name="finishedSpeaking">The finished speaking.</param>
+		/// <summary>Performs the did finish speaking operation.</summary>
 		[Export ("speechSynthesizer:didFinishSpeaking:")]
 		void DidFinishSpeaking (NSSpeechSynthesizer sender, bool finishedSpeaking);
 
-		/// <param name="sender">To be added.</param>
-		/// <param name="wordCharacterRange">To be added.</param>
-		/// <param name="ofString">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <param name="wordCharacterRange">The word character range.</param>
+		/// <param name="ofString">The of string.</param>
+		/// <summary>Performs the will speak word operation.</summary>
 		[Export ("speechSynthesizer:willSpeakWord:ofString:")]
 		void WillSpeakWord (NSSpeechSynthesizer sender, NSRange wordCharacterRange, string ofString);
 
-		/// <param name="sender">To be added.</param>
-		/// <param name="phonemeOpcode">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <param name="phonemeOpcode">The phoneme opcode.</param>
+		/// <summary>Performs the will speak phoneme operation.</summary>
 		[Export ("speechSynthesizer:willSpeakPhoneme:")]
 		void WillSpeakPhoneme (NSSpeechSynthesizer sender, short phonemeOpcode);
 
-		/// <param name="sender">To be added.</param>
-		/// <param name="characterIndex">To be added.</param>
-		/// <param name="theString">To be added.</param>
-		/// <param name="message">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <param name="characterIndex">The character index.</param>
+		/// <param name="theString">The the string.</param>
+		/// <param name="message">The message.</param>
+		/// <summary>Performs the did encounter error operation.</summary>
 		[Export ("speechSynthesizer:didEncounterErrorAtIndex:ofString:message:")]
 		void DidEncounterError (NSSpeechSynthesizer sender, nuint characterIndex, string theString, string message);
 
-		/// <param name="sender">To be added.</param>
-		/// <param name="message">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <param name="message">The message.</param>
+		/// <summary>Performs the did encounter sync message operation.</summary>
 		[Export ("speechSynthesizer:didEncounterSyncMessage:")]
 		void DidEncounterSyncMessage (NSSpeechSynthesizer sender, string message);
 	}
@@ -17352,37 +16294,21 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[StrongDictionary ("NSTextCheckingKey")]
 	interface NSTextCheckingOptions {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Orthography value.</summary>
 		NSOrthography Orthography { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Quotes value.</summary>
 		string [] Quotes { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Replacements value.</summary>
 		NSDictionary Replacements { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the ReferenceDate value.</summary>
 		NSDate ReferenceDate { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the ReferenceTimeZone value.</summary>
 		NSTimeZone ReferenceTimeZone { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the DocumentUrl value.</summary>
 		NSUrl DocumentUrl { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the DocumentTitle value.</summary>
 		string DocumentTitle { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the DocumentAuthor value.</summary>
 		string DocumentAuthor { get; set; }
 	}
 
@@ -17449,14 +16375,13 @@ namespace AppKit {
 		[Export ("menuForResult:string:options:atLocation:inView:")]
 		NSMenu MenuForResults (NSTextCheckingResult result, string checkedString, NSDictionary options, CGPoint location, NSView view);
 
-		/// <param name="result">To be added.</param>
-		///         <param name="checkedString">To be added.</param>
-		///         <param name="options">To be added.</param>
-		///         <param name="location">To be added.</param>
-		///         <param name="view">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="result">The result.</param>
+		///         <param name="checkedString">The checked string.</param>
+		///         <param name="options">The options.</param>
+		///         <param name="location">The location.</param>
+		///         <param name="view">The view.</param>
+		///         <summary>Performs the menu for results operation.</summary>
+		///         <returns>The result of the operation.</returns>
 		[Wrap ("MenuForResults (result, checkedString, options.GetDictionary ()!, location, view)")]
 		NSMenu MenuForResults (NSTextCheckingResult result, string checkedString, NSTextCheckingOptions options, CGPoint location, NSView view);
 
@@ -17533,28 +16458,22 @@ namespace AppKit {
 		[Export ("setLanguage:"), Protected]
 		bool SetLanguage (string language);
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Performs the is automatic quote substitution enabled operation.</summary>
+		///         <returns>The result of the operation.</returns>
 		[Static, Export ("isAutomaticQuoteSubstitutionEnabled")]
 		bool IsAutomaticQuoteSubstitutionEnabled ();
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Performs the is automatic dash substitution enabled operation.</summary>
+		///         <returns>The result of the operation.</returns>
 		[Static, Export ("isAutomaticDashSubstitutionEnabled")]
 		bool IsAutomaticDashSubstitutionEnabled ();
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsAutomaticCapitalizationEnabled value.</summary>
 		[Static]
 		[Export ("isAutomaticCapitalizationEnabled")]
 		bool IsAutomaticCapitalizationEnabled { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsAutomaticPeriodSubstitutionEnabled value.</summary>
 		[Static]
 		[Export ("isAutomaticPeriodSubstitutionEnabled")]
 		bool IsAutomaticPeriodSubstitutionEnabled { get; }
@@ -17562,33 +16481,29 @@ namespace AppKit {
 		[Export ("preventsAutocorrectionBeforeString:language:")]
 		bool PreventsAutocorrectionBefore (string aString, [NullAllowed] string language);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsAutomaticTextCompletionEnabled value.</summary>
 		[Static]
 		[Export ("isAutomaticTextCompletionEnabled")]
 		bool IsAutomaticTextCompletionEnabled { get; }
 
 		[Async (ResultTypeName = "NSSpellCheckerCandidates", XmlDocs = """
-			<param name="selectedRange">To be added.</param>
-			<param name="stringToCheck">To be added.</param>
-			<param name="checkingTypes">To be added.</param>
-			<param name="options">To be added.</param>
-			<param name="tag">To be added.</param>
-			<summary>To be added.</summary>
-			<returns>To be added.</returns>
-			<remarks>To be added.</remarks>
+			<param name="selectedRange">The selected range.</param>
+			<param name="stringToCheck">The string to check.</param>
+			<param name="checkingTypes">The checking types.</param>
+			<param name="options">The options.</param>
+			<param name="tag">The tag.</param>
+			<summary>Xml Docs With Out Parameter.</summary>
+			<returns>The result of the operation.</returns>
 			""",
 			XmlDocsWithOutParameter = """
-			<param name="selectedRange">To be added.</param>
-			<param name="stringToCheck">To be added.</param>
-			<param name="checkingTypes">To be added.</param>
-			<param name="options">To be added.</param>
-			<param name="tag">To be added.</param>
-			<param name="result">To be added.</param>
-			<summary>To be added.</summary>
-			<returns>To be added.</returns>
-			<remarks>To be added.</remarks>
+			<param name="selectedRange">The selected range.</param>
+			<param name="stringToCheck">The string to check.</param>
+			<param name="checkingTypes">The checking types.</param>
+			<param name="options">The options.</param>
+			<param name="tag">The tag.</param>
+			<param name="result">The result.</param>
+			<summary>Performs the request candidates operation.</summary>
+			<returns>The result of the operation.</returns>
 			""")]
 		[Export ("requestCandidatesForSelectedRange:inString:types:options:inSpellDocumentWithTag:completionHandler:")]
 		nint RequestCandidates (NSRange selectedRange, string stringToCheck, ulong checkingTypes, [NullAllowed] NSDictionary<NSString, NSObject> options, nint tag, [NullAllowed] Action<nint, NSTextCheckingResult []> completionHandler);
@@ -17649,9 +16564,8 @@ namespace AppKit {
 		[Export ("stop")]
 		bool Stop ();
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Performs the is playing operation.</summary>
+		///         <returns>The result of the operation.</returns>
 		[Export ("isPlaying")]
 		bool IsPlaying ();
 
@@ -17668,9 +16582,7 @@ namespace AppKit {
 		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSSoundDelegate Delegate { get; set; }
 
@@ -17697,13 +16609,11 @@ namespace AppKit {
 	[Model, BaseType (typeof (NSObject))]
 	[Protocol]
 	interface NSSoundDelegate {
-		/// <param name="sound">To be added.</param>
-		/// <param name="finished">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sound">The sound.</param>
+		/// <param name="finished">The finished.</param>
+		/// <summary>Performs the did finish playing operation.</summary>
 		[Export ("sound:didFinishPlaying:"), EventArgs ("NSSoundFinished", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did finish playing operation.</summary>
 			""")]
 		void DidFinishPlaying (NSSound sound, bool finished);
 	}
@@ -17751,9 +16661,7 @@ namespace AppKit {
 		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSSplitViewDelegate Delegate { get; set; }
 
@@ -17819,9 +16727,7 @@ namespace AppKit {
 		[Export ("toggleSidebar:")]
 		void ToggleSidebar ([NullAllowed] NSObject sender);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the AutomaticDimension value.</summary>
 		[Field ("NSSplitViewControllerAutomaticDimension")]
 		nfloat AutomaticDimension { get; }
 
@@ -17862,9 +16768,7 @@ namespace AppKit {
 		[Export ("viewController", ArgumentSemantic.Strong)]
 		NSViewController ViewController { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Collapsed value.</summary>
 		[Export ("collapsed")]
 		bool Collapsed { [Bind ("isCollapsed")] get; set; }
 
@@ -17900,15 +16804,11 @@ namespace AppKit {
 		[Export ("automaticMaximumThickness", ArgumentSemantic.Assign)]
 		nfloat AutomaticMaximumThickness { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the SpringLoaded value.</summary>
 		[Export ("springLoaded")]
 		bool SpringLoaded { [Bind ("isSpringLoaded")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the UnspecifiedDimension value.</summary>
 		[Field ("NSSplitViewItemUnspecifiedDimension")]
 		nfloat UnspecifiedDimension { get; }
 
@@ -17967,105 +16867,93 @@ namespace AppKit {
 	[BaseType (typeof (NSObject))]
 	[Model, Protocol]
 	interface NSSplitViewDelegate {
-		/// <param name="splitView">To be added.</param>
-		/// <param name="subview">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="splitView">The split view.</param>
+		/// <param name="subview">The subview.</param>
+		/// <summary>Performs the can collapse operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("splitView:canCollapseSubview:")]
 		[DefaultValue (true)]
 		bool CanCollapse (NSSplitView splitView, NSView subview);
 
-		/// <param name="splitView">To be added.</param>
-		/// <param name="subview">To be added.</param>
-		/// <param name="doubleClickAtDividerIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="splitView">The split view.</param>
+		/// <param name="subview">The subview.</param>
+		/// <param name="doubleClickAtDividerIndex">The double click at divider index.</param>
+		/// <summary>Performs the should collapse for double click operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("splitView:shouldCollapseSubview:forDoubleClickOnDividerAtIndex:")]
 		[DefaultValue (true)]
 		[Deprecated (PlatformName.MacOSX, 10, 15, message: "This delegate method is never called.")]
 		bool ShouldCollapseForDoubleClick (NSSplitView splitView, NSView subview, nint doubleClickAtDividerIndex);
 
-		/// <param name="splitView">To be added.</param>
-		/// <param name="proposedMinimumPosition">To be added.</param>
-		/// <param name="subviewDividerIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="splitView">The split view.</param>
+		/// <param name="proposedMinimumPosition">The proposed minimum position.</param>
+		/// <param name="subviewDividerIndex">The subview divider index.</param>
+		/// <summary>Performs the set min coordinate of subview operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("splitView:constrainMinCoordinate:ofSubviewAt:")]
 		nfloat SetMinCoordinateOfSubview (NSSplitView splitView, nfloat proposedMinimumPosition, nint subviewDividerIndex);
 
-		/// <param name="splitView">To be added.</param>
-		/// <param name="proposedMaximumPosition">To be added.</param>
-		/// <param name="subviewDividerIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="splitView">The split view.</param>
+		/// <param name="proposedMaximumPosition">The proposed maximum position.</param>
+		/// <param name="subviewDividerIndex">The subview divider index.</param>
+		/// <summary>Performs the set max coordinate of subview operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("splitView:constrainMaxCoordinate:ofSubviewAt:")]
 		nfloat SetMaxCoordinateOfSubview (NSSplitView splitView, nfloat proposedMaximumPosition, nint subviewDividerIndex);
 
-		/// <param name="splitView">To be added.</param>
-		/// <param name="proposedPosition">To be added.</param>
-		/// <param name="subviewDividerIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="splitView">The split view.</param>
+		/// <param name="proposedPosition">The proposed position.</param>
+		/// <param name="subviewDividerIndex">The subview divider index.</param>
+		/// <summary>Performs the constrain split position operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("splitView:constrainSplitPosition:ofSubviewAt:")]
 		nfloat ConstrainSplitPosition (NSSplitView splitView, nfloat proposedPosition, nint subviewDividerIndex);
 
-		/// <param name="splitView">To be added.</param>
-		/// <param name="oldSize">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="splitView">The split view.</param>
+		/// <param name="oldSize">The old size.</param>
+		/// <summary>Performs the resize operation.</summary>
 		[Export ("splitView:resizeSubviewsWithOldSize:")]
 		void Resize (NSSplitView splitView, CGSize oldSize);
 
-		/// <param name="splitView">To be added.</param>
-		/// <param name="view">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="splitView">The split view.</param>
+		/// <param name="view">The view.</param>
+		/// <summary>Performs the should adjust size operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("splitView:shouldAdjustSizeOfSubview:")]
 		[DefaultValue (true)]
 		bool ShouldAdjustSize (NSSplitView splitView, NSView view);
 
-		/// <param name="splitView">To be added.</param>
-		/// <param name="dividerIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="splitView">The split view.</param>
+		/// <param name="dividerIndex">The divider index.</param>
+		/// <summary>Performs the should hide divider operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("splitView:shouldHideDividerAtIndex:")]
 		[DefaultValue (false)]
 		bool ShouldHideDivider (NSSplitView splitView, nint dividerIndex);
 
-		/// <param name="splitView">To be added.</param>
-		/// <param name="proposedEffectiveRect">To be added.</param>
-		/// <param name="drawnRect">To be added.</param>
-		/// <param name="dividerIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="splitView">The split view.</param>
+		/// <param name="proposedEffectiveRect">The proposed effective rect.</param>
+		/// <param name="drawnRect">The drawn rect.</param>
+		/// <param name="dividerIndex">The divider index.</param>
+		/// <summary>Performs the get effective rect operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("splitView:effectiveRect:forDrawnRect:ofDividerAtIndex:")]
 		CGRect GetEffectiveRect (NSSplitView splitView, CGRect proposedEffectiveRect, CGRect drawnRect, nint dividerIndex);
 
-		/// <param name="splitView">To be added.</param>
-		/// <param name="dividerIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="splitView">The split view.</param>
+		/// <param name="dividerIndex">The divider index.</param>
+		/// <summary>Performs the get additional effective rect operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("splitView:additionalEffectiveRectOfDividerAtIndex:")]
 		CGRect GetAdditionalEffectiveRect (NSSplitView splitView, nint dividerIndex);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the split view will resize subviews operation.</summary>
 		[Export ("splitViewWillResizeSubviews:")]
 		void SplitViewWillResizeSubviews (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did resize subviews operation.</summary>
 		[Export ("splitViewDidResizeSubviews:")]
 		void DidResizeSubviews (NSNotification notification);
 	}
@@ -18105,9 +16993,7 @@ namespace AppKit {
 		[NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSStackViewDelegate Delegate { get; set; }
 
@@ -18201,17 +17087,15 @@ namespace AppKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NSStackViewDelegate {
-		/// <param name="stackView">To be added.</param>
-		/// <param name="views">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="stackView">The stack view.</param>
+		/// <param name="views">The views.</param>
+		/// <summary>Performs the will detach views operation.</summary>
 		[Export ("stackView:willDetachViews:"), DelegateName ("NSStackViewEvent")]
 		void WillDetachViews (NSStackView stackView, NSView [] views);
 
-		/// <param name="stackView">To be added.</param>
-		/// <param name="views">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="stackView">The stack view.</param>
+		/// <param name="views">The views.</param>
+		/// <summary>Performs the did reattach views operation.</summary>
 		[Export ("stackView:didReattachViews:"), DelegateName ("NSStackViewEvent")]
 		void DidReattachViews (NSStackView stackView, NSView [] views);
 	}
@@ -18301,9 +17185,7 @@ namespace AppKit {
 		[NullAllowed]
 		NSMenu Menu { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Enabled value.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 10, message: "Soft-deprecation, forwards message to button, but will be gone in the future.")]
 		[Export ("enabled")]
 		bool Enabled { [Bind ("isEnabled")] get; set; }
@@ -18327,9 +17209,7 @@ namespace AppKit {
 		[Export ("behavior", ArgumentSemantic.Assign)]
 		NSStatusItemBehavior Behavior { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Visible value.</summary>
 		[Export ("visible")]
 		bool Visible { [Bind ("isVisible")] get; set; }
 
@@ -18340,180 +17220,122 @@ namespace AppKit {
 	[Static]
 	[NoMacCatalyst]
 	interface NSStringAttributeKey {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Font key constant.</summary>
 		[Field ("NSFontAttributeName")]
 		NSString Font { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ParagraphStyle key constant.</summary>
 		[Field ("NSParagraphStyleAttributeName")]
 		NSString ParagraphStyle { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ForegroundColor key constant.</summary>
 		[Field ("NSForegroundColorAttributeName")]
 		NSString ForegroundColor { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the UnderlineStyle key constant.</summary>
 		[Field ("NSUnderlineStyleAttributeName")]
 		NSString UnderlineStyle { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Superscript key constant.</summary>
 		[Field ("NSSuperscriptAttributeName")]
 		NSString Superscript { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the BackgroundColor key constant.</summary>
 		[Field ("NSBackgroundColorAttributeName")]
 		NSString BackgroundColor { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Attachment key constant.</summary>
 		[Field ("NSAttachmentAttributeName")]
 		NSString Attachment { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Ligature key constant.</summary>
 		[Field ("NSLigatureAttributeName")]
 		NSString Ligature { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the BaselineOffset key constant.</summary>
 		[Field ("NSBaselineOffsetAttributeName")]
 		NSString BaselineOffset { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the KerningAdjustment key constant.</summary>
 		[Field ("NSKernAttributeName")]
 		NSString KerningAdjustment { get; }
 
 		[Field ("NSTrackingAttributeName")]
 		NSString Tracking { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Link key constant.</summary>
 		[Field ("NSLinkAttributeName")]
 		NSString Link { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the StrokeWidth key constant.</summary>
 		[Field ("NSStrokeWidthAttributeName")]
 		NSString StrokeWidth { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the StrokeColor key constant.</summary>
 		[Field ("NSStrokeColorAttributeName")]
 		NSString StrokeColor { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the UnderlineColor key constant.</summary>
 		[Field ("NSUnderlineColorAttributeName")]
 		NSString UnderlineColor { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the StrikethroughStyle key constant.</summary>
 		[Field ("NSStrikethroughStyleAttributeName")]
 		NSString StrikethroughStyle { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the StrikethroughColor key constant.</summary>
 		[Field ("NSStrikethroughColorAttributeName")]
 		NSString StrikethroughColor { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Shadow key constant.</summary>
 		[Field ("NSShadowAttributeName")]
 		NSString Shadow { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Obliqueness key constant.</summary>
 		[Field ("NSObliquenessAttributeName")]
 		NSString Obliqueness { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Expansion key constant.</summary>
 		[Field ("NSExpansionAttributeName")]
 		NSString Expansion { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Cursor key constant.</summary>
 		[Field ("NSCursorAttributeName")]
 		NSString Cursor { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ToolTip key constant.</summary>
 		[Field ("NSToolTipAttributeName")]
 		NSString ToolTip { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CharacterShape key constant.</summary>
 		[Field ("NSCharacterShapeAttributeName")]
 		NSString CharacterShape { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the GlyphInfo key constant.</summary>
 		[Field ("NSGlyphInfoAttributeName")]
 		NSString GlyphInfo { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the WritingDirection key constant.</summary>
 		[Field ("NSWritingDirectionAttributeName")]
 		NSString WritingDirection { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MarkedClauseSegment key constant.</summary>
 		[Field ("NSMarkedClauseSegmentAttributeName")]
 		NSString MarkedClauseSegment { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SpellingState key constant.</summary>
 		[Field ("NSSpellingStateAttributeName")]
 		NSString SpellingState { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the VerticalGlyphForm key constant.</summary>
 		[Field ("NSVerticalGlyphFormAttributeName")]
 		NSString VerticalGlyphForm { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TextAlternatives key constant.</summary>
 		[Field ("NSTextAlternativesAttributeName")]
 		NSString TextAlternatives { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TextEffect key constant.</summary>
 		[Field ("NSTextEffectAttributeName")]
 		NSString TextEffect { get; }
 
@@ -18642,25 +17464,22 @@ namespace AppKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NSSeguePerforming {
-		/// <param name="segue">To be added.</param>
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="segue">The segue.</param>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the prepare for segue operation.</summary>
 		[Export ("prepareForSegue:sender:")]
 		void PrepareForSegue (NSStoryboardSegue segue, NSObject sender);
 
-		/// <param name="identifier">To be added.</param>
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="identifier">The identifier.</param>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the perform segue operation.</summary>
 		[Export ("performSegueWithIdentifier:sender:")]
 		void PerformSegue (string identifier, NSObject sender);
 
-		/// <param name="identifier">To be added.</param>
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="identifier">The identifier.</param>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the should perform segue operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("shouldPerformSegueWithIdentifier:sender:")]
 		bool ShouldPerformSegue (string identifier, NSObject sender);
 	}
@@ -18718,101 +17537,79 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	partial interface NSTextFinderClient {
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the AllowsMultipleSelection value.</summary>
 		[Export ("allowsMultipleSelection")]
 		bool AllowsMultipleSelection { get; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the Editable value.</summary>
 		[Export ("editable")]
 		bool Editable { [Bind ("isEditable")] get; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the String value.</summary>
 		[Export ("string", ArgumentSemantic.Copy)]
 		string String { get; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the FirstSelectedRange value.</summary>
 		[Export ("firstSelectedRange")]
 		NSRange FirstSelectedRange { get; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the SelectedRanges value.</summary>
 		[Export ("selectedRanges", ArgumentSemantic.Copy)]
 		NSArray SelectedRanges { get; set; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the VisibleCharacterRanges value.</summary>
 		[Export ("visibleCharacterRanges", ArgumentSemantic.Copy)]
 		NSArray VisibleCharacterRanges { get; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the Selectable value.</summary>
 		[Export ("selectable")]
 		bool Selectable { [Bind ("isSelectable")] get; }
 
-		/// <param name="index">To be added.</param>
-		/// <param name="effectiveRange">To be added.</param>
-		/// <param name="endsWithSearchBoundary">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="index">The index.</param>
+		/// <param name="effectiveRange">The effective range.</param>
+		/// <param name="endsWithSearchBoundary">The ends with search boundary.</param>
+		/// <summary>Performs the get string operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("stringAtIndex:effectiveRange:endsWithSearchBoundary:")]
 		string GetString (nuint index, out NSRange effectiveRange, bool endsWithSearchBoundary);
 
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the StringLength value.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("stringLength")]
 		nuint StringLength { get; }
 
-		/// <param name="range">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="range">The range.</param>
+		/// <summary>Performs the scroll range to visible operation.</summary>
 		[Export ("scrollRangeToVisible:")]
 		void ScrollRangeToVisible (NSRange range);
 
-		/// <param name="ranges">To be added.</param>
-		/// <param name="strings">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="ranges">The ranges.</param>
+		/// <param name="strings">The strings.</param>
+		/// <summary>Performs the should replace characters operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("shouldReplaceCharactersInRanges:withStrings:")]
 		bool ShouldReplaceCharacters (NSArray ranges, NSArray strings);
 
-		/// <param name="range">To be added.</param>
-		/// <param name="str">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="range">The range.</param>
+		/// <param name="str">The str.</param>
+		/// <summary>Performs the replace characters operation.</summary>
 		[Export ("replaceCharactersInRange:withString:")]
 		void ReplaceCharacters (NSRange range, string str);
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the did replace characters operation.</summary>
 		[Export ("didReplaceCharacters")]
 		void DidReplaceCharacters ();
 
-		/// <param name="index">To be added.</param>
-		/// <param name="outRange">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="index">The index.</param>
+		/// <param name="outRange">The out range.</param>
+		/// <summary>Performs the get content view operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("contentViewAtIndex:effectiveCharacterRange:")]
 		NSView GetContentView (nuint index, out NSRange outRange);
 
-		/// <param name="characterRange">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="characterRange">The character range.</param>
+		/// <summary>Performs the get rects operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("rectsForCharacterRange:")]
 		NSArray GetRects (NSRange characterRange);
 
@@ -18826,20 +17623,15 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject)), Model, Protocol]
 	partial interface NSTextFinderBarContainer {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the FindBarVisible value.</summary>
 		[Abstract, Export ("findBarVisible")]
 		bool FindBarVisible { [Bind ("isFindBarVisible")] get; set; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the FindBarView value.</summary>
 		[Abstract, Export ("findBarView", ArgumentSemantic.Retain)]
 		NSView FindBarView { get; set; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the find bar view did change height operation.</summary>
 		[Abstract, Export ("findBarViewDidChangeHeight")]
 		void FindBarViewDidChangeHeight ();
 
@@ -18851,24 +17643,18 @@ namespace AppKit {
 	[DesignatedDefaultCtor]
 	[BaseType (typeof (NSObject))]
 	partial interface NSTextFinder : NSCoding {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Client value.</summary>
 		[Export ("client", ArgumentSemantic.Assign)]
 		INSTextFinderClient Client { set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the FindBarContainer value.</summary>
 		[Export ("findBarContainer", ArgumentSemantic.Assign)]
 		INSTextFinderBarContainer FindBarContainer { set; }
 
 		[Export ("findIndicatorNeedsUpdate")]
 		bool FindIndicatorNeedsUpdate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the IncrementalSearchingEnabled value.</summary>
 		[Export ("incrementalSearchingEnabled")]
 		bool IncrementalSearchingEnabled { [Bind ("isIncrementalSearchingEnabled")] get; set; }
 
@@ -18918,9 +17704,7 @@ namespace AppKit {
 		[Export ("opaqueAncestor")]
 		NSView OpaqueAncestor { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsHiddenOrHasHiddenAncestor value.</summary>
 		[Export ("isHiddenOrHasHiddenAncestor")]
 		bool IsHiddenOrHasHiddenAncestor { get; }
 
@@ -19002,21 +17786,15 @@ namespace AppKit {
 		[Export ("isFlipped")]
 		bool IsFlipped { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsRotatedFromBase value.</summary>
 		[Export ("isRotatedFromBase")]
 		bool IsRotatedFromBase { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsRotatedOrScaledFromBase value.</summary>
 		[Export ("isRotatedOrScaledFromBase")]
 		bool IsRotatedOrScaledFromBase { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsOpaque value.</summary>
 		[Export ("isOpaque")]
 		bool IsOpaque { get; }
 
@@ -19260,12 +18038,11 @@ namespace AppKit {
 		[Export ("addToolTipRect:owner:userData:")]
 		nint AddToolTip (CGRect rect, INSToolTipOwner owner, IntPtr userData);
 
-		/// <param name="rect">To be added.</param>
-		///         <param name="owner">To be added.</param>
-		///         <param name="userData">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="rect">The rect.</param>
+		///         <param name="owner">The owner.</param>
+		///         <param name="userData">The user data.</param>
+		///         <summary>Performs the add tool tip operation.</summary>
+		///         <returns>The result of the operation.</returns>
 		[Sealed]
 		[Export ("addToolTipRect:owner:userData:")]
 		nint AddToolTip (CGRect rect, NSObject owner, IntPtr userData);
@@ -19305,9 +18082,7 @@ namespace AppKit {
 		NSTextInputContext InputContext { get; }
 
 		//Detected properties
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Hidden value.</summary>
 		[Export ("hidden")]
 		bool Hidden { [Bind ("isHidden")] get; set; }
 
@@ -19416,34 +18191,24 @@ namespace AppKit {
 		[Export ("enterFullScreenMode:withOptions:")]
 		bool EnterFullscreenModeWithOptions (NSScreen screen, [NullAllowed] NSDictionary options);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsInFullscreenMode value.</summary>
 		[Export ("isInFullScreenMode")]
 		bool IsInFullscreenMode { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSFullScreenModeApplicationPresentationOptions key constant.</summary>
 		[Field ("NSFullScreenModeApplicationPresentationOptions")]
 		NSString NSFullScreenModeApplicationPresentationOptions { get; }
 
 		// Fields
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSFullScreenModeAllScreens key constant.</summary>
 		[Field ("NSFullScreenModeAllScreens")]
 		NSString NSFullScreenModeAllScreens { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSFullScreenModeSetting key constant.</summary>
 		[Field ("NSFullScreenModeSetting")]
 		NSString NSFullScreenModeSetting { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSFullScreenModeWindowLevel key constant.</summary>
 		[Field ("NSFullScreenModeWindowLevel")]
 		NSString NSFullScreenModeWindowLevel { get; }
 
@@ -19589,9 +18354,7 @@ namespace AppKit {
 		[Export ("noteFocusRingMaskChanged")]
 		void NoteFocusRingMaskChanged ();
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsDrawingFindIndicator value.</summary>
 		[Export ("isDrawingFindIndicator")]
 		bool IsDrawingFindIndicator { get; }
 
@@ -19720,9 +18483,7 @@ namespace AppKit {
 		[Export ("prepareForReuse")]
 		void PrepareForReuse ();
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsCompatibleWithResponsiveScrolling value.</summary>
 		[Static, Export ("isCompatibleWithResponsiveScrolling")]
 		bool IsCompatibleWithResponsiveScrolling { get; }
 
@@ -19795,9 +18556,7 @@ namespace AppKit {
 		[Export ("lastBaselineOffsetFromBottom")]
 		nfloat LastBaselineOffsetFromBottom { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NoIntrinsicMetric value.</summary>
 		[Field ("NSViewNoIntrinsicMetric")]
 		nfloat NoIntrinsicMetric { get; }
 
@@ -19895,39 +18654,27 @@ namespace AppKit {
 		[Export ("defaultAnimationForKey:")]
 		NSObject DefaultAnimationForKey (string key);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TargetKey key constant.</summary>
 		[Field ("NSViewAnimationTargetKey")]
 		NSString TargetKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the StartFrameKey key constant.</summary>
 		[Field ("NSViewAnimationStartFrameKey")]
 		NSString StartFrameKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the EndFrameKey key constant.</summary>
 		[Field ("NSViewAnimationEndFrameKey")]
 		NSString EndFrameKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the EffectKey key constant.</summary>
 		[Field ("NSViewAnimationEffectKey")]
 		NSString EffectKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the FadeInEffect key constant.</summary>
 		[Field ("NSViewAnimationFadeInEffect")]
 		NSString FadeInEffect { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the FadeOutEffect key constant.</summary>
 		[Field ("NSViewAnimationFadeOutEffect")]
 		NSString FadeOutEffect { get; }
 	}
@@ -19936,15 +18683,13 @@ namespace AppKit {
 	[Category]
 	[BaseType (typeof (NSView))]
 	interface NSView_NSTouchBar {
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the get allowed touch types operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("allowedTouchTypes")]
 		NSTouchTypeMask GetAllowedTouchTypes ();
 
-		/// <param name="touchTypes">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="touchTypes">The touch types.</param>
+		/// <summary>Performs the set allowed touch types operation.</summary>
 		[Export ("setAllowedTouchTypes:")]
 		void SetAllowedTouchTypes (NSTouchTypeMask touchTypes);
 	}
@@ -19975,9 +18720,7 @@ namespace AppKit {
 		[Export ("view", ArgumentSemantic.Strong)]
 		NSView View { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ViewLoaded value.</summary>
 		[Export ("viewLoaded")]
 		bool ViewLoaded { [Bind ("isViewLoaded")] get; }
 
@@ -20099,18 +18842,16 @@ namespace AppKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NSViewControllerPresentationAnimator {
-		/// <param name="viewController">To be added.</param>
-		/// <param name="fromViewController">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="viewController">The view controller.</param>
+		/// <param name="fromViewController">The from view controller.</param>
+		/// <summary>Performs the animate presentation operation.</summary>
 		[Export ("animatePresentationOfViewController:fromViewController:")]
 		[Abstract]
 		void AnimatePresentation (NSViewController viewController, NSViewController fromViewController);
 
-		/// <param name="viewController">To be added.</param>
-		/// <param name="fromViewController">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="viewController">The view controller.</param>
+		/// <param name="fromViewController">The from view controller.</param>
+		/// <summary>Performs the animate dismissal operation.</summary>
 		[Export ("animateDismissalOfViewController:fromViewController:")]
 		[Abstract]
 		void AnimateDismissal (NSViewController viewController, NSViewController fromViewController);
@@ -20130,9 +18871,7 @@ namespace AppKit {
 		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate"), NullAllowed]
 		INSPageControllerDelegate Delegate { get; set; }
 
@@ -20170,82 +18909,65 @@ namespace AppKit {
 	[BaseType (typeof (NSObject)), Model, Protocol]
 	partial interface NSPageControllerDelegate {
 
-		/// <param name="pageController">To be added.</param>
-		/// <param name="targetObject">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="pageController">The page controller.</param>
+		/// <param name="targetObject">The target object.</param>
+		/// <summary>Performs the get identifier operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the get identifier operation.</summary>
 			""")]
 		[Export ("pageController:identifierForObject:"), DelegateName ("NSPageControllerGetIdentifier"), DefaultValue ("String.Empty")]
 		string GetIdentifier (NSPageController pageController, NSObject targetObject);
 
-		/// <param name="pageController">To be added.</param>
-		/// <param name="identifier">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="pageController">The page controller.</param>
+		/// <param name="identifier">The identifier.</param>
+		/// <summary>Performs the get view controller operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the get view controller operation.</summary>
 			""")]
 		[Export ("pageController:viewControllerForIdentifier:"), DelegateName ("NSPageControllerGetViewController"), DefaultValue (null)]
 		NSViewController GetViewController (NSPageController pageController, string identifier);
 
-		/// <param name="pageController">To be added.</param>
-		/// <param name="targetObject">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="pageController">The page controller.</param>
+		/// <param name="targetObject">The target object.</param>
+		/// <summary>Performs the get frame operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the get frame operation.</summary>
 			""")]
 		[Export ("pageController:frameForObject:"), DelegateName ("NSPageControllerGetFrame"), NoDefaultValue]
 		CGRect GetFrame (NSPageController pageController, NSObject targetObject);
 
-		/// <param name="pageController">To be added.</param>
-		/// <param name="viewController">To be added.</param>
-		/// <param name="targetObject">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="pageController">The page controller.</param>
+		/// <param name="viewController">The view controller.</param>
+		/// <param name="targetObject">The target object.</param>
+		/// <summary>Performs the prepare view controller operation.</summary>
 		[Export ("pageController:prepareViewController:withObject:"), EventArgs ("NSPageControllerPrepareViewController", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the prepare view controller operation.</summary>
 			""")]
 		void PrepareViewController (NSPageController pageController, NSViewController viewController, NSObject targetObject);
 
-		/// <param name="pageController">To be added.</param>
-		/// <param name="targetObject">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="pageController">The page controller.</param>
+		/// <param name="targetObject">The target object.</param>
+		/// <summary>Performs the did transition operation.</summary>
 		[Export ("pageController:didTransitionToObject:"), EventArgs ("NSPageControllerTransition", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did transition operation.</summary>
 			""")]
 		void DidTransition (NSPageController pageController, NSObject targetObject);
 
-		/// <param name="pageController">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="pageController">The page controller.</param>
+		/// <summary>Performs the will start live transition operation.</summary>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will start live transition operation.</summary>
 			""")]
 		[Export ("pageControllerWillStartLiveTransition:")]
 		void WillStartLiveTransition (NSPageController pageController);
 
-		/// <param name="pageController">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="pageController">The page controller.</param>
+		/// <summary>Performs the did end live transition operation.</summary>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did end live transition operation.</summary>
 			""")]
 		[Export ("pageControllerDidEndLiveTransition:")]
 		void DidEndLiveTransition (NSPageController pageController);
@@ -20274,9 +18996,8 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	partial interface NSTableColumn : NSUserInterfaceItemIdentification, NSCoding {
-		/// <param name="identifier">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="identifier">The identifier.</param>
+		/// <summary>Creates a new instance with the specified parameters.</summary>
 		[Export ("initWithIdentifier:")]
 		[Sealed]
 		NativeHandle Constructor (string identifier);
@@ -20310,9 +19031,7 @@ namespace AppKit {
 		[Export ("dataCell")]
 		NSCell DataCell { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Editable value.</summary>
 		[Export ("editable")]
 		bool Editable { [Bind ("isEditable")] get; set; }
 
@@ -20325,9 +19044,7 @@ namespace AppKit {
 		[Export ("headerToolTip"), NullAllowed]
 		string HeaderToolTip { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Hidden value.</summary>
 		[Export ("hidden")]
 		bool Hidden { [Bind ("isHidden")] get; set; }
 
@@ -20344,27 +19061,19 @@ namespace AppKit {
 		[Export ("selectionHighlightStyle")]
 		NSTableViewSelectionHighlightStyle SelectionHighlightStyle { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Emphasized value.</summary>
 		[Export ("emphasized")]
 		bool Emphasized { [Bind ("isEmphasized")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the GroupRowStyle value.</summary>
 		[Export ("groupRowStyle")]
 		bool GroupRowStyle { [Bind ("isGroupRowStyle")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Selected value.</summary>
 		[Export ("selected")]
 		bool Selected { [Bind ("isSelected")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Floating value.</summary>
 		[Export ("floating")]
 		bool Floating { [Bind ("isFloating")] get; set; }
 
@@ -20383,9 +19092,7 @@ namespace AppKit {
 		[Export ("numberOfColumns")]
 		nint NumberOfColumns { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the TargetForDropOperation value.</summary>
 		[Export ("targetForDropOperation")]
 		bool TargetForDropOperation { [Bind ("isTargetForDropOperation")] get; set; }
 
@@ -20404,15 +19111,11 @@ namespace AppKit {
 		[Export ("viewAtColumn:")]
 		NSView ViewAtColumn (nint column);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the PreviousRowSelected value.</summary>
 		[Export ("previousRowSelected")]
 		bool PreviousRowSelected { [Bind ("isPreviousRowSelected")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the NextRowSelected value.</summary>
 		[Export ("nextRowSelected")]
 		bool NextRowSelected { [Bind ("isNextRowSelected")] get; set; }
 	}
@@ -20660,9 +19363,7 @@ namespace AppKit {
 		[NullAllowed]
 		NSObject WeakDataSource { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the DataSource value.</summary>
 		[Wrap ("WeakDataSource")]
 		[NullAllowed]
 		INSTableViewDataSource DataSource { get; set; }
@@ -20671,9 +19372,7 @@ namespace AppKit {
 		[NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		[NullAllowed]
 		INSTableViewDelegate Delegate { get; set; }
@@ -20796,9 +19495,7 @@ namespace AppKit {
 		[Export ("floatsGroupRows")]
 		bool FloatsGroupRows { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the RowViewKey key constant.</summary>
 		[Field ("NSTableViewRowViewKey")]
 		NSString RowViewKey { get; }
 
@@ -20849,348 +19546,274 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	partial interface NSTableViewDelegate {
-		/// <param name="tableView">To be added.</param>
-		/// <param name="cell">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="cell">The cell.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <param name="row">The row.</param>
+		/// <summary>Performs the will display cell operation.</summary>
 		[Export ("tableView:willDisplayCell:forTableColumn:row:"), EventArgs ("NSTableViewCell", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will display cell operation.</summary>
 			""")]
 		void WillDisplayCell (NSTableView tableView, NSObject cell, NSTableColumn tableColumn, nint row);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <param name="row">The row.</param>
+		/// <summary>Performs the should edit table column operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the should edit table column operation.</summary>
 			""")]
 		[Export ("tableView:shouldEditTableColumn:row:"), DelegateName ("NSTableViewColumnRowPredicate"), DefaultValue (false)]
 		bool ShouldEditTableColumn (NSTableView tableView, NSTableColumn tableColumn, nint row);
 
-		/// <param name="tableView">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <summary>Performs the selection should change operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the selection should change operation.</summary>
 			""")]
 		[Export ("selectionShouldChangeInTableView:"), DelegateName ("NSTableViewPredicate"), DefaultValue (true)]
 		bool SelectionShouldChange (NSTableView tableView);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="row">The row.</param>
+		/// <summary>Performs the should select row operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the should select row operation.</summary>
 			""")]
 		[Export ("tableView:shouldSelectRow:"), DelegateName ("NSTableViewRowPredicate")]
 		[DefaultValue (true)]
 		bool ShouldSelectRow (NSTableView tableView, nint row);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="proposedSelectionIndexes">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="proposedSelectionIndexes">The proposed selection indexes.</param>
+		/// <summary>Performs the get selection indexes operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the get selection indexes operation.</summary>
 			""")]
 		[Export ("tableView:selectionIndexesForProposedSelection:"), DelegateName ("NSTableViewIndexFilter"), DefaultValueFromArgument ("proposedSelectionIndexes")]
 		NSIndexSet GetSelectionIndexes (NSTableView tableView, NSIndexSet proposedSelectionIndexes);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <summary>Performs the should select table column operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the should select table column operation.</summary>
 			""")]
 		[Export ("tableView:shouldSelectTableColumn:"), DelegateName ("NSTableViewColumnPredicate"), DefaultValue (true)]
 		bool ShouldSelectTableColumn (NSTableView tableView, NSTableColumn tableColumn);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <summary>Performs the mouse down in header of table column operation.</summary>
 		[Export ("tableView:mouseDownInHeaderOfTableColumn:"), EventArgs ("NSTableViewTable", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the mouse down in header of table column operation.</summary>
 			""")]
 		void MouseDownInHeaderOfTableColumn (NSTableView tableView, NSTableColumn tableColumn);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <summary>Performs the did click table column operation.</summary>
 		[Export ("tableView:didClickTableColumn:"), EventArgs ("NSTableViewTable", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did click table column operation.</summary>
 			""")]
 		void DidClickTableColumn (NSTableView tableView, NSTableColumn tableColumn);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <summary>Performs the did drag table column operation.</summary>
 		[Export ("tableView:didDragTableColumn:"), EventArgs ("NSTableViewTable", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did drag table column operation.</summary>
 			""")]
 		void DidDragTableColumn (NSTableView tableView, NSTableColumn tableColumn);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="row">The row.</param>
+		/// <summary>Performs the get row height operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the get row height operation.</summary>
 			""")]
 		[Export ("tableView:heightOfRow:"), DelegateName ("NSTableViewRowHeight"), NoDefaultValue]
 		nfloat GetRowHeight (NSTableView tableView, nint row);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <param name="row">The row.</param>
+		/// <summary>Performs the get select string operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the get select string operation.</summary>
 			""")]
 		[Export ("tableView:typeSelectStringForTableColumn:row:"), DelegateName ("NSTableViewColumnRowString"), DefaultValue ("String.Empty")]
 		string GetSelectString (NSTableView tableView, NSTableColumn tableColumn, nint row);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="startRow">To be added.</param>
-		/// <param name="endRow">To be added.</param>
-		/// <param name="searchString">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="startRow">The start row.</param>
+		/// <param name="endRow">The end row.</param>
+		/// <param name="searchString">The search string.</param>
+		/// <summary>Performs the get next type select match operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the get next type select match operation.</summary>
 			""")]
 		[Export ("tableView:nextTypeSelectMatchFromRow:toRow:forString:"), DelegateName ("NSTableViewSearchString"), DefaultValue (-1)]
 		nint GetNextTypeSelectMatch (NSTableView tableView, nint startRow, nint endRow, string searchString);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="theEvent">To be added.</param>
-		/// <param name="searchString">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="theEvent">The the event.</param>
+		/// <param name="searchString">The search string.</param>
+		/// <summary>Performs the should type select operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the should type select operation.</summary>
 			""")]
 		[Export ("tableView:shouldTypeSelectForEvent:withCurrentSearchString:"), DelegateName ("NSTableViewEventString"), DefaultValue (false)]
 		bool ShouldTypeSelect (NSTableView tableView, NSEvent theEvent, string searchString);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <param name="row">The row.</param>
+		/// <summary>Performs the should show cell expansion operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the should show cell expansion operation.</summary>
 			""")]
 		[Export ("tableView:shouldShowCellExpansionForTableColumn:row:"), DelegateName ("NSTableViewColumnRowPredicate"), DefaultValue (false)]
 		bool ShouldShowCellExpansion (NSTableView tableView, NSTableColumn tableColumn, nint row);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="cell">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="cell">The cell.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <param name="row">The row.</param>
+		/// <summary>Performs the should track cell operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the should track cell operation.</summary>
 			""")]
 		[Export ("tableView:shouldTrackCell:forTableColumn:row:"), DelegateName ("NSTableViewCell"), DefaultValue (false)]
 		bool ShouldTrackCell (NSTableView tableView, NSCell cell, NSTableColumn tableColumn, nint row);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <param name="row">The row.</param>
+		/// <summary>Performs the get data cell operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the get data cell operation.</summary>
 			""")]
 		[Export ("tableView:dataCellForTableColumn:row:"), DelegateName ("NSTableViewCellGetter"), NoDefaultValue]
 		NSCell GetDataCell (NSTableView tableView, NSTableColumn tableColumn, nint row);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="row">The row.</param>
+		/// <summary>Performs the is group row operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the is group row operation.</summary>
 			""")]
 		[Export ("tableView:isGroupRow:"), DelegateName ("NSTableViewRowPredicate"), DefaultValue (false)]
 		bool IsGroupRow (NSTableView tableView, nint row);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="column">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="column">The column.</param>
+		/// <summary>Performs the get size to fit column width operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the get size to fit column width operation.</summary>
 			""")]
 		[Export ("tableView:sizeToFitWidthOfColumn:"), DelegateName ("NSTableViewColumnWidth"), DefaultValue (80)]
 		nfloat GetSizeToFitColumnWidth (NSTableView tableView, nint column);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="columnIndex">To be added.</param>
-		/// <param name="newColumnIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="columnIndex">The column index.</param>
+		/// <param name="newColumnIndex">The new column index.</param>
+		/// <summary>Performs the should reorder operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the should reorder operation.</summary>
 			""")]
 		[Export ("tableView:shouldReorderColumn:toColumn:"), DelegateName ("NSTableReorder"), DefaultValue (false)]
 		bool ShouldReorder (NSTableView tableView, nint columnIndex, nint newColumnIndex);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the selection did change operation.</summary>
 		[Export ("tableViewSelectionDidChange:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the selection did change operation.</summary>
 			""")]
 		void SelectionDidChange (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the column did move operation.</summary>
 		[Export ("tableViewColumnDidMove:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the column did move operation.</summary>
 			""")]
 		void ColumnDidMove (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the column did resize operation.</summary>
 		[Export ("tableViewColumnDidResize:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the column did resize operation.</summary>
 			""")]
 		void ColumnDidResize (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the selection is changing operation.</summary>
 		[Export ("tableViewSelectionIsChanging:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the selection is changing operation.</summary>
 			""")]
 		void SelectionIsChanging (NSNotification notification);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <param name="row">The row.</param>
+		/// <summary>Performs the get view for item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the get view for item operation.</summary>
 			""")]
 		[Export ("tableView:viewForTableColumn:row:"), DelegateName ("NSTableViewViewGetter"), NoDefaultValue]
 		NSView GetViewForItem (NSTableView tableView, NSTableColumn tableColumn, nint row);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="row">The row.</param>
+		/// <summary>Performs the core get row view operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the core get row view operation.</summary>
 			""")]
 		[Export ("tableView:rowViewForRow:"), DelegateName ("NSTableViewRowGetter"), DefaultValue (null)]
 		NSTableRowView CoreGetRowView (NSTableView tableView, nint row);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="rowView">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="rowView">The row view.</param>
+		/// <param name="row">The row.</param>
+		/// <summary>Performs the did add row view operation.</summary>
 		[Export ("tableView:didAddRowView:forRow:"), EventArgs ("NSTableViewRow", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did add row view operation.</summary>
 			""")]
 		void DidAddRowView (NSTableView tableView, NSTableRowView rowView, nint row);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="rowView">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="rowView">The row view.</param>
+		/// <param name="row">The row.</param>
+		/// <summary>Performs the did remove row view operation.</summary>
 		[Export ("tableView:didRemoveRowView:forRow:"), EventArgs ("NSTableViewRow", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did remove row view operation.</summary>
 			""")]
 		void DidRemoveRowView (NSTableView tableView, NSTableRowView rowView, nint row);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <param name="edge">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="row">The row.</param>
+		/// <param name="edge">The edge.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the specified operation.</summary>
 			""")]
 		[Export ("tableView:rowActionsForRow:edge:"), DelegateName ("NSTableViewRowActionsGetter"), NoDefaultValue]
 		//		[Verify (StronglyTypedNSArray)]
@@ -21204,44 +19827,39 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSTableViewDataSource {
-		/// <param name="tableView">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <summary>Performs the get row count operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("numberOfRowsInTableView:")]
 		nint GetRowCount (NSTableView tableView);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <param name="row">The row.</param>
+		/// <summary>Performs the get object value operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("tableView:objectValueForTableColumn:row:")]
 		NSObject GetObjectValue (NSTableView tableView, NSTableColumn tableColumn, nint row);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="theObject">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="theObject">The the object.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <param name="row">The row.</param>
+		/// <summary>Performs the set object value operation.</summary>
 		[Export ("tableView:setObjectValue:forTableColumn:row:")]
 		void SetObjectValue (NSTableView tableView, NSObject theObject, NSTableColumn tableColumn, nint row);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="oldDescriptors">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="oldDescriptors">The old descriptors.</param>
+		/// <summary>Performs the sort descriptors changed operation.</summary>
 		[Export ("tableView:sortDescriptorsDidChange:")]
 		void SortDescriptorsChanged (NSTableView tableView, NSSortDescriptor [] oldDescriptors);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="rowIndexes">To be added.</param>
-		/// <param name="pboard">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="rowIndexes">The row indexes.</param>
+		/// <param name="pboard">The pboard.</param>
+		/// <summary>Performs the write rows operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("tableView:writeRowsWithIndexes:toPasteboard:")]
 		[Deprecated (PlatformName.MacOSX, 10, 15, message: "Use the 'GetPasteboardWriterForRow' method instead.")]
 		bool WriteRows (NSTableView tableView, NSIndexSet rowIndexes, NSPasteboard pboard);
@@ -21252,39 +19870,35 @@ namespace AppKit {
 		[Export ("tableView:acceptDrop:row:dropOperation:")]
 		bool AcceptDrop (NSTableView tableView, INSDraggingInfo info, nint row, NSTableViewDropOperation dropOperation);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="dropDestination">To be added.</param>
-		/// <param name="indexSet">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="dropDestination">The drop destination.</param>
+		/// <param name="indexSet">The index set.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use 'NSFilePromiseReceiver' instead.")]
 		[Export ("tableView:namesOfPromisedFilesDroppedAtDestination:forDraggedRowsWithIndexes:")]
 		string [] FilesDropped (NSTableView tableView, NSUrl dropDestination, NSIndexSet indexSet);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="row">The row.</param>
+		/// <summary>Performs the get pasteboard writer for row operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("tableView:pasteboardWriterForRow:")]
 		INSPasteboardWriting GetPasteboardWriterForRow (NSTableView tableView, nint row);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="draggingSession">To be added.</param>
-		/// <param name="willBeginAtScreenPoint">To be added.</param>
-		/// <param name="rowIndexes">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="draggingSession">The dragging session.</param>
+		/// <param name="willBeginAtScreenPoint">The will begin at screen point.</param>
+		/// <param name="rowIndexes">The row indexes.</param>
+		/// <summary>Performs the dragging session will begin operation.</summary>
 		[Export ("tableView:draggingSession:willBeginAtPoint:forRowIndexes:")]
 		void DraggingSessionWillBegin (NSTableView tableView, NSDraggingSession draggingSession, CGPoint willBeginAtScreenPoint, NSIndexSet rowIndexes);
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="draggingSession">To be added.</param>
-		/// <param name="endedAtScreenPoint">To be added.</param>
-		/// <param name="operation">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="draggingSession">The dragging session.</param>
+		/// <param name="endedAtScreenPoint">The ended at screen point.</param>
+		/// <param name="operation">The operation.</param>
+		/// <summary>Performs the dragging session ended operation.</summary>
 		[Export ("tableView:draggingSession:endedAtPoint:operation:")]
 		void DraggingSessionEnded (NSTableView tableView, NSDraggingSession draggingSession, CGPoint endedAtScreenPoint, NSDragOperation operation);
 
@@ -21561,9 +20175,7 @@ namespace AppKit {
 		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate", IsVirtual = true)]
 		INSTabViewDelegate Delegate { get; set; }
 
@@ -21671,45 +20283,36 @@ namespace AppKit {
 	[BaseType (typeof (NSObject))]
 	[Model, Protocol]
 	interface NSTabViewDelegate {
-		/// <param name="tabView">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tabView">The tab view.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the should select tab view item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the should select tab view item operation.</summary>
 			""")]
 		[Export ("tabView:shouldSelectTabViewItem:"), DelegateName ("NSTabViewPredicate"), DefaultValue (true)]
 		bool ShouldSelectTabViewItem (NSTabView tabView, NSTabViewItem item);
 
-		/// <param name="tabView">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tabView">The tab view.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the will select operation.</summary>
 		[Export ("tabView:willSelectTabViewItem:"), EventArgs ("NSTabViewItem", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will select operation.</summary>
 			""")]
 		void WillSelect (NSTabView tabView, NSTabViewItem item);
 
-		/// <param name="tabView">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tabView">The tab view.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the did select operation.</summary>
 		[Export ("tabView:didSelectTabViewItem:"), EventArgs ("NSTabViewItem", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did select operation.</summary>
 			""")]
 		void DidSelect (NSTabView tabView, NSTabViewItem item);
 
-		/// <param name="tabView">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tabView">The tab view.</param>
+		/// <summary>Performs the number of items changed operation.</summary>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the number of items changed operation.</summary>
 			""")]
 		[Export ("tabViewDidChangeNumberOfTabViewItems:")]
 		void NumberOfItemsChanged (NSTabView tabView);
@@ -21789,9 +20392,7 @@ namespace AppKit {
 		[Export ("readRTFDFromFile:")]
 		bool FromRtfdFile (string path);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsRulerVisible value.</summary>
 		[Export ("isRulerVisible")]
 		bool IsRulerVisible { get; }
 
@@ -21874,36 +20475,26 @@ namespace AppKit {
 		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSTextDelegate Delegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Editable value.</summary>
 		[Export ("editable")]
 		bool Editable { [Bind ("isEditable")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Selectable value.</summary>
 		[Export ("selectable")]
 		bool Selectable { [Bind ("isSelectable")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the RichText value.</summary>
 		[Export ("richText")]
 		bool RichText { [Bind ("isRichText")] get; set; }
 
 		[Export ("importsGraphics")]
 		bool ImportsGraphics { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the FieldEditor value.</summary>
 		[Export ("fieldEditor")]
 		bool FieldEditor { [Bind ("isFieldEditor")] get; set; }
 
@@ -21937,15 +20528,11 @@ namespace AppKit {
 		[Export ("minSize")]
 		CGSize MinSize { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the HorizontallyResizable value.</summary>
 		[Export ("horizontallyResizable")]
 		bool HorizontallyResizable { [Bind ("isHorizontallyResizable")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the VerticallyResizable value.</summary>
 		[Export ("verticallyResizable")]
 		bool VerticallyResizable { [Bind ("isVerticallyResizable")] get; set; }
 	}
@@ -21957,54 +20544,42 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSTextDelegate {
-		/// <param name="textObject">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="textObject">The text object.</param>
+		/// <summary>Performs the text should begin editing operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the text should begin editing operation.</summary>
 			""")]
 		[Export ("textShouldBeginEditing:"), DelegateName ("NSTextPredicate"), DefaultValue (true)]
 		bool TextShouldBeginEditing (NSText textObject);
 
-		/// <param name="textObject">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="textObject">The text object.</param>
+		/// <summary>Performs the text should end editing operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the text should end editing operation.</summary>
 			""")]
 		[Export ("textShouldEndEditing:"), DelegateName ("NSTextPredicate"), DefaultValue (true)]
 		bool TextShouldEndEditing (NSText textObject);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the text did begin editing operation.</summary>
 		[Export ("textDidBeginEditing:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the text did begin editing operation.</summary>
 			""")]
 		void TextDidBeginEditing (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the text did end editing operation.</summary>
 		[Export ("textDidEndEditing:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the text did end editing operation.</summary>
 			""")]
 		void TextDidEndEditing (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the text did change operation.</summary>
 		[Export ("textDidChange:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the text did change operation.</summary>
 			""")]
 		void TextDidChange (NSNotification notification);
 	}
@@ -22182,24 +20757,18 @@ namespace AppKit {
 		[Export ("bezeled")]
 		bool Bezeled { [Bind ("isBezeled")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Editable value.</summary>
 		[Export ("editable")]
 		bool Editable { [Bind ("isEditable")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Selectable value.</summary>
 		[Export ("selectable")]
 		bool Selectable { [Bind ("isSelectable")] get; set; }
 
 		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSTextFieldDelegate Delegate { get; set; }
 
@@ -22280,27 +20849,23 @@ namespace AppKit {
 	[Category]
 	[BaseType (typeof (NSTextField))]
 	interface NSTextField_NSTouchBar {
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the get automatic text completion enabled operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("isAutomaticTextCompletionEnabled")]
 		bool GetAutomaticTextCompletionEnabled ();
 
-		/// <param name="enabled">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="enabled">The enabled.</param>
+		/// <summary>Performs the set automatic text completion enabled operation.</summary>
 		[Export ("automaticTextCompletionEnabled:")]
 		void SetAutomaticTextCompletionEnabled (bool enabled);
 
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the get allows character picker touch bar item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("allowsCharacterPickerTouchBarItem")]
 		bool GetAllowsCharacterPickerTouchBarItem ();
 
-		/// <param name="allows">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="allows">The allows.</param>
+		/// <summary>Performs the set allows character picker touch bar item operation.</summary>
 		[Export ("setAllowsCharacterPickerTouchBarItem:")]
 		void SetAllowsCharacterPickerTouchBarItem (bool allows);
 	}
@@ -22319,167 +20884,132 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSTextFieldDelegate {
-		/// <param name="control">To be added.</param>
-		/// <param name="fieldEditor">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="control">The control.</param>
+		/// <param name="fieldEditor">The field editor.</param>
+		/// <summary>Performs the text should begin editing operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the text should begin editing operation.</summary>
 			""")]
 		[Export ("control:textShouldBeginEditing:"), DelegateName ("NSControlText"), DefaultValue (true)]
 		bool TextShouldBeginEditing (NSControl control, NSText fieldEditor);
 
-		/// <param name="control">To be added.</param>
-		/// <param name="fieldEditor">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="control">The control.</param>
+		/// <param name="fieldEditor">The field editor.</param>
+		/// <summary>Performs the text should end editing operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the text should end editing operation.</summary>
 			""")]
 		[Export ("control:textShouldEndEditing:"), DelegateName ("NSControlText"), DefaultValue (true)]
 		bool TextShouldEndEditing (NSControl control, NSText fieldEditor);
 
-		/// <param name="control">To be added.</param>
-		/// <param name="str">To be added.</param>
-		/// <param name="error">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="control">The control.</param>
+		/// <param name="str">The str.</param>
+		/// <param name="error">The error.</param>
+		/// <summary>Performs the did fail to format string operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did fail to format string operation.</summary>
 			""")]
 		[Export ("control:didFailToFormatString:errorDescription:"), DelegateName ("NSControlTextError"), DefaultValue (true)]
 		bool DidFailToFormatString (NSControl control, string str, string error);
 
-		/// <param name="control">To be added.</param>
-		/// <param name="str">To be added.</param>
-		/// <param name="error">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="control">The control.</param>
+		/// <param name="str">The str.</param>
+		/// <param name="error">The error.</param>
+		/// <summary>Performs the did fail to validate partial string operation.</summary>
 		[Export ("control:didFailToValidatePartialString:errorDescription:"), EventArgs ("NSControlTextError", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did fail to validate partial string operation.</summary>
 			""")]
 		void DidFailToValidatePartialString (NSControl control, string str, string error);
 
-		/// <param name="control">To be added.</param>
-		/// <param name="objectToValidate">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="control">The control.</param>
+		/// <param name="objectToValidate">The object to validate.</param>
+		/// <summary>Performs the is valid object operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the is valid object operation.</summary>
 			""")]
 		[Export ("control:isValidObject:"), DelegateName ("NSControlTextValidation"), DefaultValue (true)]
 		bool IsValidObject (NSControl control, NSObject objectToValidate);
 
-		/// <param name="control">To be added.</param>
-		/// <param name="textView">To be added.</param>
-		/// <param name="commandSelector">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="control">The control.</param>
+		/// <param name="textView">The text view.</param>
+		/// <param name="commandSelector">The command selector.</param>
+		/// <summary>Performs the do command by selector operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the do command by selector operation.</summary>
 			""")]
 		[Export ("control:textView:doCommandBySelector:"), DelegateName ("NSControlCommand"), DefaultValue (false)]
 		bool DoCommandBySelector (NSControl control, NSTextView textView, Selector commandSelector);
 
-		/// <param name="control">To be added.</param>
-		/// <param name="textView">To be added.</param>
-		/// <param name="words">To be added.</param>
-		/// <param name="charRange">To be added.</param>
-		/// <param name="index">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="control">The control.</param>
+		/// <param name="textView">The text view.</param>
+		/// <param name="words">The words.</param>
+		/// <param name="charRange">The char range.</param>
+		/// <param name="index">The index.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the specified operation.</summary>
 			""")]
 		[Export ("control:textView:completions:forPartialWordRange:indexOfSelectedItem:"), DelegateName ("NSControlTextFilter"), DefaultValue ("new string[0]")]
 		string [] GetCompletions (NSControl control, NSTextView textView, string [] words, NSRange charRange, ref nint index);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the editing ended operation.</summary>
 		[Export ("controlTextDidEndEditing:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the editing ended operation.</summary>
 			""")]
 		void EditingEnded (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the changed operation.</summary>
 		[Export ("controlTextDidChange:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the changed operation.</summary>
 			""")]
 		void Changed (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the editing began operation.</summary>
 		[Export ("controlTextDidBeginEditing:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the editing began operation.</summary>
 			""")]
 		void EditingBegan (NSNotification notification);
 
-		/// <param name="textField">To be added.</param>
-		/// <param name="textView">To be added.</param>
-		/// <param name="selectedRange">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="textField">The text field.</param>
+		/// <param name="textView">The text view.</param>
+		/// <param name="selectedRange">The selected range.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the specified operation.</summary>
 			""")]
 		[Export ("textField:textView:candidatesForSelectedRange:"), DelegateName ("NSTextFieldGetCandidates"), DefaultValue (null)]
 		[return: NullAllowed]
 		NSObject [] GetCandidates (NSTextField textField, NSTextView textView, NSRange selectedRange);
 
-		/// <param name="textField">To be added.</param>
-		/// <param name="textView">To be added.</param>
-		/// <param name="candidates">To be added.</param>
-		/// <param name="selectedRange">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="textField">The text field.</param>
+		/// <param name="textView">The text view.</param>
+		/// <param name="candidates">The candidates.</param>
+		/// <param name="selectedRange">The selected range.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the specified operation.</summary>
 			""")]
 		[Export ("textField:textView:candidates:forSelectedRange:"), DelegateName ("NSTextFieldTextCheckingResults"), DefaultValue (null)]
 		NSTextCheckingResult [] GetTextCheckingResults (NSTextField textField, NSTextView textView, NSTextCheckingResult [] candidates, NSRange selectedRange);
 
-		/// <param name="textField">To be added.</param>
-		/// <param name="textView">To be added.</param>
-		/// <param name="index">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="textField">The text field.</param>
+		/// <param name="textView">The text view.</param>
+		/// <param name="index">The index.</param>
+		/// <summary>Performs the should select candidate operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the should select candidate operation.</summary>
 			""")]
 		[Export ("textField:textView:shouldSelectCandidateAtIndex:"), DelegateName ("NSTextFieldSelectCandidate"), DefaultValue (false)]
 		bool ShouldSelectCandidate (NSTextField textField, NSTextView textView, nuint index);
@@ -22492,42 +21022,34 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSComboBoxDelegate {
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the will pop up operation.</summary>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will pop up operation.</summary>
 			""")]
 		[Export ("comboBoxWillPopUp:")]
 		void WillPopUp (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the will dismiss operation.</summary>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will dismiss operation.</summary>
 			""")]
 		[Export ("comboBoxWillDismiss:")]
 		void WillDismiss (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the selection changed operation.</summary>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the selection changed operation.</summary>
 			""")]
 		[Export ("comboBoxSelectionDidChange:")]
 		void SelectionChanged (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the selection is changing operation.</summary>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the selection is changing operation.</summary>
 			""")]
 		[Export ("comboBoxSelectionIsChanging:")]
 		void SelectionIsChanging (NSNotification notification);
@@ -22540,88 +21062,78 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSTokenFieldCellDelegate {
-		/// <param name="tokenFieldCell">To be added.</param>
-		/// <param name="substring">To be added.</param>
-		/// <param name="tokenIndex">To be added.</param>
-		/// <param name="selectedIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tokenFieldCell">The token field cell.</param>
+		/// <param name="substring">The substring.</param>
+		/// <param name="tokenIndex">The token index.</param>
+		/// <param name="selectedIndex">The selected index.</param>
+		/// <summary>Performs the get completion strings operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("tokenFieldCell:completionsForSubstring:indexOfToken:indexOfSelectedItem:")]
 		NSArray GetCompletionStrings (NSTokenFieldCell tokenFieldCell, string substring, nint tokenIndex, ref nint selectedIndex);
 
-		/// <param name="tokenFieldCell">To be added.</param>
-		/// <param name="tokens">To be added.</param>
-		/// <param name="index">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tokenFieldCell">The token field cell.</param>
+		/// <param name="tokens">The tokens.</param>
+		/// <param name="index">The index.</param>
+		/// <summary>Performs the should add objects operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("tokenFieldCell:shouldAddObjects:atIndex:")]
 		NSArray ShouldAddObjects (NSTokenFieldCell tokenFieldCell, NSObject [] tokens, nuint index);
 
-		/// <param name="tokenFieldCell">To be added.</param>
-		/// <param name="representedObject">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tokenFieldCell">The token field cell.</param>
+		/// <param name="representedObject">The represented object.</param>
+		/// <summary>Performs the get display string operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("tokenFieldCell:displayStringForRepresentedObject:")]
 		string GetDisplayString (NSTokenFieldCell tokenFieldCell, NSObject representedObject);
 
-		/// <param name="tokenFieldCell">To be added.</param>
-		/// <param name="representedObject">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tokenFieldCell">The token field cell.</param>
+		/// <param name="representedObject">The represented object.</param>
+		/// <summary>Performs the get editing string operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("tokenFieldCell:editingStringForRepresentedObject:")]
 		string GetEditingString (NSTokenFieldCell tokenFieldCell, NSObject representedObject);
 
-		/// <param name="tokenFieldCell">To be added.</param>
-		/// <param name="editingString">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tokenFieldCell">The token field cell.</param>
+		/// <param name="editingString">The editing string.</param>
+		/// <summary>Performs the get represented object operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("tokenFieldCell:representedObjectForEditingString:")]
 		[return: NullAllowed]
 		NSObject GetRepresentedObject (NSTokenFieldCell tokenFieldCell, string editingString);
 
-		/// <param name="tokenFieldCell">To be added.</param>
-		/// <param name="objects">To be added.</param>
-		/// <param name="pboard">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tokenFieldCell">The token field cell.</param>
+		/// <param name="objects">The objects.</param>
+		/// <param name="pboard">The pboard.</param>
+		/// <summary>Performs the write represented objects operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("tokenFieldCell:writeRepresentedObjects:toPasteboard:")]
 		bool WriteRepresentedObjects (NSTokenFieldCell tokenFieldCell, NSObject [] objects, NSPasteboard pboard);
 
-		/// <param name="tokenFieldCell">To be added.</param>
-		/// <param name="pboard">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tokenFieldCell">The token field cell.</param>
+		/// <param name="pboard">The pboard.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("tokenFieldCell:readFromPasteboard:")]
 		NSObject [] Read (NSTokenFieldCell tokenFieldCell, NSPasteboard pboard);
 
-		/// <param name="tokenFieldCell">To be added.</param>
-		/// <param name="representedObject">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tokenFieldCell">The token field cell.</param>
+		/// <param name="representedObject">The represented object.</param>
+		/// <summary>Performs the get menu operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("tokenFieldCell:menuForRepresentedObject:")]
 		NSMenu GetMenu (NSTokenFieldCell tokenFieldCell, NSObject representedObject);
 
-		/// <param name="tokenFieldCell">To be added.</param>
-		/// <param name="representedObject">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tokenFieldCell">The token field cell.</param>
+		/// <param name="representedObject">The represented object.</param>
+		/// <summary>Performs the has menu operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("tokenFieldCell:hasMenuForRepresentedObject:")]
 		bool HasMenu (NSTokenFieldCell tokenFieldCell, NSObject representedObject);
 
-		/// <param name="tokenFieldCell">To be added.</param>
-		/// <param name="representedObject">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tokenFieldCell">The token field cell.</param>
+		/// <param name="representedObject">The represented object.</param>
+		/// <summary>Performs the get style operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("tokenFieldCell:styleForRepresentedObject:")]
 		NSTokenStyle GetStyle (NSTokenFieldCell tokenFieldCell, NSObject representedObject);
 	}
@@ -22698,9 +21210,7 @@ namespace AppKit {
 		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSTokenFieldCellDelegate Delegate { get; set; }
 	}
@@ -22832,9 +21342,8 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSTextInput {
-		/// <param name="insertString">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="insertString">The insert string.</param>
+		/// <summary>Performs the insert text operation.</summary>
 		[Abstract]
 		[Deprecated (PlatformName.MacOSX, 10, 6)]
 		[Export ("insertText:")]
@@ -22843,75 +21352,60 @@ namespace AppKit {
 		// The doCommandBySelector: conflicts with NSTextViewDelegate in generated code
 		// It's also deprecated in NSTextInput, and why we're not adding it here
 
-		/// <param name="string">To be added.</param>
-		/// <param name="selRange">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="string">The string.</param>
+		/// <param name="selRange">The sel range.</param>
+		/// <summary>Performs the set marked text operation.</summary>
 		[Abstract]
 		[Export ("setMarkedText:selectedRange:")]
 		void SetMarkedText (NSObject @string, NSRange selRange);
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the unmark text operation.</summary>
 		[Abstract]
 		[Export ("unmarkText")]
 		void UnmarkText ();
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the HasMarkedText value.</summary>
 		[Abstract]
 		[Export ("hasMarkedText")]
 		bool HasMarkedText { get; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the ConversationIdentifier value.</summary>
 		[Abstract]
 		[Export ("conversationIdentifier")]
 		nint ConversationIdentifier { get; }
 
-		/// <param name="range">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="range">The range.</param>
+		/// <summary>Performs the get attributed substring operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("attributedSubstringFromRange:")]
 		NSAttributedString GetAttributedSubstring (NSRange range);
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the MarkedRange value.</summary>
 		[Abstract]
 		[Export ("markedRange")]
 		NSRange MarkedRange { get; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the SelectedRange value.</summary>
 		[Abstract]
 		[Export ("selectedRange")]
 		NSRange SelectedRange { get; }
 
-		/// <param name="range">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="range">The range.</param>
+		/// <summary>Performs the get first rect for character range operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("firstRectForCharacterRange:")]
 		CGRect GetFirstRectForCharacterRange (NSRange range);
 
-		/// <param name="point">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="point">The point.</param>
+		/// <summary>Performs the get character index operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("characterIndexForPoint:")]
 		nuint GetCharacterIndex (CGPoint point);
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the ValidAttributesForMarkedText value.</summary>
 		[Abstract]
 		[Export ("validAttributesForMarkedText")]
 		NSString [] ValidAttributesForMarkedText { get; }
@@ -23554,27 +22048,24 @@ namespace AppKit {
 		[Export ("attributedString")]
 		NSAttributedString AttributedString { get; }
 
-		/// <param name="point">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="point">The point.</param>
+		/// <summary>Performs the get fraction of distance through glyph operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("fractionOfDistanceThroughGlyphForPoint:")]
 		nfloat GetFractionOfDistanceThroughGlyph (CGPoint point);
 
-		/// <param name="charIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="charIndex">The char index.</param>
+		/// <summary>Performs the get baseline delta operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("baselineDeltaForCharacterAtIndex:")]
 		nfloat GetBaselineDelta (nuint charIndex);
 
 		[Export ("windowLevel")]
 		NSWindowLevel WindowLevel { get; }
 
-		/// <param name="charIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="charIndex">The char index.</param>
+		/// <summary>Performs the draws vertically operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("drawsVerticallyForCharacterAtIndex:")]
 		bool DrawsVertically (nuint charIndex);
 
@@ -23607,336 +22098,267 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	partial interface NSTextViewDelegate {
-		/// <param name="textView">To be added.</param>
-		/// <param name="link">To be added.</param>
-		/// <param name="charIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="textView">The text view.</param>
+		/// <param name="link">The link.</param>
+		/// <param name="charIndex">The char index.</param>
+		/// <summary>Performs the link clicked operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the link clicked operation.</summary>
 			""")]
 		[Export ("textView:clickedOnLink:atIndex:"), DelegateName ("NSTextViewLink"), DefaultValue (false)]
 		bool LinkClicked (NSTextView textView, NSObject link, nuint charIndex);
 
-		/// <param name="textView">To be added.</param>
-		/// <param name="cell">To be added.</param>
-		/// <param name="cellFrame">To be added.</param>
-		/// <param name="charIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="textView">The text view.</param>
+		/// <param name="cell">The cell.</param>
+		/// <param name="cellFrame">The cell frame.</param>
+		/// <param name="charIndex">The char index.</param>
+		/// <summary>Performs the cell clicked operation.</summary>
 		[Export ("textView:clickedOnCell:inRect:atIndex:"), EventArgs ("NSTextViewClicked", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the cell clicked operation.</summary>
 			""")]
 		void CellClicked (NSTextView textView, NSTextAttachmentCell cell, CGRect cellFrame, nuint charIndex);
 
-		/// <param name="textView">To be added.</param>
-		/// <param name="cell">To be added.</param>
-		/// <param name="cellFrame">To be added.</param>
-		/// <param name="charIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="textView">The text view.</param>
+		/// <param name="cell">The cell.</param>
+		/// <param name="cellFrame">The cell frame.</param>
+		/// <param name="charIndex">The char index.</param>
+		/// <summary>Performs the cell double clicked operation.</summary>
 		[Export ("textView:doubleClickedOnCell:inRect:atIndex:"), EventArgs ("NSTextViewDoubleClick", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the cell double clicked operation.</summary>
 			""")]
 		void CellDoubleClicked (NSTextView textView, NSTextAttachmentCell cell, CGRect cellFrame, nuint charIndex);
 
 		// 
-		/// <param name="view">To be added.</param>
-		/// <param name="forCell">To be added.</param>
-		/// <param name="charIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="view">The view.</param>
+		/// <param name="forCell">The for cell.</param>
+		/// <param name="charIndex">The char index.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the specified operation.</summary>
 			""")]
 		[Export ("textView:writablePasteboardTypesForCell:atIndex:"), DelegateName ("NSTextViewCellPosition"), DefaultValue (null)]
 		string [] GetWritablePasteboardTypes (NSTextView view, NSTextAttachmentCell forCell, nuint charIndex);
 
-		/// <param name="view">To be added.</param>
-		/// <param name="cell">To be added.</param>
-		/// <param name="charIndex">To be added.</param>
-		/// <param name="pboard">To be added.</param>
-		/// <param name="type">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="view">The view.</param>
+		/// <param name="cell">The cell.</param>
+		/// <param name="charIndex">The char index.</param>
+		/// <param name="pboard">The pboard.</param>
+		/// <param name="type">The type.</param>
+		/// <summary>Performs the write cell operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the write cell operation.</summary>
 			""")]
 		[Export ("textView:writeCell:atIndex:toPasteboard:type:"), DelegateName ("NSTextViewCellPasteboard"), DefaultValue (true)]
 		bool WriteCell (NSTextView view, NSTextAttachmentCell cell, nuint charIndex, NSPasteboard pboard, string type);
 
-		/// <param name="textView">To be added.</param>
-		/// <param name="oldSelectedCharRange">To be added.</param>
-		/// <param name="newSelectedCharRange">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="textView">The text view.</param>
+		/// <param name="oldSelectedCharRange">The old selected char range.</param>
+		/// <param name="newSelectedCharRange">The new selected char range.</param>
+		/// <summary>Performs the will change selection operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will change selection operation.</summary>
 			""")]
 		[Export ("textView:willChangeSelectionFromCharacterRange:toCharacterRange:"), DelegateName ("NSTextViewSelectionChange"), DefaultValueFromArgument ("newSelectedCharRange")]
 		NSRange WillChangeSelection (NSTextView textView, NSRange oldSelectedCharRange, NSRange newSelectedCharRange);
 
-		/// <param name="textView">To be added.</param>
-		/// <param name="oldSelectedCharRanges">To be added.</param>
-		/// <param name="newSelectedCharRanges">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="textView">The text view.</param>
+		/// <param name="oldSelectedCharRanges">The old selected char ranges.</param>
+		/// <param name="newSelectedCharRanges">The new selected char ranges.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the specified operation.</summary>
 			""")]
 		[Export ("textView:willChangeSelectionFromCharacterRanges:toCharacterRanges:"), DelegateName ("NSTextViewSelectionWillChange"), DefaultValueFromArgument ("newSelectedCharRanges")]
 		NSValue [] WillChangeSelectionFromRanges (NSTextView textView, NSValue [] oldSelectedCharRanges, NSValue [] newSelectedCharRanges);
 
-		/// <param name="textView">To be added.</param>
-		/// <param name="affectedRanges">To be added.</param>
-		/// <param name="replacementStrings">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="textView">The text view.</param>
+		/// <param name="affectedRanges">The affected ranges.</param>
+		/// <param name="replacementStrings">The replacement strings.</param>
+		/// <summary>Performs the should change text in ranges operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the should change text in ranges operation.</summary>
 			""")]
 		[Export ("textView:shouldChangeTextInRanges:replacementStrings:"), DelegateName ("NSTextViewSelectionShouldChange"), DefaultValue (true)]
 		bool ShouldChangeTextInRanges (NSTextView textView, NSValue [] affectedRanges, string [] replacementStrings);
 
-		/// <param name="textView">To be added.</param>
-		/// <param name="oldTypingAttributes">To be added.</param>
-		/// <param name="newTypingAttributes">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="textView">The text view.</param>
+		/// <param name="oldTypingAttributes">The old typing attributes.</param>
+		/// <param name="newTypingAttributes">The new typing attributes.</param>
+		/// <summary>Performs the should change typing attributes operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the should change typing attributes operation.</summary>
 			""")]
 		[Export ("textView:shouldChangeTypingAttributes:toAttributes:"), DelegateName ("NSTextViewTypeAttribute"), DefaultValueFromArgument ("newTypingAttributes")]
 		NSDictionary ShouldChangeTypingAttributes (NSTextView textView, NSDictionary oldTypingAttributes, NSDictionary newTypingAttributes);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did change selection operation.</summary>
 		[Export ("textViewDidChangeSelection:"), EventArgs ("NSTextViewNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did change selection operation.</summary>
 			""")]
 		void DidChangeSelection (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did change typing attributes operation.</summary>
 		[Export ("textViewDidChangeTypingAttributes:"), EventArgs ("NSTextViewNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did change typing attributes operation.</summary>
 			""")]
 		void DidChangeTypingAttributes (NSNotification notification);
 
-		/// <param name="textView">To be added.</param>
-		/// <param name="tooltip">To be added.</param>
-		/// <param name="characterIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="textView">The text view.</param>
+		/// <param name="tooltip">The tooltip.</param>
+		/// <param name="characterIndex">The character index.</param>
+		/// <summary>Performs the will display tool tip operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will display tool tip operation.</summary>
 			""")]
 		[Export ("textView:willDisplayToolTip:forCharacterAtIndex:"), DelegateName ("NSTextViewTooltip"), DefaultValueFromArgument ("tooltip")]
 		[return: NullAllowed]
 		string WillDisplayToolTip (NSTextView textView, string tooltip, nuint characterIndex);
 
-		/// <param name="textView">To be added.</param>
-		/// <param name="words">To be added.</param>
-		/// <param name="charRange">To be added.</param>
-		/// <param name="index">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="textView">The text view.</param>
+		/// <param name="words">The words.</param>
+		/// <param name="charRange">The char range.</param>
+		/// <param name="index">The index.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the specified operation.</summary>
 			""")]
 		[Export ("textView:completions:forPartialWordRange:indexOfSelectedItem:"), DelegateName ("NSTextViewCompletion"), DefaultValue (null)]
 		string [] GetCompletions (NSTextView textView, string [] words, NSRange charRange, ref nint index);
 
-		/// <param name="textView">To be added.</param>
-		/// <param name="affectedCharRange">To be added.</param>
-		/// <param name="replacementString">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="textView">The text view.</param>
+		/// <param name="affectedCharRange">The affected char range.</param>
+		/// <param name="replacementString">The replacement string.</param>
+		/// <summary>Performs the should change text in range operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the should change text in range operation.</summary>
 			""")]
 		[Export ("textView:shouldChangeTextInRange:replacementString:"), DelegateName ("NSTextViewChangeText"), DefaultValue (true)]
 		bool ShouldChangeTextInRange (NSTextView textView, NSRange affectedCharRange, string replacementString);
 
-		/// <param name="textView">To be added.</param>
-		/// <param name="commandSelector">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="textView">The text view.</param>
+		/// <param name="commandSelector">The command selector.</param>
+		/// <summary>Performs the do command by selector operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the do command by selector operation.</summary>
 			""")]
 		[Export ("textView:doCommandBySelector:"), DelegateName ("NSTextViewSelectorCommand"), DefaultValue (false)]
 		bool DoCommandBySelector (NSTextView textView, Selector commandSelector);
 
-		/// <param name="textView">To be added.</param>
-		/// <param name="value">To be added.</param>
-		/// <param name="affectedCharRange">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="textView">The text view.</param>
+		/// <param name="value">The value.</param>
+		/// <param name="affectedCharRange">The affected char range.</param>
+		/// <summary>Performs the should set spelling state operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the should set spelling state operation.</summary>
 			""")]
 		[Export ("textView:shouldSetSpellingState:range:"), DelegateName ("NSTextViewSpellingQuery"), DefaultValue (0)]
 		nint ShouldSetSpellingState (NSTextView textView, nint value, NSRange affectedCharRange);
 
-		/// <param name="view">To be added.</param>
-		/// <param name="menu">To be added.</param>
-		/// <param name="theEvent">To be added.</param>
-		/// <param name="charIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="view">The view.</param>
+		/// <param name="menu">The menu.</param>
+		/// <param name="theEvent">The the event.</param>
+		/// <param name="charIndex">The char index.</param>
+		/// <summary>Performs the menu for event operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the menu for event operation.</summary>
 			""")]
 		[Export ("textView:menu:forEvent:atIndex:"), DelegateName ("NSTextViewEventMenu"), DefaultValueFromArgument ("menu")]
 		NSMenu MenuForEvent (NSTextView view, NSMenu menu, NSEvent theEvent, nuint charIndex);
 
-		/// <param name="view">To be added.</param>
-		/// <param name="range">To be added.</param>
-		/// <param name="options">To be added.</param>
-		/// <param name="checkingTypes">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="view">The view.</param>
+		/// <param name="range">The range.</param>
+		/// <param name="options">The options.</param>
+		/// <param name="checkingTypes">The checking types.</param>
+		/// <summary>Performs the will check text operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will check text operation.</summary>
 			""")]
 		[Export ("textView:willCheckTextInRange:options:types:"), DelegateName ("NSTextViewOnTextCheck"), DefaultValueFromArgument ("options")]
 		NSDictionary WillCheckText (NSTextView view, NSRange range, NSDictionary options, NSTextCheckingTypes checkingTypes);
 
-		/// <param name="view">To be added.</param>
-		/// <param name="range">To be added.</param>
-		/// <param name="checkingTypes">To be added.</param>
-		/// <param name="options">To be added.</param>
-		/// <param name="results">To be added.</param>
-		/// <param name="orthography">To be added.</param>
-		/// <param name="wordCount">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="view">The view.</param>
+		/// <param name="range">The range.</param>
+		/// <param name="checkingTypes">The checking types.</param>
+		/// <param name="options">The options.</param>
+		/// <param name="results">The results.</param>
+		/// <param name="orthography">The orthography.</param>
+		/// <param name="wordCount">The word count.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the specified operation.</summary>
 			""")]
 		[Export ("textView:didCheckTextInRange:types:options:results:orthography:wordCount:"), DelegateName ("NSTextViewTextChecked"), DefaultValueFromArgument ("results")]
 		NSTextCheckingResult [] DidCheckText (NSTextView view, NSRange range, NSTextCheckingTypes checkingTypes, NSDictionary options, NSTextCheckingResult [] results, NSOrthography orthography, nint wordCount);
 
 		[Export ("textView:draggedCell:inRect:event:atIndex:"), EventArgs ("NSTextViewDraggedCell", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the dragged cell operation.</summary>
 			""")]
 		void DraggedCell (NSTextView view, NSTextAttachmentCell cell, CGRect rect, NSEvent theEvent, nuint charIndex);
 
-		/// <param name="view">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="view">The view.</param>
+		/// <summary>Performs the get undo manager operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the get undo manager operation.</summary>
 			""")]
 		[Export ("undoManagerForTextView:"), DelegateName ("NSTextViewGetUndoManager"), DefaultValue (null)]
 		NSUndoManager GetUndoManager (NSTextView view);
 
-		/// <param name="textView">To be added.</param>
-		/// <param name="identifiers">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="textView">The text view.</param>
+		/// <param name="identifiers">The identifiers.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the specified operation.</summary>
 			""")]
 		[Export ("textView:shouldUpdateTouchBarItemIdentifiers:"), DelegateName ("NSTextViewUpdateTouchBarItemIdentifiers"), NoDefaultValue]
 		string [] ShouldUpdateTouchBarItemIdentifiers (NSTextView textView, string [] identifiers);
 
-		/// <param name="textView">To be added.</param>
-		/// <param name="selectedRange">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="textView">The text view.</param>
+		/// <param name="selectedRange">The selected range.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the specified operation.</summary>
 			""")]
 		[Export ("textView:candidatesForSelectedRange:"), DelegateName ("NSTextViewGetCandidates"), NoDefaultValue]
 		[return: NullAllowed]
 		NSObject [] GetCandidates (NSTextView textView, NSRange selectedRange);
 
-		/// <param name="textView">To be added.</param>
-		/// <param name="candidates">To be added.</param>
-		/// <param name="selectedRange">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="textView">The text view.</param>
+		/// <param name="candidates">The candidates.</param>
+		/// <param name="selectedRange">The selected range.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the specified operation.</summary>
 			""")]
 		[Export ("textView:candidates:forSelectedRange:"), DelegateName ("NSTextViewTextCheckingResults"), NoDefaultValue]
 		NSTextCheckingResult [] GetTextCheckingCandidates (NSTextView textView, NSTextCheckingResult [] candidates, NSRange selectedRange);
 
-		/// <param name="textView">To be added.</param>
-		/// <param name="index">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="textView">The text view.</param>
+		/// <param name="index">The index.</param>
+		/// <summary>Performs the should select candidates operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the should select candidates operation.</summary>
 			""")]
 		[Export ("textView:shouldSelectCandidateAtIndex:"), DelegateName ("NSTextViewSelectCandidate"), NoDefaultValue]
 		bool ShouldSelectCandidates (NSTextView textView, nuint index);
@@ -23979,9 +22401,7 @@ namespace AppKit {
 		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSTokenFieldDelegate Delegate { get; set; }
 
@@ -23996,88 +22416,78 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSTokenFieldDelegate {
-		/// <param name="tokenField">To be added.</param>
-		/// <param name="substring">To be added.</param>
-		/// <param name="tokenIndex">To be added.</param>
-		/// <param name="selectedIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tokenField">The token field.</param>
+		/// <param name="substring">The substring.</param>
+		/// <param name="tokenIndex">The token index.</param>
+		/// <param name="selectedIndex">The selected index.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("tokenField:completionsForSubstring:indexOfToken:indexOfSelectedItem:")]
 		string [] GetCompletionStrings (NSTokenField tokenField, string substring, nint tokenIndex, nint selectedIndex);
 
-		/// <param name="tokenField">To be added.</param>
-		/// <param name="tokens">To be added.</param>
-		/// <param name="index">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tokenField">The token field.</param>
+		/// <param name="tokens">The tokens.</param>
+		/// <param name="index">The index.</param>
+		/// <summary>Performs the should add objects operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("tokenField:shouldAddObjects:atIndex:")]
 		NSArray ShouldAddObjects (NSTokenField tokenField, NSArray tokens, nuint index);
 
-		/// <param name="tokenField">To be added.</param>
-		/// <param name="representedObject">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tokenField">The token field.</param>
+		/// <param name="representedObject">The represented object.</param>
+		/// <summary>Performs the get display string operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("tokenField:displayStringForRepresentedObject:")]
 		string GetDisplayString (NSTokenField tokenField, NSObject representedObject);
 
-		/// <param name="tokenField">To be added.</param>
-		/// <param name="representedObject">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tokenField">The token field.</param>
+		/// <param name="representedObject">The represented object.</param>
+		/// <summary>Performs the get editing string operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("tokenField:editingStringForRepresentedObject:")]
 		string GetEditingString (NSTokenField tokenField, NSObject representedObject);
 
-		/// <param name="tokenField">To be added.</param>
-		/// <param name="editingString">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tokenField">The token field.</param>
+		/// <param name="editingString">The editing string.</param>
+		/// <summary>Performs the get represented object operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("tokenField:representedObjectForEditingString:")]
 		[return: NullAllowed]
 		NSObject GetRepresentedObject (NSTokenField tokenField, string editingString);
 
-		/// <param name="tokenField">To be added.</param>
-		/// <param name="objects">To be added.</param>
-		/// <param name="pboard">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tokenField">The token field.</param>
+		/// <param name="objects">The objects.</param>
+		/// <param name="pboard">The pboard.</param>
+		/// <summary>Performs the write represented operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("tokenField:writeRepresentedObjects:toPasteboard:")]
 		bool WriteRepresented (NSTokenField tokenField, NSArray objects, NSPasteboard pboard);
 
-		/// <param name="tokenField">To be added.</param>
-		/// <param name="pboard">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tokenField">The token field.</param>
+		/// <param name="pboard">The pboard.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("tokenField:readFromPasteboard:")]
 		NSObject [] Read (NSTokenField tokenField, NSPasteboard pboard);
 
-		/// <param name="tokenField">To be added.</param>
-		/// <param name="representedObject">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tokenField">The token field.</param>
+		/// <param name="representedObject">The represented object.</param>
+		/// <summary>Performs the get menu operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("tokenField:menuForRepresentedObject:")]
 		NSMenu GetMenu (NSTokenField tokenField, NSObject representedObject);
 
-		/// <param name="tokenField">To be added.</param>
-		/// <param name="representedObject">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tokenField">The token field.</param>
+		/// <param name="representedObject">The represented object.</param>
+		/// <summary>Performs the has menu operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("tokenField:hasMenuForRepresentedObject:")]
 		bool HasMenu (NSTokenField tokenField, NSObject representedObject);
 
-		/// <param name="tokenField">To be added.</param>
-		/// <param name="representedObject">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tokenField">The token field.</param>
+		/// <param name="representedObject">The represented object.</param>
+		/// <summary>Performs the get style operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("tokenField:styleForRepresentedObject:")]
 		NSTokenStyle GetStyle (NSTokenField tokenField, NSObject representedObject);
 
@@ -24095,16 +22505,14 @@ namespace AppKit {
 		[Export ("initWithIdentifier:")]
 		NativeHandle Constructor (string identifier);
 
-		/// <param name="itemIdentifier">To be added.</param>
-		/// <param name="index">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="itemIdentifier">The item identifier.</param>
+		/// <param name="index">The index.</param>
+		/// <summary>Performs the insert item operation.</summary>
 		[Export ("insertItemWithItemIdentifier:atIndex:")]
 		void InsertItem (string itemIdentifier, nint index);
 
-		/// <param name="index">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="index">The index.</param>
+		/// <summary>Performs the remove item operation.</summary>
 		[Export ("removeItemAtIndex:")]
 		void RemoveItem (nint index);
 
@@ -24141,15 +22549,11 @@ namespace AppKit {
 		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSToolbarDelegate Delegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Visible value.</summary>
 		[Export ("visible")]
 		bool Visible { [Bind ("isVisible")] get; set; }
 
@@ -24175,49 +22579,35 @@ namespace AppKit {
 		[Export ("autosavesConfiguration")]
 		bool AutosavesConfiguration { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSToolbarSeparatorItemIdentifier key constant.</summary>
 		[NoMacCatalyst]
 		[Field ("NSToolbarSeparatorItemIdentifier")]
 		[Deprecated (PlatformName.MacOSX, 11, 0, message: "Ignored by system.")]
 		NSString NSToolbarSeparatorItemIdentifier { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSToolbarSpaceItemIdentifier key constant.</summary>
 		[Field ("NSToolbarSpaceItemIdentifier")]
 		NSString NSToolbarSpaceItemIdentifier { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSToolbarFlexibleSpaceItemIdentifier key constant.</summary>
 		[Field ("NSToolbarFlexibleSpaceItemIdentifier")]
 		NSString NSToolbarFlexibleSpaceItemIdentifier { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSToolbarShowColorsItemIdentifier key constant.</summary>
 		[Field ("NSToolbarShowColorsItemIdentifier")]
 		NSString NSToolbarShowColorsItemIdentifier { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSToolbarShowFontsItemIdentifier key constant.</summary>
 		[Field ("NSToolbarShowFontsItemIdentifier")]
 		NSString NSToolbarShowFontsItemIdentifier { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSToolbarCustomizeToolbarItemIdentifier key constant.</summary>
 		[NoMacCatalyst]
 		[Field ("NSToolbarCustomizeToolbarItemIdentifier")]
 		[Deprecated (PlatformName.MacOSX, 11, 0, message: "Ignored by system.")]
 		NSString NSToolbarCustomizeToolbarItemIdentifier { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSToolbarPrintItemIdentifier key constant.</summary>
 		[Field ("NSToolbarPrintItemIdentifier")]
 		NSString NSToolbarPrintItemIdentifier { get; }
 
@@ -24225,16 +22615,12 @@ namespace AppKit {
 		[Export ("allowsExtensionItems")]
 		bool AllowsExtensionItems { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSToolbarToggleSidebarItemIdentifier key constant.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSToolbarToggleSidebarItemIdentifier")]
 		NSString NSToolbarToggleSidebarItemIdentifier { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NSToolbarCloudSharingItemIdentifier key constant.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSToolbarCloudSharingItemIdentifier")]
 		NSString NSToolbarCloudSharingItemIdentifier { get; }
@@ -24303,72 +22689,56 @@ namespace AppKit {
 	[BaseType (typeof (NSObject))]
 	[Model, Protocol]
 	interface NSToolbarDelegate {
-		/// <param name="toolbar">To be added.</param>
-		/// <param name="itemIdentifier">To be added.</param>
-		/// <param name="willBeInserted">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="toolbar">The toolbar.</param>
+		/// <param name="itemIdentifier">The item identifier.</param>
+		/// <param name="willBeInserted">The will be inserted.</param>
+		/// <summary>Performs the will insert item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will insert item operation.</summary>
 			""")]
 		[return: NullAllowed]
 		[Export ("toolbar:itemForItemIdentifier:willBeInsertedIntoToolbar:"), DelegateName ("NSToolbarWillInsert"), DefaultValue (null)]
 		NSToolbarItem WillInsertItem (NSToolbar toolbar, string itemIdentifier, bool willBeInserted);
 
-		/// <param name="toolbar">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="toolbar">The toolbar.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the specified operation.</summary>
 			""")]
 		[Export ("toolbarDefaultItemIdentifiers:"), DelegateName ("NSToolbarIdentifiers"), DefaultValue (null)]
 		string [] DefaultItemIdentifiers (NSToolbar toolbar);
 
-		/// <param name="toolbar">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="toolbar">The toolbar.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the specified operation.</summary>
 			""")]
 		[Export ("toolbarAllowedItemIdentifiers:"), DelegateName ("NSToolbarIdentifiers"), DefaultValue (null)]
 		string [] AllowedItemIdentifiers (NSToolbar toolbar);
 
-		/// <param name="toolbar">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="toolbar">The toolbar.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the specified operation.</summary>
 			""")]
 		[Export ("toolbarSelectableItemIdentifiers:"), DelegateName ("NSToolbarIdentifiers"), DefaultValue (null)]
 		string [] SelectableItemIdentifiers (NSToolbar toolbar);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the will add item operation.</summary>
 		[Export ("toolbarWillAddItem:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will add item operation.</summary>
 			""")]
 		void WillAddItem (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did remove item operation.</summary>
 		[Export ("toolbarDidRemoveItem:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did remove item operation.</summary>
 			""")]
 		void DidRemoveItem (NSNotification notification);
 
@@ -24384,10 +22754,9 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSToolbarItemValidation {
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the validate toolbar item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("validateToolbarItem:")]
 		bool ValidateToolbarItem (NSToolbarItem item);
@@ -24397,10 +22766,9 @@ namespace AppKit {
 	[Category]
 	[BaseType (typeof (NSObject))]
 	interface NSObject_NSToolbarItemValidation {
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the validate toolbar item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("validateToolbarItem:")]
 		bool ValidateToolbarItem (NSToolbarItem item);
 	}
@@ -24459,9 +22827,7 @@ namespace AppKit {
 		nint Tag { get; set; }
 #pragma warning restore 0108
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Enabled value.</summary>
 		[Export ("enabled")]
 		bool Enabled { [Bind ("isEnabled")] get; set; }
 
@@ -24657,9 +23023,7 @@ namespace AppKit {
 		[Export ("normalizedPosition")]
 		CGPoint NormalizedPosition { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsResting value.</summary>
 		[Export ("isResting")]
 		bool IsResting { get; }
 
@@ -24674,23 +23038,20 @@ namespace AppKit {
 	[Category]
 	[BaseType (typeof (NSTouch))]
 	interface NSTouch_NSTouchBar {
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the get touch type operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("type")]
 		NSTouchType GetTouchType ();
 
-		/// <param name="view">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="view">The view.</param>
+		/// <summary>Performs the get location operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("locationInView:")]
 		CGPoint GetLocation ([NullAllowed] NSView view);
 
-		/// <param name="view">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="view">The view.</param>
+		/// <summary>Performs the get previous location operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("previousLocationInView:")]
 		CGPoint GetPreviousLocation ([NullAllowed] NSView view);
 	}
@@ -24724,9 +23085,7 @@ namespace AppKit {
 		[Export ("itemForIdentifier:")]
 		NSTouchBarItem GetItemForIdentifier (string identifier);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Visible value.</summary>
 		[Export ("visible")]
 		bool Visible { [Bind ("isVisible")] get; }
 
@@ -24745,15 +23104,12 @@ namespace AppKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NSTouchBarDelegate {
-		/// <param name="touchBar">To be added.</param>
-		/// <param name="identifier">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="touchBar">The touch bar.</param>
+		/// <param name="identifier">The identifier.</param>
+		/// <summary>Performs the make item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the make item operation.</summary>
 			""")]
 		[Export ("touchBar:makeItemForIdentifier:"), DelegateName ("NSTouchBarMakeItem"), DefaultValue (null)]
 		[return: NullAllowed]
@@ -24768,9 +23124,8 @@ namespace AppKit {
 		[DesignatedInitializer]
 		NativeHandle Constructor (string identifier);
 
-		/// <param name="identifier">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="identifier">The identifier.</param>
+		/// <summary>Creates a new instance with the specified parameters.</summary>
 		[Wrap ("this (identifier.GetConstant ()!)")]
 		NativeHandle Constructor (NSTouchBarItemIdentifier identifier);
 
@@ -24791,66 +23146,64 @@ namespace AppKit {
 		[Export ("customizationLabel")]
 		string CustomizationLabel { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Visible value.</summary>
 		[Export ("visible")]
 		bool Visible { [Bind ("isVisible")] get; }
 	}
 
 	[MacCatalyst (13, 1)]
 	public enum NSTouchBarItemIdentifier {
-		/// <summary>To be added.</summary>
+		/// <summary>Fixed Space Small.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSTouchBarItemIdentifierFixedSpaceSmall")]
 		FixedSpaceSmall,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Fixed Space Large.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSTouchBarItemIdentifierFixedSpaceLarge")]
 		FixedSpaceLarge,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Flexible Space.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSTouchBarItemIdentifierFlexibleSpace")]
 		FlexibleSpace,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Other Items Proxy.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSTouchBarItemIdentifierOtherItemsProxy")]
 		OtherItemsProxy,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Character Picker.</summary>
 		[NoMacCatalyst]
 		[Field ("NSTouchBarItemIdentifierCharacterPicker")]
 		CharacterPicker,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Text Color Picker.</summary>
 		[NoMacCatalyst]
 		[Field ("NSTouchBarItemIdentifierTextColorPicker")]
 		TextColorPicker,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Text Style.</summary>
 		[NoMacCatalyst]
 		[Field ("NSTouchBarItemIdentifierTextStyle")]
 		TextStyle,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Text Alignment.</summary>
 		[NoMacCatalyst]
 		[Field ("NSTouchBarItemIdentifierTextAlignment")]
 		TextAlignment,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Text List.</summary>
 		[NoMacCatalyst]
 		[Field ("NSTouchBarItemIdentifierTextList")]
 		TextList,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Text Format.</summary>
 		[NoMacCatalyst]
 		[Field ("NSTouchBarItemIdentifierTextFormat")]
 		TextFormat,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Candidate List.</summary>
 		[NoMacCatalyst]
 		[Field ("NSTouchBarItemIdentifierCandidateList")]
 		CandidateList,
@@ -24859,9 +23212,7 @@ namespace AppKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface NSTouchBarProvider {
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the TouchBar value.</summary>
 		[Abstract]
 		[NullAllowed, Export ("touchBar", ArgumentSemantic.Strong)]
 		NSTouchBar TouchBar { get; }
@@ -24903,9 +23254,7 @@ namespace AppKit {
 		[Export ("indexPath")]
 		NSIndexPath IndexPath { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsLeaf value.</summary>
 		[Export ("isLeaf")]
 		bool IsLeaf { get; }
 
@@ -25102,15 +23451,12 @@ namespace AppKit {
 		[Export ("setTitleWithRepresentedFilename:")]
 		void SetTitleWithRepresentedFilename (string filename);
 
-		/// <param name="flag">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="flag">The flag.</param>
+		///         <summary>Performs the set excluded from windows menu operation.</summary>
 		[Export ("setExcludedFromWindowsMenu:")]
 		void SetExcludedFromWindowsMenu (bool flag);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ExcludedFromWindowsMenu value.</summary>
 		[Export ("isExcludedFromWindowsMenu")]
 		bool ExcludedFromWindowsMenu { get; }
 
@@ -25122,9 +23468,7 @@ namespace AppKit {
 		[NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		[NullAllowed]
 		INSWindowDelegate Delegate { get; set; }
@@ -25200,9 +23544,7 @@ namespace AppKit {
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'NSAnimationContext.RunAnimation'.")]
 		void EnableFlushWindow ();
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the FlushWindowDisabled value.</summary>
 		[Export ("isFlushWindowDisabled")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'NSAnimationContext.RunAnimation'.")]
 		bool FlushWindowDisabled { get; }
@@ -25224,9 +23566,7 @@ namespace AppKit {
 		[Export ("display")]
 		void Display ();
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Autodisplay value.</summary>
 		[Export ("autodisplay")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'NSAnimationContext.RunAnimation'.")]
 		bool Autodisplay { [Bind ("isAutodisplay")] get; set; }
@@ -25258,9 +23598,7 @@ namespace AppKit {
 		void _Close ();
 
 #if !XAMCORE_5_0
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the ReleasedWhenClosed value.</summary>
 		[Obsolete ("Call 'ReleaseWhenClosed ()' instead.")]
 		[Export ("releasedWhenClosed")]
 		bool ReleasedWhenClosed { [Bind ("isReleasedWhenClosed")] get; set; }
@@ -25343,15 +23681,11 @@ namespace AppKit {
 		[Export ("autorecalculatesContentBorderThicknessForEdge:")]
 		bool AutorecalculatesContentBorderThickness (NSRectEdge forEdgeedge);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the IsMovable value.</summary>
 		[Export ("movable")]
 		bool IsMovable { [Bind ("isMovable")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the MovableByWindowBackground value.</summary>
 		[Export ("movableByWindowBackground")]
 		bool MovableByWindowBackground { [Bind ("isMovableByWindowBackground")] get; set; }
 
@@ -25413,15 +23747,11 @@ namespace AppKit {
 		[Export ("setIsVisible:")]
 		void SetIsVisible (bool value);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsKeyWindow value.</summary>
 		[Export ("isKeyWindow")]
 		bool IsKeyWindow { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsMainWindow value.</summary>
 		[Export ("isMainWindow")]
 		bool IsMainWindow { get; }
 
@@ -25476,16 +23806,13 @@ namespace AppKit {
 		[Export ("gState")]
 		nint GState ();
 
-		/// <param name="flag">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="flag">The flag.</param>
+		///         <summary>Performs the set one shot operation.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 14)]
 		[Export ("setOneShot:")]
 		void SetOneShot (bool flag);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsOneShot value.</summary>
 		[Export ("isOneShot")]
 		[Deprecated (PlatformName.MacOSX, 10, 14)]
 		bool IsOneShot { get; }
@@ -25552,9 +23879,7 @@ namespace AppKit {
 		[Export ("alphaValue")]
 		nfloat AlphaValue { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the IsOpaque value.</summary>
 		[Export ("opaque")]
 		bool IsOpaque { [Bind ("isOpaque")] get; set; }
 
@@ -25585,9 +23910,7 @@ namespace AppKit {
 		[Export ("collectionBehavior")]
 		NSWindowCollectionBehavior CollectionBehavior { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsOnActiveSpace value.</summary>
 		[Export ("isOnActiveSpace")]
 		bool IsOnActiveSpace { get; }
 
@@ -25679,9 +24002,7 @@ namespace AppKit {
 		[NullAllowed]
 		NSWindowController WindowController { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsSheet value.</summary>
 		[Export ("isSheet")]
 		bool IsSheet { get; }
 
@@ -25793,9 +24114,7 @@ namespace AppKit {
 		void EnableSnapshotRestoration ();
 
 		// This one comes from the NSUserInterfaceRestoration category ('@interface NSWindow (NSUserInterfaceRestoration)')
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Restorable value.</summary>
 		[Export ("restorable")]
 		bool Restorable { [Bind ("isRestorable")] get; set; }
 
@@ -26092,9 +24411,7 @@ namespace AppKit {
 		[Export ("viewDidDisappear")]
 		void ViewDidDisappear ();
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the IsHidden value.</summary>
 		[Export ("hidden")]
 		bool IsHidden { [Bind ("isHidden")] get; set; }
 
@@ -26135,9 +24452,7 @@ namespace AppKit {
 		[Export ("viewWillMoveToWindow:")]
 		void ViewWillMove (NSWindow newWindow);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Emphasized value.</summary>
 		[Export ("emphasized")]
 		bool Emphasized { [Bind ("isEmphasized")] get; set; }
 	}
@@ -26215,9 +24530,7 @@ namespace AppKit {
 		[Export ("showWindow:")]
 		void ShowWindow ([NullAllowed] NSObject sender);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsWindowLoaded value.</summary>
 		[Export ("isWindowLoaded")]
 		bool IsWindowLoaded { get; }
 
@@ -26247,436 +24560,339 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSWindowDelegate {
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the window should close operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the window should close operation.</summary>
 			""")]
 		[Export ("windowShouldClose:"), DelegateName ("NSObjectPredicate"), DefaultValue (true)]
 		bool WindowShouldClose (NSObject sender);
 
-		/// <param name="sender">To be added.</param>
-		/// <param name="client">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <param name="client">The client.</param>
+		/// <summary>Performs the will return field editor operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will return field editor operation.</summary>
 			""")]
 		[Export ("windowWillReturnFieldEditor:toObject:"), DelegateName ("NSWindowClient"), DefaultValue (null)]
 		NSObject WillReturnFieldEditor (NSWindow sender, NSObject client);
 
-		/// <param name="sender">To be added.</param>
-		/// <param name="toFrameSize">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <param name="toFrameSize">The to frame size.</param>
+		/// <summary>Performs the will resize operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will resize operation.</summary>
 			""")]
 		[Export ("windowWillResize:toSize:"), DelegateName ("NSWindowResize"), DefaultValueFromArgument ("toFrameSize")]
 		CGSize WillResize (NSWindow sender, CGSize toFrameSize);
 
-		/// <param name="window">To be added.</param>
-		/// <param name="newFrame">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="window">The window.</param>
+		/// <param name="newFrame">The new frame.</param>
+		/// <summary>Performs the will use standard frame operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will use standard frame operation.</summary>
 			""")]
 		[Export ("windowWillUseStandardFrame:defaultFrame:"), DelegateName ("NSWindowFrame"), DefaultValueFromArgument ("newFrame")]
 		CGRect WillUseStandardFrame (NSWindow window, CGRect newFrame);
 
-		/// <param name="window">To be added.</param>
-		/// <param name="newFrame">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="window">The window.</param>
+		/// <param name="newFrame">The new frame.</param>
+		/// <summary>Performs the should zoom operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the should zoom operation.</summary>
 			""")]
 		[Export ("windowShouldZoom:toFrame:"), DelegateName ("NSWindowFramePredicate"), DefaultValue (true)]
 		bool ShouldZoom (NSWindow window, CGRect newFrame);
 
-		/// <param name="window">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="window">The window.</param>
+		/// <summary>Performs the will return undo manager operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will return undo manager operation.</summary>
 			""")]
 		[Export ("windowWillReturnUndoManager:"), DelegateName ("NSWindowUndoManager"), DefaultValue (null)]
 		NSUndoManager WillReturnUndoManager (NSWindow window);
 
-		/// <param name="window">To be added.</param>
-		/// <param name="sheet">To be added.</param>
-		/// <param name="usingRect">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="window">The window.</param>
+		/// <param name="sheet">The sheet.</param>
+		/// <param name="usingRect">The using rect.</param>
+		/// <summary>Performs the will position sheet operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will position sheet operation.</summary>
 			""")]
 		[Export ("window:willPositionSheet:usingRect:"), DelegateName ("NSWindowSheetRect"), DefaultValueFromArgument ("usingRect")]
 		CGRect WillPositionSheet (NSWindow window, NSWindow sheet, CGRect usingRect);
 
-		/// <param name="window">To be added.</param>
-		/// <param name="menu">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="window">The window.</param>
+		/// <param name="menu">The menu.</param>
+		/// <summary>Performs the should pop up document path menu operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the should pop up document path menu operation.</summary>
 			""")]
 		[Export ("window:shouldPopUpDocumentPathMenu:"), DelegateName ("NSWindowMenu"), DefaultValue (true)]
 		bool ShouldPopUpDocumentPathMenu (NSWindow window, NSMenu menu);
 
-		/// <param name="window">To be added.</param>
-		/// <param name="theEvent">To be added.</param>
-		/// <param name="dragImageLocation">To be added.</param>
-		/// <param name="withPasteboard">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="window">The window.</param>
+		/// <param name="theEvent">The the event.</param>
+		/// <param name="dragImageLocation">The drag image location.</param>
+		/// <param name="withPasteboard">The with pasteboard.</param>
+		/// <summary>Performs the should drag document with event operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the should drag document with event operation.</summary>
 			""")]
 		[Export ("window:shouldDragDocumentWithEvent:from:withPasteboard:"), DelegateName ("NSWindowDocumentDrag"), DefaultValue (true)]
 		bool ShouldDragDocumentWithEvent (NSWindow window, NSEvent theEvent, CGPoint dragImageLocation, NSPasteboard withPasteboard);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did resize operation.</summary>
 		[Export ("windowDidResize:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did resize operation.</summary>
 			""")]
 		void DidResize (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did expose operation.</summary>
 		[Export ("windowDidExpose:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did expose operation.</summary>
 			""")]
 		void DidExpose (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the will move operation.</summary>
 		[Export ("windowWillMove:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will move operation.</summary>
 			""")]
 		void WillMove (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did move operation.</summary>
 		[Export ("windowDidMove:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did move operation.</summary>
 			""")]
 		void DidMove (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did become key operation.</summary>
 		[Export ("windowDidBecomeKey:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did become key operation.</summary>
 			""")]
 		void DidBecomeKey (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did resign key operation.</summary>
 		[Export ("windowDidResignKey:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did resign key operation.</summary>
 			""")]
 		void DidResignKey (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did become main operation.</summary>
 		[Export ("windowDidBecomeMain:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did become main operation.</summary>
 			""")]
 		void DidBecomeMain (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did resign main operation.</summary>
 		[Export ("windowDidResignMain:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did resign main operation.</summary>
 			""")]
 		void DidResignMain (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the will close operation.</summary>
 		[Export ("windowWillClose:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will close operation.</summary>
 			""")]
 		void WillClose (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the will miniaturize operation.</summary>
 		[Export ("windowWillMiniaturize:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will miniaturize operation.</summary>
 			""")]
 		void WillMiniaturize (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did miniaturize operation.</summary>
 		[Export ("windowDidMiniaturize:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did miniaturize operation.</summary>
 			""")]
 		void DidMiniaturize (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did deminiaturize operation.</summary>
 		[Export ("windowDidDeminiaturize:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did deminiaturize operation.</summary>
 			""")]
 		void DidDeminiaturize (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did update operation.</summary>
 		[Export ("windowDidUpdate:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did update operation.</summary>
 			""")]
 		void DidUpdate (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did change screen operation.</summary>
 		[Export ("windowDidChangeScreen:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did change screen operation.</summary>
 			""")]
 		void DidChangeScreen (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did change screen profile operation.</summary>
 		[Export ("windowDidChangeScreenProfile:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did change screen profile operation.</summary>
 			""")]
 		void DidChangeScreenProfile (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the will begin sheet operation.</summary>
 		[Export ("windowWillBeginSheet:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will begin sheet operation.</summary>
 			""")]
 		void WillBeginSheet (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did end sheet operation.</summary>
 		[Export ("windowDidEndSheet:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did end sheet operation.</summary>
 			""")]
 		void DidEndSheet (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the will start live resize operation.</summary>
 		[Export ("windowWillStartLiveResize:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will start live resize operation.</summary>
 			""")]
 		void WillStartLiveResize (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did end live resize operation.</summary>
 		[Export ("windowDidEndLiveResize:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did end live resize operation.</summary>
 			""")]
 		void DidEndLiveResize (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the will enter full screen operation.</summary>
 		[Export ("windowWillEnterFullScreen:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will enter full screen operation.</summary>
 			""")]
 		void WillEnterFullScreen (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did enter full screen operation.</summary>
 		[Export ("windowDidEnterFullScreen:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did enter full screen operation.</summary>
 			""")]
 		void DidEnterFullScreen (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the will exit full screen operation.</summary>
 		[Export ("windowWillExitFullScreen:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will exit full screen operation.</summary>
 			""")]
 		void WillExitFullScreen (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did exit full screen operation.</summary>
 		[Export ("windowDidExitFullScreen:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did exit full screen operation.</summary>
 			""")]
 		void DidExitFullScreen (NSNotification notification);
 
-		/// <param name="window">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="window">The window.</param>
+		/// <summary>Performs the did fail to enter full screen operation.</summary>
 		[Export ("windowDidFailToEnterFullScreen:"), EventArgs ("NSWindow", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did fail to enter full screen operation.</summary>
 			""")]
 		void DidFailToEnterFullScreen (NSWindow window);
 
-		/// <param name="window">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="window">The window.</param>
+		/// <summary>Performs the did fail to exit full screen operation.</summary>
 		[Export ("windowDidFailToExitFullScreen:"), EventArgs ("NSWindow", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did fail to exit full screen operation.</summary>
 			""")]
 		void DidFailToExitFullScreen (NSWindow window);
 
-		/// <param name="window">To be added.</param>
-		/// <param name="proposedSize">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="window">The window.</param>
+		/// <param name="proposedSize">The proposed size.</param>
+		/// <summary>Performs the will use full screen content size operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will use full screen content size operation.</summary>
 			""")]
 		[Export ("window:willUseFullScreenContentSize:"), DelegateName ("NSWindowSize"), DefaultValueFromArgument ("proposedSize")]
 		CGSize WillUseFullScreenContentSize (NSWindow window, CGSize proposedSize);
 
-		/// <param name="window">To be added.</param>
-		/// <param name="proposedOptions">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="window">The window.</param>
+		/// <param name="proposedOptions">The proposed options.</param>
+		/// <summary>Performs the will use full screen presentation options operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will use full screen presentation options operation.</summary>
 			""")]
 		[Export ("window:willUseFullScreenPresentationOptions:"), DelegateName ("NSWindowApplicationPresentationOptions"), DefaultValueFromArgument ("proposedOptions")]
 		NSApplicationPresentationOptions WillUseFullScreenPresentationOptions (NSWindow window, NSApplicationPresentationOptions proposedOptions);
 
-		/// <param name="window">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="window">The window.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the specified operation.</summary>
 			""")]
 		[Export ("customWindowsToEnterFullScreenForWindow:"), DelegateName ("NSWindowWindows"), DefaultValue (null)]
 		NSWindow [] CustomWindowsToEnterFullScreen (NSWindow window);
 
-		/// <param name="window">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="window">The window.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the specified operation.</summary>
 			""")]
 		[Export ("customWindowsToExitFullScreenForWindow:"), DelegateName ("NSWindowWindows"), DefaultValue (null)]
 		NSWindow [] CustomWindowsToExitFullScreen (NSWindow window);
 
-		/// <param name="window">To be added.</param>
-		/// <param name="duration">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="window">The window.</param>
+		/// <param name="duration">The duration.</param>
+		/// <summary>Performs the start custom animation to enter full screen operation.</summary>
 		[Export ("window:startCustomAnimationToEnterFullScreenWithDuration:"), EventArgs ("NSWindowDuration", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the start custom animation to enter full screen operation.</summary>
 			""")]
 		void StartCustomAnimationToEnterFullScreen (NSWindow window, double duration);
 
-		/// <param name="window">To be added.</param>
-		/// <param name="duration">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="window">The window.</param>
+		/// <param name="duration">The duration.</param>
+		/// <summary>Performs the start custom animation to exit full screen operation.</summary>
 		[Export ("window:startCustomAnimationToExitFullScreenWithDuration:"), EventArgs ("NSWindowDuration", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the start custom animation to exit full screen operation.</summary>
 			""")]
 		void StartCustomAnimationToExitFullScreen (NSWindow window, double duration);
 
-		/// <param name="window">To be added.</param>
-		/// <param name="coder">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="window">The window.</param>
+		/// <param name="coder">The coder.</param>
+		/// <summary>Performs the will encode restorable state operation.</summary>
 		[Export ("window:willEncodeRestorableState:"), EventArgs ("NSWindowCoder", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will encode restorable state operation.</summary>
 			""")]
 		void WillEncodeRestorableState (NSWindow window, NSCoder coder);
 
-		/// <param name="window">To be added.</param>
-		/// <param name="coder">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="window">The window.</param>
+		/// <param name="coder">The coder.</param>
+		/// <summary>Performs the did decode restorable state operation.</summary>
 		[Export ("window:didDecodeRestorableState:"), EventArgs ("NSWindowCoder", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did decode restorable state operation.</summary>
 			""")]
 		void DidDecodeRestorableState (NSWindow window, NSCoder coder);
 
@@ -26686,62 +24902,49 @@ namespace AppKit {
 		[IgnoredInDelegate]
 		INSPreviewRepresentableActivityItem [] GetPreviewRepresentableActivityItems (NSWindow window);
 
-		/// <param name="window">To be added.</param>
-		/// <param name="maxPreferredSize">To be added.</param>
-		/// <param name="maxAllowedSize">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="window">The window.</param>
+		/// <param name="maxPreferredSize">The max preferred size.</param>
+		/// <param name="maxAllowedSize">The max allowed size.</param>
+		/// <summary>Performs the will resize for version browser operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will resize for version browser operation.</summary>
 			""")]
 		[Export ("window:willResizeForVersionBrowserWithMaxPreferredSize:maxAllowedSize:"), DelegateName ("NSWindowSizeSize"), DefaultValueFromArgument ("maxPreferredSize")]
 		CGSize WillResizeForVersionBrowser (NSWindow window, CGSize maxPreferredSize, CGSize maxAllowedSize);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the will enter version browser operation.</summary>
 		[Export ("windowWillEnterVersionBrowser:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will enter version browser operation.</summary>
 			""")]
 		void WillEnterVersionBrowser (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did enter version browser operation.</summary>
 		[Export ("windowDidEnterVersionBrowser:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did enter version browser operation.</summary>
 			""")]
 		void DidEnterVersionBrowser (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the will exit version browser operation.</summary>
 		[Export ("windowWillExitVersionBrowser:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will exit version browser operation.</summary>
 			""")]
 		void WillExitVersionBrowser (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did exit version browser operation.</summary>
 		[Export ("windowDidExitVersionBrowser:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did exit version browser operation.</summary>
 			""")]
 		void DidExitVersionBrowser (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the did change backing properties operation.</summary>
 		[Export ("windowDidChangeBackingProperties:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did change backing properties operation.</summary>
 			""")]
 		void DidChangeBackingProperties (NSNotification notification);
 
@@ -26753,51 +24956,37 @@ namespace AppKit {
 
 	[NoMacCatalyst]
 	interface NSWorkspaceRenamedEventArgs {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the VolumeLocalizedName value.</summary>
 		[Export ("NSWorkspaceVolumeLocalizedNameKey")]
 		string VolumeLocalizedName { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the VolumeUrl value.</summary>
 		[Export ("NSWorkspaceVolumeURLKey")]
 		NSUrl VolumeUrl { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the OldVolumeLocalizedName value.</summary>
 		[Export ("NSWorkspaceVolumeOldLocalizedNameKey")]
 		string OldVolumeLocalizedName { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the OldVolumeUrl value.</summary>
 		[Export ("NSWorkspaceVolumeOldURLKey")]
 		NSUrl OldVolumeUrl { get; }
 	}
 
 	[NoMacCatalyst]
 	interface NSWorkspaceMountEventArgs {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the VolumeLocalizedName value.</summary>
 		[Export ("NSWorkspaceVolumeLocalizedNameKey")]
 		string VolumeLocalizedName { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the VolumeUrl value.</summary>
 		[Export ("NSWorkspaceVolumeURLKey")]
 		NSUrl VolumeUrl { get; }
 	}
 
 	[NoMacCatalyst]
 	interface NSWorkspaceApplicationEventArgs {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Application value.</summary>
 		[Export ("NSWorkspaceApplicationKey")]
 		NSRunningApplication Application { get; }
 	}
@@ -27104,27 +25293,19 @@ namespace AppKit {
 		[Notification ("SharedWorkspace.NotificationCenter")]
 		NSString ActiveSpaceDidChangeNotification { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the LaunchConfigurationAppleEvent key constant.</summary>
 		[Field ("NSWorkspaceLaunchConfigurationAppleEvent")]
 		NSString LaunchConfigurationAppleEvent { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the LaunchConfigurationArguments key constant.</summary>
 		[Field ("NSWorkspaceLaunchConfigurationArguments")]
 		NSString LaunchConfigurationArguments { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the LaunchConfigurationEnvironment key constant.</summary>
 		[Field ("NSWorkspaceLaunchConfigurationEnvironment")]
 		NSString LaunchConfigurationEnvironment { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the LaunchConfigurationArchitecture key constant.</summary>
 		[Field ("NSWorkspaceLaunchConfigurationArchitecture")]
 		NSString LaunchConfigurationArchitecture { get; }
 
@@ -27133,39 +25314,27 @@ namespace AppKit {
 		//
 		// Those not listed are not here, because they are documented as returing an error
 		//
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the OperationRecycle key constant.</summary>
 		[Field ("NSWorkspaceRecycleOperation")]
 		NSString OperationRecycle { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the OperationDuplicate key constant.</summary>
 		[Field ("NSWorkspaceDuplicateOperation")]
 		NSString OperationDuplicate { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the OperationMove key constant.</summary>
 		[Field ("NSWorkspaceMoveOperation")]
 		NSString OperationMove { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the OperationCopy key constant.</summary>
 		[Field ("NSWorkspaceCopyOperation")]
 		NSString OperationCopy { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the OperationLink key constant.</summary>
 		[Field ("NSWorkspaceLinkOperation")]
 		NSString OperationLink { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the OperationDestroy key constant.</summary>
 		[Field ("NSWorkspaceDestroyOperation")]
 		NSString OperationDestroy { get; }
 
@@ -27212,27 +25381,19 @@ namespace AppKit {
 	[BaseType (typeof (NSObject))]
 	[ThreadSafe] // NSRunningApplication is documented to be thread-safe.
 	partial interface NSRunningApplication {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Terminated value.</summary>
 		[Export ("terminated")]
 		bool Terminated { [Bind ("isTerminated")] get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the FinishedLaunching value.</summary>
 		[Export ("finishedLaunching")]
 		bool FinishedLaunching { [Bind ("isFinishedLaunching")] get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Hidden value.</summary>
 		[Export ("hidden")]
 		bool Hidden { [Bind ("isHidden")] get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Active value.</summary>
 		[Export ("active")]
 		bool Active { [Bind ("isActive")] get; }
 
@@ -27483,9 +25644,7 @@ namespace AppKit {
 		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		INSRuleEditorDelegate Delegate { get; set; }
 
@@ -27501,9 +25660,7 @@ namespace AppKit {
 		[Export ("rowHeight")]
 		nfloat RowHeight { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Editable value.</summary>
 		[Export ("editable")]
 		bool Editable { [Bind ("isEditable")] get; set; }
 
@@ -27533,100 +25690,80 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSRuleEditorDelegate {
-		/// <param name="editor">To be added.</param>
-		/// <param name="criterion">To be added.</param>
-		/// <param name="rowType">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="editor">The editor.</param>
+		/// <param name="criterion">The criterion.</param>
+		/// <param name="rowType">The row type.</param>
+		/// <summary>Performs the number of children operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the number of children operation.</summary>
 			""")]
 		[Abstract]
 		[Export ("ruleEditor:numberOfChildrenForCriterion:withRowType:"), DelegateName ("NSRuleEditorNumberOfChildren"), DefaultValue (0)]
 		nint NumberOfChildren (NSRuleEditor editor, NSObject criterion, NSRuleEditorRowType rowType);
 
-		/// <param name="editor">To be added.</param>
-		/// <param name="index">To be added.</param>
-		/// <param name="criterion">To be added.</param>
-		/// <param name="rowType">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="editor">The editor.</param>
+		/// <param name="index">The index.</param>
+		/// <param name="criterion">The criterion.</param>
+		/// <param name="rowType">The row type.</param>
+		/// <summary>Performs the child for criterion operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the child for criterion operation.</summary>
 			""")]
 		[Abstract]
 		[Export ("ruleEditor:child:forCriterion:withRowType:"), DelegateName ("NSRulerEditorChildCriterion"), DefaultValue (null)]
 		NSObject ChildForCriterion (NSRuleEditor editor, nint index, NSObject criterion, NSRuleEditorRowType rowType);
 
-		/// <param name="editor">To be added.</param>
-		/// <param name="criterion">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="editor">The editor.</param>
+		/// <param name="criterion">The criterion.</param>
+		/// <param name="row">The row.</param>
+		/// <summary>Performs the display value operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the display value operation.</summary>
 			""")]
 		[Abstract]
 		[Export ("ruleEditor:displayValueForCriterion:inRow:"), DelegateName ("NSRulerEditorDisplayValue"), DefaultValue (null)]
 		NSObject DisplayValue (NSRuleEditor editor, NSObject criterion, nint row);
 
-		/// <param name="editor">To be added.</param>
-		/// <param name="criterion">To be added.</param>
-		/// <param name="value">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="editor">The editor.</param>
+		/// <param name="criterion">The criterion.</param>
+		/// <param name="value">The value.</param>
+		/// <param name="row">The row.</param>
+		/// <summary>Performs the predicate parts operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the predicate parts operation.</summary>
 			""")]
 		[Export ("ruleEditor:predicatePartsForCriterion:withDisplayValue:inRow:"), DelegateName ("NSRulerEditorPredicateParts"), DefaultValue (null)]
 		NSDictionary PredicateParts (NSRuleEditor editor, NSObject criterion, NSObject value, nint row);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the rows did change operation.</summary>
 		[Export ("ruleEditorRowsDidChange:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the rows did change operation.</summary>
 			""")]
 		void RowsDidChange (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the editing ended operation.</summary>
 		[Export ("controlTextDidEndEditing:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the editing ended operation.</summary>
 			""")]
 		void EditingEnded (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the changed operation.</summary>
 		[Export ("controlTextDidChange:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the changed operation.</summary>
 			""")]
 		void Changed (NSNotification notification);
 
-		/// <param name="notification">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="notification">The notification.</param>
+		/// <summary>Performs the editing began operation.</summary>
 		[Export ("controlTextDidBeginEditing:"), EventArgs ("NSNotification", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the editing began operation.</summary>
 			""")]
 		void EditingBegan (NSNotification notification);
 
@@ -27655,9 +25792,7 @@ namespace AppKit {
 		[NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		[NullAllowed]
 		INSSharingServiceDelegate Delegate { get; set; }
@@ -27715,94 +25850,94 @@ namespace AppKit {
 	[NoMacCatalyst]
 	enum NSSharingServiceName {
 
-		/// <summary>To be added.</summary>
+		/// <summary>Post On Facebook.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use the proprietary SDK instead.")]
 		[Field ("NSSharingServiceNamePostOnFacebook")]
 		PostOnFacebook,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Post On Twitter.</summary>
 		[Field ("NSSharingServiceNamePostOnTwitter")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use the proprietary SDK instead.")]
 		PostOnTwitter,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Post On Sina Weibo.</summary>
 		[Field ("NSSharingServiceNamePostOnSinaWeibo")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use the proprietary SDK instead.")]
 		PostOnSinaWeibo,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Compose Email.</summary>
 		[Field ("NSSharingServiceNameComposeEmail")]
 		ComposeEmail,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Compose Message.</summary>
 		[Field ("NSSharingServiceNameComposeMessage")]
 		ComposeMessage,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Send Via Air Drop.</summary>
 		[Field ("NSSharingServiceNameSendViaAirDrop")]
 		SendViaAirDrop,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Add To Safari Reading List.</summary>
 		[Field ("NSSharingServiceNameAddToSafariReadingList")]
 		AddToSafariReadingList,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Add To I Photo.</summary>
 		[Field ("NSSharingServiceNameAddToIPhoto")]
 		AddToIPhoto,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Add To Aperture.</summary>
 		[Field ("NSSharingServiceNameAddToAperture")]
 		AddToAperture,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Use As Twitter Profile Image.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use the proprietary SDK instead.")]
 		[Field ("NSSharingServiceNameUseAsTwitterProfileImage")]
 		UseAsTwitterProfileImage,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Use As Desktop Picture.</summary>
 		[Field ("NSSharingServiceNameUseAsDesktopPicture")]
 		UseAsDesktopPicture,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Post Image On Flickr.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use the proprietary SDK instead.")]
 		[Field ("NSSharingServiceNamePostImageOnFlickr")]
 		PostImageOnFlickr,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Post Video On Vimeo.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use the proprietary SDK instead.")]
 		[Field ("NSSharingServiceNamePostVideoOnVimeo")]
 		PostVideoOnVimeo,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Post Video On Youku.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use the proprietary SDK instead.")]
 		[Field ("NSSharingServiceNamePostVideoOnYouku")]
 		PostVideoOnYouku,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Post Video On Tudou.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use the proprietary SDK instead.")]
 		[Field ("NSSharingServiceNamePostVideoOnTudou")]
 		PostVideoOnTudou,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Cloud Sharing.</summary>
 		[Field ("NSSharingServiceNameCloudSharing")]
 		CloudSharing,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Post On Tencent Weibo.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use the proprietary SDK instead.")]
 		[Field ("NSSharingServiceNamePostOnTencentWeibo")]
 		PostOnTencentWeibo,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Post On Linked In.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use the proprietary SDK instead.")]
 		[Field ("NSSharingServiceNamePostOnLinkedIn")]
 		PostOnLinkedIn,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Use As Facebook Profile Image.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use the proprietary SDK instead.")]
 		[Field ("NSSharingServiceNameUseAsFacebookProfileImage")]
 		UseAsFacebookProfileImage,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Use As Linked In Profile Image.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use the proprietary SDK instead.")]
 		[Field ("NSSharingServiceNameUseAsLinkedInProfileImage")]
 		UseAsLinkedInProfileImage,
@@ -27813,88 +25948,70 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSSharingServiceDelegate {
-		/// <param name="sharingService">To be added.</param>
-		/// <param name="items">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sharingService">The sharing service.</param>
+		/// <param name="items">The items.</param>
+		/// <summary>Performs the will share items operation.</summary>
 		[Export ("sharingService:willShareItems:"), EventArgs ("NSSharingServiceItems", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the will share items operation.</summary>
 			""")]
 		void WillShareItems (NSSharingService sharingService, NSObject [] items);
 
-		/// <param name="sharingService">To be added.</param>
-		/// <param name="items">To be added.</param>
-		/// <param name="error">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sharingService">The sharing service.</param>
+		/// <param name="items">The items.</param>
+		/// <param name="error">The error.</param>
+		/// <summary>Performs the did fail to share items operation.</summary>
 		[Export ("sharingService:didFailToShareItems:error:"), EventArgs ("NSSharingServiceDidFailToShareItems", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did fail to share items operation.</summary>
 			""")]
 		void DidFailToShareItems (NSSharingService sharingService, NSObject [] items, NSError error);
 
-		/// <param name="sharingService">To be added.</param>
-		/// <param name="items">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sharingService">The sharing service.</param>
+		/// <param name="items">The items.</param>
+		/// <summary>Performs the did share items operation.</summary>
 		[Export ("sharingService:didShareItems:"), EventArgs ("NSSharingServiceItems", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did share items operation.</summary>
 			""")]
 		void DidShareItems (NSSharingService sharingService, NSObject [] items);
 
-		/// <param name="sharingService">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sharingService">The sharing service.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the source frame on screen for share item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the source frame on screen for share item operation.</summary>
 			""")]
 		[Export ("sharingService:sourceFrameOnScreenForShareItem:"), DelegateName ("NSSharingServiceSourceFrameOnScreenForShareItem"), DefaultValue (null)]
 		CGRect SourceFrameOnScreenForShareItem (NSSharingService sharingService, INSPasteboardWriting item);
 
-		/// <param name="sharingService">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <param name="contentRect">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sharingService">The sharing service.</param>
+		/// <param name="item">The item.</param>
+		/// <param name="contentRect">The content rect.</param>
+		/// <summary>Performs the transition image for share item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the transition image for share item operation.</summary>
 			""")]
 		[Export ("sharingService:transitionImageForShareItem:contentRect:"), DelegateName ("NSSharingServiceTransitionImageForShareItem"), DefaultValue (null)]
 		NSImage TransitionImageForShareItem (NSSharingService sharingService, INSPasteboardWriting item, CGRect contentRect);
 
-		/// <param name="sharingService">To be added.</param>
-		/// <param name="items">To be added.</param>
-		/// <param name="sharingContentScope">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sharingService">The sharing service.</param>
+		/// <param name="items">The items.</param>
+		/// <param name="sharingContentScope">The sharing content scope.</param>
+		/// <summary>Performs the source window for share items operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the source window for share items operation.</summary>
 			""")]
 		[Export ("sharingService:sourceWindowForShareItems:sharingContentScope:"), DelegateName ("NSSharingServiceSourceWindowForShareItems"), DefaultValue (null)]
 		NSWindow SourceWindowForShareItems (NSSharingService sharingService, NSObject [] items, NSSharingContentScope sharingContentScope);
 
-		/// <param name="sharingService">To be added.</param>
-		/// <param name="positioningRect">To be added.</param>
-		/// <param name="preferredEdge">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sharingService">The sharing service.</param>
+		/// <param name="positioningRect">The positioning rect.</param>
+		/// <param name="preferredEdge">The preferred edge.</param>
+		/// <summary>Performs the create anchoring view operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the create anchoring view operation.</summary>
 			""")]
 		[Export ("anchoringViewForSharingService:showRelativeToRect:preferredEdge:"), DelegateName ("NSSharingServiceAnchoringViewForSharingService"), DefaultValue (null)]
 		[return: NullAllowed]
@@ -27909,33 +26026,29 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[BaseType (typeof (NSSharingServiceDelegate))]
 	interface NSCloudSharingServiceDelegate {
-		/// <param name="sharingService">To be added.</param>
-		/// <param name="items">To be added.</param>
-		/// <param name="error">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sharingService">The sharing service.</param>
+		/// <param name="items">The items.</param>
+		/// <param name="error">The error.</param>
+		/// <summary>Performs the completed operation.</summary>
 		[Export ("sharingService:didCompleteForItems:error:")]
 		void Completed (NSSharingService sharingService, NSObject [] items, [NullAllowed] NSError error);
 
-		/// <param name="cloudKitSharingService">To be added.</param>
-		/// <param name="provider">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="cloudKitSharingService">The cloud kit sharing service.</param>
+		/// <param name="provider">The provider.</param>
+		/// <summary>Performs the options operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("optionsForSharingService:shareProvider:")]
 		NSCloudKitSharingServiceOptions Options (NSSharingService cloudKitSharingService, NSItemProvider provider);
 
-		/// <param name="sharingService">To be added.</param>
-		/// <param name="share">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sharingService">The sharing service.</param>
+		/// <param name="share">The share.</param>
+		/// <summary>Performs the saved operation.</summary>
 		[Export ("sharingService:didSaveShare:")]
 		void Saved (NSSharingService sharingService, CKShare share);
 
-		/// <param name="sharingService">To be added.</param>
-		/// <param name="share">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sharingService">The sharing service.</param>
+		/// <param name="share">The share.</param>
+		/// <summary>Performs the stopped operation.</summary>
 		[Export ("sharingService:didStopSharing:")]
 		void Stopped (NSSharingService sharingService, CKShare share);
 	}
@@ -27949,9 +26062,7 @@ namespace AppKit {
 		[NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Delegate value.</summary>
 		[Wrap ("WeakDelegate")]
 		[NullAllowed]
 		INSSharingServicePickerDelegate Delegate { get; set; }
@@ -27979,40 +26090,32 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSSharingServicePickerDelegate {
-		/// <param name="sharingServicePicker">To be added.</param>
-		/// <param name="items">To be added.</param>
-		/// <param name="proposedServices">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sharingServicePicker">The sharing service picker.</param>
+		/// <param name="items">The items.</param>
+		/// <param name="proposedServices">The proposed services.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the specified operation.</summary>
 			""")]
 		[Export ("sharingServicePicker:sharingServicesForItems:proposedSharingServices:"), DelegateName ("NSSharingServicePickerSharingServicesForItems"), DefaultValueFromArgument ("proposedServices")]
 		NSSharingService [] SharingServicesForItems (NSSharingServicePicker sharingServicePicker, NSObject [] items, NSSharingService [] proposedServices);
 
-		/// <param name="sharingServicePicker">To be added.</param>
-		/// <param name="sharingService">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sharingServicePicker">The sharing service picker.</param>
+		/// <param name="sharingService">The sharing service.</param>
+		/// <summary>Performs the delegate for sharing service operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the delegate for sharing service operation.</summary>
 			""")]
 		[Export ("sharingServicePicker:delegateForSharingService:"), DelegateName ("NSSharingServicePickerDelegateForSharingService"), DefaultValue (null)]
 		INSSharingServiceDelegate DelegateForSharingService (NSSharingServicePicker sharingServicePicker, NSSharingService sharingService);
 
-		/// <param name="sharingServicePicker">To be added.</param>
-		/// <param name="service">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sharingServicePicker">The sharing service picker.</param>
+		/// <param name="service">The service.</param>
+		/// <summary>Performs the did choose sharing service operation.</summary>
 		[Export ("sharingServicePicker:didChooseSharingService:"), EventArgs ("NSSharingServicePickerDidChooseSharingService", XmlDocs = """
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<summary>Performs the did choose sharing service operation.</summary>
 			""")]
 		void DidChooseSharingService (NSSharingServicePicker sharingServicePicker, NSSharingService service);
 
@@ -28220,33 +26323,30 @@ namespace AppKit {
 	}
 
 	partial interface NSCollectionViewDelegate {
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="index">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="index">The index.</param>
+		/// <summary>Performs the pasteboard writer for item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("collectionView:pasteboardWriterForItemAtIndex:")]
 		INSPasteboardWriting PasteboardWriterForItem (NSCollectionView collectionView, nuint index);
 
 		[Export ("collectionView:updateDraggingItemsForDrag:")]
 		void UpdateDraggingItemsForDrag (NSCollectionView collectionView, INSDraggingInfo draggingInfo);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="draggingSession">To be added.</param>
-		/// <param name="screenPoint">To be added.</param>
-		/// <param name="indexes">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="draggingSession">The dragging session.</param>
+		/// <param name="screenPoint">The screen point.</param>
+		/// <param name="indexes">The indexes.</param>
+		/// <summary>Performs the dragging session will begin operation.</summary>
 		[Export ("collectionView:draggingSession:willBeginAtPoint:forItemsAtIndexes:")]
 		void DraggingSessionWillBegin (NSCollectionView collectionView, NSDraggingSession draggingSession,
 			CGPoint screenPoint, NSIndexSet indexes);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="draggingSession">To be added.</param>
-		/// <param name="screenPoint">To be added.</param>
-		/// <param name="dragOperation">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="draggingSession">The dragging session.</param>
+		/// <param name="screenPoint">The screen point.</param>
+		/// <param name="dragOperation">The drag operation.</param>
+		/// <summary>Performs the dragging session ended operation.</summary>
 		[Export ("collectionView:draggingSession:endedAtPoint:dragOperation:")]
 		void DraggingSessionEnded (NSCollectionView collectionView, NSDraggingSession draggingSession,
 			CGPoint screenPoint, NSDragOperation dragOperation);
@@ -28340,31 +26440,28 @@ namespace AppKit {
 
 	partial interface NSOutlineViewDataSource {
 		// - (id <NSPasteboardWriting>)outlineView:(NSOutlineView *)outlineView pasteboardWriterForItem:(id)item NS_AVAILABLE_MAC(10_7);
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the pasteboard writer for item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("outlineView:pasteboardWriterForItem:")]
 		INSPasteboardWriting PasteboardWriterForItem (NSOutlineView outlineView, NSObject item);
 
 		// - (void)outlineView:(NSOutlineView *)outlineView draggingSession:(NSDraggingSession *)session willBeginAtPoint:(NSPoint)screenPoint forItems:(NSArray *)draggedItems NS_AVAILABLE_MAC(10_7);
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="session">To be added.</param>
-		/// <param name="screenPoint">To be added.</param>
-		/// <param name="draggedItems">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="session">The session.</param>
+		/// <param name="screenPoint">The screen point.</param>
+		/// <param name="draggedItems">The dragged items.</param>
+		/// <summary>Performs the dragging session will begin operation.</summary>
 		[Export ("outlineView:draggingSession:willBeginAtPoint:forItems:")]
 		void DraggingSessionWillBegin (NSOutlineView outlineView, NSDraggingSession session, CGPoint screenPoint, NSArray draggedItems);
 
 		// - (void)outlineView:(NSOutlineView *)outlineView draggingSession:(NSDraggingSession *)session endedAtPoint:(NSPoint)screenPoint operation:(NSDragOperation)operation NS_AVAILABLE_MAC(10_7);
-		/// <param name="outlineView">To be added.</param>
-		/// <param name="session">To be added.</param>
-		/// <param name="screenPoint">To be added.</param>
-		/// <param name="operation">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outlineView">The outline view.</param>
+		/// <param name="session">The session.</param>
+		/// <param name="screenPoint">The screen point.</param>
+		/// <param name="operation">The operation.</param>
+		/// <summary>Performs the dragging session ended operation.</summary>
 		[Export ("outlineView:draggingSession:endedAtPoint:operation:")]
 		void DraggingSessionEnded (NSOutlineView outlineView, NSDraggingSession session, CGPoint screenPoint, NSDragOperation operation);
 
@@ -28374,23 +26471,17 @@ namespace AppKit {
 	}
 
 	interface NSWindowExposeEventArgs {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ExposedRect value.</summary>
 		[Export ("NSExposedRect", ArgumentSemantic.Copy)]
 		CGRect ExposedRect { get; }
 	}
 
 	interface NSWindowBackingPropertiesEventArgs {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the OldScaleFactor value.</summary>
 		[Export ("NSBackingPropertyOldScaleFactorKey")]
 		nint OldScaleFactor { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the OldColorSpace value.</summary>
 		[Export ("NSBackingPropertyOldColorSpaceKey")]
 		NSColorSpace OldColorSpace { get; }
 	}
@@ -28509,9 +26600,8 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Category, BaseType (typeof (NSResponder))]
 	partial interface NSStandardKeyBindingMethods {
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the quick look preview items operation.</summary>
 		[Export ("quickLookPreviewItems:")]
 		void QuickLookPreviewItems (NSObject sender);
 	}
@@ -28519,19 +26609,17 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Category, BaseType (typeof (NSView))]
 	partial interface NSRulerMarkerClientViewDelegation {
-		/// <param name="ruler">To be added.</param>
-		/// <param name="locationForPoint">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="ruler">The ruler.</param>
+		/// <param name="locationForPoint">The location for point.</param>
+		/// <summary>Performs the ruler view location operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("rulerView:locationForPoint:")]
 		nfloat RulerViewLocation (NSRulerView ruler, CGPoint locationForPoint);
 
-		/// <param name="ruler">To be added.</param>
-		/// <param name="pointForLocation">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="ruler">The ruler.</param>
+		/// <param name="pointForLocation">The point for location.</param>
+		/// <summary>Performs the ruler view point operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("rulerView:pointForLocation:")]
 		CGPoint RulerViewPoint (NSRulerView ruler, nfloat pointForLocation);
 	}
@@ -28539,9 +26627,8 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Category, BaseType (typeof (NSResponder))]
 	partial interface NSTextFinderSupport {
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the perform text finder action operation.</summary>
 		[Export ("performTextFinderAction:")]
 		void PerformTextFinderAction ([NullAllowed] NSObject sender);
 	}
@@ -28570,69 +26657,47 @@ namespace AppKit {
 		void ShowCorrectionIndicatorOfType (NSCorrectionIndicatorType type, string primaryString, string [] alternativeStrings,
 			CGRect forStringInRect, NSRulerView view, NSSpellCheckerShowCorrectionIndicatorOfTypeHandler completionHandler);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsAutomaticTextReplacementEnabled value.</summary>
 		[Static, Export ("isAutomaticTextReplacementEnabled")]
 		bool IsAutomaticTextReplacementEnabled { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsAutomaticSpellingCorrectionEnabled value.</summary>
 		[Static, Export ("isAutomaticSpellingCorrectionEnabled")]
 		bool IsAutomaticSpellingCorrectionEnabled { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TextCheckingOrthographyKey key constant.</summary>
 		[Field ("NSTextCheckingOrthographyKey")]
 		NSString TextCheckingOrthographyKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TextCheckingQuotesKey key constant.</summary>
 		[Field ("NSTextCheckingQuotesKey")]
 		NSString TextCheckingQuotesKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TextCheckingReplacementsKey key constant.</summary>
 		[Field ("NSTextCheckingReplacementsKey")]
 		NSString TextCheckingReplacementsKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TextCheckingReferenceDateKey key constant.</summary>
 		[Field ("NSTextCheckingReferenceDateKey")]
 		NSString TextCheckingReferenceDateKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TextCheckingReferenceTimeZoneKey key constant.</summary>
 		[Field ("NSTextCheckingReferenceTimeZoneKey")]
 		NSString TextCheckingReferenceTimeZoneKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TextCheckingDocumentURLKey key constant.</summary>
 		[Field ("NSTextCheckingDocumentURLKey")]
 		NSString TextCheckingDocumentURLKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TextCheckingDocumentTitleKey key constant.</summary>
 		[Field ("NSTextCheckingDocumentTitleKey")]
 		NSString TextCheckingDocumentTitleKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TextCheckingDocumentAuthorKey key constant.</summary>
 		[Field ("NSTextCheckingDocumentAuthorKey")]
 		NSString TextCheckingDocumentAuthorKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TextCheckingRegularExpressionsKey key constant.</summary>
 		[Field ("NSTextCheckingRegularExpressionsKey")]
 		NSString TextCheckingRegularExpressionsKey { get; }
 
@@ -28642,9 +26707,7 @@ namespace AppKit {
 		[Notification, Field ("NSSpellCheckerDidChangeAutomaticTextReplacementNotification")]
 		NSString DidChangeAutomaticTextReplacementNotification { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TextCheckingSelectedRangeKey key constant.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSTextCheckingSelectedRangeKey")]
 		NSString TextCheckingSelectedRangeKey { get; }
@@ -28816,9 +26879,7 @@ namespace AppKit {
 	partial interface NSDocument : NSEditorRegistration, NSFilePresenter, NSMenuItemValidation
 	, NSUserInterfaceValidations // ValidateUserInterfaceItem was bound with NSObject and fix would break API compat  
 	{
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the IsDraft value.</summary>
 		[Export ("draft")]
 		bool IsDraft { [Bind ("isDraft")] get; set; }
 
@@ -28864,9 +26925,7 @@ namespace AppKit {
 		[Export ("unlockWithCompletionHandler:")]
 		void UnlockWithCompletionHandler (NSDocumentUnlockCompletionHandler completionHandler);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IsLocked value.</summary>
 		[Export ("isLocked")]
 		bool IsLocked { get; }
 
@@ -28925,93 +26984,63 @@ namespace AppKit {
 	[Category, BaseType (typeof (NSSegmentedCell))]
 	partial interface NSSegmentBackgroundStyle_NSSegmentedCell {
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SharingServiceNamePostOnFacebook key constant.</summary>
 		[Field ("NSSharingServiceNamePostOnFacebook")]
 		NSString SharingServiceNamePostOnFacebook { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SharingServiceNamePostOnTwitter key constant.</summary>
 		[Field ("NSSharingServiceNamePostOnTwitter")]
 		NSString SharingServiceNamePostOnTwitter { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SharingServiceNamePostOnSinaWeibo key constant.</summary>
 		[Field ("NSSharingServiceNamePostOnSinaWeibo")]
 		NSString SharingServiceNamePostOnSinaWeibo { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SharingServiceNameComposeEmail key constant.</summary>
 		[Field ("NSSharingServiceNameComposeEmail")]
 		NSString SharingServiceNameComposeEmail { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SharingServiceNameComposeMessage key constant.</summary>
 		[Field ("NSSharingServiceNameComposeMessage")]
 		NSString SharingServiceNameComposeMessage { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SharingServiceNameSendViaAirDrop key constant.</summary>
 		[Field ("NSSharingServiceNameSendViaAirDrop")]
 		NSString SharingServiceNameSendViaAirDrop { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SharingServiceNameAddToSafariReadingList key constant.</summary>
 		[Field ("NSSharingServiceNameAddToSafariReadingList")]
 		NSString SharingServiceNameAddToSafariReadingList { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SharingServiceNameAddToIPhoto key constant.</summary>
 		[Field ("NSSharingServiceNameAddToIPhoto")]
 		NSString SharingServiceNameAddToIPhoto { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SharingServiceNameAddToAperture key constant.</summary>
 		[Field ("NSSharingServiceNameAddToAperture")]
 		NSString SharingServiceNameAddToAperture { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SharingServiceNameUseAsTwitterProfileImage key constant.</summary>
 		[Field ("NSSharingServiceNameUseAsTwitterProfileImage")]
 		NSString SharingServiceNameUseAsTwitterProfileImage { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SharingServiceNameUseAsDesktopPicture key constant.</summary>
 		[Field ("NSSharingServiceNameUseAsDesktopPicture")]
 		NSString SharingServiceNameUseAsDesktopPicture { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SharingServiceNamePostImageOnFlickr key constant.</summary>
 		[Field ("NSSharingServiceNamePostImageOnFlickr")]
 		NSString SharingServiceNamePostImageOnFlickr { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SharingServiceNamePostVideoOnVimeo key constant.</summary>
 		[Field ("NSSharingServiceNamePostVideoOnVimeo")]
 		NSString SharingServiceNamePostVideoOnVimeo { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SharingServiceNamePostVideoOnYouku key constant.</summary>
 		[Field ("NSSharingServiceNamePostVideoOnYouku")]
 		NSString SharingServiceNamePostVideoOnYouku { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SharingServiceNamePostVideoOnTudou key constant.</summary>
 		[Field ("NSSharingServiceNamePostVideoOnTudou")]
 		NSString SharingServiceNamePostVideoOnTudou { get; }
 	}
@@ -29020,9 +27049,8 @@ namespace AppKit {
 	[Category, BaseType (typeof (NSTextView))]
 	partial interface NSTextView_SharingService {
 
-		/// <param name="sender">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sender">The sender.</param>
+		/// <summary>Performs the order front sharing service picker operation.</summary>
 		[Export ("orderFrontSharingServicePicker:")]
 		void OrderFrontSharingServicePicker (NSObject sender);
 	}
@@ -29095,19 +27123,16 @@ namespace AppKit {
 
 	partial interface NSTableViewDelegate {
 
-		/// <param name="tableView">To be added.</param>
-		/// <param name="cell">To be added.</param>
-		/// <param name="rect">To be added.</param>
-		/// <param name="tableColumn">To be added.</param>
-		/// <param name="row">To be added.</param>
-		/// <param name="mouseLocation">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="tableView">The table view.</param>
+		/// <param name="cell">The cell.</param>
+		/// <param name="rect">The rect.</param>
+		/// <param name="tableColumn">The table column.</param>
+		/// <param name="row">The row.</param>
+		/// <param name="mouseLocation">The mouse location.</param>
+		/// <summary>Performs the get tool tip operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[EventArgs ("", XmlDocs = """
-			<summary>To be added.</summary>
-			<value>To be added.</value>
-			<remarks>To be added.</remarks>
+			<summary>Performs the get tool tip operation.</summary>
 			""")]
 		[Export ("tableView:toolTipForCell:rect:tableColumn:row:mouseLocation:"), DelegateName ("NSTableViewToolTip"), DefaultValue ("null")]
 		NSString GetToolTip (NSTableView tableView, NSCell cell, ref CGRect rect, [NullAllowed] NSTableColumn tableColumn, nint row, CGPoint mouseLocation);
@@ -29253,9 +27278,7 @@ namespace AppKit {
 		[Notification, Field ("NSTextDidChangeNotification")]
 		NSString DidChangeNotification { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MovementUserInfoKey key constant.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSTextMovementUserInfoKey")]
 		NSString MovementUserInfoKey { get; }
@@ -29299,69 +27322,69 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSAccessibilityOrientation : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Unknown.</summary>
 		Unknown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Vertical.</summary>
 		Vertical = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Horizontal.</summary>
 		Horizontal = 2,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSAccessibilitySortDirection : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Unknown.</summary>
 		Unknown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Ascending.</summary>
 		Ascending = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Descending.</summary>
 		Descending = 2,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSAccessibilityRulerMarkerType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Unknown.</summary>
 		Unknown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Tab Stop Left.</summary>
 		TabStopLeft = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Tab Stop Right.</summary>
 		TabStopRight = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Tab Stop Center.</summary>
 		TabStopCenter = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Tab Stop Decimal.</summary>
 		TabStopDecimal = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indent Head.</summary>
 		IndentHead = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Indent Tail.</summary>
 		IndentTail = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Indent First Line.</summary>
 		IndentFirstLine = 7,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSAccessibilityUnits : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Unknown.</summary>
 		Unknown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Inches.</summary>
 		Inches = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Centimeters.</summary>
 		Centimeters = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Points.</summary>
 		Points = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Picas.</summary>
 		Picas = 4,
 	}
 
 	[NoMacCatalyst]
 	[Native]
 	public enum NSAccessibilityPriorityLevel : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Low.</summary>
 		Low = 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Medium.</summary>
 		Medium = 50,
-		/// <summary>To be added.</summary>
+		/// <summary>High.</summary>
 		High = 90,
 	}
 
@@ -29388,9 +27411,7 @@ namespace AppKit {
 		[Export ("accessibilityFocused")]
 		bool AccessibilityFocused { [Bind ("isAccessibilityFocused")] get; set; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the AccessibilityElement value.</summary>
 		[Abstract]
 		[Export ("accessibilityElement")]
 		bool AccessibilityElement { [Bind ("isAccessibilityElement")] get; set; }
@@ -29467,9 +27488,7 @@ namespace AppKit {
 		[NullAllowed, Export ("accessibilitySearchMenu", ArgumentSemantic.Strong)]
 		NSObject AccessibilitySearchMenu { get; set; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the AccessibilitySelected value.</summary>
 		[Abstract]
 		[Export ("accessibilitySelected")]
 		bool AccessibilitySelected { [Bind ("isAccessibilitySelected")] get; set; }
@@ -29510,23 +27529,17 @@ namespace AppKit {
 		[NullAllowed, Export ("accessibilityFilename")]
 		string AccessibilityFilename { get; set; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the AccessibilityExpanded value.</summary>
 		[Abstract]
 		[Export ("accessibilityExpanded")]
 		bool AccessibilityExpanded { [Bind ("isAccessibilityExpanded")] get; set; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the AccessibilityEdited value.</summary>
 		[Abstract]
 		[Export ("accessibilityEdited")]
 		bool AccessibilityEdited { [Bind ("isAccessibilityEdited")] get; set; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the AccessibilityEnabled value.</summary>
 		[Abstract]
 		[Export ("accessibilityEnabled")]
 		bool AccessibilityEnabled { [Bind ("isAccessibilityEnabled")] get; set; }
@@ -29543,9 +27556,7 @@ namespace AppKit {
 		[NullAllowed, Export ("accessibilityCancelButton", ArgumentSemantic.Strong)]
 		NSObject AccessibilityCancelButton { get; set; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the AccessibilityProtectedContent value.</summary>
 		[Abstract]
 		[Export ("accessibilityProtectedContent")]
 		bool AccessibilityProtectedContent { [Bind ("isAccessibilityProtectedContent")] get; set; }
@@ -29574,16 +27585,12 @@ namespace AppKit {
 		[NullAllowed, Export ("accessibilityMainWindow", ArgumentSemantic.Strong)]
 		NSObject AccessibilityMainWindow { get; set; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the AccessibilityHidden value.</summary>
 		[Abstract]
 		[Export ("accessibilityHidden")]
 		bool AccessibilityHidden { [Bind ("isAccessibilityHidden")] get; set; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the AccessibilityFrontmost value.</summary>
 		[Abstract]
 		[Export ("accessibilityFrontmost")]
 		bool AccessibilityFrontmost { [Bind ("isAccessibilityFrontmost")] get; set; }
@@ -29608,9 +27615,7 @@ namespace AppKit {
 		[NullAllowed, Export ("accessibilityColumnTitles", ArgumentSemantic.Copy)]
 		NSObject [] AccessibilityColumnTitles { get; set; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the AccessibilityOrderedByRow value.</summary>
 		[Abstract]
 		[Export ("accessibilityOrderedByRow")]
 		bool AccessibilityOrderedByRow { [Bind ("isAccessibilityOrderedByRow")] get; set; }
@@ -29659,9 +27664,7 @@ namespace AppKit {
 		[NullAllowed, Export ("accessibilityCriticalValue", ArgumentSemantic.Strong)]
 		NSObject AccessibilityCriticalValue { get; set; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the AccessibilityDisclosed value.</summary>
 		[Abstract]
 		[Export ("accessibilityDisclosed")]
 		bool AccessibilityDisclosed { [Bind ("isAccessibilityDisclosed")] get; set; }
@@ -29890,9 +27893,7 @@ namespace AppKit {
 		[NullAllowed, Export ("accessibilityToolbarButton", ArgumentSemantic.Strong)]
 		NSObject AccessibilityToolbarButton { get; set; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the AccessibilityModal value.</summary>
 		[Abstract]
 		[Export ("accessibilityModal")]
 		bool AccessibilityModal { [Bind ("isAccessibilityModal")] get; set; }
@@ -29901,9 +27902,7 @@ namespace AppKit {
 		[NullAllowed, Export ("accessibilityProxy", ArgumentSemantic.Strong)]
 		NSObject AccessibilityProxy { get; set; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the AccessibilityMain value.</summary>
 		[Abstract]
 		[Export ("accessibilityMain")]
 		bool AccessibilityMain { [Bind ("isAccessibilityMain")] get; set; }
@@ -29936,9 +27935,7 @@ namespace AppKit {
 		[NullAllowed, Export ("accessibilityMinimizeButton", ArgumentSemantic.Strong)]
 		NSObject AccessibilityMinimizeButton { get; set; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the AccessibilityMinimized value.</summary>
 		[Abstract]
 		[Export ("accessibilityMinimized")]
 		bool AccessibilityMinimized { [Bind ("isAccessibilityMinimized")] get; set; }
@@ -29991,9 +27988,7 @@ namespace AppKit {
 		[Export ("isAccessibilitySelectorAllowed:")]
 		bool IsAccessibilitySelectorAllowed (Selector selector);
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the AccessibilityRequired value.</summary>
 		[Abstract]
 		[Export ("accessibilityRequired")]
 		bool AccessibilityRequired { [Bind ("isAccessibilityRequired")] get; set; }
@@ -30225,935 +28220,625 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Static]
 	partial interface NSAccessibilityAttributes {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SharedFocusElementsAttribute key constant.</summary>
 		[Field ("NSAccessibilitySharedFocusElementsAttribute")]
 		NSString SharedFocusElementsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the AlternateUIVisibleAttribute key constant.</summary>
 		[Field ("NSAccessibilityAlternateUIVisibleAttribute")]
 		NSString AlternateUIVisibleAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ListItemPrefixTextAttribute key constant.</summary>
 		[Field ("NSAccessibilityListItemPrefixTextAttribute")]
 		NSString ListItemPrefixTextAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ListItemIndexTextAttribute key constant.</summary>
 		[Field ("NSAccessibilityListItemIndexTextAttribute")]
 		NSString ListItemIndexTextAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ListItemLevelTextAttribute key constant.</summary>
 		[Field ("NSAccessibilityListItemLevelTextAttribute")]
 		NSString ListItemLevelTextAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the RoleAttribute key constant.</summary>
 		[Field ("NSAccessibilityRoleAttribute")]
 		NSString RoleAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the RoleDescriptionAttribute key constant.</summary>
 		[Field ("NSAccessibilityRoleDescriptionAttribute")]
 		NSString RoleDescriptionAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SubroleAttribute key constant.</summary>
 		[Field ("NSAccessibilitySubroleAttribute")]
 		NSString SubroleAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the HelpAttribute key constant.</summary>
 		[Field ("NSAccessibilityHelpAttribute")]
 		NSString HelpAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ValueAttribute key constant.</summary>
 		[Field ("NSAccessibilityValueAttribute")]
 		NSString ValueAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MinValueAttribute key constant.</summary>
 		[Field ("NSAccessibilityMinValueAttribute")]
 		NSString MinValueAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MaxValueAttribute key constant.</summary>
 		[Field ("NSAccessibilityMaxValueAttribute")]
 		NSString MaxValueAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the EnabledAttribute key constant.</summary>
 		[Field ("NSAccessibilityEnabledAttribute")]
 		NSString EnabledAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the FocusedAttribute key constant.</summary>
 		[Field ("NSAccessibilityFocusedAttribute")]
 		NSString FocusedAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ParentAttribute key constant.</summary>
 		[Field ("NSAccessibilityParentAttribute")]
 		NSString ParentAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ChildrenAttribute key constant.</summary>
 		[Field ("NSAccessibilityChildrenAttribute")]
 		NSString ChildrenAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the WindowAttribute key constant.</summary>
 		[Field ("NSAccessibilityWindowAttribute")]
 		NSString WindowAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TopLevelUIElementAttribute key constant.</summary>
 		[Field ("NSAccessibilityTopLevelUIElementAttribute")]
 		NSString TopLevelUIElementAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SelectedChildrenAttribute key constant.</summary>
 		[Field ("NSAccessibilitySelectedChildrenAttribute")]
 		NSString SelectedChildrenAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the VisibleChildrenAttribute key constant.</summary>
 		[Field ("NSAccessibilityVisibleChildrenAttribute")]
 		NSString VisibleChildrenAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the PositionAttribute key constant.</summary>
 		[Field ("NSAccessibilityPositionAttribute")]
 		NSString PositionAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SizeAttribute key constant.</summary>
 		[Field ("NSAccessibilitySizeAttribute")]
 		NSString SizeAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ContentsAttribute key constant.</summary>
 		[Field ("NSAccessibilityContentsAttribute")]
 		NSString ContentsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TitleAttribute key constant.</summary>
 		[Field ("NSAccessibilityTitleAttribute")]
 		NSString TitleAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the DescriptionAttribute key constant.</summary>
 		[Field ("NSAccessibilityDescriptionAttribute")]
 		NSString DescriptionAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ShownMenuAttribute key constant.</summary>
 		[Field ("NSAccessibilityShownMenuAttribute")]
 		NSString ShownMenuAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ValueDescriptionAttribute key constant.</summary>
 		[Field ("NSAccessibilityValueDescriptionAttribute")]
 		NSString ValueDescriptionAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the PreviousContentsAttribute key constant.</summary>
 		[Field ("NSAccessibilityPreviousContentsAttribute")]
 		NSString PreviousContentsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NextContentsAttribute key constant.</summary>
 		[Field ("NSAccessibilityNextContentsAttribute")]
 		NSString NextContentsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the HeaderAttribute key constant.</summary>
 		[Field ("NSAccessibilityHeaderAttribute")]
 		NSString HeaderAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the EditedAttribute key constant.</summary>
 		[Field ("NSAccessibilityEditedAttribute")]
 		NSString EditedAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TabsAttribute key constant.</summary>
 		[Field ("NSAccessibilityTabsAttribute")]
 		NSString TabsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the HorizontalScrollBarAttribute key constant.</summary>
 		[Field ("NSAccessibilityHorizontalScrollBarAttribute")]
 		NSString HorizontalScrollBarAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the VerticalScrollBarAttribute key constant.</summary>
 		[Field ("NSAccessibilityVerticalScrollBarAttribute")]
 		NSString VerticalScrollBarAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the OverflowButtonAttribute key constant.</summary>
 		[Field ("NSAccessibilityOverflowButtonAttribute")]
 		NSString OverflowButtonAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IncrementButtonAttribute key constant.</summary>
 		[Field ("NSAccessibilityIncrementButtonAttribute")]
 		NSString IncrementButtonAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the DecrementButtonAttribute key constant.</summary>
 		[Field ("NSAccessibilityDecrementButtonAttribute")]
 		NSString DecrementButtonAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the FilenameAttribute key constant.</summary>
 		[Field ("NSAccessibilityFilenameAttribute")]
 		NSString FilenameAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ExpandedAttribute key constant.</summary>
 		[Field ("NSAccessibilityExpandedAttribute")]
 		NSString ExpandedAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SelectedAttribute key constant.</summary>
 		[Field ("NSAccessibilitySelectedAttribute")]
 		NSString SelectedAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SplittersAttribute key constant.</summary>
 		[Field ("NSAccessibilitySplittersAttribute")]
 		NSString SplittersAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the DocumentAttribute key constant.</summary>
 		[Field ("NSAccessibilityDocumentAttribute")]
 		NSString DocumentAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ActivationPointAttribute key constant.</summary>
 		[Field ("NSAccessibilityActivationPointAttribute")]
 		NSString ActivationPointAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the URLAttribute key constant.</summary>
 		[Field ("NSAccessibilityURLAttribute")]
 		NSString URLAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IndexAttribute key constant.</summary>
 		[Field ("NSAccessibilityIndexAttribute")]
 		NSString IndexAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the RowCountAttribute key constant.</summary>
 		[Field ("NSAccessibilityRowCountAttribute")]
 		NSString RowCountAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ColumnCountAttribute key constant.</summary>
 		[Field ("NSAccessibilityColumnCountAttribute")]
 		NSString ColumnCountAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the OrderedByRowAttribute key constant.</summary>
 		[Field ("NSAccessibilityOrderedByRowAttribute")]
 		NSString OrderedByRowAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the WarningValueAttribute key constant.</summary>
 		[Field ("NSAccessibilityWarningValueAttribute")]
 		NSString WarningValueAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CriticalValueAttribute key constant.</summary>
 		[Field ("NSAccessibilityCriticalValueAttribute")]
 		NSString CriticalValueAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the PlaceholderValueAttribute key constant.</summary>
 		[Field ("NSAccessibilityPlaceholderValueAttribute")]
 		NSString PlaceholderValueAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ContainsProtectedContentAttribute key constant.</summary>
 		[Field ("NSAccessibilityContainsProtectedContentAttribute")]
 		NSString ContainsProtectedContentAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TitleUIAttribute key constant.</summary>
 		[Field ("NSAccessibilityTitleUIElementAttribute")]
 		NSString TitleUIAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ServesAsTitleForUIElementsAttribute key constant.</summary>
 		[Field ("NSAccessibilityServesAsTitleForUIElementsAttribute")]
 		NSString ServesAsTitleForUIElementsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the LinkedUIElementsAttribute key constant.</summary>
 		[Field ("NSAccessibilityLinkedUIElementsAttribute")]
 		NSString LinkedUIElementsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SelectedTextAttribute key constant.</summary>
 		[Field ("NSAccessibilitySelectedTextAttribute")]
 		NSString SelectedTextAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SelectedTextRangeAttribute key constant.</summary>
 		[Field ("NSAccessibilitySelectedTextRangeAttribute")]
 		NSString SelectedTextRangeAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the NumberOfCharactersAttribute key constant.</summary>
 		[Field ("NSAccessibilityNumberOfCharactersAttribute")]
 		NSString NumberOfCharactersAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the VisibleCharacterRangeAttribute key constant.</summary>
 		[Field ("NSAccessibilityVisibleCharacterRangeAttribute")]
 		NSString VisibleCharacterRangeAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SharedTextUIElementsAttribute key constant.</summary>
 		[Field ("NSAccessibilitySharedTextUIElementsAttribute")]
 		NSString SharedTextUIElementsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SharedCharacterRangeAttribute key constant.</summary>
 		[Field ("NSAccessibilitySharedCharacterRangeAttribute")]
 		NSString SharedCharacterRangeAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the InsertionPointLineNumberAttribute key constant.</summary>
 		[Field ("NSAccessibilityInsertionPointLineNumberAttribute")]
 		NSString InsertionPointLineNumberAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SelectedTextRangesAttribute key constant.</summary>
 		[Field ("NSAccessibilitySelectedTextRangesAttribute")]
 		NSString SelectedTextRangesAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the LineForIndexParameterizedAttribute key constant.</summary>
 		[Field ("NSAccessibilityLineForIndexParameterizedAttribute")]
 		NSString LineForIndexParameterizedAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the RangeForLineParameterizedAttribute key constant.</summary>
 		[Field ("NSAccessibilityRangeForLineParameterizedAttribute")]
 		NSString RangeForLineParameterizedAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the StringForRangeParameterizeAttribute key constant.</summary>
 		[Field ("NSAccessibilityStringForRangeParameterizedAttribute")]
 		NSString StringForRangeParameterizeAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the RangeForPositionParameterizedAttribute key constant.</summary>
 		[Field ("NSAccessibilityRangeForPositionParameterizedAttribute")]
 		NSString RangeForPositionParameterizedAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the RangeForIndexParameterizedAttribute key constant.</summary>
 		[Field ("NSAccessibilityRangeForIndexParameterizedAttribute")]
 		NSString RangeForIndexParameterizedAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the BoundsForRangeParameterizedAttribute key constant.</summary>
 		[Field ("NSAccessibilityBoundsForRangeParameterizedAttribute")]
 		NSString BoundsForRangeParameterizedAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the RTFForRangeParameterizedAttribute key constant.</summary>
 		[Field ("NSAccessibilityRTFForRangeParameterizedAttribute")]
 		NSString RTFForRangeParameterizedAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the StyleRangeForIndexParameterizedAttribute key constant.</summary>
 		[Field ("NSAccessibilityStyleRangeForIndexParameterizedAttribute")]
 		NSString StyleRangeForIndexParameterizedAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the AttributedStringForRangeParameterizedAttribute key constant.</summary>
 		[Field ("NSAccessibilityAttributedStringForRangeParameterizedAttribute")]
 		NSString AttributedStringForRangeParameterizedAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the FontTextAttribute key constant.</summary>
 		[Field ("NSAccessibilityFontTextAttribute")]
 		NSString FontTextAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ForegroundColorTextAttribute key constant.</summary>
 		[Field ("NSAccessibilityForegroundColorTextAttribute")]
 		NSString ForegroundColorTextAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the BackgroundColorTextAttribute key constant.</summary>
 		[Field ("NSAccessibilityBackgroundColorTextAttribute")]
 		NSString BackgroundColorTextAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the UnderlineColorTextAttribute key constant.</summary>
 		[Field ("NSAccessibilityUnderlineColorTextAttribute")]
 		NSString UnderlineColorTextAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the StrikethroughColorTextAttribute key constant.</summary>
 		[Field ("NSAccessibilityStrikethroughColorTextAttribute")]
 		NSString StrikethroughColorTextAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the UnderlineTextAttribute key constant.</summary>
 		[Field ("NSAccessibilityUnderlineTextAttribute")]
 		NSString UnderlineTextAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SuperscriptTextAttribute key constant.</summary>
 		[Field ("NSAccessibilitySuperscriptTextAttribute")]
 		NSString SuperscriptTextAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the StrikethroughTextAttribute key constant.</summary>
 		[Field ("NSAccessibilityStrikethroughTextAttribute")]
 		NSString StrikethroughTextAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ShadowTextAttribute key constant.</summary>
 		[Field ("NSAccessibilityShadowTextAttribute")]
 		NSString ShadowTextAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the AttachmentTextAttribute key constant.</summary>
 		[Field ("NSAccessibilityAttachmentTextAttribute")]
 		NSString AttachmentTextAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the LinkTextAttribute key constant.</summary>
 		[Field ("NSAccessibilityLinkTextAttribute")]
 		NSString LinkTextAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the AutocorrectedAttribute key constant.</summary>
 		[Field ("NSAccessibilityAutocorrectedTextAttribute")]
 		NSString AutocorrectedAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MisspelledTextAttribute key constant.</summary>
 		[Field ("NSAccessibilityMisspelledTextAttribute")]
 		NSString MisspelledTextAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MarkedMisspelledTextAttribute key constant.</summary>
 		[Field ("NSAccessibilityMarkedMisspelledTextAttribute")]
 		NSString MarkedMisspelledTextAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MainAttribute key constant.</summary>
 		[Field ("NSAccessibilityMainAttribute")]
 		NSString MainAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MinimizedAttribute key constant.</summary>
 		[Field ("NSAccessibilityMinimizedAttribute")]
 		NSString MinimizedAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CloseButtonAttribute key constant.</summary>
 		[Field ("NSAccessibilityCloseButtonAttribute")]
 		NSString CloseButtonAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ZoomButtonAttribute key constant.</summary>
 		[Field ("NSAccessibilityZoomButtonAttribute")]
 		NSString ZoomButtonAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MinimizeButtonAttribute key constant.</summary>
 		[Field ("NSAccessibilityMinimizeButtonAttribute")]
 		NSString MinimizeButtonAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ToolbarButtonAttribute key constant.</summary>
 		[Field ("NSAccessibilityToolbarButtonAttribute")]
 		NSString ToolbarButtonAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ProxyAttribute key constant.</summary>
 		[Field ("NSAccessibilityProxyAttribute")]
 		NSString ProxyAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the GrowAreaAttribute key constant.</summary>
 		[Field ("NSAccessibilityGrowAreaAttribute")]
 		NSString GrowAreaAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ModalAttribute key constant.</summary>
 		[Field ("NSAccessibilityModalAttribute")]
 		NSString ModalAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the DefaultButtonAttribute key constant.</summary>
 		[Field ("NSAccessibilityDefaultButtonAttribute")]
 		NSString DefaultButtonAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CancelButtonAttribute key constant.</summary>
 		[Field ("NSAccessibilityCancelButtonAttribute")]
 		NSString CancelButtonAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the FullScreenButtonAttribute key constant.</summary>
 		[Field ("NSAccessibilityFullScreenButtonAttribute")]
 		NSString FullScreenButtonAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MenuBarAttribute key constant.</summary>
 		[Field ("NSAccessibilityMenuBarAttribute")]
 		NSString MenuBarAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the WindowsAttribute key constant.</summary>
 		[Field ("NSAccessibilityWindowsAttribute")]
 		NSString WindowsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the FrontmostAttribute key constant.</summary>
 		[Field ("NSAccessibilityFrontmostAttribute")]
 		NSString FrontmostAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the HiddenAttribute key constant.</summary>
 		[Field ("NSAccessibilityHiddenAttribute")]
 		NSString HiddenAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MainWindowAttribute key constant.</summary>
 		[Field ("NSAccessibilityMainWindowAttribute")]
 		NSString MainWindowAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the FocusedWindowAttribute key constant.</summary>
 		[Field ("NSAccessibilityFocusedWindowAttribute")]
 		NSString FocusedWindowAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the FocusedUIElementAttribute key constant.</summary>
 		[Field ("NSAccessibilityFocusedUIElementAttribute")]
 		NSString FocusedUIElementAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ExtrasMenuBarAttribute key constant.</summary>
 		[Field ("NSAccessibilityExtrasMenuBarAttribute")]
 		NSString ExtrasMenuBarAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ColumnTitlesAttribute key constant.</summary>
 		[Field ("NSAccessibilityColumnTitlesAttribute")]
 		NSString ColumnTitlesAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SearchButtonAttribute key constant.</summary>
 		[Field ("NSAccessibilitySearchButtonAttribute")]
 		NSString SearchButtonAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SearchMenuAttribute key constant.</summary>
 		[Field ("NSAccessibilitySearchMenuAttribute")]
 		NSString SearchMenuAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ClearButtonAttribute key constant.</summary>
 		[Field ("NSAccessibilityClearButtonAttribute")]
 		NSString ClearButtonAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the RowsAttribute key constant.</summary>
 		[Field ("NSAccessibilityRowsAttribute")]
 		NSString RowsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the VisibleRowsAttribute key constant.</summary>
 		[Field ("NSAccessibilityVisibleRowsAttribute")]
 		NSString VisibleRowsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SelectedRowsAttribute key constant.</summary>
 		[Field ("NSAccessibilitySelectedRowsAttribute")]
 		NSString SelectedRowsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ColumnsAttribute key constant.</summary>
 		[Field ("NSAccessibilityColumnsAttribute")]
 		NSString ColumnsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the VisibleColumnsAttribute key constant.</summary>
 		[Field ("NSAccessibilityVisibleColumnsAttribute")]
 		NSString VisibleColumnsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SelectedColumnsAttribute key constant.</summary>
 		[Field ("NSAccessibilitySelectedColumnsAttribute")]
 		NSString SelectedColumnsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SortDirectionAttribute key constant.</summary>
 		[Field ("NSAccessibilitySortDirectionAttribute")]
 		NSString SortDirectionAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SelectedCellsAttribute key constant.</summary>
 		[Field ("NSAccessibilitySelectedCellsAttribute")]
 		NSString SelectedCellsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the VisibleCellsAttribute key constant.</summary>
 		[Field ("NSAccessibilityVisibleCellsAttribute")]
 		NSString VisibleCellsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the RowHeaderUIElementsAttribute key constant.</summary>
 		[Field ("NSAccessibilityRowHeaderUIElementsAttribute")]
 		NSString RowHeaderUIElementsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ColumnHeaderUIElementsAttribute key constant.</summary>
 		[Field ("NSAccessibilityColumnHeaderUIElementsAttribute")]
 		NSString ColumnHeaderUIElementsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CellForColumnAndRowParameterizedAttribute key constant.</summary>
 		[Field ("NSAccessibilityCellForColumnAndRowParameterizedAttribute")]
 		NSString CellForColumnAndRowParameterizedAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the RowIndexRangeAttribute key constant.</summary>
 		[Field ("NSAccessibilityRowIndexRangeAttribute")]
 		NSString RowIndexRangeAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ColumnIndexRangeAttribute key constant.</summary>
 		[Field ("NSAccessibilityColumnIndexRangeAttribute")]
 		NSString ColumnIndexRangeAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the HorizontalUnitsAttribute key constant.</summary>
 		[Field ("NSAccessibilityHorizontalUnitsAttribute")]
 		NSString HorizontalUnitsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the VerticalUnitsAttribute key constant.</summary>
 		[Field ("NSAccessibilityVerticalUnitsAttribute")]
 		NSString VerticalUnitsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the HorizontalUnitDescriptionAttribute key constant.</summary>
 		[Field ("NSAccessibilityHorizontalUnitDescriptionAttribute")]
 		NSString HorizontalUnitDescriptionAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the VerticalUnitDescriptionAttribute key constant.</summary>
 		[Field ("NSAccessibilityVerticalUnitDescriptionAttribute")]
 		NSString VerticalUnitDescriptionAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the LayoutPointForScreenPointParameterizedAttribute key constant.</summary>
 		[Field ("NSAccessibilityLayoutPointForScreenPointParameterizedAttribute")]
 		NSString LayoutPointForScreenPointParameterizedAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the LayoutSizeForScreenSizeParameterizedAttribute key constant.</summary>
 		[Field ("NSAccessibilityLayoutSizeForScreenSizeParameterizedAttribute")]
 		NSString LayoutSizeForScreenSizeParameterizedAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ScreenPointForLayoutPointParameterizedAttribute key constant.</summary>
 		[Field ("NSAccessibilityScreenPointForLayoutPointParameterizedAttribute")]
 		NSString ScreenPointForLayoutPointParameterizedAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ScreenSizeForLayoutSizeParameterizedAttribute key constant.</summary>
 		[Field ("NSAccessibilityScreenSizeForLayoutSizeParameterizedAttribute")]
 		NSString ScreenSizeForLayoutSizeParameterizedAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the HandlesAttribute key constant.</summary>
 		[Field ("NSAccessibilityHandlesAttribute")]
 		NSString HandlesAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the DisclosingAttribute key constant.</summary>
 		[Field ("NSAccessibilityDisclosingAttribute")]
 		NSString DisclosingAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the DisclosedRowsAttribute key constant.</summary>
 		[Field ("NSAccessibilityDisclosedRowsAttribute")]
 		NSString DisclosedRowsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the DisclosedByRowAttribute key constant.</summary>
 		[Field ("NSAccessibilityDisclosedByRowAttribute")]
 		NSString DisclosedByRowAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the DisclosureLevelAttribute key constant.</summary>
 		[Field ("NSAccessibilityDisclosureLevelAttribute")]
 		NSString DisclosureLevelAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the AllowedValuesAttribute key constant.</summary>
 		[Field ("NSAccessibilityAllowedValuesAttribute")]
 		NSString AllowedValuesAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the LabelUIElementsAttribute key constant.</summary>
 		[Field ("NSAccessibilityLabelUIElementsAttribute")]
 		NSString LabelUIElementsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the LabelValueAttribute key constant.</summary>
 		[Field ("NSAccessibilityLabelValueAttribute")]
 		NSString LabelValueAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MatteHoleAttribute key constant.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 10, message: "Use 'NSAccessibility' methods instead.")]
 		[Field ("NSAccessibilityMatteHoleAttribute")]
 		NSString MatteHoleAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MatteContentUIElementAttribute key constant.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 10, message: "Use 'NSAccessibility' methods instead.")]
 		[Field ("NSAccessibilityMatteContentUIElementAttribute")]
 		NSString MatteContentUIElementAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MarkerUIElementsAttribute key constant.</summary>
 		[Field ("NSAccessibilityMarkerUIElementsAttribute")]
 		NSString MarkerUIElementsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MarkerValuesAttribute key constant.</summary>
 		[Field ("NSAccessibilityMarkerValuesAttribute")]
 		NSString MarkerValuesAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MarkerGroupUIElementAttribute key constant.</summary>
 		[Field ("NSAccessibilityMarkerGroupUIElementAttribute")]
 		NSString MarkerGroupUIElementAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the UnitsAttribute key constant.</summary>
 		[Field ("NSAccessibilityUnitsAttribute")]
 		NSString UnitsAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the UnitDescriptionAttribute key constant.</summary>
 		[Field ("NSAccessibilityUnitDescriptionAttribute")]
 		NSString UnitDescriptionAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MarkerTypeAttribute key constant.</summary>
 		[Field ("NSAccessibilityMarkerTypeAttribute")]
 		NSString MarkerTypeAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MarkerTypeDescriptionAttribute key constant.</summary>
 		[Field ("NSAccessibilityMarkerTypeDescriptionAttribute")]
 		NSString MarkerTypeDescriptionAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IdentifierAttribute key constant.</summary>
 		[Field ("NSAccessibilityIdentifierAttribute")]
 		NSString IdentifierAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the RequiredAttribute key constant.</summary>
 		[Field ("NSAccessibilityRequiredAttribute")]
 		NSString RequiredAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TextAlignmentAttribute key constant.</summary>
 		[Field ("NSAccessibilityTextAlignmentAttribute")]
 		NSString TextAlignmentAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the LanguageTextAttribute key constant.</summary>
 		[Field ("NSAccessibilityLanguageTextAttribute")]
 		NSString LanguageTextAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CustomTextAttribute key constant.</summary>
 		[Field ("NSAccessibilityCustomTextAttribute")]
 		NSString CustomTextAttribute { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the AnnotationTextAttribute key constant.</summary>
 		[Field ("NSAccessibilityAnnotationTextAttribute")]
 		NSString AnnotationTextAttribute { get; }
 
@@ -31229,21 +28914,15 @@ namespace AppKit {
 	[Static]
 	[NoMacCatalyst]
 	partial interface NSAccessibilityAnnotationAttributeKey {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the AnnotationLabel key constant.</summary>
 		[Field ("NSAccessibilityAnnotationLabel")]
 		NSString AnnotationLabel { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the AnnotationElement key constant.</summary>
 		[Field ("NSAccessibilityAnnotationElement")]
 		NSString AnnotationElement { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the AnnotationLocation key constant.</summary>
 		[Field ("NSAccessibilityAnnotationLocation")]
 		NSString AnnotationLocation { get; }
 	}
@@ -31251,27 +28930,19 @@ namespace AppKit {
 	[Static]
 	[NoMacCatalyst]
 	interface NSAccessibilityFontKeys {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the FontNameKey key constant.</summary>
 		[Field ("NSAccessibilityFontNameKey")]
 		NSString FontNameKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the FontFamilyKey key constant.</summary>
 		[Field ("NSAccessibilityFontFamilyKey")]
 		NSString FontFamilyKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the VisibleNameKey key constant.</summary>
 		[Field ("NSAccessibilityVisibleNameKey")]
 		NSString VisibleNameKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the FontSizeKey key constant.</summary>
 		[Field ("NSAccessibilityFontSizeKey")]
 		NSString FontSizeKey { get; }
 	}
@@ -31279,333 +28950,223 @@ namespace AppKit {
 	[Static]
 	[NoMacCatalyst]
 	interface NSAccessibilityRoles {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the UnknownRole key constant.</summary>
 		[Field ("NSAccessibilityUnknownRole")]
 		NSString UnknownRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ButtonRole key constant.</summary>
 		[Field ("NSAccessibilityButtonRole")]
 		NSString ButtonRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the RadioButtonRole key constant.</summary>
 		[Field ("NSAccessibilityRadioButtonRole")]
 		NSString RadioButtonRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CheckBoxRole key constant.</summary>
 		[Field ("NSAccessibilityCheckBoxRole")]
 		NSString CheckBoxRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SliderRole key constant.</summary>
 		[Field ("NSAccessibilitySliderRole")]
 		NSString SliderRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TabGroupRole key constant.</summary>
 		[Field ("NSAccessibilityTabGroupRole")]
 		NSString TabGroupRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TextFieldRole key constant.</summary>
 		[Field ("NSAccessibilityTextFieldRole")]
 		NSString TextFieldRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the StaticTextRole key constant.</summary>
 		[Field ("NSAccessibilityStaticTextRole")]
 		NSString StaticTextRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TextAreaRole key constant.</summary>
 		[Field ("NSAccessibilityTextAreaRole")]
 		NSString TextAreaRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ScrollAreaRole key constant.</summary>
 		[Field ("NSAccessibilityScrollAreaRole")]
 		NSString ScrollAreaRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the PopUpButtonRole key constant.</summary>
 		[Field ("NSAccessibilityPopUpButtonRole")]
 		NSString PopUpButtonRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MenuButtonRole key constant.</summary>
 		[Field ("NSAccessibilityMenuButtonRole")]
 		NSString MenuButtonRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TableRole key constant.</summary>
 		[Field ("NSAccessibilityTableRole")]
 		NSString TableRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ApplicationRole key constant.</summary>
 		[Field ("NSAccessibilityApplicationRole")]
 		NSString ApplicationRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the GroupRole key constant.</summary>
 		[Field ("NSAccessibilityGroupRole")]
 		NSString GroupRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the RadioGroupRole key constant.</summary>
 		[Field ("NSAccessibilityRadioGroupRole")]
 		NSString RadioGroupRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ListRole key constant.</summary>
 		[Field ("NSAccessibilityListRole")]
 		NSString ListRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ScrollBarRole key constant.</summary>
 		[Field ("NSAccessibilityScrollBarRole")]
 		NSString ScrollBarRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ValueIndicatorRole key constant.</summary>
 		[Field ("NSAccessibilityValueIndicatorRole")]
 		NSString ValueIndicatorRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ImageRole key constant.</summary>
 		[Field ("NSAccessibilityImageRole")]
 		NSString ImageRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MenuRole key constant.</summary>
 		[Field ("NSAccessibilityMenuBarRole")]
 		NSString MenuRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MenuItemRole key constant.</summary>
 		[Field ("NSAccessibilityMenuItemRole")]
 		NSString MenuItemRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ColumnRole key constant.</summary>
 		[Field ("NSAccessibilityColumnRole")]
 		NSString ColumnRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the RowRole key constant.</summary>
 		[Field ("NSAccessibilityRowRole")]
 		NSString RowRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ToolbarRole key constant.</summary>
 		[Field ("NSAccessibilityToolbarRole")]
 		NSString ToolbarRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the BusyIndicatorRole key constant.</summary>
 		[Field ("NSAccessibilityBusyIndicatorRole")]
 		NSString BusyIndicatorRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ProgressIndicatorRole key constant.</summary>
 		[Field ("NSAccessibilityProgressIndicatorRole")]
 		NSString ProgressIndicatorRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the WindowRole key constant.</summary>
 		[Field ("NSAccessibilityWindowRole")]
 		NSString WindowRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the DrawerRole key constant.</summary>
 		[Field ("NSAccessibilityDrawerRole")]
 		NSString DrawerRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SystemWideRole key constant.</summary>
 		[Field ("NSAccessibilitySystemWideRole")]
 		NSString SystemWideRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the OutlineRole key constant.</summary>
 		[Field ("NSAccessibilityOutlineRole")]
 		NSString OutlineRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IncrementorRole key constant.</summary>
 		[Field ("NSAccessibilityIncrementorRole")]
 		NSString IncrementorRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the BrowserRole key constant.</summary>
 		[Field ("NSAccessibilityBrowserRole")]
 		NSString BrowserRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ComboBoxRole key constant.</summary>
 		[Field ("NSAccessibilityComboBoxRole")]
 		NSString ComboBoxRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SplitGroupRole key constant.</summary>
 		[Field ("NSAccessibilitySplitGroupRole")]
 		NSString SplitGroupRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SplitterRole key constant.</summary>
 		[Field ("NSAccessibilitySplitterRole")]
 		NSString SplitterRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ColorWellRole key constant.</summary>
 		[Field ("NSAccessibilityColorWellRole")]
 		NSString ColorWellRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the GrowAreaRole key constant.</summary>
 		[Field ("NSAccessibilityGrowAreaRole")]
 		NSString GrowAreaRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SheetRole key constant.</summary>
 		[Field ("NSAccessibilitySheetRole")]
 		NSString SheetRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the HelpTagRole key constant.</summary>
 		[Field ("NSAccessibilityHelpTagRole")]
 		NSString HelpTagRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MatteRole key constant.</summary>
 		[Field ("NSAccessibilityMatteRole")]
 		NSString MatteRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the RulerRole key constant.</summary>
 		[Field ("NSAccessibilityRulerRole")]
 		NSString RulerRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the RulerMarkerRole key constant.</summary>
 		[Field ("NSAccessibilityRulerMarkerRole")]
 		NSString RulerMarkerRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the LinkRole key constant.</summary>
 		[Field ("NSAccessibilityLinkRole")]
 		NSString LinkRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the DisclosureTriangleRole key constant.</summary>
 		[Field ("NSAccessibilityDisclosureTriangleRole")]
 		NSString DisclosureTriangleRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the GridRole key constant.</summary>
 		[Field ("NSAccessibilityGridRole")]
 		NSString GridRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the RelevanceIndicatorRole key constant.</summary>
 		[Field ("NSAccessibilityRelevanceIndicatorRole")]
 		NSString RelevanceIndicatorRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the LevelIndicatorRole key constant.</summary>
 		[Field ("NSAccessibilityLevelIndicatorRole")]
 		NSString LevelIndicatorRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CellRole key constant.</summary>
 		[Field ("NSAccessibilityCellRole")]
 		NSString CellRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the PopoverRole key constant.</summary>
 		[Field ("NSAccessibilityPopoverRole")]
 		NSString PopoverRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the LayoutAreaRole key constant.</summary>
 		[Field ("NSAccessibilityLayoutAreaRole")]
 		NSString LayoutAreaRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the LayoutItemRole key constant.</summary>
 		[Field ("NSAccessibilityLayoutItemRole")]
 		NSString LayoutItemRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the HandleRole key constant.</summary>
 		[Field ("NSAccessibilityHandleRole")]
 		NSString HandleRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MenuBarItemRole key constant.</summary>
 		[Field ("NSAccessibilityMenuBarItemRole")]
 		NSString MenuBarItemRole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the PageRole key constant.</summary>
 		[Field ("NSAccessibilityPageRole")]
 		NSString PageRole { get; }
 
@@ -31629,195 +29190,131 @@ namespace AppKit {
 	[Static]
 	[NoMacCatalyst]
 	interface NSAccessibilitySubroles {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the UnknownSubrole key constant.</summary>
 		[Field ("NSAccessibilityUnknownSubrole")]
 		NSString UnknownSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CloseButtonSubrole key constant.</summary>
 		[Field ("NSAccessibilityCloseButtonSubrole")]
 		NSString CloseButtonSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ZoomButtonSubrole key constant.</summary>
 		[Field ("NSAccessibilityZoomButtonSubrole")]
 		NSString ZoomButtonSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MinimizeButtonSubrole key constant.</summary>
 		[Field ("NSAccessibilityMinimizeButtonSubrole")]
 		NSString MinimizeButtonSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ToolbarButtonSubrole key constant.</summary>
 		[Field ("NSAccessibilityToolbarButtonSubrole")]
 		NSString ToolbarButtonSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TableRowSubrole key constant.</summary>
 		[Field ("NSAccessibilityTableRowSubrole")]
 		NSString TableRowSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the OutlineRowSubrole key constant.</summary>
 		[Field ("NSAccessibilityOutlineRowSubrole")]
 		NSString OutlineRowSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SecureTextFieldSubrole key constant.</summary>
 		[Field ("NSAccessibilitySecureTextFieldSubrole")]
 		NSString SecureTextFieldSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the StandardWindowSubrole key constant.</summary>
 		[Field ("NSAccessibilityStandardWindowSubrole")]
 		NSString StandardWindowSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the DialogSubrole key constant.</summary>
 		[Field ("NSAccessibilityDialogSubrole")]
 		NSString DialogSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SystemDialogSubrole key constant.</summary>
 		[Field ("NSAccessibilitySystemDialogSubrole")]
 		NSString SystemDialogSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the FloatingWindowSubrole key constant.</summary>
 		[Field ("NSAccessibilityFloatingWindowSubrole")]
 		NSString FloatingWindowSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SystemFloatingWindowSubrole key constant.</summary>
 		[Field ("NSAccessibilitySystemFloatingWindowSubrole")]
 		NSString SystemFloatingWindowSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IncrementArrowSubrole key constant.</summary>
 		[Field ("NSAccessibilityIncrementArrowSubrole")]
 		NSString IncrementArrowSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the DecrementArrowSubrole key constant.</summary>
 		[Field ("NSAccessibilityDecrementArrowSubrole")]
 		NSString DecrementArrowSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IncrementPageSubrole key constant.</summary>
 		[Field ("NSAccessibilityIncrementPageSubrole")]
 		NSString IncrementPageSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the DecrementPageSubrole key constant.</summary>
 		[Field ("NSAccessibilityDecrementPageSubrole")]
 		NSString DecrementPageSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SearchFieldSubrole key constant.</summary>
 		[Field ("NSAccessibilitySearchFieldSubrole")]
 		NSString SearchFieldSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TextAttachmentSubrole key constant.</summary>
 		[Field ("NSAccessibilityTextAttachmentSubrole")]
 		NSString TextAttachmentSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TextLinkSubrole key constant.</summary>
 		[Field ("NSAccessibilityTextLinkSubrole")]
 		NSString TextLinkSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TimelineSubrole key constant.</summary>
 		[Field ("NSAccessibilityTimelineSubrole")]
 		NSString TimelineSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SortButtonSubrole key constant.</summary>
 		[Field ("NSAccessibilitySortButtonSubrole")]
 		NSString SortButtonSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the RatingIndicatorSubrole key constant.</summary>
 		[Field ("NSAccessibilityRatingIndicatorSubrole")]
 		NSString RatingIndicatorSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ContentListSubrole key constant.</summary>
 		[Field ("NSAccessibilityContentListSubrole")]
 		NSString ContentListSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the DefinitionListSubrole key constant.</summary>
 		[Field ("NSAccessibilityDefinitionListSubrole")]
 		NSString DefinitionListSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the FullScreenButtonSubrole key constant.</summary>
 		[Field ("NSAccessibilityFullScreenButtonSubrole")]
 		NSString FullScreenButtonSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ToggleSubrole key constant.</summary>
 		[Field ("NSAccessibilityToggleSubrole")]
 		NSString ToggleSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SwitchSubrole key constant.</summary>
 		[Field ("NSAccessibilitySwitchSubrole")]
 		NSString SwitchSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the DescriptionListSubrole key constant.</summary>
 		[Field ("NSAccessibilityDescriptionListSubrole")]
 		NSString DescriptionListSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TabButtonSubrole key constant.</summary>
 		[Field ("NSAccessibilityTabButtonSubrole")]
 		NSString TabButtonSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CollectionListSubrole key constant.</summary>
 		[Field ("NSAccessibilityCollectionListSubrole")]
 		NSString CollectionListSubrole { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SectionListSubrole key constant.</summary>
 		[Field ("NSAccessibilitySectionListSubrole")]
 		NSString SectionListSubrole { get; }
 
@@ -31829,21 +29326,15 @@ namespace AppKit {
 	[Static]
 	[NoMacCatalyst]
 	interface NSAccessibilityNotificationUserInfoKeys {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the UIElementsKey key constant.</summary>
 		[Field ("NSAccessibilityUIElementsKey")]
 		NSString UIElementsKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the PriorityKey key constant.</summary>
 		[Field ("NSAccessibilityPriorityKey")]
 		NSString PriorityKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the AnnouncementKey key constant.</summary>
 		[Field ("NSAccessibilityAnnouncementKey")]
 		NSString AnnouncementKey { get; }
 	}
@@ -31851,69 +29342,47 @@ namespace AppKit {
 	[Static]
 	[NoMacCatalyst]
 	interface NSAccessibilityActions {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the PressAction key constant.</summary>
 		[Field ("NSAccessibilityPressAction")]
 		NSString PressAction { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IncrementAction key constant.</summary>
 		[Field ("NSAccessibilityIncrementAction")]
 		NSString IncrementAction { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the DecrementAction key constant.</summary>
 		[Field ("NSAccessibilityDecrementAction")]
 		NSString DecrementAction { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ConfirmAction key constant.</summary>
 		[Field ("NSAccessibilityConfirmAction")]
 		NSString ConfirmAction { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the PickAction key constant.</summary>
 		[Field ("NSAccessibilityPickAction")]
 		NSString PickAction { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CancelAction key constant.</summary>
 		[Field ("NSAccessibilityCancelAction")]
 		NSString CancelAction { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the RaiseAction key constant.</summary>
 		[Field ("NSAccessibilityRaiseAction")]
 		NSString RaiseAction { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ShowMenu key constant.</summary>
 		[Field ("NSAccessibilityShowMenuAction")]
 		NSString ShowMenu { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the DeleteAction key constant.</summary>
 		[Field ("NSAccessibilityDeleteAction")]
 		NSString DeleteAction { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ShowAlternateUIAction key constant.</summary>
 		[Field ("NSAccessibilityShowAlternateUIAction")]
 		NSString ShowAlternateUIAction { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the ShowDefaultUIAction key constant.</summary>
 		[Field ("NSAccessibilityShowDefaultUIAction")]
 		NSString ShowDefaultUIAction { get; }
 
@@ -31927,16 +29396,12 @@ namespace AppKit {
 	[NoTV]
 	[Protocol (Name = "NSAccessibilityElement")] // exists both as a type and a protocol in ObjC, Swift uses NSAccessibilityElementProtocol
 	interface NSAccessibilityElementProtocol {
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the AccessibilityFrame value.</summary>
 		[Abstract]
 		[Export ("accessibilityFrame")]
 		CGRect AccessibilityFrame { get; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the AccessibilityParent value.</summary>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityParent")]
 		NSObject AccessibilityParent { get; }
@@ -31958,16 +29423,13 @@ namespace AppKit {
 	[NoTV]
 	[Protocol]
 	interface NSAccessibilityButton : NSAccessibilityElementProtocol {
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the AccessibilityLabel value.</summary>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityLabel")]
 		string AccessibilityLabel { get; }
 
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the accessibility perform press operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("accessibilityPerformPress")]
 		bool AccessibilityPerformPress ();
@@ -31976,22 +29438,18 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSAccessibilitySwitch : NSAccessibilityButton {
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the AccessibilityValue value.</summary>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityValue")]
 		string AccessibilityValue { get; }
 
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the accessibility perform increment operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("accessibilityPerformIncrement")]
 		bool AccessibilityPerformIncrement ();
 
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the accessibility perform decrement operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("accessibilityPerformDecrement")]
 		bool AccessibilityPerformDecrement ();
 	}
@@ -31999,9 +29457,7 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSAccessibilityRadioButton : NSAccessibilityButton {
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the AccessibilityValue value.</summary>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityValue")]
 		NSNumber AccessibilityValue { get; }
@@ -32018,17 +29474,14 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSAccessibilityStaticText : NSAccessibilityElementProtocol {
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the AccessibilityValue value.</summary>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityValue")]
 		string AccessibilityValue { get; }
 
-		/// <param name="range">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="range">The range.</param>
+		/// <summary>Performs the get accessibility attributed string operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("accessibilityAttributedStringForRange:")]
 		[return: NullAllowed]
 		NSAttributedString GetAccessibilityAttributedString (NSRange range);
@@ -32040,35 +29493,31 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSAccessibilityNavigableStaticText : NSAccessibilityStaticText {
-		/// <param name="range">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="range">The range.</param>
+		/// <summary>Performs the get accessibility string operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("accessibilityStringForRange:")]
 		[return: NullAllowed]
 		string GetAccessibilityString (NSRange range);
 
-		/// <param name="index">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="index">The index.</param>
+		/// <summary>Performs the get accessibility line operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("accessibilityLineForIndex:")]
 		nint GetAccessibilityLine (nint index);
 
-		/// <param name="lineNumber">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="lineNumber">The line number.</param>
+		/// <summary>Performs the get accessibility range for line operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("accessibilityRangeForLine:")]
 		NSRange GetAccessibilityRangeForLine (nint lineNumber);
 
-		/// <param name="range">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="range">The range.</param>
+		/// <summary>Performs the get accessibility frame operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("accessibilityFrameForRange:")]
 		CGRect GetAccessibilityFrame (NSRange range);
@@ -32077,9 +29526,7 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSAccessibilityProgressIndicator : NSAccessibilityGroup {
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the AccessibilityValue value.</summary>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityValue")]
 		NSNumber AccessibilityValue { get; }
@@ -32088,23 +29535,19 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSAccessibilityStepper : NSAccessibilityElementProtocol {
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the AccessibilityLabel value.</summary>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityLabel")]
 		string AccessibilityLabel { get; }
 
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the accessibility perform increment operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("accessibilityPerformIncrement")]
 		bool AccessibilityPerformIncrement ();
 
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the accessibility perform decrement operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("accessibilityPerformDecrement")]
 		bool AccessibilityPerformDecrement ();
@@ -32116,30 +29559,24 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSAccessibilitySlider : NSAccessibilityElementProtocol {
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the AccessibilityLabel value.</summary>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityLabel")]
 		string AccessibilityLabel { get; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the AccessibilityValue value.</summary>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityValue")]
 		NSObject AccessibilityValue { get; }
 
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the accessibility perform increment operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("accessibilityPerformIncrement")]
 		bool AccessibilityPerformIncrement ();
 
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the accessibility perform decrement operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("accessibilityPerformDecrement")]
 		bool AccessibilityPerformDecrement ();
@@ -32148,9 +29585,7 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSAccessibilityImage : NSAccessibilityElementProtocol {
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the AccessibilityLabel value.</summary>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityLabel")]
 		string AccessibilityLabel { get; }
@@ -32159,23 +29594,19 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSAccessibilityContainsTransientUI : NSAccessibilityElementProtocol {
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the accessibility perform show alternate u i operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("accessibilityPerformShowAlternateUI")]
 		bool AccessibilityPerformShowAlternateUI ();
 
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the accessibility perform show default u i operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("accessibilityPerformShowDefaultUI")]
 		bool AccessibilityPerformShowDefaultUI ();
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the IsAccessibilityAlternateUIVisible value.</summary>
 		[Abstract]
 		[Export ("isAccessibilityAlternateUIVisible")]
 		bool IsAccessibilityAlternateUIVisible { get; }
@@ -32186,16 +29617,12 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSAccessibilityTable : NSAccessibilityGroup {
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the AccessibilityLabel value.</summary>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityLabel")]
 		string AccessibilityLabel { get; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the AccessibilityRows value.</summary>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityRows")]
 		INSAccessibilityRow [] AccessibilityRows { get; }
@@ -32245,9 +29672,7 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSAccessibilityRow : NSAccessibilityGroup {
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the AccessibilityIndex value.</summary>
 		[Abstract]
 		[Export ("accessibilityIndex")]
 		nint AccessibilityIndex { get; }
@@ -32259,30 +29684,22 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSAccessibilityLayoutArea : NSAccessibilityGroup {
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the AccessibilityLabel value.</summary>
 		[Abstract]
 		[Export ("accessibilityLabel")]
 		string AccessibilityLabel { get; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the AccessibilityChildren value.</summary>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityChildren")]
 		NSObject [] AccessibilityChildren { get; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the AccessibilitySelectedChildren value.</summary>
 		[Abstract]
 		[NullAllowed, Export ("accessibilitySelectedChildren")]
 		NSObject [] AccessibilitySelectedChildren { get; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the AccessibilityFocusedUIElement value.</summary>
 		[Abstract]
 		[Export ("accessibilityFocusedUIElement")]
 		NSObject AccessibilityFocusedUIElement { get; }
@@ -32291,9 +29708,8 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSAccessibilityLayoutItem : NSAccessibilityGroup {
-		/// <param name="frame">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="frame">The frame.</param>
+		/// <summary>Performs the set accessibility frame operation.</summary>
 		[Export ("setAccessibilityFrame:")]
 		void SetAccessibilityFrame (CGRect frame);
 	}
@@ -32377,15 +29793,11 @@ namespace AppKit {
 		[Export ("accessibilityDisplayShouldReduceMotion")]
 		bool AccessibilityDisplayShouldReduceMotion { get; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the VoiceOverEnabled value.</summary>
 		[Export ("voiceOverEnabled")]
 		bool VoiceOverEnabled { [Bind ("isVoiceOverEnabled")] get; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the SwitchControlEnabled value.</summary>
 		[Export ("switchControlEnabled")]
 		bool SwitchControlEnabled { [Bind ("isSwitchControlEnabled")] get; }
 	}
@@ -32413,11 +29825,10 @@ namespace AppKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NSFilePromiseProviderDelegate {
-		/// <param name="filePromiseProvider">To be added.</param>
-		/// <param name="fileType">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="filePromiseProvider">The file promise provider.</param>
+		/// <param name="fileType">The file type.</param>
+		/// <summary>Performs the get file name for destination operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("filePromiseProvider:fileNameForType:")]
 		string GetFileNameForDestination (NSFilePromiseProvider filePromiseProvider, string fileType);
@@ -32426,10 +29837,9 @@ namespace AppKit {
 		[Export ("filePromiseProvider:writePromiseToURL:completionHandler:")]
 		void WritePromiseToUrl (NSFilePromiseProvider filePromiseProvider, NSUrl url, [NullAllowed] Action<NSError?> completionHandler);
 
-		/// <param name="filePromiseProvider">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="filePromiseProvider">The file promise provider.</param>
+		/// <summary>Performs the get operation queue operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("operationQueueForFilePromiseProvider:")]
 		NSOperationQueue GetOperationQueue (NSFilePromiseProvider filePromiseProvider);
 	}
@@ -32456,16 +29866,12 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSValidatedUserInterfaceItem {
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the Action value.</summary>
 		[Abstract]
 		[NullAllowed, Export ("action")]
 		Selector Action { get; }
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the Tag value.</summary>
 		[Abstract]
 		[Export ("tag")]
 		nint Tag { get; }
@@ -32474,10 +29880,9 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSCloudSharingValidation {
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the get cloud share operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("cloudShareForUserInterfaceItem:")]
 		[return: NullAllowed]
@@ -32526,10 +29931,9 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[NoiOS]
 	interface NSUserInterfaceValidations {
-		/// <param name="item">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="item">The item.</param>
+		/// <summary>Performs the validate user interface item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("validateUserInterfaceItem:")]
 		bool ValidateUserInterfaceItem (INSValidatedUserInterfaceItem item);
@@ -32538,10 +29942,9 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol (IsInformal = true)]
 	interface NSMenuValidation {
-		/// <param name="menuItem">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="menuItem">The menu item.</param>
+		/// <summary>Performs the validate menu item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("validateMenuItem:")]
 		bool ValidateMenuItem (NSMenuItem menuItem);
@@ -32550,10 +29953,9 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSMenuItemValidation {
-		/// <param name="menuItem">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="menuItem">The menu item.</param>
+		/// <summary>Performs the validate menu item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("validateMenuItem:")]
 		bool ValidateMenuItem (NSMenuItem menuItem);
@@ -32577,18 +29979,14 @@ namespace AppKit {
 		[NullAllowed, Export ("delegate", ArgumentSemantic.Weak)]
 		INSCandidateListTouchBarItemDelegate Delegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Collapsed value.</summary>
 		[Export ("collapsed")]
 		bool Collapsed { [Bind ("isCollapsed")] get; set; }
 
 		[Export ("allowsCollapsing")]
 		bool AllowsCollapsing { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CandidateListVisible value.</summary>
 		[Export ("candidateListVisible")]
 		bool CandidateListVisible { [Bind ("isCandidateListVisible")] get; }
 
@@ -32616,32 +30014,28 @@ namespace AppKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NSCandidateListTouchBarItemDelegate {
-		/// <param name="anItem">To be added.</param>
-		/// <param name="index">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="anItem">The an item.</param>
+		/// <param name="index">The index.</param>
+		/// <summary>Performs the begin selecting candidate operation.</summary>
 		[Export ("candidateListTouchBarItem:beginSelectingCandidateAtIndex:")]
 		void BeginSelectingCandidate (NSCandidateListTouchBarItem anItem, nint index);
 
-		/// <param name="anItem">To be added.</param>
-		/// <param name="previousIndex">To be added.</param>
-		/// <param name="index">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="anItem">The an item.</param>
+		/// <param name="previousIndex">The previous index.</param>
+		/// <param name="index">The index.</param>
+		/// <summary>Performs the change selection from candidate operation.</summary>
 		[Export ("candidateListTouchBarItem:changeSelectionFromCandidateAtIndex:toIndex:")]
 		void ChangeSelectionFromCandidate (NSCandidateListTouchBarItem anItem, nint previousIndex, nint index);
 
-		/// <param name="anItem">To be added.</param>
-		/// <param name="index">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="anItem">The an item.</param>
+		/// <param name="index">The index.</param>
+		/// <summary>Performs the end selecting candidate operation.</summary>
 		[Export ("candidateListTouchBarItem:endSelectingCandidateAtIndex:")]
 		void EndSelectingCandidate (NSCandidateListTouchBarItem anItem, nint index);
 
-		/// <param name="anItem">To be added.</param>
-		/// <param name="isVisible">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="anItem">The an item.</param>
+		/// <param name="isVisible">The is visible.</param>
+		/// <summary>Performs the changed candidate list visibility operation.</summary>
 		[Export ("candidateListTouchBarItem:changedCandidateListVisibility:")]
 		void ChangedCandidateListVisibility (NSCandidateListTouchBarItem anItem, bool isVisible);
 	}
@@ -32650,9 +30044,8 @@ namespace AppKit {
 	[Category]
 	[BaseType (typeof (NSView))]
 	interface NSView_NSCandidateListTouchBarItem {
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the get candidate list touch bar item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("candidateListTouchBarItem")]
 		NSCandidateListTouchBarItem GetCandidateListTouchBarItem ();
 	}
@@ -32701,9 +30094,7 @@ namespace AppKit {
 		[NullAllowed, Export ("action", ArgumentSemantic.Assign)]
 		Selector Action { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Enabled value.</summary>
 		[Export ("enabled")]
 		bool Enabled { [Bind ("isEnabled")] get; set; }
 
@@ -32735,15 +30126,13 @@ namespace AppKit {
 	[Category]
 	[BaseType (typeof (NSGestureRecognizer))]
 	interface NSGestureRecognizer_NSTouchBar {
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Performs the get allowed touch types operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("allowedTouchTypes", ArgumentSemantic.Assign)]
 		NSTouchTypeMask GetAllowedTouchTypes ();
 
-		/// <param name="types">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="types">The types.</param>
+		/// <summary>Performs the set allowed touch types operation.</summary>
 		[Export ("setAllowedTouchTypes:", ArgumentSemantic.Assign)]
 		void SetAllowedTouchTypes (NSTouchTypeMask types);
 	}
@@ -32847,19 +30236,17 @@ namespace AppKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NSScrubberDataSource {
-		/// <param name="scrubber">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="scrubber">The scrubber.</param>
+		/// <summary>Performs the get number of items operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("numberOfItemsForScrubber:")]
 		nint GetNumberOfItems (NSScrubber scrubber);
 
-		/// <param name="scrubber">To be added.</param>
-		/// <param name="index">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="scrubber">The scrubber.</param>
+		/// <param name="index">The index.</param>
+		/// <summary>Performs the get view for item operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("scrubber:viewForItemAtIndex:")]
 		NSScrubberItemView GetViewForItem (NSScrubber scrubber, nint index);
@@ -32869,42 +30256,36 @@ namespace AppKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NSScrubberDelegate {
-		/// <param name="scrubber">To be added.</param>
-		/// <param name="selectedIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="scrubber">The scrubber.</param>
+		/// <param name="selectedIndex">The selected index.</param>
+		/// <summary>Performs the did select item operation.</summary>
 		[Export ("scrubber:didSelectItemAtIndex:")]
 		void DidSelectItem (NSScrubber scrubber, nint selectedIndex);
 
-		/// <param name="scrubber">To be added.</param>
-		/// <param name="highlightedIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="scrubber">The scrubber.</param>
+		/// <param name="highlightedIndex">The highlighted index.</param>
+		/// <summary>Performs the did highlight item operation.</summary>
 		[Export ("scrubber:didHighlightItemAtIndex:")]
 		void DidHighlightItem (NSScrubber scrubber, nint highlightedIndex);
 
-		/// <param name="scrubber">To be added.</param>
-		/// <param name="visibleRange">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="scrubber">The scrubber.</param>
+		/// <param name="visibleRange">The visible range.</param>
+		/// <summary>Performs the did change visible operation.</summary>
 		[Export ("scrubber:didChangeVisibleRange:")]
 		void DidChangeVisible (NSScrubber scrubber, NSRange visibleRange);
 
-		/// <param name="scrubber">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="scrubber">The scrubber.</param>
+		/// <summary>Performs the did begin interacting operation.</summary>
 		[Export ("didBeginInteractingWithScrubber:")]
 		void DidBeginInteracting (NSScrubber scrubber);
 
-		/// <param name="scrubber">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="scrubber">The scrubber.</param>
+		/// <summary>Performs the did finish interacting operation.</summary>
 		[Export ("didFinishInteractingWithScrubber:")]
 		void DidFinishInteracting (NSScrubber scrubber);
 
-		/// <param name="scrubber">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="scrubber">The scrubber.</param>
+		/// <summary>Performs the did cancel interacting operation.</summary>
 		[Export ("didCancelInteractingWithScrubber:")]
 		void DidCancelInteracting (NSScrubber scrubber);
 	}
@@ -32952,9 +30333,7 @@ namespace AppKit {
 		[Export ("itemAlignment", ArgumentSemantic.Assign)]
 		NSScrubberAlignment ItemAlignment { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Continuous value.</summary>
 		[Export ("continuous")]
 		bool Continuous { [Bind ("isContinuous")] get; set; }
 
@@ -33023,15 +30402,11 @@ namespace AppKit {
 		[Export ("initWithFrame:")]
 		NativeHandle Constructor (CGRect frameRect);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Selected value.</summary>
 		[Export ("selected")]
 		bool Selected { [Bind ("isSelected")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Highlighted value.</summary>
 		[Export ("highlighted")]
 		bool Highlighted { [Bind ("isHighlighted")] get; set; }
 
@@ -33138,12 +30513,11 @@ namespace AppKit {
 	[BaseType (typeof (NSObject))]
 	[Protocol, Model]
 	interface NSScrubberFlowLayoutDelegate : NSScrubberDelegate {
-		/// <param name="scrubber">To be added.</param>
-		/// <param name="layout">To be added.</param>
-		/// <param name="itemIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="scrubber">The scrubber.</param>
+		/// <param name="layout">The layout.</param>
+		/// <param name="itemIndex">The item index.</param>
+		/// <summary>Performs the layout operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("scrubber:layout:sizeForItemAtIndex:")]
 		CGSize Layout (NSScrubber scrubber, NSScrubberFlowLayout layout, nint itemIndex);
 	}
@@ -33178,10 +30552,9 @@ namespace AppKit {
 	[BaseType (typeof (NSObject))]
 	[Protocol, Model]
 	interface NSSharingServicePickerTouchBarItemDelegate : NSSharingServicePickerDelegate {
-		/// <param name="pickerTouchBarItem">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="pickerTouchBarItem">The picker touch bar item.</param>
+		/// <summary>Performs the specified operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("itemsForSharingServicePickerTouchBarItem:")]
 		INSPasteboardWriting [] ItemsForSharingServicePickerTouchBarItem (NSSharingServicePickerTouchBarItem pickerTouchBarItem);
@@ -33199,9 +30572,7 @@ namespace AppKit {
 		[NullAllowed, Export ("delegate", ArgumentSemantic.Weak)]
 		INSSharingServicePickerTouchBarItemDelegate Delegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Enabled value.</summary>
 		[Export ("enabled")]
 		bool Enabled { [Bind ("isEnabled")] get; set; }
 
@@ -33228,22 +30599,16 @@ namespace AppKit {
 		[Export ("behavior", ArgumentSemantic.Copy)]
 		NSSliderAccessoryBehavior Behavior { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Enabled value.</summary>
 		[Export ("enabled")]
 		bool Enabled { [Bind ("isEnabled")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the DefaultWidth value.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSSliderAccessoryWidthDefault")]
 		double DefaultWidth { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the WidthWide value.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("NSSliderAccessoryWidthWide")]
 		double WidthWide { get; }
@@ -33365,11 +30730,10 @@ namespace AppKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NSAccessibilityCustomRotorItemSearchDelegate {
-		/// <param name="rotor">To be added.</param>
-		/// <param name="searchParameters">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="rotor">The rotor.</param>
+		/// <param name="searchParameters">The search parameters.</param>
+		/// <summary>Performs the get result operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("rotor:resultForSearchParameters:")]
 		[return: NullAllowed]
@@ -33381,19 +30745,17 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSAccessibilityElementLoading {
-		/// <param name="token">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="token">The token.</param>
+		/// <summary>Performs the get accessibility element operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("accessibilityElementWithToken:")]
 		[return: NullAllowed]
 		NSAccessibilityElement GetAccessibilityElement (INSSecureCoding token);
 
-		/// <param name="token">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="token">The token.</param>
+		/// <summary>Performs the get accessibility range in target element operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("accessibilityRangeInTargetElementWithToken:")]
 		NSRange GetAccessibilityRangeInTargetElement (INSSecureCoding token);
 	}
@@ -33403,18 +30765,16 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSCollectionViewPrefetching {
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="indexPaths">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="indexPaths">The index paths.</param>
+		/// <summary>Performs the prefetch items operation.</summary>
 		[Abstract]
 		[Export ("collectionView:prefetchItemsAtIndexPaths:")]
 		void PrefetchItems (NSCollectionView collectionView, NSIndexPath [] indexPaths);
 
-		/// <param name="collectionView">To be added.</param>
-		/// <param name="indexPaths">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="collectionView">The collection view.</param>
+		/// <param name="indexPaths">The index paths.</param>
+		/// <summary>Performs the cancel prefetching operation.</summary>
 		[Export ("collectionView:cancelPrefetchingForItemsAtIndexPaths:")]
 		void CancelPrefetching (NSCollectionView collectionView, NSIndexPath [] indexPaths);
 	}
@@ -33445,10 +30805,9 @@ namespace AppKit {
 	[Category]
 	[BaseType (typeof (NSObject))]
 	interface NSObject_NSFontPanelValidationAdditions {
-		/// <param name="fontPanel">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="fontPanel">The font panel.</param>
+		/// <summary>Performs the get valid modes operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Export ("validModesForFontPanel:")]
 		NSFontPanelModeMask GetValidModes (NSFontPanel fontPanel);
 	}
@@ -33471,9 +30830,7 @@ namespace AppKit {
 		[Export ("intersectsOptions:")]
 		bool Intersects (NSUserInterfaceCompressionOptions options);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Empty value.</summary>
 		[Export ("empty")]
 		bool Empty { [Bind ("isEmpty")] get; }
 
@@ -33509,24 +30866,20 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSUserInterfaceCompression {
-		/// <param name="prioritizedOptions">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="prioritizedOptions">The prioritized options.</param>
+		/// <summary>Performs the compress operation.</summary>
 		[Abstract]
 		[Export ("compressWithPrioritizedCompressionOptions:")]
 		void Compress (NSUserInterfaceCompressionOptions [] prioritizedOptions);
 
-		/// <param name="prioritizedOptions">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="prioritizedOptions">The prioritized options.</param>
+		/// <summary>Performs the get minimum size operation.</summary>
+		/// <returns>The result of the operation.</returns>
 		[Abstract]
 		[Export ("minimumSizeWithPrioritizedCompressionOptions:")]
 		CGSize GetMinimumSize (NSUserInterfaceCompressionOptions [] prioritizedOptions);
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the ActiveCompressionOptions value.</summary>
 		[Abstract]
 		[Export ("activeCompressionOptions", ArgumentSemantic.Copy)]
 		NSUserInterfaceCompressionOptions ActiveCompressionOptions { get; }
@@ -33558,15 +30911,11 @@ namespace AppKit {
 		[Export ("windows", ArgumentSemantic.Copy)]
 		NSWindow [] Windows { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the OverviewVisible value.</summary>
 		[Export ("overviewVisible")]
 		bool OverviewVisible { [Bind ("isOverviewVisible")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the TabBarVisible value.</summary>
 		[Export ("tabBarVisible")]
 		bool TabBarVisible { [Bind ("isTabBarVisible")] get; }
 

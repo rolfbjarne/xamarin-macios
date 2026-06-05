@@ -1555,8 +1555,8 @@ namespace Photos {
 		[Async (XmlDocs = """
 			<param name="targetSize">The size of the output view to target.</param>
 			<summary>Asynchronously prepares an edited Live Photo for playback, returning a task that provides the live photo.</summary>
-			<returns>To be added.</returns>
-			<remarks>To be added.</remarks>
+			<returns>A task representing the asynchronous operation.</returns>
+			
 			""")]
 		[Wrap ("_PrepareLivePhotoForPlayback (targetSize, null, handler)")]
 		void PrepareLivePhotoForPlayback (CGSize targetSize, Action<PHLivePhoto, NSError> handler);
@@ -1575,7 +1575,7 @@ namespace Photos {
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous PrepareLivePhotoForPlayback operation.  The value of the TResult parameter is of type <c>Action&lt;Photos.PHLivePhoto,Foundation.NSError&gt;</c>.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
+			
 			""")]
 		[Wrap ("_PrepareLivePhotoForPlayback (targetSize, (options as NSDictionary), handler)", IsVirtual = true)]
 		void PrepareLivePhotoForPlayback (CGSize targetSize, [NullAllowed] NSDictionary<NSString, NSObject> options, Action<PHLivePhoto, NSError> handler);
@@ -1596,8 +1596,8 @@ namespace Photos {
 			          <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 			        </param>
 			<summary>Asynchronously prepares an edited Live Photo for playback, returning a task that provides the live photo.</summary>
-			<returns>To be added.</returns>
-			<remarks>To be added.</remarks>
+			<returns>A task representing the asynchronous operation.</returns>
+			
 			""")]
 		[Wrap ("_PrepareLivePhotoForPlayback (targetSize, options.GetDictionary (), handler)")]
 		void PrepareLivePhotoForPlayback (CGSize targetSize, [NullAllowed] PHLivePhotoEditingOption options, Action<PHLivePhoto, NSError> handler);
@@ -1612,8 +1612,8 @@ namespace Photos {
 		[Async (XmlDocs = """
 			<param name="output">The photo editing output to which to save the photo.</param>
 			<summary>Asynchronously saves a Live Photo, returning a task that indicates success or failure.</summary>
-			<returns>To be added.</returns>
-			<remarks>To be added.</remarks>
+			<returns>A task representing the asynchronous operation.</returns>
+			
 			""")]
 		[Wrap ("_SaveLivePhoto (output, null, handler)")]
 		void SaveLivePhoto (PHContentEditingOutput output, Action<bool, NSError> handler);
@@ -1632,8 +1632,8 @@ namespace Photos {
 			          <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 			        </param>
 			<summary>Asynchronously saves a Live Photo, returning a task that provides a tuple that contains a Boolean value that indicates succes or faiure and an error, if one was encountered.</summary>
-			<returns>To be added.</returns>
-			<remarks>To be added.</remarks>
+			<returns>A task representing the asynchronous operation.</returns>
+			
 			""")]
 		[Wrap ("_SaveLivePhoto (output, options, handler)", IsVirtual = true)]
 		void SaveLivePhoto (PHContentEditingOutput output, [NullAllowed] NSDictionary<NSString, NSObject> options, Action<bool, NSError> handler);
@@ -1654,8 +1654,8 @@ namespace Photos {
 			          <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 			        </param>
 			<summary>Asynchronously saves a Live Photo, returning a task that contains any error that was encountered.</summary>
-			<returns>To be added.</returns>
-			<remarks>To be added.</remarks>
+			<returns>A task representing the asynchronous operation.</returns>
+			
 			""")]
 		[Wrap ("_SaveLivePhoto (output, options.GetDictionary (), handler)")]
 		void SaveLivePhoto (PHContentEditingOutput output, [NullAllowed] PHLivePhotoEditingOption options, Action<bool, NSError> handler);
@@ -1672,28 +1672,28 @@ namespace Photos {
 	interface PHLivePhotoFrame {
 		/// <summary>Gets the image that will be processed.</summary>
 		/// <value>The image that will be processed.</value>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("image")]
 		CIImage Image { get; }
 
 		/// <summary>Gets the time, in seconds from the beginning of the Live Photo, when the image appears.</summary>
 		/// <value>The time, in seconds from the beginning of the Live Photo, when the image appears.</value>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("time")]
 		CMTime Time { get; }
 
 		/// <summary>Gets a value that tells whether the image is a still photo or a video frame.</summary>
 		/// <value>A value that tells whether the image is a still photo or a video frame.</value>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("type")]
 		PHLivePhotoFrameType Type { get; }
 
 		/// <summary>Gets the relative scale of <see cref="Photos.IPHLivePhotoFrame" /> compared to the Live Photo.</summary>
 		/// <value>The relative scale of <see cref="Photos.IPHLivePhotoFrame" /> compared to the Live Photo.</value>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("renderScale")]
 		nfloat RenderScale { get; }

@@ -310,14 +310,14 @@ namespace AuthenticationServices {
 	[DisableDefaultCtor]
 	interface ASCredentialIdentityStoreState {
 		/// <summary>Gets whether the credential identity store is enabled.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <value><see langword="true" /> if the store is enabled; otherwise, <see langword="false" />.</value>
+		
 		[Export ("enabled")]
 		bool Enabled { [Bind ("isEnabled")] get; }
 
 		/// <summary>Gets whether the credential identity store can be incrementally updated.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <value><see langword="true" /> if incremental updates are supported; otherwise, <see langword="false" />.</value>
+		
 		[Export ("supportsIncrementalUpdates")]
 		bool SupportsIncrementalUpdates { get; }
 	}

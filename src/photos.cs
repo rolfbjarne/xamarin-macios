@@ -991,10 +991,10 @@ namespace Photos {
 		[Export ("count")]
 		nint Count { get; }
 
-		/// <param name="index">To be added.</param>
+		/// <param name="index">The index of the object to retrieve.</param>
 		/// <summary>Returns that object at <paramref name="index" />.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <returns>The object at the specified index.</returns>
+		
 		[Export ("objectAtIndex:")]
 		NSObject ObjectAt (nint index);
 

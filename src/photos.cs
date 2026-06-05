@@ -1064,11 +1064,11 @@ namespace Photos {
 		[Export ("normalizedCropRect", ArgumentSemantic.Assign)]
 		CGRect NormalizedCropRect { get; set; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets whether network access is allowed for retrieving images.</summary>
 		[Export ("networkAccessAllowed", ArgumentSemantic.Assign)]
 		bool NetworkAccessAllowed { [Bind ("isNetworkAccessAllowed")] get; set; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets whether the request should be synchronous.</summary>
 		[Export ("synchronous", ArgumentSemantic.Assign)]
 		bool Synchronous { [Bind ("isSynchronous")] get; set; }
 
@@ -1091,7 +1091,7 @@ namespace Photos {
 	[BaseType (typeof (NSObject))]
 	interface PHVideoRequestOptions : NSCopying {
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets whether network access is allowed for retrieving videos.</summary>
 		[Export ("networkAccessAllowed", ArgumentSemantic.Assign)]
 		bool NetworkAccessAllowed { [Bind ("isNetworkAccessAllowed")] get; set; }
 

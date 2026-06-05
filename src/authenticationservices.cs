@@ -206,19 +206,19 @@ namespace AuthenticationServices {
 	[DisableDefaultCtor]
 	interface ASCredentialIdentityStore {
 		/// <summary>The singleton shared credential identity store.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <value>The shared credential identity store.</value>
+		
 		[Static]
 		[Export ("sharedStore")]
 		ASCredentialIdentityStore SharedStore { get; }
 
-		/// <param name="completion">To be added.</param>
+		/// <param name="completion">The completion handler that receives the store state.</param>
 		///         <summary>Retrieves the state of store, which is passed as an argument to the <paramref name="completion" /> handler.</summary>
-		///         <remarks>To be added.</remarks>
+		
 		[Async (XmlDocs = """
 			<summary>Asynchronously gets the state of the identity store.</summary>
-			<returns>To be added.</returns>
-			<remarks>To be added.</remarks>
+			<returns>A task that represents the asynchronous operation. The result contains the credential identity store state.</returns>
+			
 			""")]
 		[Export ("getCredentialIdentityStoreStateWithCompletion:")]
 		void GetCredentialIdentityStoreState (Action<ASCredentialIdentityStoreState> completion);
@@ -228,15 +228,15 @@ namespace AuthenticationServices {
 		[Export ("getCredentialIdentitiesForService:credentialIdentityTypes:completionHandler:")]
 		void GetCredentialIdentities ([NullAllowed] ASCredentialServiceIdentifier serviceIdentifier, [NullAllowed] ASCredentialIdentityTypes credentialIdentityTypes, ASCredentialIdentityStoreGetCredentialIdentitiesHandler completion);
 
-		/// <param name="credentialIdentities">To be added.</param>
-		///         <param name="completion">To be added.</param>
+		/// <param name="credentialIdentities">The credential identities to save.</param>
+		/// <param name="completion">The completion handler, or <see langword="null" />.</param>
 		///         <summary>Saves (or replaces, if the store does not support incremental updates) the <paramref name="credentialIdentities" /> to the store.</summary>
-		///         <remarks>To be added.</remarks>
+		
 		[Async (XmlDocs = """
-			<param name="credentialIdentities">To be added.</param>
+			<param name="credentialIdentities">The credential identities to save.</param>
 			<summary>Asynchronously saves (or replaces, if the store does not support incremental updates) the <paramref name="credentialIdentities" /> to the store.</summary>
 			<returns>The first value will be <see langword="true" /> on success. The second value will be non-null on error.</returns>
-			<remarks>To be added.</remarks>
+			
 			""")]
 		[Deprecated (PlatformName.MacOSX, 14, 0, message: "Use 'SaveCredentialIdentityEntries  (ASCredentialIdentity [])' instead.")]
 		[Deprecated (PlatformName.iOS, 17, 0, message: "Use 'SaveCredentialIdentityEntries  (ASCredentialIdentity [])' instead.")]
@@ -244,45 +244,45 @@ namespace AuthenticationServices {
 		[Export ("saveCredentialIdentities:completion:")]
 		void SaveCredentialIdentities (ASPasswordCredentialIdentity [] credentialIdentities, [NullAllowed] ASCredentialIdentityStoreCompletionHandler completion);
 
-		/// <param name="credentialIdentities">To be added.</param>
-		///         <param name="completion">To be added.</param>
+		/// <param name="credentialIdentities">The credential identities to remove.</param>
+		/// <param name="completion">The completion handler, or <see langword="null" />.</param>
 		///         <summary>Removes the specified <paramref name="credentialIdentities" /> from the store. The <paramref name="completion" /> handler is called after the process completes.</summary>
-		///         <remarks>To be added.</remarks>
+		
 		[Deprecated (PlatformName.MacCatalyst, 17, 0, message: "Use 'RemoveCredentialIdentityEntries (ASPasswordCredentialIdentity [])' instead.")]
 		[Deprecated (PlatformName.iOS, 17, 0, message: "Use 'RemoveCredentialIdentityEntries (ASPasswordCredentialIdentity [])' instead.")]
 		[Deprecated (PlatformName.MacOSX, 14, 0, message: "Use 'RemoveCredentialIdentityEntries (ASPasswordCredentialIdentity [])' instead.")]
 		[Async (XmlDocs = """
-			<param name="credentialIdentities">To be added.</param>
+			<param name="credentialIdentities">The credential identities to remove.</param>
 			<summary>Asynchronously removes the specified <paramref name="credentialIdentities" /> from the store. The returned tuple will have a first value of <see langword="true" /> if all identities were removed without error.</summary>
-			<returns>To be added.</returns>
-			<remarks>To be added.</remarks>
+			<returns>A task representing the asynchronous operation.</returns>
+			
 			""")]
 		[Export ("removeCredentialIdentities:completion:")]
 		void RemoveCredentialIdentities (ASPasswordCredentialIdentity [] credentialIdentities, [NullAllowed] ASCredentialIdentityStoreCompletionHandler completion);
 
-		/// <param name="completion">To be added.</param>
+		/// <param name="completion">The completion handler, or <see langword="null" />.</param>
 		///         <summary>Removes all credential identities from the store. The <paramref name="completion" /> handler is called after the process completes.</summary>
-		///         <remarks>To be added.</remarks>
+		
 		[Async (XmlDocs = """
 			<summary>Asynchronously removes all credential identities from the store. The returned tuple will have a first value of <see langword="true" /> if all identities were removed without error.</summary>
-			<returns>To be added.</returns>
-			<remarks>To be added.</remarks>
+			<returns>A task representing the asynchronous operation.</returns>
+			
 			""")]
 		[Export ("removeAllCredentialIdentitiesWithCompletion:")]
 		void RemoveAllCredentialIdentities ([NullAllowed] Action<bool, NSError> completion);
 
-		/// <param name="newCredentialIdentities">To be added.</param>
-		///         <param name="completion">To be added.</param>
+		/// <param name="newCredentialIdentities">The new credential identities to replace existing ones.</param>
+		/// <param name="completion">The completion handler, or <see langword="null" />.</param>
 		///         <summary>Replaces the existing identities with the specified <paramref name="newCredentialIdentities" /> from the store. The <paramref name="completion" /> handler is called after the process completes.</summary>
-		///         <remarks>To be added.</remarks>
+		
 		[Deprecated (PlatformName.MacCatalyst, 17, 0, message: "Use 'ReplaceCredentialIdentityEntries (ASPasswordCredentialIdentity [])' instead.")]
 		[Deprecated (PlatformName.iOS, 17, 0, message: "Use 'ReplaceCredentialIdentityEntries (ASPasswordCredentialIdentity [])' instead.")]
 		[Deprecated (PlatformName.MacOSX, 14, 0, message: "Use 'ReplaceCredentialIdentityEntries (ASPasswordCredentialIdentity [])' instead.")]
 		[Async (XmlDocs = """
-			<param name="newCredentialIdentities">To be added.</param>
+			<param name="newCredentialIdentities">The new credential identities to replace existing ones.</param>
 			<summary>Asynchronously replaces the existing identities with the specified <paramref name="newCredentialIdentities" /> from the store. The returned tuple will have a first value of <see langword="true" /> if all identities were removed without error.</summary>
-			<returns>To be added.</returns>
-			<remarks>To be added.</remarks>
+			<returns>A task representing the asynchronous operation.</returns>
+			
 			""")]
 		[Export ("replaceCredentialIdentitiesWithIdentities:completion:")]
 		void ReplaceCredentialIdentities (ASPasswordCredentialIdentity [] newCredentialIdentities, [NullAllowed] ASCredentialIdentityStoreCompletionHandler completion);

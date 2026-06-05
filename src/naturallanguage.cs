@@ -45,12 +45,10 @@ namespace NaturalLanguage {
 
 		/// <param name="string">The text to process.</param>
 		///         <summary>Evaluates <paramref name="string" /> to determine the language it was most likely to have been written in.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("processString:")]
 		void Process (string @string);
 
 		/// <summary>Resets the recognizer, discarding recognition results and any text supplied to <see cref="NaturalLanguage.NLLanguageRecognizer.Process(System.String)" />.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("reset")]
 		void Reset ();
 
@@ -60,7 +58,6 @@ namespace NaturalLanguage {
 
 		/// <summary>Gets the language in which the text that was analyzed with <see cref="NaturalLanguage.NLLanguageRecognizer.Process(System.String)" /> was most likely written.</summary>
 		///         <value>The the language in which the text was most likely written.</value>
-		///         <remarks>To be added.</remarks>
 		[Wrap ("NLLanguageExtensions.GetValue (_DominantLanguage)")]
 		NLLanguage DominantLanguage { get; }
 
@@ -68,7 +65,7 @@ namespace NaturalLanguage {
 		/// <param name="maxHypotheses">The maximum number of hypotheses to return.</param>
 		/// <summary>Returns a dictionary of probabilities, keyed by language, that describes the most likely languages in which the text that was analyzed with <see cref="NaturalLanguage.NLLanguageRecognizer.Process(System.String)" /> was written.</summary>
 		/// <returns>A dictionary of probabilities, keyed by language, that describes the most likely languages in which the text that was analyzed with <see cref="NaturalLanguage.NLLanguageRecognizer.Process(System.String)" /> was written.</returns>
-		/// <remarks>To be added.</remarks>
+		
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Export ("languageHypothesesWithMaximum:")]
 		NSDictionary<NSString, NSNumber> GetNativeLanguageHypotheses (nuint maxHypotheses);
@@ -76,7 +73,6 @@ namespace NaturalLanguage {
 		// left in case the user does not want to get a c# dict
 		/// <summary>Gets or sets a list of language hints that use native types.</summary>
 		///         <value>A list of language hints that use native types.</value>
-		///         <remarks>To be added.</remarks>
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Export ("languageHints", ArgumentSemantic.Copy)]
 		NSDictionary<NSString, NSNumber> NativeLanguageHints { get; set; }
@@ -87,7 +83,6 @@ namespace NaturalLanguage {
 
 		/// <summary>Gets or sets the array of languages from which the recognizer must choose.</summary>
 		///         <value>The array of languages from which the recognizer must choose..</value>
-		///         <remarks>To be added.</remarks>
 		NLLanguage [] LanguageConstraints {
 			[Wrap ("Array.ConvertAll (_LanguageConstraints, e => NLLanguageExtensions.GetValue (e))")]
 			get;
@@ -102,7 +97,6 @@ namespace NaturalLanguage {
 	interface NLModelConfiguration : NSCopying, NSSecureCoding {
 		/// <summary>Gets the model type.</summary>
 		///         <value>A value that tells whether the model tags at the token level, or at a higher level.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("type")]
 		NLModelType Type { get; }
 
@@ -112,19 +106,16 @@ namespace NaturalLanguage {
 
 		/// <summary>Gets the language that the model supports.</summary>
 		///         <value>The language that the model supports..</value>
-		///         <remarks>To be added.</remarks>
 		NLLanguage Language { [Wrap ("(_Language is not null)? NLLanguageExtensions.GetValue (_Language) : NLLanguage.Undetermined")] get; }
 
 		/// <summary>Gets the framework version on which the model was trained.</summary>
 		///         <value>The framework version on which the model was trained.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("revision")]
 		nuint Revision { get; }
 
 		/// <param name="type">The model type for which to inquire about the versions of support.</param>
 		///         <summary>Gets the revisions of natural language support that work with models of the specified type.</summary>
 		///         <returns>The revisions of natural language support that work with models of the specified type.</returns>
-		///         <remarks>To be added.</remarks>
 		[Static]
 		[Export ("supportedRevisionsForType:")]
 		NSIndexSet GetSupportedRevisions (NLModelType type);
@@ -132,7 +123,6 @@ namespace NaturalLanguage {
 		/// <param name="type">The model type for which to inquire about the version of support.</param>
 		///         <summary>Gets the revision of the current natural language support for models of the specified type.</summary>
 		///         <returns>The revision of the current natural language support for models of the specified type.</returns>
-		///         <remarks>To be added.</remarks>
 		[Static]
 		[Export ("currentRevisionForType:")]
 		nuint GetCurrentRevision (NLModelType type);
@@ -147,17 +137,15 @@ namespace NaturalLanguage {
 		///         <param name="error">A location in which to write any errors that occur.</param>
 		///         <summary>Creates and returns a new NLModel from the custom tagging or language recognition model at the specified <paramref name="url" />.</summary>
 		///         <returns>The new model.</returns>
-		///         <remarks>To be added.</remarks>
 		[Static]
 		[Export ("modelWithContentsOfURL:error:")]
 		[return: NullAllowed]
 		NLModel Create (NSUrl url, [NullAllowed] out NSError error);
 
 		/// <param name="mlModel">The model to import.</param>
-		///         <param name="error">To be added.</param>
+		/// <param name="error">On return, contains any error that occurred.</param>
 		///         <summary>Creates and returns a new NLModel from the provided custom tagging or language recognition model.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <returns>A new model instance, or <see langword="null" /> on failure.</returns>
 		[Static]
 		[Export ("modelWithMLModel:error:")]
 		[return: NullAllowed]
@@ -165,14 +153,12 @@ namespace NaturalLanguage {
 
 		/// <summary>Gets the configuration information, such as which language the model supports, or the current version of the model.</summary>
 		///         <value>The configuration information, such as which language the model supports, or the current version of the model.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("configuration", ArgumentSemantic.Copy)]
 		NLModelConfiguration Configuration { get; }
 
 		/// <param name="string">The string for which to get APrediction.</param>
 		///         <summary>Returns the prediction for the string.</summary>
 		///         <returns>The prediction for the string.</returns>
-		///         <remarks>To be added.</remarks>
 		[Export ("predictedLabelForString:")]
 		[return: NullAllowed]
 		string GetPredictedLabel (string @string);
@@ -180,7 +166,6 @@ namespace NaturalLanguage {
 		/// <param name="tokens">The strings for which to get APrediction.</param>
 		///         <summary>Returns the prediction for the strings.</summary>
 		///         <returns>The prediction for the strings.</returns>
-		///         <remarks>To be added.</remarks>
 		[Export ("predictedLabelsForTokens:")]
 		string [] GetPredictedLabels (string [] tokens);
 
@@ -213,20 +198,18 @@ namespace NaturalLanguage {
 	interface NLTokenizer {
 		/// <param name="unit">The unit into which the tokenizer will separate text.</param>
 		/// <summary>Creates a new tokenizer that breaks text up into the specified semantic <paramref name="unit" />s.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("initWithUnit:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NLTokenUnit unit);
 
 		/// <summary>Gets the semantic unit of the tokens that this tokenizer returns.</summary>
 		///         <value>The semantic unit of the tokens that this tokenizer returns.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("unit")]
 		NLTokenUnit Unit { get; }
 
 		/// <summary>Gets or sets the string to process.</summary>
 		///         <value>The string to process.</value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed, Export ("string", ArgumentSemantic.Retain)]
 		string String { get; set; }
 
@@ -236,28 +219,25 @@ namespace NaturalLanguage {
 
 		/// <param name="language">The language value to set.</param>
 		///         <summary>Sets the language that the tokenizer will use when processing the string.</summary>
-		///         <remarks>To be added.</remarks>
 		[Wrap ("_SetLanguage (language.GetConstant ()!)")]
 		void SetLanguage (NLLanguage language);
 
 		/// <param name="characterIndex">The index of a character that is covered by a token.</param>
 		/// <summary>Gets the range of the token that covers the specified character index.</summary>
 		/// <returns>The range of the token that covers the specified character index.</returns>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("tokenRangeAtIndex:")]
 		NSRange GetTokenRange (nuint characterIndex);
 
 		/// <param name="range">The range for which to return all tokens.</param>
 		///         <summary>Tokenizes the specified range of text.</summary>
 		///         <returns>Tokens for the specified range.</returns>
-		///         <remarks>To be added.</remarks>
 		[Export ("tokensForRange:")]
 		NSValue [] GetTokens (NSRange range);
 
 		/// <param name="range">The lexical range over which to get tokens.</param>
 		///         <param name="handler">A handler to run on each token.</param>
 		///         <summary>Enumerates tokens for the specified range in the text.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("enumerateTokensInRange:usingBlock:")]
 		void EnumerateTokens (NSRange range, NLTokenizerEnumerateContinuationHandler handler);
 
@@ -281,7 +261,7 @@ namespace NaturalLanguage {
 	interface NLTagger {
 		/// <param name="tagSchemes">The taggging schemes that detail the classifications to return.</param>
 		/// <summary>Initializes a tagger that classifies tokens according the the identified tagging schemes.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Export ("initWithTagSchemes:")]
 		[DesignatedInitializer]
@@ -289,7 +269,7 @@ namespace NaturalLanguage {
 
 		/// <param name="tagSchemes">The taggging schemes that detail the classifications to return.</param>
 		/// <summary>Initializes a tagger that classifies tokens according the the provided tagging schemes.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Wrap ("this (Array.ConvertAll (tagSchemes, e => e.GetConstant ()!))")]
 		NativeHandle Constructor ([Params] NLTagScheme [] tagSchemes);
 
@@ -299,13 +279,10 @@ namespace NaturalLanguage {
 
 		/// <summary>Gets the tagging schemes that are supported by this tagger.</summary>
 		///         <value>The tagging schemes that are supported by this tagger.</value>
-		///         <remarks>To be added.</remarks>
 		[Wrap ("Array.ConvertAll (_TagSchemes, e => NLTagSchemeExtensions.GetValue (e))")]
 		NLTagScheme [] TagSchemes { get; }
 
 		/// <summary>Gets or sets the string to tag.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed, Export ("string", ArgumentSemantic.Retain)]
 		string String { get; set; }
 
@@ -313,7 +290,6 @@ namespace NaturalLanguage {
 		///         <param name="language">The language that constrains the tags available for the <paramref name="unit" />.</param>
 		///         <summary>Returns the available tag schemes for <paramref name="unit" /> and <paramref name="language" />.</summary>
 		///         <returns>The available tag schemes for <paramref name="unit" /> and <paramref name="language" />.</returns>
-		///         <remarks>To be added.</remarks>
 		[Static]
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Export ("availableTagSchemesForUnit:language:")]
@@ -323,7 +299,6 @@ namespace NaturalLanguage {
 		///         <param name="language">The language that constrains the tags available for the <paramref name="unit" />.</param>
 		///         <summary>Returns the available tag schemes for <paramref name="unit" /> and <paramref name="language" />.</summary>
 		///         <returns>The available tag schemes for <paramref name="unit" /> and <paramref name="language" />.</returns>
-		///         <remarks>To be added.</remarks>
 		[Static]
 		[Wrap ("Array.ConvertAll (GetAvailableTagSchemes (unit, language.GetConstant()!), e => NLTagSchemeExtensions.GetValue (e))")]
 		NLTagScheme [] GetAvailableTagSchemes (NLTokenUnit unit, NLLanguage language);
@@ -332,7 +307,7 @@ namespace NaturalLanguage {
 		/// <param name="unit">The unit, which covers the <paramref name="characterIndex" />, whose range to get.</param>
 		/// <summary>Returns the lexical range of the <paramref name="unit" /> that contains the specified <paramref name="characterIndex" />.</summary>
 		/// <returns>The lexical range of the <paramref name="unit" /> that contains the specified <paramref name="characterIndex" />.</returns>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("tokenRangeAtIndex:unit:")]
 		NSRange GetTokenRange (nuint characterIndex, NSString unit);
 
@@ -342,7 +317,6 @@ namespace NaturalLanguage {
 
 		/// <summary>Gets the dominant language for the tagged text.</summary>
 		///         <value>The dominant language for the tagged text.</value>
-		///         <remarks>To be added.</remarks>
 		[Wrap ("NLLanguageExtensions.GetValue (_DominantLanguage)")]
 		NLLanguage DominantLanguage { get; }
 
@@ -352,7 +326,6 @@ namespace NaturalLanguage {
 		///         <param name="options">Options that control preprocessing done to tags.</param>
 		///         <param name="handler">A handler to run on enumerated tags.</param>
 		///         <summary>Enumerates over a filtered list of tags and applies a handler.</summary>
-		///         <remarks>To be added.</remarks>
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Export ("enumerateTagsInRange:unit:scheme:options:usingBlock:")]
 		void EnumerateTags (NSRange range, NLTokenUnit unit, NSString scheme, NLTaggerOptions options, NLTaggerEnumerateTagsContinuationHandler handler);
@@ -363,29 +336,28 @@ namespace NaturalLanguage {
 		///         <param name="options">Options that control preprocessing done to tags.</param>
 		///         <param name="handler">A handler to run on enumerated tags.</param>
 		///         <summary>Enumerates over a filtered list of tags and applies a handler.</summary>
-		///         <remarks>To be added.</remarks>
 		[Wrap ("EnumerateTags (range, unit, scheme.GetConstant ()!, options, handler)")]
 		void EnumerateTags (NSRange range, NLTokenUnit unit, NLTagScheme scheme, NLTaggerOptions options, NLTaggerEnumerateTagsContinuationHandler handler);
 
-		/// <param name="characterIndex">To be added.</param>
-		/// <param name="unit">To be added.</param>
-		/// <param name="scheme">To be added.</param>
-		/// <param name="tokenRange">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="characterIndex">The character index to start from.</param>
+		/// <param name="unit">The linguistic unit.</param>
+		/// <param name="scheme">The tag scheme.</param>
+		/// <param name="tokenRange">On return, the range of the token.</param>
+		/// <summary>Gets the tag at the specified character index.</summary>
+		/// <returns>The tag at the specified index, or <see langword="null" />.</returns>
+		
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Export ("tagAtIndex:unit:scheme:tokenRange:")]
 		[return: NullAllowed]
 		NSString GetTag (nuint characterIndex, NLTokenUnit unit, NSString scheme, out NSRange tokenRange);
 
-		/// <param name="characterIndex">To be added.</param>
-		/// <param name="unit">To be added.</param>
-		/// <param name="scheme">To be added.</param>
-		/// <param name="tokenRange">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="characterIndex">The character index to start from.</param>
+		/// <param name="unit">The linguistic unit.</param>
+		/// <param name="scheme">The tag scheme.</param>
+		/// <param name="tokenRange">On return, the range of the token.</param>
+		/// <summary>Gets the tag hypotheses at the specified character index.</summary>
+		/// <returns>A dictionary of tag hypotheses with their confidence scores.</returns>
+		
 		[return: NullAllowed]
 		[Wrap ("GetTag (characterIndex, unit, scheme.GetConstant ()!, out tokenRange)")]
 		NSString GetTag (nuint characterIndex, NLTokenUnit unit, NLTagScheme scheme, out NSRange tokenRange);
@@ -397,26 +369,23 @@ namespace NaturalLanguage {
 		///         <param name="tokenRanges">Location to store the ranges of the tokens for the returned tags.</param>
 		///         <summary>Returns the tags and ranges for a string range and unit.</summary>
 		///         <returns>The tags and ranges for the string range and unit.</returns>
-		///         <remarks>To be added.</remarks>
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Export ("tagsInRange:unit:scheme:options:tokenRanges:")]
 		NSString [] GetTags (NSRange range, NLTokenUnit unit, NSString scheme, NLTaggerOptions options, [NullAllowed] out NSValue [] tokenRanges);
 
-		/// <param name="range">To be added.</param>
-		///         <param name="unit">To be added.</param>
-		///         <param name="scheme">To be added.</param>
-		///         <param name="options">To be added.</param>
-		///         <param name="tokenRanges">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="range">The range to analyze.</param>
+		/// <param name="unit">The linguistic unit.</param>
+		/// <param name="scheme">The tag scheme.</param>
+		/// <param name="options">The tagger options.</param>
+		/// <param name="tokenRanges">On return, the ranges of the tokens.</param>
+		/// <summary>Gets the tags in the specified range.</summary>
+		/// <returns>An array of tags for the tokens in the range.</returns>
 		[Wrap ("GetTags (range, unit, scheme.GetConstant ()!, options, out tokenRanges)")]
 		NSString [] GetTags (NSRange range, NLTokenUnit unit, NLTagScheme scheme, NLTaggerOptions options, [NullAllowed] out NSValue [] tokenRanges);
 
 		/// <param name="language">The new language value.</param>
 		///         <param name="range">The range to which to apply the change.</param>
 		///         <summary>Sets the language for the specified range.</summary>
-		///         <remarks>To be added.</remarks>
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Export ("setLanguage:range:")]
 		void SetLanguage (NSString language, NSRange range);
@@ -424,21 +393,18 @@ namespace NaturalLanguage {
 		/// <param name="language">The new language value.</param>
 		///         <param name="range">The range to which to apply the change.</param>
 		///         <summary>Sets the language for the specified range.</summary>
-		///         <remarks>To be added.</remarks>
 		[Wrap ("SetLanguage (language.GetConstant ()!, range)")]
 		void SetLanguage (NLLanguage language, NSRange range);
 
 		/// <param name="orthography">The orthography to set for the range.</param>
 		///         <param name="range">The range for which to assign an orthography.</param>
 		///         <summary>Assigns an orthography to a range.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("setOrthography:range:")]
 		void SetOrthography (NSOrthography orthography, NSRange range);
 
 		/// <param name="models">The models to assign to the tag schemes.</param>
 		///         <param name="tagScheme">The tag scheme for which to assign the models.</param>
 		///         <summary>Assigns models to a tag scheme.</summary>
-		///         <remarks>To be added.</remarks>
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Export ("setModels:forTagScheme:")]
 		void SetModels (NLModel [] models, NSString tagScheme);
@@ -446,14 +412,12 @@ namespace NaturalLanguage {
 		/// <param name="models">The models to assign to the tag schemes.</param>
 		///         <param name="tagScheme">The tag scheme for which to assign the models.</param>
 		///         <summary>Assigns models to a tag scheme.</summary>
-		///         <remarks>To be added.</remarks>
 		[Wrap ("SetModels (models, tagScheme.GetConstant ()!)")]
 		void SetModels (NLModel [] models, NLTagScheme tagScheme);
 
 		/// <param name="tagScheme">The tag scheme for which to get corresponding models.</param>
 		///         <summary>Returns the models that generate tags from the specified scheme.</summary>
 		///         <returns>The models that generate tags from the specified scheme.</returns>
-		///         <remarks>To be added.</remarks>
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Export ("modelsForTagScheme:")]
 		NLModel [] GetModels (NSString tagScheme);
@@ -461,7 +425,6 @@ namespace NaturalLanguage {
 		/// <param name="tagScheme">The tag scheme for which to get corresponding models.</param>
 		///         <summary>Returns the models that generate tags from the specified scheme.</summary>
 		///         <returns>The models that generate tags from the specified scheme.</returns>
-		///         <remarks>To be added.</remarks>
 		[Wrap ("GetModels (tagScheme.GetConstant ()!)")]
 		NLModel [] GetModels (NLTagScheme tagScheme);
 
@@ -533,159 +496,97 @@ namespace NaturalLanguage {
 	[MacCatalyst (13, 1)]
 	[Static] // only used to compare with NSString not as input/output
 	interface NLTag {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for a word token.</summary>
 		[Field ("NLTagWord")]
 		NSString Word { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for punctuation.</summary>
 		[Field ("NLTagPunctuation")]
 		NSString Punctuation { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for whitespace.</summary>
 		[Field ("NLTagWhitespace")]
 		NSString Whitespace { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for other token types.</summary>
 		[Field ("NLTagOther")]
 		NSString Other { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for nouns.</summary>
 		[Field ("NLTagNoun")]
 		NSString Noun { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for verbs.</summary>
 		[Field ("NLTagVerb")]
 		NSString Verb { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for adjectives.</summary>
 		[Field ("NLTagAdjective")]
 		NSString Adjective { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for adverbs.</summary>
 		[Field ("NLTagAdverb")]
 		NSString Adverb { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for pronouns.</summary>
 		[Field ("NLTagPronoun")]
 		NSString Pronoun { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for determiners.</summary>
 		[Field ("NLTagDeterminer")]
 		NSString Determiner { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for particles.</summary>
 		[Field ("NLTagParticle")]
 		NSString Particle { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for prepositions.</summary>
 		[Field ("NLTagPreposition")]
 		NSString Preposition { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for numbers.</summary>
 		[Field ("NLTagNumber")]
 		NSString Number { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for conjunctions.</summary>
 		[Field ("NLTagConjunction")]
 		NSString Conjunction { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for interjections.</summary>
 		[Field ("NLTagInterjection")]
 		NSString Interjection { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for classifiers.</summary>
 		[Field ("NLTagClassifier")]
 		NSString Classifier { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for idioms.</summary>
 		[Field ("NLTagIdiom")]
 		NSString Idiom { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for other words.</summary>
 		[Field ("NLTagOtherWord")]
 		NSString OtherWord { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for sentence terminators.</summary>
 		[Field ("NLTagSentenceTerminator")]
 		NSString SentenceTerminator { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for open quotes.</summary>
 		[Field ("NLTagOpenQuote")]
 		NSString OpenQuote { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for close quotes.</summary>
 		[Field ("NLTagCloseQuote")]
 		NSString CloseQuote { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for open parentheses.</summary>
 		[Field ("NLTagOpenParenthesis")]
 		NSString OpenParenthesis { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for close parentheses.</summary>
 		[Field ("NLTagCloseParenthesis")]
 		NSString CloseParenthesis { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for word joiners.</summary>
 		[Field ("NLTagWordJoiner")]
 		NSString WordJoiner { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for dashes.</summary>
 		[Field ("NLTagDash")]
 		NSString Dash { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for other punctuation.</summary>
 		[Field ("NLTagOtherPunctuation")]
 		NSString OtherPunctuation { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for paragraph breaks.</summary>
 		[Field ("NLTagParagraphBreak")]
 		NSString ParagraphBreak { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for other whitespace.</summary>
 		[Field ("NLTagOtherWhitespace")]
 		NSString OtherWhitespace { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for personal names.</summary>
 		[Field ("NLTagPersonalName")]
 		NSString PersonalName { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for place names.</summary>
 		[Field ("NLTagPlaceName")]
 		NSString PlaceName { get; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tag for organization names.</summary>
 		[Field ("NLTagOrganizationName")]
 		NSString OrganizationName { get; }
 	}

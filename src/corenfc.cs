@@ -104,32 +104,27 @@ namespace CoreNFC {
 	[DisableDefaultCtor]
 	interface NFCIso15693ReaderSession {
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the alert message to display while the session is active.</summary>
 		[Field ("NFCISO15693TagResponseErrorKey")]
 		NSString TagResponseErrorKey { get; }
 
-		/// <param name="delegate">To be added.</param>
+		/// <param name="delegate">The delegate that receives session events.</param>
 		/// <param name="queue">
-		///           <para>To be added.</para>
+		///   <para>The dispatch queue on which to deliver events, or <see langword="null" /> to use the main queue.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Creates a new ISO 15693 reader session.</summary>
+		
 		[Export ("initWithDelegate:queue:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (INFCReaderSessionDelegate @delegate, [NullAllowed] DispatchQueue queue);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Restarts the polling sequence to discover new tags.</summary>
 		[Static]
 		[Export ("readingAvailable")]
 		bool ReadingAvailable { get; }
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the maximum number of retries.</summary>
 		[Export ("restartPolling")]
 		void RestartPolling ();
 	}
@@ -141,44 +136,38 @@ namespace CoreNFC {
 	interface NFCIso15693CustomCommandConfiguration {
 
 		/// <summary>Gets or sets the ISO-7816-6 manufacturer code.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("manufacturerCode")]
 		nuint ManufacturerCode { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the retry interval in seconds.</summary>
 		[Export ("customCommandCode")]
 		nuint CustomCommandCode { get; set; }
 
 		/// <summary>Gets or sets the command-specific parameters, as <see cref="Foundation.NSData" />.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("requestParameters", ArgumentSemantic.Copy)]
 		NSData RequestParameters { get; set; }
 
-		/// <param name="manufacturerCode">To be added.</param>
-		/// <param name="customCommandCode">To be added.</param>
+		/// <param name="manufacturerCode">The manufacturer code.</param>
+		/// <param name="customCommandCode">The custom command code.</param>
 		/// <param name="requestParameters">
-		///           <para>To be added.</para>
+		///   <para>The request flags, or <see langword="null" /> for default.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Creates a custom command configuration.</summary>
+		
 		[Export ("initWithManufacturerCode:customCommandCode:requestParameters:")]
 		NativeHandle Constructor (nuint manufacturerCode, nuint customCommandCode, [NullAllowed] NSData requestParameters);
 
-		/// <param name="manufacturerCode">To be added.</param>
-		/// <param name="customCommandCode">To be added.</param>
+		/// <param name="manufacturerCode">The manufacturer code.</param>
+		/// <param name="customCommandCode">The custom command code.</param>
 		/// <param name="requestParameters">
-		///           <para>To be added.</para>
+		///   <para>The request flags, or <see langword="null" /> for default.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		/// <param name="maximumRetries">To be added.</param>
-		/// <param name="retryInterval">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="maximumRetries">The maximum number of retries.</param>
+		/// <param name="retryInterval">The retry interval in seconds.</param>
+		/// <summary>Creates a custom command configuration with retry options.</summary>
+		
 		[Export ("initWithManufacturerCode:customCommandCode:requestParameters:maximumRetries:retryInterval:")]
 		NativeHandle Constructor (nuint manufacturerCode, nuint customCommandCode, [NullAllowed] NSData requestParameters, nuint maximumRetries, double retryInterval);
 	}
@@ -188,31 +177,27 @@ namespace CoreNFC {
 	[BaseType (typeof (NFCTagCommandConfiguration), Name = "NFCISO15693ReadMultipleBlocksConfiguration")]
 	interface NFCIso15693ReadMultipleBlocksConfiguration {
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the byte range of the blocks to read.</summary>
 		[Export ("range", ArgumentSemantic.Assign)]
 		NSRange Range { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the number of bytes per chunk.</summary>
 		[Export ("chunkSize")]
 		nuint ChunkSize { get; set; }
 
-		/// <param name="range">To be added.</param>
-		/// <param name="chunkSize">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="range">The range of blocks to read.</param>
+		/// <param name="chunkSize">The size of each chunk in bytes.</param>
+		/// <summary>Creates a read multiple blocks configuration.</summary>
+		
 		[Export ("initWithRange:chunkSize:")]
 		NativeHandle Constructor (NSRange range, nuint chunkSize);
 
-		/// <param name="range">To be added.</param>
-		/// <param name="chunkSize">To be added.</param>
-		/// <param name="maximumRetries">To be added.</param>
-		/// <param name="retryInterval">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="range">The range of blocks to read.</param>
+		/// <param name="chunkSize">The size of each chunk in bytes.</param>
+		/// <param name="maximumRetries">The maximum number of retries.</param>
+		/// <param name="retryInterval">The retry interval in seconds.</param>
+		/// <summary>Creates a read multiple blocks configuration with retry options.</summary>
+		
 		[Export ("initWithRange:chunkSize:maximumRetries:retryInterval:")]
 		NativeHandle Constructor (NSRange range, nuint chunkSize, nuint maximumRetries, double retryInterval);
 	}
@@ -458,26 +443,18 @@ namespace CoreNFC {
 	interface NFCNdefPayload : NSSecureCoding {
 
 		/// <summary>Gets or sets the <see cref="CoreNFC.NFCTypeNameFormat" /> that defines the content type of the payload.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("typeNameFormat", ArgumentSemantic.Assign)]
 		NFCTypeNameFormat TypeNameFormat { get; set; }
 
 		/// <summary>Gets or sets the NDEF-specified kind of the payload.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("type", ArgumentSemantic.Copy)]
 		NSData Type { get; set; }
 
 		/// <summary>Gets or sets the NDEF-specified identifier of the payload.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("identifier", ArgumentSemantic.Copy)]
 		NSData Identifier { get; set; }
 
 		/// <summary>Gets or sets the payload data, as <see cref="Foundation.NSData" />.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("payload", ArgumentSemantic.Copy)]
 		NSData Payload { get; set; }
 
@@ -531,8 +508,6 @@ namespace CoreNFC {
 	interface NFCNdefMessage : NSSecureCoding {
 
 		/// <summary>Gets or sets the array of <see cref="CoreNFC.NFCNdefPayload" /> objects that constitute the message.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("records", ArgumentSemantic.Copy)]
 		NFCNdefPayload [] Records { get; set; }
 
@@ -566,7 +541,6 @@ namespace CoreNFC {
 		/// <param name="session">The session that was invalidated.</param>
 		///         <param name="error">The error that invalidated the session.</param>
 		///         <summary>Developers may override this method to respond to the invalidation of the NFC session.</summary>
-		///         <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("readerSession:didInvalidateWithError:")]
 		void DidInvalidate (NFCNdefReaderSession session, NSError error);
@@ -574,7 +548,6 @@ namespace CoreNFC {
 		/// <param name="session">The session that detected the messages.</param>
 		///         <param name="messages">To be added.</param>
 		///         <summary>Developers may override this method to respond to the detection of NFC tags.</summary>
-		///         <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("readerSession:didDetectNDEFs:")]
 		void DidDetect (NFCNdefReaderSession session, NFCNdefMessage [] messages);
@@ -609,7 +582,6 @@ namespace CoreNFC {
 		NativeHandle Constructor (INFCNdefReaderSessionDelegate @delegate, [NullAllowed] DispatchQueue queue, bool invalidateAfterFirstRead);
 
 		/// <summary>Gets whether the device supports NFC tag reading.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>
 		///           <para>NFC tag reading is only available on iPhone 7 and later models.</para>
 		///         </remarks>
@@ -646,8 +618,6 @@ namespace CoreNFC {
 		INFCReaderSessionDelegate Delegate { get; }
 
 		/// <summary>Gets the <see cref="CoreFoundation.DispatchQueue" /> on which the NFC detection and reading is performed.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("sessionQueue")]
 		DispatchQueue SessionQueue { get; }
 
@@ -710,7 +680,6 @@ namespace CoreNFC {
 
 		/// <param name="session">The session that became active.</param>
 		///         <summary>Developers may override this method to react to the <see cref="CoreNFC.NFCReaderSession" /> activating.</summary>
-		///         <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("readerSessionDidBecomeActive:")]
 		void DidBecomeActive (NFCReaderSession session);
@@ -718,14 +687,12 @@ namespace CoreNFC {
 		/// <param name="session">The session that detected the tags.</param>
 		///         <param name="tags">The tags that were detected.</param>
 		///         <summary>Developers may override this method to react to the detection of NFC <paramref name="tags" />.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("readerSession:didDetectTags:")]
 		void DidDetectTags (NFCReaderSession session, INFCTag [] tags);
 
 		/// <param name="session">The session that was invalidated.</param>
 		///         <param name="error">The error that invalidated the session.</param>
 		///         <summary>Developers may override this method to react to the invalidation of the <see cref="CoreNFC.NFCReaderSession" />.</summary>
-		///         <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("readerSession:didInvalidateWithError:")]
 		void DidInvalidate (NFCReaderSession session, NSError error);
@@ -795,14 +762,10 @@ namespace CoreNFC {
 	interface NFCTagCommandConfiguration : NSCopying {
 
 		/// <summary>Gets or sets the number of tries a command may be resent, if necessary.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("maximumRetries")]
 		nuint MaximumRetries { get; set; }
 
 		/// <summary>Gets or sets the time, in seconds, between retry attempts.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("retryInterval")]
 		double RetryInterval { get; set; }
 	}

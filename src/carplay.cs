@@ -107,37 +107,37 @@ namespace CarPlay {
 	[Flags]
 	[Native]
 	enum CPManeuverDisplayStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Default display style.</summary>
 		Default,
-		/// <summary>To be added.</summary>
+		/// <summary>Display with a leading symbol.</summary>
 		LeadingSymbol,
-		/// <summary>To be added.</summary>
+		/// <summary>Display with a trailing symbol.</summary>
 		TrailingSymbol,
-		/// <summary>To be added.</summary>
+		/// <summary>Display symbol only.</summary>
 		SymbolOnly,
-		/// <summary>To be added.</summary>
+		/// <summary>Display instruction only.</summary>
 		InstructionOnly,
 	}
 
 	[NoTV, NoMac]
 	[Native]
 	enum CPTimeRemainingColor : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Default color.</summary>
 		Default = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Green color indicating plenty of time.</summary>
 		Green,
-		/// <summary>To be added.</summary>
+		/// <summary>Orange color indicating moderate time remaining.</summary>
 		Orange,
-		/// <summary>To be added.</summary>
+		/// <summary>Red color indicating little time remaining.</summary>
 		Red,
 	}
 
 	[NoTV, NoMac]
 	[Native]
 	enum CPTripEstimateStyle : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Light style.</summary>
 		Light = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Dark style.</summary>
 		Dark,
 	}
 
@@ -356,8 +356,6 @@ namespace CarPlay {
 		NativeHandle Constructor (CPBarButtonType type, [NullAllowed] Action<CPBarButton> handler);
 
 		/// <summary>Gets or sets whether the button is enabled.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("enabled")]
 		bool Enabled { [Bind ("isEnabled")] get; set; }
 
@@ -389,21 +387,21 @@ namespace CarPlay {
 	interface ICPBarButtonProviding { }
 
 	/// <summary>Interface defining necessary methods for the <see cref="CarPlay.ICPBarButtonProviding" /> protocol.</summary>
-	/// <remarks>To be added.</remarks>
+		
 	[NoTV, NoMac]
 	[Protocol]
 	interface CPBarButtonProviding {
 
 		/// <summary>Developers must override this with the array of <see cref="CarPlay.CPBarButton" /> objects on the leading part of the navigation bar.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <value>The list of items in the section.</value>
+		
 		[Abstract]
 		[Export ("leadingNavigationBarButtons", ArgumentSemantic.Strong)]
 		CPBarButton [] LeadingNavigationBarButtons { get; set; }
 
 		/// <summary>Developers must override this with the array of <see cref="CarPlay.CPBarButton" /> objects on the trailing part of the navigation bar..</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <value>The section header text, or <see langword="null" />.</value>
+		
 		[Abstract]
 		[Export ("trailingNavigationBarButtons", ArgumentSemantic.Strong)]
 		CPBarButton [] TrailingNavigationBarButtons { get; set; }
@@ -428,8 +426,6 @@ namespace CarPlay {
 		NativeHandle Constructor (string [] titleVariants, UIImage image, [NullAllowed] CPMessageGridItemConfiguration messageConfiguration, [NullAllowed] Action<CPGridButton> handler);
 
 		/// <summary>Gets or sets whether the button is enabled.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("enabled")]
 		bool Enabled { [Bind ("isEnabled")] get; set; }
 
@@ -611,7 +607,7 @@ namespace CarPlay {
 		/// <param name="animated">
 		///           <see langword="true" /> if the transition is automated. Otherwise, <see langword="false" />.</param>
 		/// <summary>Method that is called when a template is about to appear.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("templateWillAppear:animated:")]
 		void TemplateWillAppear (CPTemplate aTemplate, bool animated);
 
@@ -619,7 +615,7 @@ namespace CarPlay {
 		/// <param name="animated">
 		///           <see langword="true" /> if the transition is automated. Otherwise, <see langword="false" />.</param>
 		/// <summary>Method that is called when a template appears.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("templateDidAppear:animated:")]
 		void TemplateDidAppear (CPTemplate aTemplate, bool animated);
 
@@ -627,7 +623,7 @@ namespace CarPlay {
 		/// <param name="animated">
 		///           <see langword="true" /> if the transition is automated. Otherwise, <see langword="false" />.</param>
 		/// <summary>Method that is called when a template is about to disappear.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("templateWillDisappear:animated:")]
 		void TemplateWillDisappear (CPTemplate aTemplate, bool animated);
 
@@ -635,7 +631,7 @@ namespace CarPlay {
 		/// <param name="animated">
 		///           <see langword="true" /> if the transition is automated. Otherwise, <see langword="false" />.</param>
 		/// <summary>Method that is called when a template disappears.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("templateDidDisappear:animated:")]
 		void TemplateDidDisappear (CPTemplate aTemplate, bool animated);
 	}
@@ -651,20 +647,20 @@ namespace CarPlay {
 	[BaseType (typeof (NSObject))]
 	interface CPApplicationDelegate : UIApplicationDelegate {
 
-		/// <param name="application">To be added.</param>
-		/// <param name="interfaceController">To be added.</param>
-		/// <param name="window">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="application">The CarPlay application.</param>
+		/// <param name="interfaceController">The interface controller.</param>
+		/// <param name="window">The CarPlay window.</param>
+		/// <summary>Called when the CarPlay interface connects.</summary>
+		
 		[Abstract]
 		[Export ("application:didConnectCarInterfaceController:toWindow:")]
 		void DidConnectCarInterfaceController (UIApplication application, CPInterfaceController interfaceController, CPWindow window);
 
-		/// <param name="application">To be added.</param>
-		/// <param name="interfaceController">To be added.</param>
-		/// <param name="window">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="application">The CarPlay application.</param>
+		/// <param name="interfaceController">The interface controller.</param>
+		/// <param name="window">The CarPlay window.</param>
+		/// <summary>Called when the CarPlay interface disconnects.</summary>
+		
 		[Abstract]
 		[Export ("application:didDisconnectCarInterfaceController:fromWindow:")]
 		void DidDisconnectCarInterfaceController (UIApplication application, CPInterfaceController interfaceController, CPWindow window);
@@ -672,14 +668,14 @@ namespace CarPlay {
 		/// <param name="application">The application in which a navigation alert was selected.</param>
 		/// <param name="navigationAlert">The selected navigation alert.</param>
 		/// <summary>Method that is called when the user selects a navigation alert.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("application:didSelectNavigationAlert:")]
 		void DidSelectNavigationAlert (UIApplication application, CPNavigationAlert navigationAlert);
 
 		/// <param name="application">The application in which a maneuver was selected.</param>
 		/// <param name="maneuver">The selected maneuver.</param>
 		/// <summary>Method that is called when the user selects a maneuver.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("application:didSelectManeuver:")]
 		void DidSelectManeuver (UIApplication application, CPManeuver maneuver);
 	}
@@ -768,20 +764,20 @@ namespace CarPlay {
 	interface CPListSection : NSSecureCoding {
 
 #if !XAMCORE_5_0
-		/// <param name="items">To be added.</param>
-		/// <param name="header">To be added.</param>
-		/// <param name="sectionIndexTitle">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="items">The items in the section.</param>
+		/// <param name="header">The section header text.</param>
+		/// <param name="sectionIndexTitle">The section index title.</param>
+		/// <summary>Creates a list section with header and index title.</summary>
+		
 		[Wrap ("base (true ? throw new InvalidOperationException (Constants.BrokenBinding) : NSObjectFlag.Empty)")]
 		[Obsolete ("Use '.ctor (ICPListTemplateItem [], string, string)' constructor instead. Warning: this will throw InvalidOperationException at runtime.")]
 		NativeHandle Constructor (CPListItem [] items, [NullAllowed] string header, [NullAllowed] string sectionIndexTitle);
 #endif
 
 #if !XAMCORE_5_0
-		/// <param name="items">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="items">The items in the section.</param>
+		/// <summary>Creates a list section with the specified items.</summary>
+		
 		[Wrap ("base (true ? throw new InvalidOperationException (Constants.BrokenBinding) : NSObjectFlag.Empty)")]
 		[Obsolete ("Use '.ctor (ICPListTemplateItem [], string, string)' constructor instead. Warning: this will throw InvalidOperationException at runtime.")]
 		NativeHandle Constructor (CPListItem [] items);
@@ -805,8 +801,6 @@ namespace CarPlay {
 
 #if !XAMCORE_5_0
 		/// <summary>The contents of the section.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Wrap ("true ? throw new InvalidOperationException (Constants.BrokenBinding) : new NSArray ()", IsVirtual = true)]
 		[Obsolete ("Use 'Items2 : ICPListTemplateItem []' instead.")]
 		CPListItem [] Items { get; }
@@ -969,11 +963,11 @@ namespace CarPlay {
 	[BaseType (typeof (NSObject))]
 	interface CPListTemplateDelegate {
 
-		/// <param name="listTemplate">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <param name="completionHandler">To be added.</param>
+		/// <param name="listTemplate">The list template.</param>
+		/// <param name="item">The selected item.</param>
+		/// <param name="completionHandler">The completion handler to call when done.</param>
 		/// <summary>Developers must override this method to react to the selection of a list item.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("listTemplate:didSelectListItem:completionHandler:")]
 		void DidSelectListItem (CPListTemplate listTemplate, CPListItem item, Action completionHandler);
@@ -1091,14 +1085,10 @@ namespace CarPlay {
 		NativeHandle Constructor ([NullAllowed] Action<CPMapButton> handler);
 
 		/// <summary>Gets or sets whether the button is enabled.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("enabled")]
 		bool Enabled { [Bind ("isEnabled")] get; set; }
 
 		/// <summary>Gets or sets whether the button is visible.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("hidden")]
 		bool Hidden { [Bind ("isHidden")] get; set; }
 
@@ -1150,8 +1140,6 @@ namespace CarPlay {
 		bool HidesButtonsWithNavigationBar { get; set; }
 
 		/// <summary>Gets or sets the delegate object for the map.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Wrap ("WeakMapDelegate")]
 		[NullAllowed]
 		ICPMapTemplateDelegate MapDelegate { get; set; }
@@ -1165,9 +1153,7 @@ namespace CarPlay {
 		[Export ("dismissPanningInterfaceAnimated:")]
 		void DismissPanningInterface (bool animated);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether the map buttons are hidden during navigation.</summary>
 		[Export ("panningInterfaceVisible")]
 		bool PanningInterfaceVisible { [Bind ("isPanningInterfaceVisible")] get; }
 
@@ -1178,10 +1164,10 @@ namespace CarPlay {
 		void PresentNavigationAlert (CPNavigationAlert navigationAlert, bool animated);
 
 		[Async (XmlDocs = """
-			<param name="animated">To be added.</param>
+			<param name="animated">Whether to animate the dismissal.</param>
 			<summary>Asynchronously dismisses the animation.</summary>
-			<returns>To be added.</returns>
-			<remarks>To be added.</remarks>
+			<returns>A task representing the asynchronous dismiss operation.</returns>
+			
 			""")]
 		[Export ("dismissNavigationAlertAnimated:completion:")]
 		void DismissNavigationAlert (bool animated, Action<bool> completion);
@@ -1243,17 +1229,17 @@ namespace CarPlay {
 		/// <summary>Method that is called to determine whether a navigation maneuver notification should be shown when the app is running in the background.</summary>
 		/// <returns>
 		///           <see langword="true" /> if the notification should be shown. Otherwise, <see langword="false" />.</returns>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("mapTemplate:shouldShowNotificationForManeuver:")]
 		bool ShouldShowNotificationForManeuver (CPMapTemplate mapTemplate, CPManeuver maneuver);
 
 		/// <param name="mapTemplate">The template for the map to query.</param>
-		/// <param name="maneuver">To be added.</param>
+		/// <param name="maneuver">The maneuver to display.</param>
 		/// <param name="travelEstimates">The travel estimates about which to query.</param>
 		/// <summary>Method that is called to determine whether the specified travel estimate updates should be shown when the app is running in the background.</summary>
 		/// <returns>
 		///           <see langword="true" /> if the specified travel estimate updates should be shown. Otherwise, <see langword="false" />.</returns>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("mapTemplate:shouldUpdateNotificationForManeuver:withTravelEstimates:")]
 		bool ShouldUpdateNotificationForManeuver (CPMapTemplate mapTemplate, CPManeuver maneuver, CPTravelEstimates travelEstimates);
 
@@ -1262,81 +1248,81 @@ namespace CarPlay {
 		/// <summary>Method that is called to determine whether a navigation alert should be shown when the app is running in the background.</summary>
 		/// <returns>
 		///           <see langword="true" /> if the navigation alert should be shown. Otherwise, <see langword="false" />.</returns>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("mapTemplate:shouldShowNotificationForNavigationAlert:")]
 		bool ShouldShowNotificationForNavigationAlert (CPMapTemplate mapTemplate, CPNavigationAlert navigationAlert);
 
 		/// <param name="mapTemplate">The template for the map for which APanning interface was shown.</param>
 		/// <summary>Method that is called when APanning interface is shown.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("mapTemplateDidShowPanningInterface:")]
 		void DidShowPanningInterface (CPMapTemplate mapTemplate);
 
 		/// <param name="mapTemplate">The template for the map on which APanning interface will be dismissed.</param>
 		/// <summary>Method that is called just before APanning interface is dismissed.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("mapTemplateWillDismissPanningInterface:")]
 		void WillDismissPanningInterface (CPMapTemplate mapTemplate);
 
 		/// <param name="mapTemplate">The template for the map whose panning interface was dismissed.</param>
 		/// <summary>Method that is called when APanning interface is dismissed.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("mapTemplateDidDismissPanningInterface:")]
 		void DidDismissPanningInterface (CPMapTemplate mapTemplate);
 
 		/// <param name="mapTemplate">The template for the map for which APan was started.</param>
 		/// <param name="direction">The direction of the pan.</param>
 		/// <summary>Method that is called when APan begins.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("mapTemplate:panBeganWithDirection:")]
 		void PanBegan (CPMapTemplate mapTemplate, CPPanDirection direction);
 
 		/// <param name="mapTemplate">The template for the map for which APan was ended.</param>
 		/// <param name="direction">The direction of the pan.</param>
 		/// <summary>Method that is called when APan ends.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("mapTemplate:panEndedWithDirection:")]
 		void PanEnded (CPMapTemplate mapTemplate, CPPanDirection direction);
 
 		/// <param name="mapTemplate">The template for the map to pan.</param>
 		/// <param name="direction">The direction to pan.</param>
 		/// <summary>Pans the map.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("mapTemplate:panWithDirection:")]
 		void Pan (CPMapTemplate mapTemplate, CPPanDirection direction);
 
 		/// <param name="mapTemplate">The template for the map that is panning.</param>
 		/// <summary>Method that is called when APan gesture starts.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("mapTemplateDidBeginPanGesture:")]
 		void DidBeginPanGesture (CPMapTemplate mapTemplate);
 
 		/// <param name="mapTemplate">The template for the map whose pan gesture was updated.</param>
-		/// <param name="translation">To be added.</param>
+		/// <param name="translation">The pan translation.</param>
 		/// <param name="velocity">The pan velocity.</param>
 		/// <summary>Method that is called when APan gesture is updated.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("mapTemplate:didUpdatePanGestureWithTranslation:velocity:")]
 		void DidUpdatePanGesture (CPMapTemplate mapTemplate, CGPoint translation, CGPoint velocity);
 
 		/// <param name="mapTemplate">The template for the map whose pan gesture ended.</param>
-		/// <param name="velocity">To be added.</param>
+		/// <param name="velocity">The pan velocity.</param>
 		/// <summary>Method that is called when APanning interface ends.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("mapTemplate:didEndPanGestureWithVelocity:")]
 		void DidEndPanGesture (CPMapTemplate mapTemplate, CGPoint velocity);
 
 		/// <param name="mapTemplate">The template for the map for which a navigation alert will be shown.</param>
 		/// <param name="navigationAlert">The navigation alert that will be shown.</param>
 		/// <summary>Method that is called just before a navigation alert is shown.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("mapTemplate:willShowNavigationAlert:")]
 		void WillShowNavigationAlert (CPMapTemplate mapTemplate, CPNavigationAlert navigationAlert);
 
 		/// <param name="mapTemplate">The template for the map for which a navigation alert was shown.</param>
 		/// <param name="navigationAlert">The alert that was shown.</param>
 		/// <summary>Method that is called when a navigation alert is shown.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("mapTemplate:didShowNavigationAlert:")]
 		void DidShowNavigationAlert (CPMapTemplate mapTemplate, CPNavigationAlert navigationAlert);
 
@@ -1344,7 +1330,7 @@ namespace CarPlay {
 		/// <param name="navigationAlert">The alert that will be dismissed.</param>
 		/// <param name="dismissalContext">The reason the alert will be dismissed.</param>
 		/// <summary>Method that is called just before a navigation alert is dismissed.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("mapTemplate:willDismissNavigationAlert:dismissalContext:")]
 		void WillDismissNavigationAlert (CPMapTemplate mapTemplate, CPNavigationAlert navigationAlert, CPNavigationAlertDismissalContext dismissalContext);
 
@@ -1352,15 +1338,15 @@ namespace CarPlay {
 		/// <param name="navigationAlert">The alert that was canceled.</param>
 		/// <param name="dismissalContext">The reason the alert was dismissed.</param>
 		/// <summary>Method that is called when a navigation alert is canceled.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("mapTemplate:didDismissNavigationAlert:dismissalContext:")]
 		void DidDismissNavigationAlert (CPMapTemplate mapTemplate, CPNavigationAlert navigationAlert, CPNavigationAlertDismissalContext dismissalContext);
 
-		/// <param name="mapTemplate">To be added</param>
-		/// <param name="trip">To be added.</param>
-		/// <param name="routeChoice">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="mapTemplate">The map template.</param>
+		/// <param name="trip">The trip.</param>
+		/// <param name="routeChoice">The selected route choice.</param>
+		/// <summary>Called when navigation starts for a trip with the selected route.</summary>
+		
 		[Export ("mapTemplate:selectedPreviewForTrip:usingRouteChoice:")]
 		void SelectedPreview (CPMapTemplate mapTemplate, CPTrip trip, CPRouteChoice routeChoice);
 
@@ -1368,28 +1354,28 @@ namespace CarPlay {
 		/// <param name="trip">The trip that started.</param>
 		/// <param name="routeChoice">The route choice for the trip that started.</param>
 		/// <summary>Method that is called when a trip starts.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("mapTemplate:startedTrip:usingRouteChoice:")]
 		void StartedTrip (CPMapTemplate mapTemplate, CPTrip trip, CPRouteChoice routeChoice);
 
 		/// <param name="mapTemplate">The template for the map whose navigation was canceled.</param>
 		/// <summary>Method that is called when navigation is canceled.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("mapTemplateDidCancelNavigation:")]
 		void DidCancelNavigation (CPMapTemplate mapTemplate);
 
 		/// <param name="mapTemplate">The template for the map that .</param>
-		/// <param name="maneuver">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="maneuver">The maneuver to get an estimated arrival time for.</param>
+		/// <summary>Gets the estimated time of arrival for a maneuver.</summary>
+		/// <returns>The estimated arrival time.</returns>
+		
 		[Export ("mapTemplate:displayStyleForManeuver:")]
 		CPManeuverDisplayStyle GetDisplayStyle (CPMapTemplate mapTemplate, CPManeuver maneuver);
 
 		/// <param name="mapTemplate">The template for the map whose zoom gesture ended.</param>
 		/// <param name="velocity">The zoom velocity at the end of the gesture.</param>
 		/// <summary>Method that is called when a zoom gesture ends.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[iOS (26, 0), MacCatalyst (26, 0)]
 		[Export ("mapTemplate:didEndZoomGestureWithVelocity:")]
 		void DidEndZoomGesture (CPMapTemplate mapTemplate, nfloat velocity);
@@ -1399,7 +1385,7 @@ namespace CarPlay {
 		/// <param name="rotation">The rotation angle in radians.</param>
 		/// <param name="velocity">The rotation velocity.</param>
 		/// <summary>Method that is called when the map is rotated.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[iOS (26, 0), MacCatalyst (26, 0)]
 		[Export ("mapTemplate:didRotateWithCenter:rotation:velocity:")]
 		void DidRotate (CPMapTemplate mapTemplate, CGPoint center, nfloat rotation, nfloat velocity);
@@ -1409,7 +1395,7 @@ namespace CarPlay {
 		/// <param name="scale">The current zoom scale.</param>
 		/// <param name="velocity">The zoom velocity.</param>
 		/// <summary>Method that is called when a zoom gesture is updated.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[iOS (26, 0), MacCatalyst (26, 0)]
 		[Export ("mapTemplate:didUpdateZoomGestureWithCenter:scale:velocity:")]
 		void DidUpdateZoomGesture (CPMapTemplate mapTemplate, CGPoint center, nfloat scale, nfloat velocity);
@@ -1417,7 +1403,7 @@ namespace CarPlay {
 		/// <param name="mapTemplate">The template for the map whose pitch gesture ended.</param>
 		/// <param name="center">The center point of the pitch gesture.</param>
 		/// <summary>Method that is called when APitch gesture ends.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[iOS (26, 0), MacCatalyst (26, 0)]
 		[Export ("mapTemplate:pitchEndedWithCenter:")]
 		void PitchEnded (CPMapTemplate mapTemplate, CGPoint center);
@@ -1425,7 +1411,7 @@ namespace CarPlay {
 		/// <param name="mapTemplate">The template for the map that is being pitched.</param>
 		/// <param name="center">The center point of the pitch gesture.</param>
 		/// <summary>Method that is called when the map is pitched.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[iOS (26, 0), MacCatalyst (26, 0)]
 		[Export ("mapTemplate:pitchWithCenter:")]
 		void Pitch (CPMapTemplate mapTemplate, CGPoint center);
@@ -1433,28 +1419,28 @@ namespace CarPlay {
 		/// <param name="mapTemplate">The template for the map whose rotation gesture ended.</param>
 		/// <param name="velocity">The rotation velocity at the end of the gesture.</param>
 		/// <summary>Method that is called when a rotation gesture ends.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[iOS (26, 0), MacCatalyst (26, 0)]
 		[Export ("mapTemplate:rotationDidEndWithVelocity:")]
 		void RotationDidEnd (CPMapTemplate mapTemplate, nfloat velocity);
 
 		/// <param name="mapTemplate">The template for the map that began APitch gesture.</param>
 		/// <summary>Method that is called when APitch gesture begins.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[iOS (26, 0), MacCatalyst (26, 0)]
 		[Export ("mapTemplateDidBeginPitchGesture:")]
 		void DidBeginPitchGesture (CPMapTemplate mapTemplate);
 
 		/// <param name="mapTemplate">The template for the map that began a rotation gesture.</param>
 		/// <summary>Method that is called when a rotation gesture begins.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[iOS (26, 0), MacCatalyst (26, 0)]
 		[Export ("mapTemplateDidBeginRotationGesture:")]
 		void DidBeginRotationGesture (CPMapTemplate mapTemplate);
 
 		/// <param name="mapTemplate">The template for the map that began a zoom gesture.</param>
 		/// <summary>Method that is called when a zoom gesture begins.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[iOS (26, 0), MacCatalyst (26, 0)]
 		[Export ("mapTemplateDidBeginZoomGesture:")]
 		void DidBeginZoomGesture (CPMapTemplate mapTemplate);
@@ -1602,27 +1588,27 @@ namespace CarPlay {
 	[BaseType (typeof (NSObject))]
 	interface CPSearchTemplateDelegate {
 
-		/// <param name="searchTemplate">To be added.</param>
-		/// <param name="searchText">To be added.</param>
-		/// <param name="completionHandler">To be added.</param>
+		/// <param name="searchTemplate">The search template.</param>
+		/// <param name="searchText">The search text.</param>
+		/// <param name="completionHandler">The completion handler to call with results.</param>
 		/// <summary>Developers must override this method to respond to a change in the search text.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("searchTemplate:updatedSearchText:completionHandler:")]
 		void UpdatedSearchText (CPSearchTemplate searchTemplate, string searchText, CPSearchTemplateDelegateUpdateHandler completionHandler);
 
-		/// <param name="searchTemplate">To be added.</param>
-		/// <param name="item">To be added.</param>
-		/// <param name="completionHandler">To be added.</param>
+		/// <param name="searchTemplate">The search template.</param>
+		/// <param name="item">The selected item.</param>
+		/// <param name="completionHandler">The completion handler to call when done.</param>
 		/// <summary>Developers must override this method to respond to a search selection.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("searchTemplate:selectedResult:completionHandler:")]
 		void SelectedResult (CPSearchTemplate searchTemplate, CPListItem item, Action completionHandler);
 
-		/// <param name="searchTemplate">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="searchTemplate">The search template.</param>
+		/// <summary>Called when the search button is pressed.</summary>
+		
 		[Export ("searchTemplateSearchButtonPressed:")]
 		void SearchButtonPressed (CPSearchTemplate searchTemplate);
 	}
@@ -1671,10 +1657,10 @@ namespace CarPlay {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface CPSessionConfigurationDelegate {
-		/// <param name="sessionConfiguration">To be added.</param>
-		/// <param name="limitedUserInterfaces">To be added.</param>
+		/// <param name="sessionConfiguration">The session configuration.</param>
+		/// <param name="limitedUserInterfaces">The limited user interfaces.</param>
 		/// <summary>Called when the system changes keyboards or modifies list limits.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("sessionConfiguration:limitedUserInterfacesChanged:")]
 		void LimitedUserInterfacesChanged (CPSessionConfiguration sessionConfiguration, CPLimitableUserInterface limitedUserInterfaces);
 
@@ -1915,9 +1901,9 @@ namespace CarPlay {
 	[BaseType (typeof (UIWindow))]
 	interface CPWindow {
 
-		/// <param name="frame">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="frame">The frame rectangle for the window.</param>
+		/// <summary>Creates a new CarPlay window with the specified frame.</summary>
+		
 		[Export ("initWithFrame:")]
 		NativeHandle Constructor (CGRect frame);
 

@@ -285,7 +285,7 @@ namespace VideoSubscriberAccount {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
+		
 		[NullAllowed, Export ("accountProviderIdentifier")]
 		string AccountProviderIdentifier { get; }
 
@@ -294,7 +294,7 @@ namespace VideoSubscriberAccount {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
+		
 		[NullAllowed, Export ("authenticationExpirationDate", ArgumentSemantic.Copy)]
 		NSDate AuthenticationExpirationDate { get; }
 
@@ -303,7 +303,7 @@ namespace VideoSubscriberAccount {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
+		
 		[NullAllowed, Export ("verificationData", ArgumentSemantic.Copy)]
 		NSData VerificationData { get; }
 
@@ -312,16 +312,16 @@ namespace VideoSubscriberAccount {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
+		
 		[NullAllowed, Export ("SAMLAttributeQueryResponse")]
 		string SamlAttributeQueryResponse { get; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the response from the account provider.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
+		
 		[NullAllowed, Export ("accountProviderResponse", ArgumentSemantic.Strong)]
 		VSAccountProviderResponse AccountProviderResponse { get; }
 	}

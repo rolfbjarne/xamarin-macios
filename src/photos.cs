@@ -381,19 +381,19 @@ namespace Photos {
 	interface PHAssetContentEditingInputExtensions {
 
 		/// <param name="options">
-		///           <para>To be added.</para>
+		///   <para>Options for the request, or <see langword="null" />.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		/// <param name="completionHandler">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="completionHandler">The handler to call when the input is available.</param>
+		/// <summary>Requests editing input for the asset.</summary>
+		/// <returns>A request identifier that can be used to cancel the request.</returns>
+		
 		[Export ("requestContentEditingInputWithOptions:completionHandler:")]
 		nuint RequestContentEditingInput ([NullAllowed] PHContentEditingInputRequestOptions options, PHContentEditingHandler completionHandler);
 
-		/// <param name="requestID">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="requestID">The identifier of the request to cancel.</param>
+		/// <summary>Cancels the specified content editing input request.</summary>
+		
 		[Export ("cancelContentEditingInputRequest:")]
 		void CancelContentEditingInputRequest (nuint requestID);
 	}

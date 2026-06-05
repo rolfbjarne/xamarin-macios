@@ -23,15 +23,15 @@ namespace AddressBookUI {
 	[BaseType (typeof (UIViewController))]
 	interface ABNewPersonViewController {
 		/// <param name="nibName">
-		///           <para>To be added.</para>
+		///   <para>The name of the nib file, or <see langword="null" />.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <param name="bundle">
-		///           <para>To be added.</para>
+		///   <para>The bundle containing the nib, or <see langword="null" />.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Creates the view controller from the specified nib and bundle.</summary>
+		
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
 		NativeHandle Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);

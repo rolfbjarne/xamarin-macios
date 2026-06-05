@@ -285,8 +285,8 @@ namespace Xamarin.Linker {
 					})
 				)},
 				{ "DylibToConvertToFramework", (
-					new LoadValue ((key, value) => Application.DylibsToConvertToFrameworks.Add (value),
-					new SaveValue ((key, storage) => storage.AddRange (Application.DylibsToConvertToFrameworks.Select (v => $"{key}={v}"))),
+					new LoadValue ((key, value) => Application.DylibsToConvertToFrameworks.Add (value)),
+					new SaveValue ((key, storage) => storage.AddRange (Application.DylibsToConvertToFrameworks.Select (v => $"{key}={v}")))
 				)},
 				{ "EnableSGenConc", (
 					new LoadValue ((key, value) => Application.EnableSGenConc = string.Equals ("true", value, StringComparison.OrdinalIgnoreCase)),
@@ -443,7 +443,7 @@ namespace Xamarin.Linker {
 					new SaveValue ((key, storage) => saveNullableBool (key, Application.PublishReadyToRun, storage))
 				)},
 				{ "PublishReadyToRunContainerFormat", (
-					new LoadValue ((key, value) => Application.PublishReadyToRunContainerFormat = value,
+					new LoadValue ((key, value) => Application.PublishReadyToRunContainerFormat = value),
 					new SaveValue ((key, storage) => saveNonEmpty (key, Application.PublishReadyToRunContainerFormat, storage))
 				)},
 				{ "ReferenceNativeSymbol", (

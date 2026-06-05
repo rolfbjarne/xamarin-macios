@@ -429,46 +429,46 @@ namespace AuthenticationServices {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface ASPasswordCredentialIdentity : NSCopying, NSSecureCoding, ASCredentialIdentity {
-		/// <param name="serviceIdentifier">To be added.</param>
-		/// <param name="user">To be added.</param>
-		/// <param name="recordIdentifier">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="serviceIdentifier">The service identifier for the credential.</param>
+		/// <param name="user">The user name.</param>
+		/// <param name="recordIdentifier">The record identifier, or <see langword="null" />.</param>
+		/// <summary>Creates a new password credential identity.</summary>
+		
 		[Export ("initWithServiceIdentifier:user:recordIdentifier:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (ASCredentialServiceIdentifier serviceIdentifier, string user, [NullAllowed] string recordIdentifier);
 
-		/// <param name="serviceIdentifier">To be added.</param>
-		///         <param name="user">To be added.</param>
-		///         <param name="recordIdentifier">To be added.</param>
+		/// <param name="serviceIdentifier">The service identifier for the credential.</param>
+		/// <param name="user">The user name.</param>
+		/// <param name="recordIdentifier">The record identifier, or <see langword="null" />.</param>
 		///         <summary>Static factory method to create a new <see cref="AuthenticationServices.ASPasswordCredentialIdentity" />.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <returns>A new password credential identity instance.</returns>
+		
 		[Static]
 		[Export ("identityWithServiceIdentifier:user:recordIdentifier:")]
 		ASPasswordCredentialIdentity Create (ASCredentialServiceIdentifier serviceIdentifier, string user, [NullAllowed] string recordIdentifier);
 
 		/// <summary>Gets the <see cref="AuthenticationServices.ASCredentialServiceIdentifier" /> that provides a hint as to when the credential should be displayed.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <value>The service identifier.</value>
+		
 		[Export ("serviceIdentifier", ArgumentSemantic.Strong)]
 		new ASCredentialServiceIdentifier ServiceIdentifier { get; }
 
 		/// <summary>A user-meaningful name to help identify the credential.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <value>The user name string.</value>
+		
 		[Export ("user")]
 		new string User { get; }
 
 		/// <summary>Gets the string associating this identity to a record in the developer's database. (May be <see langword="null" />.)</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <value>The record identifier, or <see langword="null" />.</value>
+		
 		[NullAllowed, Export ("recordIdentifier")]
 		new string RecordIdentifier { get; }
 
 		/// <summary>Gets or sets the priority for the credential identity.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <value>The rank value.</value>
+		
 		[Export ("rank")]
 		new nint Rank { get; set; }
 	}

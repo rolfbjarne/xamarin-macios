@@ -102,11 +102,11 @@ namespace HealthKit {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum HKHeartRateMotionContext : long {
-		/// <summary>To be added.</summary>
+		/// <summary>The motion context was not set.</summary>
 		NotSet = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>The heart rate was measured during sedentary activity.</summary>
 		Sedentary,
-		/// <summary>To be added.</summary>
+		/// <summary>The heart rate was measured during active movement.</summary>
 		Active,
 	}
 
@@ -243,35 +243,35 @@ namespace HealthKit {
 	[BaseType (typeof (HKQuery))]
 	[DisableDefaultCtor] // NSInvalidArgumentException: The -init method is not available on HKAnchoredObjectQuery
 	interface HKAnchoredObjectQuery {
-		/// <param name="type">To be added.</param>
+		/// <param name="type">The sample type to query.</param>
 		/// <param name="predicate">
-		///           <para>To be added.</para>
+		///           <para>An optional predicate to filter results.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		/// <param name="anchor">To be added.</param>
-		/// <param name="limit">To be added.</param>
-		/// <param name="completion">To be added.</param>
+		/// <param name="anchor">The anchor point for the query.</param>
+		/// <param name="limit">The maximum number of results to return.</param>
+		/// <param name="completion">The handler to call with results.</param>
 		/// <summary>Developers should not use this deprecated constructor. </summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Deprecated (PlatformName.iOS, 9, 0)]
 		[MacCatalyst (13, 1)]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1)]
 		[Export ("initWithType:predicate:anchor:limit:completionHandler:")]
 		NativeHandle Constructor (HKSampleType type, [NullAllowed] NSPredicate predicate, nuint anchor, nuint limit, HKAnchoredObjectResultHandler completion);
 
-		/// <param name="type">To be added.</param>
+		/// <param name="type">The sample type to query.</param>
 		/// <param name="predicate">
-		///           <para>To be added.</para>
+		///           <para>An optional predicate to filter results.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <param name="anchor">
-		///           <para>To be added.</para>
+		///           <para>An optional anchor to start from.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		/// <param name="limit">To be added.</param>
-		/// <param name="handler">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="limit">The maximum number of results to return.</param>
+		/// <param name="handler">The handler to call with results.</param>
+		/// <summary>Creates an anchored object query with a query anchor.</summary>
+		
 		[MacCatalyst (13, 1)]
 		[Export ("initWithType:predicate:anchor:limit:resultsHandler:")]
 		NativeHandle Constructor (HKSampleType type, [NullAllowed] NSPredicate predicate, [NullAllowed] HKQueryAnchor anchor, nuint limit, HKAnchoredObjectUpdateHandler handler);
@@ -294,77 +294,66 @@ namespace HealthKit {
 		/// <summary>Represents the value associated with the constant HKPredicateKeyPathCategoryValue</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKPredicateKeyPathCategoryValue")]
 		NSString CategoryValue { get; }
 
 		/// <summary>Represents the value associated with the constant HKPredicateKeyPathSource</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKPredicateKeyPathSource")]
 		NSString Source { get; }
 
 		/// <summary>Represents the value associated with the constant HKPredicateKeyPathMetadata</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKPredicateKeyPathMetadata")]
 		NSString Metadata { get; }
 
 		/// <summary>Represents the value associated with the constant HKPredicateKeyPathQuantity</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKPredicateKeyPathQuantity")]
 		NSString Quantity { get; }
 
 		/// <summary>Represents the value associated with the constant HKPredicateKeyPathStartDate</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKPredicateKeyPathStartDate")]
 		NSString StartDate { get; }
 
 		/// <summary>Represents the value associated with the constant HKPredicateKeyPathEndDate</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKPredicateKeyPathEndDate")]
 		NSString EndDate { get; }
 
 		/// <summary>Represents the value associated with the constant HKPredicateKeyPathUUID</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKPredicateKeyPathUUID")]
 		NSString Uuid { get; }
 
 		/// <summary>Represents the value associated with the constant HKPredicateKeyPathCorrelation</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKPredicateKeyPathCorrelation")]
 		NSString Correlation { get; }
 
 		/// <summary>Represents the value associated with the constant HKPredicateKeyPathWorkout</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKPredicateKeyPathWorkout")]
 		NSString Workout { get; }
 
 		/// <summary>Represents the value associated with the constant HKPredicateKeyPathWorkoutDuration</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKPredicateKeyPathWorkoutDuration")]
 		NSString WorkoutDuration { get; }
 
 		/// <summary>Represents the value associated with the constant HKPredicateKeyPathWorkoutTotalDistance</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 18, 0, message: "Use 'HKQuery.GetSumQuantityPredicateForWorkoutActivities' instead, passing the HKQuantityType for the desired distance type.")]
 		[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "Use 'HKQuery.GetSumQuantityPredicateForWorkoutActivities' instead, passing the HKQuantityType for the desired distance type.")]
 		[Deprecated (PlatformName.TvOS, 18, 0, message: "Use 'HKQuery.GetSumQuantityPredicateForWorkoutActivities' instead, passing the HKQuantityType for the desired distance type.")]
@@ -375,7 +364,6 @@ namespace HealthKit {
 		/// <summary>Represents the value associated with the constant HKPredicateKeyPathWorkoutTotalEnergyBurned</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 18, 0, message: "Use 'HKQuery.GetSumQuantityPredicateForWorkoutActivities' instead, passing the HKQuantityType for HKQuantityTypeIdentifier.ActiveEnergyBurned.")]
 		[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "Use 'HKQuery.GetSumQuantityPredicateForWorkoutActivities' instead, passing the HKQuantityType for HKQuantityTypeIdentifier.ActiveEnergyBurned.")]
 		[Deprecated (PlatformName.TvOS, 18, 0, message: "Use 'HKQuery.GetSumQuantityPredicateForWorkoutActivities' instead, passing the HKQuantityType for HKQuantityTypeIdentifier.ActiveEnergyBurned.")]
@@ -386,13 +374,10 @@ namespace HealthKit {
 		/// <summary>Represents the value associated with the constant HKPredicateKeyPathWorkoutType</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKPredicateKeyPathWorkoutType")]
 		NSString WorkoutType { get; }
 
 		/// <summary>Represents the value associated with the constant HKPredicateKeyPathWorkoutTotalSwimmingStrokeCount.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 18, 0, message: "Use 'HKQuery.GetSumQuantityPredicateForWorkoutActivities' instead, passing the HKQuantityType for HKQuantityTypeIdentifier.SwimmingStrokeCount.")]
 		[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "Use 'HKQuery.GetSumQuantityPredicateForWorkoutActivities' instead, passing the HKQuantityType for HKQuantityTypeIdentifier.SwimmingStrokeCount.")]
 		[Deprecated (PlatformName.TvOS, 18, 0, message: "Use 'HKQuery.GetSumQuantityPredicateForWorkoutActivities' instead, passing the HKQuantityType for HKQuantityTypeIdentifier.SwimmingStrokeCount.")]
@@ -402,57 +387,41 @@ namespace HealthKit {
 		NSString WorkoutTotalSwimmingStrokeCount { get; }
 
 		/// <summary>Represents the value associated with the constant HKPredicateKeyPathDevice.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKPredicateKeyPathDevice")]
 		NSString Device { get; }
 
 		/// <summary>Represents the value associated with the constant HKPredicateKeyPathSourceRevision.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKPredicateKeyPathSourceRevision")]
 		NSString SourceRevision { get; }
 
 		/// <summary>Represents the value associated with the constant HKPredicateKeyPathDateComponents.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKPredicateKeyPathDateComponents")]
 		NSString DateComponents { get; }
 
 		/// <summary>Represents the value associated with the constant HKPredicateKeyPathCDATitle.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKPredicateKeyPathCDATitle")]
 		NSString CdaTitle { get; }
 
 		/// <summary>Represents the value associated with the constant HKPredicateKeyPathCDAPatientName.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKPredicateKeyPathCDAPatientName")]
 		NSString CdaPatientName { get; }
 
 		/// <summary>Represents the value associated with the constant HKPredicateKeyPathCDAAuthorName.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKPredicateKeyPathCDAAuthorName")]
 		NSString CdaAuthorName { get; }
 
 		/// <summary>Represents the value associated with the constant HKPredicateKeyPathCDACustodianName.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKPredicateKeyPathCDACustodianName")]
 		NSString CdaCustodianName { get; }
 
 		/// <summary>Represents the value associated with the constant HKPredicateKeyPathWorkoutTotalFlightsClimbed.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 18, 0, message: "Use 'HKQuery.GetSumQuantityPredicateForWorkoutActivities' instead, passing the HKQuantityType for HKQuantityTypeIdentifier.FlightsClimbed.")]
 		[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "Use 'HKQuery.GetSumQuantityPredicateForWorkoutActivities' instead, passing the HKQuantityType for HKQuantityTypeIdentifier.FlightsClimbed.")]
 		[Deprecated (PlatformName.TvOS, 18, 0, message: "Use 'HKQuery.GetSumQuantityPredicateForWorkoutActivities' instead, passing the HKQuantityType for HKQuantityTypeIdentifier.FlightsClimbed.")]
@@ -462,22 +431,16 @@ namespace HealthKit {
 		NSString TotalFlightsClimbed { get; }
 
 		/// <summary>Represents the value associated with the constant HKPredicateKeyPathSum.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKPredicateKeyPathSum")]
 		NSString PathSum { get; }
 
 		/// <summary>Represents the value associated with the constant HKPredicateKeyPathClinicalRecordFHIRResourceIdentifier.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKPredicateKeyPathClinicalRecordFHIRResourceIdentifier")]
 		NSString ClinicalRecordFhirResourceIdentifier { get; }
 
 		/// <summary>Represents the value associated with the constant HKPredicateKeyPathClinicalRecordFHIRResourceType.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKPredicateKeyPathClinicalRecordFHIRResourceType")]
 		NSString ClinicalRecordFhirResourceType { get; }
@@ -623,9 +586,7 @@ namespace HealthKit {
 	[StrongDictionary ("HKDetailedCdaErrorKeys")]
 	[Internal]
 	interface HKDetailedCdaErrors {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the validation error details.</summary>
 		NSString ValidationError { get; }
 	}
 
@@ -643,60 +604,60 @@ namespace HealthKit {
 		[Export ("value")]
 		nint Value { get; }
 
-		/// <param name="type">To be added.</param>
-		/// <param name="value">To be added.</param>
-		/// <param name="startDate">To be added.</param>
-		/// <param name="endDate">To be added.</param>
+		/// <param name="type">The category type for the sample.</param>
+		/// <param name="value">The value for the sample.</param>
+		/// <param name="startDate">The start date of the sample.</param>
+		/// <param name="endDate">The end date of the sample.</param>
 		/// <param name="metadata">
-		///           <para>To be added.</para>
+		///           <para>Optional metadata for the sample.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Creates a category sample with the specified type, value, dates, and metadata dictionary.</summary>
+		/// <returns>A new category sample instance.</returns>
+		
 		[Static]
 		[Export ("categorySampleWithType:value:startDate:endDate:metadata:")]
 		[EditorBrowsable (EditorBrowsableState.Advanced)] // this is not the one we want to be seen (compat only)
 		HKCategorySample FromType (HKCategoryType type, nint value, NSDate startDate, NSDate endDate, [NullAllowed] NSDictionary metadata);
 
-		/// <param name="type">To be added.</param>
-		/// <param name="value">To be added.</param>
-		/// <param name="startDate">To be added.</param>
-		/// <param name="endDate">To be added.</param>
-		/// <param name="metadata">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="type">The category type for the sample.</param>
+		/// <param name="value">The value for the sample.</param>
+		/// <param name="startDate">The start date of the sample.</param>
+		/// <param name="endDate">The end date of the sample.</param>
+		/// <param name="metadata">The metadata for the sample.</param>
+		/// <summary>Creates a category sample with the specified type, value, dates, and metadata.</summary>
+		/// <returns>A new category sample instance.</returns>
+		
 		[Static]
 		[Wrap ("FromType (type, value, startDate, endDate, metadata.GetDictionary ())")]
 		HKCategorySample FromType (HKCategoryType type, nint value, NSDate startDate, NSDate endDate, HKMetadata metadata);
 
-		/// <param name="type">To be added.</param>
-		/// <param name="value">To be added.</param>
-		/// <param name="startDate">To be added.</param>
-		/// <param name="endDate">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="type">The category type for the sample.</param>
+		/// <param name="value">The value for the sample.</param>
+		/// <param name="startDate">The start date of the sample.</param>
+		/// <param name="endDate">The end date of the sample.</param>
+		/// <summary>Creates a category sample with the specified type, value, and dates.</summary>
+		/// <returns>A new category sample instance.</returns>
+		
 		[Static]
 		[Export ("categorySampleWithType:value:startDate:endDate:")]
 		HKCategorySample FromType (HKCategoryType type, nint value, NSDate startDate, NSDate endDate);
 
-		/// <param name="type">To be added.</param>
-		/// <param name="value">To be added.</param>
-		/// <param name="startDate">To be added.</param>
-		/// <param name="endDate">To be added.</param>
+		/// <param name="type">The category type for the sample.</param>
+		/// <param name="value">The value for the sample.</param>
+		/// <param name="startDate">The start date of the sample.</param>
+		/// <param name="endDate">The end date of the sample.</param>
 		/// <param name="device">
-		///           <para>To be added.</para>
+		///           <para>An optional device that recorded the sample.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <param name="metadata">
-		///           <para>To be added.</para>
+		///           <para>Optional metadata for the sample.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <summary>Creates and returns a new <see cref="HealthKit.HKCategorySample" /> of the specified type, with the specified values.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <returns>A new category sample instance.</returns>
+		
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("categorySampleWithType:value:startDate:endDate:device:metadata:")]
@@ -734,14 +695,13 @@ namespace HealthKit {
 		[return: NullAllowed]
 		HKCdaDocumentSample Create (NSData documentData, NSDate startDate, NSDate endDate, [NullAllowed] NSDictionary metadata, out NSError validationError);
 
-		/// <param name="documentData">To be added.</param>
-		///         <param name="startDate">To be added.</param>
-		///         <param name="endDate">To be added.</param>
-		///         <param name="metadata">To be added.</param>
-		///         <param name="validationError">To be added.</param>
+		/// <param name="documentData">The CDA document data.</param>
+		///         <param name="startDate">The start date of the document.</param>
+		///         <param name="endDate">The end date of the document.</param>
+		///         <param name="metadata">Optional metadata for the document.</param>
+		///         <param name="validationError">On return, contains any validation error.</param>
 		///         <summary>Creates a new <see cref="HealthKit.HKCdaDocumentSample" /> with the specified values.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		///         <returns>A new CDA document instance, or <see langword="null" /> if validation failed.</returns>
 		[Static, Wrap ("Create (documentData, startDate, endDate, metadata.GetDictionary (), out validationError)")]
 		[return: NullAllowed]
 		HKCdaDocumentSample Create (NSData documentData, NSDate startDate, NSDate endDate, HKMetadata metadata, out NSError validationError);
@@ -793,14 +753,13 @@ namespace HealthKit {
 		[EditorBrowsable (EditorBrowsableState.Advanced)] // this is not the one we want to be seen (compat only)
 		HKCorrelation Create (HKCorrelationType correlationType, NSDate startDate, NSDate endDate, NSSet objects, [NullAllowed] NSDictionary metadata);
 
-		/// <param name="correlationType">To be added.</param>
-		///         <param name="startDate">To be added.</param>
-		///         <param name="endDate">To be added.</param>
-		///         <param name="objects">To be added.</param>
-		///         <param name="metadata">To be added.</param>
+		/// <param name="correlationType">The correlation type.</param>
+		///         <param name="startDate">The start date.</param>
+		///         <param name="endDate">The end date.</param>
+		///         <param name="objects">The objects in the correlation.</param>
+		///         <param name="metadata">Optional metadata for the correlation.</param>
 		///         <summary>Creates a correlation between <paramref name="objects" /> for the supplied date range.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		///         <returns>A new correlation instance.</returns>
 		[Static, Wrap ("Create (correlationType, startDate, endDate, objects, metadata.GetDictionary ())")]
 		HKCorrelation Create (HKCorrelationType correlationType, NSDate startDate, NSDate endDate, NSSet objects, HKMetadata metadata);
 
@@ -872,70 +831,65 @@ namespace HealthKit {
 
 		// FIXME NS_EXTENSION_UNAVAILABLE("Not available to extensions") ;
 		[Async (XmlDocs = """
-			<param name="typesToShare">To be added.</param>
-			<param name="typesToRead">To be added.</param>
+			<param name="typesToShare">The types to request write access for.</param>
+			<param name="typesToRead">The types to request read access for.</param>
 			<summary>Requests autorization to save and read user data and runs an action after a determination has been made.</summary>
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous RequestAuthorizationToShare operation.  The value of the TResult parameter is of type System.Action&lt;System.Boolean,Foundation.NSError&gt;.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Export ("requestAuthorizationToShareTypes:readTypes:completion:")]
 		void RequestAuthorizationToShare ([NullAllowed] NSSet typesToShare, [NullAllowed] NSSet typesToRead, Action<bool, NSError> completion);
 
 		// FIXME NS_EXTENSION_UNAVAILABLE("Not available to extensions") ;
 		[Async (XmlDocs = """
-			<param name="obj">To be added.</param>
+			<param name="obj">The object to save.</param>
 			<summary>Asynchronously saves <paramref name="obj" />.</summary>
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous SaveObject operation.  The value of the TResult parameter is of type System.Action&lt;System.Boolean,Foundation.NSError&gt;.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Export ("saveObject:withCompletion:")]
 		void SaveObject (HKObject obj, Action<bool, NSError> completion);
 
 		// FIXME NS_EXTENSION_UNAVAILABLE("Not available to extensions") ;
 		[Async (XmlDocs = """
-			<param name="objects">To be added.</param>
+			<param name="objects">The objects to save.</param>
 			<summary>Asynchronously saves the objects that are contained in  <paramref name="objects" />.</summary>
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous SaveObjects operation.  The value of the TResult parameter is of type System.Action&lt;System.Boolean,Foundation.NSError&gt;.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Export ("saveObjects:withCompletion:")]
 		void SaveObjects (HKObject [] objects, Action<bool, NSError> completion);
 
 		// FIXME NS_EXTENSION_UNAVAILABLE("Not available to extensions") ;
 		[Async (XmlDocs = """
-			<param name="obj">To be added.</param>
+			<param name="obj">The object to delete.</param>
 			<summary>Deletes and object from the store and runs an action after it has been deleted.</summary>
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous DeleteObject operation.  The value of the TResult parameter is of type System.Action&lt;System.Boolean,Foundation.NSError&gt;.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Export ("deleteObject:withCompletion:")]
 		void DeleteObject (HKObject obj, Action<bool, NSError> completion);
 
 		[MacCatalyst (13, 1)]
 		[Async (XmlDocs = """
-			<param name="objects">To be added.</param>
+			<param name="objects">The objects to delete.</param>
 			<summary>Deletes the specified <paramref name="objects" /> from the store and runs a completion handler when it is finished.</summary>
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous DeleteObjects operation.  The value of the TResult parameter is of type System.Action&lt;System.Boolean,Foundation.NSError&gt;.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Export ("deleteObjects:withCompletion:")]
 		void DeleteObjects (HKObject [] objects, Action<bool, NSError> completion);
 
-		/// <param name="objectType">To be added.</param>
-		/// <param name="predicate">To be added.</param>
+		/// <param name="objectType">The type of object to query.</param>
+		/// <param name="predicate">An optional predicate to filter results.</param>
 		/// <param name="completion">A handler to run when the operation completes.</param>
 		/// <summary>Deletes the objects that match the specified <paramref name="objectType" /> and <paramref name="predicate" /> from the store and runs a completion handler when it is finished.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[MacCatalyst (13, 1)]
 		[Export ("deleteObjectsOfType:predicate:withCompletion:")]
 		void DeleteObjects (HKObjectType objectType, NSPredicate predicate, Action<bool, nuint, NSError> completion);
@@ -998,7 +952,6 @@ namespace HealthKit {
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous EnableBackgroundDelivery operation.  The value of the TResult parameter is of type System.Action&lt;System.Boolean,Foundation.NSError&gt;.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Export ("enableBackgroundDeliveryForType:frequency:withCompletion:")]
 		void EnableBackgroundDelivery (HKObjectType type, HKUpdateFrequency frequency, Action<bool, NSError> completion);
@@ -1010,7 +963,6 @@ namespace HealthKit {
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous DisableBackgroundDelivery operation.  The value of the TResult parameter is of type System.Action&lt;System.Boolean,Foundation.NSError&gt;.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Export ("disableBackgroundDeliveryForType:withCompletion:")]
 		void DisableBackgroundDelivery (HKObjectType type, Action<bool, NSError> completion);
@@ -1021,7 +973,6 @@ namespace HealthKit {
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous DisableAllBackgroundDelivery operation.  The value of the TResult parameter is of type System.Action&lt;System.Boolean,Foundation.NSError&gt;.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Export ("disableAllBackgroundDeliveryWithCompletion:")]
 		void DisableAllBackgroundDelivery (Action<bool, NSError> completion);
@@ -1032,7 +983,6 @@ namespace HealthKit {
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous HandleAuthorizationForExtension operation.  The value of the TResult parameter is of type System.Action&lt;System.Boolean,Foundation.NSError&gt;.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[MacCatalyst (13, 1)]
 		[Export ("handleAuthorizationForExtensionWithCompletion:")]
@@ -1074,12 +1024,11 @@ namespace HealthKit {
 
 		[MacCatalyst (13, 1)]
 		[Async (XmlDocs = """
-			<param name="workoutConfiguration">To be added.</param>
+			<param name="workoutConfiguration">The workout configuration.</param>
 			<summary>Launches or wakes the Watch app for the workout.</summary>
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous StartWatchApp operation.  The value of the TResult parameter is of type System.Action&lt;System.Boolean,Foundation.NSError&gt;.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Export ("startWatchAppWithWorkoutConfiguration:completion:")]
 		void StartWatchApp (HKWorkoutConfiguration workoutConfiguration, Action<bool, NSError> completion);
@@ -1088,14 +1037,14 @@ namespace HealthKit {
 
 		[MacCatalyst (13, 1)]
 		[Async (XmlDocs = """
-			<param name="quantityTypes">To be added.</param>
+			<param name="quantityTypes">The quantity types to enable data collection for.</param>
 			<summary>Asynchronously gets the preffered units as a <see cref="Foundation.NSDictionary" /> of <see cref="HealthKit.HKQuantityType" />-&gt;<see cref="HealthKit.HKUnit" />.</summary>
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous GetPreferredUnits operation.  The value of the TResult parameter is of type System.Action&lt;Foundation.NSDictionary,Foundation.NSError&gt;.</para>
 			        </returns>
 			<remarks>
 			          <para copied="true">The GetPreferredUnitsAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
+			          <para>Requests authorization to access the specified health data types.</para>
 			        </remarks>
 			""")]
 		[Export ("preferredUnitsForQuantityTypes:completion:")]
@@ -1111,7 +1060,6 @@ namespace HealthKit {
 			<param name="typesToRead">The types for which to request read authorization status.</param>
 			<summary>Queries the the authorization request status of the specified types.</summary>
 			<returns>A task that contains the value that communicates whether the app needs to request user permission.</returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[MacCatalyst (13, 1)]
 		[Export ("getRequestStatusForAuthorizationToShareTypes:readTypes:completion:")]
@@ -1183,276 +1131,195 @@ namespace HealthKit {
 	[StrongDictionary ("HKMetadataKey")]
 	interface HKMetadata {
 		/// <summary>Gets or sets the food type.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("FoodType")]
 		string FoodType { get; set; }
 
 		/// <summary>Gets or set the UDI unique device identifier.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("UdiDeviceIdentifier")]
 		string UdiDeviceIdentifier { get; set; }
 
 		/// <summary>Gets or sets the UDI production identifier.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("UdiProductionIdentifier")]
 		string UdiProductionIdentifier { get; set; }
 
 		/// <summary>Gets or sets the digital signature.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("DigitalSignature")]
 		string DigitalSignature { get; set; }
 
 		/// <summary>Gets or sets the external UUID.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("ExternalUuid")]
 		string ExternalUuid { get; set; }
 
 		/// <summary>Gets or sets the device serial number.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("DeviceSerialNumber")]
 		string DeviceSerialNumber { get; set; }
 
 		/// <summary>Gets or sets the body temperature sensor location.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("BodyTemperatureSensorLocation")]
 		HKBodyTemperatureSensorLocation BodyTemperatureSensorLocation { get; set; }
 
 		/// <summary>Gets or sets the heart rate sensor location.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("HeartRateSensorLocation")]
 		HKHeartRateSensorLocation HeartRateSensorLocation { get; set; }
 
 		/// <summary>Gets or sets the time zone.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("TimeZone")]
 		NSTimeZone TimeZone { get; set; }
 
 		/// <summary>Gets or sets the device name.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("DeviceName")]
 		string DeviceName { get; set; }
 
 		/// <summary>Gets or sets the device manufacturer name.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("DeviceManufacturerName")]
 		string DeviceManufacturerName { get; set; }
 
 		/// <summary>Gets or sets a value that indicates whether a measurement was taken in a lab.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("WasTakenInLab")]
 		bool WasTakenInLab { get; set; }
 
 		/// <summary>Gets or sets the lower limit of the reference range.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("ReferenceRangeLowerLimit")]
 		NSNumber ReferenceRangeLowerLimit { get; set; }
 
 		/// <summary>Gets or sets the upper limit of the reference range.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("ReferenceRangeUpperLimit")]
 		NSNumber ReferenceRangeUpperLimit { get; set; }
 
 		/// <summary>Gets or sets a value that indicates whether a measurement was entered by the user.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("WasUserEntered")]
 		bool WasUserEntered { get; set; }
 
 		/// <summary>Gets or sets the brand name of the workout.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("WorkoutBrandName")]
 		string WorkoutBrandName { get; set; }
 
 		/// <summary>Gets or sets a value that indicates whether the activity was a group fitness activity.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("GroupFitness")]
 		bool GroupFitness { get; set; }
 
 		/// <summary>Gets or sets a value that indicates whether the workout takes place indoors.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("IndoorWorkout")]
 		bool IndoorWorkout { get; set; }
 
 		/// <summary>Gets or sets a value that indicates whether the workout was coached.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("CoachedWorkout")]
 		bool CoachedWorkout { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets a value that indicates whether protection was used during sexual activity.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("SexualActivityProtectionUsed")]
 		bool SexualActivityProtectionUsed { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets a value that indicates whether this is the start of a menstrual cycle.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("MenstrualCycleStart")]
 		bool MenstrualCycleStart { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the weather condition during the activity.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("WeatherCondition")]
 		HKWeatherCondition WeatherCondition { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the weather temperature during the activity.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("WeatherTemperature")]
 		HKQuantity WeatherTemperature { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the weather humidity during the activity.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("WeatherHumidity")]
 		HKQuantity WeatherHumidity { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the lap length for swimming activities.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("LapLength")]
 		NSString LapLength { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the swimming location type.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("SwimmingLocationType")]
 		NSString SwimmingLocationType { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the swimming stroke style.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("SwimmingStrokeStyle")]
 		NSString SwimmingStrokeStyle { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the sync identifier for the sample.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("SyncIdentifier")]
 		string SyncIdentifier { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the sync version for the sample.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("SyncVersion")]
 		int SyncVersion { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the insulin delivery reason.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("InsulinDeliveryReason")]
 		HKInsulinDeliveryReason InsulinDeliveryReason { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the blood glucose meal time.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("BloodGlucoseMealTime")]
 		HKBloodGlucoseMealTime BloodGlucoseMealTime { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the VO2 max test type.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("VO2MaxTestType")]
 		HKVO2MaxTestType VO2MaxTestType { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the heart rate motion context.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("HeartRateMotionContext")]
 		HKHeartRateMotionContext HeartRateMotionContext { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the average speed.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("AverageSpeed")]
 		HKQuantity AverageSpeed { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the maximum speed.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("MaximumSpeed")]
 		HKQuantity MaximumSpeed { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the alpine slope grade.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("AlpineSlopeGrade")]
 		HKQuantity AlpineSlopeGrade { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the elevation ascended.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("ElevationAscended")]
 		HKQuantity ElevationAscended { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the elevation descended.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("ElevationDescended")]
 		HKQuantity ElevationDescended { get; set; }
 
 		/// <summary>Gets or sets the length of time spent on a fitness machine.</summary>
 		///         <value>The length of time spent on a fitness machine.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("FitnessMachineDuration")]
 		HKQuantity FitnessMachineDuration { get; set; }
 
 		/// <summary>Gets or sets the distance traveled on an indoor bike.</summary>
 		///         <value>The distance traveled on an indoor bike.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("IndoorBikeDistance")]
 		HKQuantity IndoorBikeDistance { get; set; }
 
 		/// <summary>Gets or sets the distance traveled on a cross trainer.</summary>
 		///         <value>The distance traveled on a cross trainer.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("CrossTrainerDistance")]
 		HKQuantity CrossTrainerDistance { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the heart rate event threshold.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("HeartRateEventThreshold")]
 		HKQuantity HeartRateEventThreshold { get; set; }
@@ -1470,293 +1337,228 @@ namespace HealthKit {
 		/// <summary>Represents the value associated with the constant HKMetadataKeyDeviceSerialNumber</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKMetadataKeyDeviceSerialNumber")]
 		NSString DeviceSerialNumber { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyBodyTemperatureSensorLocation</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKMetadataKeyBodyTemperatureSensorLocation")]
 		NSString BodyTemperatureSensorLocation { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyHeartRateSensorLocation</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKMetadataKeyHeartRateSensorLocation")]
 		NSString HeartRateSensorLocation { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyFoodType</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKMetadataKeyFoodType")]
 		NSString FoodType { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyUDIDeviceIdentifier</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKMetadataKeyUDIDeviceIdentifier")]
 		NSString UdiDeviceIdentifier { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyUDIProductionIdentifier</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKMetadataKeyUDIProductionIdentifier")]
 		NSString UdiProductionIdentifier { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyDigitalSignature</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKMetadataKeyDigitalSignature")]
 		NSString DigitalSignature { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyExternalUUID</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKMetadataKeyExternalUUID")]
 		NSString ExternalUuid { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyTimeZone</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKMetadataKeyTimeZone")]
 		NSString TimeZone { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyDeviceName</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKMetadataKeyDeviceName")]
 		NSString DeviceName { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyDeviceManufacturerName</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKMetadataKeyDeviceManufacturerName")]
 		NSString DeviceManufacturerName { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyWasTakenInLab</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKMetadataKeyWasTakenInLab")]
 		NSString WasTakenInLab { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyReferenceRangeLowerLimit</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKMetadataKeyReferenceRangeLowerLimit")]
 		NSString ReferenceRangeLowerLimit { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyReferenceRangeUpperLimit</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKMetadataKeyReferenceRangeUpperLimit")]
 		NSString ReferenceRangeUpperLimit { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyWasUserEntered</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKMetadataKeyWasUserEntered")]
 		NSString WasUserEntered { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyWorkoutBrandName</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKMetadataKeyWorkoutBrandName")]
 		NSString WorkoutBrandName { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyGroupFitness</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKMetadataKeyGroupFitness")]
 		NSString GroupFitness { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyIndoorWorkout</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKMetadataKeyIndoorWorkout")]
 		NSString IndoorWorkout { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyCoachedWorkout</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKMetadataKeyCoachedWorkout")]
 		NSString CoachedWorkout { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeySexualActivityProtectionUsed.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKMetadataKeySexualActivityProtectionUsed")]
 		NSString SexualActivityProtectionUsed { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyMenstrualCycleStart.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKMetadataKeyMenstrualCycleStart")]
 		NSString MenstrualCycleStart { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyWeatherCondition.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKMetadataKeyWeatherCondition")]
 		NSString WeatherCondition { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyWeatherTemperature.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKMetadataKeyWeatherTemperature")]
 		NSString WeatherTemperature { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyWeatherHumidity.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKMetadataKeyWeatherHumidity")]
 		NSString WeatherHumidity { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyLapLength.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKMetadataKeyLapLength")]
 		NSString LapLength { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeySwimmingLocationType.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKMetadataKeySwimmingLocationType")]
 		NSString SwimmingLocationType { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeySwimmingStrokeStyle.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKMetadataKeySwimmingStrokeStyle")]
 		NSString SwimmingStrokeStyle { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeySyncIdentifier.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKMetadataKeySyncIdentifier")]
 		NSString SyncIdentifier { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeySyncVersion.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKMetadataKeySyncVersion")]
 		NSString SyncVersion { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyInsulinDeliveryReason.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKMetadataKeyInsulinDeliveryReason")]
 		NSString InsulinDeliveryReason { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyBloodGlucoseMealTime.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKMetadataKeyBloodGlucoseMealTime")]
 		NSString BloodGlucoseMealTime { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyVO2MaxTestType.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKMetadataKeyVO2MaxTestType")]
 		NSString VO2MaxTestType { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyHeartRateMotionContext.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKMetadataKeyHeartRateMotionContext")]
 		NSString HeartRateMotionContext { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyAverageSpeed.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKMetadataKeyAverageSpeed")]
 		NSString AverageSpeed { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyMaximumSpeed.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKMetadataKeyMaximumSpeed")]
 		NSString MaximumSpeed { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyAlpineSlopeGrade.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKMetadataKeyAlpineSlopeGrade")]
 		NSString AlpineSlopeGrade { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyElevationAscended.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKMetadataKeyElevationAscended")]
 		NSString ElevationAscended { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyElevationDescended.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKMetadataKeyElevationDescended")]
 		NSString ElevationDescended { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyFitnessMachineDuration.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKMetadataKeyFitnessMachineDuration")]
 		NSString FitnessMachineDuration { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyIndoorBikeDistance.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKMetadataKeyIndoorBikeDistance")]
 		NSString IndoorBikeDistance { get; }
 
 		/// <summary>Represents the value associated with the constant HKMetadataKeyCrossTrainerDistance.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKMetadataKeyCrossTrainerDistance")]
 		NSString CrossTrainerDistance { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the metadata key for heart rate event threshold.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("HKMetadataKeyHeartRateEventThreshold")]
 		NSString HeartRateEventThreshold { get; }
@@ -1910,8 +1712,6 @@ namespace HealthKit {
 		NSDictionary WeakMetadata { get; }
 
 		/// <summary>Gets the Health Kit object metadata.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Wrap ("WeakMetadata")]
 		HKMetadata Metadata { get; }
 
@@ -1937,40 +1737,36 @@ namespace HealthKit {
 		[Export ("identifier")]
 		NSString Identifier { get; }
 
-		/// <param name="hkTypeIdentifier">To be added.</param>
+		/// <param name="hkTypeIdentifier">The HealthKit type identifier string.</param>
 		///         <summary>Returns the quantity type of <paramref name="hkTypeIdentifier" />.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		///         <returns>The quantity type, or <see langword="null" /> if not found.</returns>
 		[Internal]
 		[Static]
 		[Export ("quantityTypeForIdentifier:")]
 		[return: NullAllowed]
 		HKQuantityType GetQuantityType (NSString hkTypeIdentifier);
 
-		/// <param name="hkCategoryTypeIdentifier">To be added.</param>
+		/// <param name="hkCategoryTypeIdentifier">The HealthKit category type identifier string.</param>
 		///         <summary>Returns the category type for <paramref name="hkCategoryTypeIdentifier" />.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		///         <returns>The category type, or <see langword="null" /> if not found.</returns>
 		[Internal]
 		[Static]
 		[Export ("categoryTypeForIdentifier:")]
 		[return: NullAllowed]
 		HKCategoryType GetCategoryType (NSString hkCategoryTypeIdentifier);
 
-		/// <param name="hkCharacteristicTypeIdentifier">To be added.</param>
+		/// <param name="hkCharacteristicTypeIdentifier">The HealthKit characteristic type identifier string.</param>
 		///         <summary>Returns the characteristic type of <paramref name="hkCharacteristicTypeIdentifier" />.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		///         <returns>The characteristic type, or <see langword="null" /> if not found.</returns>
 		[Internal]
 		[Static]
 		[Export ("characteristicTypeForIdentifier:")]
 		[return: NullAllowed]
 		HKCharacteristicType GetCharacteristicType (NSString hkCharacteristicTypeIdentifier);
 
-		/// <param name="hkCorrelationTypeIdentifier">To be added.</param>
+		/// <param name="hkCorrelationTypeIdentifier">The HealthKit correlation type identifier string.</param>
 		///         <summary>Returns the correlation type of <paramref name="hkCorrelationTypeIdentifier" />.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		///         <returns>The correlation type, or <see langword="null" /> if not found.</returns>
 		[Internal]
 		[Static, Export ("correlationTypeForIdentifier:")]
 		[return: NullAllowed]
@@ -2004,10 +1800,9 @@ namespace HealthKit {
 		[return: NullAllowed]
 		HKClinicalType GetClinicalType (NSString identifier);
 
-		/// <param name="identifier">To be added.</param>
+		/// <param name="identifier">The clinical type identifier.</param>
 		///         <summary>Returns the clinical type of the <paramref name="identifier" />.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		///         <returns>The clinical type, or <see langword="null" /> if not found.</returns>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Wrap ("GetClinicalType (identifier.GetConstant ()!)")]
@@ -2236,14 +2031,13 @@ namespace HealthKit {
 		[EditorBrowsable (EditorBrowsableState.Advanced)] // this is not the one we want to be seen (compat only)
 		HKQuantitySample FromType (HKQuantityType quantityType, HKQuantity quantity, NSDate startDate, NSDate endDate, [NullAllowed] NSDictionary metadata);
 
-		/// <param name="quantityType">To be added.</param>
-		///         <param name="quantity">To be added.</param>
-		///         <param name="startDate">To be added.</param>
-		///         <param name="endDate">To be added.</param>
-		///         <param name="metadata">To be added.</param>
+		/// <param name="quantityType">The quantity type.</param>
+		///         <param name="quantity">The quantity value.</param>
+		///         <param name="startDate">The start date of the sample.</param>
+		///         <param name="endDate">The end date of the sample.</param>
+		///         <param name="metadata">The metadata for the sample.</param>
 		///         <summary>Creates a new HKQuantitySample, using a stronglty typed HKMetadata for the metadata.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		///         <returns>A new quantity sample instance.</returns>
 		[Static]
 		[Wrap ("FromType (quantityType, quantity, startDate, endDate, metadata.GetDictionary ())")]
 		HKQuantitySample FromType (HKQuantityType quantityType, HKQuantity quantity, NSDate startDate, NSDate endDate, HKMetadata metadata);
@@ -2337,11 +2131,11 @@ namespace HealthKit {
 
 		// HKQuery (HKCategorySamplePredicates) Category
 
-		/// <param name="operatorType">To be added.</param>
-		/// <param name="value">To be added.</param>
+		/// <param name="operatorType">The comparison operator to use.</param>
+		/// <param name="value">The category value to compare against.</param>
 		/// <summary> Creates and returns APredicate that can be used to check the value of a category sample.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <returns>A predicate for filtering category samples.</returns>
+		
 		[Static]
 		[Export ("predicateForCategorySamplesWithOperatorType:value:")]
 		NSPredicate GetPredicateForCategorySamples (NSPredicateOperatorType operatorType, nint value);
@@ -2426,7 +2220,6 @@ namespace HealthKit {
 		/// <param name="resourceType">The resource type for which to generate a query predicate.</param>
 		///         <summary>Creates and returns APredicate for a Fast Healthcare Interoperability Resources record of the specified resource type.</summary>
 		///         <returns>A predicate for a Fast Healthcare Interoperability Resources record of the specified resource type.</returns>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Wrap ("GetPredicateForClinicalRecords (resourceType.GetConstant ()!)")]
@@ -2442,7 +2235,6 @@ namespace HealthKit {
 		///         <param name="identifier">The record identifier.</param>
 		///         <summary>Creates and returns APredicate for a Fast Healthcare Interoperability Resources record for the specified query parameters.</summary>
 		///         <returns>A predicate for a Fast Healthcare Interoperability Resources record oor the specified query parameters.</returns>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Wrap ("GetPredicateForClinicalRecords (source, resourceType.GetConstant ()!, identifier)")]
@@ -2621,7 +2413,6 @@ namespace HealthKit {
 		/// <summary>Represents the value associated with the constant HKSampleSortIdentifierStartDate</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKSampleSortIdentifierStartDate")]
 		NSString SortIdentifierStartDate { get; }
 
@@ -2629,7 +2420,6 @@ namespace HealthKit {
 		/// <summary>Represents the value associated with the constant HKSampleSortIdentifierEndDate</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKSampleSortIdentifierEndDate")]
 		NSString SortIdentifierEndDate { get; }
 
@@ -2657,19 +2447,19 @@ namespace HealthKit {
 		[NullAllowed, Export ("sortDescriptors")]
 		NSSortDescriptor [] SortDescriptors { get; }
 
-		/// <param name="sampleType">To be added.</param>
+		/// <param name="sampleType">The type of samples to query.</param>
 		/// <param name="predicate">
-		///           <para>To be added.</para>
+		///           <para>An optional predicate to filter results.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		/// <param name="limit">To be added.</param>
+		/// <param name="limit">The maximum number of results to return.</param>
 		/// <param name="sortDescriptors">
-		///           <para>To be added.</para>
+		///           <para>Optional sort descriptors for ordering results.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		/// <param name="resultsHandler">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="resultsHandler">The handler to call with results.</param>
+		/// <summary>Creates a sample query with the specified parameters.</summary>
+		
 		[Export ("initWithSampleType:predicate:limit:sortDescriptors:resultsHandler:")]
 		NativeHandle Constructor (HKSampleType sampleType, [NullAllowed] NSPredicate predicate, nuint limit, [NullAllowed] NSSortDescriptor [] sortDescriptors, HKSampleQueryResultsHandler resultsHandler);
 
@@ -3142,81 +2932,81 @@ namespace HealthKit {
 		[Field ("HKQuantityTypeIdentifierDietaryCaffeine")]
 		DietaryCaffeine,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates the basal body temperature.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("HKQuantityTypeIdentifierBasalBodyTemperature")]
 		BasalBodyTemperature,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates the dietary water intake.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("HKQuantityTypeIdentifierDietaryWater")]
 		DietaryWater,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates the UV exposure.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("HKQuantityTypeIdentifierUVExposure")]
 		UVExposure,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates the electrodermal activity.</summary>
 		[Field ("HKQuantityTypeIdentifierElectrodermalActivity")]
 		ElectrodermalActivity,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates the Apple exercise time.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("HKQuantityTypeIdentifierAppleExerciseTime")]
 		AppleExerciseTime,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates the distance traveled by wheelchair.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("HKQuantityTypeIdentifierDistanceWheelchair")]
 		DistanceWheelchair,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates the wheelchair push count.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("HKQuantityTypeIdentifierPushCount")]
 		PushCount,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates the swimming distance.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("HKQuantityTypeIdentifierDistanceSwimming")]
 		DistanceSwimming,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates the swimming stroke count.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("HKQuantityTypeIdentifierSwimmingStrokeCount")]
 		SwimmingStrokeCount,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates the waist circumference.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("HKQuantityTypeIdentifierWaistCircumference")]
 		WaistCircumference,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates the VO2 max measurement.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("HKQuantityTypeIdentifierVO2Max")]
 		VO2Max,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates the distance for downhill snow sports.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("HKQuantityTypeIdentifierDistanceDownhillSnowSports")]
 		DistanceDownhillSnowSports,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates the insulin delivery amount.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("HKQuantityTypeIdentifierInsulinDelivery")]
 		InsulinDelivery,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates the resting heart rate.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("HKQuantityTypeIdentifierRestingHeartRate")]
 		RestingHeartRate,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates the walking heart rate average.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("HKQuantityTypeIdentifierWalkingHeartRateAverage")]
 		WalkingHeartRateAverage,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates the heart rate variability (SDNN).</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("HKQuantityTypeIdentifierHeartRateVariabilitySDNN")]
 		HeartRateVariabilitySdnn,
@@ -3466,17 +3256,17 @@ namespace HealthKit {
 		[Field ("HKCategoryTypeIdentifierMindfulSession")]
 		MindfulSession,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates a high heart rate event.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("HKCategoryTypeIdentifierHighHeartRateEvent")]
 		HighHeartRateEvent,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates a low heart rate event.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("HKCategoryTypeIdentifierLowHeartRateEvent")]
 		LowHeartRateEvent,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates an irregular heart rhythm event.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("HKCategoryTypeIdentifierIrregularHeartRhythmEvent")]
 		IrregularHeartRhythmEvent,
@@ -4054,10 +3844,10 @@ namespace HealthKit {
 		[Export ("unitDividedByUnit:")]
 		HKUnit UnitDividedBy (HKUnit unit);
 
-		/// <param name="power">To be added.</param>
+		/// <param name="power">The exponent to raise the unit to.</param>
 		/// <summary>Returns a unit that is the result of raising <see langword="this" /> unit by <paramref name="power" />.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <returns>A new unit raised to the specified power.</returns>
+		
 		[Export ("unitRaisedToPower:")]
 		HKUnit UnitRaisedToPower (nint power);
 
@@ -4207,16 +3997,15 @@ namespace HealthKit {
 		[EditorBrowsable (EditorBrowsableState.Advanced)] // this is not the one we want to be seen (compat only)
 		HKWorkout Create (HKWorkoutActivityType workoutActivityType, NSDate startDate, NSDate endDate, [NullAllowed] HKWorkoutEvent [] workoutEvents, [NullAllowed] HKQuantity totalEnergyBurned, [NullAllowed] HKQuantity totalDistance, [NullAllowed] NSDictionary metadata);
 
-		/// <param name="workoutActivityType">To be added.</param>
-		///         <param name="startDate">To be added.</param>
-		///         <param name="endDate">To be added.</param>
-		///         <param name="workoutEvents">To be added.</param>
-		///         <param name="totalEnergyBurned">To be added.</param>
-		///         <param name="totalDistance">To be added.</param>
-		///         <param name="metadata">To be added.</param>
+		/// <param name="workoutActivityType">The type of workout activity.</param>
+		///         <param name="startDate">The start date of the workout.</param>
+		///         <param name="endDate">The end date of the workout.</param>
+		///         <param name="workoutEvents">The events that occurred during the workout.</param>
+		///         <param name="totalEnergyBurned">The total energy burned during the workout.</param>
+		///         <param name="totalDistance">The total distance covered during the workout.</param>
+		///         <param name="metadata">Optional metadata for the workout.</param>
 		///         <summary>Creates an activity that lasts from <paramref name="startDate" /> to <paramref name="endDate" />.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		///         <returns>A new workout instance.</returns>
 		[Static, Wrap ("Create (workoutActivityType, startDate, endDate, workoutEvents, totalEnergyBurned, totalDistance, metadata.GetDictionary ())")]
 		HKWorkout Create (HKWorkoutActivityType workoutActivityType, NSDate startDate, NSDate endDate, HKWorkoutEvent [] workoutEvents, HKQuantity totalEnergyBurned, HKQuantity totalDistance, HKMetadata metadata);
 
@@ -4224,16 +4013,15 @@ namespace HealthKit {
 		[EditorBrowsable (EditorBrowsableState.Advanced)] // this is not the one we want to be seen (compat only)
 		HKWorkout Create (HKWorkoutActivityType workoutActivityType, NSDate startDate, NSDate endDate, double duration, [NullAllowed] HKQuantity totalEnergyBurned, [NullAllowed] HKQuantity totalDistance, [NullAllowed] NSDictionary metadata);
 
-		/// <param name="workoutActivityType">To be added.</param>
-		///         <param name="startDate">To be added.</param>
-		///         <param name="endDate">To be added.</param>
-		///         <param name="duration">To be added.</param>
-		///         <param name="totalEnergyBurned">To be added.</param>
-		///         <param name="totalDistance">To be added.</param>
-		///         <param name="metadata">To be added.</param>
+		/// <param name="workoutActivityType">The type of workout activity.</param>
+		///         <param name="startDate">The start date of the workout.</param>
+		///         <param name="endDate">The end date of the workout.</param>
+		///         <param name="duration">The duration of the workout.</param>
+		///         <param name="totalEnergyBurned">The total energy burned during the workout.</param>
+		///         <param name="totalDistance">The total distance covered during the workout.</param>
+		///         <param name="metadata">Optional metadata for the workout.</param>
 		///         <summary>Creates an activity that lasts from <paramref name="startDate" /> to <paramref name="endDate" />.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		///         <returns>A new workout instance.</returns>
 		[Static, Wrap ("Create (workoutActivityType, startDate, endDate, duration, totalEnergyBurned, totalDistance, metadata.GetDictionary ())")]
 		HKWorkout Create (HKWorkoutActivityType workoutActivityType, NSDate startDate, NSDate endDate, double duration, HKQuantity totalEnergyBurned, HKQuantity totalDistance, HKMetadata metadata);
 
@@ -4242,17 +4030,16 @@ namespace HealthKit {
 		[Export ("workoutWithActivityType:startDate:endDate:workoutEvents:totalEnergyBurned:totalDistance:device:metadata:")]
 		HKWorkout Create (HKWorkoutActivityType workoutActivityType, NSDate startDate, NSDate endDate, [NullAllowed] HKWorkoutEvent [] workoutEvents, [NullAllowed] HKQuantity totalEnergyBurned, [NullAllowed] HKQuantity totalDistance, [NullAllowed] HKDevice device, [NullAllowed] NSDictionary metadata);
 
-		/// <param name="workoutActivityType">To be added.</param>
-		///         <param name="startDate">To be added.</param>
-		///         <param name="endDate">To be added.</param>
-		///         <param name="workoutEvents">To be added.</param>
-		///         <param name="totalEnergyBurned">To be added.</param>
-		///         <param name="totalDistance">To be added.</param>
-		///         <param name="device">To be added.</param>
-		///         <param name="metadata">To be added.</param>
+		/// <param name="workoutActivityType">The type of workout activity.</param>
+		///         <param name="startDate">The start date of the workout.</param>
+		///         <param name="endDate">The end date of the workout.</param>
+		///         <param name="workoutEvents">The events that occurred during the workout.</param>
+		///         <param name="totalEnergyBurned">The total energy burned during the workout.</param>
+		///         <param name="totalDistance">The total distance covered during the workout.</param>
+		///         <param name="device">The device that recorded the workout.</param>
+		///         <param name="metadata">Optional metadata for the workout.</param>
 		///         <summary>Creates and returns a new <see cref="HealthKit.HKWorkout" /> with the provide values.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		///         <returns>A new workout instance.</returns>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Wrap ("Create (workoutActivityType, startDate, endDate, workoutEvents, totalEnergyBurned, totalDistance, device, metadata.GetDictionary ())")]
@@ -4263,17 +4050,16 @@ namespace HealthKit {
 		[Export ("workoutWithActivityType:startDate:endDate:duration:totalEnergyBurned:totalDistance:device:metadata:")]
 		HKWorkout Create (HKWorkoutActivityType workoutActivityType, NSDate startDate, NSDate endDate, double duration, [NullAllowed] HKQuantity totalEnergyBurned, [NullAllowed] HKQuantity totalDistance, [NullAllowed] HKDevice device, [NullAllowed] NSDictionary metadata);
 
-		/// <param name="workoutActivityType">To be added.</param>
-		///         <param name="startDate">To be added.</param>
-		///         <param name="endDate">To be added.</param>
-		///         <param name="duration">To be added.</param>
-		///         <param name="totalEnergyBurned">To be added.</param>
-		///         <param name="totalDistance">To be added.</param>
-		///         <param name="device">To be added.</param>
-		///         <param name="metadata">To be added.</param>
+		/// <param name="workoutActivityType">The type of workout activity.</param>
+		///         <param name="startDate">The start date of the workout.</param>
+		///         <param name="endDate">The end date of the workout.</param>
+		///         <param name="duration">The duration of the workout.</param>
+		///         <param name="totalEnergyBurned">The total energy burned during the workout.</param>
+		///         <param name="totalDistance">The total distance covered during the workout.</param>
+		///         <param name="device">The device that recorded the workout.</param>
+		///         <param name="metadata">Optional metadata for the workout.</param>
 		///         <summary>Creates and returns a new <see cref="HealthKit.HKWorkout" /> with the provide values.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		///         <returns>A new workout instance.</returns>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Wrap ("Create (workoutActivityType, startDate, endDate, duration, totalEnergyBurned, totalDistance, device, metadata.GetDictionary ())")]
@@ -4284,18 +4070,17 @@ namespace HealthKit {
 		[Export ("workoutWithActivityType:startDate:endDate:workoutEvents:totalEnergyBurned:totalDistance:totalSwimmingStrokeCount:device:metadata:")]
 		HKWorkout Create (HKWorkoutActivityType workoutActivityType, NSDate startDate, NSDate endDate, [NullAllowed] HKWorkoutEvent [] workoutEvents, [NullAllowed] HKQuantity totalEnergyBurned, [NullAllowed] HKQuantity totalDistance, [NullAllowed] HKQuantity totalSwimmingStrokeCount, [NullAllowed] HKDevice device, [NullAllowed] NSDictionary metadata);
 
-		/// <param name="workoutActivityType">To be added.</param>
-		///         <param name="startDate">To be added.</param>
-		///         <param name="endDate">To be added.</param>
-		///         <param name="workoutEvents">To be added.</param>
-		///         <param name="totalEnergyBurned">To be added.</param>
-		///         <param name="totalDistance">To be added.</param>
-		///         <param name="totalSwimmingStrokeCount">To be added.</param>
-		///         <param name="device">To be added.</param>
-		///         <param name="metadata">To be added.</param>
+		/// <param name="workoutActivityType">The type of workout activity.</param>
+		///         <param name="startDate">The start date of the workout.</param>
+		///         <param name="endDate">The end date of the workout.</param>
+		///         <param name="workoutEvents">The events that occurred during the workout.</param>
+		///         <param name="totalEnergyBurned">The total energy burned during the workout.</param>
+		///         <param name="totalDistance">The total distance covered during the workout.</param>
+		///         <param name="totalSwimmingStrokeCount">The total swimming stroke count.</param>
+		///         <param name="device">The device that recorded the workout.</param>
+		///         <param name="metadata">Optional metadata for the workout.</param>
 		///         <summary>Creates and returns a new <see cref="HealthKit.HKWorkout" /> with the provide values.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		///         <returns>A new workout instance.</returns>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Wrap ("Create (workoutActivityType, startDate, endDate, workoutEvents, totalEnergyBurned, totalDistance, totalSwimmingStrokeCount, device, metadata.GetDictionary ())")]
@@ -4306,18 +4091,17 @@ namespace HealthKit {
 		[Export ("workoutWithActivityType:startDate:endDate:workoutEvents:totalEnergyBurned:totalDistance:totalFlightsClimbed:device:metadata:")]
 		HKWorkout CreateFlightsClimbedWorkout (HKWorkoutActivityType workoutActivityType, NSDate startDate, NSDate endDate, [NullAllowed] HKWorkoutEvent [] workoutEvents, [NullAllowed] HKQuantity totalEnergyBurned, [NullAllowed] HKQuantity totalDistance, [NullAllowed] HKQuantity totalFlightsClimbed, [NullAllowed] HKDevice device, [NullAllowed] NSDictionary metadata);
 
-		/// <param name="workoutActivityType">To be added.</param>
-		///         <param name="startDate">To be added.</param>
-		///         <param name="endDate">To be added.</param>
-		///         <param name="workoutEvents">To be added.</param>
-		///         <param name="totalEnergyBurned">To be added.</param>
-		///         <param name="totalDistance">To be added.</param>
-		///         <param name="totalFlightsClimbed">To be added.</param>
-		///         <param name="device">To be added.</param>
-		///         <param name="metadata">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="workoutActivityType">The type of workout activity.</param>
+		///         <param name="startDate">The start date of the workout.</param>
+		///         <param name="endDate">The end date of the workout.</param>
+		///         <param name="workoutEvents">The events that occurred during the workout.</param>
+		///         <param name="totalEnergyBurned">The total energy burned during the workout.</param>
+		///         <param name="totalDistance">The total distance covered during the workout.</param>
+		///         <param name="totalFlightsClimbed">The total flights climbed during the workout.</param>
+		///         <param name="device">The device that recorded the workout.</param>
+		///         <param name="metadata">Optional metadata for the workout.</param>
+		///         <summary>Creates a workout with the specified activity type, dates, events, and metrics.</summary>
+		///         <returns>A new workout instance.</returns>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Wrap ("CreateFlightsClimbedWorkout (workoutActivityType, startDate, endDate, workoutEvents, totalEnergyBurned, totalDistance, totalFlightsClimbed, device, metadata.GetDictionary ())")]
@@ -4327,7 +4111,6 @@ namespace HealthKit {
 		/// <summary>Represents the value associated with the constant HKWorkoutSortIdentifierDuration</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKWorkoutSortIdentifierDuration")]
 		NSString SortIdentifierDuration { get; }
 
@@ -4335,7 +4118,6 @@ namespace HealthKit {
 		/// <summary>Represents the value associated with the constant HKWorkoutSortIdentifierTotalDistance</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKWorkoutSortIdentifierTotalDistance")]
 		NSString SortIdentifierTotalDistance { get; }
 
@@ -4343,20 +4125,15 @@ namespace HealthKit {
 		/// <summary>Represents the value associated with the constant HKWorkoutSortIdentifierTotalEnergyBurned</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKWorkoutSortIdentifierTotalEnergyBurned")]
 		NSString SortIdentifierTotalEnergyBurned { get; }
 
 		/// <summary>Represents the value that is associated with the HKWorkoutSortIdentifierTotalSwimmingStrokeCount constant.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("HKWorkoutSortIdentifierTotalSwimmingStrokeCount")]
 		NSString SortIdentifierTotalSwimmingStrokeCount { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the sort identifier for total flights climbed.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("HKWorkoutSortIdentifierTotalFlightsClimbed")]
 		NSString SortIdentifierTotalFlightsClimbed { get; }
@@ -4402,12 +4179,11 @@ namespace HealthKit {
 		[NullAllowed, Export ("metadata", ArgumentSemantic.Copy)]
 		NSDictionary WeakMetadata { get; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the strongly-typed metadata for this workout event.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Wrap ("WeakMetadata")]
 		HKMetadata Metadata { get; }
@@ -4425,12 +4201,11 @@ namespace HealthKit {
 		[Export ("workoutEventWithType:date:metadata:")]
 		HKWorkoutEvent Create (HKWorkoutEventType type, NSDate date, NSDictionary metadata);
 
-		/// <param name="type">To be added.</param>
-		///         <param name="date">To be added.</param>
-		///         <param name="metadata">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="type">The workout event type.</param>
+		///         <param name="date">The date of the event.</param>
+		///         <param name="metadata">Optional metadata for the event.</param>
+		///         <summary>Creates a workout event with the specified type, date, and metadata.</summary>
+		///         <returns>A new workout event instance.</returns>
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use 'Create (HKWorkoutEventType, NSDateInterval, HKMetadata)' instead.")]
 		[MacCatalyst (13, 1)]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'Create (HKWorkoutEventType, NSDateInterval, HKMetadata)' instead.")]
@@ -4443,12 +4218,11 @@ namespace HealthKit {
 		[Export ("workoutEventWithType:dateInterval:metadata:")]
 		HKWorkoutEvent Create (HKWorkoutEventType type, NSDateInterval dateInterval, [NullAllowed] NSDictionary metadata);
 
-		/// <param name="type">To be added.</param>
-		///         <param name="dateInterval">To be added.</param>
-		///         <param name="metadata">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="type">The workout event type.</param>
+		///         <param name="dateInterval">The date interval of the event.</param>
+		///         <param name="metadata">Optional metadata for the event.</param>
+		///         <summary>Creates a workout event with the specified type, date interval, and metadata.</summary>
+		///         <returns>A new workout event instance.</returns>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Wrap ("Create (type, dateInterval, metadata.GetDictionary ())")]
@@ -4470,7 +4244,6 @@ namespace HealthKit {
 		/// <summary>Represents the value associated with the constant HKWorkoutTypeIdentifier</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("HKWorkoutTypeIdentifier")]
 		NSString Identifier { get; }
 	}
@@ -4490,12 +4263,11 @@ namespace HealthKit {
 		[NullAllowed, Export ("metadata", ArgumentSemantic.Copy)]
 		NSDictionary WeakMetadata { get; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the strongly-typed metadata for this object.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Wrap ("WeakMetadata")]
 		HKMetadata Metadata { get; }
@@ -4559,20 +4331,20 @@ namespace HealthKit {
 		[Export ("includeDocumentData")]
 		bool IncludeDocumentData { get; }
 
-		/// <param name="documentType">To be added.</param>
+		/// <param name="documentType">The type of document to query.</param>
 		/// <param name="predicate">
-		///           <para>To be added.</para>
+		///           <para>An optional predicate to filter results.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		/// <param name="limit">To be added.</param>
+		/// <param name="limit">The maximum number of results to return.</param>
 		/// <param name="sortDescriptors">
-		///           <para>To be added.</para>
+		///           <para>Optional sort descriptors for ordering results.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		/// <param name="includeDocumentData">To be added.</param>
-		/// <param name="resultsHandler">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="includeDocumentData">Whether to include document data in the results.</param>
+		/// <param name="resultsHandler">The handler to call with results.</param>
+		/// <summary>Creates a document query with the specified parameters.</summary>
+		
 		[Export ("initWithDocumentType:predicate:limit:sortDescriptors:includeDocumentData:resultsHandler:")]
 		NativeHandle Constructor (HKDocumentType documentType, [NullAllowed] NSPredicate predicate, nuint limit, [NullAllowed] NSSortDescriptor [] sortDescriptors, bool includeDocumentData, Action<HKDocumentQuery, HKDocumentSample [], bool, NSError> resultsHandler);
 	}
@@ -4582,51 +4354,35 @@ namespace HealthKit {
 	[MacCatalyst (13, 1)]
 	[Static]
 	interface HKDevicePropertyKey {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the device property key for the device name.</summary>
 		[Field ("HKDevicePropertyKeyName")]
 		NSString Name { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the device property key for the manufacturer.</summary>
 		[Field ("HKDevicePropertyKeyManufacturer")]
 		NSString Manufacturer { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the device property key for the model.</summary>
 		[Field ("HKDevicePropertyKeyModel")]
 		NSString Model { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the device property key for the hardware version.</summary>
 		[Field ("HKDevicePropertyKeyHardwareVersion")]
 		NSString HardwareVersion { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the device property key for the firmware version.</summary>
 		[Field ("HKDevicePropertyKeyFirmwareVersion")]
 		NSString FirmwareVersion { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the device property key for the software version.</summary>
 		[Field ("HKDevicePropertyKeySoftwareVersion")]
 		NSString SoftwareVersion { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the device property key for the local identifier.</summary>
 		[Field ("HKDevicePropertyKeyLocalIdentifier")]
 		NSString LocalIdentifier { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the device property key for the UDI device identifier.</summary>
 		[Field ("HKDevicePropertyKeyUDIDeviceIdentifier")]
 		NSString UdiDeviceIdentifier { get; }
 	}
@@ -4688,15 +4444,11 @@ namespace HealthKit {
 	[Static]
 	interface HKSourceRevisionInfo {
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the constant for any version.</summary>
 		[Field ("HKSourceRevisionAnyVersion")]
 		NSString AnyVersion { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the constant for any product type.</summary>
 		[Field ("HKSourceRevisionAnyProductType")]
 		NSString AnyProductType { get; }
 
@@ -4715,7 +4467,7 @@ namespace HealthKit {
 		/// <param name="value">The anchor value, used before iOS 9.0, from which to construct an anchor object.</param>
 		/// <summary>Returns an anchor object for the specified anchor value. (Anchor values were used before iOS 9.0)</summary>
 		/// <returns>An anchor object for the specified anchor value. (Anchor values were used before iOS 9.0)</returns>
-		/// <remarks>To be added.</remarks>
+		
 		[Static]
 		[Export ("anchorFromValue:")]
 		HKQueryAnchor Create (nuint value);
@@ -5026,9 +4778,7 @@ namespace HealthKit {
 	[DisableDefaultCtor]
 	interface HKWorkoutRoute : NSCopying {
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the type identifier for workout routes.</summary>
 		[Field ("HKWorkoutRouteTypeIdentifier")]
 		NSString TypeIdentifier { get; }
 	}
@@ -5052,7 +4802,6 @@ namespace HealthKit {
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous InsertRouteData operation.  The value of the TResult parameter is of type System.Action&lt;System.Boolean,Foundation.NSError&gt;.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
 			"""), Export ("insertRouteData:completion:")]
 		void InsertRouteData (CLLocation [] routeData, Action<bool, NSError> completion);
 
@@ -5065,7 +4814,7 @@ namespace HealthKit {
 			        </returns>
 			<remarks>
 			          <para copied="true">The FinishRouteAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
+			          <para>Requests authorization to access the specified health data types.</para>
 			        </remarks>
 			"""), Protected, Export ("finishRouteWithWorkout:metadata:completion:")]
 		void FinishRoute (HKWorkout workout, [NullAllowed] NSDictionary metadata, Action<HKWorkoutRoute, NSError> completion);
@@ -5074,13 +4823,11 @@ namespace HealthKit {
 		///         <param name="metadata">The metadata for the route.</param>
 		///         <param name="completion">A handler to run when the operation completes.</param>
 		///         <summary>Finalizes the route and saves it to the workout.</summary>
-		///         <remarks>To be added.</remarks>
 		[Async (XmlDocs = """
 			<param name="workout">The workout to which to add the route.</param>
 			<param name="metadata">The metadata for the route.</param>
 			<summary>Finalizes the route and saves it to the workout, returning a task that contains the route.</summary>
-			<returns>To be added.</returns>
-			<remarks>To be added.</remarks>
+			<returns>A task that represents the asynchronous FinishRoute operation.</returns>
 			"""), Wrap ("FinishRoute (workout, metadata.GetDictionary (), completion)")]
 		void FinishRoute (HKWorkout workout, HKMetadata metadata, Action<HKWorkoutRoute, NSError> completion);
 
@@ -5089,7 +4836,6 @@ namespace HealthKit {
 			<param name="metadata">The metadata to add.</param>
 			<summary>Adds the provided metadata to the route and returns a task that contains a success code and any errors that occurred.</summary>
 			<returns>A task that contains a success code and any errors that occurred.</returns>
-			<remarks>To be added.</remarks>
 			"""), Protected]
 		[Export ("addMetadata:completion:")]
 		void AddMetadata (NSDictionary metadata, HKWorkoutRouteBuilderAddMetadataHandler completion);
@@ -5097,13 +4843,11 @@ namespace HealthKit {
 		/// <param name="metadata">The metadata to add.</param>
 		///         <param name="completion">A handler to run when the operation completes.</param>
 		///         <summary>Adds the provided metadata to the route and runs a handler when the operation completes.</summary>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Async (XmlDocs = """
 			<param name="metadata">The metadata to add.</param>
 			<summary>Adds the provided metadata to the route and returns a task that contains a success code and any errors that occurred.</summary>
 			<returns>A task that contains a success code and any errors that occurred.</returns>
-			<remarks>To be added.</remarks>
 			"""), Wrap ("AddMetadata (metadata.GetDictionary ()!, completion)")]
 		void AddMetadata (HKMetadata metadata, HKWorkoutRouteBuilderAddMetadataHandler completion);
 	}
@@ -5150,7 +4894,6 @@ namespace HealthKit {
 
 		/// <summary>Gets the workout metadata.</summary>
 		///         <value>The workout metadata.</value>
-		///         <remarks>To be added.</remarks>
 		[Wrap ("NativeMetadata")]
 		HKMetadata Metadata { get; }
 
@@ -5164,7 +4907,6 @@ namespace HealthKit {
 			<param name="startDate">The date and time the workout starts.</param>
 			<summary>Starts the workout at the specified time, begins collecting workout data, and returns a task that contains a success status and any error that occurred.</summary>
 			<returns>A task that contains a success status and any error that occurred.</returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Export ("beginCollectionWithStartDate:completion:")]
 		void BeginCollection (NSDate startDate, HKWorkoutBuilderCompletionHandler completionHandler);
@@ -5173,7 +4915,6 @@ namespace HealthKit {
 			<param name="samples">The samples to add.</param>
 			<summary>Adds the specified samples and returns a task that contains a success status and any error that occurred.</summary>
 			<returns>A task that contains a success status and any error that occurred.</returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Export ("addSamples:completion:")]
 		void Add (HKSample [] samples, HKWorkoutBuilderCompletionHandler completionHandler);
@@ -5182,7 +4923,6 @@ namespace HealthKit {
 			<param name="workoutEvents">The workout events to add.</param>
 			<summary>Adds the specified workout events and returns a task that contains a success status and any error that occurred.</summary>
 			<returns>A task that contains a success status and any error that occurred.</returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Export ("addWorkoutEvents:completion:")]
 		void Add (HKWorkoutEvent [] workoutEvents, HKWorkoutBuilderCompletionHandler completionHandler);
@@ -5191,7 +4931,6 @@ namespace HealthKit {
 			<param name="metadata">The metadata to add.</param>
 			<summary>Adds the specified metadata and returns a task that contains a success status and any error that occurred.</summary>
 			<returns>A task that contains a success status and any error that occurred.</returns>
-			<remarks>To be added.</remarks>
 			"""), Protected]
 		[Export ("addMetadata:completion:")]
 		void Add (NSDictionary metadata, HKWorkoutBuilderCompletionHandler completionHandler);
@@ -5199,13 +4938,10 @@ namespace HealthKit {
 		/// <param name="metadata">The metadata to add.</param>
 		///         <param name="completionHandler">A handler to run when the operation completes.</param>
 		///         <summary>Adds the specified metadata to the workout and runs a handler when the operation completes.</summary>
-		///         <remarks>To be added.</remarks>
-		///         <remarks>To be added.</remarks>
 		[Async (XmlDocs = """
 			<param name="metadata">The metadata to add.</param>
 			<summary>Adds the specified metadata and returns a task that contains a success status and any error that occurred.</summary>
 			<returns>A task that contains a success status and any error that occurred.</returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Wrap ("Add (metadata.GetDictionary ()!, completionHandler)")]
 		void Add (HKMetadata metadata, HKWorkoutBuilderCompletionHandler completionHandler);
@@ -5214,7 +4950,6 @@ namespace HealthKit {
 			<param name="endDate">The end time of the workout.</param>
 			<summary>Ends the workout and returns a task that contains a success status and any error that occurred.</summary>
 			<returns>A task that contains a success status and any error that occurred.</returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Export ("endCollectionWithEndDate:completion:")]
 		void EndCollection (NSDate endDate, HKWorkoutBuilderCompletionHandler completionHandler);
@@ -5222,7 +4957,6 @@ namespace HealthKit {
 		[Async (XmlDocs = """
 			<summary>Saves a new workout, created with the collected data, to the Health Store. Returns a handler that contains a success status and any error that occurred.</summary>
 			<returns>A handler that contains a success status and any error that occurred.</returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Export ("finishWorkoutWithCompletion:")]
 		void FinishWorkout (HKWorkoutBuilderCompletionHandler completionHandler);
@@ -5325,7 +5059,6 @@ namespace HealthKit {
 			<param name="metadata">The metadata to add to the series.</param>
 			<summary>Finishes and saves the series and returns a task that contains the sample data.</summary>
 			<returns>A task that contains the sample data.</returns>
-			<remarks>To be added.</remarks>
 			"""), Protected]
 		[Export ("finishSeriesWithMetadata:completion:")]
 		void FinishSeries ([NullAllowed] NSDictionary metadata, HKQuantitySeriesSampleBuilderFinishSeriesDelegate completionHandler);
@@ -5333,12 +5066,10 @@ namespace HealthKit {
 		/// <param name="metadata">The metadata to add to the series.</param>
 		///         <param name="completionHandler">A handler to run when the operation completes.</param>
 		///         <summary>Finishes and saves the series.</summary>
-		///         <remarks>To be added.</remarks>
 		[Async (XmlDocs = """
 			<param name="metadata">The metadata to add to the series.</param>
 			<summary>Finishes and saves the series and returns a task that contains the sample data.</summary>
 			<returns>A task that contains the sample data.</returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Wrap ("FinishSeries (metadata.GetDictionary (), completionHandler)")]
 		void FinishSeries ([NullAllowed] HKMetadata metadata, HKQuantitySeriesSampleBuilderFinishSeriesDelegate completionHandler);
@@ -5396,7 +5127,6 @@ namespace HealthKit {
 
 		/// <summary>Gets the Fast Healthcare Interoperability Resources (FHIR) type.</summary>
 		///         <value>The FHIR type.</value>
-		///         <remarks>To be added.</remarks>
 		HKFhirResourceType ResourceType { [Wrap ("HKFhirResourceTypeExtensions.GetValue (_ResourceType)")] get; }
 
 		[Export ("identifier")]

@@ -1104,7 +1104,7 @@ namespace StoreKit {
 	}
 
 	/// <summary>Enumerates cloud service setup message identifiers.</summary>
-	/// <remarks>To be added.</remarks>
+		
 	[Deprecated (PlatformName.iOS, 18, 0 /* Apple's replacement requires Swift */ )]
 	[Deprecated (PlatformName.MacCatalyst, 18, 0 /* Apple's replacement requires Swift */ )]
 	[Deprecated (PlatformName.TvOS, 18, 0 /* Apple's replacement requires Swift */ )]
@@ -1142,7 +1142,7 @@ namespace StoreKit {
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous RequestAuthorization operation.  The value of the TResult parameter is of type System.Action&lt;StoreKit.SKCloudServiceAuthorizationStatus&gt;.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
+			
 			""")]
 		[Export ("requestAuthorization:")]
 		void RequestAuthorization (Action<SKCloudServiceAuthorizationStatus> handler);
@@ -1152,7 +1152,7 @@ namespace StoreKit {
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous RequestStorefrontIdentifier operation.  The value of the TResult parameter is of type System.Action&lt;Foundation.NSString,Foundation.NSError&gt;.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
+			
 			""")]
 		[Export ("requestStorefrontIdentifierWithCompletionHandler:")]
 		void RequestStorefrontIdentifier (Action<NSString, NSError> completionHandler);
@@ -1163,7 +1163,7 @@ namespace StoreKit {
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous RequestStorefrontCountryCode operation.  The value of the TResult parameter is of type System.Action&lt;Foundation.NSString,Foundation.NSError&gt;.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
+			
 			""")]
 		[Export ("requestStorefrontCountryCodeWithCompletionHandler:")]
 		void RequestStorefrontCountryCode (Action<NSString, NSError> completionHandler);
@@ -1173,19 +1173,19 @@ namespace StoreKit {
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous RequestCapabilities operation.  The value of the TResult parameter is of type System.Action&lt;StoreKit.SKCloudServiceCapability,Foundation.NSError&gt;.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
+			
 			""")]
 		[Export ("requestCapabilitiesWithCompletionHandler:")]
 		void RequestCapabilities (Action<SKCloudServiceCapability, NSError> completionHandler);
 
 		[MacCatalyst (13, 1)]
 		[Async (XmlDocs = """
-			<param name="clientToken">To be added.</param>
+			<param name="clientToken">The client token for personalization.</param>
 			<summary>Developers should not use this deprecated method. Developers should use 'RequestUserToken' instead.</summary>
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous RequestPersonalizationToken operation.  The value of the TResult parameter is of type System.Action&lt;Foundation.NSString,Foundation.NSError&gt;.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
+			
 			""")]
 		[Export ("requestPersonalizationTokenForClientToken:withCompletionHandler:")]
 		void RequestPersonalizationToken (string clientToken, Action<NSString, NSError> completionHandler);
@@ -1199,7 +1199,7 @@ namespace StoreKit {
 			        </returns>
 			<remarks>
 			          <para copied="true">The RequestUserTokenAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
+			          
 			        </remarks>
 			""")]
 		[Export ("requestUserTokenForDeveloperToken:completionHandler:")]
@@ -1238,7 +1238,7 @@ namespace StoreKit {
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous FetchStorePromotionVisibility operation.  The value of the TResult parameter is of type System.Action&lt;StoreKit.SKProductStorePromotionVisibility,Foundation.NSError&gt;.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
+			
 			""")]
 		[Export ("fetchStorePromotionVisibilityForProduct:completionHandler:")]
 		void FetchStorePromotionVisibility (SKProduct product, [NullAllowed] Action<SKProductStorePromotionVisibility, NSError> completionHandler);
@@ -1248,7 +1248,7 @@ namespace StoreKit {
 			<param name="product">The product whose visibility to update.</param>
 			<summary>Updates the visibility of the specified product on the device.</summary>
 			<returns>A task that represents the asynchronous Update operation</returns>
-			<remarks>To be added.</remarks>
+			
 			""")]
 		[Export ("updateStorePromotionVisibility:forProduct:completionHandler:")]
 		void Update (SKProductStorePromotionVisibility promotionVisibility, SKProduct product, [NullAllowed] Action<NSError> completionHandler);
@@ -1258,7 +1258,7 @@ namespace StoreKit {
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous FetchStorePromotionOrder operation.  The value of the TResult parameter is of type System.Action&lt;StoreKit.SKProduct[],Foundation.NSError&gt;.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
+			
 			""")]
 		[Export ("fetchStorePromotionOrderWithCompletionHandler:")]
 		void FetchStorePromotionOrder ([NullAllowed] Action<SKProduct [], NSError> completionHandler);
@@ -1269,7 +1269,7 @@ namespace StoreKit {
 			<returns>A task that represents the asynchronous Update operation</returns>
 			<remarks>
 			          <para copied="true">The UpdateAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
+			          
 			        </remarks>
 			""")]
 		[Export ("updateStorePromotionOrder:completionHandler:")]

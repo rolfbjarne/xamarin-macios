@@ -982,7 +982,7 @@ namespace StoreKit {
 			        </returns>
 			<remarks>
 			          <para copied="true">The LoadAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
+			          
 			        </remarks>
 			""")]
 		[Export ("loadWithOptions:completionHandler:")]
@@ -994,12 +994,12 @@ namespace StoreKit {
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		///         <summary>Loads a setup view with the specified <paramref name="options" /> and runs a handler when the view is loaded.</summary>
-		///         <remarks>To be added.</remarks>
+		
 		[Async (XmlDocs = """
 			<param name="options">Setup options object.</param>
 			<summary>Asynchronously loads a setup view with the specified <paramref name="options" />, returning a task that indicates success or failure and includes an error, if one occurred.</summary>
-			<returns>To be added.</returns>
-			<remarks>To be added.</remarks>
+			<returns>A task that represents the asynchronous load operation.</returns>
+			
 			""")]
 		[Wrap ("Load (options.GetDictionary ()!, completionHandler)")]
 		void Load (SKCloudServiceSetupOptions options, Action<bool, NSError> completionHandler);
@@ -1022,7 +1022,7 @@ namespace StoreKit {
 	interface SKCloudServiceSetupViewControllerDelegate {
 		/// <param name="cloudServiceSetupViewController">The view controller that was dismissed.</param>
 		/// <summary>Method that is called after the setup view has been dismissed.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("cloudServiceSetupViewControllerDidDismiss:")]
 		void DidDismiss (SKCloudServiceSetupViewController cloudServiceSetupViewController);
 	}

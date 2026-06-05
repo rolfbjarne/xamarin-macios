@@ -827,10 +827,10 @@ namespace Photos {
 		[Export ("replaceChildCollectionsAtIndexes:withChildCollections:")]
 		void ReplaceChildCollection (NSIndexSet indexes, PHCollection [] collections);
 
-		/// <param name="indexes">To be added.</param>
-		/// <param name="toIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="indexes">The indexes of the collections to move.</param>
+		/// <param name="toIndex">The destination index.</param>
+		/// <summary>Moves child collections from the specified indexes to the destination index.</summary>
+		
 		[Export ("moveChildCollectionsAtIndexes:toIndex:")]
 		void MoveChildCollections (NSIndexSet indexes, nuint toIndex);
 	}

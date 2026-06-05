@@ -80,20 +80,20 @@ namespace ARKit {
 		WorldTrackingFailed = 200,
 		GeoTrackingNotAvailableAtLocation = 201,
 		GeoTrackingFailed = 202,
-		/// <summary>To be added.</summary>
+		/// <summary>The reference image is invalid.</summary>
 		InvalidReferenceImage = 300,
-		/// <summary>To be added.</summary>
+		/// <summary>The reference object is invalid.</summary>
 		InvalidReferenceObject = 301,
-		/// <summary>To be added.</summary>
+		/// <summary>The world map is invalid.</summary>
 		InvalidWorldMap = 302,
-		/// <summary>To be added.</summary>
+		/// <summary>The configuration is invalid.</summary>
 		InvalidConfiguration = 303,
 		InvalidCollaborationData = 304,
-		/// <summary>To be added.</summary>
+		/// <summary>Insufficient features were available.</summary>
 		InsufficientFeatures = 400,
-		/// <summary>To be added.</summary>
+		/// <summary>Object merge failed.</summary>
 		ObjectMergeFailed = 401,
-		/// <summary>To be added.</summary>
+		/// <summary>A file I/O operation failed.</summary>
 		FileIOFailed = 500,
 		RequestFailed = 501,
 	}
@@ -132,7 +132,7 @@ namespace ARKit {
 	[Flags]
 	[Native]
 	public enum ARSessionRunOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the raw feature points detected in the frame.</summary>
 		None = 0,
 		/// <summary>The <see cref="ARKit.ARSession" /> should reset its world-tracking.</summary>
 		ResetTracking = 1 << 0,
@@ -197,30 +197,30 @@ namespace ARKit {
 	[NoTV, NoMac]
 	[Native]
 	public enum ARPlaneClassificationStatus : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Not available.</summary>
 		NotAvailable = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Normal tracking quality.</summary>
 		Undetermined,
-		/// <summary>To be added.</summary>
+		/// <summary>Limited tracking quality.</summary>
 		Unknown,
-		/// <summary>To be added.</summary>
+		/// <summary>The camera position is not available.</summary>
 		Known,
 	}
 
 	[NoTV, NoMac]
 	[Native]
 	public enum ARPlaneClassification : long {
-		/// <summary>To be added.</summary>
+		/// <summary>No reason specified.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Tracking is limited due to initialization.</summary>
 		Wall,
-		/// <summary>To be added.</summary>
+		/// <summary>Tracking is limited due to excessive motion.</summary>
 		Floor,
-		/// <summary>To be added.</summary>
+		/// <summary>Tracking is limited due to insufficient features.</summary>
 		Ceiling,
-		/// <summary>To be added.</summary>
+		/// <summary>Tracking is limited due to relocalizing after interruption.</summary>
 		Table,
-		/// <summary>To be added.</summary>
+		/// <summary>Tracking is in a normal state.</summary>
 		Seat,
 		[iOS (13, 0)]
 		Window,
@@ -450,8 +450,8 @@ namespace ARKit {
 		/// <param name="zNear">The distance to the near Z-clipping plane.</param>
 		/// <param name="zFar">The distance to the far Z-clipping plane..</param>
 		/// <summary>The projection matrix used to render 3D content so that it will match the real-world imagery.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <returns>A new world tracking configuration.</returns>
+		
 		[Export ("projectionMatrixForOrientation:viewportSize:zNear:zFar:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		Matrix4 GetProjectionMatrix (UIInterfaceOrientation orientation, CGSize viewportSize, nfloat zNear, nfloat zFar);
@@ -602,9 +602,7 @@ namespace ARKit {
 
 		// [Export ("initWithTransform:")] marked as NS_UNAVAILABLE
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the estimated scale factor for the scene.</summary>
 		[Static]
 		[Export ("classificationSupported")]
 		bool ClassificationSupported { [Bind ("isClassificationSupported")] get; }
@@ -725,19 +723,19 @@ namespace ARKit {
 		[Export ("validateWithCompletionHandler:")]
 		void Validate (Action<NSError?> completionHandler);
 
-		/// <param name="image">To be added.</param>
-		/// <param name="orientation">To be added.</param>
-		/// <param name="physicalWidth">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="image">The Core Graphics image to use as a reference.</param>
+		/// <param name="orientation">The image orientation.</param>
+		/// <param name="physicalWidth">The physical width of the image in meters.</param>
+		/// <summary>Creates a reference image from a Core Graphics image.</summary>
+		
 		[Export ("initWithCGImage:orientation:physicalWidth:")]
 		NativeHandle Constructor (CGImage image, CGImagePropertyOrientation orientation, nfloat physicalWidth);
 
-		/// <param name="pixelBuffer">To be added.</param>
-		/// <param name="orientation">To be added.</param>
-		/// <param name="physicalWidth">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="pixelBuffer">The pixel buffer containing the image.</param>
+		/// <param name="orientation">The image orientation.</param>
+		/// <param name="physicalWidth">The physical width of the image in meters.</param>
+		/// <summary>Creates a reference image from a pixel buffer.</summary>
+		
 		[Export ("initWithPixelBuffer:orientation:physicalWidth:")]
 		NativeHandle Constructor (CVPixelBuffer pixelBuffer, CGImagePropertyOrientation orientation, nfloat physicalWidth);
 
@@ -843,8 +841,8 @@ namespace ARKit {
 		/// <param name="renderer">The renderer for the scene.</param>
 		/// <param name="anchor">The anchor for the node to get.</param>
 		/// <summary>Retrieves the <see cref="SceneKit.SCNNode" /> corresponding to the specified <paramref name="anchor" />.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <returns>A new face tracking configuration.</returns>
+		
 		[Export ("renderer:nodeForAnchor:")]
 		[return: NullAllowed]
 		SCNNode GetNode (ISCNSceneRenderer renderer, ARAnchor anchor);
@@ -853,7 +851,7 @@ namespace ARKit {
 		/// <param name="node">The node that was added.</param>
 		/// <param name="anchor">The anchor for the node that was added.</param>
 		/// <summary>Developers may override this method to react to the adding of a <see cref="SceneKit.SCNNode" /> that corresponds to a new <see cref="ARKit.ARAnchor" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("renderer:didAddNode:forAnchor:")]
 		void DidAddNode (ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor);
 
@@ -861,7 +859,7 @@ namespace ARKit {
 		/// <param name="node">The node that will be updated.</param>
 		/// <param name="anchor">The anchor for the node that will be updated.</param>
 		/// <summary>This method is called shortly before the properties of <paramref name="node" /> are updated to reflect the state of <paramref name="anchor" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("renderer:willUpdateNode:forAnchor:")]
 		void WillUpdateNode (ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor);
 
@@ -869,7 +867,7 @@ namespace ARKit {
 		/// <param name="node">The node that was updated.</param>
 		/// <param name="anchor">The anchor for the node that was updated.</param>
 		/// <summary>This method is called shortly after <paramref name="node" /> has been updated to reflect the current state of <paramref name="anchor" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("renderer:didUpdateNode:forAnchor:")]
 		void DidUpdateNode (ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor);
 
@@ -877,7 +875,7 @@ namespace ARKit {
 		/// <param name="node">The node that was removed.</param>
 		/// <param name="anchor">The anchor for the node that was removed.</param>
 		/// <summary>Developers may override this method to react to the removal of <paramref name="node" />, which was removed after <paramref name="anchor" /> was removed.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("renderer:didRemoveNode:forAnchor:")]
 		void DidRemoveNode (ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor);
 	}
@@ -918,8 +916,8 @@ namespace ARKit {
 		/// <param name="view">The view that is rendering the scene.</param>
 		/// <param name="anchor">The anchor for the node to get.</param>
 		/// <summary>Retrieves the <see cref="SpriteKit.SKNode" /> corresponding to the specified <paramref name="anchor" />. If no corresponding node exists, returns <see langword="null" />.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <returns>A new image tracking configuration.</returns>
+		
 		[Export ("view:nodeForAnchor:")]
 		[return: NullAllowed]
 		SKNode GetNode (ARSKView view, ARAnchor anchor);
@@ -928,7 +926,7 @@ namespace ARKit {
 		/// <param name="node">The node that was added.</param>
 		/// <param name="anchor">The anchor for the node that was added.</param>
 		/// <summary>Developers may override this method to react to the adding of a <see cref="SpriteKit.SKNode" /> that corresponds to a new <see cref="ARKit.ARAnchor" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("view:didAddNode:forAnchor:")]
 		void DidAddNode (ARSKView view, SKNode node, ARAnchor anchor);
 
@@ -936,7 +934,7 @@ namespace ARKit {
 		/// <param name="node">The node that will be updated.</param>
 		/// <param name="anchor">The anchor for the node that will be updated.</param>
 		/// <summary>This method is called shortly before the properties of <paramref name="node" /> are updated to reflect the state of <paramref name="anchor" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("view:willUpdateNode:forAnchor:")]
 		void WillUpdateNode (ARSKView view, SKNode node, ARAnchor anchor);
 
@@ -944,7 +942,7 @@ namespace ARKit {
 		/// <param name="node">The node that was updated.</param>
 		/// <param name="anchor">The anchor for the node that was updated.</param>
 		/// <summary>This method is called shortly after <paramref name="node" /> has been updated to reflect the current state of <paramref name="anchor" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("view:didUpdateNode:forAnchor:")]
 		void DidUpdateNode (ARSKView view, SKNode node, ARAnchor anchor);
 
@@ -952,7 +950,7 @@ namespace ARKit {
 		/// <param name="node">The node that was removed.</param>
 		/// <param name="anchor">The anchor for the node that was removed.</param>
 		/// <summary>Developers may override this method to react to the removal of <paramref name="node" />, which was removed after <paramref name="anchor" /> was removed.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("view:didRemoveNode:forAnchor:")]
 		void DidRemoveNode (ARSKView view, SKNode node, ARAnchor anchor);
 	}
@@ -1002,7 +1000,7 @@ namespace ARKit {
 		[Async (XmlDocs = """
 			<summary>Asynchronously returns a task that contains the current world map.</summary>
 			<returns>A task that contains the current world map.</returns>
-			<remarks>To be added.</remarks>
+			
 			""")]
 		[Export ("getCurrentWorldMapWithCompletionHandler:")]
 		void GetCurrentWorldMap (Action<ARWorldMap?, NSError?> completionHandler);
@@ -1013,7 +1011,7 @@ namespace ARKit {
 			<param name="extent">The exent of the region, in the <paramref name="transform" /> coordinate space.</param>
 			<summary>Asynchronously creates a reference object from a region in space and returns a task that contains the resulting object.</summary>
 			<returns>A task that receives the created object, if present.</returns>
-			<remarks>To be added.</remarks>
+			
 			""")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		[Export ("createReferenceObjectWithTransform:center:extent:completionHandler:")]
@@ -1053,7 +1051,7 @@ namespace ARKit {
 	delegate void ARSessionCaptureHighResolutionFrame ([NullAllowed] ARFrame frame, [NullAllowed] NSError error);
 
 	/// <summary>Interface defining methods that respond to events in an <see cref="ARKit.ARSession" />.</summary>
-	/// <remarks>To be added.</remarks>
+		
 	[NoTV, NoMac]
 	[Protocol]
 	interface ARSessionObserver {
@@ -1061,40 +1059,40 @@ namespace ARKit {
 		/// <param name="session">The session that is supplying the information for the event.</param>
 		/// <param name="error">The error that occurred.</param>
 		/// <summary>Called when the <paramref name="session" /> stops running due to an error.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("session:didFailWithError:")]
 		void DidFail (ARSession session, NSError error);
 
 		/// <param name="session">The session that is supplying the information for the event.</param>
 		/// <param name="camera">The camera whose tracking state changed.</param>
 		/// <summary>Called when the <see cref="ARKit.ARCamera.TrackingState" /> changes, indicating a change in tracking quality.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("session:cameraDidChangeTrackingState:")]
 		void CameraDidChangeTrackingState (ARSession session, ARCamera camera);
 
 		/// <param name="session">The session that is supplying the information for the event.</param>
 		/// <summary>Developers may override this method to stop frame processing and device tracking when an interruption occurs.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("sessionWasInterrupted:")]
 		void WasInterrupted (ARSession session);
 
 		/// <param name="session">The session that is supplying the information for the event.</param>
 		/// <summary>Developers may override this method to begin frame processing and device tracking after an interruption.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("sessionInterruptionEnded:")]
 		void InterruptionEnded (ARSession session);
 
 		/// <param name="session">The session in question.</param>
 		/// <summary>Returns a Boolean value that tells whether the session should attempt to reorient after an interruption.</summary>
 		/// <returns>A Boolean value that tells whether the session should attempt to reorient after an interruption.</returns>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("sessionShouldAttemptRelocalization:")]
 		bool ShouldAttemptRelocalization (ARSession session);
 
 		/// <param name="session">The session that is supplying the information for the event.</param>
 		/// <param name="audioSampleBuffer">The audio buffer that was played.</param>
 		/// <summary>Developers may implement this method that is called shortly after an audio buffer has been played.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("session:didOutputAudioSampleBuffer:")]
 		void DidOutputAudioSampleBuffer (ARSession session, CMSampleBuffer audioSampleBuffer);
 
@@ -1122,21 +1120,21 @@ namespace ARKit {
 		/// <param name="session">The session that is supplying the information for the event.</param>
 		/// <param name="anchors">The anchors that were added.</param>
 		/// <summary>Called when <paramref name="anchors" /> are added to the <paramref name="session" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("session:didAddAnchors:")]
 		void DidAddAnchors (ARSession session, ARAnchor [] anchors);
 
 		/// <param name="session">The session that is supplying the information for the event.</param>
 		/// <param name="anchors">The anchors that were updated.</param>
 		/// <summary>Indicates that <paramref name="anchors" /> have been updated due to tracking.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("session:didUpdateAnchors:")]
 		void DidUpdateAnchors (ARSession session, ARAnchor [] anchors);
 
 		/// <param name="session">The session that is supplying the information for the event.</param>
 		/// <param name="anchors">The anchors that were removed.</param>
 		/// <summary>Called when <paramref name="anchors" /> have been removed from the <paramref name="session" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("session:didRemoveAnchors:")]
 		void DidRemoveAnchors (ARSession session, ARAnchor [] anchors);
 	}
@@ -1163,8 +1161,6 @@ namespace ARKit {
 		ARWorldAlignment WorldAlignment { get; set; }
 
 		/// <summary>Gets or sets a Boolean value that tells whether ARKit estimates ambient lighting to render augmented reality elements.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("lightEstimationEnabled")]
 		bool LightEstimationEnabled { [Bind ("isLightEstimationEnabled")] get; set; }
 
@@ -1211,7 +1207,6 @@ namespace ARKit {
 
 		/// <summary>Gets or sets a value that controls whether autofocus is enabled on the device camera.</summary>
 		///         <value>A value that controls whether autofocus is enabled on the device camera.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("autoFocusEnabled")]
 		bool AutoFocusEnabled { [Bind ("isAutoFocusEnabled")] get; set; }
 
@@ -1289,8 +1284,6 @@ namespace ARKit {
 		ARVideoFormat [] GetSupportedVideoFormats ();
 
 		/// <summary>Gets or sets a Boolean value that tells whether the device camera is currently autofocusing.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("autoFocusEnabled")]
 		bool AutoFocusEnabled { [Bind ("isAutoFocusEnabled")] get; set; }
 
@@ -1306,14 +1299,10 @@ namespace ARKit {
 	interface ARSCNDebugOptions {
 
 		/// <summary>The [0, 0, 0] coordinate of the world coordinate system will be displayed as a large heavy + shape.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ARSCNDebugOptionShowWorldOrigin")]
 		SCNDebugOptions ShowWorldOrigin { get; }
 
 		/// <summary>The point cloud being used by image processing will be shown as a series of + shapes.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ARSCNDebugOptionShowFeaturePoints")]
 		SCNDebugOptions ShowFeaturePoints { get; }
 	}
@@ -1325,7 +1314,7 @@ namespace ARKit {
 		/// <summary>Whether the ARKit-calculated transform matches the real-world position and rotation.</summary>
 		/// <value>
 		///           <see langword="true" /> if the transform accurately represents the real-world position and rotation of the detected object.</value>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("isTracked")]
 		bool IsTracked { get; }
@@ -1371,264 +1360,161 @@ namespace ARKit {
 	[StrongDictionary ("ARBlendShapeLocationKeys")]
 	interface ARBlendShapeLocationOptions {
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the brow-down-left blend shape coefficient.</summary>
 		float BrowDownLeft { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the brow-down-right blend shape coefficient.</summary>
 		float BrowDownRight { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the brow-inner-up blend shape coefficient.</summary>
 		float BrowInnerUp { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the brow-outer-up-left blend shape coefficient.</summary>
 		float BrowOuterUpLeft { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the brow-outer-up-right blend shape coefficient.</summary>
 		float BrowOuterUpRight { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the cheek-puff blend shape coefficient.</summary>
 		float CheekPuff { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the cheek-squint-left blend shape coefficient.</summary>
 		float CheekSquintLeft { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the cheek-squint-right blend shape coefficient.</summary>
 		float CheekSquintRight { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the eye-blink-left blend shape coefficient.</summary>
 		float EyeBlinkLeft { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the eye-blink-right blend shape coefficient.</summary>
 		float EyeBlinkRight { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the eye-look-down-left blend shape coefficient.</summary>
 		float EyeLookDownLeft { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the eye-look-down-right blend shape coefficient.</summary>
 		float EyeLookDownRight { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the eye-look-in-left blend shape coefficient.</summary>
 		float EyeLookInLeft { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the eye-look-in-right blend shape coefficient.</summary>
 		float EyeLookInRight { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the eye-look-out-left blend shape coefficient.</summary>
 		float EyeLookOutLeft { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the eye-look-out-right blend shape coefficient.</summary>
 		float EyeLookOutRight { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the eye-look-up-left blend shape coefficient.</summary>
 		float EyeLookUpLeft { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the eye-look-up-right blend shape coefficient.</summary>
 		float EyeLookUpRight { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the eye-squint-left blend shape coefficient.</summary>
 		float EyeSquintLeft { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the eye-squint-right blend shape coefficient.</summary>
 		float EyeSquintRight { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the eye-wide-left blend shape coefficient.</summary>
 		float EyeWideLeft { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the eye-wide-right blend shape coefficient.</summary>
 		float EyeWideRight { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the jaw-forward blend shape coefficient.</summary>
 		float JawForward { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the jaw-left blend shape coefficient.</summary>
 		float JawLeft { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the jaw-open blend shape coefficient.</summary>
 		float JawOpen { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the jaw-right blend shape coefficient.</summary>
 		float JawRight { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the mouth-close blend shape coefficient.</summary>
 		float MouthClose { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the mouth-dimple-left blend shape coefficient.</summary>
 		float MouthDimpleLeft { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the mouth-dimple-right blend shape coefficient.</summary>
 		float MouthDimpleRight { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the mouth-frown-left blend shape coefficient.</summary>
 		float MouthFrownLeft { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the mouth-frown-right blend shape coefficient.</summary>
 		float MouthFrownRight { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the mouth-funnel blend shape coefficient.</summary>
 		float MouthFunnel { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the mouth-left blend shape coefficient.</summary>
 		float MouthLeft { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the mouth-lower-down-left blend shape coefficient.</summary>
 		float MouthLowerDownLeft { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the mouth-lower-down-right blend shape coefficient.</summary>
 		float MouthLowerDownRight { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the mouth-press-left blend shape coefficient.</summary>
 		float MouthPressLeft { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the mouth-press-right blend shape coefficient.</summary>
 		float MouthPressRight { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the mouth-pucker blend shape coefficient.</summary>
 		float MouthPucker { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the mouth-right blend shape coefficient.</summary>
 		float MouthRight { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the mouth-roll-lower blend shape coefficient.</summary>
 		float MouthRollLower { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the mouth-roll-upper blend shape coefficient.</summary>
 		float MouthRollUpper { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the mouth-shrug-lower blend shape coefficient.</summary>
 		float MouthShrugLower { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the mouth-shrug-upper blend shape coefficient.</summary>
 		float MouthShrugUpper { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the mouth-smile-left blend shape coefficient.</summary>
 		float MouthSmileLeft { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the mouth-smile-right blend shape coefficient.</summary>
 		float MouthSmileRight { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the mouth-stretch-left blend shape coefficient.</summary>
 		float MouthStretchLeft { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the mouth-stretch-right blend shape coefficient.</summary>
 		float MouthStretchRight { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the mouth-upper-up-left blend shape coefficient.</summary>
 		float MouthUpperUpLeft { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the mouth-upper-up-right blend shape coefficient.</summary>
 		float MouthUpperUpRight { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the nose-sneer-left blend shape coefficient.</summary>
 		float NoseSneerLeft { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the nose-sneer-right blend shape coefficient.</summary>
 		float NoseSneerRight { get; set; }
 
 		/// <summary>Gets or sets the extension of a tongue.</summary>
 		///         <value>The extension of a tongue.</value>
-		///         <remarks>To be added.</remarks>
 		float TongueOut { get; set; }
 	}
 
@@ -1828,9 +1714,7 @@ namespace ARKit {
 		[Export ("blendShapes")]
 		NSDictionary WeakBlendShapes { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the classification of this plane anchor.</summary>
 		[Wrap ("WeakBlendShapes")]
 		ARBlendShapeLocationOptions BlendShapes { get; }
 	}
@@ -1844,7 +1728,7 @@ namespace ARKit {
 		[Export ("initWithBlendShapes:")]
 		NativeHandle Constructor (NSDictionary blendShapes);
 
-		/// <param name="blendShapes">To be added.</param>
+		/// <param name="blendShapes">The blend shape dictionary.</param>
 		/// <summary>Constructor that instantiates facial geometry with the expression specified in s<paramref name="blendShapes" />. Requires hardware support for face-tracking.</summary>
 		/// <remarks>
 		///           <para>This constructor will throw an <see cref="ObjCRuntime.Class.ThrowOnInitFailure" /> exception if run on a device that does not support face-tracking.</para>
@@ -1942,7 +1826,6 @@ namespace ARKit {
 
 		/// <summary>Gets or sets whether the camera is using autofocus. If <see langword="false" />, fixed focus is used.</summary>
 		///         <value>The default value is <see langword="true" />.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("autoFocusEnabled")]
 		bool AutoFocusEnabled { [Bind ("isAutoFocusEnabled")] get; set; }
 
@@ -1971,7 +1854,6 @@ namespace ARKit {
 
 		/// <summary>Gets or sets whether the camera should use autofocusing. If <see langword="false" />, manual focus is used.</summary>
 		///         <value>The default value is <see langword="true" />.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("autoFocusEnabled")]
 		bool AutoFocusEnabled { [Bind ("isAutoFocusEnabled")] get; set; }
 
@@ -2064,8 +1946,6 @@ namespace ARKit {
 		ARReferenceObject Merge (ARReferenceObject @object, [NullAllowed] out NSError error);
 
 		/// <summary>The file extension used for archived 3D objects.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ARReferenceObjectArchiveExtension")]
 		NSString ArchiveExtension { get; }
 	}

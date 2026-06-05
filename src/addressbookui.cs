@@ -319,161 +319,138 @@ namespace AddressBookUI {
 		/// <summary>Represents the value associated with the constant ABPersonBirthdayProperty</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ABPersonBirthdayProperty")]
 		NSString Birthday { get; }
 
 		/// <summary>Represents the value associated with the constant ABPersonDatesProperty</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ABPersonDatesProperty")]
 		NSString Dates { get; }
 
 		/// <summary>Represents the value associated with the constant ABPersonDepartmentNameProperty</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ABPersonDepartmentNameProperty")]
 		NSString DepartmentName { get; }
 
 		/// <summary>Represents the value associated with the constant ABPersonEmailAddressesProperty</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ABPersonEmailAddressesProperty")]
 		NSString EmailAddresses { get; }
 
 		/// <summary>Represents the value associated with the constant ABPersonFamilyNameProperty</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ABPersonFamilyNameProperty")]
 		NSString FamilyName { get; }
 
 		/// <summary>Represents the value associated with the constant ABPersonGivenNameProperty</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ABPersonGivenNameProperty")]
 		NSString GivenName { get; }
 
 		/// <summary>Represents the value associated with the constant ABPersonInstantMessageAddressesProperty</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ABPersonInstantMessageAddressesProperty")]
 		NSString InstantMessageAddresses { get; }
 
 		/// <summary>Represents the value associated with the constant ABPersonJobTitleProperty</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ABPersonJobTitleProperty")]
 		NSString JobTitle { get; }
 
 		/// <summary>Represents the value associated with the constant ABPersonMiddleNameProperty</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ABPersonMiddleNameProperty")]
 		NSString MiddleName { get; }
 
 		/// <summary>Represents the value associated with the constant ABPersonNamePrefixProperty</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ABPersonNamePrefixProperty")]
 		NSString NamePrefix { get; }
 
 		/// <summary>Represents the value associated with the constant ABPersonNameSuffixProperty</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ABPersonNameSuffixProperty")]
 		NSString NameSuffix { get; }
 
 		/// <summary>Represents the value associated with the constant ABPersonNicknameProperty</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ABPersonNicknameProperty")]
 		NSString Nickname { get; }
 
 		/// <summary>Represents the value associated with the constant ABPersonNoteProperty</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ABPersonNoteProperty")]
 		NSString Note { get; }
 
 		/// <summary>Represents the value associated with the constant ABPersonOrganizationNameProperty</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ABPersonOrganizationNameProperty")]
 		NSString OrganizationName { get; }
 
 		/// <summary>Represents the value associated with the constant ABPersonPhoneNumbersProperty</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ABPersonPhoneNumbersProperty")]
 		NSString PhoneNumbers { get; }
 
 		/// <summary>Represents the value associated with the constant ABPersonPhoneticFamilyNameProperty</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ABPersonPhoneticFamilyNameProperty")]
 		NSString PhoneticFamilyName { get; }
 
 		/// <summary>Represents the value associated with the constant ABPersonPhoneticGivenNameProperty</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ABPersonPhoneticGivenNameProperty")]
 		NSString PhoneticGivenName { get; }
 
 		/// <summary>Represents the value associated with the constant ABPersonPhoneticMiddleNameProperty</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ABPersonPhoneticMiddleNameProperty")]
 		NSString PhoneticMiddleName { get; }
 
 		/// <summary>Represents the value associated with the constant ABPersonPostalAddressesProperty</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ABPersonPostalAddressesProperty")]
 		NSString PostalAddresses { get; }
 
 		/// <summary>Represents the value associated with the constant ABPersonPreviousFamilyNameProperty</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ABPersonPreviousFamilyNameProperty")]
 		NSString PreviousFamilyName { get; }
 
 		/// <summary>Represents the value associated with the constant ABPersonRelatedNamesProperty</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ABPersonRelatedNamesProperty")]
 		NSString RelatedNames { get; }
 
 		/// <summary>Represents the value associated with the constant ABPersonSocialProfilesProperty</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ABPersonSocialProfilesProperty")]
 		NSString SocialProfiles { get; }
 
 		/// <summary>Represents the value associated with the constant ABPersonUrlAddressesProperty</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ABPersonUrlAddressesProperty")]
 		NSString UrlAddresses { get; }
 	}
@@ -494,7 +471,6 @@ namespace AddressBookUI {
 		///         <param name="identifier">To be added.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[Export ("personViewController:shouldPerformDefaultActionForPerson:property:identifier:")]
 		[Abstract]
 		bool ShouldPerformDefaultActionForPerson (ABPersonViewController personViewController, ABPerson person, int /* ABPropertyID = int32 */ propertyId, int /* ABMultiValueIdentifier = int32 */ identifier);
@@ -529,7 +505,6 @@ namespace AddressBookUI {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed] // by default this property is null
 		[Export ("alternateName", ArgumentSemantic.Copy)]
 		string AlternateName { get; set; }
@@ -539,7 +514,6 @@ namespace AddressBookUI {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed] // by default this property is null
 		[Export ("message", ArgumentSemantic.Copy)]
 		string Message { get; set; }
@@ -552,13 +526,11 @@ namespace AddressBookUI {
 
 		/// <summary>Gets or sets whether the buttons for predefined actions (send text message, etc.) are shown by the controller.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("allowsActions")]
 		bool AllowsActions { get; set; }
 
 		/// <summary>Gets or sets whether the user's changes to the displayed data should be saved to the <see cref="AddressBookUI.ABUnknownPersonViewController.AddressBook" />.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("allowsAddingToAddressBook")]
 		bool AllowsAddingToAddressBook { get; set; }
 
@@ -596,7 +568,6 @@ namespace AddressBookUI {
 		/// <param name="unknownPersonView">To be added.</param>
 		///         <param name="person">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("unknownPersonViewController:didResolveToPerson:")]
 		[Abstract]
 		void DidResolveToPerson (ABUnknownPersonViewController unknownPersonView, [NullAllowed] ABPerson person);
@@ -607,7 +578,6 @@ namespace AddressBookUI {
 		///         <param name="identifier">To be added.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[Export ("unknownPersonViewController:shouldPerformDefaultActionForPerson:property:identifier:")]
 		bool ShouldPerformDefaultActionForPerson (ABUnknownPersonViewController personViewController, ABPerson person, int /* ABPropertyID = int32 */ propertyId, int /* ABMultiValueIdentifier = int32 */ identifier);
 	}

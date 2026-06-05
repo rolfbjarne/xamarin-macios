@@ -521,19 +521,19 @@ namespace VideoSubscriberAccount {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface VSSubscriptionRegistrationCenter {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the default subscription registration center.</summary>
+		/// <value>The shared default registration center instance.</value>
+		
 		[Static]
 		[Export ("defaultSubscriptionRegistrationCenter")]
 		VSSubscriptionRegistrationCenter Default { get; }
 
 		/// <param name="currentSubscription">
-		///           <para>To be added.</para>
+		///   <para>The subscription to register, or <see langword="null" /> to clear.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Sets the current subscription for the app.</summary>
+		
 		[Export ("setCurrentSubscription:")]
 		void SetCurrentSubscription ([NullAllowed] VSSubscription currentSubscription);
 	}

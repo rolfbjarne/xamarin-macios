@@ -575,37 +575,37 @@ namespace AuthenticationServices {
 	}
 
 	/// <summary>Associates a username and APassword.</summary>
-	/// <remarks>To be added.</remarks>
+		
 	[TV (13, 0)]
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface ASPasswordCredential : NSCopying, NSSecureCoding, ASAuthorizationCredential {
-		/// <param name="user">To be added.</param>
-		/// <param name="password">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="user">The user name.</param>
+		/// <param name="password">The password.</param>
+		/// <summary>Creates a new password credential with the specified user and password.</summary>
+		
 		[Export ("initWithUser:password:")]
 		NativeHandle Constructor (string user, string password);
 
-		/// <param name="user">To be added.</param>
-		///         <param name="password">To be added.</param>
+		/// <param name="user">The user name.</param>
+		/// <param name="password">The password.</param>
 		///         <summary>Static factory methods to create a new <see cref="AuthenticationServices.ASPasswordCredential" />.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <returns>A new password credential instance.</returns>
+		
 		[Static]
 		[Export ("credentialWithUser:password:")]
 		ASPasswordCredential Create (string user, string password);
 
 		/// <summary>The identifier associated with the password.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <value>The user name string.</value>
+		
 		[Export ("user")]
 		string User { get; }
 
 		/// <summary>The password associated with the user.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <value>The password string.</value>
+		
 		[Export ("password")]
 		string Password { get; }
 	}

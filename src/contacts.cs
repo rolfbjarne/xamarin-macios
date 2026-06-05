@@ -145,8 +145,6 @@ namespace Contacts {
 		bool IsUnifiedWithContact (string contactIdentifier);
 
 		/// <summary>Used as the name of an exception thrown when attempting to read AProperty that has not been fetched.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactPropertyNotFetchedExceptionName")]
 		NSString PropertyNotFetchedExceptionName { get; }
 
@@ -189,184 +187,124 @@ namespace Contacts {
 	interface CNContactKey {
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.Identifier" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactIdentifierKey")]
 		NSString Identifier { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.NamePrefix" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactNamePrefixKey")]
 		NSString NamePrefix { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.GivenName" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactGivenNameKey")]
 		NSString GivenName { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.MiddleName" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactMiddleNameKey")]
 		NSString MiddleName { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.FamilyName" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactFamilyNameKey")]
 		NSString FamilyName { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.PreviousFamilyName" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactPreviousFamilyNameKey")]
 		NSString PreviousFamilyName { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.NameSuffix" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactNameSuffixKey")]
 		NSString NameSuffix { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.Nickname" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactNicknameKey")]
 		NSString Nickname { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.PhoneticGivenName" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactPhoneticGivenNameKey")]
 		NSString PhoneticGivenName { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.PhoneticMiddleName" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactPhoneticMiddleNameKey")]
 		NSString PhoneticMiddleName { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.PhoneticFamilyName" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactPhoneticFamilyNameKey")]
 		NSString PhoneticFamilyName { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.PhoneticOrganizationName" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("CNContactPhoneticOrganizationNameKey")]
 		NSString PhoneticOrganizationName { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.OrganizationName" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactOrganizationNameKey")]
 		NSString OrganizationName { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.DepartmentName" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactDepartmentNameKey")]
 		NSString DepartmentName { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.JobTitle" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactJobTitleKey")]
 		NSString JobTitle { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.Birthday" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactBirthdayKey")]
 		NSString Birthday { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.NonGregorianBirthday" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactNonGregorianBirthdayKey")]
 		NSString NonGregorianBirthday { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.Note" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactNoteKey")]
 		NSString Note { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.ImageData" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactImageDataKey")]
 		NSString ImageData { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.ImageDataAvailable" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("CNContactImageDataAvailableKey")]
 		NSString ImageDataAvailable { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.ThumbnailImageData" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactThumbnailImageDataKey")]
 		NSString ThumbnailImageData { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.ContactType" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactTypeKey")]
 		NSString Type { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.PhoneNumbers" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactPhoneNumbersKey")]
 		NSString PhoneNumbers { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.EmailAddresses" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactEmailAddressesKey")]
 		NSString EmailAddresses { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.PostalAddresses" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactPostalAddressesKey")]
 		NSString PostalAddresses { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.Dates" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactDatesKey")]
 		NSString Dates { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.UrlAddresses" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactUrlAddressesKey")]
 		NSString UrlAddresses { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.ContactRelations" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactRelationsKey")]
 		NSString Relations { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.SocialProfiles" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactSocialProfilesKey")]
 		NSString SocialProfiles { get; }
 
 		/// <summary>Key identifying the <see cref="Contacts.CNContact.InstantMessageAddresses" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactInstantMessageAddressesKey")]
 		NSString InstantMessageAddresses { get; }
 	}
@@ -445,8 +383,6 @@ namespace Contacts {
 		NSAttributedString GetAttributedString (CNContact contact, [NullAllowed] NSDictionary attributes);
 
 		/// <summary>A string constant whose value is returned in calls to <see cref="Contacts.CNContactFormatter.GetAttributedString(Contacts.CNContact,Foundation.NSDictionary)" /> and <see cref="Contacts.CNContactFormatter.GetAttributedStringFrom(Contacts.CNContact,Contacts.CNContactFormatterStyle,Foundation.NSDictionary)" />.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContactPropertyAttribute")]
 		NSString ContactPropertyAttribute { get; }
 
@@ -514,81 +450,55 @@ namespace Contacts {
 	interface CNLabelContactRelationKey {
 
 		/// <summary>Father.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNLabelContactRelationFather")]
 		NSString Father { get; }
 
 		/// <summary>Mother.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNLabelContactRelationMother")]
 		NSString Mother { get; }
 
 		/// <summary>Parent.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNLabelContactRelationParent")]
 		NSString Parent { get; }
 
 		/// <summary>Brother.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNLabelContactRelationBrother")]
 		NSString Brother { get; }
 
 		/// <summary>Sister.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNLabelContactRelationSister")]
 		NSString Sister { get; }
 
 		/// <summary>Child.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNLabelContactRelationChild")]
 		NSString Child { get; }
 
 		/// <summary>Just friends.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNLabelContactRelationFriend")]
 		NSString Friend { get; }
 
 		/// <summary>Spouse.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNLabelContactRelationSpouse")]
 		NSString Spouse { get; }
 
 		/// <summary>Partner. (see also <see cref="Contacts.CNLabelContactRelationKey.Spouse" />)</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNLabelContactRelationPartner")]
 		NSString Partner { get; }
 
 		/// <summary>Professional assistant.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNLabelContactRelationAssistant")]
 		NSString Assistant { get; }
 
 		/// <summary>Manager.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNLabelContactRelationManager")]
 		NSString Manager { get; }
 
 		/// <summary>Son.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNLabelContactRelationSon")]
 		[MacCatalyst (13, 1)]
 		NSString Son { get; }
 
 		/// <summary>Daughter.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("CNLabelContactRelationDaughter")]
 		NSString Daughter { get; }
@@ -1835,14 +1745,14 @@ namespace Contacts {
 		CNAuthorizationStatus GetAuthorizationStatus (CNEntityType entityType);
 
 		[Async (XmlDocs = """
-			<param name="entityType">To be added.</param>
+			<param name="entityType">The entity type to request access for.</param>
 			<summary>Requests access to the user's contacts.</summary>
 			<returns>
 			          <para>A task that represents the asynchronous RequestAccess operation.   The value of the TResult parameter is a Contacts.CNContactStoreRequestAccessHandler.</para>
 			        </returns>
 			<remarks>
 			          <para copied="true">The RequestAccessAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
+			          
 			        </remarks>
 			""")]
 		[Export ("requestAccessForEntityType:completionHandler:")]
@@ -1991,20 +1901,14 @@ namespace Contacts {
 	interface CNContainerKey { // Can be used in KVO
 
 		/// <summary>The key for the <see cref="Contacts.CNContainer.Identifier" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContainerIdentifierKey")]
 		NSString Identifier { get; }
 
 		/// <summary>The key for the <see cref="Contacts.CNContainer.Name" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContainerNameKey")]
 		NSString Name { get; }
 
 		/// <summary>The key for the <see cref="Contacts.CNContainer.ContainerType" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNContainerTypeKey")]
 		NSString Type { get; }
 	}
@@ -2015,27 +1919,19 @@ namespace Contacts {
 	[EditorBrowsable (EditorBrowsableState.Advanced)]
 	interface CNErrorUserInfoKey {
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for affected records in the error user info dictionary.</summary>
 		[Field ("CNErrorUserInfoAffectedRecordsKey")]
 		NSString AffectedRecords { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for affected record identifiers in the error user info dictionary.</summary>
 		[Field ("CNErrorUserInfoAffectedRecordIdentifiersKey")]
 		NSString AffectedRecordIdentifiers { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for validation errors in the error user info dictionary.</summary>
 		[Field ("CNErrorUserInfoValidationErrorsKey")]
 		NSString ValidationErrors { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for key paths in the error user info dictionary.</summary>
 		[Field ("CNErrorUserInfoKeyPathsKey")]
 		NSString KeyPaths { get; }
 	}
@@ -2077,14 +1973,10 @@ namespace Contacts {
 	interface CNGroupKey { // Can be used in KVO
 
 		/// <summary>Key for the <see cref="Contacts.CNGroup.Identifier" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNGroupIdentifierKey")]
 		NSString Identifier { get; }
 
 		/// <summary>Key for the <see cref="Contacts.CNGroup.Name" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNGroupNameKey")]
 		NSString Name { get; }
 	}
@@ -2121,14 +2013,10 @@ namespace Contacts {
 	interface CNInstantMessageAddressKey { // Can be used in KVO
 
 		/// <summary>A key identifying the <see cref="Contacts.CNInstantMessageAddress.Username" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNInstantMessageAddressUsernameKey")]
 		NSString Username { get; }
 
 		/// <summary>A key identifying the <see cref="Contacts.CNInstantMessageAddress.Service" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNInstantMessageAddressServiceKey")]
 		NSString Service { get; }
 	}
@@ -2140,62 +2028,42 @@ namespace Contacts {
 	interface CNInstantMessageServiceKey {
 
 		/// <summary>AOL Instant Messenger.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNInstantMessageServiceAIM")]
 		NSString Aim { get; }
 
 		/// <summary>Facebook Messenger.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNInstantMessageServiceFacebook")]
 		NSString Facebook { get; }
 
 		/// <summary>Gadu-Gadu (Polish).</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNInstantMessageServiceGaduGadu")]
 		NSString GaduGadu { get; }
 
 		/// <summary>Google Talk.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNInstantMessageServiceGoogleTalk")]
 		NSString GoogleTalk { get; }
 
 		/// <summary>ICQ.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNInstantMessageServiceICQ")]
 		NSString Icq { get; }
 
 		/// <summary>Jabber.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNInstantMessageServiceJabber")]
 		NSString Jabber { get; }
 
 		/// <summary>MSN Messenger.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNInstantMessageServiceMSN")]
 		NSString Msn { get; }
 
 		/// <summary>Tencent QQ.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNInstantMessageServiceQQ")]
 		NSString QQ { get; }
 
 		/// <summary>Microsoft Skype.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNInstantMessageServiceSkype")]
 		NSString Skype { get; }
 
 		/// <summary>Yahoo Messenger.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNInstantMessageServiceYahoo")]
 		NSString Yahoo { get; }
 	}
@@ -2247,14 +2115,10 @@ namespace Contacts {
 	interface CNLabelKey {
 
 		/// <summary>The home of the user (as defined in the contact store).</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNLabelHome")]
 		NSString Home { get; }
 
 		/// <summary>The user's work address (as defined in the contacts store).</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNLabelWork")]
 		NSString Work { get; }
 
@@ -2264,26 +2128,18 @@ namespace Contacts {
 		NSString School { get; }
 
 		/// <summary>A <see cref="Contacts.CNLabeledValue{ValueType}" /> with an unknown label.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNLabelOther")]
 		NSString Other { get; }
 
 		/// <summary>An iCloud email.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNLabelEmailiCloud")]
 		NSString EmailiCloud { get; }
 
 		/// <summary>The user's home page.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNLabelURLAddressHomePage")]
 		NSString UrlAddressHomePage { get; }
 
 		/// <summary>A labeled anniversary.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNLabelDateAnniversary")]
 		NSString DateAnniversary { get; }
 	}
@@ -2488,8 +2344,6 @@ namespace Contacts {
 	interface CNLabelPhoneNumberKey {
 
 		/// <summary>Not to be confused with a mere <see cref="Contacts.CNLabelPhoneNumberKey.Mobile" />.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNLabelPhoneNumberiPhone")]
 		NSString iPhone { get; }
 
@@ -2499,38 +2353,26 @@ namespace Contacts {
 		NSString AppleWatch { get; }
 
 		/// <summary>A mobile phone number (see <see cref="Contacts.CNLabelPhoneNumberKey.iPhone" />).</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNLabelPhoneNumberMobile")]
 		NSString Mobile { get; }
 
 		/// <summary>The main phone number for a <see cref="Contacts.CNContact" />.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNLabelPhoneNumberMain")]
 		NSString Main { get; }
 
 		/// <summary>The user's home fax number.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNLabelPhoneNumberHomeFax")]
 		NSString HomeFax { get; }
 
 		/// <summary>Number for a fax located at work.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNLabelPhoneNumberWorkFax")]
 		NSString WorkFax { get; }
 
 		/// <summary>A fax number (see <see cref="Contacts.CNLabelPhoneNumberKey.HomeFax" /> and <see cref="Contacts.CNLabelPhoneNumberKey.WorkFax" />).</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNLabelPhoneNumberOtherFax")]
 		NSString OtherFax { get; }
 
 		/// <summary>A pager number.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNLabelPhoneNumberPager")]
 		NSString Pager { get; }
 	}
@@ -2572,10 +2414,9 @@ namespace Contacts {
 		[Export ("localizedStringForKey:")]
 		string LocalizeProperty (NSString property);
 
-		/// <param name="option">To be added.</param>
+		/// <param name="option">The property option to localize.</param>
 		///         <summary>The localized name for the property as modified by the option that is specified in <paramref name="option" />.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <returns>The localized string for the property.</returns>
 		[Static]
 		[Wrap ("LocalizeProperty (option.GetConstant ()!)")]
 		string LocalizeProperty (CNPostalAddressKeyOption option);
@@ -2639,14 +2480,10 @@ namespace Contacts {
 		CNPostalAddressFormatterStyle Style { get; set; }
 
 		/// <summary>Get the <see cref="Contacts.CNPostalAddress" /> property key.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNPostalAddressPropertyAttribute")]
 		NSString PropertyAttribute { get; }
 
 		/// <summary>Returns the localized <see cref="Contacts.CNPostalAddress" /> property key.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNPostalAddressLocalizedPropertyNameAttribute")]
 		NSString LocalizedPropertyNameAttribute { get; }
 	}
@@ -2728,10 +2565,9 @@ namespace Contacts {
 		[Export ("localizedStringForKey:")]
 		string LocalizeProperty (NSString key);
 
-		/// <param name="key">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="key">The key to localize.</param>
+		/// <summary>Gets the localized string for the specified key.</summary>
+		/// <returns>The localized string.</returns>
 		[Static]
 		[Wrap ("LocalizeProperty (key.GetConstant ()!)")]
 		string LocalizeProperty (CNPostalAddressKeyOption key);
@@ -2748,26 +2584,18 @@ namespace Contacts {
 	interface CNSocialProfileKey { // Can be used in KVO
 
 		/// <summary>The key associated with <see cref="Contacts.CNSocialProfileOption.UrlString" />.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNSocialProfileURLStringKey")]
 		NSString UrlString { get; }
 
 		/// <summary>The key associated with <see cref="Contacts.CNSocialProfileOption.Username" />.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNSocialProfileUsernameKey")]
 		NSString Username { get; }
 
 		/// <summary>The key associated with <see cref="Contacts.CNSocialProfileOption.UserIdentifier" />.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNSocialProfileUserIdentifierKey")]
 		NSString UserIdentifier { get; }
 
 		/// <summary>The key associated with <see cref="Contacts.CNSocialProfileOption.Service" />.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNSocialProfileServiceKey")]
 		NSString Service { get; }
 	}
@@ -2779,56 +2607,38 @@ namespace Contacts {
 	interface CNSocialProfileServiceKey {
 
 		/// <summary>Facebook.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNSocialProfileServiceFacebook")]
 		NSString Facebook { get; }
 
 		/// <summary>Flickr.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNSocialProfileServiceFlickr")]
 		NSString Flickr { get; }
 
 		/// <summary>LinkedIn.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNSocialProfileServiceLinkedIn")]
 		NSString LinkedIn { get; }
 
 		/// <summary>MySpace.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNSocialProfileServiceMySpace")]
 		NSString MySpace { get; }
 
 		/// <summary>SinaWeibo.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNSocialProfileServiceSinaWeibo")]
 		NSString SinaWeibo { get; }
 
 		/// <summary>TencentWeibo.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNSocialProfileServiceTencentWeibo")]
 		NSString TencentWeibo { get; }
 
 		/// <summary>Twitter.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNSocialProfileServiceTwitter")]
 		NSString Twitter { get; }
 
 		/// <summary>Yelp.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNSocialProfileServiceYelp")]
 		NSString Yelp { get; }
 
 		/// <summary>Apple GameCenter.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CNSocialProfileServiceGameCenter")]
 		NSString GameCenter { get; }
 	}

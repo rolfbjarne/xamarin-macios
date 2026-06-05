@@ -299,10 +299,10 @@ namespace MessageUI {
 	[Model]
 	[Protocol]
 	interface MFMessageComposeViewControllerDelegate {
-		/// <param name="controller">To be added.</param>
-		///         <param name="result">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="controller">The message compose view controller.</param>
+		/// <param name="result">The result of the compose operation.</param>
+		/// <summary>Called when the user finishes or cancels the message compose operation.</summary>
+		
 		[Abstract]
 		[Export ("messageComposeViewController:didFinishWithResult:")]
 		void Finished (MFMessageComposeViewController controller, MessageComposeResult result);

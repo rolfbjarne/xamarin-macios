@@ -457,7 +457,7 @@ namespace VideoSubscriberAccount {
 
 	[NoMacCatalyst]
 	enum VSAccountProviderAuthenticationScheme {
-		/// <summary>To be added.</summary>
+		/// <summary>The SAML authentication scheme.</summary>
 		[Field ("VSAccountProviderAuthenticationSchemeSAML")]
 		Saml,
 
@@ -473,11 +473,11 @@ namespace VideoSubscriberAccount {
 	[NoMacCatalyst]
 	[Native]
 	public enum VSSubscriptionAccessLevel : long {
-		/// <summary>To be added.</summary>
+		/// <summary>The user has an unknown subscription level.</summary>
 		Unknown,
-		/// <summary>To be added.</summary>
+		/// <summary>The user has a free account.</summary>
 		FreeWithAccount,
-		/// <summary>To be added.</summary>
+		/// <summary>The user has a paid account.</summary>
 		Paid,
 	}
 

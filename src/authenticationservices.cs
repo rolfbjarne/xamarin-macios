@@ -479,29 +479,29 @@ namespace AuthenticationServices {
 	[BaseType (typeof (UIViewController))]
 	interface ASCredentialProviderViewController {
 		/// <summary>The <see cref="AuthenticationServices.ASCredentialProviderExtensionContext" /> of the provider.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <value>The extension context.</value>
+		
 		[Export ("extensionContext", ArgumentSemantic.Strong)]
 		ASCredentialProviderExtensionContext ExtensionContext { get; }
 
 		/// <param name="serviceIdentifiers">Zero or more service identifiers. More-specific identifiers are at lower index values.</param>
 		///         <summary>Developers should override this method to prepare a list of credentials for the <paramref name="serviceIdentifiers" />.</summary>
-		///         <remarks>To be added.</remarks>
+		
 		[Export ("prepareCredentialListForServiceIdentifiers:")]
 		void PrepareCredentialList (ASCredentialServiceIdentifier [] serviceIdentifiers);
 
-		/// <param name="credentialIdentity">To be added.</param>
+		/// <param name="credentialIdentity">The credential identity to provide.</param>
 		///         <summary>Developers should override this method to attempt to provide the credential without user interaction.</summary>
-		///         <remarks>To be added.</remarks>
+		
 		[Deprecated (PlatformName.MacOSX, 14, 0, message: "Use 'ProvideCredentialWithoutUserInteraction (ASCredentialRequest)' instead.")]
 		[Deprecated (PlatformName.iOS, 17, 0, message: "Use 'ProvideCredentialWithoutUserInteraction (ASCredentialRequest)' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 17, 0, message: "Use 'ProvideCredentialWithoutUserInteraction (ASCredentialRequest)' instead.")]
 		[Export ("provideCredentialWithoutUserInteractionForIdentity:")]
 		void ProvideCredentialWithoutUserInteraction (ASPasswordCredentialIdentity credentialIdentity);
 
-		/// <param name="credentialIdentity">To be added.</param>
+		/// <param name="credentialIdentity">The credential identity to prepare the interface for.</param>
 		///         <summary>Developers should override this method which is called shortly before the user is shown the interface for the credential.</summary>
-		///         <remarks>To be added.</remarks>
+		
 		[Deprecated (PlatformName.MacOSX, 14, 0, message: "Use 'PrepareInterfaceToProvideCredential (ASPasswordCredentialIdentity)' instead.")]
 		[Deprecated (PlatformName.iOS, 17, 0, message: "Use 'PrepareInterfaceToProvideCredential (ASPasswordCredentialIdentity)' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 17, 0, message: "Use 'PrepareInterfaceToProvideCredential (ASPasswordCredentialIdentity)' instead.")]
@@ -509,7 +509,7 @@ namespace AuthenticationServices {
 		void PrepareInterfaceToProvideCredential (ASPasswordCredentialIdentity credentialIdentity);
 
 		/// <summary>Developers should override this method to prepare for the user-experience of enabling the developer's extension.</summary>
-		///         <remarks>To be added.</remarks>
+		
 		[Export ("prepareInterfaceForExtensionConfiguration")]
 		void PrepareInterfaceForExtensionConfiguration ();
 

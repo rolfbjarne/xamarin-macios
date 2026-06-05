@@ -803,40 +803,40 @@ namespace StoreKit {
 		string ProviderToken { get; set; }
 
 		/// <summary>Gets or sets the ad network's cryptographic signature. Used for attribution.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <value>The attribution signature string.</value>
+		
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Export ("AdNetworkAttributionSignature")]
 		string AdNetworkAttributionSignature { get; set; }
 
 		/// <summary>Gets or sets the ad network campaign.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <value>The campaign identifier.</value>
+		
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Export ("AdNetworkCampaignIdentifier")]
 		uint AdNetworkCampaignIdentifier { get; set; }
 
 		/// <summary>Gets or sets the ad network's unique ID.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <value>The ad network identifier string.</value>
+		
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Export ("AdNetworkIdentifier")]
 		string AdNetworkIdentifier { get; set; }
 
 		/// <summary>Gets or sets a cryptographic nonce value.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <value>A nonce value.</value>
+		
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Export ("AdNetworkNonce")]
 		NSUuid AdNetworkNonce { get; set; }
 
 		/// <summary>Gets or sets a key for the time of the ad impression.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <value>The timestamp value.</value>
+		
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Export ("AdNetworkTimestamp")]

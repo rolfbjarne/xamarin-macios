@@ -331,10 +331,10 @@ namespace AuthenticationServices {
 	[BaseType (typeof (NSExtensionContext))]
 	[DisableDefaultCtor]
 	interface ASCredentialProviderExtensionContext {
-		/// <param name="credential">To be added.</param>
-		///         <param name="completionHandler">To be added.</param>
+		/// <param name="credential">The credential to complete the request with.</param>
+		/// <param name="completionHandler">The completion handler, or <see langword="null" />.</param>
 		///         <summary>Completes the request by providing <paramref name="credential" />.</summary>
-		///         <remarks>To be added.</remarks>
+		
 		[Export ("completeRequestWithSelectedCredential:completionHandler:")]
 		void CompleteRequest (ASPasswordCredential credential, [NullAllowed] ASCredentialProviderExtensionRequestCompletionHandler completionHandler);
 
@@ -344,7 +344,7 @@ namespace AuthenticationServices {
 
 		/// <param name="error">The error must be of type <see cref="AuthenticationServices.ASExtensionErrorCode" />.</param>
 		///         <summary>Cancels the request.</summary>
-		///         <remarks>To be added.</remarks>
+		
 		[Export ("cancelRequestWithError:")]
 		void CancelRequest (NSError error);
 

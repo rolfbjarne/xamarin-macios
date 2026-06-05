@@ -1046,25 +1046,25 @@ namespace StoreKit {
 
 		// Headers comment: Identifier of the iTunes Store item the user is trying to access which requires cloud service setup (NSNumber).
 		/// <summary>Gets or sets the identifier for the item for which access is being requested.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <value>The iTunes item identifier.</value>
+		
 		nint ITunesItemIdentifier { get; set; }
 
 		/// <summary>Gets or sets the affiliate token.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <value>The affiliate token string.</value>
+		
 		[MacCatalyst (13, 1)]
 		string AffiliateToken { get; set; }
 
 		/// <summary>Gets or sets the campaign token.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <value>The campaign token string.</value>
+		
 		[MacCatalyst (13, 1)]
 		string CampaignToken { get; set; }
 
 		/// <summary>Gets or sets the setup message identifier.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <value>The message identifier string.</value>
+		
 		[MacCatalyst (13, 1)]
 		string MessageIdentifier { get; set; }
 	}

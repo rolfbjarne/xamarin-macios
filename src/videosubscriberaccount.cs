@@ -423,34 +423,34 @@ namespace VideoSubscriberAccount {
 	[BaseType (typeof (NSObject))]
 	interface VSAccountProviderResponse {
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the authentication scheme string used by the provider.</summary>
+		/// <value>The authentication scheme as an NSString constant.</value>
+		
 		[Protected]
 		[Export ("authenticationScheme")]
 		NSString AuthenticationSchemeString { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the authentication scheme used by the provider.</summary>
+		/// <value>The authentication scheme enumeration value.</value>
+		
 		[Wrap ("VSAccountProviderAuthenticationSchemeExtensions.GetValue (AuthenticationSchemeString)")]
 		VSAccountProviderAuthenticationScheme AuthenticationScheme { get; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the status of the authentication response.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
+		
 		[NullAllowed, Export ("status")]
 		string Status { get; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the body of the authentication response.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
+		
 		[NullAllowed, Export ("body")]
 		string Body { get; }
 	}

@@ -610,25 +610,25 @@ namespace AuthenticationServices {
 		string Password { get; }
 	}
 
-	/// <param name="callbackUrl">To be added.</param>
-	/// <param name="error">To be added.</param>
+	/// <param name="callbackUrl">The callback URL, or <see langword="null" /> if the session was cancelled.</param>
+	/// <param name="error">The error, or <see langword="null" /> if the session completed successfully.</param>
 	/// <summary>Delegate method used in <see cref="AuthenticationServices.ASWebAuthenticationSession" /> interactions.</summary>
-	/// <remarks>To be added.</remarks>
+		
 	delegate void ASWebAuthenticationSessionCompletionHandler ([NullAllowed] NSUrl callbackUrl, [NullAllowed] NSError error);
 
 	/// <summary>Manages a one-time Safari login experience for the developer's app.</summary>
-	/// <remarks>To be added.</remarks>
+		
 	[TV (16, 0)]
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface ASWebAuthenticationSession {
 
-		/// <param name="url">To be added.</param>
-		/// <param name="callbackUrlScheme">To be added.</param>
-		/// <param name="completionHandler">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="url">The URL to authenticate with.</param>
+		/// <param name="callbackUrlScheme">The callback URL scheme, or <see langword="null" />.</param>
+		/// <param name="completionHandler">The completion handler called when the session finishes.</param>
+		/// <summary>Creates a new web authentication session.</summary>
+		
 		[Deprecated (PlatformName.iOS, 17, 4, message: "Use the 'ASWebAuthenticationSessionCallback' overload instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 17, 4, message: "Use the 'ASWebAuthenticationSessionCallback' overload instead.")]
 		[Deprecated (PlatformName.MacOSX, 14, 4, message: "Use the 'ASWebAuthenticationSessionCallback' overload instead.")]
@@ -641,8 +641,8 @@ namespace AuthenticationServices {
 		NativeHandle Constructor (NSUrl url, ASWebAuthenticationSessionCallback callback, ASWebAuthenticationSessionCompletionHandler completionHandler);
 
 		/// <summary>Begins the Safari-based logon, returning <see langword="true" /> if the session started successfully.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <returns><see langword="true" /> if the session started successfully; otherwise, <see langword="false" />.</returns>
+		
 		[Export ("start")]
 		bool Start ();
 

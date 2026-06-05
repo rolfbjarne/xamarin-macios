@@ -854,20 +854,20 @@ namespace StoreKit {
 	}
 
 	/// <summary>Encapsulates the iTunes identifier for the item that the store should display when the application is displaying a <see cref="StoreKit.SKStoreProductViewController" />.</summary>
-	/// <remarks>To be added.</remarks>
+		
 	[MacCatalyst (13, 1)]
 	[Static]
 	interface SKStoreProductParameterKey {
 		/// <summary>Represents the value associated with the constant SKStoreProductParameterITunesItemIdentifier</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
+		
 		[Field ("SKStoreProductParameterITunesItemIdentifier")]
 		NSString ITunesItemIdentifier { get; }
 
 		/// <summary>Represents the value associated with the constant SKStoreProductParameterProductIdentifier.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		
+		
 		[MacCatalyst (13, 1)]
 		[Field ("SKStoreProductParameterProductIdentifier")]
 		NSString ProductIdentifier { get; }
@@ -875,7 +875,7 @@ namespace StoreKit {
 		/// <summary>Represents the value associated with the constant SKStoreProductParameterAffiliateToken</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
+		
 		[MacCatalyst (13, 1)]
 		[Field ("SKStoreProductParameterAffiliateToken")]
 		NSString AffiliateToken { get; }
@@ -883,36 +883,36 @@ namespace StoreKit {
 		/// <summary>Represents the value associated with the constant SKStoreProductParameterCampaignToken</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
+		
 		[MacCatalyst (13, 1)]
 		[Field ("SKStoreProductParameterCampaignToken")]
 		NSString CampaignToken { get; }
 
 		/// <summary>TRepresents the value associated with the constant SKStoreProductParameterProviderToken.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		
+		
 		[MacCatalyst (13, 1)]
 		[Field ("SKStoreProductParameterProviderToken")]
 		NSString ProviderToken { get; }
 
 		/// <summary>Represents the value associated with the constant SKStoreProductParameterAdvertisingPartnerToken.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		
+		
 		[MacCatalyst (13, 1)]
 		[Field ("SKStoreProductParameterAdvertisingPartnerToken")]
 		NSString AdvertisingPartnerToken { get; }
 
 		/// <summary>Represents the value associated with the constant SKStoreProductParameterAdNetworkAttributionSignature.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		
+		
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Field ("SKStoreProductParameterAdNetworkAttributionSignature")]
 		NSString AdNetworkAttributionSignature { get; }
 
 		/// <summary>Represents the value associated with the constant SKStoreProductParameterAdNetworkCampaignIdentifier.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		
+		
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Field ("SKStoreProductParameterAdNetworkCampaignIdentifier")]
@@ -923,24 +923,24 @@ namespace StoreKit {
 		NSString AdNetworkSourceIdentifier { get; }
 
 		/// <summary>Represents the value associated with the constant SKStoreProductParameterAdNetworkIdentifier.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		
+		
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Field ("SKStoreProductParameterAdNetworkIdentifier")]
 		NSString AdNetworkIdentifier { get; }
 
 		/// <summary>Represents the value associated with the constant SKStoreProductParameterAdNetworkNonce.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		
+		
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Field ("SKStoreProductParameterAdNetworkNonce")]
 		NSString AdNetworkNonce { get; }
 
 		/// <summary>Represents the value associated with the constant SKStoreProductParameterAdNetworkTimestamp.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		
+		
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Field ("SKStoreProductParameterAdNetworkTimestamp")]

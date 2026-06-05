@@ -446,10 +446,10 @@ namespace Photos {
 		[Export ("replaceAssetsAtIndexes:withAssets:")]
 		void ReplaceAssets (NSIndexSet indexes, PHObject [] assets);
 
-		/// <param name="fromIndexes">To be added.</param>
-		/// <param name="toIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="fromIndexes">The indexes of the assets to move.</param>
+		/// <param name="toIndex">The destination index.</param>
+		/// <summary>Moves the assets at the specified indexes to the destination index.</summary>
+		
 		[Export ("moveAssetsAtIndexes:toIndex:")]
 		void MoveAssets (NSIndexSet fromIndexes, nuint toIndex);
 	}
@@ -477,7 +477,7 @@ namespace Photos {
 			<returns>A task that represents the asynchronous WriteData operation</returns>
 			<remarks>
 			          <para copied="true">The WriteDataAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
+			          
 			        </remarks>
 			""")]
 		void WriteData (PHAssetResource forResource, NSUrl fileURL, [NullAllowed] PHAssetResourceRequestOptions options, Action<NSError> completionHandler);

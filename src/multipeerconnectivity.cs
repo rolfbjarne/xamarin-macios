@@ -29,14 +29,12 @@ namespace MultipeerConnectivity {
 
 		/// <param name="myDisplayName">The name for the peer.</param>
 		/// <summary>Constructor that assigns to the <see cref="MultipeerConnectivity.MCPeerID.DisplayName" /> property.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[DesignatedInitializer]
 		[Export ("initWithDisplayName:")]
 		NativeHandle Constructor (string myDisplayName);
 
 		/// <summary>The displayable name for the peer.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("displayName")]
 		string DisplayName { get; }
 	}
@@ -52,7 +50,7 @@ namespace MultipeerConnectivity {
 
 		/// <param name="myPeerID">The identity of the local peer.</param>
 		/// <summary>Constructs a session with the specified identity for the local peer.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("initWithPeer:")]
 		NativeHandle Constructor (MCPeerID myPeerID);
 
@@ -62,10 +60,10 @@ namespace MultipeerConnectivity {
 		[Export ("initWithPeer:securityIdentity:encryptionPreference:")]
 		IntPtr _Init (MCPeerID myPeerID, [NullAllowed] NSArray identity, MCEncryptionPreference encryptionPreference);
 
-		/// <param name="data">To be added.</param>
-		///         <param name="peerIDs">To be added.</param>
-		///         <param name="mode">To be added.</param>
-		///         <param name="error">To be added.</param>
+		/// <param name="data">The data to send.</param>
+		/// <param name="peerIDs">The peer IDs to send the data to.</param>
+		/// <param name="mode">The delivery mode.</param>
+		/// <param name="error">Set to the error if sending fails.</param>
 		///         <summary>Enqueues for delivery the <paramref name="data" /> to the peers in <paramref name="peerIDs" />.</summary>
 		///         <returns>
 		///           <see langword="true" /> if the message was enqueued for delivery.</returns>
@@ -76,13 +74,11 @@ namespace MultipeerConnectivity {
 		bool SendData (NSData data, MCPeerID [] peerIDs, MCSessionSendDataMode mode, out NSError error);
 
 		/// <summary>Disconnects this peer from the session.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("disconnect")]
 		void Disconnect ();
 
 		/// <summary>An array of the currently connected devices.</summary>
 		///         <value>The array will be non-null, but of length 0, if no peers are connected.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("connectedPeers")]
 		MCPeerID [] ConnectedPeers { get; }
 
@@ -105,7 +101,7 @@ namespace MultipeerConnectivity {
 			<param name="peerID">The ID of the receiving peer.</param>
 			<summary>Enqueues for delivery to <paramref name="peerID" /> the resource at <paramref name="resourceUrl" />.</summary>
 			<returns>A task that represents the asynchronous SendResource operation</returns>
-			<remarks>To be added.</remarks>
+			
 			""",
 			XmlDocsWithOutParameter = """
 			<param name="resourceUrl">The URL to the resource.</param>
@@ -113,19 +109,18 @@ namespace MultipeerConnectivity {
 			<param name="peerID">The ID of the receiving peer.</param>
 			<param name="result">A progress result.</param>
 			<summary>Asynchronously enqueues for delivery to <paramref name="resourceName" /> the resource at <paramref name="resourceUrl" />, returning a task that represents the operation.</summary>
-			<returns>To be added.</returns>
-			<remarks>To be added.</remarks>
+			<returns>A task representing the asynchronous operation.</returns>
+			
 			""")]
 		[return: NullAllowed]
 		[Export ("sendResourceAtURL:withName:toPeer:withCompletionHandler:")]
 		NSProgress SendResource (NSUrl resourceUrl, string resourceName, MCPeerID peerID, [NullAllowed] Action<NSError> completionHandler);
 
-		/// <param name="streamName">To be added.</param>
-		///         <param name="peerID">To be added.</param>
-		///         <param name="error">To be added.</param>
+		/// <param name="streamName">The name of the stream.</param>
+		/// <param name="peerID">The peer ID to stream to.</param>
+		/// <param name="error">Set to the error if the stream cannot be started.</param>
 		///         <summary>Creates a named stream to <paramref name="peerID" />.</summary>
 		///         <returns>A byte stream or <see langword="null" /> if the stream could not be created.</returns>
-		///         <remarks>To be added.</remarks>
 		[return: NullAllowed]
 		[Export ("startStreamWithName:toPeer:error:")]
 		NSOutputStream StartStream (string streamName, MCPeerID peerID, out NSError error);
@@ -151,28 +146,23 @@ namespace MultipeerConnectivity {
 		IMCSessionDelegate Delegate { get; set; }
 
 		/// <summary>The peer ID associated with this device.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("myPeerID")]
 		MCPeerID MyPeerID { get; }
 
 		// we use NSArray because, when non-null, it contains a SecIdentity followed by 0..n SecCertificate - none are NSObject
 		/// <summary>The security identity of this peer.</summary>
 		///         <value>Location [0] holds a <c>SecIdentityRef</c> for the local peer. Additional values (if they exist) will be for connected peers.</value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed]
 		[Export ("securityIdentity")]
 		NSArray SecurityIdentity { get; }
 
 		/// <summary>What type, if any, encryption s preferred.</summary>
 		///         <value>The default value is <see cref="MultipeerConnectivity.MCEncryptionPreference.Optional" />.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("encryptionPreference")]
 		MCEncryptionPreference EncryptionPreference { get; }
 
 		/// <summary>Represents the value associated with the constant kMCSessionMaximumNumberOfPeers</summary>
 		///         <value>The value is 8.</value>
-		///         <remarks>To be added.</remarks>
 		///         <altmember cref="MultipeerConnectivity.MCBrowserViewController.MaximumNumberOfPeers" />
 		[Field ("kMCSessionMaximumNumberOfPeers")]
 		nint MaximumNumberOfPeers { get; }
@@ -180,7 +170,6 @@ namespace MultipeerConnectivity {
 		/// <summary>Represents the value associated with the constant kMCSessionMinimumNumberOfPeers</summary>
 		///         <value>The value is 2.
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		///         <altmember cref="MultipeerConnectivity.MCBrowserViewController.MinimumNumberOfPeers" />
 		[Field ("kMCSessionMinimumNumberOfPeers")]
 		nint MinimumNumberOfPeers { get; }
@@ -224,7 +213,6 @@ namespace MultipeerConnectivity {
 
 		/// <param name="peerID">The ID of the peer whose connection should be cancelled.</param>
 		///         <summary>Cancel's APending connection to the <paramref name="peerID" />.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("cancelConnectPeer:")]
 		void CancelConnectPeer (MCPeerID peerID);
 
@@ -243,39 +231,36 @@ namespace MultipeerConnectivity {
 	[Model]
 	[Protocol]
 	partial interface MCSessionDelegate {
-		/// <param name="session">To be added.</param>
-		///         <param name="peerID">To be added.</param>
-		///         <param name="state">To be added.</param>
+		/// <param name="session">The session.</param>
+		/// <param name="peerID">The peer ID whose state changed.</param>
+		/// <param name="state">The new session state.</param>
 		///         <summary>Indicates that the <paramref name="session" /> has transitioned to the new <paramref name="state" />.</summary>
-		///         <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("session:peer:didChangeState:")]
 		void DidChangeState (MCSession session, MCPeerID peerID, MCSessionState state);
 
-		/// <param name="session">To be added.</param>
-		///         <param name="data">To be added.</param>
-		///         <param name="peerID">To be added.</param>
+		/// <param name="session">The session.</param>
+		/// <param name="data">The received data.</param>
+		/// <param name="peerID">The peer ID that sent the data.</param>
 		///         <summary>Indicates the arrival of <paramref name="data" />.</summary>
-		///         <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("session:didReceiveData:fromPeer:")]
 		void DidReceiveData (MCSession session, NSData data, MCPeerID peerID);
 
-		/// <param name="session">To be added.</param>
-		///         <param name="resourceName">To be added.</param>
-		///         <param name="fromPeer">To be added.</param>
-		///         <param name="progress">To be added.</param>
+		/// <param name="session">The session.</param>
+		/// <param name="resourceName">The name of the resource.</param>
+		/// <param name="fromPeer">The peer ID that is sending the resource.</param>
+		/// <param name="progress">The progress of the transfer.</param>
 		///         <summary>Indicates that <paramref name="resourceName" /> has begun to arrive.</summary>
-		///         <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("session:didStartReceivingResourceWithName:fromPeer:withProgress:")]
 		void DidStartReceivingResource (MCSession session, string resourceName, MCPeerID fromPeer, NSProgress progress);
 
-		/// <param name="session">To be added.</param>
-		///         <param name="resourceName">To be added.</param>
-		///         <param name="fromPeer">To be added.</param>
+		/// <param name="session">The session.</param>
+		/// <param name="resourceName">The name of the resource.</param>
+		/// <param name="fromPeer">The peer ID that sent the resource.</param>
 		///         <param name="localUrl">
-		///           <para>To be added.</para>
+		///   <para>The error, or <see langword="null" /> if the transfer succeeded.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		///         <param name="error">
@@ -283,30 +268,28 @@ namespace MultipeerConnectivity {
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		///         <summary>Indicates that the transfer of <paramref name="resourceName" /> has completed.</summary>
-		///         <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("session:didFinishReceivingResourceWithName:fromPeer:atURL:withError:")]
 		void DidFinishReceivingResource (MCSession session, string resourceName, MCPeerID fromPeer, [NullAllowed] NSUrl localUrl, [NullAllowed] NSError error);
 
-		/// <param name="session">To be added.</param>
-		///         <param name="stream">To be added.</param>
-		///         <param name="streamName">To be added.</param>
-		///         <param name="peerID">To be added.</param>
+		/// <param name="session">The session.</param>
+		/// <param name="stream">The input stream.</param>
+		/// <param name="streamName">The name of the stream.</param>
+		/// <param name="peerID">The peer ID that opened the stream.</param>
 		///         <summary>Indicates the arrival of <paramref name="stream" />.</summary>
-		///         <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("session:didReceiveStream:withName:fromPeer:")]
 		void DidReceiveStream (MCSession session, NSInputStream stream, string streamName, MCPeerID peerID);
 
-		/// <param name="session">To be added.</param>
+		/// <param name="session">The session.</param>
 		///         <param name="certificate">
-		///           <para>To be added.</para>
+		///   <para>The certificate chain, or <see langword="null" />.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		///         <param name="peerID">To be added.</param>
-		///         <param name="certificateHandler">To be added.</param>
+		/// <param name="peerID">The peer ID that is connecting.</param>
+		/// <param name="certificateHandler">The handler to call with the certificate decision.</param>
 		///         <summary>Indicates <paramref name="peerID" /> wishes to join the <paramref name="session" />. <paramref name="certificateHandler" /> must be called.</summary>
-		///         <returns>To be added.</returns>
+		/// <returns><see langword="true" /> to handle certificate verification; otherwise, <see langword="false" />.</returns>
 		///         <remarks>
 		///           <para>When overriding this method, the application developer must invoke the <paramref name="certificateHandler" />, passing in <see langword="true" /> if the peer should be accepted to the <paramref name="session" />.</para>
 		///           <para>The Multipeer Connectivity framework makes no attempt to validate passed certificates. It is the application developer's responsibility to ensure their validity.</para>
@@ -327,7 +310,7 @@ namespace MultipeerConnectivity {
 	[DisableDefaultCtor] // NSInvalidArgumentException -[MCNearbyServiceAdvertiser init]: unrecognized selector sent to instance 0x19195e50
 	partial interface MCNearbyServiceAdvertiser {
 
-		/// <param name="myPeerID">To be added.</param>
+		/// <param name="myPeerID">The local peer ID.</param>
 		/// <param name="info">A small dictionary to aide discovery (see <see cref="MultipeerConnectivity.MCNearbyServiceAdvertiser.DiscoveryInfo" />).<para tool="nullallowed">This parameter can be <see langword="null" />.</para></param>
 		/// <param name="serviceType">A string between 1 and 15 characters long, identifying the protocol being used.</param>
 		/// <summary>Creates an object identified as <paramref name="myPeerID" /> for the specific <paramref name="serviceType" />.</summary>
@@ -340,12 +323,10 @@ namespace MultipeerConnectivity {
 		NativeHandle Constructor (MCPeerID myPeerID, [NullAllowed] NSDictionary info, string serviceType);
 
 		/// <summary>Begins advertising this peer device for connection.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("startAdvertisingPeer")]
 		void StartAdvertisingPeer ();
 
 		/// <summary>Stops advertising this peer device for connection.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("stopAdvertisingPeer")]
 		void StopAdvertisingPeer ();
 
@@ -371,7 +352,6 @@ namespace MultipeerConnectivity {
 
 		/// <summary>The identity by which this device will be known on the peer network.</summary>
 		///         <value>This will contain the datAPassed in to the <see cref="MultipeerConnectivity.MCNearbyServiceAdvertiser(MultipeerConnectivity.MCPeerID,Foundation.NSDictionary,string)" /> constructor.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("myPeerID")]
 		MCPeerID MyPeerID { get; }
 
@@ -382,7 +362,6 @@ namespace MultipeerConnectivity {
 
 		/// <summary>The network protocol this peer supports.</summary>
 		///         <value>This will contain the datAPassed in to the <see cref="MultipeerConnectivity.MCNearbyServiceAdvertiser(MultipeerConnectivity.MCPeerID,Foundation.NSDictionary,string)" /> constructor.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("serviceType")]
 		string ServiceType { get; }
 	}
@@ -411,10 +390,9 @@ namespace MultipeerConnectivity {
 		[Export ("advertiser:didReceiveInvitationFromPeer:withContext:invitationHandler:")]
 		void DidReceiveInvitationFromPeer (MCNearbyServiceAdvertiser advertiser, MCPeerID peerID, [NullAllowed] NSData context, MCNearbyServiceAdvertiserInvitationHandler invitationHandler);
 
-		/// <param name="advertiser">To be added.</param>
-		///         <param name="error">To be added.</param>
+		/// <param name="advertiser">The nearby service advertiser.</param>
+		/// <param name="error">The error that occurred.</param>
 		///         <summary>Indicates that advertising peer availability failed.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("advertiser:didNotStartAdvertisingPeer:")]
 		void DidNotStartAdvertisingPeer (MCNearbyServiceAdvertiser advertiser, NSError error);
 	}
@@ -442,12 +420,10 @@ namespace MultipeerConnectivity {
 		NativeHandle Constructor (MCPeerID myPeerID, string serviceType);
 
 		/// <summary>Starts browsing for local peers advertising for the <see cref="MultipeerConnectivity.MCNearbyServiceBrowser.ServiceType" />.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("startBrowsingForPeers")]
 		void StartBrowsingForPeers ();
 
 		/// <summary>Stops browsing for peers.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("stopBrowsingForPeers")]
 		void StopBrowsingForPeers ();
 
@@ -459,7 +435,6 @@ namespace MultipeerConnectivity {
 		///         </param>
 		///         <param name="timeout">The maximum time, in seconds, to wait for the peer (default value is 30).</param>
 		///         <summary>Invites a remote peer to join the <paramref name="session" />.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("invitePeer:toSession:withContext:timeout:")]
 		void InvitePeer (MCPeerID peerID, MCSession session, [NullAllowed] NSData context, double timeout);
 
@@ -484,14 +459,10 @@ namespace MultipeerConnectivity {
 		IMCNearbyServiceBrowserDelegate Delegate { get; set; }
 
 		/// <summary>The identity of the local peer.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("myPeerID")]
 		MCPeerID MyPeerID { get; }
 
 		/// <summary>The network protocol being browsed for.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("serviceType")]
 		string ServiceType { get; }
 	}
@@ -508,30 +479,27 @@ namespace MultipeerConnectivity {
 	[Protocol]
 	partial interface MCNearbyServiceBrowserDelegate {
 
-		/// <param name="browser">To be added.</param>
-		///         <param name="peerID">To be added.</param>
+		/// <param name="browser">The nearby service browser.</param>
+		/// <param name="peerID">The discovered peer ID.</param>
 		///         <param name="info">
-		///           <para>To be added.</para>
+		///   <para>The discovery info, or <see langword="null" />.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		///         <summary>Indicates that APeer has been found.</summary>
-		///         <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("browser:foundPeer:withDiscoveryInfo:")]
 		void FoundPeer (MCNearbyServiceBrowser browser, MCPeerID peerID, [NullAllowed] NSDictionary info);
 
-		/// <param name="browser">To be added.</param>
-		///         <param name="peerID">To be added.</param>
+		/// <param name="browser">The nearby service browser.</param>
+		/// <param name="peerID">The lost peer ID.</param>
 		///         <summary>Indicates that APeer has been lost.</summary>
-		///         <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("browser:lostPeer:")]
 		void LostPeer (MCNearbyServiceBrowser browser, MCPeerID peerID);
 
-		/// <param name="browser">To be added.</param>
-		///         <param name="error">To be added.</param>
+		/// <param name="browser">The nearby service browser.</param>
+		/// <param name="error">The error that occurred.</param>
 		///         <summary>Indicates that browsing for peers failed.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("browser:didNotStartBrowsingForPeers:")]
 		void DidNotStartBrowsingForPeers (MCNearbyServiceBrowser browser, NSError error);
 	}
@@ -544,29 +512,29 @@ namespace MultipeerConnectivity {
 	[DisableDefaultCtor] // NSInvalidArgumentException -[MCPeerPickerViewController initWithNibName:bundle:]: unrecognized selector sent to instance 0x15517b90
 	partial interface MCBrowserViewController : MCNearbyServiceBrowserDelegate {
 		/// <param name="nibName">
-		///           <para>To be added.</para>
+		///   <para>The name of the nib file, or <see langword="null" />.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <param name="bundle">
-		///           <para>To be added.</para>
+		///   <para>The bundle containing the nib, or <see langword="null" />.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <summary>Creates a new multipeer browser view controller from the named NIB in the specified bundle.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
 		NativeHandle Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);
 
-		/// <param name="browser">To be added.</param>
-		/// <param name="session">To be added.</param>
+		/// <param name="browser">The nearby service browser to use.</param>
+		/// <param name="session">The session to connect peers to.</param>
 		/// <summary>Constructor where the service type and options are defined in <paramref name="browser" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[DesignatedInitializer]
 		[Export ("initWithBrowser:session:")]
 		NativeHandle Constructor (MCNearbyServiceBrowser browser, MCSession session);
 
-		/// <param name="serviceType">To be added.</param>
-		/// <param name="session">To be added.</param>
+		/// <param name="serviceType">The Bonjour service type to browse for.</param>
+		/// <param name="session">The session to connect peers to.</param>
 		/// <summary>Constructor that advertises the <paramref name="serviceType" /> network protocol.</summary>
 		/// <remarks>
 		///           <para>The <paramref name="serviceType" /> must be a string, between 1 and 15 characters long, identifying the network protocol being advertised. A common pattern is "{company_name}-{apptype}", e.g., <c>xamarin-txtchat</c>.</para>
@@ -596,28 +564,22 @@ namespace MultipeerConnectivity {
 
 		/// <summary>Allows the application developer to specify a minimum amount of peers.</summary>
 		///         <value>Must be greater than or equal to <see cref="MultipeerConnectivity.MCSession.MinimumNumberOfPeers" />.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("minimumNumberOfPeers", ArgumentSemantic.Assign)]
 		nuint MinimumNumberOfPeers { get; set; }
 
 		/// <summary>Allows the application developer to limit the number of peers.</summary>
 		///         <value>Must be less than or equal to <see cref="MultipeerConnectivity.MCSession.MaximumNumberOfPeers" />.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("maximumNumberOfPeers", ArgumentSemantic.Assign)]
 		nuint MaximumNumberOfPeers { get; set; }
 
 #if !MONOMAC
 		/// <summary>The <see cref="MultipeerConnectivity.MCNearbyServiceBrowser" /> used for discovering peers.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed]
 #endif
 		[Export ("browser")]
 		MCNearbyServiceBrowser Browser { get; }
 
 		/// <summary>The <see cref="MultipeerConnectivity.MCSession" /> being managed.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("session")]
 		MCSession Session { get; }
 	}
@@ -633,33 +595,30 @@ namespace MultipeerConnectivity {
 	[Protocol]
 	partial interface MCBrowserViewControllerDelegate {
 
-		/// <param name="browserViewController">To be added.</param>
+		/// <param name="browserViewController">The browser view controller.</param>
 		///         <summary>Indicates that the <paramref name="browserViewController" /> was dismissed when the user cancelled the presentation.</summary>
-		///         <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("browserViewControllerWasCancelled:")]
 		void WasCancelled (MCBrowserViewController browserViewController);
 
-		/// <param name="browserViewController">To be added.</param>
+		/// <param name="browserViewController">The browser view controller.</param>
 		///         <summary>Indicates that the <see cref="MultipeerConnectivity.MCBrowserViewController" /> was dismissed with peers connected.
 		///         </summary>
-		///         <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("browserViewControllerDidFinish:")]
 		void DidFinish (MCBrowserViewController browserViewController);
 
 		// optional
 
-		/// <param name="browserViewController">To be added.</param>
-		///         <param name="peerID">To be added.</param>
+		/// <param name="browserViewController">The browser view controller.</param>
+		/// <param name="peerID">The peer ID to validate.</param>
 		///         <param name="info">
-		///           <para>To be added.</para>
+		///   <para>The discovery info, or <see langword="null" />.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		///         <summary>Indicates a new peer has been discovered. Can be used to avoid showing the invitation UI.</summary>
 		///         <returns>
 		///           <see langword="true" /> if the <paramref name="browserViewController" /> should be displayed to the app user.</returns>
-		///         <remarks>To be added.</remarks>
 		[Export ("browserViewController:shouldPresentNearbyPeer:withDiscoveryInfo:")]
 		bool ShouldPresentNearbyPeer (MCBrowserViewController browserViewController, MCPeerID peerID, [NullAllowed] NSDictionary info);
 	}
@@ -678,7 +637,7 @@ namespace MultipeerConnectivity {
 
 		/// <param name="serviceType">A string between 1 and 15 characters long, identifying the protocol being used.</param>
 		/// <param name="info">A small dictionary to aide discovery (see <see cref="MultipeerConnectivity.MCAdvertiserAssistant.DiscoveryInfo" />).<para tool="nullallowed">This parameter can be <see langword="null" />.</para></param>
-		/// <param name="session">To be added.</param>
+		/// <param name="session">The session to advertise for.</param>
 		/// <summary>Creates an object for the specific <paramref name="serviceType" /> and <paramref name="session" />.</summary>
 		/// <remarks>
 		///           <para>The <paramref name="serviceType" /> must be a string, between 1 and 15 characters long, identifying the network protocol being advertised. A common pattern is "{company_name}-{apptype}", e.g., <c>xamarin-txtchat</c>.</para>
@@ -695,13 +654,11 @@ namespace MultipeerConnectivity {
 
 		/// <summary>The <see cref="MultipeerConnectivity.MCSession" /> into which peers will be placed.</summary>
 		///         <value>Passed in to the <see cref="MultipeerConnectivity.MCAdvertiserAssistant(string,Foundation.NSDictionary, MultipeerConnectivity.MCSession)" /> constructor.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("session")]
 		MCSession Session { get; }
 
 		/// <summary>A string, between 1 and 15 characters long, identifying the network protocol being advertised.</summary>
 		///         <value>Passed in to the <see cref="MultipeerConnectivity.MCAdvertiserAssistant(string,Foundation.NSDictionary, MultipeerConnectivity.MCSession)" /> constructor.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("serviceType")]
 		string ServiceType { get; }
 
@@ -726,12 +683,10 @@ namespace MultipeerConnectivity {
 		IMCAdvertiserAssistantDelegate Delegate { get; set; }
 
 		/// <summary>Begins advertising the local peer for connections.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("start")]
 		void Start ();
 
 		/// <summary>Stops advertising the local peer.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("stop")]
 		void Stop ();
 	}
@@ -747,15 +702,13 @@ namespace MultipeerConnectivity {
 	[Protocol]
 	interface MCAdvertiserAssistantDelegate {
 
-		/// <param name="advertiserAssistant">To be added.</param>
+		/// <param name="advertiserAssistant">The advertiser assistant.</param>
 		///         <summary>Indicates that the peer-connection invitation is no longer being displayed to the user.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("advertiserAssistantDidDismissInvitation:")]
 		void DidDismissInvitation (MCAdvertiserAssistant advertiserAssistant);
 
-		/// <param name="advertiserAssistant">To be added.</param>
+		/// <param name="advertiserAssistant">The advertiser assistant.</param>
 		///         <summary>Indicates that the peer-connection invitation is about to be presented.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("advertiserAssistantWillPresentInvitation:")]
 		void WillPresentInvitation (MCAdvertiserAssistant advertiserAssistant);
 	}

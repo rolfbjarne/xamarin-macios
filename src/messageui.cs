@@ -27,82 +27,82 @@ namespace MessageUI {
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/MessageUI/Reference/MFMailComposeViewController_class/index.html">Apple documentation for <c>MFMailComposeViewController</c></related>
 	[BaseType (typeof (UINavigationController))]
 	interface MFMailComposeViewController : UIAppearance {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets a value that indicates whether the device can send mail.</summary>
+		/// <value><see langword="true" /> if the device can send mail; otherwise, <see langword="false" />.</value>
+		
 		[Static, Export ("canSendMail")]
 		bool CanSendMail { get; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets the weak delegate for mail compose events.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
+		
 		[Export ("mailComposeDelegate", ArgumentSemantic.Weak)]
 		[NullAllowed]
 		NSObject WeakMailComposeDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets the strongly-typed delegate for mail compose events.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
+		
 		[Wrap ("WeakMailComposeDelegate")]
 		IMFMailComposeViewControllerDelegate MailComposeDelegate { get; set; }
 
-		/// <param name="subject">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="subject">The subject of the email.</param>
+		/// <summary>Sets the subject of the email message.</summary>
+		
 		[Export ("setSubject:")]
 		void SetSubject (string subject);
 
 		/// <param name="recipients">
-		///           <para>To be added.</para>
+		///   <para>An array of email address strings, or <see langword="null" />.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Sets the To recipients of the email message.</summary>
+		
 		[Export ("setToRecipients:")]
 		void SetToRecipients ([NullAllowed] string [] recipients);
 
 		/// <param name="ccRecipients">
-		///           <para>To be added.</para>
+		///   <para>An array of email address strings, or <see langword="null" />.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Sets the CC recipients of the email message.</summary>
+		
 		[Export ("setCcRecipients:")]
 		void SetCcRecipients ([NullAllowed] string [] ccRecipients);
 
 		/// <param name="bccRecipients">
-		///           <para>To be added.</para>
+		///   <para>An array of email address strings, or <see langword="null" />.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Sets the BCC recipients of the email message.</summary>
+		
 		[Export ("setBccRecipients:")]
 		void SetBccRecipients ([NullAllowed] string [] bccRecipients);
 
-		/// <param name="body">To be added.</param>
-		///         <param name="isHtml">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="body">The body of the message.</param>
+		/// <param name="isHtml">Whether the body is HTML.</param>
+		/// <summary>Sets the body of the email message.</summary>
+		
 		[Export ("setMessageBody:isHTML:")]
 		void SetMessageBody (string body, bool isHtml);
 
-		/// <param name="attachment">To be added.</param>
-		///         <param name="mimeType">To be added.</param>
-		///         <param name="fileName">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="attachment">The attachment data.</param>
+		/// <param name="mimeType">The MIME type of the attachment.</param>
+		/// <param name="fileName">The filename for the attachment.</param>
+		/// <summary>Adds an attachment to the email message.</summary>
+		
 		[Export ("addAttachmentData:mimeType:fileName:")]
 		void AddAttachmentData (NSData attachment, string mimeType, string fileName);
 
-		/// <param name="emailAddress">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="emailAddress">The preferred email address to send from.</param>
+		/// <summary>Sets the preferred sending email address.</summary>
+		
 		[MacCatalyst (13, 1)]
 		[Export ("setPreferredSendingEmailAddress:")]
 		void SetPreferredSendingEmailAddress (string emailAddress);

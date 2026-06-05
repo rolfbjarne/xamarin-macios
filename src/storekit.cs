@@ -586,9 +586,9 @@ namespace StoreKit {
 	[Model]
 	[Protocol]
 	interface SKRequestDelegate {
-		/// <param name="request">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="request">The request that finished.</param>
+		/// <summary>Called when the request has completed successfully.</summary>
+		
 		[EventArgs ("", XmlDocs = """
 			<summary>Event raised by the object.</summary>
 			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
@@ -596,10 +596,10 @@ namespace StoreKit {
 		[Export ("requestDidFinish:")]
 		void RequestFinished (SKRequest request);
 
-		/// <param name="request">To be added.</param>
-		/// <param name="error">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="request">The request that failed.</param>
+		/// <param name="error">The error that caused the failure.</param>
+		/// <summary>Called when the request has failed.</summary>
+		
 		[Export ("request:didFailWithError:"), EventArgs ("SKRequestError", XmlDocs = """
 			<summary>Event raised by the object.</summary>
 			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>

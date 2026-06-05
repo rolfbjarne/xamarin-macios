@@ -37,7 +37,7 @@ namespace VideoSubscriberAccount {
 		UserCancelled = 2,
 		/// <summary>A transient error has occurred.</summary>
 		ServiceTemporarilyUnavailable = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>The provider rejected the request.</summary>
 		ProviderRejected = 4,
 		/// <summary>The provider does not recognize the verification token provided by the app.</summary>
 		InvalidVerificationToken = 5,
@@ -364,13 +364,11 @@ namespace VideoSubscriberAccount {
 		string VerificationToken { get; set; }
 
 		/// <summary>Whether to ask for the provider's unique identification string.</summary>
-		///         <value>To be added.</value>
 		/// <value><see langword="true" /> to include the provider identifier; otherwise, <see langword="false" />.</value>
 		
 		bool IncludeAccountProviderIdentifier { get; set; }
 
 		/// <summary>Whether to ask when the authentication expires.</summary>
-		///         <value>To be added.</value>
 		/// <value><see langword="true" /> to include the expiration date; otherwise, <see langword="false" />.</value>
 		
 		bool IncludeAuthenticationExpirationDate { get; set; }
@@ -385,19 +383,16 @@ namespace VideoSubscriberAccount {
 		string LocalizedVideoTitle { get; set; }
 
 		/// <summary>If <see langword="true" />, the user may be prompted to authenticate.</summary>
-		///         <value>To be added.</value>
 		/// <value><see langword="true" /> if the user may be prompted; otherwise, <see langword="false" />.</value>
 		
 		bool InterruptionAllowed { [Bind ("isInterruptionAllowed")] get; set; }
 
 		/// <summary>If <see langword="true" />, cached credentials will not be used.</summary>
-		///         <value>To be added.</value>
 		/// <value><see langword="true" /> to force authentication; otherwise, <see langword="false" />.</value>
 		
 		bool ForceAuthentication { get; set; }
 
 		/// <summary>Values to be added to the SAML <c>attributeQuery</c> sent to the provider.</summary>
-		///         <value>To be added.</value>
 		/// <value>An array of SAML attribute names.</value>
 		
 		string [] AttributeNames { get; set; }

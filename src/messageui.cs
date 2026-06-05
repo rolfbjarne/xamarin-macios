@@ -130,9 +130,9 @@ namespace MessageUI {
 
 	/// <summary>Provides data for the  event.</summary>
 	interface MFMessageAvailabilityChangedEventArgs {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets a value that indicates whether text messaging is available.</summary>
+		/// <value><see langword="true" /> if text messaging is available; otherwise, <see langword="false" />.</value>
+		
 		[Export ("MFMessageComposeViewControllerTextMessageAvailabilityKey")]
 		bool TextMessageAvailability { get; }
 	}

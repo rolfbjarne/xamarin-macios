@@ -1439,9 +1439,9 @@ namespace StoreKit {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum SKProductDiscountType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>An introductory discount offer.</summary>
 		Introductory,
-		/// <summary>To be added.</summary>
+		/// <summary>A subscription discount offer.</summary>
 		Subscription,
 	}
 

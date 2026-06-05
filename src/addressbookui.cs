@@ -76,13 +76,13 @@ namespace AddressBookUI {
 	[Protocol]
 	interface ABNewPersonViewControllerDelegate {
 
-		/// <param name="controller">To be added.</param>
+		/// <param name="controller">The new person view controller.</param>
 		///         <param name="person">
-		///           <para>To be added.</para>
+		///   <para>The new person, or <see langword="null" /> if the user cancelled.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Called when the user completes creating a new contact.</summary>
+		
 		[Export ("newPersonViewController:didCompleteWithNewPerson:")]
 		[Abstract]
 		void DidCompleteWithNewPerson (ABNewPersonViewController controller, [NullAllowed] ABPerson person);

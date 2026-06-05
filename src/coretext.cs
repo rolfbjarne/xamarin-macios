@@ -22,27 +22,19 @@ namespace CoreText {
 	/// <summary>A class whose static properties can be used as keys for the <see cref="Foundation.NSDictionary" /> used by <see cref="CoreText.CTFontFeatures" />.</summary>
 	[Static]
 	interface CTFontFeatureKey {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the font feature type identifier.</summary>
 		[Field ("kCTFontFeatureTypeIdentifierKey")]
 		NSString Identifier { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the font feature type name.</summary>
 		[Field ("kCTFontFeatureTypeNameKey")]
 		NSString Name { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the font feature type exclusive setting.</summary>
 		[Field ("kCTFontFeatureTypeExclusiveKey")]
 		NSString Exclusive { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the font feature type selectors.</summary>
 		[Field ("kCTFontFeatureTypeSelectorsKey")]
 		NSString Selectors { get; }
 	}
@@ -50,27 +42,19 @@ namespace CoreText {
 	/// <summary>A class whose static properties can be used as keys for the <see cref="Foundation.NSDictionary" /> used by <see cref="CoreText.CTFontFeatureSelectors" />.</summary>
 	[Static]
 	interface CTFontFeatureSelectorKey {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the font feature selector identifier.</summary>
 		[Field ("kCTFontFeatureSelectorIdentifierKey")]
 		NSString Identifier { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the font feature selector name.</summary>
 		[Field ("kCTFontFeatureSelectorNameKey")]
 		NSString Name { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the font feature selector default value.</summary>
 		[Field ("kCTFontFeatureSelectorDefaultKey")]
 		NSString Default { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the font feature selector setting value.</summary>
 		[Field ("kCTFontFeatureSelectorSettingKey")]
 		NSString Setting { get; }
 
@@ -89,39 +73,27 @@ namespace CoreText {
 	[Static]
 	interface CTFontVariationAxisKey {
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the font variation axis identifier.</summary>
 		[Field ("kCTFontVariationAxisIdentifierKey")]
 		NSString Identifier { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the font variation axis minimum value.</summary>
 		[Field ("kCTFontVariationAxisMinimumValueKey")]
 		NSString MinimumValue { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the font variation axis maximum value.</summary>
 		[Field ("kCTFontVariationAxisMaximumValueKey")]
 		NSString MaximumValue { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the font variation axis default value.</summary>
 		[Field ("kCTFontVariationAxisDefaultValueKey")]
 		NSString DefaultValue { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the font variation axis name.</summary>
 		[Field ("kCTFontVariationAxisNameKey")]
 		NSString Name { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for whether the font variation axis is hidden.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("kCTFontVariationAxisHiddenKey")]
 		NSString Hidden { get; }
@@ -132,7 +104,7 @@ namespace CoreText {
 	interface CTTypesetterOptionKey {
 
 		/// <summary>Developers should not use this deprecated field. </summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Deprecated (PlatformName.iOS, 6, 0)]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1)]
 		[Deprecated (PlatformName.MacOSX, 10, 8)]
@@ -140,14 +112,12 @@ namespace CoreText {
 		[Field ("kCTTypesetterOptionDisableBidiProcessing")]
 		NSString DisableBidiProcessing { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the forced embedding level option.</summary>
+		
 		[Field ("kCTTypesetterOptionForcedEmbeddingLevel")]
 		NSString ForceEmbeddingLevel { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for allowing unbounded layout.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("kCTTypesetterOptionAllowUnboundedLayout")]
 		NSString AllowUnboundedLayout { get; }
@@ -206,48 +176,48 @@ namespace CoreText {
 	/// <summary>A valid key for use with <see cref="CoreText.CTFontDescriptor" /> attribute properties.</summary>
 	[Static]
 	interface CTFontDescriptorAttributeKey {
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font URL attribute.</summary>
+		
 		[Field ("kCTFontURLAttribute")]
 		NSString Url { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font name attribute.</summary>
+		
 		[Field ("kCTFontNameAttribute")]
 		NSString Name { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font display name attribute.</summary>
+		
 		[Field ("kCTFontDisplayNameAttribute")]
 		NSString DisplayName { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font family name attribute.</summary>
+		
 		[Field ("kCTFontFamilyNameAttribute")]
 		NSString FamilyName { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font style name attribute.</summary>
+		
 		[Field ("kCTFontStyleNameAttribute")]
 		NSString StyleName { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font traits attribute.</summary>
+		
 		[Field ("kCTFontTraitsAttribute")]
 		NSString Traits { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font variation attribute.</summary>
+		
 		[Field ("kCTFontVariationAttribute")]
 		NSString Variation { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font size attribute.</summary>
+		
 		[Field ("kCTFontSizeAttribute")]
 		NSString Size { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font matrix attribute.</summary>
+		
 		[Field ("kCTFontMatrixAttribute")]
 		NSString Matrix { get; }
 
@@ -280,63 +250,63 @@ namespace CoreText {
 		[Field ("kCTFontCascadeListAttribute")]
 		NSString CascadeList { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font character set attribute.</summary>
+		
 		[Field ("kCTFontCharacterSetAttribute")]
 		NSString CharacterSet { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font languages attribute.</summary>
+		
 		[Field ("kCTFontLanguagesAttribute")]
 		NSString Languages { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font baseline adjustment attribute.</summary>
+		
 		[Field ("kCTFontBaselineAdjustAttribute")]
 		NSString BaselineAdjust { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font Macintosh encodings attribute.</summary>
+		
 		[Field ("kCTFontMacintoshEncodingsAttribute")]
 		NSString MacintoshEncodings { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font features attribute.</summary>
+		
 		[Field ("kCTFontFeaturesAttribute")]
 		NSString Features { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font feature settings attribute.</summary>
+		
 		[Field ("kCTFontFeatureSettingsAttribute")]
 		NSString FeatureSettings { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font fixed advance attribute.</summary>
+		
 		[Field ("kCTFontFixedAdvanceAttribute")]
 		NSString FixedAdvance { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font orientation attribute.</summary>
+		
 		[Field ("kCTFontOrientationAttribute")]
 		NSString FontOrientation { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font format attribute.</summary>
+		
 		[Field ("kCTFontFormatAttribute")]
 		NSString FontFormat { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font registration scope attribute.</summary>
+		
 		[Field ("kCTFontRegistrationScopeAttribute")]
 		NSString RegistrationScope { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font priority attribute.</summary>
+		
 		[Field ("kCTFontPriorityAttribute")]
 		NSString Priority { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font enabled attribute.</summary>
+		
 		[Field ("kCTFontEnabledAttribute")]
 		NSString Enabled { get; }
 
@@ -352,8 +322,8 @@ namespace CoreText {
 	/// <summary>A class whose static properties can be used as keys for the <see cref="Foundation.NSDictionary" /> used by <see cref="CoreText.CTTextTabOptions" />.</summary>
 	[Static]
 	interface CTTextTabOptionKey {
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the text tab column terminators.</summary>
+		
 		[Field ("kCTTabColumnTerminatorsAttributeName")]
 		NSString ColumnTerminators { get; }
 	}
@@ -361,28 +331,28 @@ namespace CoreText {
 	/// <summary>A class whose static properties can be used as keys for the <see cref="Foundation.NSDictionary" /> used by <see cref="CoreText.CTFrameAttributes" />.</summary>
 	[Static]
 	interface CTFrameAttributeKey {
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the frame progression attribute.</summary>
+		
 		[Field ("kCTFrameProgressionAttributeName")]
 		NSString Progression { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the frame path fill rule attribute.</summary>
+		
 		[Field ("kCTFramePathFillRuleAttributeName")]
 		NSString PathFillRule { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the frame path width attribute.</summary>
+		
 		[Field ("kCTFramePathWidthAttributeName")]
 		NSString PathWidth { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the frame clipping paths attribute.</summary>
+		
 		[Field ("kCTFrameClippingPathsAttributeName")]
 		NSString ClippingPaths { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the frame path clipping path attribute.</summary>
+		
 		[Field ("kCTFramePathClippingPathAttributeName")]
 		NSString PathClippingPath { get; }
 	}
@@ -390,23 +360,23 @@ namespace CoreText {
 	/// <summary>A class whose static properties can be used as keys for the <see cref="Foundation.NSDictionary" /> used by <see cref="CoreText.CTFontTraits" />.</summary>
 	[Static]
 	interface CTFontTraitKey {
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font symbolic trait.</summary>
+		
 		[Field ("kCTFontSymbolicTrait")]
 		NSString Symbolic { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font weight trait.</summary>
+		
 		[Field ("kCTFontWeightTrait")]
 		NSString Weight { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font width trait.</summary>
+		
 		[Field ("kCTFontWidthTrait")]
 		NSString Width { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font slant trait.</summary>
+		
 		[Field ("kCTFontSlantTrait")]
 		NSString Slant { get; }
 	}
@@ -473,8 +443,8 @@ namespace CoreText {
 	/// <summary>A class whose static property can be used as a key for the <see cref="Foundation.NSDictionary" /> used by <see cref="CoreText.CTFontCollectionOptions" />.</summary>
 	[Static]
 	interface CTFontCollectionOptionKey {
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the remove duplicates option.</summary>
+		
 		[Field ("kCTFontCollectionRemoveDuplicatesOption")]
 		NSString RemoveDuplicates { get; }
 	}
@@ -523,88 +493,88 @@ namespace CoreText {
 	[Static]
 	[Partial]
 	interface CTStringAttributeKey {
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the font attribute.</summary>
+		
 		[Field ("kCTFontAttributeName")]
 		NSString Font { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for using foreground color from context.</summary>
+		
 		[Field ("kCTForegroundColorFromContextAttributeName")]
 		NSString ForegroundColorFromContext { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for kerning adjustment.</summary>
+		
 		[Field ("kCTKernAttributeName")]
 		NSString KerningAdjustment { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for ligature formation.</summary>
+		
 		[Field ("kCTLigatureAttributeName")]
 		NSString LigatureFormation { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the foreground color.</summary>
+		
 		[Field ("kCTForegroundColorAttributeName")]
 		NSString ForegroundColor { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the background color.</summary>
+		
 		[Field ("kCTBackgroundColorAttributeName")]
 		NSString BackgroundColor { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the paragraph style.</summary>
+		
 		[Field ("kCTParagraphStyleAttributeName")]
 		NSString ParagraphStyle { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the stroke width.</summary>
+		
 		[Field ("kCTStrokeWidthAttributeName")]
 		NSString StrokeWidth { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the stroke color.</summary>
+		
 		[Field ("kCTStrokeColorAttributeName")]
 		NSString StrokeColor { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the underline style.</summary>
+		
 		[Field ("kCTUnderlineStyleAttributeName")]
 		NSString UnderlineStyle { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the superscript attribute.</summary>
+		
 		[Field ("kCTSuperscriptAttributeName")]
 		NSString Superscript { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the underline color.</summary>
+		
 		[Field ("kCTUnderlineColorAttributeName")]
 		NSString UnderlineColor { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for vertical forms.</summary>
+		
 		[Field ("kCTVerticalFormsAttributeName")]
 		NSString VerticalForms { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for horizontal in vertical forms.</summary>
+		
 		[Field ("kCTHorizontalInVerticalFormsAttributeName")]
 		NSString HorizontalInVerticalForms { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for glyph info.</summary>
+		
 		[Field ("kCTGlyphInfoAttributeName")]
 		NSString GlyphInfo { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for character shape.</summary>
+		
 		[Field ("kCTCharacterShapeAttributeName")]
 		NSString CharacterShape { get; }
 
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>The key for the run delegate.</summary>
+		
 		[Field ("kCTRunDelegateAttributeName")]
 		NSString RunDelegate { get; }
 

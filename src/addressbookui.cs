@@ -487,15 +487,15 @@ namespace AddressBookUI {
 	[BaseType (typeof (UIViewController))]
 	interface ABUnknownPersonViewController {
 		/// <param name="nibName">
-		///           <para>To be added.</para>
+		///   <para>The name of the nib file, or <see langword="null" />.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <param name="bundle">
-		///           <para>To be added.</para>
+		///   <para>The bundle containing the nib, or <see langword="null" />.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Creates the view controller from the specified nib and bundle.</summary>
+		
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
 		NativeHandle Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);
@@ -525,12 +525,12 @@ namespace AddressBookUI {
 		IntPtr _AddressBook { get; set; }
 
 		/// <summary>Gets or sets whether the buttons for predefined actions (send text message, etc.) are shown by the controller.</summary>
-		///         <value>To be added.</value>
+		/// <value><see langword="true" /> if actions are shown; otherwise, <see langword="false" />.</value>
 		[Export ("allowsActions")]
 		bool AllowsActions { get; set; }
 
 		/// <summary>Gets or sets whether the user's changes to the displayed data should be saved to the <see cref="AddressBookUI.ABUnknownPersonViewController.AddressBook" />.</summary>
-		///         <value>To be added.</value>
+		/// <value><see langword="true" /> if adding to the address book is allowed; otherwise, <see langword="false" />.</value>
 		[Export ("allowsAddingToAddressBook")]
 		bool AllowsAddingToAddressBook { get; set; }
 

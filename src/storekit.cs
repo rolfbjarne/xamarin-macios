@@ -145,7 +145,7 @@ namespace StoreKit {
 		/// <summary>Represents the value associated with the constant SKDownloadTimeRemainingUnknown</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
+		
 		[MacCatalyst (13, 1)]
 		[Field ("SKDownloadTimeRemainingUnknown")]
 		double TimeRemainingUnknown { get; }

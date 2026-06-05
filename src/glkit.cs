@@ -59,14 +59,10 @@ namespace GLKit {
 	interface GLKModelError {
 
 		/// <summary>A value corresponding to the constant <c>kGLKModelErrorDomain</c>.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("kGLKModelErrorDomain")]
 		NSString Domain { get; }
 
 		/// <summary>A value corresponding to the constant <c>kGLKModelErrorKey</c>.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("kGLKModelErrorKey")]
 		NSString Key { get; }
 	}
@@ -79,104 +75,76 @@ namespace GLKit {
 	[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'Metal' instead.")]
 	[BaseType (typeof (NSObject))]
 	interface GLKBaseEffect : GLKNamedEffect {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether color material is enabled.</summary>
 		[Export ("colorMaterialEnabled", ArgumentSemantic.Assign)]
 		bool ColorMaterialEnabled { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether to use a constant color.</summary>
 		[Export ("useConstantColor", ArgumentSemantic.Assign)]
 		bool UseConstantColor { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the transform property.</summary>
 		[Export ("transform")]
 		GLKEffectPropertyTransform Transform { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the first light property.</summary>
 		[Export ("light0")]
 		GLKEffectPropertyLight Light0 { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the second light property.</summary>
 		[Export ("light1")]
 		GLKEffectPropertyLight Light1 { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the third light property.</summary>
 		[Export ("light2")]
 		GLKEffectPropertyLight Light2 { get; }
 
 		[Export ("lightingType", ArgumentSemantic.Assign)]
 		GLKLightingType LightingType { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the ambient color for the light model.</summary>
 		[Export ("lightModelAmbientColor", ArgumentSemantic.Assign)]
 		Vector4 LightModelAmbientColor { [Align (16)] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the material property.</summary>
 		[Export ("material")]
 		GLKEffectPropertyMaterial Material { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the first texture property.</summary>
 		[Export ("texture2d0")]
 		GLKEffectPropertyTexture Texture2d0 { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the second texture property.</summary>
 		[Export ("texture2d1")]
 		GLKEffectPropertyTexture Texture2d1 { get; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets the texture rendering order.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed] // by default this property is null
 		[Export ("textureOrder", ArgumentSemantic.Copy)]
 		GLKEffectPropertyTexture [] TextureOrder { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the constant color.</summary>
 		[Export ("constantColor", ArgumentSemantic.Assign)]
 		Vector4 ConstantColor { [Align (16)] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the fog property.</summary>
 		[Export ("fog")]
 		GLKEffectPropertyFog Fog { get; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets a label for the effect.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Export ("label", ArgumentSemantic.Copy)]
 		[NullAllowed] // default is null on iOS 5.1.1
 		string Label { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether two-sided lighting is enabled.</summary>
 		[Export ("lightModelTwoSided", ArgumentSemantic.Assign)]
 		bool LightModelTwoSided { get; set; }
 	}
@@ -199,39 +167,27 @@ namespace GLKit {
 	[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'Metal' instead.")]
 	[BaseType (typeof (GLKEffectProperty))]
 	interface GLKEffectPropertyFog {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the fog mode.</summary>
 		[Export ("mode", ArgumentSemantic.Assign)]
 		GLKFogMode Mode { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the fog color.</summary>
 		[Export ("color", ArgumentSemantic.Assign)]
 		Vector4 Color { [Align (16)] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the fog density.</summary>
 		[Export ("density", ArgumentSemantic.Assign)]
 		float Density { get; set; } /* GLfloat = float */
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the distance at which fog begins.</summary>
 		[Export ("start", ArgumentSemantic.Assign)]
 		float Start { get; set; } /* GLfloat = float */
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the distance at which fog is fully opaque.</summary>
 		[Export ("end", ArgumentSemantic.Assign)]
 		float End { get; set; } /* GLfloat = float */
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether fog is enabled.</summary>
 		[Export ("enabled", ArgumentSemantic.Assign)]
 		bool Enabled { get; set; }
 	}
@@ -244,79 +200,56 @@ namespace GLKit {
 	[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'Metal' instead.")]
 	[BaseType (typeof (GLKEffectProperty))]
 	interface GLKEffectPropertyLight {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the position of the light.</summary>
 		[Export ("position", ArgumentSemantic.Assign)]
 		Vector4 Position { [Align (16)] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the ambient color of the light.</summary>
 		[Export ("ambientColor", ArgumentSemantic.Assign)]
 		Vector4 AmbientColor { [Align (16)] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the diffuse color of the light.</summary>
 		[Export ("diffuseColor", ArgumentSemantic.Assign)]
 		Vector4 DiffuseColor { [Align (16)] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the specular color of the light.</summary>
 		[Export ("specularColor", ArgumentSemantic.Assign)]
 		Vector4 SpecularColor { [Align (16)] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the direction the spotlight points.</summary>
 		[Export ("spotDirection", ArgumentSemantic.Assign)]
 		Vector3 SpotDirection { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the spotlight exponent (focus).</summary>
 		[Export ("spotExponent", ArgumentSemantic.Assign)]
 		float SpotExponent { get; set; } /* GLfloat = float */
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the spotlight cutoff angle.</summary>
 		[Export ("spotCutoff", ArgumentSemantic.Assign)]
 		float SpotCutoff { get; set; } /* GLfloat = float */
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the constant attenuation factor.</summary>
 		[Export ("constantAttenuation", ArgumentSemantic.Assign)]
 		float ConstantAttenuation { get; set; } /* GLfloat = float */
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the linear attenuation factor.</summary>
 		[Export ("linearAttenuation", ArgumentSemantic.Assign)]
 		float LinearAttenuation { get; set; } /* GLfloat = float */
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the quadratic attenuation factor.</summary>
 		[Export ("quadraticAttenuation", ArgumentSemantic.Assign)]
 		float QuadraticAttenuation { get; set; } /* GLfloat = float */
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets the transform property for the light.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed] // by default this property is null
 		[Export ("transform", ArgumentSemantic.Retain)]
 		GLKEffectPropertyTransform Transform { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether the light is enabled.</summary>
 		[Export ("enabled", ArgumentSemantic.Assign)]
 		bool Enabled { get; set; }
 
@@ -330,33 +263,23 @@ namespace GLKit {
 	[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'Metal' instead.")]
 	[BaseType (typeof (GLKEffectProperty))]
 	interface GLKEffectPropertyMaterial {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the diffuse color of the material.</summary>
 		[Export ("diffuseColor", ArgumentSemantic.Assign)]
 		Vector4 DiffuseColor { [Align (16)] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the specular color of the material.</summary>
 		[Export ("specularColor", ArgumentSemantic.Assign)]
 		Vector4 SpecularColor { [Align (16)] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the emissive color of the material.</summary>
 		[Export ("emissiveColor", ArgumentSemantic.Assign)]
 		Vector4 EmissiveColor { [Align (16)] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the shininess of the material.</summary>
 		[Export ("shininess", ArgumentSemantic.Assign)]
 		float Shininess { get; set; } /* GLfloat = float */
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the ambient color of the material.</summary>
 		[Export ("ambientColor", ArgumentSemantic.Assign)]
 		Vector4 AmbientColor { [Align (16)] get; set; }
 	}
@@ -375,9 +298,7 @@ namespace GLKit {
 		[Export ("envMode", ArgumentSemantic.Assign)]
 		GLKTextureEnvMode EnvMode { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether the texture is enabled.</summary>
 		[Export ("enabled", ArgumentSemantic.Assign)]
 		bool Enabled { get; set; }
 
@@ -394,21 +315,15 @@ namespace GLKit {
 	[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'Metal' instead.")]
 	[BaseType (typeof (GLKEffectProperty))]
 	interface GLKEffectPropertyTransform {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the computed normal matrix.</summary>
 		[Export ("normalMatrix")]
 		Matrix3 NormalMatrix { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the model-view matrix.</summary>
 		[Export ("modelviewMatrix", ArgumentSemantic.Assign)]
 		Matrix4 ModelViewMatrix { [Align (16)] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the projection matrix.</summary>
 		[Export ("projectionMatrix", ArgumentSemantic.Assign)]
 		Matrix4 ProjectionMatrix { [Align (16)] get; set; }
 	}
@@ -420,10 +335,10 @@ namespace GLKit {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // - (nullable instancetype)init NS_UNAVAILABLE;
 	interface GLKMesh {
-		/// <param name="mesh">To be added.</param>
-		/// <param name="error">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="mesh">The Model I/O mesh to create the GLKit mesh from.</param>
+		/// <param name="error">On return, contains any error that occurred.</param>
+		/// <summary>Creates a GLKit mesh from a Model I/O mesh.</summary>
+		
 		[Export ("initWithMesh:error:")]
 		NativeHandle Constructor (MDLMesh mesh, out NSError error);
 
@@ -435,27 +350,19 @@ namespace GLKit {
 		[return: Release]
 		GLKMesh [] FromAsset (MDLAsset asset, [NullAllowed] out NSArray sourceMeshes, [NullAllowed] out NSError error);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the number of vertices in the mesh.</summary>
 		[Export ("vertexCount")]
 		nuint VertexCount { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the vertex buffers for the mesh.</summary>
 		[Export ("vertexBuffers")]
 		GLKMeshBuffer [] VertexBuffers { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the vertex descriptor for the mesh.</summary>
 		[Export ("vertexDescriptor")]
 		MDLVertexDescriptor VertexDescriptor { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the submeshes for the mesh.</summary>
 		[Export ("submeshes")]
 		GLKSubmesh [] Submeshes { get; }
 
@@ -470,15 +377,11 @@ namespace GLKit {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface GLKMeshBuffer : MDLMeshBuffer {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the OpenGL buffer name.</summary>
 		[Export ("glBufferName")]
 		uint GlBufferName { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the byte offset into the buffer.</summary>
 		[Export ("offset")]
 		nuint Offset { get; }
 	}
@@ -502,8 +405,7 @@ namespace GLKit {
 	[Model]
 	[Protocol]
 	interface GLKNamedEffect {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Prepares the effect for rendering.</summary>
 		[Abstract]
 		[Export ("prepareToDraw")]
 		void PrepareToDraw ();
@@ -517,15 +419,11 @@ namespace GLKit {
 	[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'Metal' instead.")]
 	[BaseType (typeof (GLKBaseEffect))]
 	interface GLKReflectionMapEffect : GLKNamedEffect {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the cube map texture property.</summary>
 		[Export ("textureCubeMap")]
 		GLKEffectPropertyTexture TextureCubeMap { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the texture environment matrix.</summary>
 		[Export ("matrix", ArgumentSemantic.Assign)]
 		Matrix3 Matrix { get; set; }
 	}
@@ -538,54 +436,40 @@ namespace GLKit {
 	[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'Metal' instead.")]
 	[BaseType (typeof (NSObject))]
 	interface GLKSkyboxEffect : GLKNamedEffect {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the center of the skybox.</summary>
 		[Export ("center", ArgumentSemantic.Assign)]
 		Vector3 Center { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the X dimension of the skybox.</summary>
 		[Export ("xSize", ArgumentSemantic.Assign)]
 		float XSize { get; set; } /* GLfloat = float */
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Y dimension of the skybox.</summary>
 		[Export ("ySize", ArgumentSemantic.Assign)]
 		float YSize { get; set; } /* GLfloat = float */
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Z dimension of the skybox.</summary>
 		[Export ("zSize", ArgumentSemantic.Assign)]
 		float ZSize { get; set; } /* GLfloat = float */
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the cube map texture for the skybox.</summary>
 		[Export ("textureCubeMap")]
 		GLKEffectPropertyTexture TextureCubeMap { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the transform property for the skybox.</summary>
 		[Export ("transform")]
 		GLKEffectPropertyTransform Transform { get; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets a label for the skybox effect.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed] // by default this property is null
 		[Export ("label", ArgumentSemantic.Copy)]
 		string Label { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Draws the skybox.</summary>
 		[Export ("draw")]
 		void Draw ();
 	}
@@ -601,9 +485,7 @@ namespace GLKit {
 		// OpenTK.Graphics.ES11.DataType
 		// OpenTK.Graphics.ES20.DataType
 		// OpenTK.Graphics.ES30.DataType
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the OpenGL element type.</summary>
 		[Export ("type")]
 		uint Type { get; }
 
@@ -611,30 +493,23 @@ namespace GLKit {
 		// OpenTK.Graphics.ES11.BeginMode
 		// OpenTK.Graphics.ES20.BeginMode
 		// OpenTK.Graphics.ES30.BeginMode
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the OpenGL drawing mode.</summary>
 		[Export ("mode")]
 		uint Mode { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the number of elements in the submesh.</summary>
 		[Export ("elementCount")]
 		int ElementCount { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the element buffer for the submesh.</summary>
 		[Export ("elementBuffer")]
 		GLKMeshBuffer ElementBuffer { get; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the mesh that contains this submesh.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed, Export ("mesh", ArgumentSemantic.Weak)]
 		GLKMesh Mesh { get; }
 
@@ -704,7 +579,6 @@ namespace GLKit {
 		///         <param name="error">Error result.</param>
 		///         <summary>Loads a texture from a file synchronously.</summary>
 		///         <returns>On error, this will return null, the details of the error will be stored in the NSError parameter.   Otherwise the instance of the GLKTextureInfo.</returns>
-		///         <remarks>To be added.</remarks>
 		[Static]
 		[Export ("textureWithContentsOfFile:options:error:")]
 		[return: NullAllowed]
@@ -718,7 +592,6 @@ namespace GLKit {
 		///         <param name="error">Error result.</param>
 		///         <summary>Loads a texture from a file pointed to by the url.</summary>
 		///         <returns>On error, this will return null, the details of the error will be stored in the NSError parameter.   Otherwise the instance of the GLKTextureInfo.</returns>
-		///         <remarks>To be added.</remarks>
 		[Static]
 		[Export ("textureWithContentsOfURL:options:error:")]
 		[return: NullAllowed]
@@ -732,7 +605,6 @@ namespace GLKit {
 		///         <param name="error">Error result.</param>
 		///         <summary>Loads a texture from an NSData source.</summary>
 		///         <returns>On error, this will return null, the details of the error will be stored in the NSError parameter.   Otherwise the instance of the GLKTextureInfo.</returns>
-		///         <remarks>To be added.</remarks>
 		[Static]
 		[Export ("textureWithContentsOfData:options:error:")]
 		[return: NullAllowed]
@@ -766,7 +638,6 @@ namespace GLKit {
 		///         <param name="error">Error result.</param>
 		///         <summary>Loads a cube map synchronously.</summary>
 		///         <returns>On error, this will return null, the details of the error will be stored in the NSError parameter.   Otherwise the instance of the GLKTextureInfo.</returns>
-		///         <remarks>To be added.</remarks>
 		[Static]
 		[Export ("cubeMapWithContentsOfFile:options:error:")]
 		[return: NullAllowed]
@@ -780,34 +651,33 @@ namespace GLKit {
 		///         <param name="error">Error result.</param>
 		///         <summary>Loads a cube map synchronously.</summary>
 		///         <returns>On error, this will return null, the details of the error will be stored in the NSError parameter.   Otherwise the instance of the GLKTextureInfo.</returns>
-		///         <remarks>To be added.</remarks>
 		[Static]
 		[Export ("cubeMapWithContentsOfURL:options:error:")]
 		[return: NullAllowed]
 		GLKTextureInfo CubeMapFromUrl (NSUrl url, [NullAllowed] NSDictionary textureOperations, out NSError error);
 
-		/// <param name="name">To be added.</param>
-		/// <param name="scaleFactor">To be added.</param>
+		/// <param name="name">The name of the texture resource.</param>
+		/// <param name="scaleFactor">The scale factor to apply.</param>
 		/// <param name="bundle">
-		///           <para>To be added.</para>
+		///           <para>The bundle containing the resource.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <param name="options">
-		///           <para>To be added.</para>
+		///           <para>The texture loading options.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		/// <param name="outError">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="outError">On return, contains any error that occurred.</param>
+		/// <summary>Loads a texture by name from the specified bundle.</summary>
+		/// <returns>The loaded texture info, or <see langword="null" /> on error.</returns>
+		
 		[Static]
 		[Export ("textureWithName:scaleFactor:bundle:options:error:")]
 		[return: NullAllowed]
 		GLKTextureInfo FromName (string name, nfloat scaleFactor, [NullAllowed] NSBundle bundle, [NullAllowed] NSDictionary<NSString, NSNumber> options, out NSError outError);
 
-		/// <param name="context">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="context">The OpenGL context to load textures into.</param>
+		/// <summary>Creates a texture loader with the specified OpenGL context.</summary>
+		
 		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]
@@ -844,7 +714,7 @@ namespace GLKit {
 			<returns>
 			          <para>A task that represents the asynchronous BeginTextureLoad operation.   The value of the TResult parameter is a <see cref="GLKit.GLKTextureLoaderCallback" />.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
+			<remarks>The returned task contains the loaded texture info.</remarks>
 			""")]
 		void BeginTextureLoad (string file, [NullAllowed] NSDictionary textureOperations, [NullAllowed] DispatchQueue queue, GLKTextureLoaderCallback onComplete);
 
@@ -870,7 +740,7 @@ namespace GLKit {
 			<returns>
 			          <para>A task that represents the asynchronous BeginTextureLoad operation.   The value of the TResult parameter is a <see cref="GLKit.GLKTextureLoaderCallback" />.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
+			<remarks>The returned task contains the loaded texture info.</remarks>
 			""")]
 		void BeginTextureLoad (NSUrl filePath, [NullAllowed] NSDictionary textureOperations, [NullAllowed] DispatchQueue queue, GLKTextureLoaderCallback onComplete);
 
@@ -896,7 +766,7 @@ namespace GLKit {
 			<returns>
 			          <para>A task that represents the asynchronous BeginTextureLoad operation.   The value of the TResult parameter is a <see cref="GLKit.GLKTextureLoaderCallback" />.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
+			<remarks>The returned task contains the loaded texture info.</remarks>
 			""")]
 		void BeginTextureLoad (NSData data, [NullAllowed] NSDictionary textureOperations, [NullAllowed] DispatchQueue queue, GLKTextureLoaderCallback onComplete);
 
@@ -922,7 +792,7 @@ namespace GLKit {
 			<returns>
 			          <para>A task that represents the asynchronous BeginTextureLoad operation.   The value of the TResult parameter is a <see cref="GLKit.GLKTextureLoaderCallback" />.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
+			<remarks>The returned task contains the loaded texture info.</remarks>
 			""")]
 		void BeginTextureLoad (CGImage image, [NullAllowed] NSDictionary textureOperations, [NullAllowed] DispatchQueue queue, GLKTextureLoaderCallback onComplete);
 
@@ -952,7 +822,7 @@ namespace GLKit {
 			<returns>
 			          <para>A task that represents the asynchronous BeginLoadCubeMap operation.   The value of the TResult parameter is a <see cref="GLKit.GLKTextureLoaderCallback" />.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
+			<remarks>The returned task contains the loaded cube map texture info.</remarks>
 			""")]
 		void BeginLoadCubeMap (string fileName, [NullAllowed] NSDictionary textureOperations, [NullAllowed] DispatchQueue queue, GLKTextureLoaderCallback onComplete);
 
@@ -978,41 +848,41 @@ namespace GLKit {
 			<returns>
 			          <para>A task that represents the asynchronous BeginLoadCubeMap operation.   The value of the TResult parameter is a <see cref="GLKit.GLKTextureLoaderCallback" />.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
+			<remarks>The returned task contains the loaded cube map texture info.</remarks>
 			""")]
 		void BeginLoadCubeMap (NSUrl filePath, [NullAllowed] NSDictionary textureOperations, [NullAllowed] DispatchQueue queue, GLKTextureLoaderCallback onComplete);
 
-		/// <param name="name">To be added.</param>
-		/// <param name="scaleFactor">To be added.</param>
+		/// <param name="name">The name of the texture resource.</param>
+		/// <param name="scaleFactor">The scale factor to apply.</param>
 		/// <param name="bundle">
-		///           <para>To be added.</para>
+		///           <para>The bundle containing the resource.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <param name="options">
-		///           <para>To be added.</para>
+		///           <para>The texture loading options.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <param name="queue">
-		///           <para>To be added.</para>
+		///           <para>The dispatch queue for the completion handler.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		/// <param name="block">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="block">The completion handler to invoke when loading completes.</param>
+		/// <summary>Asynchronously loads a texture by name from the specified bundle.</summary>
+		
 		[Export ("textureWithName:scaleFactor:bundle:options:queue:completionHandler:")]
 		[Async (XmlDocs = """
-			<param name="name">To be added.</param>
-			<param name="scaleFactor">To be added.</param>
-			<param name="bundle">To be added.</param>
-			<param name="options">To be added.</param>
-			<param name="queue">To be added.</param>
-			<summary>To be added.</summary>
+			<param name="name">The name of the texture resource.</param>
+			<param name="scaleFactor">The scale factor to apply.</param>
+			<param name="bundle">The bundle containing the resource.</param>
+			<param name="options">The texture loading options.</param>
+			<param name="queue">The dispatch queue for the completion handler.</param>
+			<summary>Asynchronously loads a texture by name from the specified bundle.</summary>
 			<returns>
 			          <para>A task that represents the asynchronous BeginTextureLoad operation.   The value of the TResult parameter is a <see cref="GLKit.GLKTextureLoaderCallback" />.</para>
 			        </returns>
 			<remarks>
 			          <para copied="true">The BeginTextureLoadAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
+			          <para>The BeginTextureLoadAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
 			        </remarks>
 			""")]
 		void BeginTextureLoad (string name, nfloat scaleFactor, [NullAllowed] NSBundle bundle, [NullAllowed] NSDictionary<NSString, NSNumber> options, [NullAllowed] DispatchQueue queue, GLKTextureLoaderCallback block);
@@ -1048,7 +918,6 @@ namespace GLKit {
 		/// <summary>Represents the value associated with the constant GLKTextureLoaderSRGB</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("GLKTextureLoaderSRGB")]
 		NSString SRGB { get; }
 
@@ -1115,83 +984,64 @@ namespace GLKit {
 		[Wrap ("WeakDelegate")]
 		IGLKViewDelegate Delegate { get; set; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets the EAGLContext used for rendering.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed] // by default this property is null
 		[Export ("context", ArgumentSemantic.Retain)]
 		EAGLContext Context { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the width of the drawable area in pixels.</summary>
 		[Export ("drawableWidth")]
 		nint DrawableWidth { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the height of the drawable area in pixels.</summary>
 		[Export ("drawableHeight")]
 		nint DrawableHeight { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the color format of the drawable.</summary>
 		[Export ("drawableColorFormat")]
 		GLKViewDrawableColorFormat DrawableColorFormat { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the depth format of the drawable.</summary>
 		[Export ("drawableDepthFormat")]
 		GLKViewDrawableDepthFormat DrawableDepthFormat { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the stencil format of the drawable.</summary>
 		[Export ("drawableStencilFormat")]
 		GLKViewDrawableStencilFormat DrawableStencilFormat { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the multisample mode of the drawable.</summary>
 		[Export ("drawableMultisample")]
 		GLKViewDrawableMultisample DrawableMultisample { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether setNeedsDisplay is enabled.</summary>
 		[Export ("enableSetNeedsDisplay")]
 		bool EnableSetNeedsDisplay { get; set; }
 
-		/// <param name="frame">To be added.</param>
-		/// <param name="context">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="frame">The frame rectangle for the view.</param>
+		/// <param name="context">The EAGLContext to use for rendering.</param>
+		/// <summary>Creates a GLKit view with the specified frame and context.</summary>
+		
 		[Export ("initWithFrame:context:")]
 		NativeHandle Constructor (CGRect frame, EAGLContext context);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Binds the drawable framebuffer for rendering.</summary>
 		[Export ("bindDrawable")]
 		void BindDrawable ();
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Takes a snapshot of the current rendering.</summary>
+		/// <returns>A UIImage containing the rendered content.</returns>
 		[Export ("snapshot")]
 		UIImage Snapshot ();
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Redraws the view contents immediately.</summary>
 		[Export ("display")]
 		void Display ();
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Deletes the drawable objects associated with the view.</summary>
 		[Export ("deleteDrawable")]
 		void DeleteDrawable ();
 	}
@@ -1210,10 +1060,10 @@ namespace GLKit {
 	[Model]
 	[Protocol]
 	interface GLKViewDelegate {
-		/// <param name="view">To be added.</param>
-		/// <param name="rect">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="view">The GLKit view requesting the draw.</param>
+		/// <param name="rect">The rectangle to draw into.</param>
+		/// <summary>Called when the view needs to be drawn.</summary>
+		
 		[Abstract]
 		[Export ("glkView:drawInRect:"), EventArgs ("GLKViewDraw", XmlDocs = """
 			<summary>Event raised by the object.</summary>
@@ -1229,52 +1079,40 @@ namespace GLKit {
 	[BaseType (typeof (UIViewController))]
 	interface GLKViewController : GLKViewDelegate {
 		/// <param name="nibName">
-		///           <para>To be added.</para>
+		///           <para>The nib name to load.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <param name="bundle">
-		///           <para>To be added.</para>
+		///           <para>The bundle containing the nib.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <summary>Creates a new <see cref="GLKit.GLKViewController" /> from the specified Nib name in the specified <paramref name="bundle" />.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <remarks>Loads the view controller from a nib file.</remarks>
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
 		NativeHandle Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);
 
 		/// <summary>The desired number of frames per second.   Controls the frequency that your Update and Draw methods will be called.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("preferredFramesPerSecond")]
 		nint PreferredFramesPerSecond { get; set; }
 
 		/// <summary>The actual frames per second that your application is getting.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("framesPerSecond")]
 		nint FramesPerSecond { get; }
 
 		/// <summary>When paused, the Update and Draw methods are not invoked.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("paused")]
 		bool Paused { [Bind ("isPaused")] get; set; }
 
 		/// <summary>Cumulative count of frames displayed.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("framesDisplayed")]
 		nint FramesDisplayed { get; }
 
 		/// <summary>Gets the time interval, in seconds, since the view controller first resumed sending updates.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("timeSinceFirstResume")]
 		double TimeSinceFirstResume { get; }
 
 		/// <summary>Gets the time interval, in seconds, since the view controller most recently resumed sending updates.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("timeSinceLastResume")]
 		double TimeSinceLastResume { get; }
 
@@ -1285,14 +1123,10 @@ namespace GLKit {
 		double TimeSinceLastDraw { get; }
 
 		/// <summary>Gets or sets a Boolean value that controls whether the rendering loop will pause when the application resigns from the active state.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("pauseOnWillResignActive")]
 		bool PauseOnWillResignActive { get; set; }
 
 		/// <summary>Gets or sets a Boolean value that controls whether the rendering loop will resume when the application enters the active state.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("resumeOnDidBecomeActive")]
 		bool ResumeOnDidBecomeActive { get; set; }
 
@@ -1334,17 +1168,17 @@ namespace GLKit {
 	[Model]
 	[Protocol]
 	interface GLKViewControllerDelegate {
-		/// <param name="controller">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="controller">The view controller requesting the update.</param>
+		/// <summary>Called before each frame is rendered.</summary>
+		
 		[Abstract]
 		[Export ("glkViewControllerUpdate:")]
 		void Update (GLKViewController controller);
 
-		/// <param name="controller">To be added.</param>
-		/// <param name="pause">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="controller">The view controller whose pause state changed.</param>
+		/// <param name="pause">Whether the controller is pausing or resuming.</param>
+		/// <summary>Called when the rendering loop is paused or resumed.</summary>
+		
 		[Export ("glkViewController:willPause:")]
 		void WillPause (GLKViewController controller, bool pause);
 	}

@@ -28,11 +28,11 @@ namespace AuthenticationServices {
 	[Native]
 	[ErrorDomain ("ASCredentialIdentityStoreErrorDomain")]
 	public enum ASCredentialIdentityStoreErrorCode : long {
-		/// <summary>To be added.</summary>
+		/// <summary>An internal error occurred.</summary>
 		InternalError = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>The credential identity store is disabled.</summary>
 		StoreDisabled = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>The credential identity store is busy.</summary>
 		StoreBusy = 2,
 	}
 
@@ -81,7 +81,7 @@ namespace AuthenticationServices {
 	}
 
 	/// <summary>Enumerates errors associated with a <see cref="AuthenticationServices.ASWebAuthenticationSession" />.</summary>
-	/// <remarks>To be added.</remarks>
+		
 	[TV (16, 0)]
 	[MacCatalyst (13, 1)]
 	[Native]

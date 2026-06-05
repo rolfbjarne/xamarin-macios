@@ -20,8 +20,6 @@ namespace CoreMotion {
 	[MacCatalyst (13, 1)]
 	interface CMAccelerometerData : NSSecureCoding {
 		/// <summary>The acceleration data.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("acceleration")]
 		CMAcceleration Acceleration { get; }
 	}
@@ -35,14 +33,10 @@ namespace CoreMotion {
 	[DisableDefaultCtor]
 	interface CMRecordedAccelerometerData {
 		/// <summary>An identifier of the batch in which these data were recorded.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("identifier")]
 		ulong Identifier { get; }
 
 		/// <summary>The wall-time at which the accelerometer data was recorded.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("startDate")]
 		NSDate StartDate { get; }
 	}
@@ -54,9 +48,7 @@ namespace CoreMotion {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // will crash, see Extra.cs for compatibility stubs
 	interface CMLogItem : NSSecureCoding, NSCopying {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the timestamp of when the log item was recorded.</summary>
 		[Export ("timestamp")]
 		double Timestamp { get; }
 	}
@@ -114,202 +106,150 @@ namespace CoreMotion {
 	[BaseType (typeof (NSObject))]
 	interface CMMotionManager {
 		/// <summary>Whether the device has an accelerometer.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("accelerometerAvailable")]
 		bool AccelerometerAvailable { [Bind ("isAccelerometerAvailable")] get; }
 
 		/// <summary>Whether the accelerometer is currently sending updates.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("accelerometerActive")]
 		bool AccelerometerActive { [Bind ("isAccelerometerActive")] get; }
 
 		/// <summary>The latest accelerometer data.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed]
 		[Export ("accelerometerData")]
 		CMAccelerometerData AccelerometerData { get; }
 
 		/// <summary>The duration, in seconds, between accelerometer data updates.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("accelerometerUpdateInterval")]
 		double AccelerometerUpdateInterval { get; set; }
 
 		/// <summary>Requests that the accelerometer begin delivering data updates.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("startAccelerometerUpdates")]
 		void StartAccelerometerUpdates ();
 
-		/// <param name="queue">To be added.</param>
-		///         <param name="handler">To be added.</param>
+		/// <param name="queue">The operation queue on which to deliver updates.</param>
+		/// <param name="handler">The handler to invoke with accelerometer data.</param>
 		///         <summary>Requests that the accelerometer begin delivering data updates.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("startAccelerometerUpdatesToQueue:withHandler:")]
 		void StartAccelerometerUpdates (NSOperationQueue queue, CMAccelerometerHandler handler);
 
 		/// <summary>Requests that the accelerometer stop delivering data updates.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("stopAccelerometerUpdates")]
 		void StopAccelerometerUpdates ();
 
 		/// <summary>The interval, in seconds, between device-motion data updates.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("deviceMotionUpdateInterval")]
 		double DeviceMotionUpdateInterval { get; set; }
 
 		/// <summary>Whether the device supports device-motion updates.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("deviceMotionAvailable")]
 		bool DeviceMotionAvailable { [Bind ("isDeviceMotionAvailable")] get; }
 
 		/// <summary>Whether the device is delivering device-motion updates.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("deviceMotionActive")]
 		bool DeviceMotionActive { [Bind ("isDeviceMotionActive")] get; }
 
 		/// <summary>The latest device-motion data.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed]
 		[Export ("deviceMotion")]
 		CMDeviceMotion DeviceMotion { get; }
 
 		/// <summary>The interval, in seconds, between gyroscopic data updates.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("gyroUpdateInterval")]
 		double GyroUpdateInterval { get; set; }
 
 		/// <summary>Whether the device has a gyroscope.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("gyroAvailable")]
 		bool GyroAvailable { [Bind ("isGyroAvailable")] get; }
 
 		/// <summary>Whether the device gyroscope is delivering updates.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("gyroActive")]
 		bool GyroActive { [Bind ("isGyroActive")] get; }
 
 		/// <summary>The latest gyroscopic data from the device.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed]
 		[Export ("gyroData")]
 		CMGyroData GyroData { get; }
 
 		/// <summary>Requests that the gyroscope begin delivering data updates.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("startGyroUpdates")]
 		void StartGyroUpdates ();
 
-		/// <param name="toQueue">To be added.</param>
-		///         <param name="handler">To be added.</param>
+		/// <param name="toQueue">The operation queue on which to deliver updates.</param>
+		/// <param name="handler">The handler to invoke with gyroscope data.</param>
 		///         <summary>Requests that the gyroscope begin delivering data updates.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("startGyroUpdatesToQueue:withHandler:")]
 		void StartGyroUpdates (NSOperationQueue toQueue, CMGyroHandler handler);
 
 		/// <summary>Requests that the gyroscope stop delivering data updates.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("stopGyroUpdates")]
 		void StopGyroUpdates ();
 
 		/// <summary>Requests that the device begin delivering device-motion data updates.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("startDeviceMotionUpdates")]
 		void StartDeviceMotionUpdates ();
 
-		/// <param name="toQueue">To be added.</param>
-		///         <param name="handler">To be added.</param>
+		/// <param name="toQueue">The operation queue on which to deliver updates.</param>
+		/// <param name="handler">The handler to invoke with device motion data.</param>
 		///         <summary>Requests that the device begin delivering device-motion data updates.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("startDeviceMotionUpdatesToQueue:withHandler:")]
 		void StartDeviceMotionUpdates (NSOperationQueue toQueue, CMDeviceMotionHandler handler);
 
 		/// <summary>Requests that the device stop delivering device-motion updates.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("stopDeviceMotionUpdates")]
 		void StopDeviceMotionUpdates ();
 
 		/// <summary>The interval, in seconds, between magnetometer updates.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("magnetometerUpdateInterval")]
 		double MagnetometerUpdateInterval { get; set; }
 
 		/// <summary>Whether the device has a magnetometer.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("magnetometerAvailable")]
 		bool MagnetometerAvailable { [Bind ("isMagnetometerAvailable")] get; }
 
 		/// <summary>Whether the magnetometer is delivering data updates.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("magnetometerActive")]
 		bool MagnetometerActive { [Bind ("isMagnetometerActive")] get; }
 
 		/// <summary>The latest magnetometer data.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed]
 		[Export ("magnetometerData")]
 		CMMagnetometerData MagnetometerData { get; }
 
 		/// <summary>Requests that the magnetometer begin delivering data updates.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("startMagnetometerUpdates")]
 		void StartMagnetometerUpdates ();
 
-		/// <param name="queue">To be added.</param>
-		///         <param name="handler">To be added.</param>
+		/// <param name="queue">The operation queue on which to deliver updates.</param>
+		/// <param name="handler">The handler to invoke with magnetometer data.</param>
 		///         <summary>Requests that the gyroscope begin delivering data updates.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("startMagnetometerUpdatesToQueue:withHandler:")]
 		void StartMagnetometerUpdates (NSOperationQueue queue, CMMagnetometerHandler handler);
 
 		/// <summary>Requests that the magnetometer begin delivering data updates.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("stopMagnetometerUpdates")]
 		void StopMagnetometerUpdates ();
 
 		/// <summary>Returns a bit-mask of all the available reference frames.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("availableAttitudeReferenceFrames"), Static]
 		CMAttitudeReferenceFrame AvailableAttitudeReferenceFrames { get; }
 
 		/// <summary>The current attitude reference frame.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("attitudeReferenceFrame")]
 		CMAttitudeReferenceFrame AttitudeReferenceFrame { get; }
 
-		/// <param name="referenceFrame">To be added.</param>
+		/// <param name="referenceFrame">The reference frame to use for attitude.</param>
 		///         <summary>Requests that the device begin delivering device-motion data updates, using <paramref name="referenceFrame" />.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("startDeviceMotionUpdatesUsingReferenceFrame:")]
 		void StartDeviceMotionUpdates (CMAttitudeReferenceFrame referenceFrame);
 
-		/// <param name="referenceFrame">To be added.</param>
-		///         <param name="queue">To be added.</param>
-		///         <param name="handler">To be added.</param>
+		/// <param name="referenceFrame">The reference frame to use for attitude.</param>
+		/// <param name="queue">The operation queue on which to deliver updates.</param>
+		/// <param name="handler">The handler to invoke with device motion data.</param>
 		///         <summary>Requests that the device begin delivering device-motion data updates.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("startDeviceMotionUpdatesUsingReferenceFrame:toQueue:withHandler:")]
 		void StartDeviceMotionUpdates (CMAttitudeReferenceFrame referenceFrame, NSOperationQueue queue, CMDeviceMotionHandler handler);
 
 		/// <summary>Whether the device-movement display is shown.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("showsDeviceMovementDisplay")]
 		bool ShowsDeviceMovementDisplay { get; set; }
 	}
@@ -321,38 +261,27 @@ namespace CoreMotion {
 	[DisableDefaultCtor] // will crash, see Extra.cs for compatibility stubs
 	interface CMAttitude : NSSecureCoding, NSCopying {
 		/// <summary>Device pitch in radians.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("pitch")]
 		double Pitch { get; }
 
 		/// <summary>Device yaw, in Radians.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("yaw")]
 		double Yaw { get; }
 
 		/// <summary>The device attitude as a rotation matrix.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("rotationMatrix")]
 		CMRotationMatrix RotationMatrix { get; }
 
 		/// <summary>Device attitude represented as a quaternion.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("quaternion")]
 		CMQuaternion Quaternion { get; }
 
 		/// <summary>Device roll in radians.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("roll")]
 		double Roll { get; }
 
-		/// <param name="attitude">To be added.</param>
+		/// <param name="attitude">The attitude to multiply by the inverse of.</param>
 		///         <summary>Multiplies the attitude by the specified attitude.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("multiplyByInverseOfAttitude:")]
 		void MultiplyByInverseOfAttitude (CMAttitude attitude);
 	}
@@ -365,38 +294,26 @@ namespace CoreMotion {
 	[DisableDefaultCtor] // will crash, see Extra.cs for compatibility stubs
 	interface CMDeviceMotion : NSSecureCoding {
 		/// <summary>Returns the device's current rotation rate.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("rotationRate")]
 		CMRotationRate RotationRate { get; }
 
 		/// <summary>The gravity vector, expressed in the device's reference frame.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("gravity")]
 		CMAcceleration Gravity { get; }
 
 		/// <summary>Returns the current user-generated acceleration on the device (subtracting the gravity vector).</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("userAcceleration")]
 		CMAcceleration UserAcceleration { get; }
 
 		/// <summary>The current <see cref="CoreMotion.CMAttitude" /> of the device.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("attitude")]
 		CMAttitude Attitude { get; }
 
 		/// <summary>Returns the device's current <see cref="CoreMotion.CMCalibratedMagneticField" />.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("magneticField")]
 		CMCalibratedMagneticField MagneticField { get; }
 
 		/// <summary>Gets the heading angle, in degrees in [0,360), relative to the reference frame.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("heading")]
 		double Heading { get; }
@@ -415,8 +332,6 @@ namespace CoreMotion {
 	[DisableDefaultCtor] // will crash, see Extra.cs for compatibility stubs
 	interface CMGyroData : NSSecureCoding {
 		/// <summary>The rotation rate of the device.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("rotationRate")]
 		CMRotationRate RotationRate { get; }
 	}
@@ -475,44 +390,40 @@ namespace CoreMotion {
 	interface CMStepCounter {
 
 		/// <summary>Whether step counting is available.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Static]
 		[Export ("isStepCountingAvailable")]
 		bool IsStepCountingAvailable { get; }
 
-		/// <param name="start">To be added.</param>
-		///         <param name="end">To be added.</param>
-		///         <param name="queue">To be added.</param>
-		///         <param name="handler">To be added.</param>
+		/// <param name="start">The start date for the query.</param>
+		/// <param name="end">The end date for the query.</param>
+		/// <param name="queue">The operation queue on which to deliver results.</param>
+		/// <param name="handler">The handler to invoke with step counting data.</param>
 		///         <summary>Queries for step-counting data.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("queryStepCountStartingFrom:to:toQueue:withHandler:")]
 		[Async (XmlDocs = """
-			<param name="start">To be added.</param>
-			<param name="end">To be added.</param>
-			<param name="queue">To be added.</param>
+			<param name="start">The start date for the query.</param>
+			<param name="end">The end date for the query.</param>
+			<param name="queue">The operation queue on which to deliver results.</param>
 			<summary>Queries for step-counting data.</summary>
 			<returns>
 			          <para>A task that represents the asynchronous QueryStepCount operation.   The value of the TResult parameter is a CoreMotion.CMStepQueryHandler.</para>
 			        </returns>
 			<remarks>
 			          <para copied="true">The QueryStepCountAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
+			          <para>The QueryStepCountAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
 			        </remarks>
 			""")]
 		void QueryStepCount (NSDate start, NSDate end, NSOperationQueue queue, CMStepQueryHandler handler);
 
-		/// <param name="queue">To be added.</param>
-		/// <param name="stepCounts">To be added.</param>
-		/// <param name="handler">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="queue">The operation queue on which to deliver updates.</param>
+		/// <param name="stepCounts">The number of steps between each update.</param>
+		/// <param name="handler">The handler to invoke with step counting updates.</param>
+		/// <summary>Starts delivering periodic step counting updates.</summary>
+		
 		[Export ("startStepCountingUpdatesToQueue:updateOn:withHandler:")]
 		void StartStepCountingUpdates (NSOperationQueue queue, nint stepCounts, CMStepUpdateHandler handler);
 
 		/// <summary>End periodic updates of step-counting information.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("stopStepCountingUpdates")]
 		void StopStepCountingUpdates ();
 	}
@@ -525,40 +436,28 @@ namespace CoreMotion {
 	interface CMPedometerData : NSSecureCoding, NSCopying {
 
 		/// <summary>The beginning time of the data interval.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("startDate")]
 		NSDate StartDate { get; }
 
 		/// <summary>The ending time of the data interval.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("endDate")]
 		NSDate EndDate { get; }
 
 		/// <summary>The number of steps taken.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("numberOfSteps")]
 		NSNumber NumberOfSteps { get; }
 
 		/// <summary>The estimated distance, in meters, traveled by the user.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed]
 		[Export ("distance")]
 		NSNumber Distance { get; }
 
 		/// <summary>The number of floors walked up.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed]
 		[Export ("floorsAscended")]
 		NSNumber FloorsAscended { get; }
 
 		/// <summary>The number of floors walked down.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed]
 		[Export ("floorsDescended")]
 		NSNumber FloorsDescended { get; }
@@ -568,7 +467,6 @@ namespace CoreMotion {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("currentPace")]
 		NSNumber CurrentPace { get; }
@@ -578,7 +476,6 @@ namespace CoreMotion {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[NullAllowed]
 		[Export ("currentCadence")]
@@ -589,7 +486,6 @@ namespace CoreMotion {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("averageActivePace")]
 		NSNumber AverageActivePace { get; }
@@ -603,82 +499,67 @@ namespace CoreMotion {
 	interface CMPedometer {
 
 		/// <summary>Whether the device has step-counting capabilities.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Static]
 		[Export ("isStepCountingAvailable")]
 		bool IsStepCountingAvailable { get; }
 
 		/// <summary>Whether the device can estimate walking distance.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Static]
 		[Export ("isDistanceAvailable")]
 		bool IsDistanceAvailable { get; }
 
 		/// <summary>Whether the device can track floors climbed throughout the day.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Static]
 		[Export ("isFloorCountingAvailable")]
 		bool IsFloorCountingAvailable { get; }
 
-		/// <param name="start">To be added.</param>
-		///         <param name="end">To be added.</param>
-		///         <param name="handler">To be added.</param>
+		/// <param name="start">The start date for the query.</param>
+		/// <param name="end">The end date for the query.</param>
+		/// <param name="handler">The handler to invoke with pedometer data.</param>
 		///         <summary>Requests pedometer data for the specified range.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("queryPedometerDataFromDate:toDate:withHandler:")]
 		[Async (XmlDocs = """
-			<param name="start">To be added.</param>
-			<param name="end">To be added.</param>
+			<param name="start">The start date for the query.</param>
+			<param name="end">The end date for the query.</param>
 			<summary>Requests pedometer data for the specified range.</summary>
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous QueryPedometerData operation.  The value of the TResult parameter is of type System.Action&lt;CoreMotion.CMPedometerData,Foundation.NSError&gt;.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
+			<remarks>The returned task contains pedometer data for the specified interval.</remarks>
 			""")]
 		void QueryPedometerData (NSDate start, NSDate end, Action<CMPedometerData, NSError> handler);
 
-		/// <param name="start">To be added.</param>
-		///         <param name="handler">To be added.</param>
+		/// <param name="start">The start date for updates.</param>
+		/// <param name="handler">The handler to invoke with periodic pedometer data.</param>
 		///         <summary>Requests that the pedometer begin sending periodic updates to the app.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("startPedometerUpdatesFromDate:withHandler:")]
 		[Async (XmlDocs = """
-			<param name="start">To be added.</param>
+			<param name="start">The start date for updates.</param>
 			<summary>Requests that the pedometer begin sending periodic updates to the app.</summary>
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous StartPedometerUpdates operation.  The value of the TResult parameter is of type System.Action&lt;CoreMotion.CMPedometerData,Foundation.NSError&gt;.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
+			<remarks>The returned task delivers periodic pedometer updates starting from the specified date.</remarks>
 			""")]
 		void StartPedometerUpdates (NSDate start, Action<CMPedometerData, NSError> handler);
 
 		/// <summary>Requests that the pedometer stop sending periodic updates to the app.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("stopPedometerUpdates")]
 		void StopPedometerUpdates ();
 
 		/// <summary>Whether the device can determine the user's pace.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("isPaceAvailable")]
 		bool IsPaceAvailable { get; }
 
 		/// <summary>Whether the device can deliver cadence data.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("isCadenceAvailable")]
 		bool IsCadenceAvailable { get; }
 
 		/// <summary>Gets a value that tells whether pedometer tracking data is available on the device.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("isPedometerEventTrackingAvailable")]
@@ -686,7 +567,6 @@ namespace CoreMotion {
 
 		/// <param name="handler">An event handler for pedometer update events.</param>
 		///         <summary>Starts handling updates to pedestrian data.</summary>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Async (XmlDocs = """
 			<summary>Starts handling updates to pedestrian data.</summary>
@@ -695,21 +575,18 @@ namespace CoreMotion {
 			        </returns>
 			<remarks>
 			          <para copied="true">The StartPedometerEventUpdatesAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
+			          <para>The StartPedometerEventUpdatesAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
 			        </remarks>
 			""")]
 		[Export ("startPedometerEventUpdatesWithHandler:")]
 		void StartPedometerEventUpdates (Action<CMPedometerEvent, NSError> handler);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Stops pedometer event updates.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("stopPedometerEventUpdates")]
 		void StopPedometerEventUpdates ();
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the authorization status for pedometer data.</summary>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("authorizationStatus")]
@@ -737,49 +614,42 @@ namespace CoreMotion {
 	interface CMMotionActivityManager {
 
 		/// <summary>Whether stored motion data is available.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Static]
 		[Export ("isActivityAvailable")]
 		bool IsActivityAvailable { get; }
 
-		/// <param name="start">To be added.</param>
-		///         <param name="end">To be added.</param>
-		///         <param name="queue">To be added.</param>
-		///         <param name="handler">To be added.</param>
+		/// <param name="start">The start date for the query.</param>
+		/// <param name="end">The end date for the query.</param>
+		/// <param name="queue">The operation queue on which to deliver results.</param>
+		/// <param name="handler">The handler to invoke with activity data.</param>
 		///         <summary>Queries the device for stored motion activity.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("queryActivityStartingFromDate:toDate:toQueue:withHandler:")]
 		[Async (XmlDocs = """
-			<param name="start">To be added.</param>
-			<param name="end">To be added.</param>
-			<param name="queue">To be added.</param>
+			<param name="start">The start date for the query.</param>
+			<param name="end">The end date for the query.</param>
+			<param name="queue">The operation queue on which to deliver results.</param>
 			<summary>Queries the device for stored motion activity.</summary>
 			<returns>
 			          <para>A task that represents the asynchronous QueryActivity operation.   The value of the TResult parameter is a <see cref="CoreMotion.CMMotionActivityQueryHandler" />.</para>
 			        </returns>
 			<remarks>
 			          <para copied="true">The QueryActivityAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
+			          <para>The QueryActivityAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
 			        </remarks>
 			""")]
 		void QueryActivity (NSDate start, NSDate end, NSOperationQueue queue, CMMotionActivityQueryHandler handler);
 
-		/// <param name="queue">To be added.</param>
-		///         <param name="handler">To be added.</param>
+		/// <param name="queue">The operation queue on which to deliver updates.</param>
+		/// <param name="handler">The handler to invoke with activity updates.</param>
 		///         <summary>Begins periodically sending motion activity data to the app.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("startActivityUpdatesToQueue:withHandler:")]
 		void StartActivityUpdates (NSOperationQueue queue, CMMotionActivityHandler handler);
 
 		/// <summary>Stops periodically sending motion activity data to the app.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("stopActivityUpdates")]
 		void StopActivityUpdates ();
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the authorization status for motion activity data.</summary>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("authorizationStatus")]
@@ -796,50 +666,34 @@ namespace CoreMotion {
 	[DisableDefaultCtor] // <quote>You do not create instances of this class yourself.</quote>
 	interface CMMotionActivity : NSCopying, NSSecureCoding {
 		/// <summary>The confidence in the assessement of the motion type.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("confidence")]
 		CMMotionActivityConfidence Confidence { get; }
 
 		/// <summary>The beginning of the data interval.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("startDate", ArgumentSemantic.Copy)]
 		NSDate StartDate { get; }
 
 		/// <summary>The device's motion cannot be characterized.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("unknown")]
 		bool Unknown { get; }
 
 		/// <summary>The user is not moving a significant amount.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("stationary")]
 		bool Stationary { get; }
 
 		/// <summary>The user is walking with the device.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("walking")]
 		bool Walking { get; }
 
 		/// <summary>The user is running with the device.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("running")]
 		bool Running { get; }
 
 		/// <summary>Whether the device is in an automobile.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("automotive")]
 		bool Automotive { get; }
 
 		/// <summary>The device is on a bicycle.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("cycling")]
 		bool Cycling { get; }
@@ -855,13 +709,10 @@ namespace CoreMotion {
 	interface CMAltitudeData {
 		/// <summary>Delta, in meters, since the last time this method was called.</summary>
 		///         <value>The first time this method is called, the value will be 0.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("relativeAltitude")]
 		NSNumber RelativeAltitude { get; }
 
 		/// <summary>The current pressure, in kilopascals.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("pressure")]
 		NSNumber Pressure { get; }
 	}
@@ -874,38 +725,32 @@ namespace CoreMotion {
 	[BaseType (typeof (NSObject))]
 	interface CMAltimeter {
 		/// <summary>Whether the device has a barometer.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Static]
 		[Export ("isRelativeAltitudeAvailable")]
 		bool IsRelativeAltitudeAvailable { get; }
 
-		/// <param name="queue">To be added.</param>
-		///         <param name="handler">To be added.</param>
+		/// <param name="queue">The operation queue on which to deliver updates.</param>
+		/// <param name="handler">The handler to invoke with altitude data.</param>
 		///         <summary>Requests periodic updates of altitude-adjustment data.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("startRelativeAltitudeUpdatesToQueue:withHandler:")]
 		[Async (XmlDocs = """
-			<param name="queue">To be added.</param>
+			<param name="queue">The operation queue on which to deliver updates.</param>
 			<summary>Requests periodic updates of altitude-adjustment data.</summary>
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous StartRelativeAltitudeUpdates operation.  The value of the TResult parameter is of type System.Action&lt;CoreMotion.CMAltitudeData,Foundation.NSError&gt;.</para>
 			        </returns>
 			<remarks>
 			          <para copied="true">The StartRelativeAltitudeUpdatesAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
+			          <para>The StartRelativeAltitudeUpdatesAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
 			        </remarks>
 			""")]
 		void StartRelativeAltitudeUpdates (NSOperationQueue queue, Action<CMAltitudeData, NSError> handler);
 
 		/// <summary>Stops periodic updates of altitude-adjustment data.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("stopRelativeAltitudeUpdates")]
 		void StopRelativeAltitudeUpdates ();
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the authorization status for altimeter data.</summary>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("authorizationStatus")]
@@ -931,13 +776,13 @@ namespace CoreMotion {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum CMAuthorizationStatus : long {
-		/// <summary>To be added.</summary>
+		/// <summary>The authorization status has not yet been determined.</summary>
 		NotDetermined = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>The application is restricted from accessing motion data.</summary>
 		Restricted,
-		/// <summary>To be added.</summary>
+		/// <summary>The user denied access to motion data.</summary>
 		Denied,
-		/// <summary>To be added.</summary>
+		/// <summary>The application is authorized to access motion data.</summary>
 		Authorized,
 	}
 
@@ -968,42 +813,34 @@ namespace CoreMotion {
 	[BaseType (typeof (NSObject))]
 	interface CMSensorRecorder {
 		/// <summary>Whether accelerometer recording is available on the device.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Static]
 		[MacCatalyst (13, 1)]
 		[Export ("isAccelerometerRecordingAvailable")]
 		bool IsAccelerometerRecordingAvailable { get; }
 
 		/// <summary>Developers should not use this deprecated property. Developers should use 'CMSensorRecorder.AuthorizationStatus' instead.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use 'CMSensorRecorder.AuthorizationStatus' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'CMSensorRecorder.AuthorizationStatus' instead.")]
 		[Static]
 		[Export ("isAuthorizedForRecording")]
 		bool IsAuthorizedForRecording { get; }
 
-		/// <param name="fromDate">To be added.</param>
-		///         <param name="toDate">To be added.</param>
+		/// <param name="fromDate">The start date of the time interval.</param>
+		/// <param name="toDate">The end date of the time interval.</param>
 		///         <summary>Retrieves accelerometer data for the specified time interval.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <returns>A list of accelerometer data, or <see langword="null" /> if no data is available.</returns>
 		[MacCatalyst (13, 1)]
 		[Export ("accelerometerDataFromDate:toDate:")]
 		[return: NullAllowed]
 		CMSensorDataList GetAccelerometerData (NSDate fromDate, NSDate toDate);
 
-		/// <param name="duration">To be added.</param>
+		/// <param name="duration">The number of seconds to record.</param>
 		///         <summary>Begins recording sensor data for <paramref name="duration" /> seconds.</summary>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("recordAccelerometerForDuration:")]
 		void RecordAccelerometer (double duration);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the authorization status for sensor recording.</summary>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("authorizationStatus")]
@@ -1014,9 +851,9 @@ namespace CoreMotion {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum CMPedometerEventType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>A pedometer event indicating the user paused.</summary>
 		Pause,
-		/// <summary>To be added.</summary>
+		/// <summary>A pedometer event indicating the user resumed.</summary>
 		Resume,
 	}
 
@@ -1026,15 +863,11 @@ namespace CoreMotion {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // instances exposed from delegate
 	interface CMPedometerEvent : NSSecureCoding, NSCopying {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the date when the event occurred.</summary>
 		[Export ("date")]
 		NSDate Date { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the type of pedometer event.</summary>
 		[Export ("type")]
 		CMPedometerEventType Type { get; }
 	}
@@ -1045,27 +878,19 @@ namespace CoreMotion {
 	[DisableDefaultCtor]
 	interface CMDyskineticSymptomResult : NSCopying, NSSecureCoding {
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the start date of the measurement period.</summary>
 		[Export ("startDate", ArgumentSemantic.Copy)]
 		NSDate StartDate { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the end date of the measurement period.</summary>
 		[Export ("endDate", ArgumentSemantic.Copy)]
 		NSDate EndDate { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the percentage of time when dyskinetic symptoms were unlikely.</summary>
 		[Export ("percentUnlikely")]
 		float PercentUnlikely { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the percentage of time when dyskinetic symptoms were likely.</summary>
 		[Export ("percentLikely")]
 		float PercentLikely { get; }
 	}
@@ -1076,51 +901,35 @@ namespace CoreMotion {
 	[DisableDefaultCtor]
 	interface CMTremorResult : NSCopying, NSSecureCoding {
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the start date of the measurement period.</summary>
 		[Export ("startDate", ArgumentSemantic.Copy)]
 		NSDate StartDate { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the end date of the measurement period.</summary>
 		[Export ("endDate", ArgumentSemantic.Copy)]
 		NSDate EndDate { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the percentage of time with unknown tremor status.</summary>
 		[Export ("percentUnknown")]
 		float PercentUnknown { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the percentage of time with no tremor detected.</summary>
 		[Export ("percentNone")]
 		float PercentNone { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the percentage of time with slight tremor.</summary>
 		[Export ("percentSlight")]
 		float PercentSlight { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the percentage of time with mild tremor.</summary>
 		[Export ("percentMild")]
 		float PercentMild { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the percentage of time with moderate tremor.</summary>
 		[Export ("percentModerate")]
 		float PercentModerate { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the percentage of time with strong tremor.</summary>
 		[Export ("percentStrong")]
 		float PercentStrong { get; }
 	}

@@ -741,9 +741,9 @@ namespace CloudKit {
 
 	}
 
-	/// <param name="serverChangeToken">To be added.</param>
-	/// <param name="clientChangeTokenData">To be added.</param>
-	/// <param name="operationError">To be added.</param>
+	/// <param name="serverChangeToken">The server change token.</param>
+	/// <param name="clientChangeTokenData">The client change token data.</param>
+	/// <param name="operationError">The error, or <see langword="null" /> if the operation succeeded.</param>
 	/// <summary>Delegate for the <see cref="CloudKit.CKFetchRecordChangesOperation.AllChangesReported" /> property.</summary>
 	[MacCatalyst (13, 1)]
 	delegate void CKFetchRecordChangesHandler ([NullAllowed] CKServerChangeToken serverChangeToken, [NullAllowed] NSData clientChangeTokenData, [NullAllowed] NSError operationError);
@@ -909,8 +909,8 @@ namespace CloudKit {
 		string [] DesiredKeys { get; set; }
 	}
 
-	/// <param name="recordsByRecordId">To be added.</param>
-	/// <param name="error">To be added.</param>
+	/// <param name="recordsByRecordId">The fetched records keyed by record ID.</param>
+	/// <param name="error">The error, or <see langword="null" /> if the operation succeeded.</param>
 	/// <summary>Delegate for the <see cref="CloudKit.CKFetchRecordsOperation.Completed" /> property.</summary>
 	[MacCatalyst (13, 1)]
 	delegate void CKFetchRecordsCompletedHandler ([NullAllowed] NSDictionary recordsByRecordId, [NullAllowed] NSError error);
@@ -957,8 +957,8 @@ namespace CloudKit {
 		CKFetchRecordsOperation FetchCurrentUserRecordOperation ();
 	}
 
-	/// <param name="recordZonesByZoneId">To be added.</param>
-	/// <param name="operationError">To be added.</param>
+	/// <param name="recordZonesByZoneId">The fetched record zones keyed by zone ID.</param>
+	/// <param name="operationError">The error, or <see langword="null" /> if the operation succeeded.</param>
 	/// <summary>Delegate for the <see cref="CloudKit.CKFetchRecordZonesOperation.Completed" /> property.</summary>
 	[MacCatalyst (13, 1)]
 	delegate void CKRecordZoneCompleteHandler ([NullAllowed] NSDictionary recordZonesByZoneId, [NullAllowed] NSError operationError);
@@ -995,8 +995,8 @@ namespace CloudKit {
 		CKRecordZonePerRecordZoneCompletionHandler PerRecordZoneCompletionHandler { get; set; }
 	}
 
-	/// <param name="subscriptionsBySubscriptionId">To be added.</param>
-	/// <param name="operationError">To be added.</param>
+	/// <param name="subscriptionsBySubscriptionId">The fetched subscriptions keyed by subscription ID.</param>
+	/// <param name="operationError">The error, or <see langword="null" /> if the operation succeeded.</param>
 	/// <summary>Delegate for the <see cref="CloudKit.CKFetchSubscriptionsOperation.Completed" /> property.</summary>
 	[MacCatalyst (13, 1)]
 	delegate void CKFetchSubscriptionsCompleteHandler ([NullAllowed] NSDictionary subscriptionsBySubscriptionId, [NullAllowed] NSError operationError);
@@ -1049,9 +1049,9 @@ namespace CloudKit {
 		CLLocation RelativeLocation { get; }
 	}
 
-	/// <param name="savedRecords">To be added.</param>
-	/// <param name="deletedRecordIds">To be added.</param>
-	/// <param name="operationError">To be added.</param>
+	/// <param name="savedRecords">The saved records, or <see langword="null" />.</param>
+	/// <param name="deletedRecordIds">The deleted record IDs, or <see langword="null" />.</param>
+	/// <param name="operationError">The error, or <see langword="null" /> if the operation succeeded.</param>
 	/// <summary>Delegate for the <see cref="CloudKit.CKModifyRecordsOperation.Completed" /> property.</summary>
 	[MacCatalyst (13, 1)]
 	delegate void CKModifyRecordsOperationHandler ([NullAllowed] CKRecord [] savedRecords, [NullAllowed] CKRecordID [] deletedRecordIds, [NullAllowed] NSError operationError);
@@ -1125,9 +1125,9 @@ namespace CloudKit {
 
 	}
 
-	/// <param name="savedRecordZones">To be added.</param>
-	/// <param name="deletedRecordZoneIds">To be added.</param>
-	/// <param name="operationError">To be added.</param>
+	/// <param name="savedRecordZones">The saved record zones, or <see langword="null" />.</param>
+	/// <param name="deletedRecordZoneIds">The deleted record zone IDs, or <see langword="null" />.</param>
+	/// <param name="operationError">The error, or <see langword="null" /> if the operation succeeded.</param>
 	/// <summary>Delegate for the <see cref="CloudKit.CKModifyRecordZonesOperation.Completed" /> property.</summary>
 	[MacCatalyst (13, 1)]
 	delegate void CKModifyRecordZonesHandler ([NullAllowed] CKRecordZone [] savedRecordZones, [NullAllowed] CKRecordZoneID [] deletedRecordZoneIds, [NullAllowed] NSError operationError);
@@ -1172,9 +1172,9 @@ namespace CloudKit {
 		CKModifyRecordZonesPerRecordZoneDeleteHandler PerRecordZoneDeleteHandler { get; set; }
 	}
 
-	/// <param name="savedSubscriptions">To be added.</param>
-	/// <param name="deletedSubscriptionIds">To be added.</param>
-	/// <param name="operationError">To be added.</param>
+	/// <param name="savedSubscriptions">The saved subscriptions, or <see langword="null" />.</param>
+	/// <param name="deletedSubscriptionIds">The deleted subscription IDs, or <see langword="null" />.</param>
+	/// <param name="operationError">The error, or <see langword="null" /> if the operation succeeded.</param>
 	/// <summary>Delegate for the <see cref="CloudKit.CKModifySubscriptionsOperation.Completed" /> property.</summary>
 	[MacCatalyst (13, 1)]
 	delegate void CKModifySubscriptionsHandler ([NullAllowed] CKSubscription [] savedSubscriptions, [NullAllowed] string [] deletedSubscriptionIds, [NullAllowed] NSError operationError);
@@ -1623,12 +1623,12 @@ namespace CloudKit {
 		[Field ("CKRecordTypeUserRecord")]
 		NSString TypeUserRecord { get; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets a value indicating whether the share record type is a system-defined type.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("CKRecordParentKey")]
 		NSString ParentKey { get; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets a value indicating whether the share record type is a user-defined type.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("CKRecordShareKey")]
 		NSString ShareKey { get; }
@@ -1653,7 +1653,7 @@ namespace CloudKit {
 		[Field ("CKRecordCreationDateKey")]
 		NSString CreationDateKey { get; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets the allowed sharing options for the share.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("CKRecordTypeShare")]
 		NSString TypeShare { get; }

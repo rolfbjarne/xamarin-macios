@@ -12,7 +12,7 @@ using UIKit;
 namespace ExternalAccessory {
 
 	/// <summary>Provides information about a connected external accessory.</summary>
-	/// <remarks>To be added.</remarks>
+		
 	/// <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/ExternalAccessory/Reference/EAAccessory_class/index.html">Apple documentation for <c>EAAccessory</c></related>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject), Delegates = new string [] { "WeakDelegate" }, Events = new Type [] { typeof (EAAccessoryDelegate) })]
@@ -20,56 +20,38 @@ namespace ExternalAccessory {
 	[DisableDefaultCtor]
 	interface EAAccessory {
 		/// <summary>Gets a Boolean value that tells whether the accessory is connected to the device.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("connected")]
 		bool Connected { [Bind ("isConnected")] get; }
 
 		/// <summary>Gets the unique connection identifier.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("connectionID")]
 		nuint ConnectionID { get; }
 
 		/// <summary>Gets the accessory display name.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("name")]
 		string Name { get; }
 
 		/// <summary>Gets the accessory manufacturer.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("manufacturer")]
 		string Manufacturer { get; }
 
 		/// <summary>Gets the model number for the accessory.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("modelNumber")]
 		string ModelNumber { get; }
 
 		/// <summary>Gets the serial number of the accessory.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("serialNumber")]
 		string SerialNumber { get; }
 
 		/// <summary>Gets the firmware revision for the accessory.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("firmwareRevision")]
 		string FirmwareRevision { get; }
 
 		/// <summary>Gets the hardware revision for the accessory.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("hardwareRevision")]
 		string HardwareRevision { get; }
 
 		/// <summary>Gets an array of descriptions of supported protocols for the accessory.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("protocolStrings")]
 		string [] ProtocolStrings { get; }
 
@@ -95,9 +77,7 @@ namespace ExternalAccessory {
 		[NullAllowed]
 		IEAAccessoryDelegate Delegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the connected accessories.</summary>
 		[Deprecated (PlatformName.iOS, 13, 0)]
 		[Deprecated (PlatformName.TvOS, 13, 0)]
 		[Deprecated (PlatformName.MacOSX, 10, 14)]
@@ -114,9 +94,8 @@ namespace ExternalAccessory {
 	[Model]
 	[Protocol]
 	interface EAAccessoryDelegate {
-		/// <param name="accessory">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="accessory">The disconnected accessory.</param>
+		/// <summary>Called when an accessory is disconnected.</summary>
 		[Export ("accessoryDidDisconnect:"), EventArgs ("EAAccessory", XmlDocs = """
 			<summary>Event raised by the object.</summary>
 			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
@@ -126,47 +105,37 @@ namespace ExternalAccessory {
 
 	[MacCatalyst (13, 1)]
 	interface EAAccessoryEventArgs {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the connected accessories.</summary>
 		[Export ("EAAccessoryKey")]
 		EAAccessory Accessory { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the connected accessories.</summary>
 		[Export ("EAAccessorySelectedKey")]
 		EAAccessory Selected { get; }
 	}
 
 	/// <summary>Used to enumerate the external accessories connected.</summary>
-	/// <remarks>To be added.</remarks>
+		
 	/// <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/ExternalAccessory/Reference/EAAccessoryManager_class/index.html">Apple documentation for <c>EAAccessoryManager</c></related>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
 	// Objective-C exception thrown.  Name: EAAccessoryManagerInitException Reason: -init is not supported. Use +sharedAccessoryManager.
 	[DisableDefaultCtor]
 	interface EAAccessoryManager {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the name of the accessory.</summary>
 		[Static]
 		[Export ("sharedAccessoryManager")]
 		EAAccessoryManager SharedAccessoryManager { get; }
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the manufacturer of the accessory.</summary>
 		[Export ("registerForLocalNotifications")]
 		void RegisterForLocalNotifications ();
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the model number of the accessory.</summary>
 		[Export ("unregisterForLocalNotifications")]
 		void UnregisterForLocalNotifications ();
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the serial number of the accessory.</summary>
 		[Export ("connectedAccessories")]
 		EAAccessory [] ConnectedAccessories { get; }
 
@@ -180,114 +149,93 @@ namespace ExternalAccessory {
 
 		// [Introduced (PlatformName.MacCatalyst, 14, 0)]
 		/// <param name="predicate">
-		///           <para>To be added.</para>
+		///   <para>The predicate for filtering, or <see langword="null" />.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		///         <param name="completion">
-		///           <para>To be added.</para>
+		///   <para>The predicate options, or <see langword="null" />.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Shows the Bluetooth accessory picker UI.</summary>
 		[NoMacCatalyst] // selector does not respond
 		[NoMac]
 		[Export ("showBluetoothAccessoryPickerWithNameFilter:completion:")]
 		[Async (XmlDocs = """
-			<param name="predicate">To be added.</param>
-			<summary>To be added.</summary>
+			<param name="predicate">The predicate for filtering, or <see langword="null" />.</param>
+			<summary>Shows the Bluetooth accessory picker UI.</summary>
 			<returns>A task that represents the asynchronous ShowBluetoothAccessoryPicker operation</returns>
 			<remarks>
 			          <para copied="true">The ShowBluetoothAccessoryPickerAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
+			          
 			        </remarks>
 			""")]
 		void ShowBluetoothAccessoryPicker ([NullAllowed] NSPredicate predicate, [NullAllowed] Action<NSError> completion);
 	}
 
 	/// <summary>The EASession is used to communicate with the external hardware accessory.</summary>
-	/// <remarks>To be added.</remarks>
+		
 	/// <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/ExternalAccessory/Reference/EASession_class/index.html">Apple documentation for <c>EASession</c></related>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
 	// Objective-C exception thrown.  Name: EASessionInitException Reason: -init not supported. use -initWithAccessory:forProtocol.
 	[DisableDefaultCtor]
 	interface EASession {
-		/// <param name="accessory">To be added.</param>
-		/// <param name="protocol">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="accessory">The accessory to open the session for.</param>
+		/// <param name="protocol">The protocol string to use for the session.</param>
+		/// <summary>Creates a new session with the specified accessory and protocol.</summary>
+		
 		[Export ("initWithAccessory:forProtocol:")]
 		NativeHandle Constructor (EAAccessory accessory, string protocol);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the accessory for this session.</summary>
 		[NullAllowed]
 		[Export ("accessory")]
 		EAAccessory Accessory { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the protocol string for this session.</summary>
 		[NullAllowed]
 		[Export ("protocolString")]
 		string ProtocolString { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the input stream for receiving data.</summary>
 		[NullAllowed]
 		[Export ("inputStream")]
 		NSInputStream InputStream { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the output stream for sending data.</summary>
 		[NullAllowed]
 		[Export ("outputStream")]
 		NSOutputStream OutputStream { get; }
 	}
 
 	/// <summary>An MFI Wireless Accessory Configuration accessory that is currently unconfigured.</summary>
-	/// <remarks>To be added.</remarks>
+		
 	/// <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/ExternalAccessory/Reference/EAWiFiUnconfiguredAccessory_Class/index.html">Apple documentation for <c>EAWiFiUnconfiguredAccessory</c></related>
 	[NoMac]
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
 	interface EAWiFiUnconfiguredAccessory {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the name of the accessory.</summary>
 		[Export ("name")]
 		string Name { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the protocol string of the accessory.</summary>
 		[Export ("manufacturer")]
 		string Manufacturer { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the manufacturer of the accessory.</summary>
 		[Export ("model")]
 		string Model { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the model number of the accessory.</summary>
 		[Export ("ssid")]
 		string Ssid { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the firmware revision of the accessory.</summary>
 		[Export ("macAddress")]
 		string MacAddress { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the hardware revision of the accessory.</summary>
 		[Export ("properties")]
 		EAWiFiUnconfiguredAccessoryProperties Properties { get; }
 	}
@@ -313,15 +261,15 @@ namespace ExternalAccessory {
 	interface EAWiFiUnconfiguredAccessoryBrowser {
 
 		/// <param name="accessoryBrowserDelegate">
-		///           <para>To be added.</para>
+		///   <para>The name of the nib file, or <see langword="null" />.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <param name="queue">
-		///           <para>To be added.</para>
+		///   <para>The bundle containing the nib, or <see langword="null" />.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Creates the view controller from the specified nib and bundle.</summary>
+		
 		[MacCatalyst (14, 0)] // the headers lie, not usable until at least Mac Catalyst 14.0
 		[NoTV]
 		[Export ("initWithDelegate:queue:")]
@@ -354,35 +302,30 @@ namespace ExternalAccessory {
 		[NullAllowed]
 		IEAWiFiUnconfiguredAccessoryBrowserDelegate Delegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether to show already-paired accessories.</summary>
 		[Export ("unconfiguredAccessories", ArgumentSemantic.Copy)]
 		NSSet UnconfiguredAccessories { get; }
 
 		/// <param name="predicate">
-		///           <para>To be added.</para>
+		///   <para>The filter predicate, or <see langword="null" />.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the predicate for filtering accessories.</summary>
 		[MacCatalyst (14, 0)] // the headers lie, not usable until at least Mac Catalyst 14.0
 		[NoTV]
 		[Export ("startSearchingForUnconfiguredAccessoriesMatchingPredicate:")]
 		void StartSearchingForUnconfiguredAccessories ([NullAllowed] NSPredicate predicate);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the selected accessories.</summary>
 		[MacCatalyst (14, 0)] // the headers lie, not usable until at least Mac Catalyst 14.0
 		[NoTV]
 		[Export ("stopSearchingForUnconfiguredAccessories")]
 		void StopSearchingForUnconfiguredAccessories ();
 
 #if !MONOMAC
-		/// <param name="accessory">To be added.</param>
-		///         <param name="viewController">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="accessory">The configured accessory.</param>
+		/// <param name="viewController">The Wi-Fi configuration view controller.</param>
+		/// <summary>Called when accessory configuration is complete.</summary>
 		[MacCatalyst (14, 0)] // the headers lie, not usable until at least Mac Catalyst 14.0
 		[NoTV]
 		[Export ("configureAccessory:withConfigurationUIOnViewController:")]
@@ -400,10 +343,9 @@ namespace ExternalAccessory {
 	[BaseType (typeof (NSObject))]
 	interface EAWiFiUnconfiguredAccessoryBrowserDelegate {
 
-		/// <param name="browser">To be added.</param>
-		///         <param name="state">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="browser">The browser view controller.</param>
+		/// <param name="state">The new browser state.</param>
+		/// <summary>Called when the browser state changes.</summary>
 		[Abstract]
 		[Export ("accessoryBrowser:didUpdateState:"), EventArgs ("EAWiFiUnconfiguredAccessory", XmlDocs = """
 			<summary>Event raised by the object.</summary>
@@ -411,10 +353,9 @@ namespace ExternalAccessory {
 			""")]
 		void DidUpdateState (EAWiFiUnconfiguredAccessoryBrowser browser, EAWiFiUnconfiguredAccessoryBrowserState state);
 
-		/// <param name="browser">To be added.</param>
-		///         <param name="accessories">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="browser">The browser view controller.</param>
+		/// <param name="accessories">The already-paired accessories.</param>
+		/// <summary>Called when already-paired accessories are found.</summary>
 		[Abstract]
 		[Export ("accessoryBrowser:didFindUnconfiguredAccessories:"), EventArgs ("EAWiFiUnconfiguredAccessoryBrowser", XmlDocs = """
 			<summary>Event raised by the object.</summary>
@@ -422,10 +363,9 @@ namespace ExternalAccessory {
 			""")]
 		void DidFindUnconfiguredAccessories (EAWiFiUnconfiguredAccessoryBrowser browser, NSSet accessories);
 
-		/// <param name="browser">To be added.</param>
-		///         <param name="accessories">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="browser">The browser view controller.</param>
+		/// <param name="accessories">The newly discovered accessories.</param>
+		/// <summary>Called when new accessories are discovered.</summary>
 		[Abstract]
 		[Export ("accessoryBrowser:didRemoveUnconfiguredAccessories:"), EventArgs ("EAWiFiUnconfiguredAccessoryBrowser", XmlDocs = """
 			<summary>Event raised by the object.</summary>
@@ -433,11 +373,10 @@ namespace ExternalAccessory {
 			""")]
 		void DidRemoveUnconfiguredAccessories (EAWiFiUnconfiguredAccessoryBrowser browser, NSSet accessories);
 
-		/// <param name="browser">To be added.</param>
-		///         <param name="accessory">To be added.</param>
-		///         <param name="status">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="browser">The browser view controller.</param>
+		/// <param name="accessory">The accessory that was configured.</param>
+		/// <param name="status">The configuration status.</param>
+		/// <summary>Called when an accessory configuration event occurs.</summary>
 		[Abstract]
 		[Export ("accessoryBrowser:didFinishConfiguringAccessory:withStatus:"), EventArgs ("EAWiFiUnconfiguredAccessoryDidFinish", XmlDocs = """
 			<summary>Event raised by the object.</summary>

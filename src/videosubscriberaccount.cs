@@ -338,19 +338,19 @@ namespace VideoSubscriberAccount {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
+		
 		[NullAllowed, Export ("channelIdentifier")]
 		string ChannelIdentifier { get; set; }
 
 		/// <summary>If not empty, a list of provider identifiers that are allowed to respond to the request.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <value>An array of supported provider identifiers.</value>
+		
 		[Export ("supportedAccountProviderIdentifiers", ArgumentSemantic.Copy)]
 		string [] SupportedAccountProviderIdentifiers { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the list of featured account provider identifiers.</summary>
+		/// <value>An array of featured provider identifiers.</value>
+		
 		[Export ("featuredAccountProviderIdentifiers", ArgumentSemantic.Copy)]
 		string [] FeaturedAccountProviderIdentifiers { get; set; }
 
@@ -359,20 +359,20 @@ namespace VideoSubscriberAccount {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
+		
 		[NullAllowed, Export ("verificationToken")]
 		string VerificationToken { get; set; }
 
 		/// <summary>Whether to ask for the provider's unique identification string.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
-		[Export ("includeAccountProviderIdentifier")]
+		/// <value><see langword="true" /> to include the provider identifier; otherwise, <see langword="false" />.</value>
+		
 		bool IncludeAccountProviderIdentifier { get; set; }
 
 		/// <summary>Whether to ask when the authentication expires.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
-		[Export ("includeAuthenticationExpirationDate")]
+		/// <value><see langword="true" /> to include the expiration date; otherwise, <see langword="false" />.</value>
+		
 		bool IncludeAuthenticationExpirationDate { get; set; }
 
 		/// <summary>If not <see langword="null" />, a user-readable title of the video that the app will play on successful authentication.</summary>
@@ -380,31 +380,31 @@ namespace VideoSubscriberAccount {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
+		
 		[NullAllowed, Export ("localizedVideoTitle")]
 		string LocalizedVideoTitle { get; set; }
 
 		/// <summary>If <see langword="true" />, the user may be prompted to authenticate.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
-		[Export ("interruptionAllowed")]
+		/// <value><see langword="true" /> if the user may be prompted; otherwise, <see langword="false" />.</value>
+		
 		bool InterruptionAllowed { [Bind ("isInterruptionAllowed")] get; set; }
 
 		/// <summary>If <see langword="true" />, cached credentials will not be used.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
-		[Export ("forceAuthentication")]
+		/// <value><see langword="true" /> to force authentication; otherwise, <see langword="false" />.</value>
+		
 		bool ForceAuthentication { get; set; }
 
 		/// <summary>Values to be added to the SAML <c>attributeQuery</c> sent to the provider.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
-		[Export ("attributeNames", ArgumentSemantic.Copy)]
+		/// <value>An array of SAML attribute names.</value>
+		
 		string [] AttributeNames { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the supported authentication schemes.</summary>
+		/// <value>An array of authentication scheme strings.</value>
+		
 		[Protected]
 		[Export ("supportedAuthenticationSchemes", ArgumentSemantic.Copy)]
 		NSString [] SupportedAuthenticationSchemesString { get; set; }

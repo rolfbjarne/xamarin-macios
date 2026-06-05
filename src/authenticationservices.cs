@@ -385,39 +385,39 @@ namespace AuthenticationServices {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface ASCredentialServiceIdentifier : NSCopying, NSSecureCoding {
-		/// <param name="identifier">To be added.</param>
-		/// <param name="type">To be added.</param>
+		/// <param name="identifier">The service identifier string.</param>
+		/// <param name="type">The type of service identifier.</param>
 		/// <summary>Constructs a new <see cref="AuthenticationServices.ASCredentialServiceIdentifier" /> with the specified <paramref name="identifier" /> and of the specified <paramref name="type" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("initWithIdentifier:type:")]
 		NativeHandle Constructor (string identifier, ASCredentialServiceIdentifierType type);
 
 		/// <summary>Gets the service identifier.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <value>The identifier string.</value>
+		
 		[Export ("identifier")]
 		string Identifier { get; }
 
 		/// <summary>Gets the <see cref="AuthenticationServices.ASCredentialServiceIdentifierType" />.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <value>The service identifier type.</value>
+		
 		[Export ("type")]
 		ASCredentialServiceIdentifierType Type { get; }
 
 		/// <summary>
 		/// Constructs a new <see cref="AuthenticationServices.ASCredentialServiceIdentifier" /> with the specified <paramref name="identifier" />, of the specified <paramref name="type" />, and with the specified <paramref name="displayName" />.
 		/// </summary>
-		/// <param name="identifier">To be added.</param>
-		/// <param name="type">To be added.</param>
-		/// <param name="displayName">To be added.</param>
-		/// <remarks>To be added.</remarks>
+		/// <param name="identifier">The service identifier string.</param>
+		/// <param name="type">The type of service identifier.</param>
+		/// <param name="displayName">The display name for the service identifier.</param>
+		
 		[NoTV, Mac (26, 2), iOS (26, 2), MacCatalyst (26, 2)]
 		[Export ("initWithIdentifier:type:displayName:")]
 		NativeHandle Constructor (string identifier, ASCredentialServiceIdentifierType type, string displayName);
 
 		/// <summary>Gets the display name.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <value>The display name string.</value>
+		
 		[NoTV, Mac (26, 2), iOS (26, 2), MacCatalyst (26, 2)]
 		[NullAllowed, Export ("displayName")]
 		string DisplayName { get; }

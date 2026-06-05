@@ -73,14 +73,10 @@ namespace Photos {
 		double Duration { get; }
 
 		/// <summary>Whether the user has marked the <see cref="Photos.PHAsset" /> as hidden.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("hidden")]
 		bool Hidden { [Bind ("isHidden")] get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets a value indicating whether sync failures are hidden.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 15, message: "No longer supported.")]
 		[NoTV]
 		[NoiOS]
@@ -89,8 +85,6 @@ namespace Photos {
 		bool SyncFailureHidden { [Bind ("isSyncFailureHidden")] get; }
 
 		/// <summary>Whether the user has marked this <see cref="Photos.PHAsset" /> as a favorite.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("favorite")]
 		bool Favorite { [Bind ("isFavorite")] get; }
 
@@ -156,9 +150,7 @@ namespace Photos {
 		[Export ("playbackStyle", ArgumentSemantic.Assign)]
 		PHAssetPlaybackStyle PlaybackStyle { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether the asset has adjustments applied.</summary>
 		[NoMacCatalyst]
 		[Deprecated (PlatformName.MacOSX, 12, 0, message: "Use 'PHPhotosError.IdentifierNotFound' instead.")]
 		[NoTV]
@@ -226,15 +218,11 @@ namespace Photos {
 		[NullAllowed]
 		CLLocation Location { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the placeholder for the change request.</summary>
 		[Export ("favorite", ArgumentSemantic.Assign)]
 		bool Favorite { [Bind ("isFavorite")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the placeholder for the change request.</summary>
 		[Export ("hidden", ArgumentSemantic.Assign)]
 		bool Hidden { [Bind ("isHidden")] get; set; }
 
@@ -357,8 +345,6 @@ namespace Photos {
 		Func<PHAdjustmentData, bool> CanHandleAdjustmentData { get; set; }
 
 		/// <summary>Gets or sets a Boolean value that controls whether Photos may download the asset from iCloud.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("networkAccessAllowed", ArgumentSemantic.Assign)]
 		bool NetworkAccessAllowed { [Bind ("isNetworkAccessAllowed")] get; set; }
 
@@ -369,21 +355,18 @@ namespace Photos {
 		/// <summary>Represents the value associated with the constant PHContentEditingInputResultIsInCloudKey</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("PHContentEditingInputResultIsInCloudKey")]
 		NSString ResultIsInCloudKey { get; }
 
 		/// <summary>Represents the value associated with the constant PHContentEditingInputCancelledKey</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("PHContentEditingInputCancelledKey")]
 		NSString CancelledKey { get; }
 
 		/// <summary>Represents the value associated with the constant PHContentEditingInputErrorKey</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("PHContentEditingInputErrorKey")]
 		NSString InputErrorKey { get; }
 	}
@@ -510,8 +493,6 @@ namespace Photos {
 	[BaseType (typeof (NSObject))]
 	interface PHAssetResourceRequestOptions : NSCopying {
 		/// <summary>Whether the resource data needs to be downloaded from iCloud.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("networkAccessAllowed")]
 		bool NetworkAccessAllowed { [Bind ("isNetworkAccessAllowed")] get; set; }
 
@@ -1031,8 +1012,6 @@ namespace Photos {
 
 #if !XAMCORE_5_0
 		/// <summary>Returns the first asset in the <see cref="Photos.PHFetchResult" />.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Obsolete ("Use the 'FirstObject' property instead.")]
 		[Wrap ("FirstObject", IsVirtual = true)]
 		[NullAllowed]
@@ -1086,14 +1065,10 @@ namespace Photos {
 		CGRect NormalizedCropRect { get; set; }
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("networkAccessAllowed", ArgumentSemantic.Assign)]
 		bool NetworkAccessAllowed { [Bind ("isNetworkAccessAllowed")] get; set; }
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("synchronous", ArgumentSemantic.Assign)]
 		bool Synchronous { [Bind ("isSynchronous")] get; set; }
 
@@ -1117,8 +1092,6 @@ namespace Photos {
 	interface PHVideoRequestOptions : NSCopying {
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("networkAccessAllowed", ArgumentSemantic.Assign)]
 		bool NetworkAccessAllowed { [Bind ("isNetworkAccessAllowed")] get; set; }
 
@@ -1141,35 +1114,30 @@ namespace Photos {
 		/// <summary>Represents the value associated with the constant PHImageResultIsInCloudKey</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("PHImageResultIsInCloudKey")]
 		NSString ResultIsInCloud { get; }
 
 		/// <summary>Represents the value associated with the constant PHImageResultIsDegradedKey</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("PHImageResultIsDegradedKey")]
 		NSString ResultIsDegraded { get; }
 
 		/// <summary>Represents the value associated with the constant PHImageCancelledKey</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("PHImageCancelledKey")]
 		NSString Cancelled { get; }
 
 		/// <summary>Represents the value associated with the constant PHImageErrorKey</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("PHImageErrorKey")]
 		NSString Error { get; }
 
 		/// <summary>Represents the value associated with the constant PHImageResultRequestIDKey</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("PHImageResultRequestIDKey")]
 		NSString ResultRequestID { get; }
 	}
@@ -1234,7 +1202,6 @@ namespace Photos {
 		/// <summary>Represents the value associated with the constant PHImageManagerMaximumSize</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("PHImageManagerMaximumSize")]
 		CGSize MaximumSize { get; }
 
@@ -1515,8 +1482,6 @@ namespace Photos {
 		PHImageRequestOptionsDeliveryMode DeliveryMode { get; set; }
 
 		/// <summary>Gets or sets a Boolean value that controls whether the app may request Live Photos from iCloud.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("networkAccessAllowed")]
 		bool NetworkAccessAllowed { [Bind ("isNetworkAccessAllowed")] get; set; }
 
@@ -1533,20 +1498,14 @@ namespace Photos {
 	[Static]
 	interface PHLivePhotoInfo {
 		/// <summary>Key for the error message.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("PHLivePhotoInfoErrorKey")]
 		NSString ErrorKey { get; }
 
 		/// <summary>Key for a Boolean value that tells whether the returned resource is of a lower quality than the requested resource.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("PHLivePhotoInfoIsDegradedKey")]
 		NSString IsDegradedKey { get; }
 
 		/// <summary>Key for a Boolean that tells whether the request was cancelled.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("PHLivePhotoInfoCancelledKey")]
 		NSString CancelledKey { get; }
 	}
@@ -1593,7 +1552,6 @@ namespace Photos {
 		/// <param name="targetSize">The size of the output view to target.</param>
 		///         <param name="handler">A handler that takes the Live Photo and an error and is run on the main thread when the processing is complete.</param>
 		///         <summary>Prepares an edited Live Photo for playback.</summary>
-		///         <remarks>To be added.</remarks>
 		[Async (XmlDocs = """
 			<param name="targetSize">The size of the output view to target.</param>
 			<summary>Asynchronously prepares an edited Live Photo for playback, returning a task that provides the live photo.</summary>
@@ -1610,7 +1568,6 @@ namespace Photos {
 		///         </param>
 		///         <param name="handler">A handler that takes the Live Photo and an error and is run on the main thread when the processing is complete.</param>
 		///         <summary>Prepares an edited Live Photo for playback.</summary>
-		///         <remarks>To be added.</remarks>
 		[Async (XmlDocs = """
 			<param name="targetSize">The size of the output view to target.</param>
 			<param name="options">Live Photo processing options.This parameter can be .</param>
@@ -1631,7 +1588,6 @@ namespace Photos {
 		///         </param>
 		///         <param name="handler">A handler that takes the Live Photo and an error and is run on the main thread when the processing is complete.</param>
 		///         <summary>Prepares an edited Live Photo for playback.</summary>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Async (XmlDocs = """
 			<param name="targetSize">The size of the output view to target.</param>
@@ -1653,7 +1609,6 @@ namespace Photos {
 		/// <param name="output">The output that will receive the Live Photo data.</param>
 		///         <param name="handler">A handler that receives an error and is run on the main thread when the processing is complete.</param>
 		///         <summary>Saves a Live Photo.</summary>
-		///         <remarks>To be added.</remarks>
 		[Async (XmlDocs = """
 			<param name="output">The photo editing output to which to save the photo.</param>
 			<summary>Asynchronously saves a Live Photo, returning a task that indicates success or failure.</summary>
@@ -1670,7 +1625,6 @@ namespace Photos {
 		///         </param>
 		///         <param name="handler">A handler that takes a <see langword="bool" /> and an error and is run when rendering completes.</param>
 		///         <summary>Saves a Live Photo.</summary>
-		///         <remarks>To be added.</remarks>
 		[Async (XmlDocs = """
 			<param name="output">The photo editing output to which to save the photo.</param>
 			<param name="options">
@@ -1692,7 +1646,6 @@ namespace Photos {
 		///         </param>
 		///         <param name="handler">A handler that takes a <see langword="bool" /> and an error and is run when rendering completes.</param>
 		///         <summary>Saves a Live Photo.</summary>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Async (XmlDocs = """
 			<param name="output">The photo editing output to which to save the photo.</param>
@@ -1759,8 +1712,6 @@ namespace Photos {
 	[StrongDictionary ("PHLivePhotoEditingOptionKeys")]
 	interface PHLivePhotoEditingOption {
 		/// <summary>Gets a Boolean value that tells whether rendering should happen at playback time.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		bool ShouldRenderAtPlaybackTime { get; }
 	}
 

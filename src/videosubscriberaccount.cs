@@ -144,29 +144,29 @@ namespace VideoSubscriberAccount {
 	[BaseType (typeof (NSObject))]
 	interface VSAccountManagerDelegate {
 
-		/// <param name="accountManager">To be added.</param>
-		///         <param name="viewController">To be added.</param>
+		/// <param name="accountManager">The account manager.</param>
+		/// <param name="viewController">The view controller to present.</param>
 		///         <summary>Developers override this to specify the <see cref="UIKit.UIViewController" /> to be shown when the <see cref="VSAccountManager" /> requires user interaction.</summary>
-		///         <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[NoMac]
 		[Export ("accountManager:presentViewController:")]
 		void PresentViewController (VSAccountManager accountManager, UIViewController viewController);
 
-		/// <param name="accountManager">To be added.</param>
-		///         <param name="viewController">To be added.</param>
+		/// <param name="accountManager">The account manager.</param>
+		/// <param name="viewController">The view controller to dismiss.</param>
 		///         <summary>Called after the user has interacted with the <paramref name="viewController" />.</summary>
-		///         <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[NoMac]
 		[Export ("accountManager:dismissViewController:")]
 		void DismissViewController (VSAccountManager accountManager, UIViewController viewController);
 
-		/// <param name="accountManager">To be added.</param>
-		///         <param name="accountProviderIdentifier">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="accountManager">The account manager.</param>
+		/// <param name="accountProviderIdentifier">The identifier of the account provider.</param>
+		/// <summary>Called to determine whether the specified provider should be authenticated.</summary>
+		/// <returns><see langword="true" /> if the provider should be authenticated; otherwise, <see langword="false" />.</returns>
+		
 		[Export ("accountManager:shouldAuthenticateAccountProviderWithIdentifier:")]
 		bool ShouldAuthenticateAccountProvider (VSAccountManager accountManager, string accountProviderIdentifier);
 	}

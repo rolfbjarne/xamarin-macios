@@ -34,127 +34,89 @@ namespace QuartzComposer {
 	[Deprecated (PlatformName.MacOSX, 10, 15)]
 	[BaseType (typeof (NSObject))]
 	interface QCComposition : NSCopying {
-		/// <param name="path">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="path">The file path to the composition.</param>
+		/// <summary>Creates a composition from a file at the specified path.</summary>
+		/// <returns>A new composition instance, or <see langword="null" /> on failure.</returns>
 		[Static]
 		[Export ("compositionWithFile:")]
 		QCComposition GetComposition (string path);
 
-		/// <param name="data">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="data">The data containing the composition.</param>
+		/// <summary>Creates a composition from the specified data.</summary>
+		/// <returns>A new composition instance, or <see langword="null" /> on failure.</returns>
 		[Static]
 		[Export ("compositionWithData:")]
 		QCComposition GetComposition (NSData data);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the protocols supported by this composition.</summary>
 		[Export ("protocols")]
 		string [] Protocols { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the attributes dictionary for this composition.</summary>
 		[Export ("attributes")]
 		NSDictionary Attributes { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the input keys for this composition.</summary>
 		[Export ("inputKeys")]
 		string [] InputKeys { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the output keys for this composition.</summary>
 		[Export ("outputKeys")]
 		string [] OutputKeys { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the identifier of this composition.</summary>
 		[Export ("identifier")]
 		string Identifier { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the composition name attribute.</summary>
 		[Field ("QCCompositionAttributeNameKey")]
 		NSString AttributeNameKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the composition description attribute.</summary>
 		[Field ("QCCompositionAttributeDescriptionKey")]
 		NSString AttributeDescriptionKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the composition copyright attribute.</summary>
 		[Field ("QCCompositionAttributeCopyrightKey")]
 		NSString AttributeCopyrightKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the composition built-in attribute.</summary>
 		[Field ("QCCompositionAttributeBuiltInKey")]
 		NSString AttributeBuiltInKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the time-dependent attribute.</summary>
 		[Field ("QCCompositionAttributeIsTimeDependentKey")]
 		NSString AttributeIsTimeDependentKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the has-consumers attribute.</summary>
 		[Field ("QCCompositionAttributeHasConsumersKey")]
 		NSString AttributeHasConsumersKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the composition category attribute.</summary>
 		[Field ("QCCompositionAttributeCategoryKey")]
 		NSString AttributeCategoryKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The distortion category identifier.</summary>
 		[Field ("QCCompositionCategoryDistortion")]
 		NSString CategoryDistortion { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The stylize category identifier.</summary>
 		[Field ("QCCompositionCategoryStylize")]
 		NSString CategoryStylize { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The utility category identifier.</summary>
 		[Field ("QCCompositionCategoryUtility")]
 		NSString CategoryUtility { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the input image.</summary>
 		[Field ("QCCompositionInputImageKey")]
 		NSString InputImageKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the input source image.</summary>
 		[Field ("QCCompositionInputSourceImageKey")]
 		NSString InputSourceImageKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the input destination image.</summary>
 		[Field ("QCCompositionInputDestinationImageKey")]
 		NSString InputDestinationImageKey { get; }
 
@@ -163,111 +125,75 @@ namespace QuartzComposer {
 		// The 'InputRSSArticleDurationKey' property has manual bindings.
 #endif
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the input preview mode.</summary>
 		[Field ("QCCompositionInputPreviewModeKey")]
 		NSString InputPreviewModeKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the input X position.</summary>
 		[Field ("QCCompositionInputXKey")]
 		NSString InputXKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the input Y position.</summary>
 		[Field ("QCCompositionInputYKey")]
 		NSString InputYKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the input screen image.</summary>
 		[Field ("QCCompositionInputScreenImageKey")]
 		NSString InputScreenImageKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the input audio peak.</summary>
 		[Field ("QCCompositionInputAudioPeakKey")]
 		NSString InputAudioPeakKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the input audio spectrum.</summary>
 		[Field ("QCCompositionInputAudioSpectrumKey")]
 		NSString InputAudioSpectrumKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the input track position.</summary>
 		[Field ("QCCompositionInputTrackPositionKey")]
 		NSString InputTrackPositionKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the input track info.</summary>
 		[Field ("QCCompositionInputTrackInfoKey")]
 		NSString InputTrackInfoKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the input track signal.</summary>
 		[Field ("QCCompositionInputTrackSignalKey")]
 		NSString InputTrackSignalKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the input primary color.</summary>
 		[Field ("QCCompositionInputPrimaryColorKey")]
 		NSString InputPrimaryColorKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the input secondary color.</summary>
 		[Field ("QCCompositionInputSecondaryColorKey")]
 		NSString InputSecondaryColorKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the input pace.</summary>
 		[Field ("QCCompositionInputPaceKey")]
 		NSString InputPaceKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the output image.</summary>
 		[Field ("QCCompositionOutputImageKey")]
 		NSString OutputImageKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the output web page URL.</summary>
 		[Field ("QCCompositionOutputWebPageURLKey")]
 		NSString OutputWebPageURLKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The graphic animation protocol identifier.</summary>
 		[Field ("QCCompositionProtocolGraphicAnimation")]
 		NSString ProtocolGraphicAnimation { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The graphic transition protocol identifier.</summary>
 		[Field ("QCCompositionProtocolGraphicTransition")]
 		NSString ProtocolGraphicTransition { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The image filter protocol identifier.</summary>
 		[Field ("QCCompositionProtocolImageFilter")]
 		NSString ProtocolImageFilter { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The screen saver protocol identifier.</summary>
 		[Field ("QCCompositionProtocolScreenSaver")]
 		NSString ProtocolScreenSaver { get; }
 
@@ -275,9 +201,7 @@ namespace QuartzComposer {
 		// The 'ProtocolRSSVisualizer' property has manual bindings.
 #endif
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The music visualizer protocol identifier.</summary>
 		[Field ("QCCompositionProtocolMusicVisualizer")]
 		NSString ProtocolMusicVisualizer { get; }
 	}
@@ -288,37 +212,33 @@ namespace QuartzComposer {
 	[DisableDefaultCtor] // return invalid handle
 	interface QCCompositionLayer {
 
-		/// <param name="path">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="path">The file path to the composition.</param>
+		/// <summary>Creates a composition layer from the file at the specified path.</summary>
+		/// <returns>A new composition layer instance.</returns>
 		[Static]
 		[Export ("compositionLayerWithFile:")]
 		QCCompositionLayer Create (string path);
 
-		/// <param name="composition">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="composition">The composition to use.</param>
+		/// <summary>Creates a composition layer from the specified composition.</summary>
+		/// <returns>A new composition layer instance.</returns>
 		[Static]
 		[Export ("compositionLayerWithComposition:")]
 		QCCompositionLayer Create (QCComposition composition);
 
-		/// <param name="path">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="path">The file path to the composition.</param>
+		/// <summary>Initializes a composition layer from the file at the specified path.</summary>
+		
 		[Export ("initWithFile:")]
 		NativeHandle Constructor (string path);
 
-		/// <param name="composition">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="composition">The composition to render.</param>
+		/// <summary>Initializes a composition layer with the specified composition.</summary>
+		
 		[Export ("initWithComposition:")]
 		NativeHandle Constructor (QCComposition composition);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the composition rendered by this layer.</summary>
 		[Export ("composition")]
 		QCComposition Composition { get; }
 
@@ -328,31 +248,25 @@ namespace QuartzComposer {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // crash when used (e.g. description) meant to be used thru sharedCompositionRepository
 	interface QCCompositionRepository {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the shared composition repository.</summary>
 		[Static]
 		[Export ("sharedCompositionRepository")]
 		QCCompositionRepository SharedCompositionRepository { get; }
 
-		/// <param name="identifier">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="identifier">The identifier of the composition to find.</param>
+		/// <summary>Gets a composition by its identifier.</summary>
+		/// <returns>The composition with the specified identifier, or <see langword="null" />.</returns>
 		[Export ("compositionWithIdentifier:")]
 		QCComposition GetComposition (string identifier);
 
-		/// <param name="protocols">To be added.</param>
-		///         <param name="attributes">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="protocols">The protocols to filter by.</param>
+		/// <param name="attributes">The attributes to filter by.</param>
+		/// <summary>Gets compositions matching the specified protocols and attributes.</summary>
+		/// <returns>An array of matching compositions.</returns>
 		[Export ("compositionsWithProtocols:andAttributes:")]
 		QCComposition [] GetCompositions (NSArray protocols, NSDictionary attributes);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets all available compositions.</summary>
 		[Export ("allCompositions")]
 		QCComposition [] AllCompositions { get; }
 

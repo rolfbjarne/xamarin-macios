@@ -202,29 +202,29 @@ namespace VideoSubscriberAccount {
 		[Export ("checkAccessStatusWithOptions:completionHandler:")]
 		void CheckAccessStatus (NSDictionary options, Action<VSAccountAccessStatus, NSError> completionHandler);
 
-		/// <param name="accountMetadataRequest">To be added.</param>
-		///         <param name="completionHandler">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="accountMetadataRequest">The metadata request to enqueue.</param>
+		/// <param name="completionHandler">Called with the metadata result or error.</param>
+		/// <summary>Enqueues a request for account metadata.</summary>
+		/// <returns>A result object that can be used to cancel the request.</returns>
+		
 		[NoMac]
 		[Async (XmlDocs = """
-			<param name="accountMetadataRequest">To be added.</param>
-			<summary>To be added.</summary>
+			<param name="accountMetadataRequest">The metadata request to enqueue.</param>
+			<summary>Enqueues a request for account metadata.</summary>
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous Enqueue operation.  The value of the TResult parameter is of type System.Action&lt;VideoSubscriberAccount.VSAccountMetadata,Foundation.NSError&gt;.</para>
 			        </returns>
 			<remarks>
 			          <para copied="true">The EnqueueAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
+			          <para copied="true">The EnqueueAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
 			        </remarks>
 			""",
 			XmlDocsWithOutParameter = """
-			<param name="accountMetadataRequest">To be added.</param>
-			<param name="result">To be added.</param>
-			<summary>To be added.</summary>
-			<returns>To be added.</returns>
-			<remarks>To be added.</remarks>
+			<param name="accountMetadataRequest">The metadata request to enqueue.</param>
+			<param name="result">The result object that can cancel the request.</param>
+			<summary>Enqueues a request for account metadata.</summary>
+			<returns>A task that represents the asynchronous enqueue operation.</returns>
+			
 			""")]
 		[Export ("enqueueAccountMetadataRequest:completionHandler:")]
 		VSAccountManagerResult Enqueue (VSAccountMetadataRequest accountMetadataRequest, Action<VSAccountMetadata, NSError> completionHandler);
@@ -268,7 +268,7 @@ namespace VideoSubscriberAccount {
 	interface VSAccountManagerResult {
 
 		/// <summary>Informs the <see cref="VSAccountManager" /> that the app no longer needs the requested work.</summary>
-		///         <remarks>To be added.</remarks>
+		
 		[Export ("cancel")]
 		void Cancel ();
 	}

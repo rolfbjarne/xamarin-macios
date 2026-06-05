@@ -440,38 +440,38 @@ namespace StoreKit {
 	[Deprecated (PlatformName.TvOS, 18, 0 /* Apple's replacement requires Swift */ )]
 	interface SKPaymentTransactionObserver {
 
-		/// <param name="queue">To be added.</param>
-		/// <param name="transactions">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="queue">The payment queue.</param>
+		/// <param name="transactions">The updated transactions.</param>
+		/// <summary>Called when one or more transactions have been updated.</summary>
+		
 		[Export ("paymentQueue:updatedTransactions:")]
 		[Abstract]
 		void UpdatedTransactions (SKPaymentQueue queue, SKPaymentTransaction [] transactions);
 
-		/// <param name="queue">To be added.</param>
-		/// <param name="transactions">To be added.</param>
+		/// <param name="queue">The payment queue.</param>
+		/// <param name="transactions">The removed transactions.</param>
 		/// <summary>Method that is called after transactions have been removed from the queue.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("paymentQueue:removedTransactions:")]
 		void RemovedTransactions (SKPaymentQueue queue, SKPaymentTransaction [] transactions);
 
-		/// <param name="queue">To be added.</param>
-		/// <param name="error">To be added.</param>
+		/// <param name="queue">The payment queue.</param>
+		/// <param name="error">The error that occurred.</param>
 		/// <summary>Method that is called when an error occurs while restoring transactions.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("paymentQueue:restoreCompletedTransactionsFailedWithError:")]
 		void RestoreCompletedTransactionsFailedWithError (SKPaymentQueue queue, NSError error);
 
-		/// <param name="queue">To be added.</param>
+		/// <param name="queue">The payment queue.</param>
 		/// <summary>Method that is called after transactions have been restored.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("paymentQueueRestoreCompletedTransactionsFinished:")]
 		void RestoreCompletedTransactionsFinished (SKPaymentQueue queue);
 
-		/// <param name="queue">To be added.</param>
-		/// <param name="downloads">To be added.</param>
+		/// <param name="queue">The payment queue.</param>
+		/// <param name="downloads">The updated downloads.</param>
 		/// <summary>Method that is called when one or more downloads has been updated by the queue.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Deprecated (PlatformName.iOS, 16, 0)]
 		[Deprecated (PlatformName.MacOSX, 13, 0)]
 		[Deprecated (PlatformName.TvOS, 16, 0)]
@@ -483,8 +483,8 @@ namespace StoreKit {
 		/// <param name="payment">The payment.</param>
 		/// <param name="product">The product that was paid for.</param>
 		/// <summary>Called to indicate that the user has started an in-app App Store purchase.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <returns><see langword="true" /> if the purchase should proceed; otherwise, <see langword="false" />.</returns>
+		
 		[MacCatalyst (13, 1)]
 		[Export ("paymentQueue:shouldAddStorePayment:forProduct:")]
 		bool ShouldAddStorePayment (SKPaymentQueue queue, SKPayment payment, SKProduct product);

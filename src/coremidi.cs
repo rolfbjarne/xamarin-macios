@@ -47,17 +47,17 @@ namespace CoreMidi {
 
 
 	/// <summary>An enumeration whose values specify which hosts are eligible to connect to a MIDI network session.</summary>
-	/// <remarks>To be added.</remarks>
+		
 	[TV (15, 0)]
 	[MacCatalyst (13, 1)]
 	// NSUInteger -> MIDINetworkSession.h
 	[Native]
 	public enum MidiNetworkConnectionPolicy : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>The network is not reachable.</summary>
 		NoOne,
-		/// <summary>To be added.</summary>
+		/// <summary>The network is reachable via a local address.</summary>
 		HostsInContactsList,
-		/// <summary>To be added.</summary>
+		/// <summary>The network is reachable via a host address.</summary>
 		Anyone,
 	}
 
@@ -335,71 +335,58 @@ namespace CoreMidi {
 	[BaseType (typeof (NSObject), Name = "MIDINetworkHost")]
 	[DisableDefaultCtor]
 	interface MidiNetworkHost {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the name of the network host.</summary>
 		[Export ("name", ArgumentSemantic.Retain)]
 		string Name { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the net service name.</summary>
 		[Export ("address", ArgumentSemantic.Retain)]
 		string Address { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the net service domain.</summary>
 		[Export ("port")]
 		nint Port { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the port number.</summary>
 		[NullAllowed]
 		[Export ("netServiceName", ArgumentSemantic.Retain)]
 		string NetServiceName { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the IP address.</summary>
 		[NullAllowed]
 		[Export ("netServiceDomain", ArgumentSemantic.Retain)]
 		string NetServiceDomain { get; }
 
-		/// <param name="hostName">To be added.</param>
-		///         <param name="netService">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="hostName">The host name to resolve.</param>
+		/// <param name="netService">The net service to use for resolution.</param>
+		/// <summary>Creates a network host from a host name and net service.</summary>
+		/// <returns>A new network host instance.</returns>
 		[Static]
 		[Export ("hostWithName:netService:")]
 		MidiNetworkHost Create (string hostName, NSNetService netService);
 
-		/// <param name="hostName">To be added.</param>
-		///         <param name="netServiceName">To be added.</param>
-		///         <param name="netServiceDomain">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="hostName">The host name to resolve.</param>
+		/// <param name="netServiceName">The name of the net service.</param>
+		/// <param name="netServiceDomain">The domain of the net service.</param>
+		/// <summary>Creates a network host from a host name, net service name, and domain.</summary>
+		/// <returns>A new network host instance.</returns>
 		[Static]
 		[Export ("hostWithName:netServiceName:netServiceDomain:")]
 		MidiNetworkHost Create (string hostName, string netServiceName, string netServiceDomain);
 
-		/// <param name="hostName">To be added.</param>
-		/// <param name="address">To be added.</param>
-		/// <param name="port">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="hostName">The host name.</param>
+		/// <param name="address">The IP address.</param>
+		/// <param name="port">The port number.</param>
+		/// <summary>Creates a network host from a host name, address, and port.</summary>
+		/// <returns>A new network host instance.</returns>
+		
 		[Static]
 		[Export ("hostWithName:address:port:")]
 		MidiNetworkHost Create (string hostName, string address, nint port);
 
-		/// <param name="other">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="other">The network host to compare with.</param>
+		/// <summary>Determines whether this host has the same address as another host.</summary>
+		/// <returns><see langword="true" /> if the hosts have the same address; otherwise, <see langword="false" />.</returns>
 		[Export ("hasSameAddressAs:")]
 		bool HasSameAddressAs (MidiNetworkHost other);
 	}
@@ -434,16 +421,13 @@ namespace CoreMidi {
 	[DisableDefaultCtor]
 	[BaseType (typeof (NSObject), Name = "MIDINetworkConnection")]
 	interface MidiNetworkConnection {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the current network node.</summary>
 		[Export ("host", ArgumentSemantic.Retain)]
 		MidiNetworkHost Host { get; }
 
-		/// <param name="host">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="host">The host to create a connection for.</param>
+		/// <summary>Creates a new network connection to the specified host.</summary>
+		/// <returns>A new network connection instance.</returns>
 		[Static, Export ("connectionWithHost:")]
 		MidiNetworkConnection FromHost (MidiNetworkHost host);
 	}
@@ -457,80 +441,60 @@ namespace CoreMidi {
 	// default 'init' crash the application
 	[DisableDefaultCtor]
 	interface MidiNetworkSession {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the owner of this MIDI CI device.</summary>
 		[Export ("enabled")]
 		bool Enabled { [Bind ("isEnabled")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the destination of this device.</summary>
 		[Export ("networkPort")]
 		nint NetworkPort { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the device info for this MIDI CI device.</summary>
 		[Export ("networkName")]
 		string NetworkName { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets whether this device is reachable.</summary>
 		[Export ("localName")]
 		string LocalName { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the maximum size of SysEx messages supported by this device.</summary>
 		[Export ("connectionPolicy")]
 		MidiNetworkConnectionPolicy ConnectionPolicy { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets whether this device supports protocol negotiation.</summary>
 		[Static]
 		[Export ("defaultSession")]
 		MidiNetworkSession DefaultSession { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the number of profiles supported by this device.</summary>
 		[Export ("contacts")]
 		NSSet Contacts { get; }
 
-		/// <param name="contact">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="contact">The MIDI CI profile to send data to.</param>
+		/// <summary>Sends profile data to the specified contact.</summary>
+		/// <returns><see langword="true" /> if the data was sent successfully; otherwise, <see langword="false" />.</returns>
 		[Export ("addContact:")]
 		bool AddContact (MidiNetworkHost contact);
 
-		/// <param name="contact">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="contact">The MIDI CI profile to request data from.</param>
+		/// <summary>Requests profile-specific data from the specified contact.</summary>
+		/// <returns><see langword="true" /> if the request was sent successfully; otherwise, <see langword="false" />.</returns>
 		[Export ("removeContact:")]
 		bool RemoveContact (MidiNetworkHost contact);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the number of property exchange capabilities.</summary>
 		[Export ("connections")]
 		NSSet Connections { get; }
 
-		/// <param name="connection">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="connection">The MIDI CI connection to get properties from.</param>
+		/// <summary>Determines whether the specified connection supports property exchange.</summary>
+		/// <returns><see langword="true" /> if the connection supports property exchange; otherwise, <see langword="false" />.</returns>
 		[Export ("addConnection:")]
 		bool AddConnection (MidiNetworkConnection connection);
 
-		/// <param name="connection">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="connection">The MIDI CI connection to check.</param>
+		/// <summary>Determines whether the specified connection supports process inquiry.</summary>
+		/// <returns><see langword="true" /> if the connection supports process inquiry; otherwise, <see langword="false" />.</returns>
 		[Export ("removeConnection:")]
 		bool RemoveConnection (MidiNetworkConnection connection);
 
@@ -554,22 +518,18 @@ namespace CoreMidi {
 	[BaseType (typeof (NSObject), Name = "MIDICIProfile")]
 	[DisableDefaultCtor]
 	interface MidiCIProfile : NSSecureCoding {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the name of the MIDI CI profile.</summary>
 		[Export ("name")]
 		string Name { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the profile identifier.</summary>
 		[Export ("profileID")]
 		NSData ProfileId { get; }
 
-		/// <param name="data">To be added.</param>
-		/// <param name="inName">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="data">The profile-specific data.</param>
+		/// <param name="inName">The name of the profile.</param>
+		/// <summary>Creates a MIDI CI profile with the specified data and name.</summary>
+		
 		[Export ("initWithData:name:")]
 		NativeHandle Constructor (NSData data, string inName);
 
@@ -595,22 +555,18 @@ namespace CoreMidi {
 	[BaseType (typeof (NSObject), Name = "MIDICIProfileState")]
 	[DisableDefaultCtor]
 	interface MidiCIProfileState : NSSecureCoding {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the profile identifier.</summary>
 		[Export ("enabledProfiles")]
 		MidiCIProfile [] EnabledProfiles { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the channel number.</summary>
 		[Export ("disabledProfiles")]
 		MidiCIProfile [] DisabledProfiles { get; }
 
-		/// <param name="enabled">To be added.</param>
-		/// <param name="disabled">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="enabled">The list of enabled profiles.</param>
+		/// <param name="disabled">The list of disabled profiles.</param>
+		/// <summary>Creates a profile state with enabled and disabled profile lists.</summary>
+		
 		[Export ("initWithEnabledProfiles:disabledProfiles:")]
 		NativeHandle Constructor (MidiCIProfile [] enabled, MidiCIProfile [] disabled);
 
@@ -640,21 +596,15 @@ namespace CoreMidi {
 	[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "No longer supported.")]
 	[Deprecated (PlatformName.MacOSX, 15, 0, message: "No longer supported.")]
 	interface MidiCISession {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the profile identifier.</summary>
 		[Export ("entity")]
 		uint Entity { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the MIDI channel.</summary>
 		[Export ("supportsProfileCapability")]
 		bool SupportsProfileCapability { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets whether the profile is enabled.</summary>
 		[Export ("supportsPropertyCapability")]
 		bool SupportsPropertyCapability { get; }
 
@@ -666,41 +616,34 @@ namespace CoreMidi {
 		[Export ("deviceIdentification")]
 		MidiCIDeviceIdentification_Blittable _DeviceIdentification { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the profile for this responder delegate.</summary>
 		[Wrap ("_DeviceIdentification.ToMidiCIDeviceIdentification ()", IsVirtual = true)]
 		MidiCIDeviceIdentification DeviceIdentification { get; }
 #endif
 
-		/// <param name="channel">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="channel">The MIDI channel number.</param>
+		/// <summary>Handles initialization for the specified channel.</summary>
+		/// <returns><see langword="true" /> if initialization was successful; otherwise, <see langword="false" />.</returns>
 		[Export ("profileStateForChannel:")]
 		MidiCIProfileState GetProfileState (byte channel);
 
-		/// <param name="profile">To be added.</param>
-		///         <param name="channel">To be added.</param>
-		///         <param name="outError">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="profile">The MIDI CI profile to enable.</param>
+		/// <param name="channel">The MIDI channel.</param>
+		/// <param name="outError">On failure, contains the error that occurred.</param>
+		/// <summary>Called to enable a profile on the specified channel.</summary>
+		/// <returns><see langword="true" /> if the profile was enabled; otherwise, <see langword="false" />.</returns>
 		[Export ("enableProfile:onChannel:error:")]
 		bool EnableProfile (MidiCIProfile profile, byte channel, [NullAllowed] out NSError outError);
 
-		/// <param name="profile">To be added.</param>
-		///         <param name="channel">To be added.</param>
-		///         <param name="outError">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="profile">The MIDI CI profile to disable.</param>
+		/// <param name="channel">The MIDI channel.</param>
+		/// <param name="outError">On failure, contains the error that occurred.</param>
+		/// <summary>Called to disable a profile on the specified channel.</summary>
+		/// <returns><see langword="true" /> if the profile was disabled; otherwise, <see langword="false" />.</returns>
 		[Export ("disableProfile:onChannel:error:")]
 		bool DisableProfile (MidiCIProfile profile, byte channel, [NullAllowed] out NSError outError);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the delegate for the profile responder.</summary>
 		[NullAllowed, Export ("profileChangedCallback", ArgumentSemantic.Assign)]
 		MidiCIProfileChangedHandler ProfileChangedCallback { get; set; }
 

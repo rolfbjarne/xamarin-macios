@@ -23,33 +23,23 @@ namespace CoreVideo {
 	[Partial]
 	interface CVBuffer {
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the movie time buffer attachment.</summary>
 		[Field ("kCVBufferMovieTimeKey")]
 		NSString MovieTimeKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the time value buffer attachment.</summary>
 		[Field ("kCVBufferTimeValueKey")]
 		NSString TimeValueKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the time scale buffer attachment.</summary>
 		[Field ("kCVBufferTimeScaleKey")]
 		NSString TimeScaleKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for propagated attachments.</summary>
 		[Field ("kCVBufferPropagatedAttachmentsKey")]
 		NSString PropagatedAttachmentsKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for non-propagated attachments.</summary>
 		[Field ("kCVBufferNonPropagatedAttachmentsKey")]
 		NSString NonPropagatedAttachmentsKey { get; }
 	}
@@ -58,397 +48,277 @@ namespace CoreVideo {
 	[Partial]
 	interface CVImageBuffer : CVBuffer {
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the CoreGraphics color space attachment.</summary>
 		[Field ("kCVImageBufferCGColorSpaceKey")]
 		NSString CGColorSpaceKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the gamma level attachment.</summary>
 		[Field ("kCVImageBufferGammaLevelKey")]
 		NSString GammaLevelKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the clean aperture attachment.</summary>
 		[Field ("kCVImageBufferCleanApertureKey")]
 		NSString CleanApertureKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the preferred clean aperture attachment.</summary>
 		[Field ("kCVImageBufferPreferredCleanApertureKey")]
 		NSString PreferredCleanApertureKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the clean aperture width.</summary>
 		[Field ("kCVImageBufferCleanApertureWidthKey")]
 		NSString CleanApertureWidthKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the clean aperture height.</summary>
 		[Field ("kCVImageBufferCleanApertureHeightKey")]
 		NSString CleanApertureHeightKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the clean aperture horizontal offset.</summary>
 		[Field ("kCVImageBufferCleanApertureHorizontalOffsetKey")]
 		NSString CleanApertureHorizontalOffsetKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the clean aperture vertical offset.</summary>
 		[Field ("kCVImageBufferCleanApertureVerticalOffsetKey")]
 		NSString CleanApertureVerticalOffsetKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the field count attachment.</summary>
 		[Field ("kCVImageBufferFieldCountKey")]
 		NSString FieldCountKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the field detail attachment.</summary>
 		[Field ("kCVImageBufferFieldDetailKey")]
 		NSString FieldDetailKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The value indicating temporal top-first field detail.</summary>
 		[Field ("kCVImageBufferFieldDetailTemporalTopFirst")]
 		NSString FieldDetailTemporalTopFirst { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The value indicating temporal bottom-first field detail.</summary>
 		[Field ("kCVImageBufferFieldDetailTemporalBottomFirst")]
 		NSString FieldDetailTemporalBottomFirst { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The value indicating spatial first-line-early field detail.</summary>
 		[Field ("kCVImageBufferFieldDetailSpatialFirstLineEarly")]
 		NSString FieldDetailSpatialFirstLineEarly { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The value indicating spatial first-line-late field detail.</summary>
 		[Field ("kCVImageBufferFieldDetailSpatialFirstLineLate")]
 		NSString FieldDetailSpatialFirstLineLate { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the pixel aspect ratio attachment.</summary>
 		[Field ("kCVImageBufferPixelAspectRatioKey")]
 		NSString PixelAspectRatioKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the pixel aspect ratio horizontal spacing.</summary>
 		[Field ("kCVImageBufferPixelAspectRatioHorizontalSpacingKey")]
 		NSString PixelAspectRatioHorizontalSpacingKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the pixel aspect ratio vertical spacing.</summary>
 		[Field ("kCVImageBufferPixelAspectRatioVerticalSpacingKey")]
 		NSString PixelAspectRatioVerticalSpacingKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the display dimensions attachment.</summary>
 		[Field ("kCVImageBufferDisplayDimensionsKey")]
 		NSString DisplayDimensionsKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the display width.</summary>
 		[Field ("kCVImageBufferDisplayWidthKey")]
 		NSString DisplayWidthKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the display height.</summary>
 		[Field ("kCVImageBufferDisplayHeightKey")]
 		NSString DisplayHeightKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the YCbCr matrix attachment.</summary>
 		[Field ("kCVImageBufferYCbCrMatrixKey")]
 		NSString YCbCrMatrixKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The constant for the ITU-R 709-2 YCbCr matrix.</summary>
 		[Static]
 		[Wrap ("CVImageBufferYCbCrMatrix.ItuR709_2.GetConstant ()")]
 		NSString YCbCrMatrix_ITU_R_709_2 { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The constant for the ITU-R 601-4 YCbCr matrix.</summary>
 		[Static]
 		[Wrap ("CVImageBufferYCbCrMatrix.ItuR601_4.GetConstant ()")]
 		NSString YCbCrMatrix_ITU_R_601_4 { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The constant for the SMPTE 240M 1995 YCbCr matrix.</summary>
 		[Static]
 		[Wrap ("CVImageBufferYCbCrMatrix.Smpte240M1995.GetConstant ()")]
 		NSString YCbCrMatrix_SMPTE_240M_1995 { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The constant for the DCI-P3 YCbCr matrix.</summary>
 		[Static]
 		[Wrap ("CVImageBufferYCbCrMatrix.DciP3.GetConstant ()")]
 		[MacCatalyst (13, 1)]
 		NSString YCbCrMatrix_DCI_P3 { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The constant for the P3-D65 YCbCr matrix.</summary>
 		[Static]
 		[Wrap ("CVImageBufferYCbCrMatrix.P3D65.GetConstant ()")]
 		[MacCatalyst (13, 1)]
 		NSString YCbCrMatrix_P3_D65 { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The constant for the ITU-R 2020 YCbCr matrix.</summary>
 		[Static]
 		[Wrap ("CVImageBufferYCbCrMatrix.ItuR2020.GetConstant ()")]
 		[MacCatalyst (13, 1)]
 		NSString YCbCrMatrix_ITU_R_2020 { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The constant for the DCI-P3 color primaries.</summary>
 		[Static]
 		[Wrap ("CVImageBufferColorPrimaries.DciP3.GetConstant ()")]
 		[MacCatalyst (13, 1)]
 		NSString ColorPrimaries_DCI_P3 { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The constant for the ITU-R 2020 color primaries.</summary>
 		[Static]
 		[Wrap ("CVImageBufferColorPrimaries.ItuR2020.GetConstant ()")]
 		[MacCatalyst (13, 1)]
 		NSString ColorPrimaries_ITU_R_2020 { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The constant for the P3-D65 color primaries.</summary>
 		[Static]
 		[Wrap ("CVImageBufferColorPrimaries.P3D65.GetConstant ()")]
 		[MacCatalyst (13, 1)]
 		NSString ColorPrimaries_P3_D65 { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the chroma subsampling attachment.</summary>
 		[Field ("kCVImageBufferChromaSubsamplingKey")]
 		NSString ChromaSubsamplingKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The value indicating 4:2:0 chroma subsampling.</summary>
 		[Field ("kCVImageBufferChromaSubsampling_420")]
 		NSString ChromaSubsampling_420 { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The value indicating 4:2:2 chroma subsampling.</summary>
 		[Field ("kCVImageBufferChromaSubsampling_422")]
 		NSString ChromaSubsampling_422 { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The value indicating 4:1:1 chroma subsampling.</summary>
 		[Field ("kCVImageBufferChromaSubsampling_411")]
 		NSString ChromaSubsampling_411 { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the transfer function attachment.</summary>
 		[Field ("kCVImageBufferTransferFunctionKey")]
 		NSString TransferFunctionKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The constant for the ITU-R 709-2 transfer function.</summary>
 		[Static]
 		[Wrap ("CVImageBufferTransferFunction.ItuR709_2.GetConstant ()")]
 		NSString TransferFunction_ITU_R_709_2 { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The constant for the SMPTE 240M 1995 transfer function.</summary>
 		[Static]
 		[Wrap ("CVImageBufferTransferFunction.Smpte240M1995.GetConstant ()")]
 		NSString TransferFunction_SMPTE_240M_1995 { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The constant for the use-gamma transfer function.</summary>
 		[Static]
 		[Wrap ("CVImageBufferTransferFunction.UseGamma.GetConstant ()")]
 		NSString TransferFunction_UseGamma { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The constant for the ITU-R 2020 transfer function.</summary>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Wrap ("CVImageBufferTransferFunction.ItuR2020.GetConstant ()")]
 		NSString TransferFunction_ITU_R_2020 { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The constant for the SMPTE ST 428-1 transfer function.</summary>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Wrap ("CVImageBufferTransferFunction.SmpteST428_1.GetConstant ()")]
 		NSString TransferFunction_SMPTE_ST_428_1 { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The constant for the sRGB transfer function.</summary>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Wrap ("CVImageBufferTransferFunction.SRgb.GetConstant ()")]
 		NSString TransferFunction_sRGB { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The constant for the SMPTE ST 2084 PQ transfer function.</summary>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Wrap ("CVImageBufferTransferFunction.SmpteST2084PQ.GetConstant ()")]
 		NSString TransferFunction_SMPTE_ST_2084_PQ { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The constant for the ITU-R 2100 HLG transfer function.</summary>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Wrap ("CVImageBufferTransferFunction.ItuR2100Hlg.GetConstant ()")]
 		NSString TransferFunction_ITU_R_2100_HLG { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the chroma location of the top field.</summary>
 		[Field ("kCVImageBufferChromaLocationTopFieldKey")]
 		NSString ChromaLocationTopFieldKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the chroma location of the bottom field.</summary>
 		[Field ("kCVImageBufferChromaLocationBottomFieldKey")]
 		NSString ChromaLocationBottomFieldKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The value indicating left chroma location.</summary>
 		[Field ("kCVImageBufferChromaLocation_Left")]
 		NSString ChromaLocation_Left { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The value indicating center chroma location.</summary>
 		[Field ("kCVImageBufferChromaLocation_Center")]
 		NSString ChromaLocation_Center { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The value indicating top-left chroma location.</summary>
 		[Field ("kCVImageBufferChromaLocation_TopLeft")]
 		NSString ChromaLocation_TopLeft { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The value indicating top chroma location.</summary>
 		[Field ("kCVImageBufferChromaLocation_Top")]
 		NSString ChromaLocation_Top { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The value indicating bottom-left chroma location.</summary>
 		[Field ("kCVImageBufferChromaLocation_BottomLeft")]
 		NSString ChromaLocation_BottomLeft { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The value indicating bottom chroma location.</summary>
 		[Field ("kCVImageBufferChromaLocation_Bottom")]
 		NSString ChromaLocation_Bottom { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The value indicating DV 4:2:0 chroma location.</summary>
 		[Field ("kCVImageBufferChromaLocation_DV420")]
 		NSString ChromaLocation_DV420 { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the color primaries attachment.</summary>
 		[Field ("kCVImageBufferColorPrimariesKey")]
 		NSString ColorPrimariesKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The constant for the ITU-R 709-2 color primaries.</summary>
 		[Static]
 		[Wrap ("CVImageBufferColorPrimaries.ItuR709_2.GetConstant ()")]
 		NSString ColorPrimaries_ITU_R_709_2 { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The constant for the EBU 3213 color primaries.</summary>
 		[Static]
 		[Wrap ("CVImageBufferColorPrimaries.Ebu3213.GetConstant ()")]
 		NSString ColorPrimaries_EBU_3213 { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The constant for the SMPTE-C color primaries.</summary>
 		[Static]
 		[Wrap ("CVImageBufferColorPrimaries.SmpteC.GetConstant ()")]
 		NSString ColorPrimaries_SMPTE_C { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The constant for the P22 color primaries.</summary>
 		[Static]
 		[Wrap ("CVImageBufferColorPrimaries.P22.GetConstant ()")]
 		NSString ColorPrimaries_P22 { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key indicating whether the alpha channel is opaque.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("kCVImageBufferAlphaChannelIsOpaque")]
 		NSString AlphaChannelIsOpaque { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the mastering display color volume metadata.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("kCVImageBufferMasteringDisplayColorVolumeKey")]
 		NSString MasteringDisplayColorVolumeKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the content light level information metadata.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("kCVImageBufferContentLightLevelInfoKey")]
 		NSString ContentLightLevelInfoKey { get; }
@@ -506,48 +376,48 @@ namespace CoreVideo {
 	[MacCatalyst (13, 1)]
 	enum CVImageBufferTransferFunction {
 
-		/// <summary>To be added.</summary>
+		/// <summary>The unknown transfer function.</summary>
 		[Field (null)]
 		Unknown = 2, // 2 (the code point for "unknown")
 
-		/// <summary>To be added.</summary>
+		/// <summary>The ITU-R BT.709-2 transfer function.</summary>
 		[Field ("kCVImageBufferTransferFunction_ITU_R_709_2")]
 		ItuR709_2,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The SMPTE 240M 1995 transfer function.</summary>
 		[Field ("kCVImageBufferTransferFunction_SMPTE_240M_1995")]
 		Smpte240M1995,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The use-gamma transfer function.</summary>
 		[Field ("kCVImageBufferTransferFunction_UseGamma")]
 		UseGamma,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The ITU-R BT.2020 transfer function.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("kCVImageBufferTransferFunction_ITU_R_2020")]
 		ItuR2020,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The SMPTE ST 428-1 transfer function.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("kCVImageBufferTransferFunction_SMPTE_ST_428_1")]
 		SmpteST428_1,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The sRGB transfer function.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("kCVImageBufferTransferFunction_sRGB")]
 		SRgb,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The SMPTE ST 2084 PQ (perceptual quantizer) transfer function.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("kCVImageBufferTransferFunction_SMPTE_ST_2084_PQ")]
 		SmpteST2084PQ,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The ITU-R BT.2100 HLG (hybrid log-gamma) transfer function.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("kCVImageBufferTransferFunction_ITU_R_2100_HLG")]
 		ItuR2100Hlg,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The linear transfer function.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("kCVImageBufferTransferFunction_Linear")]
 		Linear,
@@ -556,38 +426,38 @@ namespace CoreVideo {
 	[MacCatalyst (13, 1)]
 	enum CVImageBufferColorPrimaries {
 
-		/// <summary>To be added.</summary>
+		/// <summary>The unknown color primaries.</summary>
 		[Field (null)]
 		Unknown = 2, // 2 (the code point for "unknown")
 
-		/// <summary>To be added.</summary>
+		/// <summary>The DCI-P3 color primaries.</summary>
 		[Field ("kCVImageBufferColorPrimaries_DCI_P3")]
 		[MacCatalyst (13, 1)]
 		DciP3,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The ITU-R BT.2020 color primaries.</summary>
 		[Field ("kCVImageBufferColorPrimaries_ITU_R_2020")]
 		[MacCatalyst (13, 1)]
 		ItuR2020,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The P3-D65 color primaries.</summary>
 		[Field ("kCVImageBufferColorPrimaries_P3_D65")]
 		[MacCatalyst (13, 1)]
 		P3D65,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The ITU-R BT.709-2 color primaries.</summary>
 		[Field ("kCVImageBufferColorPrimaries_ITU_R_709_2")]
 		ItuR709_2,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The EBU 3213 color primaries.</summary>
 		[Field ("kCVImageBufferColorPrimaries_EBU_3213")]
 		Ebu3213,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The SMPTE-C color primaries.</summary>
 		[Field ("kCVImageBufferColorPrimaries_SMPTE_C")]
 		SmpteC,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The P22 color primaries.</summary>
 		[Field ("kCVImageBufferColorPrimaries_P22")]
 		P22,
 	}
@@ -595,23 +465,23 @@ namespace CoreVideo {
 	[MacCatalyst (13, 1)]
 	enum CVImageBufferYCbCrMatrix {
 
-		/// <summary>To be added.</summary>
+		/// <summary>The unknown YCbCr matrix.</summary>
 		[Field (null)]
 		Unknown = 2, // 2 (the code point for "unknown")
 
-		/// <summary>To be added.</summary>
+		/// <summary>The ITU-R BT.709-2 YCbCr matrix.</summary>
 		[Field ("kCVImageBufferYCbCrMatrix_ITU_R_709_2")]
 		ItuR709_2,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The ITU-R BT.601-4 YCbCr matrix.</summary>
 		[Field ("kCVImageBufferYCbCrMatrix_ITU_R_601_4")]
 		ItuR601_4,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The SMPTE 240M 1995 YCbCr matrix.</summary>
 		[Field ("kCVImageBufferYCbCrMatrix_SMPTE_240M_1995")]
 		Smpte240M1995,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The DCI-P3 YCbCr matrix.</summary>
 		[Deprecated (PlatformName.iOS, 14, 0, message: "This API is no longer supported.")]
 		[Deprecated (PlatformName.TvOS, 14, 0, message: "This API is no longer supported.")]
 		[Deprecated (PlatformName.MacOSX, 11, 0, message: "This API is no longer supported.")]
@@ -620,7 +490,7 @@ namespace CoreVideo {
 		[Deprecated (PlatformName.MacCatalyst, 14, 0, message: "This API is no longer supported.")]
 		DciP3,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The P3-D65 YCbCr matrix.</summary>
 		[Deprecated (PlatformName.iOS, 14, 0, message: "This API is no longer supported.")]
 		[Deprecated (PlatformName.TvOS, 14, 0, message: "This API is no longer supported.")]
 		[Deprecated (PlatformName.MacOSX, 11, 0, message: "This API is no longer supported.")]
@@ -629,7 +499,7 @@ namespace CoreVideo {
 		[Deprecated (PlatformName.MacCatalyst, 14, 0, message: "This API is no longer supported.")]
 		P3D65,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The ITU-R BT.2020 YCbCr matrix.</summary>
 		[Field ("kCVImageBufferYCbCrMatrix_ITU_R_2020")]
 		[MacCatalyst (13, 1)]
 		ItuR2020,
@@ -639,116 +509,80 @@ namespace CoreVideo {
 	[Partial]
 	interface CVPixelBuffer {
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the pixel format type.</summary>
 		[Field ("kCVPixelBufferPixelFormatTypeKey")]
 		NSString PixelFormatTypeKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the memory allocator.</summary>
 		[Field ("kCVPixelBufferMemoryAllocatorKey")]
 		NSString MemoryAllocatorKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the pixel buffer width.</summary>
 		[Field ("kCVPixelBufferWidthKey")]
 		NSString WidthKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the pixel buffer height.</summary>
 		[Field ("kCVPixelBufferHeightKey")]
 		NSString HeightKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the number of extended pixels on the left.</summary>
 		[Field ("kCVPixelBufferExtendedPixelsLeftKey")]
 		NSString ExtendedPixelsLeftKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the number of extended pixels on the top.</summary>
 		[Field ("kCVPixelBufferExtendedPixelsTopKey")]
 		NSString ExtendedPixelsTopKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the number of extended pixels on the right.</summary>
 		[Field ("kCVPixelBufferExtendedPixelsRightKey")]
 		NSString ExtendedPixelsRightKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the number of extended pixels on the bottom.</summary>
 		[Field ("kCVPixelBufferExtendedPixelsBottomKey")]
 		NSString ExtendedPixelsBottomKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the bytes-per-row alignment.</summary>
 		[Field ("kCVPixelBufferBytesPerRowAlignmentKey")]
 		NSString BytesPerRowAlignmentKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key indicating CoreGraphics bitmap context compatibility.</summary>
 		[Field ("kCVPixelBufferCGBitmapContextCompatibilityKey")]
 		NSString CGBitmapContextCompatibilityKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key indicating CoreGraphics image compatibility.</summary>
 		[Field ("kCVPixelBufferCGImageCompatibilityKey")]
 		NSString CGImageCompatibilityKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key indicating OpenGL compatibility.</summary>
 		[Field ("kCVPixelBufferOpenGLCompatibilityKey")]
 		NSString OpenGLCompatibilityKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for IOSurface properties.</summary>
 		[Field ("kCVPixelBufferIOSurfacePropertiesKey")]
 		NSString IOSurfacePropertiesKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the plane alignment.</summary>
 		[Field ("kCVPixelBufferPlaneAlignmentKey")]
 		NSString PlaneAlignmentKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key indicating OpenGL ES compatibility.</summary>
 		[NoMac]
 		[NoMacCatalyst]
 		[Field ("kCVPixelBufferOpenGLESCompatibilityKey")]
 		NSString OpenGLESCompatibilityKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key indicating OpenGL ES texture cache compatibility.</summary>
 		[NoMac]
 		[NoMacCatalyst]
 		[Field ("kCVPixelBufferOpenGLESTextureCacheCompatibilityKey")]
 		NSString OpenGLESTextureCacheCompatibilityKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key indicating Metal compatibility.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("kCVPixelBufferMetalCompatibilityKey")]
 		NSString MetalCompatibilityKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key indicating OpenGL texture cache compatibility.</summary>
 		[NoiOS, NoTV, NoMacCatalyst]
 		[Field ("kCVPixelBufferOpenGLTextureCacheCompatibilityKey")]
 		NSString OpenGLTextureCacheCompatibilityKey { get; }
@@ -805,15 +639,11 @@ namespace CoreVideo {
 	/// <summary>A reusable set of <see cref="CoreVideo.CVPixelBuffer" />s.</summary>
 	[Partial]
 	interface CVPixelBufferPool {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the pixel format type of the pixel buffer.</summary>
 		[Field ("kCVPixelBufferPoolMinimumBufferCountKey")]
 		NSString MinimumBufferCountKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the number of planes in the pixel buffer.</summary>
 		[Field ("kCVPixelBufferPoolMaximumBufferAgeKey")]
 		NSString MaximumBufferAgeKey { get; }
 	}

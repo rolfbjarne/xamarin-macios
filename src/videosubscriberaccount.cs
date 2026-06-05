@@ -115,24 +115,24 @@ namespace VideoSubscriberAccount {
 	[StrongDictionary ("VSErrorInfoKeys")]
 	interface VSErrorInfo {
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SAML response string from the error info.</summary>
+		/// <value>The SAML response string.</value>
+		
 		string SamlResponse { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the SAML response status string from the error info.</summary>
+		/// <value>The SAML response status string.</value>
+		
 		string SamlResponseStatus { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the identifier of the unsupported provider.</summary>
+		/// <value>The unsupported provider identifier string.</value>
+		
 		string UnsupportedProviderIdentifier { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the account provider response from the error info.</summary>
+		/// <value>The account provider response string.</value>
+		
 		string AccountProviderResponse { get; }
 	}
 

@@ -187,45 +187,45 @@ namespace AddressBookUI {
 	[Model]
 	[Protocol]
 	interface ABPeoplePickerNavigationControllerDelegate {
-		/// <param name="peoplePicker">To be added.</param>
-		///         <param name="selectedPerson">To be added.</param>
+		/// <param name="peoplePicker">The people picker navigation controller.</param>
+		/// <param name="selectedPerson">The selected person.</param>
 		///         <summary>Developers should not use this deprecated method. Developers should use 'DidSelectPerson' instead (or 'ABPeoplePickerNavigationController.PredicateForSelectionOfPerson').</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <returns><see langword="true" /> to continue after selecting the person; otherwise, <see langword="false" />.</returns>
+		
 		[Deprecated (PlatformName.iOS, 8, 0, message: "Use 'DidSelectPerson' instead (or 'ABPeoplePickerNavigationController.PredicateForSelectionOfPerson').")]
 		[Export ("peoplePickerNavigationController:shouldContinueAfterSelectingPerson:")]
 		bool ShouldContinue (ABPeoplePickerNavigationController peoplePicker, ABPerson selectedPerson);
 
-		/// <param name="peoplePicker">To be added.</param>
-		///         <param name="selectedPerson">To be added.</param>
-		///         <param name="propertyId">To be added.</param>
-		///         <param name="identifier">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="peoplePicker">The people picker navigation controller.</param>
+		/// <param name="selectedPerson">The selected person.</param>
+		/// <param name="propertyId">The identifier of the selected property.</param>
+		/// <param name="identifier">The multi-value identifier of the selected value.</param>
+		/// <summary>Called to determine whether the picker should continue after a property is selected.</summary>
+		/// <returns><see langword="true" /> to continue; otherwise, <see langword="false" />.</returns>
+		
 		[Deprecated (PlatformName.iOS, 8, 0, message: "Use 'DidSelectPerson' instead (or 'ABPeoplePickerNavigationController.PredicateForSelectionOfProperty').")]
 		[Export ("peoplePickerNavigationController:shouldContinueAfterSelectingPerson:property:identifier:")]
 		bool ShouldContinue (ABPeoplePickerNavigationController peoplePicker, ABPerson selectedPerson, int /* ABPropertyId = int32 */ propertyId, int /* ABMultiValueIdentifier = int32 */ identifier);
 
-		/// <param name="peoplePicker">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="peoplePicker">The people picker navigation controller.</param>
+		/// <summary>Called when the user cancels the people picker.</summary>
+		
 		[Export ("peoplePickerNavigationControllerDidCancel:")]
 		void Cancelled (ABPeoplePickerNavigationController peoplePicker);
 
-		/// <param name="peoplePicker">To be added.</param>
-		///         <param name="selectedPerson">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="peoplePicker">The people picker navigation controller.</param>
+		/// <param name="selectedPerson">The selected person.</param>
+		/// <summary>Called when the user selects a person.</summary>
+		
 		[Export ("peoplePickerNavigationController:didSelectPerson:")]
 		void DidSelectPerson (ABPeoplePickerNavigationController peoplePicker, ABPerson selectedPerson);
 
-		/// <param name="peoplePicker">To be added.</param>
-		///         <param name="selectedPerson">To be added.</param>
-		///         <param name="propertyId">To be added.</param>
-		///         <param name="identifier">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="peoplePicker">The people picker navigation controller.</param>
+		/// <param name="selectedPerson">The selected person.</param>
+		/// <param name="propertyId">The identifier of the selected property.</param>
+		/// <param name="identifier">The multi-value identifier of the selected value.</param>
+		/// <summary>Called when the user selects a property of a person.</summary>
+		
 		[Export ("peoplePickerNavigationController:didSelectPerson:property:identifier:")]
 		void DidSelectPerson (ABPeoplePickerNavigationController peoplePicker, ABPerson selectedPerson, int /* ABPropertyId = int32 */ propertyId, int /* ABMultiValueIdentifier = int32 */ identifier);
 	}

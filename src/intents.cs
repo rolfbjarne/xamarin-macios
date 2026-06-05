@@ -41,7 +41,7 @@ namespace Intents {
 	interface NSUnitPower : NSUnit { }
 
 	/// <summary>Enumerates the results of an <see cref="Intents.INBookRestaurantReservationIntent" />.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[MacCatalyst (13, 1)]
 	[Native]
@@ -73,7 +73,7 @@ namespace Intents {
 	}
 
 	/// <summary>Enumerates the record types for audio or video calls.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum INCallRecordType : long {
@@ -277,7 +277,7 @@ namespace Intents {
 	}
 
 	/// <summary>Enumerates results codes for the <see cref="Intents.INGetAvailableRestaurantReservationBookingDefaultsIntent" />.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[MacCatalyst (13, 1)]
 	[Native]
@@ -291,7 +291,7 @@ namespace Intents {
 	}
 
 	/// <summary>Enumerates results codes for the <see cref="Intents.INGetAvailableRestaurantReservationBookingsIntent" />.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[MacCatalyst (13, 1)]
 	[Native]
@@ -307,7 +307,7 @@ namespace Intents {
 	}
 
 	/// <summary>Enumerates results codes for the <see cref="Intents.INGetRestaurantGuestIntent" />.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[MacCatalyst (13, 1)]
 	[Native]
@@ -345,7 +345,7 @@ namespace Intents {
 	}
 
 	/// <summary>Enumerates results codes for the <see cref="Intents.INGetUserCurrentRestaurantReservationBookingsIntent" />.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[MacCatalyst (13, 1)]
 	[Native]
@@ -361,7 +361,7 @@ namespace Intents {
 	}
 
 	/// <summary>Enumerates errors associated with Intents / SiriKit.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[TV (14, 0)]
 	[MacCatalyst (13, 1)]
 	[Native]
@@ -385,11 +385,11 @@ namespace Intents {
 		NoHandlerProvidedForIntent = 2003,
 		/// <summary>The extension's intent does not match the intent names provided in info.plist.</summary>
 		InvalidIntentName = 2004,
-		/// <summary>To be added.</summary>
+		/// <summary>No app is available to handle the intent.</summary>
 		NoAppAvailable = 2005,
 		/// <summary>Too much time has elapsed for the underlying request.</summary>
 		RequestTimedOut = 3001,
-		/// <summary>To be added.</summary>
+		/// <summary>Required information is missing from the intent.</summary>
 		MissingInformation = 3002,
 		/// <summary>The user vocabulary file is not at the specified location.</summary>
 		InvalidUserVocabularyFileLocation = 4000,
@@ -397,46 +397,46 @@ namespace Intents {
 		ExtensionLaunchingTimeout = 5000,
 		/// <summary>An error occurred while trying to start communication with an extension.</summary>
 		ExtensionBringUpFailed = 5001,
-		/// <summary>To be added.</summary>
+		/// <summary>A generic image error occurred.</summary>
 		ImageGeneric = 6000,
-		/// <summary>To be added.</summary>
+		/// <summary>No image service is available.</summary>
 		ImageNoServiceAvailable = 6001,
-		/// <summary>To be added.</summary>
+		/// <summary>Image storage failed.</summary>
 		ImageStorageFailed = 6002,
-		/// <summary>To be added.</summary>
+		/// <summary>Image loading failed.</summary>
 		ImageLoadingFailed = 6003,
-		/// <summary>To be added.</summary>
+		/// <summary>Image retrieval failed.</summary>
 		ImageRetrievalFailed = 6004,
-		/// <summary>To be added.</summary>
+		/// <summary>An image proxy loop was detected.</summary>
 		ImageProxyLoop = 6005,
-		/// <summary>To be added.</summary>
+		/// <summary>The image proxy is invalid.</summary>
 		ImageProxyInvalid = 6006,
-		/// <summary>To be added.</summary>
+		/// <summary>The image proxy timed out.</summary>
 		ImageProxyTimeout = 6007,
-		/// <summary>To be added.</summary>
+		/// <summary>The image service failed.</summary>
 		ImageServiceFailure = 6008,
-		/// <summary>To be added.</summary>
+		/// <summary>Image scaling failed.</summary>
 		ImageScalingFailed = 6009,
-		/// <summary>To be added.</summary>
+		/// <summary>Permission was denied.</summary>
 		PermissionDenied = 6010,
-		/// <summary>To be added.</summary>
+		/// <summary>Voice shortcut creation failed.</summary>
 		VoiceShortcutCreationFailed = 7000,
-		/// <summary>To be added.</summary>
+		/// <summary>Voice shortcut retrieval failed.</summary>
 		VoiceShortcutGetFailed = 7001,
-		/// <summary>To be added.</summary>
+		/// <summary>Voice shortcut deletion failed.</summary>
 		VoiceShortcutDeleteFailed = 7002,
-		/// <summary>To be added.</summary>
+		/// <summary>A generic encoding error occurred.</summary>
 		EncodingGeneric = 8000,
-		/// <summary>To be added.</summary>
+		/// <summary>Encoding failed.</summary>
 		EncodingFailed = 8001,
-		/// <summary>To be added.</summary>
+		/// <summary>A generic decoding error occurred.</summary>
 		DecodingGeneric = 9000,
 		UnableToCreateAppIntentRepresentation = 10000,
 		NoAppIntent = 10001,
 	}
 
 	/// <summary>Enumerates the state of an intent handling response.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[TV (14, 0)]
 	[MacCatalyst (13, 1)]
 	[Native]
@@ -453,13 +453,13 @@ namespace Intents {
 		Failure,
 		/// <summary>Developers should use this code to indicate that processing of the intent should be done in the app.</summary>
 		DeferredToApplication,
-		/// <summary>To be added.</summary>
+		/// <summary>User confirmation is required before processing the intent.</summary>
 		[MacCatalyst (13, 1)]
 		UserConfirmationRequired,
 	}
 
 	/// <summary>Enumerates the direction of information flow relative to the device.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[TV (14, 0)]
 	[MacCatalyst (13, 1)]
 	[Native]
@@ -628,7 +628,7 @@ namespace Intents {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum INPersonSuggestionType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>No suggestion type.</summary>
 		[MacCatalyst (13, 1)]
 		None = 0,
 		/// <summary>Indicates the person's social media information, not their actual name, should be used.</summary>
@@ -694,19 +694,19 @@ namespace Intents {
 		FadeFilter = (1 << 22),
 		/// <summary>The Process image effect.</summary>
 		ProcessFilter = (1 << 23),
-		/// <summary>To be added.</summary>
+		/// <summary>The photo was taken in portrait mode.</summary>
 		[MacCatalyst (13, 1)]
 		PortraitPhoto = (1uL << 24),
-		/// <summary>To be added.</summary>
+		/// <summary>The photo is a Live Photo.</summary>
 		[MacCatalyst (13, 1)]
 		LivePhoto = (1uL << 25),
-		/// <summary>To be added.</summary>
+		/// <summary>The photo is a Loop Live Photo.</summary>
 		[MacCatalyst (13, 1)]
 		LoopPhoto = (1uL << 26),
-		/// <summary>To be added.</summary>
+		/// <summary>The photo is a Bounce Live Photo.</summary>
 		[MacCatalyst (13, 1)]
 		BouncePhoto = (1uL << 27),
-		/// <summary>To be added.</summary>
+		/// <summary>The photo is a Long Exposure Live Photo.</summary>
 		[MacCatalyst (13, 1)]
 		LongExposurePhoto = (1uL << 28),
 	}
@@ -801,7 +801,7 @@ namespace Intents {
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		FailureNotEligible,
-		/// <summary>To be added.</summary>
+		/// <summary>The user must accept terms and conditions before proceeding.</summary>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		FailureTermsAndConditionsAcceptanceRequired,
@@ -841,7 +841,7 @@ namespace Intents {
 	}
 
 	/// <summary>Enumerates the status of a restaurant reservation.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[MacCatalyst (13, 1)]
 	[Native]
@@ -1062,7 +1062,7 @@ namespace Intents {
 		/// <summary>Developers should use this code to indicate they failed to process the intent because the user is not eligible to perform the transaction.</summary>
 		[MacCatalyst (13, 1)]
 		FailureNotEligible,
-		/// <summary>To be added.</summary>
+		/// <summary>The user must accept terms and conditions before proceeding.</summary>
 		[MacCatalyst (13, 1)]
 		FailureTermsAndConditionsAcceptanceRequired,
 	}
@@ -1226,7 +1226,7 @@ namespace Intents {
 	}
 
 	/// <summary>Enumerates the authorization of the developer's Intent.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[MacCatalyst (13, 1)]
 	[Native]
@@ -1359,7 +1359,7 @@ namespace Intents {
 	}
 
 	/// <summary>Enumerates the kind of thing a <see cref="Intents.INVocabulary" /> string represents.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[TV (14, 0)]
 	[MacCatalyst (13, 1)]
@@ -1993,25 +1993,25 @@ namespace Intents {
 		MediaPass,
 		/// <summary>Indicates media with audio data.</summary>
 		MediaAudio,
-		/// <summary>To be added.</summary>
+		/// <summary>A payment sent message.</summary>
 		[MacCatalyst (13, 1)]
 		PaymentSent,
-		/// <summary>To be added.</summary>
+		/// <summary>A payment request message.</summary>
 		[MacCatalyst (13, 1)]
 		PaymentRequest,
-		/// <summary>To be added.</summary>
+		/// <summary>A payment note message.</summary>
 		[MacCatalyst (13, 1)]
 		PaymentNote,
-		/// <summary>To be added.</summary>
+		/// <summary>An Animoji message.</summary>
 		[MacCatalyst (13, 1)]
 		Animoji,
-		/// <summary>To be added.</summary>
+		/// <summary>An activity snippet message.</summary>
 		[MacCatalyst (13, 1)]
 		ActivitySnippet,
-		/// <summary>To be added.</summary>
+		/// <summary>A file attachment message.</summary>
 		[MacCatalyst (13, 1)]
 		File,
-		/// <summary>To be added.</summary>
+		/// <summary>A link message.</summary>
 		[MacCatalyst (13, 1)]
 		Link,
 		[iOS (17, 0), MacCatalyst (17, 0)]
@@ -2093,7 +2093,7 @@ namespace Intents {
 		CredentialsUnverified = 1,
 		/// <summary>The payer had no account.</summary>
 		NoAccount,
-		/// <summary>To be added.</summary>
+		/// <summary>The payer had no valid handle.</summary>
 		[MacCatalyst (13, 1)]
 		NoValidHandle,
 	}
@@ -2130,9 +2130,9 @@ namespace Intents {
 		FailureCredentialsUnverified,
 		/// <summary>Developers should use this code to indicate a failure in finding the account.</summary>
 		FailureAccountNotFound,
-		/// <summary>To be added.</summary>
+		/// <summary>The user must accept terms and conditions before proceeding.</summary>
 		FailureTermsAndConditionsAcceptanceRequired,
-		/// <summary>To be added.</summary>
+		/// <summary>The user is not eligible to perform this action.</summary>
 		FailureNotEligible,
 	}
 
@@ -2166,11 +2166,11 @@ namespace Intents {
 		Offline,
 		/// <summary>Indicates that the recipient was not enabled in the messaging service.</summary>
 		MessagingServiceNotEnabledForRecipient,
-		/// <summary>To be added.</summary>
+		/// <summary>The recipient had no valid handle.</summary>
 		NoValidHandle,
-		/// <summary>To be added.</summary>
+		/// <summary>The requested handle is invalid.</summary>
 		RequestedHandleInvalid,
-		/// <summary>To be added.</summary>
+		/// <summary>No handle exists for the specified label.</summary>
 		NoHandleForLabel,
 		[Mac (14, 0), MacCatalyst (17, 0)]
 		RequiringInAppAuthentication,
@@ -2200,7 +2200,7 @@ namespace Intents {
 		InsufficientFunds,
 		/// <summary>Indicates that the payee has no account.</summary>
 		NoAccount,
-		/// <summary>To be added.</summary>
+		/// <summary>The payee had no valid handle.</summary>
 		[MacCatalyst (13, 1)]
 		NoValidHandle,
 	}
@@ -2282,11 +2282,11 @@ namespace Intents {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum INTaskType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>The task type is unknown.</summary>
 		Unknown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>The task cannot be completed.</summary>
 		NotCompletable,
-		/// <summary>To be added.</summary>
+		/// <summary>The task can be completed.</summary>
 		Completable,
 	}
 
@@ -2330,13 +2330,13 @@ namespace Intents {
 		RequestPayment,
 		/// <summary>The code makes APayment.</summary>
 		SendPayment,
-		/// <summary>To be added.</summary>
+		/// <summary>The visual code represents a transit pass.</summary>
 		[MacCatalyst (13, 1)]
 		Transit,
-		/// <summary>To be added.</summary>
+		/// <summary>The visual code represents a bus pass.</summary>
 		[MacCatalyst (13, 1)]
 		Bus,
-		/// <summary>To be added.</summary>
+		/// <summary>The visual code represents a subway pass.</summary>
 		[MacCatalyst (13, 1)]
 		Subway,
 	}
@@ -2345,35 +2345,35 @@ namespace Intents {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum INMediaItemType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>The media item type is unknown.</summary>
 		Unknown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>A song.</summary>
 		Song,
-		/// <summary>To be added.</summary>
+		/// <summary>An album.</summary>
 		Album,
-		/// <summary>To be added.</summary>
+		/// <summary>An artist.</summary>
 		Artist,
-		/// <summary>To be added.</summary>
+		/// <summary>A genre.</summary>
 		Genre,
-		/// <summary>To be added.</summary>
+		/// <summary>A playlist.</summary>
 		Playlist,
-		/// <summary>To be added.</summary>
+		/// <summary>A podcast show.</summary>
 		PodcastShow,
-		/// <summary>To be added.</summary>
+		/// <summary>A podcast episode.</summary>
 		PodcastEpisode,
-		/// <summary>To be added.</summary>
+		/// <summary>A podcast playlist.</summary>
 		PodcastPlaylist,
-		/// <summary>To be added.</summary>
+		/// <summary>A music station.</summary>
 		MusicStation,
-		/// <summary>To be added.</summary>
+		/// <summary>An audiobook.</summary>
 		AudioBook,
-		/// <summary>To be added.</summary>
+		/// <summary>A movie.</summary>
 		Movie,
-		/// <summary>To be added.</summary>
+		/// <summary>A TV show.</summary>
 		TVShow,
-		/// <summary>To be added.</summary>
+		/// <summary>A TV show episode.</summary>
 		TVShowEpisode,
-		/// <summary>To be added.</summary>
+		/// <summary>A music video.</summary>
 		MusicVideo,
 		[iOS (13, 0)]
 		[MacCatalyst (13, 1)]
@@ -2399,27 +2399,27 @@ namespace Intents {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum INPlayMediaIntentResponseCode : long {
-		/// <summary>To be added.</summary>
+		/// <summary>No explicit response code was provided.</summary>
 		Unspecified = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>The extension is ready to handle the intent.</summary>
 		Ready = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Processing should continue in the app.</summary>
 		ContinueInApp = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Processing is in progress.</summary>
 		InProgress = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>The intent was handled successfully.</summary>
 		Success = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>The intent should be handled in the app.</summary>
 		HandleInApp = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>The intent failed to be processed.</summary>
 		Failure = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>The intent failed and requires app launch.</summary>
 		FailureRequiringAppLaunch = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>The media type is unknown.</summary>
 		FailureUnknownMediaType = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>There is no unplayed content available.</summary>
 		FailureNoUnplayedContent = 9,
-		/// <summary>To be added.</summary>
+		/// <summary>The content is restricted.</summary>
 		FailureRestrictedContent = 10,
 		FailureMaxStreamLimitReached = 11,
 	}
@@ -2428,13 +2428,13 @@ namespace Intents {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum INPlaybackRepeatMode : long {
-		/// <summary>To be added.</summary>
+		/// <summary>The repeat mode is unknown.</summary>
 		Unknown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>No repeat.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Repeat all items.</summary>
 		All,
-		/// <summary>To be added.</summary>
+		/// <summary>Repeat one item.</summary>
 		One,
 	}
 
@@ -2442,17 +2442,17 @@ namespace Intents {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum INDailyRoutineSituation : long {
-		/// <summary>To be added.</summary>
+		/// <summary>The morning routine.</summary>
 		Morning,
-		/// <summary>To be added.</summary>
+		/// <summary>The evening routine.</summary>
 		Evening,
-		/// <summary>To be added.</summary>
+		/// <summary>The home routine.</summary>
 		Home,
-		/// <summary>To be added.</summary>
+		/// <summary>The work routine.</summary>
 		Work,
-		/// <summary>To be added.</summary>
+		/// <summary>The school routine.</summary>
 		School,
-		/// <summary>To be added.</summary>
+		/// <summary>The gym routine.</summary>
 		Gym,
 		[iOS (13, 0)]
 		[MacCatalyst (13, 1)]
@@ -2472,9 +2472,9 @@ namespace Intents {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum INUpcomingMediaPredictionMode : long {
-		/// <summary>To be added.</summary>
+		/// <summary>The default prediction mode.</summary>
 		Default = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Only predict suggested intents.</summary>
 		OnlyPredictSuggestedIntents = 1,
 	}
 
@@ -2482,9 +2482,9 @@ namespace Intents {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum INRelevantShortcutRole : long {
-		/// <summary>To be added.</summary>
+		/// <summary>The shortcut performs an action.</summary>
 		Action,
-		/// <summary>To be added.</summary>
+		/// <summary>The shortcut provides information.</summary>
 		Information,
 	}
 
@@ -3307,17 +3307,17 @@ namespace Intents {
 		[Field ("INWorkoutNameIdentifierExercise")]
 		Exercise,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates a hiking workout.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("INWorkoutNameIdentifierHike")]
 		Hike,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates a high-intensity interval training workout.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("INWorkoutNameIdentifierHighIntensityIntervalTraining")]
 		HighIntensityIntervalTraining,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates a swimming workout.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("INWorkoutNameIdentifierSwim")]
 		Swim,
@@ -3431,7 +3431,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[NoTV]
 	[Unavailable (PlatformName.MacOSX)]
 	[MacCatalyst (13, 1)]
@@ -3441,7 +3441,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INBookRestaurantReservationIntentResponse" /> appropriate to the <see cref="Intents.INBookRestaurantReservationIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleBookRestaurantReservation:completion:")]
 		void HandleBookRestaurantReservation (INBookRestaurantReservationIntent intent, Action<INBookRestaurantReservationIntentResponse> completion);
@@ -3449,42 +3449,42 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the confirmation of a restaurant reservation.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmBookRestaurantReservation:completion:")]
 		void Confirm (INBookRestaurantReservationIntent intent, Action<INBookRestaurantReservationIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of the restaurant at which the booking will be made.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveRestaurantForBookRestaurantReservation:withCompletion:")]
 		void ResolveRestaurant (INBookRestaurantReservationIntent intent, Action<INRestaurantResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of the reservation date.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveBookingDateComponentsForBookRestaurantReservation:withCompletion:")]
 		void ResolveBookingDate (INBookRestaurantReservationIntent intent, Action<INDateComponentsResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of the number of guests in the booking.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolvePartySizeForBookRestaurantReservation:withCompletion:")]
 		void ResolvePartySize (INBookRestaurantReservationIntent intent, Action<INIntegerResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of a guest in the reservation.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveGuestForBookRestaurantReservation:withCompletion:")]
 		void ResolveGuest (INBookRestaurantReservationIntent intent, Action<INRestaurantGuestResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of whether a guest has made a special request as part of the reservation.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveGuestProvidedSpecialRequestTextForBookRestaurantReservation:withCompletion:")]
 		void ResolveGuestProvidedSpecialRequest (INBookRestaurantReservationIntent intent, Action<INStringResolutionResult> completion);
 	}
@@ -3627,7 +3627,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
 	[MacCatalyst (13, 1)]
@@ -3637,7 +3637,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INCancelWorkoutIntentResponse" /> appropriate to the <see cref="Intents.INCancelWorkoutIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleCancelWorkout:completion:")]
 		void HandleCancelWorkout (INCancelWorkoutIntent intent, Action<INCancelWorkoutIntentResponse> completion);
@@ -3645,14 +3645,14 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the confirmation of the cancellation of a workout.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmCancelWorkout:completion:")]
 		void Confirm (INCancelWorkoutIntent intent, Action<INCancelWorkoutIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers can call this method to customize the resolution of the workout name.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveWorkoutNameForCancelWorkout:withCompletion:")]
 		void ResolveWorkoutName (INCancelWorkoutIntent intent, Action<INSpeakableStringResolutionResult> completion);
 	}
@@ -4315,7 +4315,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
 	[MacCatalyst (13, 1)]
@@ -4325,7 +4325,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INEndWorkoutIntentResponse" /> appropriate to the <see cref="Intents.INEndWorkoutIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleEndWorkout:completion:")]
 		void HandleEndWorkout (INEndWorkoutIntent intent, Action<INEndWorkoutIntentResponse> completion);
@@ -4333,14 +4333,14 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the confirmation of the end of a workout.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmEndWorkout:completion:")]
 		void Confirm (INEndWorkoutIntent intent, Action<INEndWorkoutIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers can override this method to customize validation of the workout name.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveWorkoutNameForEndWorkout:withCompletion:")]
 		void ResolveWorkoutName (INEndWorkoutIntent intent, Action<INSpeakableStringResolutionResult> completion);
 	}
@@ -4372,7 +4372,7 @@ namespace Intents {
 		/// <param name="intent">The <see cref="Intents.INIntent" /> received by the system.</param>
 		/// <summary>Developers override this method to return the handler object if <paramref name="intent" /> is one their extension can respond to.</summary>
 		/// <returns>The developer's handler object or <see langword="null" /> if <paramref name="intent" /> is not handled by the extension.</returns>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handlerForIntent:")]
 		[return: NullAllowed]
@@ -4403,7 +4403,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
 	[MacCatalyst (13, 1)]
@@ -4413,7 +4413,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INGetAvailableRestaurantReservationBookingDefaultsIntentResponse" /> appropriate to the <see cref="Intents.INGetAvailableRestaurantReservationBookingDefaultsIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleGetAvailableRestaurantReservationBookingDefaults:completion:")]
 		void HandleAvailableRestaurantReservationBookingDefaults (INGetAvailableRestaurantReservationBookingDefaultsIntent intent, Action<INGetAvailableRestaurantReservationBookingDefaultsIntentResponse> completion);
@@ -4421,14 +4421,14 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the confirmation of booking defaults.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmGetAvailableRestaurantReservationBookingDefaults:completion:")]
 		void Confirm (INGetAvailableRestaurantReservationBookingDefaultsIntent intent, Action<INGetAvailableRestaurantReservationBookingDefaultsIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of a booking default.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveRestaurantForGetAvailableRestaurantReservationBookingDefaults:withCompletion:")]
 		void ResolveAvailableRestaurantReservationBookingDefaults (INGetAvailableRestaurantReservationBookingDefaultsIntent intent, Action<INRestaurantResolutionResult> completion);
 	}
@@ -4458,15 +4458,15 @@ namespace Intents {
 		[Export ("providerImage", ArgumentSemantic.Copy)]
 		INImage ProviderImage { get; set; }
 
-		/// <param name="defaultPartySize">To be added.</param>
-		/// <param name="defaultBookingDate">To be added.</param>
-		/// <param name="code">To be added.</param>
+		/// <param name="defaultPartySize">The default party size for the reservation.</param>
+		/// <param name="defaultBookingDate">The default booking date.</param>
+		/// <param name="code">The response code.</param>
 		/// <param name="userActivity">
-		///           <para>To be added.</para>
+		///           <para>Optional user activity for further handling.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Creates a response with the specified parameters.</summary>
+		
 		[Export ("initWithDefaultPartySize:defaultBookingDate:code:userActivity:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (nuint defaultPartySize, NSDate defaultBookingDate, INGetAvailableRestaurantReservationBookingDefaultsIntentResponseCode code, [NullAllowed] NSUserActivity userActivity);
@@ -4509,7 +4509,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
 	[MacCatalyst (13, 1)]
@@ -4519,7 +4519,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INGetAvailableRestaurantReservationBookingsIntentResponse" /> appropriate to the <see cref="Intents.INGetAvailableRestaurantReservationBookingsIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleGetAvailableRestaurantReservationBookings:completion:")]
 		void HandleAvailableRestaurantReservationBookings (INGetAvailableRestaurantReservationBookingsIntent intent, Action<INGetAvailableRestaurantReservationBookingsIntentResponse> completion);
@@ -4527,28 +4527,28 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the confirmation that the developer's app can provide available reservations.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmGetAvailableRestaurantReservationBookings:completion:")]
 		void Confirm (INGetAvailableRestaurantReservationBookingsIntent intent, Action<INGetAvailableRestaurantReservationBookingsIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of the restaurant for gathering available reservations.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveRestaurantForGetAvailableRestaurantReservationBookings:withCompletion:")]
 		void ResolveAvailableRestaurantReservationBookings (INGetAvailableRestaurantReservationBookingsIntent intent, Action<INRestaurantResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of the number of guests in the reservation.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolvePartySizeForGetAvailableRestaurantReservationBookings:withCompletion:")]
 		void ResolvePartySizeAvailableRestaurantReservationBookings (INGetAvailableRestaurantReservationBookingsIntent intent, Action<INIntegerResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of the preferred dates for the reservation.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolvePreferredBookingDateComponentsForGetAvailableRestaurantReservationBookings:withCompletion:")]
 		void ResolvePreferredBookingDateAvailableRestaurantReservationBookings (INGetAvailableRestaurantReservationBookingsIntent intent, Action<INDateComponentsResolutionResult> completion);
 	}
@@ -4594,7 +4594,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
 	[MacCatalyst (13, 1)]
@@ -4604,15 +4604,15 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INGetRestaurantGuestIntentResponse" /> appropriate to the <see cref="Intents.INGetRestaurantGuestIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleGetRestaurantGuest:completion:")]
 		void HandleRestaurantGuest (INGetRestaurantGuestIntent intent, Action<INGetRestaurantGuestIntentResponse> completion);
 
-		/// <param name="guestIntent">To be added.</param>
-		/// <param name="completion">To be added.</param>
+		/// <param name="guestIntent">The guest intent to handle.</param>
+		/// <param name="completion">The handler to call when done.</param>
 		/// <summary>Developers may override this method to customize the confirmation of a guest for a restaurant reservation.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmGetRestaurantGuest:completion:")]
 		void Confirm (INGetRestaurantGuestIntent guestIntent, Action<INGetRestaurantGuestIntentResponse> completion);
 	}
@@ -4657,7 +4657,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
 	[MacCatalyst (13, 1)]
@@ -4667,22 +4667,22 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INGetRideStatusIntentResponse" /> appropriate to the <see cref="Intents.INGetRideStatusIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleGetRideStatus:completion:")]
 		void HandleRideStatus (INGetRideStatusIntent intent, Action<INGetRideStatusIntentResponse> completion);
 
-		/// <param name="intent">To be added.</param>
-		/// <param name="observer">To be added.</param>
+		/// <param name="intent">The restaurant reservation intent.</param>
+		/// <param name="observer">The observer to notify of progress.</param>
 		/// <summary>Developers may call this method to begin sending updates about the ride status.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("startSendingUpdatesForGetRideStatus:toObserver:")]
 		void StartSendingUpdates (INGetRideStatusIntent intent, IINGetRideStatusIntentResponseObserver observer);
 
-		/// <param name="intent">To be added.</param>
+		/// <param name="intent">The restaurant reservation intent to confirm.</param>
 		/// <summary>Developers may call this method to end the sending of updates about the ride status.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("stopSendingUpdatesForGetRideStatus:")]
 		void StopSendingUpdates (INGetRideStatusIntent intent);
@@ -4690,7 +4690,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the confirmation of a ride's status.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmGetRideStatus:completion:")]
 		void Confirm (INGetRideStatusIntent intent, Action<INGetRideStatusIntentResponse> completion);
 	}
@@ -4704,9 +4704,9 @@ namespace Intents {
 	[Protocol]
 	interface INGetRideStatusIntentResponseObserver {
 
-		/// <param name="response">To be added.</param>
+		/// <param name="response">The reservation response to handle.</param>
 		/// <summary>Developers may override this method to respond to changes in the ride's status.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("getRideStatusResponseDidUpdate:")]
 		void DidUpdateRideStatus (INGetRideStatusIntentResponse response);
@@ -4747,12 +4747,12 @@ namespace Intents {
 		[Export ("initWithRestaurant:reservationIdentifier:maximumNumberOfResults:earliestBookingDateForResults:")]
 		NativeHandle Constructor ([NullAllowed] INRestaurant restaurant, [NullAllowed] string reservationIdentifier, [NullAllowed] NSNumber maximumNumberOfResults, [NullAllowed] NSDate earliestBookingDateForResults);
 
-		/// <param name="restaurant">To be added.</param>
-		/// <param name="reservationIdentifier">To be added.</param>
-		/// <param name="maximumNumberOfResults">To be added.</param>
-		/// <param name="earliestBookingDateForResults">To be added.</param>
+		/// <param name="restaurant">The restaurant to get availability for.</param>
+		/// <param name="reservationIdentifier">The identifier of the existing reservation.</param>
+		/// <param name="maximumNumberOfResults">The maximum number of time slots to return.</param>
+		/// <param name="earliestBookingDateForResults">The earliest date for available time slots.</param>
 		/// <summary>Creates a new booking search intent with the specified details.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[MacCatalyst (13, 1)]
 		[Wrap ("this (restaurant, reservationIdentifier, NSNumber.FromNInt (maximumNumberOfResults), earliestBookingDateForResults)")]
 		NativeHandle Constructor ([NullAllowed] INRestaurant restaurant, [NullAllowed] string reservationIdentifier, nint maximumNumberOfResults, [NullAllowed] NSDate earliestBookingDateForResults);
@@ -4771,7 +4771,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
 	[MacCatalyst (13, 1)]
@@ -4781,7 +4781,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INGetUserCurrentRestaurantReservationBookingsIntentResponse" /> appropriate to the <see cref="Intents.INGetUserCurrentRestaurantReservationBookingsIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleGetUserCurrentRestaurantReservationBookings:completion:")]
 		void HandleUserCurrentRestaurantReservationBookings (INGetUserCurrentRestaurantReservationBookingsIntent intent, Action<INGetUserCurrentRestaurantReservationBookingsIntentResponse> completion);
@@ -4789,14 +4789,14 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the confirmation of the user for the current reservation.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmGetUserCurrentRestaurantReservationBookings:completion:")]
 		void Confirm (INGetUserCurrentRestaurantReservationBookingsIntent intent, Action<INGetUserCurrentRestaurantReservationBookingsIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of the user for the current reservation.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveRestaurantForGetUserCurrentRestaurantReservationBookings:withCompletion:")]
 		void ResolveUserCurrentRestaurantReservationBookings (INGetUserCurrentRestaurantReservationBookingsIntent intent, Action<INRestaurantResolutionResult> completion);
 	}
@@ -4862,39 +4862,35 @@ namespace Intents {
 
 		// INImage_IntentsUI (IntentsUI)
 
-		/// <param name="image">To be added.</param>
+		/// <param name="image">The image for the intent response.</param>
 		///         <summary>Static factory method to create an <see cref="Intents.INImage" /> from a <see cref="CoreGraphics.CGImage" />.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		///         <returns>A new intent response.</returns>
 		[NoMac, NoTV]
 		[NoMacCatalyst]
 		[Static]
 		[Export ("imageWithCGImage:")]
 		INImage FromImage (CGImage image);
 
-		/// <param name="image">To be added.</param>
+		/// <param name="image">The image to resolve.</param>
 		///         <summary>Static factory method to create an <see cref="Intents.INImage" /> from a <see cref="UIKit.UIImage" />.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		///         <returns>The display image for the restaurant.</returns>
 		[NoMac, NoTV]
 		[NoMacCatalyst]
 		[Static]
 		[Export ("imageWithUIImage:")]
 		INImage FromImage (UIImage image);
 
-		/// <param name="response">To be added.</param>
+		/// <param name="response">The restaurant reservation response.</param>
 		///         <summary>Gets the preferred image size for the specified <paramref name="response" />.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		///         <returns>The booking intent for the response.</returns>
 		[NoMac, NoTV]
 		[NoMacCatalyst]
 		[Static]
 		[Export ("imageSizeForIntentResponse:")]
 		CGSize GetImageSize (INIntentResponse response);
 
-		/// <param name="completion">To be added.</param>
+		/// <param name="completion">The handler to call with the resolved shortcut.</param>
 		///         <summary>Passes the image to the provided <paramref name="completion" /> handler.</summary>
-		///         <remarks>To be added.</remarks>
 		[NoMac, NoTV]
 		[NoMacCatalyst]
 		[Async (XmlDocs = """
@@ -4904,7 +4900,7 @@ namespace Intents {
 			        </returns>
 			<remarks>
 			          <para copied="true">The FetchImageAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
+			          <para>A task representing the asynchronous set-image operation.</para>
 			        </remarks>
 			""")]
 		[Export ("fetchUIImageWithCompletion:")]
@@ -4917,10 +4913,10 @@ namespace Intents {
 	[DisableDefaultCtor]
 	interface INIntegerResolutionResult {
 
-		/// <param name="resolvedValue">To be added.</param>
+		/// <param name="resolvedValue">The resolved person value.</param>
 		/// <summary>Factory method to create an <see cref="Intents.INIntentResolutionResult" /> object indicating that the parameter value was successfully matched.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <returns>A resolution result with the resolved value.</returns>
+		
 		[Static]
 		[Export ("successWithResolvedValue:")]
 		INIntegerResolutionResult GetSuccess (nint resolvedValue);
@@ -4972,8 +4968,6 @@ namespace Intents {
 		NSString IdentifierString { get; }
 
 		/// <summary>Gets the <see cref="Intents.INIntentIdentifier" /> that uniquely identifies the intent instance, or <see langword="null" /> if there is no identifier.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Unavailable (PlatformName.MacOSX)]
 		[NoTV]
 		[MacCatalyst (13, 1)]
@@ -5082,7 +5076,6 @@ namespace Intents {
 		[Async (XmlDocs = """
 			<summary>Donates this <see cref="Intents.INInteraction" /> to the system.</summary>
 			<returns>A task that represents the asynchronous DonateInteraction operation</returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Export ("donateInteractionWithCompletion:")]
 		void DonateInteraction ([NullAllowed] Action<NSError> completion);
@@ -5091,29 +5084,27 @@ namespace Intents {
 		[Async (XmlDocs = """
 			<summary>Deletes all interactions previously donated by the developer.</summary>
 			<returns>A task that represents the asynchronous DeleteAllInteractions operation</returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Export ("deleteAllInteractionsWithCompletion:")]
 		void DeleteAllInteractions ([NullAllowed] Action<NSError> completion);
 
 		[Static]
 		[Async (XmlDocs = """
-			<param name="identifiers">To be added.</param>
+			<param name="identifiers">The intent identifiers to remove.</param>
 			<summary>Deletes the interactions with the specified <paramref name="identifiers" />.</summary>
 			<returns>A task that represents the asynchronous DeleteInteractions operation</returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Export ("deleteInteractionsWithIdentifiers:completion:")]
 		void DeleteInteractions (string [] identifiers, [NullAllowed] Action<NSError> completion);
 
 		[Static]
 		[Async (XmlDocs = """
-			<param name="groupIdentifier">To be added.</param>
+			<param name="groupIdentifier">The group identifier for the intents to remove.</param>
 			<summary>Deletes the donated interactions in the specified <paramref name="groupIdentifier" />.</summary>
 			<returns>A task that represents the asynchronous DeleteGroupedInteractions operation</returns>
 			<remarks>
 			          <para copied="true">The DeleteGroupedInteractionsAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
+			          <para>A task representing the asynchronous remove-intents operation.</para>
 			        </remarks>
 			""")]
 		[Export ("deleteInteractionsWithGroupIdentifier:completion:")]
@@ -5170,7 +5161,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
 	[MacCatalyst (13, 1)]
@@ -5180,7 +5171,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INListRideOptionsIntentResponse" /> appropriate to the <see cref="Intents.INListRideOptionsIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleListRideOptions:completion:")]
 		void HandleListRideOptions (INListRideOptionsIntent intent, Action<INListRideOptionsIntentResponse> completion);
@@ -5188,21 +5179,21 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the confirmation of the list of ride options.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmListRideOptions:completion:")]
 		void Confirm (INListRideOptionsIntent intent, Action<INListRideOptionsIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of the pickup location.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolvePickupLocationForListRideOptions:withCompletion:")]
 		void ResolvePickupLocation (INListRideOptionsIntent intent, Action<INPlacemarkResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of the dropoff location.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveDropOffLocationForListRideOptions:withCompletion:")]
 		void ResolveDropOffLocation (INListRideOptionsIntent intent, Action<INPlacemarkResolutionResult> completion);
 	}
@@ -5507,7 +5498,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
 	[MacCatalyst (13, 1)]
@@ -5517,7 +5508,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INPauseWorkoutIntentResponse" /> appropriate to the <see cref="Intents.INPauseWorkoutIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handlePauseWorkout:completion:")]
 		void HandlePauseWorkout (INPauseWorkoutIntent intent, Action<INPauseWorkoutIntentResponse> completion);
@@ -5525,14 +5516,14 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the confirmation of the pausing of the workout.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmPauseWorkout:completion:")]
 		void Confirm (INPauseWorkoutIntent intent, Action<INPauseWorkoutIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers can call this method to trigger validation of the workout name.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveWorkoutNameForPauseWorkout:withCompletion:")]
 		void ResolveWorkoutName (INPauseWorkoutIntent intent, Action<INSpeakableStringResolutionResult> completion);
 	}
@@ -5683,7 +5674,6 @@ namespace Intents {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Wrap ("INPersonRelationshipExtensions.GetValue (WeakRelationship)")]
 		INPersonRelationship Relationship { get; }
 
@@ -5738,16 +5728,15 @@ namespace Intents {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Wrap ("INPersonHandleLabelExtensions.GetValue (WeakLabel)")]
 		INPersonHandleLabel Label { get; }
 
-		/// <param name="value">To be added.</param>
-		/// <param name="type">To be added.</param>
-		/// <param name="label">To be added.</param>
+		/// <param name="value">The string value.</param>
+		/// <param name="type">The spoken phrase type.</param>
+		/// <param name="label">The display label for the person handle.</param>
 		/// <summary>Creates a new person handle with the specified details.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[MacCatalyst (13, 1)]
 		[Wrap ("this (value, type, label.GetConstant ())")]
 		NativeHandle Constructor (string value, INPersonHandleType type, INPersonHandleLabel label);
@@ -5892,7 +5881,7 @@ namespace Intents {
 			        </returns>
 			<remarks>
 			          <para copied="true">The RequestSiriAuthorizationAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
+			          <para>A task representing the asynchronous get-image operation.</para>
 			        </remarks>
 			""")]
 		[Export ("requestSiriAuthorization:")]
@@ -6130,7 +6119,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
 	[MacCatalyst (13, 1)]
@@ -6140,7 +6129,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INRequestPaymentIntentResponse" /> appropriate to the <see cref="Intents.INRequestPaymentIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleRequestPayment:completion:")]
 		void HandleRequestPayment (INRequestPaymentIntent intent, Action<INRequestPaymentIntentResponse> completion);
@@ -6148,14 +6137,14 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the confirmation of APayment request.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmRequestPayment:completion:")]
 		void Confirm (INRequestPaymentIntent intent, Action<INRequestPaymentIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of the payer.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use 'ResolvePayer (INRequestPaymentIntent, Action<INRequestPaymentPayerResolutionResult>)' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'ResolvePayer (INRequestPaymentIntent, Action<INRequestPaymentPayerResolutionResult>)' instead.")]
 		[Export ("resolvePayerForRequestPayment:withCompletion:")]
@@ -6164,7 +6153,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize the resolution of APayer.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[MacCatalyst (13, 1)]
 		[Export ("resolvePayerForRequestPayment:completion:")]
 		void ResolvePayer (INRequestPaymentIntent intent, Action<INRequestPaymentPayerResolutionResult> completion);
@@ -6172,7 +6161,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers should not use this deprecated method. Developers should use 'ResolveCurrencyAmount (INRequestPaymentIntent, Action&lt;INRequestPaymentCurrencyAmountResolutionResult&gt;)' instead.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use 'ResolveCurrencyAmount (INRequestPaymentIntent, Action<INRequestPaymentCurrencyAmountResolutionResult>)' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'ResolveCurrencyAmount (INRequestPaymentIntent, Action<INRequestPaymentCurrencyAmountResolutionResult>)' instead.")]
 		[Export ("resolveCurrencyAmountForRequestPayment:withCompletion:")]
@@ -6181,7 +6170,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of a currency and amount.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[MacCatalyst (13, 1)]
 		[Export ("resolveCurrencyAmountForRequestPayment:completion:")]
 		void ResolveCurrencyAmount (INRequestPaymentIntent intent, Action<INRequestPaymentCurrencyAmountResolutionResult> completion);
@@ -6189,7 +6178,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of a note to accompany the request.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveNoteForRequestPayment:withCompletion:")]
 		void ResolveNote (INRequestPaymentIntent intent, Action<INStringResolutionResult> completion);
 	}
@@ -6256,7 +6245,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
 	[MacCatalyst (13, 1)]
@@ -6266,7 +6255,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INRequestRideIntentResponse" /> appropriate to the <see cref="Intents.INRequestRideIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleRequestRide:completion:")]
 		void HandleRequestRide (INRequestRideIntent intent, Action<INRequestRideIntentResponse> completion);
@@ -6274,42 +6263,42 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the confirmation of a ride request.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmRequestRide:completion:")]
 		void Confirm (INRequestRideIntent intent, Action<INRequestRideIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of the pickup location.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolvePickupLocationForRequestRide:withCompletion:")]
 		void ResolvePickupLocation (INRequestRideIntent intent, Action<INPlacemarkResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of the dropoff location.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveDropOffLocationForRequestRide:withCompletion:")]
 		void ResolveDropOffLocation (INRequestRideIntent intent, Action<INPlacemarkResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of options related to the ride.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveRideOptionNameForRequestRide:withCompletion:")]
 		void ResolveRideOptionName (INRequestRideIntent intent, Action<INSpeakableStringResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of the number of passengers in the party.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolvePartySizeForRequestRide:withCompletion:")]
 		void ResolvePartySize (INRequestRideIntent intent, Action<INIntegerResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this to customize resolution of scheduled pickup times.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[MacCatalyst (13, 1)]
 		[Export ("resolveScheduledPickupTimeForRequestRide:withCompletion:")]
 		void ResolveScheduledPickupTime (INRequestRideIntent intent, Action<INDateComponentsRangeResolutionResult> completion);
@@ -6502,12 +6491,12 @@ namespace Intents {
 	[BaseType (typeof (NSObject))]
 	interface INRestaurantReservationBooking : NSSecureCoding, NSCopying {
 
-		/// <param name="restaurant">To be added.</param>
-		/// <param name="bookingDate">To be added.</param>
-		/// <param name="partySize">To be added.</param>
-		/// <param name="bookingIdentifier">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="restaurant">The restaurant for the reservation.</param>
+		/// <param name="bookingDate">The booking date.</param>
+		/// <param name="partySize">The party size.</param>
+		/// <param name="bookingIdentifier">The booking identifier.</param>
+		/// <summary>Creates a restaurant reservation with the specified parameters.</summary>
+		
 		[Export ("initWithRestaurant:bookingDate:partySize:bookingIdentifier:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (INRestaurant restaurant, NSDate bookingDate, nuint partySize, string bookingIdentifier);
@@ -6528,8 +6517,6 @@ namespace Intents {
 		string BookingIdentifier { get; set; }
 
 		/// <summary>Gets or sets whether the reservation is satisfiable.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("bookingAvailable")]
 		bool BookingAvailable { [Bind ("isBookingAvailable")] get; set; }
 
@@ -6558,25 +6545,25 @@ namespace Intents {
 	[BaseType (typeof (INRestaurantReservationBooking))]
 	interface INRestaurantReservationUserBooking : NSCopying {
 
-		/// <param name="restaurant">To be added.</param>
-		/// <param name="bookingDate">To be added.</param>
-		/// <param name="partySize">To be added.</param>
-		/// <param name="bookingIdentifier">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="restaurant">The restaurant for the reservation.</param>
+		/// <param name="bookingDate">The booking date.</param>
+		/// <param name="partySize">The party size.</param>
+		/// <param name="bookingIdentifier">The booking identifier.</param>
+		/// <summary>Creates a restaurant reservation user booking with the specified parameters.</summary>
+		
 		[Export ("initWithRestaurant:bookingDate:partySize:bookingIdentifier:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (INRestaurant restaurant, NSDate bookingDate, nuint partySize, string bookingIdentifier);
 
-		/// <param name="restaurant">To be added.</param>
-		/// <param name="bookingDate">To be added.</param>
-		/// <param name="partySize">To be added.</param>
-		/// <param name="bookingIdentifier">To be added.</param>
-		/// <param name="guest">To be added.</param>
-		/// <param name="status">To be added.</param>
-		/// <param name="dateStatusModified">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="restaurant">The restaurant for the reservation.</param>
+		/// <param name="bookingDate">The booking date.</param>
+		/// <param name="partySize">The party size.</param>
+		/// <param name="bookingIdentifier">The booking identifier.</param>
+		/// <param name="guest">The guest for the reservation.</param>
+		/// <param name="status">The status of the reservation.</param>
+		/// <param name="dateStatusModified">The date the status was last modified.</param>
+		/// <summary>Creates a restaurant reservation user booking with all details.</summary>
+		
 		[Export ("initWithRestaurant:bookingDate:partySize:bookingIdentifier:guest:status:dateStatusModified:")]
 		NativeHandle Constructor (INRestaurant restaurant, NSDate bookingDate, nuint partySize, string bookingIdentifier, INRestaurantGuest guest, INRestaurantReservationUserBookingStatus status, NSDate dateStatusModified);
 
@@ -6673,7 +6660,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
 	[MacCatalyst (13, 1)]
@@ -6683,7 +6670,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INResumeWorkoutIntentResponse" /> appropriate to the <see cref="Intents.INResumeWorkoutIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleResumeWorkout:completion:")]
 		void HandleResumeWorkout (INResumeWorkoutIntent intent, Action<INResumeWorkoutIntentResponse> completion);
@@ -6691,14 +6678,14 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the confirmation that the workout should resume.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmResumeWorkout:completion:")]
 		void Confirm (INResumeWorkoutIntent intent, Action<INResumeWorkoutIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers can call this method to trigger validation of the workout name.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveWorkoutNameForResumeWorkout:withCompletion:")]
 		void ResolveWorkoutName (INResumeWorkoutIntent intent, Action<INSpeakableStringResolutionResult> completion);
 	}
@@ -6765,20 +6752,14 @@ namespace Intents {
 		NSUserActivity CompletionUserActivity { get; set; }
 
 		/// <summary>Gets whether the ride was completed.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("completed")]
 		bool Completed { [Bind ("isCompleted")] get; }
 
 		/// <summary>Indicates that the ride has been canceled successfully.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("canceled")]
 		bool Canceled { [Bind ("isCanceled")] get; }
 
 		/// <summary>Gets whether the pickup failed.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("missedPickup")]
 		bool MissedPickup { [Bind ("isMissedPickup")] get; }
 
@@ -6790,8 +6771,6 @@ namespace Intents {
 		INRideFeedbackTypeOptions FeedbackType { get; }
 
 		/// <summary>Gets whether there is an outstanding charge on the ride.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("outstanding")]
 		bool Outstanding { [Bind ("isOutstanding")] get; }
 
@@ -7039,7 +7018,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Deprecated (PlatformName.iOS, 15, 0)]
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
@@ -7051,7 +7030,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INSaveProfileInCarIntentResponse" /> appropriate to the <see cref="Intents.INSaveProfileInCarIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleSaveProfileInCar:completion:")]
 		void HandleSaveProfileInCar (INSaveProfileInCarIntent intent, Action<INSaveProfileInCarIntentResponse> completion);
@@ -7059,21 +7038,21 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the confirmation of the saving of AProfile.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmSaveProfileInCar:completion:")]
 		void Confirm (INSaveProfileInCarIntent intent, Action<INSaveProfileInCarIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of the profile number.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveProfileNumberForSaveProfileInCar:withCompletion:")]
 		void ResolveProfileNumber (INSaveProfileInCarIntent intent, Action<INIntegerResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of the profile name.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[MacCatalyst (13, 1)]
 		[Export ("resolveProfileNameForSaveProfileInCar:withCompletion:")]
 		void ResolveProfileName (INSaveProfileInCarIntent intent, Action<INStringResolutionResult> completion);
@@ -7116,13 +7095,13 @@ namespace Intents {
 		[DesignatedInitializer]
 		NativeHandle Constructor ([NullAllowed] INDateComponentsRange dateCreated, [NullAllowed] INPerson recipient, INCallCapabilityOptions callCapabilities, INCallRecordTypeOptions callTypes, [NullAllowed] NSNumber unseen);
 
-		/// <param name="dateCreated">To be added.</param>
-		/// <param name="recipient">To be added.</param>
-		/// <param name="callCapabilities">To be added.</param>
-		/// <param name="callTypes">To be added.</param>
-		/// <param name="unseen">To be added.</param>
+		/// <param name="dateCreated">The date the call record was created.</param>
+		/// <param name="recipient">The person who received or placed the call.</param>
+		/// <param name="callCapabilities">The call capabilities.</param>
+		/// <param name="callTypes">The type of call.</param>
+		/// <param name="unseen">Whether the call record has not been viewed.</param>
 		/// <summary>Creates a new call search intent with the specified details.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[MacCatalyst (13, 1)]
 		[Wrap ("this (dateCreated, recipient, callCapabilities, callTypes, new NSNumber (unseen))")]
 		NativeHandle Constructor ([NullAllowed] INDateComponentsRange dateCreated, [NullAllowed] INPerson recipient, INCallCapabilityOptions callCapabilities, INCallRecordTypeOptions callTypes, bool unseen);
@@ -7157,7 +7136,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[NoMac]
 	[Deprecated (PlatformName.iOS, 15, 0)]
 	[NoTV]
@@ -7169,7 +7148,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INSearchCallHistoryIntentResponse" /> appropriate to the <see cref="Intents.INSearchCallHistoryIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleSearchCallHistory:completion:")]
 		void HandleSearchCallHistory (INSearchCallHistoryIntent intent, Action<INSearchCallHistoryIntentResponse> completion);
@@ -7177,14 +7156,14 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the confirmation of a call history search.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmSearchCallHistory:completion:")]
 		void Confirm (INSearchCallHistoryIntent intent, Action<INSearchCallHistoryIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers should not use this deprecated method. Developers should use 'ResolveCallTypes' instead.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use 'ResolveCallTypes' instead.")]
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use 'ResolveCallTypes' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'ResolveCallTypes' instead.")]
@@ -7194,21 +7173,21 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the "date created" parameter of the search.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveDateCreatedForSearchCallHistory:withCompletion:")]
 		void ResolveDateCreated (INSearchCallHistoryIntent intent, Action<INDateComponentsRangeResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the recipient parameter of the search.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveRecipientForSearchCallHistory:withCompletion:")]
 		void ResolveRecipient (INSearchCallHistoryIntent intent, Action<INPersonResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to resolve call types for a history search.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[MacCatalyst (13, 1)]
 		[Export ("resolveCallTypesForSearchCallHistory:withCompletion:")]
 		void ResolveCallTypes (INSearchCallHistoryIntent intent, Action<INCallRecordTypeOptionsResolutionResult> completion);
@@ -7216,7 +7195,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of whether the user or app may search for unseen calls.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Export ("resolveUnseenForSearchCallHistory:withCompletion:")]
@@ -7341,7 +7320,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[NoMac]
 	[NoTV]
 	[MacCatalyst (13, 1)]
@@ -7351,7 +7330,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INSearchForMessagesIntentResponse" /> appropriate to the <see cref="Intents.INSearchForMessagesIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleSearchForMessages:completion:")]
 		void HandleSearchForMessages (INSearchForMessagesIntent intent, Action<INSearchForMessagesIntentResponse> completion);
@@ -7359,42 +7338,42 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the confirmation of a message search.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmSearchForMessages:completion:")]
 		void Confirm (INSearchForMessagesIntent intent, Action<INSearchForMessagesIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of recipients in the message search.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveRecipientsForSearchForMessages:withCompletion:")]
 		void ResolveRecipients (INSearchForMessagesIntent intent, Action<INPersonResolutionResult []> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of senders in the message search.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveSendersForSearchForMessages:withCompletion:")]
 		void ResolveSenders (INSearchForMessagesIntent intent, Action<INPersonResolutionResult []> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of attributes in the search.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveAttributesForSearchForMessages:withCompletion:")]
 		void ResolveAttributes (INSearchForMessagesIntent intent, Action<INMessageAttributeOptionsResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the date range used in the search.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveDateTimeRangeForSearchForMessages:withCompletion:")]
 		void ResolveDateTimeRange (INSearchForMessagesIntent intent, Action<INDateComponentsRangeResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers should not use this deprecated method. Developers should use 'ResolveSpeakableGroupNames' instead.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use 'ResolveSpeakableGroupNames' instead.")]
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use 'ResolveSpeakableGroupNames' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'ResolveSpeakableGroupNames' instead.")]
@@ -7404,7 +7383,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of speakable names for the groups that were named as recipients.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[MacCatalyst (13, 1)]
 		[Export ("resolveSpeakableGroupNamesForSearchForMessages:withCompletion:")]
 		void ResolveSpeakableGroupNames (INSearchForMessagesIntent intent, Action<INSpeakableStringResolutionResult []> completion);
@@ -7476,7 +7455,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Deprecated (PlatformName.iOS, 15, 0)]
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
@@ -7488,7 +7467,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INSearchForPhotosIntentResponse" /> appropriate to the <see cref="Intents.INSearchForPhotosIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleSearchForPhotos:completion:")]
 		void HandleSearchForPhotos (INSearchForPhotosIntent intent, Action<INSearchForPhotosIntentResponse> completion);
@@ -7496,35 +7475,35 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the confirmation of APhoto search.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmSearchForPhotos:completion:")]
 		void Confirm (INSearchForPhotosIntent intent, Action<INSearchForPhotosIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of a date-created variable.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveDateCreatedForSearchForPhotos:withCompletion:")]
 		void ResolveDateCreated (INSearchForPhotosIntent intent, Action<INDateComponentsRangeResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of the location-created variable.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveLocationCreatedForSearchForPhotos:withCompletion:")]
 		void ResolveLocationCreated (INSearchForPhotosIntent intent, Action<INPlacemarkResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resoluition of APhoto album name.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveAlbumNameForSearchForPhotos:withCompletion:")]
 		void ResolveAlbumName (INSearchForPhotosIntent intent, Action<INStringResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of the search terms.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[MacCatalyst (13, 1)]
 		[Export ("resolveSearchTermsForSearchForPhotos:withCompletion:")]
 		void ResolveSearchTerms (INSearchForPhotosIntent intent, Action<INStringResolutionResult []> completion);
@@ -7532,7 +7511,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of people in the photo.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolvePeopleInPhotoForSearchForPhotos:withCompletion:")]
 		void ResolvePeopleInPhoto (INSearchForPhotosIntent intent, Action<INPersonResolutionResult []> completion);
 	}
@@ -7648,7 +7627,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[NoTV]
 	[MacCatalyst (13, 1)]
 	[Protocol]
@@ -7657,7 +7636,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INSendMessageIntentResponse" /> appropriate to the <see cref="Intents.INSendMessageIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleSendMessage:completion:")]
 		void HandleSendMessage (INSendMessageIntent intent, Action<INSendMessageIntentResponse> completion);
@@ -7665,14 +7644,14 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the confirmation to send a message.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmSendMessage:completion:")]
 		void Confirm (INSendMessageIntent intent, Action<INSendMessageIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize the resolution of message recipients.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use 'ResolveRecipients (INSendMessageIntent, Action<INSendMessageRecipientResolutionResult []>)' instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use 'ResolveRecipients (INSendMessageIntent, Action<INSendMessageRecipientResolutionResult []>)' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'ResolveRecipients (INSendMessageIntent, Action<INSendMessageRecipientResolutionResult []>)' instead.")]
@@ -7682,7 +7661,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize the resolution of message recipients.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[MacCatalyst (13, 1)]
 		[Export ("resolveRecipientsForSendMessage:completion:")]
 		void ResolveRecipients (INSendMessageIntent intent, Action<INSendMessageRecipientResolutionResult []> completion);
@@ -7690,14 +7669,14 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of the content of a message.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveContentForSendMessage:withCompletion:")]
 		void ResolveContent (INSendMessageIntent intent, Action<INStringResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers should not use this deprecated method. Developers should use 'ResolveSpeakableGroupName' instead.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Deprecated (PlatformName.MacOSX, 12, 0, message: "Use 'ResolveSpeakableGroupName' instead.")]
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use 'ResolveSpeakableGroupName' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'ResolveSpeakableGroupName' instead.")]
@@ -7712,7 +7691,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize the resolution of the speakable group name.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[NoMac] // The INSpeakableStringResolutionResult used as a parameter type is not available in macOS
 		[MacCatalyst (13, 1)]
 		[Export ("resolveSpeakableGroupNameForSendMessage:withCompletion:")]
@@ -7774,7 +7753,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
 	[MacCatalyst (13, 1)]
@@ -7784,7 +7763,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INSendPaymentIntentResponse" /> appropriate to the <see cref="Intents.INSendPaymentIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleSendPayment:completion:")]
 		void HandleSendPayment (INSendPaymentIntent intent, Action<INSendPaymentIntentResponse> completion);
@@ -7792,14 +7771,14 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the confirmation of a request to send APayment.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmSendPayment:completion:")]
 		void Confirm (INSendPaymentIntent intent, Action<INSendPaymentIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of the payee.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use 'ResolvePayee (INSendPaymentIntent, Action<INSendPaymentPayeeResolutionResult>)' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'ResolvePayee (INSendPaymentIntent, Action<INSendPaymentPayeeResolutionResult>)' instead.")]
 		[Export ("resolvePayeeForSendPayment:withCompletion:")]
@@ -7808,7 +7787,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of the payee.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[MacCatalyst (13, 1)]
 		[Export ("resolvePayeeForSendPayment:completion:")]
 		void ResolvePayee (INSendPaymentIntent intent, Action<INSendPaymentPayeeResolutionResult> completion);
@@ -7816,7 +7795,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers should not use this deprecated method. Developers should use 'ResolveCurrencyAmount (INSendPaymentIntent, Action&lt;INSendPaymentCurrencyAmountResolutionResult&gt;)' instead.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use 'ResolveCurrencyAmount (INSendPaymentIntent, Action<INSendPaymentCurrencyAmountResolutionResult>)' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'ResolveCurrencyAmount (INSendPaymentIntent, Action<INSendPaymentCurrencyAmountResolutionResult>)' instead.")]
 		[Export ("resolveCurrencyAmountForSendPayment:withCompletion:")]
@@ -7825,7 +7804,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of a currency and amount.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[MacCatalyst (13, 1)]
 		[Export ("resolveCurrencyAmountForSendPayment:completion:")]
 		void ResolveCurrencyAmount (INSendPaymentIntent intent, Action<INSendPaymentCurrencyAmountResolutionResult> completion);
@@ -7833,7 +7812,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of a note associated with the payment.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveNoteForSendPayment:withCompletion:")]
 		void ResolveNote (INSendPaymentIntent intent, Action<INStringResolutionResult> completion);
 	}
@@ -7883,7 +7862,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Deprecated (PlatformName.iOS, 15, 0)]
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
@@ -7895,7 +7874,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INSetAudioSourceInCarIntentResponse" /> appropriate to the <see cref="Intents.INSetAudioSourceInCarIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleSetAudioSourceInCar:completion:")]
 		void HandleSetAudioSourceInCar (INSetAudioSourceInCarIntent intent, Action<INSetAudioSourceInCarIntentResponse> completion);
@@ -7903,21 +7882,21 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the confirmation of the audio source.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmSetAudioSourceInCar:completion:")]
 		void Confirm (INSetAudioSourceInCarIntent intent, Action<INSetAudioSourceInCarIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of the requested audio source.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveAudioSourceForSetAudioSourceInCar:withCompletion:")]
 		void ResolveAudioSource (INSetAudioSourceInCarIntent intent, Action<INCarAudioSourceResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of a relative audio source (e.g, "next," "previous," etc.).</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveRelativeAudioSourceReferenceForSetAudioSourceInCar:withCompletion:")]
 		void ResolveRelativeAudioSourceReference (INSetAudioSourceInCarIntent intent, Action<INRelativeReferenceResolutionResult> completion);
 	}
@@ -8010,7 +7989,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Deprecated (PlatformName.iOS, 15, 0)]
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
@@ -8022,7 +8001,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INSetClimateSettingsInCarIntentResponse" /> appropriate to the <see cref="Intents.INSetClimateSettingsInCarIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleSetClimateSettingsInCar:completion:")]
 		void HandleSetClimateSettingsInCar (INSetClimateSettingsInCarIntent intent, Action<INSetClimateSettingsInCarIntentResponse> completion);
@@ -8030,91 +8009,91 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the confirmation of climate settings.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmSetClimateSettingsInCar:completion:")]
 		void Confirm (INSetClimateSettingsInCarIntent intent, Action<INSetClimateSettingsInCarIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of whether the requested fan can be enabled.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveEnableFanForSetClimateSettingsInCar:withCompletion:")]
 		void ResolveEnableFan (INSetClimateSettingsInCarIntent intent, Action<INBooleanResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of whether the air conditioner can be enabled.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveEnableAirConditionerForSetClimateSettingsInCar:withCompletion:")]
 		void ResolveEnableAirConditioner (INSetClimateSettingsInCarIntent intent, Action<INBooleanResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of whether climate control can be enabled.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveEnableClimateControlForSetClimateSettingsInCar:withCompletion:")]
 		void ResolveEnableClimateControl (INSetClimateSettingsInCarIntent intent, Action<INBooleanResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of whether automatic mode can be enabled.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveEnableAutoModeForSetClimateSettingsInCar:withCompletion:")]
 		void ResolveEnableAutoMode (INSetClimateSettingsInCarIntent intent, Action<INBooleanResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of the air circulation mode.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveAirCirculationModeForSetClimateSettingsInCar:withCompletion:")]
 		void ResolveAirCirculationMode (INSetClimateSettingsInCarIntent intent, Action<INCarAirCirculationModeResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of a fan speed index.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveFanSpeedIndexForSetClimateSettingsInCar:withCompletion:")]
 		void ResolveFanSpeedIndex (INSetClimateSettingsInCarIntent intent, Action<INIntegerResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of a fan speed, as APercentage.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveFanSpeedPercentageForSetClimateSettingsInCar:withCompletion:")]
 		void ResolveFanSpeedPercentage (INSetClimateSettingsInCarIntent intent, Action<INDoubleResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of a relative increase or decrease in the fan speed.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveRelativeFanSpeedSettingForSetClimateSettingsInCar:withCompletion:")]
 		void ResolveRelativeFanSpeedSetting (INSetClimateSettingsInCarIntent intent, Action<INRelativeSettingResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of the specified temperature value.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveTemperatureForSetClimateSettingsInCar:withCompletion:")]
 		void ResolveTemperature (INSetClimateSettingsInCarIntent intent, Action<INTemperatureResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of a relative increase or decrease in temperature settings.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveRelativeTemperatureSettingForSetClimateSettingsInCar:withCompletion:")]
 		void ResolveRelativeTemperatureSetting (INSetClimateSettingsInCarIntent intent, Action<INRelativeSettingResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of a requested climate zone.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveClimateZoneForSetClimateSettingsInCar:withCompletion:")]
 		void ResolveClimateZone (INSetClimateSettingsInCarIntent intent, Action<INCarSeatResolutionResult> completion);
 
-		/// <param name="intent">To be added.</param>
-		/// <param name="completion">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="intent">The intent to handle.</param>
+		/// <param name="completion">The handler to call with the response.</param>
+		/// <summary>Handles the start workout intent.</summary>
+		
 		[MacCatalyst (13, 1)]
 		[Export ("resolveCarNameForSetClimateSettingsInCar:withCompletion:")]
 		void ResolveCarName (INSetClimateSettingsInCarIntent intent, Action<INSpeakableStringResolutionResult> completion);
@@ -8176,7 +8155,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Deprecated (PlatformName.iOS, 15, 0)]
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
@@ -8188,7 +8167,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INSetDefrosterSettingsInCarIntentResponse" /> appropriate to the <see cref="Intents.INSetDefrosterSettingsInCarIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleSetDefrosterSettingsInCar:completion:")]
 		void HandleSetDefrosterSettingsInCar (INSetDefrosterSettingsInCarIntent intent, Action<INSetDefrosterSettingsInCarIntentResponse> completion);
@@ -8196,28 +8175,28 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the confirmation of defroster settings.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmSetDefrosterSettingsInCar:completion:")]
 		void Confirm (INSetDefrosterSettingsInCarIntent intent, Action<INSetDefrosterSettingsInCarIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers can override this method to customize the resolution of whether the defroster can be enabled.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveEnableForSetDefrosterSettingsInCar:withCompletion:")]
 		void ResolveEnable (INSetDefrosterSettingsInCarIntent intent, Action<INBooleanResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers can override this method to customize the resolution of the requested defroster.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveDefrosterForSetDefrosterSettingsInCar:withCompletion:")]
 		void ResolveDefroster (INSetDefrosterSettingsInCarIntent intent, Action<INCarDefrosterResolutionResult> completion);
 
-		/// <param name="intent">To be added.</param>
-		/// <param name="completion">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="intent">The intent to handle.</param>
+		/// <param name="completion">The handler to call with the response.</param>
+		/// <summary>Handles the cancel workout intent.</summary>
+		
 		[MacCatalyst (13, 1)]
 		[Export ("resolveCarNameForSetDefrosterSettingsInCar:withCompletion:")]
 		void ResolveCarName (INSetDefrosterSettingsInCarIntent intent, Action<INSpeakableStringResolutionResult> completion);
@@ -8265,7 +8244,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
 	[MacCatalyst (13, 1)]
@@ -8275,7 +8254,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INSetMessageAttributeIntentResponse" /> appropriate to the <see cref="Intents.INSetMessageAttributeIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleSetMessageAttribute:completion:")]
 		void HandleSetMessageAttribute (INSetMessageAttributeIntent intent, Action<INSetMessageAttributeIntentResponse> completion);
@@ -8283,14 +8262,14 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the confirmation of the setting of a message attribute.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmSetMessageAttribute:completion:")]
 		void Confirm (INSetMessageAttributeIntent intent, Action<INSetMessageAttributeIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of a message attribute.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveAttributeForSetMessageAttribute:withCompletion:")]
 		void ResolveAttribute (INSetMessageAttributeIntent intent, Action<INMessageAttributeResolutionResult> completion);
 	}
@@ -8363,7 +8342,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Deprecated (PlatformName.iOS, 15, 0)]
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
@@ -8375,7 +8354,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INSetProfileInCarIntentResponse" /> appropriate to the <see cref="Intents.INSetProfileInCarIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleSetProfileInCar:completion:")]
 		void HandleSetProfileInCar (INSetProfileInCarIntent intent, Action<INSetProfileInCarIntentResponse> completion);
@@ -8383,30 +8362,30 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the confirmation of setting AProfile.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmSetProfileInCar:completion:")]
 		void Confirm (INSetProfileInCarIntent intent, Action<INSetProfileInCarIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of AProfile number.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveProfileNumberForSetProfileInCar:withCompletion:")]
 		void ResolveProfileNumber (INSetProfileInCarIntent intent, Action<INIntegerResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers should not use this deprecated method. The property doesn't need to be resolved.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Deprecated (PlatformName.iOS, 11, 0, message: "The property doesn't need to be resolved.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "The property doesn't need to be resolved.")]
 		[Export ("resolveDefaultProfileForSetProfileInCar:withCompletion:")]
 		void ResolveDefaultProfile (INSetProfileInCarIntent intent, Action<INBooleanResolutionResult> completion);
 
-		/// <param name="intent">To be added.</param>
-		/// <param name="completion">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="intent">The intent to handle.</param>
+		/// <param name="completion">The handler to call with the response.</param>
+		/// <summary>Handles the end workout intent.</summary>
+		
 		[MacCatalyst (13, 1)]
 		[Export ("resolveCarNameForSetProfileInCar:withCompletion:")]
 		void ResolveCarName (INSetProfileInCarIntent intent, Action<INSpeakableStringResolutionResult> completion);
@@ -8414,7 +8393,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the resolution of AProfile name.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[MacCatalyst (13, 1)]
 		[Export ("resolveProfileNameForSetProfileInCar:withCompletion:")]
 		void ResolveProfileName (INSetProfileInCarIntent intent, Action<INStringResolutionResult> completion);
@@ -8473,7 +8452,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Deprecated (PlatformName.iOS, 15, 0)]
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
@@ -8485,7 +8464,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INSetRadioStationIntentResponse" /> appropriate to the <see cref="Intents.INSetRadioStationIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleSetRadioStation:completion:")]
 		void HandleSetRadioStation (INSetRadioStationIntent intent, Action<INSetRadioStationIntentResponse> completion);
@@ -8493,42 +8472,42 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers can override this method to customize the confirmation of a radio station change.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmSetRadioStation:completion:")]
 		void Confirm (INSetRadioStationIntent intent, Action<INSetRadioStationIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers can override this method to customize the resolution of what kind of radio is available.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveRadioTypeForSetRadioStation:withCompletion:")]
 		void ResolveRadioType (INSetRadioStationIntent intent, Action<INRadioTypeResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers can override this method to customize the resolution of a radio frequency.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveFrequencyForSetRadioStation:withCompletion:")]
 		void ResolveFrequency (INSetRadioStationIntent intent, Action<INDoubleResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers can override this method to customize the resolution of a radio station name.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveStationNameForSetRadioStation:withCompletion:")]
 		void ResolveStationName (INSetRadioStationIntent intent, Action<INStringResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers can override this method to customize the resolution of a radio channel.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveChannelForSetRadioStation:withCompletion:")]
 		void ResolveChannel (INSetRadioStationIntent intent, Action<INStringResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers can override this method to customize the resolution of a radio preset.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolvePresetNumberForSetRadioStation:withCompletion:")]
 		void ResolvePresetNumber (INSetRadioStationIntent intent, Action<INIntegerResolutionResult> completion);
 	}
@@ -8604,7 +8583,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Deprecated (PlatformName.iOS, 15, 0)]
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
@@ -8616,7 +8595,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INSetSeatSettingsInCarIntentResponse" /> appropriate to the <see cref="Intents.INSetSeatSettingsInCarIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleSetSeatSettingsInCar:completion:")]
 		void HandleSetSeatSettingsInCar (INSetSeatSettingsInCarIntent intent, Action<INSetSeatSettingsInCarIntentResponse> completion);
@@ -8624,56 +8603,56 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers can override this method to customize the confirmation of a change in seat settings.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmSetSeatSettingsInCar:completion:")]
 		void Confirm (INSetSeatSettingsInCarIntent intent, Action<INSetSeatSettingsInCarIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers can override this method to customize the resolution of whether seat heating can be enabled.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveEnableHeatingForSetSeatSettingsInCar:withCompletion:")]
 		void ResolveEnableHeating (INSetSeatSettingsInCarIntent intent, Action<INBooleanResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers can override this method to customize the resolution of whether seat cooling can be enabled.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveEnableCoolingForSetSeatSettingsInCar:withCompletion:")]
 		void ResolveEnableCooling (INSetSeatSettingsInCarIntent intent, Action<INBooleanResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers can override this method to customize the resolution of whether seat massage can be enabled.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveEnableMassageForSetSeatSettingsInCar:withCompletion:")]
 		void ResolveEnableMassage (INSetSeatSettingsInCarIntent intent, Action<INBooleanResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers can override this method to customize the resolution of choosing AParticular seat.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveSeatForSetSeatSettingsInCar:withCompletion:")]
 		void ResolveSeat (INSetSeatSettingsInCarIntent intent, Action<INCarSeatResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers can override this method to customize the resolution of setting the absolute level of the requested service.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveLevelForSetSeatSettingsInCar:withCompletion:")]
 		void ResolveLevel (INSetSeatSettingsInCarIntent intent, Action<INIntegerResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers can override this method to customize the resolution of setting a relative level of the requested service.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveRelativeLevelSettingForSetSeatSettingsInCar:withCompletion:")]
 		void ResolveRelativeLevelSetting (INSetSeatSettingsInCarIntent intent, Action<INRelativeSettingResolutionResult> completion);
 
-		/// <param name="intent">To be added.</param>
-		/// <param name="completion">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="intent">The intent to handle.</param>
+		/// <param name="completion">The handler to call with the response.</param>
+		/// <summary>Handles the pause workout intent.</summary>
+		
 		[MacCatalyst (13, 1)]
 		[Export ("resolveCarNameForSetSeatSettingsInCar:withCompletion:")]
 		void ResolveCarName (INSetSeatSettingsInCarIntent intent, Action<INSpeakableStringResolutionResult> completion);
@@ -8749,22 +8728,22 @@ namespace Intents {
 	interface IINSpeakable { }
 
 	/// <summary>Interface defining attributes of utterances made or heard by Siri.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[TV (14, 0)]
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface INSpeakable {
 
 		/// <summary>Siri's interpretation of the utterance.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <value>The party size for the restaurant reservation.</value>
+		
 		[Abstract]
 		[Export ("spokenPhrase")]
 		string SpokenPhrase { get; }
 
 		/// <summary>Developers can use this to clarify how a name is pronounced.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <value>The booking date for the restaurant reservation.</value>
+		
 		[Abstract]
 		[NullAllowed, Export ("pronunciationHint")]
 		string PronunciationHint { get; }
@@ -8782,8 +8761,8 @@ namespace Intents {
 		IINSpeakable [] AlternativeSpeakableMatches { get; }
 
 		/// <summary>The unique identifier of this pronunciation hint.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <value>The restaurant for the reservation.</value>
+		
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use 'VocabularyIdentifier' instead.")]
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use 'VocabularyIdentifier' instead.")]
 		[Deprecated (PlatformName.TvOS, 11, 0, message: "Use 'VocabularyIdentifier' instead.")]
@@ -8895,7 +8874,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[NoMac]
 	[Deprecated (PlatformName.iOS, 13, 0, message: "Use 'INStartCallIntentHandling' instead.")]
 	[NoTV]
@@ -8907,7 +8886,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INStartAudioCallIntentResponse" /> appropriate to the <see cref="Intents.INStartAudioCallIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleStartAudioCall:completion:")]
 		void HandleStartAudioCall (INStartAudioCallIntent intent, Action<INStartAudioCallIntentResponse> completion);
@@ -8915,14 +8894,14 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to customize the confirmation that an audio call should start.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmStartAudioCall:completion:")]
 		void Confirm (INStartAudioCallIntent intent, Action<INStartAudioCallIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of the destination type.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[MacCatalyst (13, 1)]
 		[Export ("resolveDestinationTypeForStartAudioCall:withCompletion:")]
 		void ResolveDestinationType (INStartAudioCallIntent intent, Action<INCallDestinationTypeResolutionResult> completion);
@@ -8930,7 +8909,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may override this method to resolve a specific contact based on the <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveContactsForStartAudioCall:withCompletion:")]
 		void ResolveContacts (INStartAudioCallIntent intent, Action<INPersonResolutionResult []> completion);
 	}
@@ -9000,7 +8979,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Deprecated (PlatformName.iOS, 15, 0)]
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
@@ -9012,7 +8991,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INStartPhotoPlaybackIntentResponse" /> appropriate to the <see cref="Intents.INStartPhotoPlaybackIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleStartPhotoPlayback:completion:")]
 		void HandleStartPhotoPlayback (INStartPhotoPlaybackIntent intent, Action<INStartPhotoPlaybackIntentResponse> completion);
@@ -9020,35 +8999,35 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize the behavior of confirming that APhoto playback session may start.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmStartPhotoPlayback:completion:")]
 		void Confirm (INStartPhotoPlaybackIntent intent, Action<INStartPhotoPlaybackIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this in order to customize the behavior of resolving the dates when the photos were taken.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveDateCreatedForStartPhotoPlayback:withCompletion:")]
 		void ResolveDateCreated (INStartPhotoPlaybackIntent intent, Action<INDateComponentsRangeResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this in order to customize the behavior of resolving the location where the photos were taken.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveLocationCreatedForStartPhotoPlayback:withCompletion:")]
 		void ResolveLocationCreated (INStartPhotoPlaybackIntent intent, Action<INPlacemarkResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to confirm that they can resolve the photo album name.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveAlbumNameForStartPhotoPlayback:withCompletion:")]
 		void ResolveAlbumName (INStartPhotoPlaybackIntent intent, Action<INStringResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this in order to customize the behavior of resolving the people in the photo.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolvePeopleInPhotoForStartPhotoPlayback:withCompletion:")]
 		void ResolvePeopleInPhoto (INStartPhotoPlaybackIntent intent, Action<INPersonResolutionResult []> completion);
 	}
@@ -9097,7 +9076,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[NoMac]
 	[Deprecated (PlatformName.iOS, 13, 0, message: "Use 'INStartCallIntentHandling' instead.")]
 	[NoTV]
@@ -9109,7 +9088,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INStartVideoCallIntentResponse" /> appropriate to the <see cref="Intents.INStartVideoCallIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleStartVideoCall:completion:")]
 		void HandleStartVideoCall (INStartVideoCallIntent intent, Action<INStartVideoCallIntentResponse> completion);
@@ -9117,14 +9096,14 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize behavior during confirmation to start a video call.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmStartVideoCall:completion:")]
 		void Confirm (INStartVideoCallIntent intent, Action<INStartVideoCallIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize the resolution of a contact.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveContactsForStartVideoCall:withCompletion:")]
 		void ResolveContacts (INStartVideoCallIntent intent, Action<INPersonResolutionResult []> completion);
 	}
@@ -9182,7 +9161,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
 	[MacCatalyst (13, 1)]
@@ -9192,7 +9171,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INStartWorkoutIntentResponse" /> appropriate to the <see cref="Intents.INStartWorkoutIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleStartWorkout:completion:")]
 		void HandleStartWorkout (INStartWorkoutIntent intent, Action<INStartWorkoutIntentResponse> completion);
@@ -9200,42 +9179,42 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize a workout's starting confirmation.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmStartWorkout:completion:")]
 		void Confirm (INStartWorkoutIntent intent, Action<INStartWorkoutIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers can call this method to trigger validation of the workout name.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveWorkoutNameForStartWorkout:withCompletion:")]
 		void ResolveWorkoutName (INStartWorkoutIntent intent, Action<INSpeakableStringResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize the resolution of a workout goal.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveGoalValueForStartWorkout:withCompletion:")]
 		void ResolveGoalValue (INStartWorkoutIntent intent, Action<INDoubleResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize the resolution of the type of the workout goal.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveWorkoutGoalUnitTypeForStartWorkout:withCompletion:")]
 		void ResolveWorkoutGoalUnitType (INStartWorkoutIntent intent, Action<INWorkoutGoalUnitTypeResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize the resolution of the workout location.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveWorkoutLocationTypeForStartWorkout:withCompletion:")]
 		void ResolveWorkoutLocationType (INStartWorkoutIntent intent, Action<INWorkoutLocationTypeResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize the determination of whether a workout is open-ended.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveIsOpenEndedForStartWorkout:withCompletion:")]
 		void ResolveIsOpenEnded (INStartWorkoutIntent intent, Action<INBooleanResolutionResult> completion);
 	}
@@ -9526,7 +9505,7 @@ namespace Intents {
 	}
 
 	/// <summary>Optional methods for the <see cref="Foundation.NSUserActivity" /> interface.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[TV (14, 0)]
 	[MacCatalyst (13, 1)]
 	[Category]
@@ -9534,8 +9513,8 @@ namespace Intents {
 	interface NSUserActivity_IntentsAdditions {
 
 		/// <summary>Retrieves the <see cref="Intents.INInteraction" /> associated with <c>this</c><see cref="Foundation.NSUserActivity" />.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <returns>A new resolution result with the resolved value.</returns>
+		
 		[MacCatalyst (13, 1)]
 		[return: NullAllowed]
 		[Export ("interaction")]
@@ -9583,7 +9562,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
 	[MacCatalyst (13, 1)]
@@ -9593,7 +9572,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INActivateCarSignalIntentResponse" /> appropriate to the <see cref="Intents.INActivateCarSignalIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleActivateCarSignal:completion:")]
 		void HandleActivateCarSignal (INActivateCarSignalIntent intent, Action<INActivateCarSignalIntentResponse> completion);
@@ -9601,21 +9580,21 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to confirm whether the car's signals may be activated.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmActivateCarSignal:completion:")]
 		void Confirm (INActivateCarSignalIntent intent, Action<INActivateCarSignalIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to resolve the car's name.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveCarNameForActivateCarSignal:withCompletion:")]
 		void ResolveCarName (INActivateCarSignalIntent intent, Action<INSpeakableStringResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to resolve the requested signals by type.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveSignalsForActivateCarSignal:withCompletion:")]
 		void ResolveSignals (INActivateCarSignalIntent intent, Action<INCarSignalOptionsResolutionResult> completion);
 	}
@@ -9861,7 +9840,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
 	[MacCatalyst (13, 1)]
@@ -9871,7 +9850,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INGetCarLockStatusIntentResponse" /> appropriate to the <see cref="Intents.INGetCarLockStatusIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleGetCarLockStatus:completion:")]
 		void HandleGetCarLockStatus (INGetCarLockStatusIntent intent, Action<INGetCarLockStatusIntentResponse> completion);
@@ -9879,14 +9858,14 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to onfirm whether the car's locks can be accessed.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmGetCarLockStatus:completion:")]
 		void Confirm (INGetCarLockStatusIntent intent, Action<INGetCarLockStatusIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to resolve the car's name.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveCarNameForGetCarLockStatus:withCompletion:")]
 		void ResolveCarName (INGetCarLockStatusIntent intent, Action<INSpeakableStringResolutionResult> completion);
 	}
@@ -9929,7 +9908,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
 	[MacCatalyst (13, 1)]
@@ -9939,7 +9918,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INGetCarPowerLevelStatusIntentResponse" /> appropriate to the <see cref="Intents.INGetCarPowerLevelStatusIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleGetCarPowerLevelStatus:completion:")]
 		void HandleGetCarPowerLevelStatus (INGetCarPowerLevelStatusIntent intent, Action<INGetCarPowerLevelStatusIntentResponse> completion);
@@ -9957,14 +9936,14 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to confirm whether the car's power levels can be accessed.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmGetCarPowerLevelStatus:completion:")]
 		void Confirm (INGetCarPowerLevelStatusIntent intent, Action<INGetCarPowerLevelStatusIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to resolve the car's name.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveCarNameForGetCarPowerLevelStatus:withCompletion:")]
 		void ResolveCarName (INGetCarPowerLevelStatusIntent intent, Action<INSpeakableStringResolutionResult> completion);
 	}
@@ -10125,7 +10104,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Deprecated (PlatformName.iOS, 15, 0)]
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
@@ -10143,56 +10122,56 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to confirm payment details.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmPayBill:completion:")]
 		void Confirm (INPayBillIntent intent, Action<INPayBillIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to resolve the payee.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveBillPayeeForPayBill:withCompletion:")]
 		void ResolveBillPayee (INPayBillIntent intent, Action<INBillPayeeResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to resolve the account that will be debited to pay the bill.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveFromAccountForPayBill:withCompletion:")]
 		void ResolveFromAccount (INPayBillIntent intent, Action<INPaymentAccountResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to resolve the transaction amount.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveTransactionAmountForPayBill:withCompletion:")]
 		void ResolveTransactionAmount (INPayBillIntent intent, Action<INPaymentAmountResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to resolve the scheduled date for the transaction.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveTransactionScheduledDateForPayBill:withCompletion:")]
 		void ResolveTransactionScheduledDate (INPayBillIntent intent, Action<INDateComponentsRangeResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to resolve the custom transaction notes.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveTransactionNoteForPayBill:withCompletion:")]
 		void ResolveTransactionNote (INPayBillIntent intent, Action<INStringResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to resolve the bill type.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveBillTypeForPayBill:withCompletion:")]
 		void ResolveBillType (INPayBillIntent intent, Action<INBillTypeResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to resolve the bill due date.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveDueDateForPayBill:withCompletion:")]
 		void ResolveDueDate (INPayBillIntent intent, Action<INDateComponentsRangeResolutionResult> completion);
 	}
@@ -10480,7 +10459,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Deprecated (PlatformName.iOS, 15, 0)]
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
@@ -10498,42 +10477,42 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize search confirmation.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmSearchForBills:completion:")]
 		void Confirm (INSearchForBillsIntent intent, Action<INSearchForBillsIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize the resolution of the payee.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveBillPayeeForSearchForBills:withCompletion:")]
 		void ResolveBillPayee (INSearchForBillsIntent intent, Action<INBillPayeeResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize the resolution of the date range of payments.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolvePaymentDateRangeForSearchForBills:withCompletion:")]
 		void ResolvePaymentDateRange (INSearchForBillsIntent intent, Action<INDateComponentsRangeResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize the resolution of the bill type.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveBillTypeForSearchForBills:withCompletion:")]
 		void ResolveBillType (INSearchForBillsIntent intent, Action<INBillTypeResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize the resolution of the bill status.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveStatusForSearchForBills:withCompletion:")]
 		void ResolveStatus (INSearchForBillsIntent intent, Action<INPaymentStatusResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize the resolution of the range of due dates.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveDueDateRangeForSearchForBills:withCompletion:")]
 		void ResolveDueDateRange (INSearchForBillsIntent intent, Action<INDateComponentsRangeResolutionResult> completion);
 	}
@@ -10582,7 +10561,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
 	[MacCatalyst (13, 1)]
@@ -10592,7 +10571,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INSetCarLockStatusIntentResponse" /> appropriate to the <see cref="Intents.INSetCarLockStatusIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleSetCarLockStatus:completion:")]
 		void HandleSetCarLockStatus (INSetCarLockStatusIntent intent, Action<INSetCarLockStatusIntentResponse> completion);
@@ -10600,21 +10579,21 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize confirmation of whether the app can lock and unlock the car.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmSetCarLockStatus:completion:")]
 		void Confirm (INSetCarLockStatusIntent intent, Action<INSetCarLockStatusIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of the lock status.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveLockedForSetCarLockStatus:withCompletion:")]
 		void ResolveLocked (INSetCarLockStatusIntent intent, Action<INBooleanResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of the car name.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveCarNameForSetCarLockStatus:withCompletion:")]
 		void ResolveCarName (INSetCarLockStatusIntent intent, Action<INSpeakableStringResolutionResult> completion);
 	}
@@ -10741,7 +10720,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[NoMac, NoTV]
 	[MacCatalyst (13, 1)]
 	[Protocol]
@@ -10750,7 +10729,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INAddTasksIntentResponse" /> appropriate to the <see cref="Intents.INAddTasksIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleAddTasks:completion:")]
 		void HandleAddTasks (INAddTasksIntent intent, Action<INAddTasksIntentResponse> completion);
@@ -10758,14 +10737,14 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to confirm whether local and remote resources are ready to add the task.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmAddTasks:completion:")]
 		void Confirm (INAddTasksIntent intent, Action<INAddTasksIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of the list that will receive added tasks.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Use 'ResolveTargetTaskList (Action<INAddTasksTargetTaskListResolutionResult>)' overload instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'ResolveTargetTaskList (Action<INAddTasksTargetTaskListResolutionResult>)' overload instead.")]
 		[Export ("resolveTargetTaskListForAddTasks:withCompletion:")]
@@ -10779,21 +10758,21 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of a task title.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveTaskTitlesForAddTasks:withCompletion:")]
 		void ResolveTaskTitles (INAddTasksIntent intent, Action<INSpeakableStringResolutionResult []> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of a spatial trigger for a task.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveSpatialEventTriggerForAddTasks:withCompletion:")]
 		void ResolveSpatialEventTrigger (INAddTasksIntent intent, Action<INSpatialEventTriggerResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of a temporal trigger for a task.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Use 'ResolveTemporalEventTrigger (Action<INAddTasksTemporalEventTriggerResolutionResult>)' overload instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'ResolveTemporalEventTrigger (Action<INAddTasksTemporalEventTriggerResolutionResult>)' overload instead.")]
 		[Export ("resolveTemporalEventTriggerForAddTasks:withCompletion:")]
@@ -10852,7 +10831,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Deprecated (PlatformName.iOS, 15, 0)]
 	[NoTV, NoMac]
 	[MacCatalyst (13, 1)]
@@ -10863,7 +10842,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INAppendToNoteIntentResponse" /> appropriate to the <see cref="Intents.INAppendToNoteIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleAppendToNote:completion:")]
 		void HandleAppendToNote (INAppendToNoteIntent intent, Action<INAppendToNoteIntentResponse> completion);
@@ -10871,21 +10850,21 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to confirm whether local and remote resources are ready to append to the note.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmAppendToNote:completion:")]
 		void Confirm (INAppendToNoteIntent intent, Action<INAppendToNoteIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of the target note.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveTargetNoteForAppendToNote:withCompletion:")]
 		void ResolveTargetNoteForAppend (INAppendToNoteIntent intent, Action<INNoteResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of the content to append.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveContentForAppendToNote:withCompletion:")]
 		void ResolveContentForAppend (INAppendToNoteIntent intent, Action<INNoteContentResolutionResult> completion);
 	}
@@ -11181,7 +11160,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[NoMac, NoTV]
 	[MacCatalyst (13, 1)]
 	[Protocol]
@@ -11190,15 +11169,15 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INCancelRideIntentResponse" /> appropriate to the <see cref="Intents.INCancelRideIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleCancelRide:completion:")]
 		void HandleCancelRide (INCancelRideIntent intent, Action<INCancelRideIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the donation shortcut.</summary>
+		
 		[Export ("confirmCancelRide:completion:")]
 		void Confirm (INCancelRideIntent intent, Action<INCancelRideIntentResponse> completion);
 	}
@@ -11247,7 +11226,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[NoTV, NoMac]
 	[MacCatalyst (13, 1)]
 	[Protocol]
@@ -11256,7 +11235,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INCreateNoteIntentResponse" /> appropriate to the <see cref="Intents.INCreateNoteIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleCreateNote:completion:")]
 		void HandleCreateNote (INCreateNoteIntent intent, Action<INCreateNoteIntentResponse> completion);
@@ -11264,28 +11243,28 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to confirm whether local and remote resources are ready to create the note.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmCreateNote:completion:")]
 		void Confirm (INCreateNoteIntent intent, Action<INCreateNoteIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize the resolution of a note's title.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveTitleForCreateNote:withCompletion:")]
 		void ResolveTitle (INCreateNoteIntent intent, Action<INSpeakableStringResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to resolve the content of a note.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveContentForCreateNote:withCompletion:")]
 		void ResolveContent (INCreateNoteIntent intent, Action<INNoteContentResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize the resolution of a note's group name.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveGroupNameForCreateNote:withCompletion:")]
 		void ResolveGroupName (INCreateNoteIntent intent, Action<INSpeakableStringResolutionResult> completion);
 	}
@@ -11333,7 +11312,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Deprecated (PlatformName.iOS, 15, 0)]
 	[NoTV, NoMac]
 	[MacCatalyst (13, 1)]
@@ -11344,7 +11323,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INAddTasksIntentResponse" /> appropriate to the <see cref="Intents.INAddTasksIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleCreateTaskList:completion:")]
 		void HandleCreateTaskList (INCreateTaskListIntent intent, Action<INCreateTaskListIntentResponse> completion);
@@ -11352,28 +11331,28 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to confirm whether local and remote resources are ready to create the task.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmCreateTaskList:completion:")]
 		void Confirm (INCreateTaskListIntent intent, Action<INCreateTaskListIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of a task list's title.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveTitleForCreateTaskList:withCompletion:")]
 		void ResolveTitle (INCreateTaskListIntent intent, Action<INSpeakableStringResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of a task list's task titles.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveTaskTitlesForCreateTaskList:withCompletion:")]
 		void ResolveTaskTitles (INCreateTaskListIntent intent, Action<INSpeakableStringResolutionResult []> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of a task list's group name.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveGroupNameForCreateTaskList:withCompletion:")]
 		void ResolveGroupName (INCreateTaskListIntent intent, Action<INSpeakableStringResolutionResult> completion);
 	}
@@ -11464,7 +11443,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Deprecated (PlatformName.iOS, 15, 0)]
 	[NoTV, NoMac]
 	[MacCatalyst (13, 1)]
@@ -11475,7 +11454,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INGetVisualCodeIntentResponse" /> appropriate to the <see cref="Intents.INGetVisualCodeIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleGetVisualCode:completion:")]
 		void HandleGetVisualCode (INGetVisualCodeIntent intent, Action<INGetVisualCodeIntentResponse> completion);
@@ -11483,14 +11462,14 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to confirm whether local and remote resources are ready and allowed to provide the code.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmGetVisualCode:completion:")]
 		void Confirm (INGetVisualCodeIntent intent, Action<INGetVisualCodeIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize the resolution of a visual code type.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveVisualCodeTypeForGetVisualCode:withCompletion:")]
 		void ResolveVisualCodeType (INGetVisualCodeIntent intent, Action<INVisualCodeTypeResolutionResult> completion);
 	}
@@ -11833,11 +11812,10 @@ namespace Intents {
 		[Export ("parameterForClass:keyPath:")]
 		INParameter GetParameter (Class aClass, string keyPath);
 
-		/// <param name="type">To be added.</param>
-		///         <param name="keyPath">To be added.</param>
+		/// <param name="type">The relevance provider type.</param>
+		///         <param name="keyPath">The key path for the date relevance provider.</param>
 		///         <summary>Gets the parameter for the specified key path on the specified intent or response type.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		///         <returns>A new date relevance provider.</returns>
 		[Static]
 		[Wrap ("GetParameter (new Class (type), keyPath)")]
 		INParameter GetParameter (Type type, string keyPath);
@@ -11846,8 +11824,6 @@ namespace Intents {
 		Class ParameterClass { get; }
 
 		/// <summary>Gets the type that the parameter represents.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Wrap ("Class.Lookup (ParameterClass)")]
 		Type ParameterType { get; }
 
@@ -11857,10 +11833,10 @@ namespace Intents {
 		[Export ("isEqualToParameter:")]
 		bool IsEqualTo (INParameter parameter);
 
-		/// <param name="index">To be added.</param>
-		/// <param name="subKeyPath">To be added.</param>
+		/// <param name="index">The index for the location relevance provider.</param>
+		/// <param name="subKeyPath">The sub-key path for the location.</param>
 		/// <summary>Sets the index where the value of the parameter that is specified by the key path will be stored.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("setIndex:forSubKeyPath:")]
 		void SetIndex (nuint index, string subKeyPath);
 
@@ -11876,10 +11852,10 @@ namespace Intents {
 	[DisableDefaultCtor]
 	interface INRecurrenceRule : NSCopying, NSSecureCoding {
 
-		/// <param name="interval">To be added.</param>
-		/// <param name="frequency">To be added.</param>
+		/// <param name="interval">The date interval for the relevance.</param>
+		/// <param name="frequency">The frequency of the relevance.</param>
 		/// <summary>Creates a new recurrence rule that describes repetitions at the specified frequency during the specified interval.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("initWithInterval:frequency:")]
 		NativeHandle Constructor (nuint interval, INRecurrenceFrequency frequency);
 
@@ -12037,7 +12013,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[NoTV, NoMac]
 	[MacCatalyst (13, 1)]
 	[Protocol]
@@ -12046,7 +12022,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INSearchForAccountsIntentResponse" /> appropriate to the <see cref="Intents.INSearchForAccountsIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleSearchForAccounts:completion:")]
 		void HandleSearchForAccounts (INSearchForAccountsIntent intent, Action<INSearchForAccountsIntentResponse> completion);
@@ -12054,35 +12030,35 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to confirm whether local and remote resources are ready to perform the search.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmSearchForAccounts:completion:")]
 		void Confirm (INSearchForAccountsIntent intent, Action<INSearchForAccountsIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of account nicknames.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveAccountNicknameForSearchForAccounts:withCompletion:")]
 		void ResolveAccountNickname (INSearchForAccountsIntent intent, Action<INSpeakableStringResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of account types.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveAccountTypeForSearchForAccounts:withCompletion:")]
 		void ResolveAccountType (INSearchForAccountsIntent intent, Action<INAccountTypeResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of organization names.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveOrganizationNameForSearchForAccounts:withCompletion:")]
 		void ResolveOrganizationName (INSearchForAccountsIntent intent, Action<INSpeakableStringResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of requested balance types.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveRequestedBalanceTypeForSearchForAccounts:withCompletion:")]
 		void ResolveRequestedBalanceType (INSearchForAccountsIntent intent, Action<INBalanceTypeResolutionResult> completion);
 	}
@@ -12169,7 +12145,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[NoTV, NoMac]
 	[MacCatalyst (13, 1)]
 	[Protocol]
@@ -12178,7 +12154,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INSearchForNotebookItemsIntentResponse" /> appropriate to the <see cref="Intents.INSearchForNotebookItemsIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleSearchForNotebookItems:completion:")]
 		void HandleSearchForNotebookItems (INSearchForNotebookItemsIntent intent, Action<INSearchForNotebookItemsIntentResponse> completion);
@@ -12186,63 +12162,63 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to confirm whether local and remote resources are ready to perform the search.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmSearchForNotebookItems:completion:")]
 		void Confirm (INSearchForNotebookItemsIntent intent, Action<INSearchForNotebookItemsIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of the title to search for.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveTitleForSearchForNotebookItems:withCompletion:")]
 		void ResolveTitle (INSearchForNotebookItemsIntent intent, Action<INSpeakableStringResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of the search string.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveContentForSearchForNotebookItems:withCompletion:")]
 		void ResolveContent (INSearchForNotebookItemsIntent intent, Action<INStringResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of the type of items to search for.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveItemTypeForSearchForNotebookItems:withCompletion:")]
 		void ResolveItemType (INSearchForNotebookItemsIntent intent, Action<INNotebookItemTypeResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of the search status.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveStatusForSearchForNotebookItems:withCompletion:")]
 		void ResolveStatus (INSearchForNotebookItemsIntent intent, Action<INTaskStatusResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of the location of a location-based search.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveLocationForSearchForNotebookItems:withCompletion:")]
 		void ResolveLocation (INSearchForNotebookItemsIntent intent, Action<INPlacemarkResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of the location search type.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveLocationSearchTypeForSearchForNotebookItems:withCompletion:")]
 		void ResolveLocationSearchType (INSearchForNotebookItemsIntent intent, Action<INLocationSearchTypeResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of the search time and date.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveDateTimeForSearchForNotebookItems:withCompletion:")]
 		void ResolveDateTime (INSearchForNotebookItemsIntent intent, Action<INDateComponentsRangeResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of the date type.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveDateSearchTypeForSearchForNotebookItems:withCompletion:")]
 		void ResolveDateSearchType (INSearchForNotebookItemsIntent intent, Action<INDateSearchTypeResolutionResult> completion);
 
@@ -12483,7 +12459,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[NoTV, NoMac]
 	[MacCatalyst (13, 1)]
 	[Protocol]
@@ -12492,15 +12468,15 @@ namespace Intents {
 		/// <param name="sendRideFeedbackintent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INSendRideFeedbackIntentResponse" /> appropriate to the <see cref="Intents.INSendRideFeedbackIntent" /> <paramref name="sendRideFeedbackintent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleSendRideFeedback:completion:")]
 		void HandleSendRideFeedback (INSendRideFeedbackIntent sendRideFeedbackintent, Action<INSendRideFeedbackIntentResponse> completion);
 
-		/// <param name="sendRideFeedbackIntent">To be added.</param>
-		/// <param name="completion">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="sendRideFeedbackIntent">The ride feedback intent to handle.</param>
+		/// <param name="completion">The handler to call with the response.</param>
+		/// <summary>Handles the send ride feedback intent.</summary>
+		
 		[Export ("confirmSendRideFeedback:completion:")]
 		void Confirm (INSendRideFeedbackIntent sendRideFeedbackIntent, Action<INSendRideFeedbackIntentResponse> completion);
 	}
@@ -12562,7 +12538,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[NoTV, NoMac]
 	[MacCatalyst (13, 1)]
 	[Protocol]
@@ -12571,7 +12547,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INSetTaskAttributeIntentResponse" /> appropriate to the <see cref="Intents.INSetTaskAttributeIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleSetTaskAttribute:completion:")]
 		void HandleSetTaskAttribute (INSetTaskAttributeIntent intent, Action<INSetTaskAttributeIntentResponse> completion);
@@ -12579,14 +12555,14 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to confirm whether local and remote resources are ready to update the attributes.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmSetTaskAttribute:completion:")]
 		void Confirm (INSetTaskAttributeIntent intent, Action<INSetTaskAttributeIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of the task to update.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveTargetTaskForSetTaskAttribute:withCompletion:")]
 		void ResolveTargetTask (INSetTaskAttributeIntent intent, Action<INTaskResolutionResult> completion);
 
@@ -12598,7 +12574,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize the resolution of the task status.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveStatusForSetTaskAttribute:withCompletion:")]
 		void ResolveStatus (INSetTaskAttributeIntent intent, Action<INTaskStatusResolutionResult> completion);
 
@@ -12610,14 +12586,14 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize the resolution of a spatial event trigger.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveSpatialEventTriggerForSetTaskAttribute:withCompletion:")]
 		void ResolveSpatialEventTrigger (INSetTaskAttributeIntent intent, Action<INSpatialEventTriggerResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customise resolution of the temporal trigger.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Use 'ResolveTemporalEventTrigger (INSetTaskAttributeIntent Action<INSetTaskAttributeTemporalEventTriggerResolutionResult>)' overload instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'ResolveTemporalEventTrigger (INSetTaskAttributeIntent Action<INSetTaskAttributeTemporalEventTriggerResolutionResult>)' overload instead.")]
 		[Export ("resolveTemporalEventTriggerForSetTaskAttribute:withCompletion:")]
@@ -13061,7 +13037,7 @@ namespace Intents {
 	}
 
 	/// <summary>Interface to resolve, confirm and handle Siri requests for the corresponding action.</summary>
-	/// <remarks>To be added.</remarks>
+	
 	[Deprecated (PlatformName.iOS, 15, 0)]
 	[NoTV, NoMac]
 	[MacCatalyst (13, 1)]
@@ -13072,7 +13048,7 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers must override this method and invoke the <see cref="System.Action{T}" /> with an <see cref="Intents.INTransferMoneyIntentResponse" /> appropriate to the <see cref="Intents.INTransferMoneyIntent" /> <paramref name="intent" />.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Abstract]
 		[Export ("handleTransferMoney:completion:")]
 		void HandleTransferMoney (INTransferMoneyIntent intent, Action<INTransferMoneyIntentResponse> completion);
@@ -13080,42 +13056,42 @@ namespace Intents {
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to confirm whether local and remote resources are ready to perform the transfer.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("confirmTransferMoney:completion:")]
 		void Confirm (INTransferMoneyIntent intent, Action<INTransferMoneyIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of the transfer amount.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveFromAccountForTransferMoney:withCompletion:")]
 		void ResolveFromAccount (INTransferMoneyIntent intent, Action<INPaymentAccountResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of the account that will receive the transfer.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveToAccountForTransferMoney:withCompletion:")]
 		void ResolveToAccount (INTransferMoneyIntent intent, Action<INPaymentAccountResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize the resolution of the amount of the transaction.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveTransactionAmountForTransferMoney:withCompletion:")]
 		void ResolveTransactionAmount (INTransferMoneyIntent intent, Action<INPaymentAmountResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of a scheduled transfer date.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveTransactionScheduledDateForTransferMoney:withCompletion:")]
 		void ResolveTransactionScheduledDate (INTransferMoneyIntent intent, Action<INDateComponentsRangeResolutionResult> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
 		/// <summary>Developers may implement this method to customize resolution of a note for a transfer.</summary>
-		/// <remarks>To be added.</remarks>
+		
 		[Export ("resolveTransactionNoteForTransferMoney:withCompletion:")]
 		void ResolveTransactionNote (INTransferMoneyIntent intent, Action<INStringResolutionResult> completion);
 	}
@@ -13375,18 +13351,18 @@ namespace Intents {
 	[Protocol]
 	interface INPlayMediaIntentHandling {
 
-		/// <param name="intent">To be added.</param>
-		/// <param name="completion">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="intent">The intent to handle.</param>
+		/// <param name="completion">The handler to call with the response.</param>
+		/// <summary>Handles the add media intent.</summary>
+		
 		[Abstract]
 		[Export ("handlePlayMedia:completion:")]
 		void HandlePlayMedia (INPlayMediaIntent intent, Action<INPlayMediaIntentResponse> completion);
 
-		/// <param name="intent">To be added.</param>
-		/// <param name="completion">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="intent">The intent to handle.</param>
+		/// <param name="completion">The handler to call with the response.</param>
+		/// <summary>Handles the update media affinity intent.</summary>
+		
 		[Export ("confirmPlayMedia:completion:")]
 		void Confirm (INPlayMediaIntent intent, Action<INPlayMediaIntentResponse> completion);
 
@@ -13530,10 +13506,9 @@ namespace Intents {
 		INRelevantShortcutStore DefaultStore { get; }
 
 		[Async (XmlDocs = """
-			<param name="shortcuts">To be added.</param>
-			<summary>To be added.</summary>
-			<returns>To be added.</returns>
-			<remarks>To be added.</remarks>
+			<param name="shortcuts">The shortcuts to set as voice shortcuts.</param>
+			<summary>Sets the suggested voice shortcuts.</summary>
+			<returns>A task representing the asynchronous operation.</returns>
 			""")]
 		[Export ("setRelevantShortcuts:completionHandler:")]
 		void SetRelevantShortcuts (INRelevantShortcut [] shortcuts, [NullAllowed] Action<NSError> completionHandler);
@@ -13604,18 +13579,16 @@ namespace Intents {
 		INVoiceShortcutCenter SharedCenter { get; }
 
 		[Async (XmlDocs = """
-			<summary>To be added.</summary>
-			<returns>To be added.</returns>
-			<remarks>To be added.</remarks>
+			<summary>Gets all voice shortcuts, returning a task with the results.</summary>
+			<returns>A task containing the voice shortcuts array.</returns>
 			""")]
 		[Export ("getAllVoiceShortcutsWithCompletion:")]
 		void GetAllVoiceShortcuts (INVoiceShortcutCenterGetVoiceShortcutsHandler completionHandler);
 
 		[Async (XmlDocs = """
-			<param name="identifier">To be added.</param>
-			<summary>To be added.</summary>
-			<returns>To be added.</returns>
-			<remarks>To be added.</remarks>
+			<param name="identifier">The identifier of the voice shortcut to delete.</param>
+			<summary>Deletes the voice shortcut with the specified identifier.</summary>
+			<returns>A task representing the asynchronous operation.</returns>
 			""")]
 		[Export ("getVoiceShortcutWithIdentifier:completion:")]
 		void GetVoiceShortcut (NSUuid identifier, Action<INVoiceShortcut, NSError> completionHandler);

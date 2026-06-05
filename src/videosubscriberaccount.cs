@@ -487,29 +487,29 @@ namespace VideoSubscriberAccount {
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	interface VSSubscription {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the subscription expiration date.</summary>
+		/// <value>The expiration date, or <see langword="null" /> for no expiration.</value>
+		
 		[NullAllowed] // null_resettable
 		[Export ("expirationDate", ArgumentSemantic.Copy)]
 		NSDate ExpirationDate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the access level of the subscription.</summary>
+		/// <value>The subscription access level.</value>
+		
 		[Export ("accessLevel", ArgumentSemantic.Assign)]
 		VSSubscriptionAccessLevel AccessLevel { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the tier identifiers for the subscription.</summary>
+		/// <value>An array of tier identifier strings, or <see langword="null" />.</value>
+		
 		[NullAllowed] // null_resettable
 		[Export ("tierIdentifiers", ArgumentSemantic.Copy)]
 		string [] TierIdentifiers { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the billing identifier for the subscription.</summary>
+		/// <value>The billing identifier, or <see langword="null" />.</value>
+		
 		[NullAllowed, Export ("billingIdentifier")]
 		string BillingIdentifier { get; set; }
 	}

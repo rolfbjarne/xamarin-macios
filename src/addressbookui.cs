@@ -240,15 +240,15 @@ namespace AddressBookUI {
 	[BaseType (typeof (UIViewController))]
 	interface ABPersonViewController : UIViewControllerRestoration {
 		/// <param name="nibName">
-		///           <para>To be added.</para>
+		///   <para>The name of the nib file, or <see langword="null" />.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <param name="bundle">
-		///           <para>To be added.</para>
+		///   <para>The bundle containing the nib, or <see langword="null" />.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Creates the view controller from the specified nib and bundle.</summary>
+		
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
 		NativeHandle Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);
@@ -264,20 +264,20 @@ namespace AddressBookUI {
 		IntPtr _AddressBook { get; set; }
 
 		/// <summary>Gets or sets whether the buttons for predefined actions (send text message, etc.) are displayed.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <value><see langword="true" /> if actions are shown; otherwise, <see langword="false" />.</value>
+		
 		[Export ("allowsActions")]
 		bool AllowsActions { get; set; }
 
 		/// <summary>Gets or sets whether the user is allowed to edit the person's data.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <value><see langword="true" /> if editing is allowed; otherwise, <see langword="false" />.</value>
+		
 		[Export ("allowsEditing")]
 		bool AllowsEditing { get; set; }
 
 		/// <summary>Gets or sets whether the view controller should show linked people.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <value><see langword="true" /> to show linked people; otherwise, <see langword="false" />.</value>
+		
 		[Export ("shouldShowLinkedPeople")]
 		bool ShouldShowLinkedPeople { get; set; }
 

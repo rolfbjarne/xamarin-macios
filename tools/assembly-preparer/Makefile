@@ -19,7 +19,7 @@ $(ASSEMBLIES): .build-stamp
 
 all-local:: .build-stamp
 
-run-tests:
+run-tests: .build-stamp
 	$(Q_BUILD) $(DOTNET) test $(TOP)/tests/assembly-preparer/assembly-preparer-tests.csproj --logger "console;verbosity=detailed" $(DOTNET_BUILD_VERBOSITY) -bl:$@.binlog
 
 generated-files: $(abspath ../common/SdkVersions.cs) $(abspath ../common/ProductConstants.cs)

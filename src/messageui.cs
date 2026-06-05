@@ -119,11 +119,11 @@ namespace MessageUI {
 	[Model]
 	[Protocol]
 	interface MFMailComposeViewControllerDelegate {
-		/// <param name="controller">To be added.</param>
-		///         <param name="result">To be added.</param>
-		///         <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="controller">The mail compose view controller.</param>
+		/// <param name="result">The result of the compose operation.</param>
+		/// <param name="error">The error, or <see langword="null" /> if no error occurred.</param>
+		/// <summary>Called when the user finishes or cancels the mail compose operation.</summary>
+		
 		[Export ("mailComposeController:didFinishWithResult:error:")]
 		void Finished (MFMailComposeViewController controller, MFMailComposeResult result, [NullAllowed] NSError error);
 	}

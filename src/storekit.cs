@@ -617,9 +617,9 @@ namespace StoreKit {
 		[Export ("initWithReceiptProperties:")]
 		NativeHandle Constructor ([NullAllowed] NSDictionary properties);
 
-		/// <param name="receiptProperties">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="receiptProperties">The receipt properties, or <see langword="null" />.</param>
+		/// <summary>Creates a receipt refresh request with the specified properties.</summary>
+		
 		[Wrap ("this (receiptProperties.GetDictionary ())")]
 		NativeHandle Constructor ([NullAllowed] SKReceiptProperties receiptProperties);
 
@@ -627,9 +627,9 @@ namespace StoreKit {
 		[Export ("receiptProperties")]
 		NSDictionary WeakReceiptProperties { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the receipt properties as a strongly-typed object.</summary>
+		/// <value>The receipt properties, or <see langword="null" />.</value>
+		
 		[NullAllowed]
 		[Wrap ("WeakReceiptProperties")]
 		SKReceiptProperties ReceiptProperties { get; }

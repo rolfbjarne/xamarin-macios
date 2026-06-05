@@ -704,10 +704,10 @@ namespace StoreKit {
 	[Model]
 	[Protocol]
 	interface SKProductsRequestDelegate {
-		/// <param name="request">To be added.</param>
-		/// <param name="response">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="request">The products request.</param>
+		/// <param name="response">The response containing available products.</param>
+		/// <summary>Called when the products request receives a response.</summary>
+		
 		[Export ("productsRequest:didReceiveResponse:")]
 		[Abstract]
 		[EventArgs ("SKProductsRequestResponse", XmlDocs = """

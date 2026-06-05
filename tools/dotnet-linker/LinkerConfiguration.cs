@@ -284,6 +284,10 @@ namespace Xamarin.Linker {
 						}
 					})
 				)},
+				{ "DylibToConvertToFramework", (
+					new LoadValue ((key, value) => Application.DylibsToConvertToFrameworks.Add (value),
+					new SaveValue ((key, storage) => storage.AddRange (Application.DylibsToConvertToFrameworks.Select (v => $"{key}={v}"))),
+				)},
 				{ "EnableSGenConc", (
 					new LoadValue ((key, value) => Application.EnableSGenConc = string.Equals ("true", value, StringComparison.OrdinalIgnoreCase)),
 					new SaveValue ((key, storage) => storage.Add ($"{key}={(Application.EnableSGenConc ? "true" : "false")}"))
@@ -434,6 +438,14 @@ namespace Xamarin.Linker {
 					new LoadValue ((key, value) => PublishTrimmed = string.Equals ("true", value, StringComparison.OrdinalIgnoreCase)),
 					new SaveValue ((key, storage) => storage.Add ($"{key}={(PublishTrimmed ? "true" : "false")}"))
 				 )},
+				{ "PublishReadyToRun", (
+					new LoadValue ((key, value) => loadNullableBool (key, value, out Application.PublishReadyToRun)),
+					new SaveValue ((key, storage) => saveNullableBool (key, Application.PublishReadyToRun, storage))
+				)},
+				{ "PublishReadyToRunContainerFormat", (
+					new LoadValue ((key, value) => Application.PublishReadyToRunContainerFormat = value,
+					new SaveValue ((key, storage) => saveNonEmpty (key, Application.PublishReadyToRunContainerFormat, storage))
+				)},
 				{ "ReferenceNativeSymbol", (
 					new LoadValue ((key, value) => {
 						(string symbolType, string symbolMode, string symbol) = SplitString3 (value, ':');
@@ -812,6 +824,9 @@ namespace Xamarin.Linker {
 				Application.Log ($"    Debug: {Application.EnableDebug}");
 				Application.Log ($"    Dlsym: {Application.DlsymOptions} {(Application.DlsymAssemblies is not null ? string.Join (" ", Application.DlsymAssemblies.Select (v => (v.Item2 ? "+" : "-") + v.Item1)) : string.Empty)}");
 				Application.Log ($"    DeploymentTarget: {DeploymentTarget}");
+				Application.Log ($"    DylibToConvertToFramework ({Application.DylibsToConvertToFrameworks.Count}):");
+				foreach (var lib in Application.DylibsToConvertToFrameworks.OrderBy (v => v))
+					Application.Log ($"        {lib}");
 				Application.Log ($"    EnableSGenConc {Application.EnableSGenConc}");
 				Application.Log ($"    InlineDlfcnMethods: {InlineDlfcnMethods}");
 				Application.Log ($"    IntermediateLinkDir: {IntermediateLinkDir}");

@@ -187,9 +187,9 @@ namespace IOSurface {
 		[Internal, Export ("initWithProperties:")]
 		NativeHandle Constructor (NSDictionary properties);
 
-		/// <param name="properties">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="properties">The surface properties.</param>
+		/// <summary>Creates an IOSurface with the specified properties.</summary>
+		
 		[Wrap ("this (properties.GetDictionary ()!)")]
 		NativeHandle Constructor (IOSurfaceOptions properties);
 
@@ -236,52 +236,52 @@ namespace IOSurface {
 		[Export ("planeCount")]
 		nuint PlaneCount { get; }
 
-		/// <param name="planeIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="planeIndex">The zero-based index of the plane.</param>
+		/// <summary>Gets the width of the specified plane.</summary>
+		/// <returns>The width of the plane in pixels.</returns>
+		
 		[Export ("widthOfPlaneAtIndex:")]
 		nint GetWidth (nuint planeIndex);
 
-		/// <param name="planeIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="planeIndex">The zero-based index of the plane.</param>
+		/// <summary>Gets the height of the specified plane.</summary>
+		/// <returns>The height of the plane in pixels.</returns>
+		
 		[Export ("heightOfPlaneAtIndex:")]
 		nint GetHeight (nuint planeIndex);
 
-		/// <param name="planeIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="planeIndex">The zero-based index of the plane.</param>
+		/// <summary>Gets the bytes per row of the specified plane.</summary>
+		/// <returns>The number of bytes per row in the plane.</returns>
+		
 		[Export ("bytesPerRowOfPlaneAtIndex:")]
 		nint GetBytesPerRow (nuint planeIndex);
 
-		/// <param name="planeIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="planeIndex">The zero-based index of the plane.</param>
+		/// <summary>Gets the bytes per element of the specified plane.</summary>
+		/// <returns>The number of bytes per element in the plane.</returns>
+		
 		[Export ("bytesPerElementOfPlaneAtIndex:")]
 		nint GetBytesPerElement (nuint planeIndex);
 
-		/// <param name="planeIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="planeIndex">The zero-based index of the plane.</param>
+		/// <summary>Gets the element width of the specified plane.</summary>
+		/// <returns>The element width of the plane in pixels.</returns>
+		
 		[Export ("elementWidthOfPlaneAtIndex:")]
 		nint GetElementWidth (nuint planeIndex);
 
-		/// <param name="planeIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="planeIndex">The zero-based index of the plane.</param>
+		/// <summary>Gets the element height of the specified plane.</summary>
+		/// <returns>The element height of the plane in pixels.</returns>
+		
 		[Export ("elementHeightOfPlaneAtIndex:")]
 		nint GetElementHeight (nuint planeIndex);
 
-		/// <param name="planeIndex">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <param name="planeIndex">The zero-based index of the plane.</param>
+		/// <summary>Gets the base address of the specified plane.</summary>
+		/// <returns>A pointer to the base address of the plane.</returns>
+		
 		[Export ("baseAddressOfPlaneAtIndex:")]
 		IntPtr GetBaseAddress (nuint planeIndex);
 
@@ -306,9 +306,9 @@ namespace IOSurface {
 		[Export ("removeAllAttachments")]
 		void RemoveAllAttachments ();
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets a value that indicates whether the IOSurface is in use.</summary>
+		/// <value><see langword="true" /> if the surface is in use; otherwise, <see langword="false" />.</value>
+		
 		[Export ("inUse")]
 		bool InUse { [Bind ("isInUse")] get; }
 

@@ -743,16 +743,16 @@ namespace StoreKit {
 		[Async]
 		void LoadProduct (NSDictionary parameters, [NullAllowed] Action<bool, NSError> callback);
 
-		/// <param name="parameters">To be added.</param>
-		///         <param name="callback">To be added.</param>
+		/// <param name="parameters">The product parameters to load.</param>
+		/// <param name="callback">A callback invoked when loading completes, or <see langword="null" />.</param>
 		///         <summary>Loads the product that is specified by the specified product <paramref name="parameters" /> and runs the provided <paramref name="callback" /> when the operation completes.</summary>
-		///         <remarks>To be added.</remarks>
+		
 		[Wrap ("LoadProduct (parameters.GetDictionary ()!, callback)")]
 		[Async (XmlDocs = """
-			<param name="parameters">To be added.</param>
+			<param name="parameters">The product parameters to load.</param>
 			<summary>Returns a task that loads the product that is specified by the specified product <paramref name="parameters" />.</summary>
-			<returns>To be added.</returns>
-			<remarks>To be added.</remarks>
+			<returns>A task that represents the asynchronous load operation.</returns>
+			
 			""")]
 		void LoadProduct (StoreProductParameters parameters, [NullAllowed] Action<bool, NSError> callback);
 
@@ -780,9 +780,9 @@ namespace StoreKit {
 	[Model]
 	[Protocol]
 	interface SKStoreProductViewControllerDelegate {
-		/// <param name="controller">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
+		/// <param name="controller">The store product view controller.</param>
+		/// <summary>Called when the user dismisses the store product view controller.</summary>
+		
 		[Export ("productViewControllerDidFinish:"), EventArgs ("SKStoreProductViewController", XmlDocs = """
 			<summary>Event raised by the object.</summary>
 			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>

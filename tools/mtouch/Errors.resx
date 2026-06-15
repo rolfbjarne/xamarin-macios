@@ -852,7 +852,7 @@
 	</data>
 
 	<data name="MX1504" xml:space="preserve">
-		<value>Can not find the product assembly '{0}' in the list of loaded assemblies.</value>
+		<value>Cannot find the product assembly '{0}' in the list of loaded assemblies.</value>
 	</data>
 
 	<data name="MX1600" xml:space="preserve">

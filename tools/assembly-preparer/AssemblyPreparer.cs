@@ -25,7 +25,7 @@ public class AssemblyPreparer : IDisposable {
 
 	public LinkerConfiguration Configuration => configuration;
 
-	public string MakeReproPath { get; set; } = string.Empty;
+	public string MakeReproPath { get; set; } = "";
 
 	public RegistrarMode Registrar {
 		get => configuration.Application.Registrar;
@@ -109,7 +109,7 @@ public class AssemblyPreparer : IDisposable {
 		var file = Path.Combine (reproPath, "arguments.txt");
 		if (!File.Exists (file))
 			throw new FileNotFoundException ($"Repro arguments file not found: {file}");
-		return new AssemblyPreparer (ConsoleLog.Instance, Array.Empty<AssemblyPreparerInfo> (), file);
+		return new AssemblyPreparer (ConsoleLog.Instance, [], file);
 	}
 
 	public bool Prepare (out List<ProductException> exceptions)
@@ -170,7 +170,11 @@ public class AssemblyPreparer : IDisposable {
 		// save assemblies
 
 		foreach (var assembly in Assemblies) {
-			var assemblyDefinition = assembly.Assembly!;
+			var assemblyDefinition = assembly.Assembly;
+			if (assemblyDefinition is null) {
+				exceptions.Add (ErrorHelper.CreateError (99, $"Assembly definition is null for {assembly.InputPath}"));
+				return false;
+			}
 
 			var action = configuration.Context.Annotations.GetAction (assemblyDefinition);
 			switch (action) {
@@ -187,7 +191,7 @@ public class AssemblyPreparer : IDisposable {
 				return false;
 			}
 
-			Directory.CreateDirectory (Path.GetDirectoryName (assembly.OutputPath)!);
+			PathUtils.CreateDirectoryForFile (assembly.OutputPath);
 			var writerParameters = new WriterParameters ();
 			if (assemblyDefinition.MainModule.HasSymbols) {
 				var provider = new CustomSymbolWriterProvider ();

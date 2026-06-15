@@ -19,6 +19,7 @@ using Xamarin.Utils;
 #nullable enable
 
 namespace Xamarin.MacDev.Tasks {
+	// This task is not supposed to be remoted (it doesn't need to run on a Mac).
 	public class PrepareAssemblies : XamarinTask {
 		const string ErrorPrefix = "MX";
 

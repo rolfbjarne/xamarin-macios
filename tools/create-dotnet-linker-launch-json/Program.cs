@@ -52,8 +52,12 @@ class Program {
 
 		// Copy the binlog to "/tmp/assembly-preparer.binlog", to easily debug the PrepareAssemblies task.
 		var unitTestLocation = "/tmp/assembly-preparer.binlog";
-		File.Copy (path, unitTestLocation, true);
-		Console.WriteLine ($"Copied {path} to {unitTestLocation}");
+		try {
+			File.Copy (path, unitTestLocation, true);
+			Console.WriteLine ($"Copied {path} to {unitTestLocation}");
+		} catch (Exception ex) {
+			Console.WriteLine ($"Failed to copy {path} to {unitTestLocation}: {ex.Message}");
+		}
 
 		var reader = new BinLogReader ();
 		var records = reader.ReadRecords (path).ToArray ();

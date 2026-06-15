@@ -3354,7 +3354,7 @@ namespace Xamarin.Bundler {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Can not find the product assembly &apos;{0}&apos; in the list of loaded assemblies..
+        ///   Looks up a localized string similar to Cannot find the product assembly &apos;{0}&apos; in the list of loaded assemblies..
         /// </summary>
         public static string MX1504 {
             get {

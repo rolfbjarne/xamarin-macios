@@ -56,8 +56,9 @@ namespace Xamarin.Linker {
 				var rootTypeMapAssemblyName = new AssemblyNameDefinition (App.TypeMapAssemblyName, new Version (1, 0, 0, 0));
 				rootTypeMapAssembly = AssemblyDefinition.CreateAssembly (rootTypeMapAssemblyName, rootTypeMapAssemblyName.Name, moduleParameters);
 				Annotations.SetAction (rootTypeMapAssembly, AssemblyAction.Link);
-				addedAssemblies.Add ((createdRootTypeMapAssemblyPath, rootTypeMapAssembly, Configuration.PlatformAssembly));
+				addedAssemblies.Add ((createdRootTypeMapAssemblyPath, rootTypeMapAssembly, Configuration.PlatformAssembly + ".dll"));
 
+#if !ASSEMBLY_PREPARER
 				// We're running from inside the linker, but the TypeMapEntryAssembly property can only be set using a command-line
 				// argument, so we need to cheat a bit here and use reflection to set it. This will go away once we're not running
 				// as a custom linker step anymore.
@@ -65,6 +66,7 @@ namespace Xamarin.Linker {
 				if (typeMapEntryAssemblyProperty is null)
 					throw ErrorHelper.CreateError (99, "Could not find the 'TypeMapEntryAssembly' property on the linker context.");
 				typeMapEntryAssemblyProperty.SetValue (this.Context, App.TypeMapAssemblyName);
+#endif
 			}
 
 			abr.SetCurrentAssembly (rootTypeMapAssembly);

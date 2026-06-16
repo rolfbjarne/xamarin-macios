@@ -3419,7 +3419,10 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		DependsOnTargets="$(_PrepareAssembliesForPreparationDependsOn)"
 		>
 		<ItemGroup>
-			<_AssembliesToPrepare Include="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.PostprocessAssembly)' == 'true'" />
+			<!-- Include all managed assemblies (not just those with PostprocessAssembly=true), because the assembly-preparer
+			     needs to know about all assemblies (including the platform assembly) to do its work. This matches what the
+			     linker does internally (via CollectAssembliesStep which resolves all referenced assemblies). -->
+			<_AssembliesToPrepare Include="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.Extension)' == '.dll' And '%(ResolvedFileToPublish.Culture)' == ''" />
 		</ItemGroup>
 		<PropertyGroup>
 			<PreparedAssembliesDirectory>$([MSBuild]::EnsureTrailingSlash('$(DeviceSpecificIntermediateOutputPath)prepared-assemblies'))</PreparedAssembliesDirectory>

@@ -153,12 +153,22 @@ public class AssemblyPreparer : IDisposable {
 			SymbolReaderProvider = new DefaultSymbolReaderProvider (throwIfNoSymbol: false),
 		};
 
+		var skippedAssemblies = new List<AssemblyPreparerInfo> ();
 		foreach (var assembly in Assemblies) {
-			var assemblyDefinition = AssemblyDefinition.ReadAssembly (assembly.InputPath, parameters);
+			AssemblyDefinition assemblyDefinition;
+			try {
+				assemblyDefinition = AssemblyDefinition.ReadAssembly (assembly.InputPath, parameters);
+			} catch (BadImageFormatException) {
+				// Not a managed assembly, skip it (pass it through unchanged).
+				log.Log ($"Skipping non-managed assembly: {assembly.InputPath}");
+				assembly.OutputPath = assembly.InputPath;
+				skippedAssemblies.Add (assembly);
+				continue;
+			}
 			linkContext.Assemblies.Add (assemblyDefinition);
 			assembly.Assembly = assemblyDefinition;
 			configuration.Context.Annotations.SetAction (assemblyDefinition, ComputeAssemblyAction (assemblyDefinition, assembly));
-			configuration.AssemblyResolver.ResolverCache.Add (assemblyDefinition.Name.Name, assemblyDefinition);
+			configuration.AssemblyResolver.ResolverCache [assemblyDefinition.Name.Name] = assemblyDefinition;
 		}
 
 		configuration.Context.Annotations.CollectOverrides (linkContext.Assemblies, linkContext);
@@ -170,6 +180,9 @@ public class AssemblyPreparer : IDisposable {
 		// save assemblies
 
 		foreach (var assembly in Assemblies) {
+			if (skippedAssemblies.Contains (assembly))
+				continue;
+
 			var assemblyDefinition = assembly.Assembly;
 			if (assemblyDefinition is null) {
 				exceptions.Add (ErrorHelper.CreateError (99, $"Assembly definition is null for {assembly.InputPath}"));

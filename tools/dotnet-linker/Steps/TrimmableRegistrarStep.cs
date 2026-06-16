@@ -39,6 +39,9 @@ namespace Xamarin.Linker {
 			if (App.Registrar != RegistrarMode.TrimmableStatic)
 				return;
 
+			if (App.IsPostProcessingAssemblies)
+				return;
+
 			Configuration.Application.StaticRegistrar.Register (Configuration.GetNonDeletedAssemblies (this));
 		}
 
@@ -153,6 +156,14 @@ namespace Xamarin.Linker {
 			base.TryEndProcess ();
 
 			if (App.Registrar != RegistrarMode.TrimmableStatic) {
+				exceptions = null;
+				return;
+			}
+
+			if (App.IsPostProcessingAssemblies) {
+				// The assembly-preparer already created the type map assemblies, and the
+				// TypeMapEntryAssembly MSBuild property tells ILLink about the root type map
+				// assembly via --typemap-entry-assembly, so there's nothing to do here.
 				exceptions = null;
 				return;
 			}

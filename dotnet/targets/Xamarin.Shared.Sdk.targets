@@ -619,6 +619,9 @@
 			<RunILLink Condition="'$(PublishAot)' == 'true'">true</RunILLink>
 
 			<TypeMapEntryAssembly Condition="'$(Registrar)' == 'trimmable-static'">$(_TypeMapAssemblyName)</TypeMapEntryAssembly>
+			<!-- ILLink targets add typemap-entry-assembly to _ExtraTrimmerArgs in a static PropertyGroup,
+			     but that's evaluated at import time before TypeMapEntryAssembly is set. Add it here instead. -->
+			<_ExtraTrimmerArgs Condition="'$(Registrar)' == 'trimmable-static' And $([MSBuild]::VersionGreaterThanOrEquals($(TargetFrameworkVersion), '11.0'))">$(_ExtraTrimmerArgs) --typemap-entry-assembly &quot;$(_TypeMapAssemblyName)&quot;</_ExtraTrimmerArgs>
 
 			<!--
 				In the case of NativeAOT builds, the trim warnings will be produced either by the ILLink roslyn analyzer in Debug builds

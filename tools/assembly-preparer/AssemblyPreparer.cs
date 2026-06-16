@@ -168,7 +168,10 @@ public class AssemblyPreparer : IDisposable {
 			linkContext.Assemblies.Add (assemblyDefinition);
 			assembly.Assembly = assemblyDefinition;
 			configuration.Context.Annotations.SetAction (assemblyDefinition, ComputeAssemblyAction (assemblyDefinition, assembly));
-			configuration.AssemblyResolver.ResolverCache [assemblyDefinition.Name.Name] = assemblyDefinition;
+			var assemblyName = assemblyDefinition.Name.Name;
+			if (configuration.AssemblyResolver.ResolverCache.ContainsKey (assemblyName))
+				exceptions.Add (ErrorHelper.CreateWarning (99, $"Duplicate assembly name '{assemblyName}' in the list of assemblies to prepare (new: {assembly.InputPath})."));
+			configuration.AssemblyResolver.ResolverCache [assemblyName] = assemblyDefinition;
 		}
 
 		configuration.Context.Annotations.CollectOverrides (linkContext.Assemblies, linkContext);

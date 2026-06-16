@@ -368,8 +368,14 @@ namespace Xamarin.Linker {
 		}
 
 		int counter;
+		AssemblyDefinition? last_assembly;
 		void CreateUnmanagedCallersMethod (MethodDefinition method, AssemblyTrampolineInfo infos, List<TypeDefinition> proxyInterfaces)
 		{
+			if (last_assembly != method.Module.Assembly) {
+				counter = 0;
+				last_assembly = method.Module.Assembly;
+			}
+
 			var baseMethod = StaticRegistrar.GetBaseMethodInTypeHierarchy (method);
 			var placeholderType = abr.System_IntPtr;
 			var name = $"callback_{counter++}_{Sanitize (method.DeclaringType.FullName)}_{Sanitize (method.Name)}";

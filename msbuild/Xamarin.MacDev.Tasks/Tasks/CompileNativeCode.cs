@@ -156,7 +156,7 @@ namespace Xamarin.MacDev.Tasks {
 			return !Log.HasLoggedErrors;
 		}
 
-		public bool ShouldCopyToBuildServer (ITaskItem item) => false;
+		public bool ShouldCopyToBuildServer (ITaskItem item) => true;
 
 		public bool ShouldCreateOutputFile (ITaskItem item) => true;
 

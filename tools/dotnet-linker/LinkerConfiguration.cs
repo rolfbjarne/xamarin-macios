@@ -10,7 +10,9 @@ using Mono.Cecil;
 using Mono.Linker;
 using Mono.Linker.Steps;
 
+#if ASSEMBLY_PREPARER
 using Xamarin.Build;
+#endif
 using Xamarin.Bundler;
 using Xamarin.Utils;
 using Xamarin.Tuner;
@@ -63,9 +65,7 @@ namespace Xamarin.Linker {
 
 		public IList<string> RegistrationMethods { get; set; } = new List<string> ();
 		public List<string> NativeCodeToCompileAndLink { get; private set; } = new List<string> ();
-#if !ASSEMBLY_PREPARER
 		public CompilerFlags CompilerFlags;
-#endif
 
 #if ASSEMBLY_PREPARER
 		List<ProductException> exceptions = new List<ProductException> ();
@@ -651,9 +651,7 @@ namespace Xamarin.Linker {
 			configurations.Add (this.Context, this);
 #endif
 
-#if !ASSEMBLY_PREPARER
 			CompilerFlags = new CompilerFlags (Application);
-#endif
 
 			var configurator = GetConfigurator (linker_file);
 
@@ -870,6 +868,7 @@ namespace Xamarin.Linker {
 
 		public void FlushOutputForMSBuild ()
 		{
+			Directory.CreateDirectory (ItemsDirectory);
 			foreach (var kvp in msbuild_items) {
 				var itemName = kvp.Key;
 				var items = kvp.Value;

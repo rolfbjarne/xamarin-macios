@@ -35,6 +35,10 @@ namespace Xamarin.MacDev.Tasks {
 		public ITaskItem? OptionsFile { get; set; }
 		#endregion
 
+		public ITaskItem [] OriginalAssemblies { get; set; } = [];
+
+		public bool PostProcessing { get; set; }
+
 		#region Outputs
 		[Output]
 		public ITaskItem [] OutputAssemblies { get; set; } = [];
@@ -63,7 +67,14 @@ namespace Xamarin.MacDev.Tasks {
 				var infos = InputAssemblies.Select (GetAssemblyInfo).ToArray ();
 				using var preparer = new AssemblyPreparer (this, infos, OptionsFile?.ItemSpec ?? "");
 				preparer.MakeReproPath = MakeReproPath;
-				var rv = preparer.Prepare (out var exceptions);
+				bool rv;
+				List<ProductException> exceptions;
+
+				if (PostProcessing) {
+					rv = preparer.PostProcess (out exceptions);
+				} else {
+					rv = preparer.Prepare (out exceptions);
+				}
 
 				foreach (var pe in exceptions) {
 					if (pe.IsError (this)) {

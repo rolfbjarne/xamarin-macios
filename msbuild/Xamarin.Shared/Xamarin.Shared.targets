@@ -3448,7 +3448,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ItemGroup>
 	</Target>
 
-
 	<!--
 		TODO: add inputs as hashes to the stamp file, delete the stamp file if input has changed
 	-->
@@ -3467,12 +3466,14 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			Postprocessing="true"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 		>
-			<Output TaskParameter="OutputAssemblies" ItemName="_PreparedAssemblies" />
+			<Output TaskParameter="OutputAssemblies" ItemName="_PostProcessedAssemblies" />
 		</PrepareAssemblies>
 
-
-		<!-- load linker output -->
-
+		<ItemGroup>
+			<ResolvedFileToPublish Remove="@(_PreparedAssemblies)" />
+			<ResolvedFileToPublish Include="@(_PostProcessedAssemblies)" />
+			<FileWrites Include="@(_PostProcessedAssemblies)" />
+		</ItemGroup>
 	</Target>
 
 	<Import Project="$(MSBuildThisFileDirectory)Xamarin.Shared.ObjCBinding.targets" Condition="'$(IsBindingProject)' == 'true'" />

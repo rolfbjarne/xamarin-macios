@@ -3447,6 +3447,33 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ItemGroup>
 	</Target>
 
+
+	<!--
+		TODO: add inputs as hashes to the stamp file, delete the stamp file if input has changed
+	-->
+	<Target
+		Name="_PostprocessAssemblies"
+		Condition="'$(PrepareAssemblies)' == 'true'"
+		Inputs="@(_PreparedAssemblies)"
+		Outputs="$(_PrepareAssembliesStampFile)"
+		BeforeTargets="_LoadLinkerOutput"
+		>
+		<PrepareAssemblies
+			InputAssemblies="@(_PreparedAssemblies)"
+			MakeReproPath="$(_PostprocessAssembliesMakeReproPath)"
+			OptionsFile="$(_CustomLinkerOptionsFile)"
+			OriginalAssemblies="$(_AssembliesToPrepare)"
+			Postprocessing="true"
+			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+		>
+			<Output TaskParameter="OutputAssemblies" ItemName="_PreparedAssemblies" />
+		</PrepareAssemblies>
+
+
+		<!-- load linker output -->
+
+	</Target>
+
 	<Import Project="$(MSBuildThisFileDirectory)Xamarin.Shared.ObjCBinding.targets" Condition="'$(IsBindingProject)' == 'true'" />
 
 	<Import Project="$(MSBuildThisFileDirectory)Xamarin.Shared.Stubs.targets" />

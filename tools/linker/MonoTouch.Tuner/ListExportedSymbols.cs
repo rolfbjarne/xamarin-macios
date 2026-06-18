@@ -16,7 +16,13 @@ using Xamarin.Utils;
 #nullable enable
 
 namespace Xamarin.Linker.Steps {
+#if ASSEMBLY_PREPARER
+	public class ListExportedSymbols : ConfigurationAwareStep {
+		protected override string Name { get; } = "List Exported Symbols";
+		protected override int ErrorCode { get; } = 2510;
+#else
 	public class ListExportedSymbols : BaseStep {
+#endif
 		PInvokeWrapperGenerator? state;
 
 		PInvokeWrapperGenerator? State {
@@ -34,7 +40,11 @@ namespace Xamarin.Linker.Steps {
 			}
 		}
 
+#if ASSEMBLY_PREPARER
+		protected override void TryEndProcess ()
+#else
 		protected override void EndProcess ()
+#endif
 		{
 			if (state?.Started == true) {
 				// The generator is 'started' by the linker, which means it may not
@@ -44,6 +54,7 @@ namespace Xamarin.Linker.Steps {
 			base.EndProcess ();
 		}
 
+#if !ASSEMBLY_PREPARER
 		public LinkerConfiguration Configuration {
 			get {
 				return LinkerConfiguration.GetInstance (Context);
@@ -55,12 +66,17 @@ namespace Xamarin.Linker.Steps {
 				return Configuration.DerivedLinkContext;
 			}
 		}
+#endif
 
 		public ListExportedSymbols ()
 		{
 		}
 
+#if ASSEMBLY_PREPARER
+		protected override void TryProcessAssembly (AssemblyDefinition assembly)
+#else
 		protected override void ProcessAssembly (AssemblyDefinition assembly)
+#endif
 		{
 			base.ProcessAssembly (assembly);
 

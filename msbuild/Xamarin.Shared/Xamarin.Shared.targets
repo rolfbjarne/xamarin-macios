@@ -3398,6 +3398,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 	<PropertyGroup>
 		<PrepareAssemblies Condition="'$(PrepareAssemblies)' == ''">false</PrepareAssemblies>
+		<PostProcessAssemblies Condition="'$(PostProcessAssemblies)' == ''">$(PrepareAssemblies)</PostProcessAssemblies>
 	</PropertyGroup>
 
 	<PropertyGroup>

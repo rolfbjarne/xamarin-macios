@@ -66,7 +66,7 @@ namespace Xamarin.Linker {
 				Report (ErrorHelper.CreateError (71, Errors.MX0071, platform, App.ProductName));
 				break;
 			}
-			return Array.Empty<string>();
+			return Array.Empty<string> ();
 		}
 
 #if ASSEMBLY_PREPARER

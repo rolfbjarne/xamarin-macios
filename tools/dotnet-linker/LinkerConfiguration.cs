@@ -868,6 +868,7 @@ namespace Xamarin.Linker {
 
 		public void FlushOutputForMSBuild ()
 		{
+			Directory.CreateDirectory (ItemsDirectory);
 			foreach (var kvp in msbuild_items) {
 				var itemName = kvp.Key;
 				var items = kvp.Value;

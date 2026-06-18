@@ -51,7 +51,9 @@ namespace Xamarin.Linker.Steps {
 				// be started if the linker was not executed due to re-using cached results.
 				state.End ();
 			}
+#if !ASSEMBLY_PREPARER
 			base.EndProcess ();
+#endif
 		}
 
 #if !ASSEMBLY_PREPARER
@@ -74,12 +76,12 @@ namespace Xamarin.Linker.Steps {
 
 #if ASSEMBLY_PREPARER
 		protected override void TryProcessAssembly (AssemblyDefinition assembly)
+		{
 #else
 		protected override void ProcessAssembly (AssemblyDefinition assembly)
-#endif
 		{
 			base.ProcessAssembly (assembly);
-
+#endif
 			if (Annotations.GetAction (assembly) == AssemblyAction.Delete)
 				return;
 

@@ -23,6 +23,10 @@ namespace MonoTouch.Tuner {
 			foreach (var assembly in configuration.AssemblyInfos) {
 				var assemblyDefinition = assembly.Assembly;
 				if (assemblyDefinition is null) {
+					if (!assembly.IsCILAssembly) {
+						// Non-managed assembly, already handled by LoadAssembliesStep (OutputPath = InputPath).
+						continue;
+					}
 					exceptions.Add (ErrorHelper.CreateError (99, $"Assembly definition is null for {assembly.InputPath}"));
 					return;
 				}

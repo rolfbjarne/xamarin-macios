@@ -3454,8 +3454,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<Target
 		Name="_PostprocessAssemblies"
 		Condition="'$(PrepareAssemblies)' == 'true'"
-		Inputs="@(_PreparedAssemblies)"
-		Outputs="$(_PrepareAssembliesStampFile)"
 		BeforeTargets="_LoadLinkerOutput"
 		>
 		<PrepareAssemblies

@@ -781,7 +781,9 @@
 			>
 				<TrimMode>copy</TrimMode> <!-- Don't use 'copyused', because that might still end up saving some assemblies, and if that's the platform assembly, it may break the partial static registrar -->
 			</ResolvedFileToPublish>
+		</ItemGroup>
 
+		<ItemGroup Condition="!('$(PrepareAssemblies)' == 'true' And '$(PostProcessAssemblies)' == 'true')">
 			<!--
 				pre-mark custom steps
 			-->
@@ -853,7 +855,9 @@
 			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" Type="Xamarin.Linker.ComputeAOTArguments" Condition="'$(PostProcessAssemblies)' != 'true'" />
 			<!-- Must be the last step. -->
 			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" Type="Xamarin.Linker.DoneStep" Condition="'$(PostProcessAssemblies)' != 'true'" />
+		</ItemGroup>
 
+		<ItemGroup>
 			<!-- _BundlerXmlDefinitions comes from any -xml arguments to mtouch/mmp -->
 			<TrimmerRootDescriptor Include="@(_BundlerXmlDefinitions)" />
 			<!-- LinkDescription can be defined in the user's csproj -->

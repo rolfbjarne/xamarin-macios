@@ -149,7 +149,6 @@ public class AssemblyPreparer : IDisposable {
 		var steps = new ConfigurationAwareStep [] {
 			// All the same steps as the custom trimmer steps that are run after sweeping in Xamarin.Shared.Sdk.targets (and in the same order).
 			new LoadAssembliesStep (), // LoadNonSkippedAssembliesStep
-			new PopulateApplicationAssembliesStep (),
 
 			// post-sweep
 			new ExtractBindingLibrariesStep (),
@@ -159,6 +158,10 @@ public class AssemblyPreparer : IDisposable {
 			// We're not doing ClassHandleRewriterStep, that's replaced by InlineClassGetHandleStep, which is run in Prepare().
 
 			new SaveAssembliesStep (),
+
+			// PopulateApplicationAssembliesStep must run after SaveAssembliesStep so that
+			// OutputPath is set correctly (used by ComputeAOTArguments and GatherFrameworksStep).
+			new PopulateApplicationAssembliesStep (),
 
 			// post-output
 

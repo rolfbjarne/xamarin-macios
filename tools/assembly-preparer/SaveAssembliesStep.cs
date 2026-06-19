@@ -35,7 +35,17 @@ namespace MonoTouch.Tuner {
 				switch (action) {
 				case AssemblyAction.Copy:
 				case AssemblyAction.CopyUsed:
-					assembly.OutputPath = assembly.InputPath;
+					if (configuration.Application.IsPostProcessingAssemblies && assembly.InputPath != assembly.OutputPath) {
+						// During post-processing, copy unchanged assemblies to the output directory
+						// so all assemblies are in the same directory (required for AOT compilation).
+						PathUtils.CreateDirectoryForFile (assembly.OutputPath);
+						File.Copy (assembly.InputPath, assembly.OutputPath, true);
+						var pdb = Path.ChangeExtension (assembly.InputPath, ".pdb");
+						if (File.Exists (pdb))
+							File.Copy (pdb, Path.ChangeExtension (assembly.OutputPath, ".pdb"), true);
+					} else {
+						assembly.OutputPath = assembly.InputPath;
+					}
 					continue;
 				case AssemblyAction.Link:
 				case AssemblyAction.Save:

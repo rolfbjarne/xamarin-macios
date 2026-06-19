@@ -3420,6 +3420,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ItemGroup>
 		<PropertyGroup>
 			<PreparedAssembliesDirectory>$([MSBuild]::EnsureTrailingSlash('$(DeviceSpecificIntermediateOutputPath)prepared-assemblies'))</PreparedAssembliesDirectory>
+			<_PostprocessedAssembliesDirectory>$([MSBuild]::EnsureTrailingSlash('$(DeviceSpecificIntermediateOutputPath)postprocessed-assemblies'))</_PostprocessedAssembliesDirectory>
 		</PropertyGroup>
 	</Target>
 
@@ -3461,6 +3462,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			MakeReproPath="$(_PostprocessAssembliesMakeReproPath)"
 			OptionsFile="$(_CustomLinkerOptionsFile)"
 			OriginalAssemblies="$(_AssembliesToPrepare)"
+			OutputDirectory="$(_PostprocessedAssembliesDirectory)"
 			Postprocessing="true"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 		>

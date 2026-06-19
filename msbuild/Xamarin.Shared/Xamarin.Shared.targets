@@ -3420,7 +3420,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ItemGroup>
 		<PropertyGroup>
 			<PreparedAssembliesDirectory>$([MSBuild]::EnsureTrailingSlash('$(DeviceSpecificIntermediateOutputPath)prepared-assemblies'))</PreparedAssembliesDirectory>
-			<_PostprocessedAssembliesDirectory>$([MSBuild]::EnsureTrailingSlash('$(DeviceSpecificIntermediateOutputPath)postprocessed-assemblies'))</_PostprocessedAssembliesDirectory>
 		</PropertyGroup>
 	</Target>
 
@@ -3449,6 +3448,21 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ItemGroup>
 	</Target>
 
+	<Target
+		Name="_PrepareAssembliesForPostProcessing"
+		DependsOnTargets="$(_PrepareAssembliesForPostProcessingDependsOn)"
+		>
+		<ItemGroup>
+			<!-- Include all managed assemblies (not just those with PostprocessAssembly=true), because the assembly-preparer
+			     needs to know about all assemblies (including the platform assembly) to do its work. This matches what the
+			     linker does internally (via CollectAssembliesStep which resolves all referenced assemblies). -->
+			<_AssembliesToPostProcess Include="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.Extension)' == '.dll' And '%(ResolvedFileToPublish.Culture)' == '' And !$([System.String]::Copy ('%(Filename)').EndsWith ('.resources'))" />
+		</ItemGroup>
+		<PropertyGroup>
+			<_PostprocessedAssembliesDirectory>$([MSBuild]::EnsureTrailingSlash('$(DeviceSpecificIntermediateOutputPath)postprocessed-assemblies'))</_PostprocessedAssembliesDirectory>
+		</PropertyGroup>
+	</Target>
+
 	<!--
 		TODO: add inputs as hashes to the stamp file, delete the stamp file if input has changed
 	-->
@@ -3456,9 +3470,10 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		Name="_PostprocessAssemblies"
 		Condition="'$(PrepareAssemblies)' == 'true'"
 		BeforeTargets="_ComputeStripAssemblyIL;_LoadLinkerOutput"
+		DependsOnTargets="_PrepareAssembliesForPostProcessing"
 		>
 		<PrepareAssemblies
-			InputAssemblies="@(_PreparedAssemblies)"
+			InputAssemblies="@(_AssembliesToPostProcess)"
 			MakeReproPath="$(_PostprocessAssembliesMakeReproPath)"
 			OptionsFile="$(_CustomLinkerOptionsFile)"
 			OriginalAssemblies="$(_AssembliesToPrepare)"
@@ -3470,7 +3485,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</PrepareAssemblies>
 
 		<ItemGroup>
-			<ResolvedFileToPublish Remove="@(_PreparedAssemblies)" />
+			<ResolvedFileToPublish Remove="@(_AssembliesToPostProcess)" />
 			<ResolvedFileToPublish Include="@(_PostProcessedAssemblies)" />
 			<FileWrites Include="@(_PostProcessedAssemblies)" />
 		</ItemGroup>

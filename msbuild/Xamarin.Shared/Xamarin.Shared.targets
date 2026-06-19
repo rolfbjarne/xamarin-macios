@@ -3454,7 +3454,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<Target
 		Name="_PostprocessAssemblies"
 		Condition="'$(PrepareAssemblies)' == 'true'"
-		BeforeTargets="_LoadLinkerOutput"
+		BeforeTargets="_ComputeStripAssemblyIL;_LoadLinkerOutput"
 		>
 		<PrepareAssemblies
 			InputAssemblies="@(_PreparedAssemblies)"

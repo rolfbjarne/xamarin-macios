@@ -149,6 +149,7 @@ public class AssemblyPreparer : IDisposable {
 		var steps = new ConfigurationAwareStep [] {
 			// All the same steps as the custom trimmer steps that are run after sweeping in Xamarin.Shared.Sdk.targets (and in the same order).
 			new LoadAssembliesStep (), // LoadNonSkippedAssembliesStep
+			new PopulateApplicationAssembliesStep (),
 
 			// post-sweep
 			new ExtractBindingLibrariesStep (),

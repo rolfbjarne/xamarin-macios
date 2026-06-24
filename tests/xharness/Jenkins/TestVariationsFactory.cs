@@ -199,7 +199,7 @@ namespace Xharness.Jenkins {
 					yield return new TestData { Variation = "Release (static registrar)", TestVariation = "release|static-registrar", Ignored = ignore };
 					yield return new TestData { Variation = "Release (static registrar, all optimizations)", TestVariation = "release|static-registrar-all-optimizations-linkall", Ignored = ignore };
 					if (supports_mono && test.Platform == TestPlatform.MacCatalyst) {
-						yield return new TestData { Variation = "Release (ARM64, LLVM)", TestVariation = "release|llvm", Ignored = true : ignore, RuntimeIdentifier = arm64_runtime_identifier };
+						yield return new TestData { Variation = "Release (ARM64, LLVM)", TestVariation = "release|llvm", Ignored = ignore, RuntimeIdentifier = arm64_runtime_identifier };
 					}
 					if (supports_interpreter) {
 						yield return new TestData { Variation = "Debug (interpreter)", TestVariation = "interpreter", Ignored = ignore };

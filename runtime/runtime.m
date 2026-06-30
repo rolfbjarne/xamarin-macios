@@ -2518,9 +2518,7 @@ static size_t xamarin_coreclr_get_runtime_property (const char *key, char *value
 static bool
 xamarin_is_sandboxed ()
 {
-#if TARGET_OS_IOS || TARGET_OS_TV
-	return true;
-#else
+#if TARGET_OS_OSX || TARGET_OS_MACCATALYST
 	SecTaskRef task = SecTaskCreateFromSelf (NULL);
 	if (task == NULL)
 		return false;
@@ -2535,6 +2533,11 @@ xamarin_is_sandboxed ()
 	CFRelease (task);
 
 	return is_sandboxed;
+#elif TARGET_OS_IOS || TARGET_OS_TV
+	// TARGET_OS_IOS is set for Mac Catalyst too, so we check for TARGET_OS_MACCATALYST first.
+	return true;
+#else
+	#error Unknown platform
 #endif
 }
 

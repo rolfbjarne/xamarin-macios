@@ -1246,7 +1246,10 @@ namespace Xamarin.Linker {
 		{
 			var unmanagedCallersAttribute = new CustomAttribute (abr.UnmanagedCallersOnlyAttribute_Constructor);
 			unmanagedCallersAttribute.Fields.Add (new CustomAttributeNamedArgument ("EntryPoint", new CustomAttributeArgument (abr.System_String, entryPoint)));
-			if (associatedSourceType is not null)
+			// The AssociatedSourceType field is only recognized by the NativeAOT compiler (ILC). The CoreCLR
+			// runtime's attribute parser rejects any UnmanagedCallersOnly named argument it doesn't know about,
+			// so only emit it when we're compiling for NativeAOT.
+			if (associatedSourceType is not null && App.XamarinRuntime == XamarinRuntime.NativeAOT)
 				unmanagedCallersAttribute.Fields.Add (new CustomAttributeNamedArgument ("AssociatedSourceType", new CustomAttributeArgument (abr.System_Type, associatedSourceType)));
 			return unmanagedCallersAttribute;
 		}

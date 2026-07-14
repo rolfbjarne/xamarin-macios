@@ -5,11 +5,11 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>PreviewExtension</string>
+	<string>SpotlightImportExtension</string>
 	<key>CFBundleExecutable</key>
-	<string>ExtensionProject</string>
+	<string>AppExtension</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.xamarin.PreviewExtensionTest</string>
+	<string>com.xamarin.SpotlightImportExtensionTest</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -26,18 +26,15 @@
 	<dict>
 		<key>NSExtensionAttributes</key>
 		<dict>
-			<key>QLSupportedContentTypes</key>
+			<key>CSSupportedContentTypes</key>
 			<array>
-				<string>com.xamarin.test-preview</string>
+				<string>com.xamarin.test-spotlight</string>
 			</array>
-			<key>QLSupportsSearchableItems</key>
-			<false/>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>
-		<string>com.apple.quicklook.preview</string>
+		<string>com.apple.spotlight.import</string>
 		<key>NSExtensionPrincipalClass</key>
-		<string>PreviewViewController</string>
+		<string>ImportExtension</string>
 	</dict>
 </dict>
 </plist>
-

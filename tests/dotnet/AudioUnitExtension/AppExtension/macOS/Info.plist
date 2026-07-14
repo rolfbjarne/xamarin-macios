@@ -5,11 +5,11 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>PreviewExtension</string>
+	<string>AudioUnitExtension</string>
 	<key>CFBundleExecutable</key>
-	<string>ExtensionProject</string>
+	<string>AppExtension</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.xamarin.PreviewExtensionTest</string>
+	<string>com.xamarin.AudioUnitExtensionTest</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -26,18 +26,32 @@
 	<dict>
 		<key>NSExtensionAttributes</key>
 		<dict>
-			<key>QLSupportedContentTypes</key>
+			<key>AudioComponents</key>
 			<array>
-				<string>com.xamarin.test-preview</string>
+				<dict>
+					<key>type</key>
+					<string>aufx</string>
+					<key>subtype</key>
+					<string>test</string>
+					<key>manufacturer</key>
+					<string>Xmrn</string>
+					<key>name</key>
+					<string>XamarinTest: TestAU</string>
+					<key>version</key>
+					<integer>1</integer>
+					<key>sandboxSafe</key>
+					<true/>
+					<key>tags</key>
+					<array>
+						<string>Effects</string>
+					</array>
+				</dict>
 			</array>
-			<key>QLSupportsSearchableItems</key>
-			<false/>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>
-		<string>com.apple.quicklook.preview</string>
+		<string>com.apple.AudioUnit</string>
 		<key>NSExtensionPrincipalClass</key>
-		<string>PreviewViewController</string>
+		<string>TestAudioUnitFactory</string>
 	</dict>
 </dict>
 </plist>
-

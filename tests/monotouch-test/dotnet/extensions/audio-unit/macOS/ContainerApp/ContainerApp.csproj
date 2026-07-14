@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net$(BundledNETCoreAppTargetFrameworkVersion)-macos</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <ApplicationTitle>ContainerApp</ApplicationTitle>
+    <ApplicationId>com.xamarin.monotouch-test.audiounit.containerapp</ApplicationId>
+    <ApplicationVersion>1.0</ApplicationVersion>
+  </PropertyGroup>
+
+  <Import Project="..\..\..\..\..\..\common\shared-dotnet.csproj" />
+
+  <ItemGroup>
+    <Compile Include="..\..\ContainerApp.cs">
+      <Link>ContainerApp.cs</Link>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AppExtension\AppExtension.csproj">
+      <IsAppExtension>true</IsAppExtension>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

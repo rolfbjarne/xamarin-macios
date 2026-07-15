@@ -660,8 +660,23 @@
 		</PropertyGroup>
 
 		<PropertyGroup>
-			<!-- Yep, we want to run ILLink as well, because we need our custom steps to run (NativeAOT sets this to false, so set it back to true) -->
-			<RunILLink Condition="'$(PublishAot)' == 'true'">true</RunILLink>
+			<!--
+				When using NativeAOT + PrepareAssemblies, all our custom linker steps are executed by the
+				assembly-preparer (in the _PrepareAssemblies / _PostprocessAssemblies targets) instead of
+				inside ILLink (they're gated out of the _TrimmerCustomSteps item group when PrepareAssemblies
+				is true). The only reason we run ILLink for NativeAOT is to execute those custom steps (NativeAOT
+				sets RunILLink=false by default and does its own trimming via ILC); now that the custom steps run
+				elsewhere, running ILLink first is redundant - it just trims the assemblies before ILC, but ILC
+				trims them again anyway. So we skip ILLink entirely here and let ILC do all the trimming (the
+				standard NativeAOT flow). This simplifies the pipeline and makes it possible to run ILC before the
+				native registrar code is generated. When ILLink is skipped, we copy the prepared assemblies to the
+				IntermediateLinkDir ourselves (see _PopulateLinkDirWhenSkippingILLink).
+			-->
+			<_SkipILLink Condition="'$(_SkipILLink)' == '' And '$(_UseNativeAot)' == 'true' And '$(PrepareAssemblies)' == 'true'">true</_SkipILLink>
+			<_SkipILLink Condition="'$(_SkipILLink)' == ''">false</_SkipILLink>
+
+			<!-- Yep, we want to run ILLink as well, because we need our custom steps to run (NativeAOT sets this to false, so set it back to true), unless we're skipping ILLink (see _SkipILLink above) -->
+			<RunILLink Condition="'$(PublishAot)' == 'true' And '$(_SkipILLink)' != 'true'">true</RunILLink>
 
 			<TypeMapEntryAssembly Condition="'$(Registrar)' == 'trimmable-static'">$(_TypeMapAssemblyName)</TypeMapEntryAssembly>
 			<!-- ILLink targets add typemap-entry-assembly to _ExtraTrimmerArgs in a static PropertyGroup,
@@ -1724,6 +1739,29 @@
 				<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 			</ResolvedFileToPublish>
 		</ItemGroup>
+	</Target>
+
+	<!--
+		When we skip ILLink (see the _SkipILLink property), nothing populates the IntermediateLinkDir,
+		which is where ILC expects to find the managed assemblies to compile (see the ManagedAssemblyToLink
+		remapping in _XamarinComputeIlcCompileInputs). So copy the (prepared, untrimmed) assemblies to the
+		IntermediateLinkDir ourselves - ILC will trim them. This is the same set of assemblies ILLink would
+		have consumed as input: ILLink read the prepared assemblies and wrote the trimmed result to the
+		IntermediateLinkDir; here we copy the prepared assemblies directly and let ILC do the trimming instead.
+
+		This must run before _PostprocessAssemblies (just like ILLink did), so that we copy the prepared
+		assemblies (and not the postprocessed ones) to the IntermediateLinkDir - in the ILLink scenario ILC
+		consumed the prepared (pre-postprocessing) assemblies, so we preserve that behavior.
+	-->
+	<Target Name="_PopulateLinkDirWhenSkippingILLink"
+			Condition="'$(_SkipILLink)' == 'true'"
+			BeforeTargets="_PostprocessAssemblies;_XamarinComputeIlcCompileInputs"
+			DependsOnTargets="_PrepareAssemblies;PrepareForILLink">
+		<Copy SourceFiles="@(ManagedAssemblyToLink);@(_PDBToLink)"
+			  DestinationFiles="@(ManagedAssemblyToLink->'$(IntermediateLinkDir)%(Filename)%(Extension)');@(_PDBToLink->'$(IntermediateLinkDir)%(Filename)%(Extension)')"
+			  SkipUnchangedFiles="true">
+			<Output TaskParameter="CopiedFiles" ItemName="FileWrites" />
+		</Copy>
 	</Target>
 
 	<Target Name="_XamarinComputeIlcCompileInputs">

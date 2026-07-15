@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
   <PropertyGroup>
-    <OutputType Condition="'$(OutputType)' == ''">Exe</OutputType>
+    <OutputType Condition="'$(IsAppExtension)' != 'true'">Exe</OutputType>
     <DefineConstants>$(DefineConstants);NET</DefineConstants>
     <RootTestsDirectory>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)\..\..'))</RootTestsDirectory>
     <RootNamespace Condition="'$(RootNamespace)' == ''">monotouchtest</RootNamespace>

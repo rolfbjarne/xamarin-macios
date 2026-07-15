@@ -41,10 +41,12 @@ sealed class AudioUnitExtensionTestRunner {
 	const string BundleIdentifier = "com.xamarin.monotouch-test.AudioUnitExtension";
 	const string TestFilterFileName = "monotouch-extension-test-filter.txt";
 	const string LogPredicate = "process == \"AppExtension\" OR eventMessage CONTAINS[c] \"monotouch-test-audio-unit-extension\" OR eventMessage CONTAINS[c] \"AppExtensionSmokeTest\"";
+	const string ZzzzMarker = "ZZZZ ";
 
 	static readonly Regex CompletionRegex = new ("\\[monotouch-test-audio-unit-extension\\] Finished monotouch-test audio unit extension test run\\.|\\[monotouch-test-audio-unit-extension\\] Extension test run failed:", RegexOptions.Compiled);
 	static readonly Regex ExecutedTestRegex = new ("\\[PASS\\]|\\[FAIL\\]|Tests run: [1-9]", RegexOptions.Compiled);
 	static readonly Regex FilteredSuccessRegex = new ("\\[monotouch-test-audio-unit-extension\\] Finished monotouch-test audio unit extension test run\\. Passed: [0-9]+ Failed: 0", RegexOptions.Compiled);
+	static readonly Regex ZzzzLineRegex = new ("ZZZZ (.*)$", RegexOptions.Compiled);
 
 	readonly Options options;
 	readonly StringBuilder transcript = new ();
@@ -260,34 +262,87 @@ sealed class AudioUnitExtensionTestRunner {
 
 	async Task<bool> WaitForExtensionProcessExitAsync (Process testProcess, Process hostProcess, DateTime logStart, DateTime deadline)
 	{
+		// Use 'log stream' to get real-time test output instead of polling with 'log show'.
+		Process? logStream = null;
+		var completionDetected = false;
 		var requestedHostShutdown = false;
 
-		while (true) {
-			if (HasExited (testProcess, out var exitCode)) {
-				if (exitCode.HasValue)
-					Log ($"Extension test process PID {testProcess.Id} exited with code {exitCode.Value}.");
-				else
-					Log ($"Extension test process PID {testProcess.Id} exited.");
-				return true;
-			}
+		try {
+			logStream = new Process ();
+			logStream.StartInfo.FileName = "log";
+			logStream.StartInfo.ArgumentList.Add ("stream");
+			logStream.StartInfo.ArgumentList.Add ("--style");
+			logStream.StartInfo.ArgumentList.Add ("compact");
+			logStream.StartInfo.ArgumentList.Add ("--predicate");
+			logStream.StartInfo.ArgumentList.Add (LogPredicate);
+			logStream.StartInfo.UseShellExecute = false;
+			logStream.StartInfo.RedirectStandardOutput = true;
+			logStream.StartInfo.RedirectStandardError = true;
 
-			if (!requestedHostShutdown) {
-				var systemLog = await GetSystemLogAsync (logStart, DateTime.Now);
-				if (CompletionRegex.IsMatch (systemLog)) {
+			if (!logStream.Start ())
+				throw new InvalidOperationException ("Failed to start 'log stream'.");
+
+			logStream.BeginErrorReadLine ();
+
+			// Read log stream output on a background thread.
+			var streamReader = Task.Run (() => ReadLogStream (logStream, ref completionDetected));
+
+			while (true) {
+				if (HasExited (testProcess, out var exitCode)) {
+					if (exitCode.HasValue)
+						Log ($"Extension test process PID {testProcess.Id} exited with code {exitCode.Value}.");
+					else
+						Log ($"Extension test process PID {testProcess.Id} exited.");
+					return true;
+				}
+
+				if (!requestedHostShutdown && completionDetected) {
 					Log ("Detected the extension completion marker. Stopping the container host so the test process can exit.");
 					TryKillProcess (hostProcess);
 					requestedHostShutdown = true;
 				}
-			}
 
-			if (DateTime.UtcNow >= deadline) {
-				Log ($"Timed out waiting for the extension test process PID {testProcess.Id} to finish after {options.Timeout.TotalMinutes:0} minutes.");
-				TryKillProcess (testProcess);
-				TryKillProcess (hostProcess);
-				return false;
-			}
+				if (DateTime.UtcNow >= deadline) {
+					Log ($"Timed out waiting for the extension test process PID {testProcess.Id} to finish after {options.Timeout.TotalMinutes:0} minutes.");
+					TryKillProcess (testProcess);
+					TryKillProcess (hostProcess);
+					return false;
+				}
 
-			await Task.Delay (TimeSpan.FromSeconds (1));
+				await Task.Delay (TimeSpan.FromMilliseconds (500));
+			}
+		} finally {
+			TryKillProcess (logStream);
+			logStream?.Dispose ();
+		}
+	}
+
+	void ReadLogStream (Process logStream, ref bool completionDetected)
+	{
+		try {
+			string? line;
+			while ((line = logStream.StandardOutput.ReadLine ()) is not null) {
+				// Extract test progress from ZZZZ-prefixed lines and print to stdout.
+				var match = ZzzzLineRegex.Match (line);
+				if (match.Success) {
+					var testOutput = match.Groups [1].Value;
+					Console.WriteLine (testOutput);
+					lock (logLock) {
+						transcript.AppendLine (testOutput);
+						File.AppendAllText (options.LogFilePath, line + Environment.NewLine);
+					}
+				} else {
+					// Write full line to log file for non-ZZZZ output.
+					lock (logLock) {
+						File.AppendAllText (options.LogFilePath, line + Environment.NewLine);
+					}
+				}
+
+				if (CompletionRegex.IsMatch (line))
+					completionDetected = true;
+			}
+		} catch (Exception ex) {
+			Log ($"Error reading log stream: {ex.Message}");
 		}
 	}
 

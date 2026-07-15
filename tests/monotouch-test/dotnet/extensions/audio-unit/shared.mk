@@ -84,8 +84,10 @@ prepare:
 	@# nothing to do here right now
 
 build: prepare
+	$(Q) echo "Building extension test project: $(COLOR_GRAY)$(CONTAINER_PROJECT)$(COLOR_CLEAR) [$(CONFIG) $(RID)]"
 	$(Q) rm -rf "$(abspath $(CURDIR))/AppExtension/bin" "$(abspath $(CURDIR))/AppExtension/obj" "$(abspath $(CURDIR))/ContainerApp/bin" "$(abspath $(CURDIR))/ContainerApp/obj"
 	$(Q) $(DOTNET) build "$(CONTAINER_PROJECT)" "/bl:$(abspath build-$(BINLOG_TIMESTAMP).binlog)" $(DOTNET_BUILD_VERBOSITY) $(BUILD_PARAMETERS) $(CONFIG_ARGUMENT) $(RID_ARGUMENT) $(UNIVERSAL_ARGUMENT) $(USE_MONO_RUNTIME_ARGUMENT)
+	$(Q) echo "Build completed."
 
 register-extension: build
 	$(Q) "$(LSREGISTER)" -f "$(APP_PATH)"

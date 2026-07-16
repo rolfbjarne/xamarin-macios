@@ -29,6 +29,7 @@ public static class ExtensionTestRunner {
 			log = Console.WriteLine;
 
 		var runner = new HeadlessTouchRunner ();
+		runner.RunOnMainThread = true;
 		var asms = TestLoader.GetTestAssemblies ();
 		log ($"Loading {asms.Count ()} assemblies");
 		foreach (var assembly in asms) {

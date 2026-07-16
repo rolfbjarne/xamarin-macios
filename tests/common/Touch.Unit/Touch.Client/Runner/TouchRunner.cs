@@ -110,6 +110,8 @@ namespace MonoTouch.NUnit.UI {
 
 		public HashSet<string>? ExcludedCategories { get; set; }
 
+		public bool RunOnMainThread { get; set; }
+
 		public bool TerminateAfterExecution {
 			get { return TouchOptions.Current.TerminateAfterExecution && !connection_failure; }
 			set { TouchOptions.Current.TerminateAfterExecution = value; }
@@ -601,10 +603,10 @@ namespace MonoTouch.NUnit.UI {
 
 		SettingsDictionary CreateSettings (SettingsDictionary? settings)
 		{
-			if (fixtures is null && (settings is null || settings.Count == 0))
-				return default_settings;
-
 			var dict = new Dictionary<string, object> (default_settings);
+
+			if (RunOnMainThread)
+				dict ["RunOnMainThread"] = true;
 
 			if (settings is not null) {
 				foreach (var key in settings.Keys) {

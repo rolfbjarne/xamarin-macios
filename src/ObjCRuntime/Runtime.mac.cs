@@ -28,6 +28,7 @@
 using System.Reflection;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 
 using AppKit;
 using Registrar;
@@ -77,6 +78,9 @@ namespace ObjCRuntime {
 
 			ResourcesPath = Path.Combine (basePath, "Resources");
 			FrameworksPath = Path.Combine (basePath, "Frameworks");
+
+			if (SynchronizationContext.Current is null)
+				SynchronizationContext.SetSynchronizationContext (new AppKitSynchronizationContext ());
 		}
 #endif // !COREBUILD
 	}

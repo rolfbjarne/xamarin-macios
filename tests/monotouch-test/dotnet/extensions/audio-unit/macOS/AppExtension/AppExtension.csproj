@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net$(BundledNETCoreAppTargetFrameworkVersion)-macos</TargetFramework>
-    <DefineConstants>$(DefineConstants);XAMMAC_TESTS</DefineConstants>
+    <DefineConstants>$(DefineConstants);XAMMAC_TESTS;APP_EXTENSION</DefineConstants>
     <OutputType>Library</OutputType>
     <IsAppExtension>true</IsAppExtension>
     <AssemblyName>AppExtension</AssemblyName>

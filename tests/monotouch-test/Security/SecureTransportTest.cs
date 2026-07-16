@@ -128,6 +128,9 @@ namespace MonoTouchFixtures.Security {
 		}
 
 		[Test]
+#if APP_EXTENSION
+		[Ignore ("App extensions don't have network access for outbound connections.")]
+#endif
 		public void Tls12 ()
 		{
 			try {

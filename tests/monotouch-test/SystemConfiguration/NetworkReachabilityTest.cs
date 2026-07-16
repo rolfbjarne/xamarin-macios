@@ -78,6 +78,9 @@ namespace MonoTouchFixtures.SystemConfiguration {
 		}
 
 		[Test]
+#if APP_EXTENSION
+		[Ignore ("DNS resolution is not available in app extensions.")]
+#endif
 		public void CtorIPAddressPair ()
 		{
 			IPAddress address;

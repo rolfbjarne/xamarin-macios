@@ -20,6 +20,9 @@ namespace MonoTouchFixtures.CoreFoundation {
 		static readonly byte [] dataToSend = { 0, 1, 2, 3 };
 
 		[Test]
+#if APP_EXTENSION
+		[Ignore ("App extensions can't bind sockets to loopback ports.")]
+#endif
 		public void RetainCount ()
 		{
 			var received = new ManualResetEvent (false);
@@ -63,6 +66,9 @@ namespace MonoTouchFixtures.CoreFoundation {
 		}
 
 		[Test]
+#if APP_EXTENSION
+		[Ignore ("App extensions can't bind sockets to loopback ports.")]
+#endif
 		public void Collected ()
 		{
 			// Allocate a determined amount of sockets on a background thread, have them process for a little while,

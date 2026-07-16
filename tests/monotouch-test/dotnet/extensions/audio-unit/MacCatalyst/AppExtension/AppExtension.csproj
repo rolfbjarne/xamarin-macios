@@ -4,6 +4,7 @@
     <TargetFramework>net$(BundledNETCoreAppTargetFrameworkVersion)-maccatalyst</TargetFramework>
     <OutputType>Library</OutputType>
     <IsAppExtension>true</IsAppExtension>
+    <DefineConstants>$(DefineConstants);APP_EXTENSION</DefineConstants>
     <AssemblyName>AppExtension</AssemblyName>
     <RootNamespace>monotouchtestappextension</RootNamespace>
     <IncludeMonoTouchAppDelegate>false</IncludeMonoTouchAppDelegate>

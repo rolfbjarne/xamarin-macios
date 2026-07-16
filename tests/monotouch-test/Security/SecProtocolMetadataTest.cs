@@ -16,6 +16,9 @@ namespace MonoTouchFixtures.Security {
 		}
 
 		[Test]
+#if APP_EXTENSION
+		[Ignore ("App extensions don't have network access for outbound connections.")]
+#endif
 		public void TlsDefaults ()
 		{
 			using (var ep = NWEndpoint.Create ("www.microsoft.com", "https"))

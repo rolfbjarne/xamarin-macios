@@ -128,8 +128,17 @@ namespace AppKit {
 		///         <remarks>To be added.</remarks>
 		public static void EnsureUIThread ()
 		{
-			if (NSApplication.CheckForIllegalCrossThreadCalls && NSApplication.mainThread != Thread.CurrentThread)
-				throw new AppKitThreadAccessException ();
+			if (!NSApplication.CheckForIllegalCrossThreadCalls)
+				return;
+
+			if (mainThread is null) {
+				if (NSThread.Current.IsMainThread)
+					return;
+			} else if (mainThread == Thread.CurrentThread) {
+				return;
+			}
+
+			throw new AppKitThreadAccessException ();
 		}
 
 		/// <param name="del">To be added.</param>

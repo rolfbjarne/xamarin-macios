@@ -1061,6 +1061,7 @@ namespace MonoTouch.NUnit.UI {
 
 	class CallbackTextWriter : TextWriter {
 		Action<string> writeLine;
+		StringBuilder lineBuffer = new StringBuilder ();
 
 		public CallbackTextWriter (Action<string> writeLine)
 		{
@@ -1075,21 +1076,49 @@ namespace MonoTouch.NUnit.UI {
 
 		public override void Close ()
 		{
+			Flush ();
+		}
+
+		public override void Flush ()
+		{
+			if (lineBuffer.Length > 0) {
+				writeLine (lineBuffer.ToString ());
+				lineBuffer.Clear ();
+			}
 		}
 
 		public override void Write (char value)
 		{
-			writeLine (value.ToString ());
+			if (value == '\n') {
+				Flush ();
+			} else {
+				lineBuffer.Append (value);
+			}
 		}
 
 		public override void Write (char [] buffer)
 		{
-			writeLine (new string (buffer));
+			Write (new string (buffer));
 		}
 
-		public override void WriteLine (string value)
+		public override void Write (string? value)
 		{
-			writeLine (value);
+			if (value is null)
+				return;
+
+			var lines = value.Split ('\n');
+			for (var i = 0; i < lines.Length; i++) {
+				lineBuffer.Append (lines [i]);
+				if (i < lines.Length - 1)
+					Flush ();
+			}
+		}
+
+		public override void WriteLine (string? value)
+		{
+			if (value is not null)
+				lineBuffer.Append (value);
+			Flush ();
 		}
 	}
 }

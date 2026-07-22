@@ -1148,7 +1148,6 @@ Microsoft.MacCatalyst.dll:Registrar.Registrar/ObjCType Registrar.Registrar/ObjCM
 Microsoft.MacCatalyst.dll:Registrar.Registrar/ObjCType Registrar.Registrar/ObjCType::BaseType
 Microsoft.MacCatalyst.dll:Registrar.Registrar/ObjCType Registrar.Registrar/ObjCType::superType
 Microsoft.MacCatalyst.dll:Registrar.Registrar/ObjCType Registrar.Registrar/ObjCType::SuperType()
-Microsoft.MacCatalyst.dll:Registrar.Registrar/ObjCType..cctor()
 Microsoft.MacCatalyst.dll:Registrar.Registrar/ObjCType..ctor(Registrar.Registrar, System.Type)
 Microsoft.MacCatalyst.dll:Registrar.Registrar/ObjCType.Add(Registrar.Registrar/ObjCField, System.Collections.Generic.List`1<System.Exception>&)
 Microsoft.MacCatalyst.dll:Registrar.Registrar/ObjCType.Add(Registrar.Registrar/ObjCMethod, System.Collections.Generic.List`1<System.Exception>&)
@@ -1172,12 +1171,9 @@ Microsoft.MacCatalyst.dll:Registrar.Shared
 Microsoft.MacCatalyst.dll:Registrar.Shared.GetMT4127(System.Reflection.MethodBase, System.Collections.Generic.List`1<System.Reflection.MethodBase>)
 Microsoft.MacCatalyst.dll:Registrar.SharedDynamic
 Microsoft.MacCatalyst.dll:Registrar.SharedDynamic.GetOneAttribute`1(System.Reflection.ICustomAttributeProvider)
+Microsoft.MacCatalyst.dll:Registrar.SharedDynamic.IsProtocolInterface(System.Type, System.Object)
 Microsoft.MacCatalyst.dll:Registrar.SharedDynamic.PrepareInterfaceMethodMapping(System.Type)
-Microsoft.MacCatalyst.dll:Registrar.SharedDynamic/<>c
-Microsoft.MacCatalyst.dll:Registrar.SharedDynamic/<>c Registrar.SharedDynamic/<>c::<>9
-Microsoft.MacCatalyst.dll:Registrar.SharedDynamic/<>c..cctor()
-Microsoft.MacCatalyst.dll:Registrar.SharedDynamic/<>c..ctor()
-Microsoft.MacCatalyst.dll:Registrar.SharedDynamic/<>c.<PrepareInterfaceMethodMapping>b__0_0(System.Type, System.Object)
+Microsoft.MacCatalyst.dll:Registrar.SharedDynamic/<>O
 Microsoft.MacCatalyst.dll:Registrar.Trampoline
 Microsoft.MacCatalyst.dll:Registrar.Trampoline Registrar.Registrar/ObjCMethod::trampoline
 Microsoft.MacCatalyst.dll:Registrar.Trampoline Registrar.Registrar/ObjCMethod::Trampoline()
@@ -1269,7 +1265,6 @@ Microsoft.MacCatalyst.dll:System.Boolean UIKit.UIApplication::CheckForEventAndDe
 Microsoft.MacCatalyst.dll:System.Boolean UIKit.UIApplication::CheckForIllegalCrossThreadCalls
 Microsoft.MacCatalyst.dll:System.Boolean[] Foundation.ProtocolMemberAttribute::ParameterByRef()
 Microsoft.MacCatalyst.dll:System.Byte Registrar.Registrar/ObjCField::Alignment
-Microsoft.MacCatalyst.dll:System.Char[] Registrar.Registrar/ObjCType::invalidSelectorCharacters
 Microsoft.MacCatalyst.dll:System.Collections.Generic.Dictionary`2<System.IntPtr,Registrar.Registrar/ObjCType> Registrar.DynamicRegistrar::type_map
 Microsoft.MacCatalyst.dll:System.Collections.Generic.Dictionary`2<System.IntPtr,System.Boolean> ObjCRuntime.Runtime::usertype_cache
 Microsoft.MacCatalyst.dll:System.Collections.Generic.Dictionary`2<System.IntPtr,System.Collections.Generic.Dictionary`2<System.IntPtr,System.Boolean>> ObjCRuntime.Runtime::protocol_cache
@@ -1498,7 +1493,7 @@ Microsoft.MacCatalyst.dll:System.Reflection.MethodBase Registrar.Registrar::conf
 Microsoft.MacCatalyst.dll:System.Reflection.MethodBase Registrar.Registrar::invoke_conforms_to_protocol
 Microsoft.MacCatalyst.dll:System.Reflection.MethodBase Registrar.Registrar/ObjCMethod::Method
 Microsoft.MacCatalyst.dll:System.Reflection.PropertyInfo Registrar.Registrar/ObjCProperty::Property
-Microsoft.MacCatalyst.dll:System.Reflection.TypeFilter Registrar.SharedDynamic/<>c::<>9__0_0
+Microsoft.MacCatalyst.dll:System.Reflection.TypeFilter Registrar.SharedDynamic/<>O::<0>__IsProtocolInterface
 Microsoft.MacCatalyst.dll:System.Runtime.CompilerServices.ConditionalWeakTable`2<Foundation.NSObject,Foundation.NSObjectDataHandle> Foundation.NSObject::data_table
 Microsoft.MacCatalyst.dll:System.Runtime.CompilerServices.ConditionalWeakTable`2<Foundation.NSObject,Foundation.TrackedMemory> Foundation.NSObject::super_map
 Microsoft.MacCatalyst.dll:System.Runtime.CompilerServices.ConditionalWeakTable`2<System.Delegate,ObjCRuntime.BlockCollector> ObjCRuntime.Runtime::block_lifetime_table

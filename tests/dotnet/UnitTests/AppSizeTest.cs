@@ -133,8 +133,10 @@ namespace Xamarin.Tests {
 				Assert.Multiple (() => {
 					AssertAppSize (platform, name, appPath, update, forceUpdate, expectedDirectory);
 
-					if (supportsAssemblyInspection)
+					if (supportsAssemblyInspection) {
 						AssertAssemblyReport (platform, name, appPath, update, expectedDirectory);
+						AssertStaticConstructorReport (platform, name, appPath, update, expectedDirectory);
+					}
 
 					AssertExpectedDSyms (platform, appPath);
 				});
@@ -314,6 +316,43 @@ namespace Xamarin.Tests {
 					Assert.That (addedAPIs, Is.Empty, "Unexpected APIs were added to the preserved set." + updateHint);
 					Assert.That (removedAPIs, Is.Empty, "APIs were unexpectedly removed from the preserved set." + updateHint);
 				}
+			}
+		}
+
+		// Inspect the linked platform assembly so that static constructors removed by release-build trimming are excluded.
+		void AssertStaticConstructorReport (ApplePlatform platform, string name, string appPath, bool update, string expectedDirectory)
+		{
+			var asmDir = Path.Combine (appPath, GetRelativeAssemblyDirectory (platform));
+			var assemblyPath = Path.Combine (asmDir, $"Microsoft.{platform.AsString ()}.dll");
+			using var assembly = AssemblyDefinition.ReadAssembly (assemblyPath, new ReaderParameters { ReadingMode = ReadingMode.Deferred });
+			var staticConstructors = assembly.EnumerateTypes (type => type.HasMethods && type.Methods.Any (method => method.IsConstructor && method.IsStatic)).
+				Select (type => type.FullName).
+				OrderBy (type => type, StringComparer.Ordinal).
+				ToList ();
+			var expectedFile = Path.Combine (expectedDirectory, $"{name}-static-constructors.txt");
+			var expectedStaticConstructors = File.Exists (expectedFile) ? File.ReadAllLines (expectedFile) : [];
+			var addedStaticConstructors = staticConstructors.Except (expectedStaticConstructors).ToList ();
+			var removedStaticConstructors = expectedStaticConstructors.Except (staticConstructors).ToList ();
+
+			if (addedStaticConstructors.Count > 0) {
+				Console.WriteLine ($"    {addedStaticConstructors.Count} additional types with static constructors:");
+				foreach (var type in addedStaticConstructors)
+					Console.WriteLine ($"        {type}");
+			}
+			if (removedStaticConstructors.Count > 0) {
+				Console.WriteLine ($"    {removedStaticConstructors.Count} types no longer have static constructors:");
+				foreach (var type in removedStaticConstructors)
+					Console.WriteLine ($"        {type}");
+			}
+
+			if (update)
+				File.WriteAllLines (expectedFile, staticConstructors);
+
+			if (!update && (addedStaticConstructors.Count > 0 || removedStaticConstructors.Count > 0)) {
+				UploadUpdatedExpectedFile (expectedFile, string.Join ('\n', staticConstructors) + "\n");
+				var updateHint = " " + GetUpdateHint ();
+				Assert.That (addedStaticConstructors, Is.Empty, "Unexpected types with static constructors were added." + updateHint);
+				Assert.That (removedStaticConstructors, Is.Empty, "Types unexpectedly no longer have static constructors." + updateHint);
 			}
 		}
 

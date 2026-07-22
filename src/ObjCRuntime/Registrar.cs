@@ -252,7 +252,7 @@ namespace Registrar {
 
 			// This list is duplicated in tests/mtouch/RegistrarTest.cs.
 			// Update that list whenever this list is updated.
-			static readonly char [] invalidSelectorCharacters = { ' ', '\t', '?', '\\', '!', '|', '@', '"', '\'', '%', '&', '/', '(', ')', '=', '^', '[', ']', '{', '}', ',', '.', ';', '-', '\n', '<', '>' };
+			const string invalidSelectorCharacters = " \t?\\!|@\"'%&/()=^[]{},.;-\n<>";
 			void VerifySelector (ObjCMethod method, [NotNullIfNotNull (nameof (exceptions))] ref List<Exception>? exceptions)
 			{
 				if (method.Method is null)
@@ -287,7 +287,7 @@ namespace Registrar {
 					Registrar.AddException (ref exceptions, Registrar.CreateException (4123, method, Errors.MT4123, Registrar.GetDescriptiveMethodName (method.Method)));
 
 				char ch;
-				var idx = method.Selector.IndexOfAny (invalidSelectorCharacters);
+				var idx = method.Selector.AsSpan ().IndexOfAny (invalidSelectorCharacters);
 				if (idx != -1) {
 					ch = method.Selector [idx];
 					Registrar.AddException (ref exceptions, Registrar.CreateException (4160, method, Errors.MT4160,
@@ -303,7 +303,7 @@ namespace Registrar {
 				foreach (var adoptedProtocol in AdoptedProtocols) {
 					// Tested all of the current 'invalidSelectorCharacters' for protocol names and all of them are invalid.
 					char ch;
-					var idx = adoptedProtocol.IndexOfAny (invalidSelectorCharacters);
+					var idx = adoptedProtocol.AsSpan ().IndexOfAny (invalidSelectorCharacters);
 					var ap = adoptedProtocol;
 					if (idx != -1) {
 						ch = adoptedProtocol [idx];

@@ -1133,7 +1133,6 @@ Microsoft.tvOS.dll:Registrar.Registrar/ObjCType Registrar.Registrar/ObjCMember::
 Microsoft.tvOS.dll:Registrar.Registrar/ObjCType Registrar.Registrar/ObjCType::BaseType
 Microsoft.tvOS.dll:Registrar.Registrar/ObjCType Registrar.Registrar/ObjCType::superType
 Microsoft.tvOS.dll:Registrar.Registrar/ObjCType Registrar.Registrar/ObjCType::SuperType()
-Microsoft.tvOS.dll:Registrar.Registrar/ObjCType..cctor()
 Microsoft.tvOS.dll:Registrar.Registrar/ObjCType..ctor(Registrar.Registrar, System.Type)
 Microsoft.tvOS.dll:Registrar.Registrar/ObjCType.Add(Registrar.Registrar/ObjCField, System.Collections.Generic.List`1<System.Exception>&)
 Microsoft.tvOS.dll:Registrar.Registrar/ObjCType.Add(Registrar.Registrar/ObjCMethod, System.Collections.Generic.List`1<System.Exception>&)
@@ -1157,12 +1156,9 @@ Microsoft.tvOS.dll:Registrar.Shared
 Microsoft.tvOS.dll:Registrar.Shared.GetMT4127(System.Reflection.MethodBase, System.Collections.Generic.List`1<System.Reflection.MethodBase>)
 Microsoft.tvOS.dll:Registrar.SharedDynamic
 Microsoft.tvOS.dll:Registrar.SharedDynamic.GetOneAttribute`1(System.Reflection.ICustomAttributeProvider)
+Microsoft.tvOS.dll:Registrar.SharedDynamic.IsProtocolInterface(System.Type, System.Object)
 Microsoft.tvOS.dll:Registrar.SharedDynamic.PrepareInterfaceMethodMapping(System.Type)
-Microsoft.tvOS.dll:Registrar.SharedDynamic/<>c
-Microsoft.tvOS.dll:Registrar.SharedDynamic/<>c Registrar.SharedDynamic/<>c::<>9
-Microsoft.tvOS.dll:Registrar.SharedDynamic/<>c..cctor()
-Microsoft.tvOS.dll:Registrar.SharedDynamic/<>c..ctor()
-Microsoft.tvOS.dll:Registrar.SharedDynamic/<>c.<PrepareInterfaceMethodMapping>b__0_0(System.Type, System.Object)
+Microsoft.tvOS.dll:Registrar.SharedDynamic/<>O
 Microsoft.tvOS.dll:Registrar.Trampoline
 Microsoft.tvOS.dll:Registrar.Trampoline Registrar.Registrar/ObjCMethod::trampoline
 Microsoft.tvOS.dll:Registrar.Trampoline Registrar.Registrar/ObjCMethod::Trampoline()
@@ -1251,7 +1247,6 @@ Microsoft.tvOS.dll:System.Boolean UIKit.UIApplication::CheckForEventAndDelegateM
 Microsoft.tvOS.dll:System.Boolean UIKit.UIApplication::CheckForIllegalCrossThreadCalls
 Microsoft.tvOS.dll:System.Boolean[] Foundation.ProtocolMemberAttribute::ParameterByRef()
 Microsoft.tvOS.dll:System.Byte Registrar.Registrar/ObjCField::Alignment
-Microsoft.tvOS.dll:System.Char[] Registrar.Registrar/ObjCType::invalidSelectorCharacters
 Microsoft.tvOS.dll:System.Collections.Generic.Dictionary`2<System.IntPtr,Registrar.Registrar/ObjCType> Registrar.DynamicRegistrar::type_map
 Microsoft.tvOS.dll:System.Collections.Generic.Dictionary`2<System.IntPtr,System.Boolean> ObjCRuntime.Runtime::usertype_cache
 Microsoft.tvOS.dll:System.Collections.Generic.Dictionary`2<System.IntPtr,System.Collections.Generic.Dictionary`2<System.IntPtr,System.Boolean>> ObjCRuntime.Runtime::protocol_cache
@@ -1478,7 +1473,7 @@ Microsoft.tvOS.dll:System.Reflection.MethodBase Registrar.Registrar::conforms_to
 Microsoft.tvOS.dll:System.Reflection.MethodBase Registrar.Registrar::invoke_conforms_to_protocol
 Microsoft.tvOS.dll:System.Reflection.MethodBase Registrar.Registrar/ObjCMethod::Method
 Microsoft.tvOS.dll:System.Reflection.PropertyInfo Registrar.Registrar/ObjCProperty::Property
-Microsoft.tvOS.dll:System.Reflection.TypeFilter Registrar.SharedDynamic/<>c::<>9__0_0
+Microsoft.tvOS.dll:System.Reflection.TypeFilter Registrar.SharedDynamic/<>O::<0>__IsProtocolInterface
 Microsoft.tvOS.dll:System.Runtime.CompilerServices.ConditionalWeakTable`2<Foundation.NSObject,Foundation.NSObjectDataHandle> Foundation.NSObject::data_table
 Microsoft.tvOS.dll:System.Runtime.CompilerServices.ConditionalWeakTable`2<Foundation.NSObject,Foundation.TrackedMemory> Foundation.NSObject::super_map
 Microsoft.tvOS.dll:System.Runtime.CompilerServices.ConditionalWeakTable`2<System.Delegate,ObjCRuntime.BlockCollector> ObjCRuntime.Runtime::block_lifetime_table

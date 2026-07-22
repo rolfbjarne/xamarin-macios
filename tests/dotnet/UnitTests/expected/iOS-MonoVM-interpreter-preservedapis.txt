@@ -1133,7 +1133,6 @@ Microsoft.iOS.dll:Registrar.Registrar/ObjCType Registrar.Registrar/ObjCMember::D
 Microsoft.iOS.dll:Registrar.Registrar/ObjCType Registrar.Registrar/ObjCType::BaseType
 Microsoft.iOS.dll:Registrar.Registrar/ObjCType Registrar.Registrar/ObjCType::superType
 Microsoft.iOS.dll:Registrar.Registrar/ObjCType Registrar.Registrar/ObjCType::SuperType()
-Microsoft.iOS.dll:Registrar.Registrar/ObjCType..cctor()
 Microsoft.iOS.dll:Registrar.Registrar/ObjCType..ctor(Registrar.Registrar, System.Type)
 Microsoft.iOS.dll:Registrar.Registrar/ObjCType.Add(Registrar.Registrar/ObjCField, System.Collections.Generic.List`1<System.Exception>&)
 Microsoft.iOS.dll:Registrar.Registrar/ObjCType.Add(Registrar.Registrar/ObjCMethod, System.Collections.Generic.List`1<System.Exception>&)
@@ -1157,12 +1156,9 @@ Microsoft.iOS.dll:Registrar.Shared
 Microsoft.iOS.dll:Registrar.Shared.GetMT4127(System.Reflection.MethodBase, System.Collections.Generic.List`1<System.Reflection.MethodBase>)
 Microsoft.iOS.dll:Registrar.SharedDynamic
 Microsoft.iOS.dll:Registrar.SharedDynamic.GetOneAttribute`1(System.Reflection.ICustomAttributeProvider)
+Microsoft.iOS.dll:Registrar.SharedDynamic.IsProtocolInterface(System.Type, System.Object)
 Microsoft.iOS.dll:Registrar.SharedDynamic.PrepareInterfaceMethodMapping(System.Type)
-Microsoft.iOS.dll:Registrar.SharedDynamic/<>c
-Microsoft.iOS.dll:Registrar.SharedDynamic/<>c Registrar.SharedDynamic/<>c::<>9
-Microsoft.iOS.dll:Registrar.SharedDynamic/<>c..cctor()
-Microsoft.iOS.dll:Registrar.SharedDynamic/<>c..ctor()
-Microsoft.iOS.dll:Registrar.SharedDynamic/<>c.<PrepareInterfaceMethodMapping>b__0_0(System.Type, System.Object)
+Microsoft.iOS.dll:Registrar.SharedDynamic/<>O
 Microsoft.iOS.dll:Registrar.Trampoline
 Microsoft.iOS.dll:Registrar.Trampoline Registrar.Registrar/ObjCMethod::trampoline
 Microsoft.iOS.dll:Registrar.Trampoline Registrar.Registrar/ObjCMethod::Trampoline()
@@ -1251,7 +1247,6 @@ Microsoft.iOS.dll:System.Boolean UIKit.UIApplication::CheckForEventAndDelegateMi
 Microsoft.iOS.dll:System.Boolean UIKit.UIApplication::CheckForIllegalCrossThreadCalls
 Microsoft.iOS.dll:System.Boolean[] Foundation.ProtocolMemberAttribute::ParameterByRef()
 Microsoft.iOS.dll:System.Byte Registrar.Registrar/ObjCField::Alignment
-Microsoft.iOS.dll:System.Char[] Registrar.Registrar/ObjCType::invalidSelectorCharacters
 Microsoft.iOS.dll:System.Collections.Generic.Dictionary`2<System.IntPtr,Registrar.Registrar/ObjCType> Registrar.DynamicRegistrar::type_map
 Microsoft.iOS.dll:System.Collections.Generic.Dictionary`2<System.IntPtr,System.Boolean> ObjCRuntime.Runtime::usertype_cache
 Microsoft.iOS.dll:System.Collections.Generic.Dictionary`2<System.IntPtr,System.Collections.Generic.Dictionary`2<System.IntPtr,System.Boolean>> ObjCRuntime.Runtime::protocol_cache
@@ -1478,7 +1473,7 @@ Microsoft.iOS.dll:System.Reflection.MethodBase Registrar.Registrar::conforms_to_
 Microsoft.iOS.dll:System.Reflection.MethodBase Registrar.Registrar::invoke_conforms_to_protocol
 Microsoft.iOS.dll:System.Reflection.MethodBase Registrar.Registrar/ObjCMethod::Method
 Microsoft.iOS.dll:System.Reflection.PropertyInfo Registrar.Registrar/ObjCProperty::Property
-Microsoft.iOS.dll:System.Reflection.TypeFilter Registrar.SharedDynamic/<>c::<>9__0_0
+Microsoft.iOS.dll:System.Reflection.TypeFilter Registrar.SharedDynamic/<>O::<0>__IsProtocolInterface
 Microsoft.iOS.dll:System.Runtime.CompilerServices.ConditionalWeakTable`2<Foundation.NSObject,Foundation.NSObjectDataHandle> Foundation.NSObject::data_table
 Microsoft.iOS.dll:System.Runtime.CompilerServices.ConditionalWeakTable`2<Foundation.NSObject,Foundation.TrackedMemory> Foundation.NSObject::super_map
 Microsoft.iOS.dll:System.Runtime.CompilerServices.ConditionalWeakTable`2<System.Delegate,ObjCRuntime.BlockCollector> ObjCRuntime.Runtime::block_lifetime_table

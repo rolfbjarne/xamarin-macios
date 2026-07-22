@@ -39,10 +39,7 @@ namespace Registrar {
 				throw ErrorHelper.CreateError (8026, "The 'DynamicRegistrar' class is not supported when the dynamic registrar has been linked away.");
 
 			Dictionary<MethodBase, List<MethodBase>>? rv = null;
-			var ifaces = type.FindInterfaces ((v, o) => {
-				var attribs = v.GetCustomAttributes (typeof (ProtocolAttribute), true);
-				return attribs is not null && attribs.Length > 0;
-			}, null);
+			var ifaces = type.FindInterfaces (IsProtocolInterface, null);
 
 			foreach (var iface in ifaces) {
 				var map = type.GetInterfaceMap (iface);
@@ -65,6 +62,12 @@ namespace Registrar {
 			}
 
 			return rv;
+		}
+
+		static bool IsProtocolInterface (Type type, object? state)
+		{
+			var attribs = type.GetCustomAttributes (typeof (ProtocolAttribute), true);
+			return attribs is not null && attribs.Length > 0;
 		}
 
 		public static T? GetOneAttribute<T> (ICustomAttributeProvider provider) where T : Attribute

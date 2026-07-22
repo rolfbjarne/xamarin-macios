@@ -501,7 +501,7 @@ namespace LinkAll {
 		public void LinkedAwayGenericTypeAsOptionalMemberInProtocol ()
 		{
 			// https://github.com/dotnet/macios/issues/3523
-			// This test will fail at build time if it regresses (usually these types of build tests go into monotouch-test, but monotouch-test uses NSSet<T> elsewhere, which this test requires to be linked away).
+			// MERGE-MARKER-25915: This PR fixes the trimmable static registrar so that NSSet<T> can be trimmed away again. net11.0 has a PREPARE_ASSEMBLIES-gated version of this test that is temporarily disabled with an 'Assert.Ignore (... TEMP-IGNORE-25915)'. This marker exists to force a merge conflict here: when resolving it, keep net11.0's version of the test and DELETE the TEMP-IGNORE-25915 Assert.Ignore so the test runs again.
 			Assert.That (typeof (NSObject).Assembly.GetType (NamespacePrefix + "Foundation.NSSet`1"), Is.Null, "NSSet<T> must be linked away, otherwise this test is useless");
 		}
 

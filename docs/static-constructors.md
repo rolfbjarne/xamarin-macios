@@ -94,6 +94,32 @@ Representative types:
 
 Hand-written or specialized generated initialization. All 35 distinct types are listed below; links point to the constructor source when sequence points are available.
 
+#### Field initializer candidates
+
+These 16 types can replace their explicit static constructors with field or property initializers. This retains the cached values and generated initialization method, but lets the compiler mark the type `beforefieldinit`, removing the stricter initialization checks that this inventory targets.
+
+The following 15 constructors contain only assignments that can move directly to their field or property declarations:
+
+- [`AddressBook.ABAddressBook`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/AddressBook/ABAddressBook.cs#L231)
+- [`AddressBook.ABPersonSocialProfile`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/AddressBook/ABPerson.cs#L336)
+- [`AddressBook.ABPersonSocialProfileService`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/AddressBook/ABPerson.cs#L377)
+- [`CoreAnimation.CATransform3D`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreAnimation/CATransform3D.cs#L47)
+- [`CoreFoundation.CFDictionary`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreFoundation/CFDictionary.cs#L48)
+- [`CoreFoundation.CFErrorDomain`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreFoundation/CFException.cs#L53)
+- [`CoreFoundation.CFExceptionDataKey`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreFoundation/CFException.cs#L88)
+- [`CoreFoundation.CFPreferences`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreFoundation/CFPreferences.cs#L36)
+- [`CoreGraphics.CGFunction`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreGraphics/CGFunction.cs#L46)
+- [`CoreGraphics.CGPattern`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreGraphics/CGPattern.cs#L92)
+- [`CoreMedia.CMTime`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreMedia/CMTime.cs#L461)
+- [`CoreVideo.CVPixelFormatDescription`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreVideo/CVPixelFormatDescription.cs#L231)
+- [`OpenGLES.EAGLColorFormat`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/OpenGLES/EAGLConsts.cs#L47)
+- [`OpenGLES.EAGLDrawableProperty`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/OpenGLES/EAGLConsts.cs#L23)
+- [`UIKit.DraggingEventArgs`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/UIKit/UIScrollView.cs#L20)
+
+[`CoreMedia.CMTimeRange`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreMedia/CoreMedia.cs#L86) is also a candidate, but its conditional `kCMTimeMappingInvalid` lookup needs a small helper that returns the default value when the symbol is unavailable.
+
+The other 19 types are not candidates for this conversion. Twelve AddressBook types deliberately trigger the ordered initialization coordinated by `InitConstants`; `<Module>` performs required module startup; and the four generated AppKit delegates plus `Foundation.NSTimer` need explicit constructors to retain trimming attributes. Their selector and class-handle fields are already initialized inline.
+
 #### Required module initialization
 
 Keep. This calls `RegistrarHelper.Initialize`, which is required module startup.
@@ -102,7 +128,7 @@ Keep. This calls `RegistrarHelper.Initialize`, which is required module startup.
 
 #### AddressBook constants
 
-Keep for compatibility. These types initialize and share native AddressBook constants. A future conversion should replace the shared initialization design as a unit.
+Keep the 13-type `InitConstants` design for compatibility: 12 types invoke the coordinator, which initializes and shares the native AddressBook constants as an ordered unit. The three standalone assignment-only types are field-initializer candidates listed above.
 
 - [`AddressBook.ABAddressBook`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/AddressBook/ABAddressBook.cs#L233)
 - [`AddressBook.ABGroupProperty`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/AddressBook/ABGroup.cs#L53)
@@ -132,7 +158,7 @@ Keep unless the dispatcher implementation is redesigned. These cache selectors, 
 
 #### Canonical values and native constants
 
-Keep. These initialize public or internal canonical values and native constants. Computed properties could change APIs or repeat nontrivial construction; moving the values to another cache only relocates the constructor.
+Keep the cached values, but move their assignment to field initializers as described above.
 
 - [`CoreAnimation.CATransform3D`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreAnimation/CATransform3D.cs#L49)
 - [`CoreMedia.CMTime`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreMedia/CMTime.cs#L47)
@@ -142,7 +168,7 @@ Keep. These initialize public or internal canonical values and native constants.
 
 #### Native callbacks, symbols, and sentinels
 
-Keep for now. These cache native callbacks, symbols, dictionaries, or sentinel values. Each requires a framework-specific lazy or generated-constant design; there is no benign source-only removal that avoids equivalent work.
+Keep the cached callbacks, symbols, dictionaries, and sentinel values, but move their assignment to field initializers as described above.
 
 - [`CoreFoundation.CFDictionary`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreFoundation/CFDictionary.cs#L50)
 - [`CoreFoundation.CFErrorDomain`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreFoundation/CFException.cs#L55)
@@ -154,7 +180,7 @@ Keep for now. These cache native callbacks, symbols, dictionaries, or sentinel v
 
 #### Runtime and framework state
 
-Keep for now. These own runtime defaults, object-map/disposal state, selector tables, architecture data, messaging metadata, or framework singleton state. Splitting class-handle initialization may reduce bodies, but the remaining initialization is observable or stateful.
+`UIKit.DraggingEventArgs` is a direct field-initializer candidate. Keep the explicit `Foundation.NSTimer` constructor because it carries trimming metadata; its class handle is already initialized inline.
 
 - [`Foundation.NSTimer`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/foundation.cs#L7365)
 - [`UIKit.DraggingEventArgs`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/UIKit/UIScrollView.cs#L22)

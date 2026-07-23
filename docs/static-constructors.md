@@ -40,6 +40,25 @@ The baseline is the authoritative per-type inventory. The categories below expla
 
 Generated wrapper types whose constructors host trimming annotations and execute only `GC.KeepAlive (null)`. Wrapper names link to the protocol declarations that generate them. These are candidates for post-mark or post-sweep removal.
 
+For example, bgen generates the following constructors from the [`ARAnchorCopying` protocol declaration](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/arkit.cs#L350-L356). The interface constructor represents the `protocol marker` category, while the wrapper constructor represents the `linker marker` category:
+
+```csharp
+[DynamicDependencyAttribute (DynamicallyAccessedMemberTypes.Interfaces | DynamicallyAccessedMemberTypes.PublicConstructors, typeof (ARAnchorCopyingWrapper))]
+[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+static IARAnchorCopying ()
+{
+	GC.KeepAlive (null);
+}
+
+[DynamicDependencyAttribute (DynamicallyAccessedMemberTypes.PublicConstructors, typeof (ARAnchorCopyingWrapper))]
+static ARAnchorCopyingWrapper ()
+{
+	GC.KeepAlive (null);
+}
+```
+
+The corresponding [bgen implementation](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/bgen/Generator.cs#L5169-L5178) emits the interface constructor and separately [emits the wrapper constructor](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/bgen/Generator.cs#L5292-L5296).
+
 Representative types:
 
 - [`ARKit.ARAnchorCopyingWrapper`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/arkit.cs#L353)

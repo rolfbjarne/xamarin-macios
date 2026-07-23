@@ -325,7 +325,10 @@ namespace Xamarin.Tests {
 			var asmDir = Path.Combine (appPath, GetRelativeAssemblyDirectory (platform));
 			var assemblyPath = Path.Combine (asmDir, $"Microsoft.{platform.AsString ()}.dll");
 			using var assembly = AssemblyDefinition.ReadAssembly (assemblyPath, new ReaderParameters { ReadingMode = ReadingMode.Deferred });
-			var staticConstructors = assembly.EnumerateTypes (type => type.HasMethods && type.Methods.Any (method => method.IsConstructor && method.IsStatic)).
+			var staticConstructors = assembly.EnumerateTypes (type =>
+				!type.IsBeforeFieldInit &&
+				type.HasMethods &&
+				type.Methods.Any (method => method.IsConstructor && method.IsStatic)).
 				Select (type => type.FullName).
 				OrderBy (type => type, StringComparer.Ordinal).
 				ToList ();
@@ -335,12 +338,12 @@ namespace Xamarin.Tests {
 			var removedStaticConstructors = expectedStaticConstructors.Except (staticConstructors).ToList ();
 
 			if (addedStaticConstructors.Count > 0) {
-				Console.WriteLine ($"    {addedStaticConstructors.Count} additional types with static constructors:");
+				Console.WriteLine ($"    {addedStaticConstructors.Count} additional types with static constructors without beforefieldinit:");
 				foreach (var type in addedStaticConstructors)
 					Console.WriteLine ($"        {type}");
 			}
 			if (removedStaticConstructors.Count > 0) {
-				Console.WriteLine ($"    {removedStaticConstructors.Count} types no longer have static constructors:");
+				Console.WriteLine ($"    {removedStaticConstructors.Count} types no longer have static constructors without beforefieldinit:");
 				foreach (var type in removedStaticConstructors)
 					Console.WriteLine ($"        {type}");
 			}
@@ -351,8 +354,8 @@ namespace Xamarin.Tests {
 			if (!update && (addedStaticConstructors.Count > 0 || removedStaticConstructors.Count > 0)) {
 				UploadUpdatedExpectedFile (expectedFile, string.Join ('\n', staticConstructors) + "\n");
 				var updateHint = " " + GetUpdateHint ();
-				Assert.That (addedStaticConstructors, Is.Empty, "Unexpected types with static constructors were added." + updateHint);
-				Assert.That (removedStaticConstructors, Is.Empty, "Types unexpectedly no longer have static constructors." + updateHint);
+				Assert.That (addedStaticConstructors, Is.Empty, "Unexpected types with static constructors without beforefieldinit were added." + updateHint);
+				Assert.That (removedStaticConstructors, Is.Empty, "Types unexpectedly no longer have static constructors without beforefieldinit." + updateHint);
 			}
 		}
 

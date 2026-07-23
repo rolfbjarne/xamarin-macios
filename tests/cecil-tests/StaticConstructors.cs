@@ -27,6 +27,9 @@ namespace Cecil.Tests {
 			var staticConstructors = new HashSet<string> ();
 			foreach (var info in Helper.NetPlatformImplementationAssemblyDefinitions) {
 				foreach (var type in info.Assembly.EnumerateTypes ()) {
+					if (type.IsBeforeFieldInit)
+						continue;
+
 					var cctor = type.Methods.FirstOrDefault (v => v.IsConstructor && v.IsStatic);
 					if (cctor is null)
 						continue;
@@ -46,11 +49,11 @@ namespace Cecil.Tests {
 			if (!string.IsNullOrEmpty (Environment.GetEnvironmentVariable ("WRITE_KNOWN_FAILURES")))
 				File.WriteAllLines (knownFailuresPath, staticConstructors.OrderBy (v => v, StringComparer.Ordinal));
 
-			PrintDifferences ("Types with new static constructors", unknownFailures);
-			PrintDifferences ("Types that no longer have static constructors", fixedFailures);
+			PrintDifferences ("Types with new static constructors without beforefieldinit", unknownFailures);
+			PrintDifferences ("Types that no longer have static constructors without beforefieldinit", fixedFailures);
 			Assert.Multiple (() => {
-				Assert.That (unknownFailures.Count, Is.Zero, "Number of types with new static constructors.");
-				Assert.That (fixedFailures.Count, Is.Zero, "Number of types that no longer have static constructors; remove them from StaticConstructors.KnownFailures.txt.");
+				Assert.That (unknownFailures.Count, Is.Zero, "Number of types with new static constructors without beforefieldinit.");
+				Assert.That (fixedFailures.Count, Is.Zero, "Number of types that no longer have static constructors without beforefieldinit; remove them from StaticConstructors.KnownFailures.txt.");
 			});
 		}
 

@@ -1,12 +1,9 @@
 <Module>
-CoreFoundation.CFArray
 Foundation.NSAutoreleasePool
 Foundation.NSDictionary
 Foundation.NSException
 Foundation.NSObject
-Foundation.NSObject/NSObject_Disposer
 ObjCRuntime.Class
-ObjCRuntime.Libraries/CoreFoundation
 ObjCRuntime.Selector
 UIKit.UIApplication
 UIKit.UIApplicationDelegate

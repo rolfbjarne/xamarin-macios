@@ -177,11 +177,11 @@ namespace Xamarin.Linker {
 		// away again by ILLink.
 		void EmitTypeReferencesForTypeMaps (AssemblyDefinition typeMapAssembly)
 		{
-			// Only crossgen2 needs this, and the added metadata isn't free, so don't do it otherwise.
-			// ReadyToRun is a CoreCLR-only feature, but the property can be set for other runtimes as well.
+			// Only crossgen2 needs this, and the added metadata isn't free, so don't do it for the other runtimes.
+			// We don't narrow this down to ReadyToRun builds, because that would mean different behavior between
+			// .NET versions (ReadyToRun is a .NET 11+ feature), and the cost for the interpreted CoreCLR
+			// configurations is small (~64 KB per runtime identifier in the platform type map assembly).
 			if (App.XamarinRuntime != XamarinRuntime.CoreCLR)
-				return;
-			if (App.PublishReadyToRun != true)
 				return;
 
 			var module = typeMapAssembly.MainModule;

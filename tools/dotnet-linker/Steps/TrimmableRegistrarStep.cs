@@ -169,6 +169,10 @@ namespace Xamarin.Linker {
 		// so it's trimmed away again by ILC/ILLink.
 		void EmitTypeReferencesForTypeMaps (AssemblyDefinition typeMapAssembly)
 		{
+			// Only crossgen2 needs this, and the added metadata isn't free, so don't do it otherwise.
+			if (App.PublishReadyToRun != true)
+				return;
+
 			var module = typeMapAssembly.MainModule;
 			var externalTypes = new List<TypeReference> ();
 			var seen = new HashSet<string> (StringComparer.Ordinal);

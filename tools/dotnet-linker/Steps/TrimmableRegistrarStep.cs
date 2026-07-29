@@ -160,6 +160,47 @@ namespace Xamarin.Linker {
 			il.Append (il.Create (OpCodes.Throw));
 		}
 
+		// The types named by our type-map entries are only mentioned in the custom attribute blobs (as
+		// assembly-qualified names), which means the type map assembly typically ends up without a TypeRef row for
+		// them. crossgen2 can't resolve such a type back to a module token, and crashes with a
+		// NotImplementedException (in ModuleTokenResolver.GetModuleTokenForType) when it ReadyToRun-compiles the
+		// type map assembly. Work around that by emitting an unused method that loads the token of every externally
+		// defined type we name, which makes Cecil emit the corresponding TypeRef rows. The method is never called,
+		// so it's trimmed away again by ILC/ILLink.
+		void EmitTypeReferencesForTypeMaps (AssemblyDefinition typeMapAssembly)
+		{
+			var module = typeMapAssembly.MainModule;
+			var externalTypes = new List<TypeReference> ();
+			var seen = new HashSet<string> (StringComparer.Ordinal);
+
+			foreach (var attribute in typeMapAssembly.CustomAttributes) {
+				foreach (var argument in attribute.ConstructorArguments) {
+					if (argument.Value is not TypeReference type)
+						continue;
+					// Types defined in the type map assembly itself already have a TypeDef row.
+					if (type.Scope == module)
+						continue;
+					if (seen.Add (type.FullName))
+						externalTypes.Add (type);
+				}
+			}
+
+			if (externalTypes.Count == 0)
+				return;
+
+			var holderType = new TypeDefinition ("", "<TypeReferences>", TypeAttributes.NotPublic | TypeAttributes.Abstract | TypeAttributes.Sealed, abr.System_Object);
+			module.Types.Add (holderType);
+
+			var method = holderType.AddMethod ("KeepTypeReferences", MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.Static, abr.System_Void);
+			method.CreateBody (out var il);
+			foreach (var type in externalTypes) {
+				// 'ldtoken' works for open generic types too, unlike a field or parameter of that type.
+				il.Append (il.Create (OpCodes.Ldtoken, type));
+				il.Append (il.Create (OpCodes.Pop));
+			}
+			il.Append (il.Create (OpCodes.Ret));
+		}
+
 		protected override void TryEndProcess (out List<Exception>? exceptions)
 		{
 			CustomAttribute attribute;
@@ -641,6 +682,8 @@ namespace Xamarin.Linker {
 						typeMapAssembly.CustomAttributes.Add (attribute);
 					}
 				}
+
+				EmitTypeReferencesForTypeMaps (typeMapAssembly);
 
 				abr.ClearCurrentAssembly ();
 

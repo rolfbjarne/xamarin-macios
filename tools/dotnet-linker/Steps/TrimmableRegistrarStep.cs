@@ -170,9 +170,11 @@ namespace Xamarin.Linker {
 		//
 		// crossgen2 nonetheless assumes such a TypeRef row exists: it can't resolve the type back to a module
 		// token, and crashes with a NotImplementedException (in ModuleTokenResolver.GetModuleTokenForType) when it
-		// ReadyToRun-compiles the type map assembly. Work around that by emitting an unused method that loads the
-		// token of every externally defined type we name, which makes Cecil emit the corresponding TypeRef rows.
-		// The method is never called, so it's trimmed away again by ILLink.
+		// ReadyToRun-compiles the type map assembly. See https://github.com/dotnet/runtime/issues/131527.
+		//
+		// Work around that by emitting an unused method that loads the token of every externally defined type we
+		// name, which makes Cecil emit the corresponding TypeRef rows. The method is never called, so it's trimmed
+		// away again by ILLink.
 		void EmitTypeReferencesForTypeMaps (AssemblyDefinition typeMapAssembly)
 		{
 			// Only crossgen2 needs this, and the added metadata isn't free, so don't do it otherwise.

@@ -170,6 +170,9 @@ namespace Xamarin.Linker {
 		void EmitTypeReferencesForTypeMaps (AssemblyDefinition typeMapAssembly)
 		{
 			// Only crossgen2 needs this, and the added metadata isn't free, so don't do it otherwise.
+			// ReadyToRun is a CoreCLR-only feature, but the property can be set for other runtimes as well.
+			if (App.XamarinRuntime != XamarinRuntime.CoreCLR)
+				return;
 			if (App.PublishReadyToRun != true)
 				return;
 

@@ -19,14 +19,14 @@ Set `WRITE_KNOWN_FAILURES=1` when an intentional change requires regenerating th
 
 ## Inventory
 
-The initial high-impact inventory contains 11,184 platform/type pairs:
+The initial high-impact inventory contained 11,184 platform/type pairs. After the field-initializer and generated-native-constant changes merged into `main`, 67 entries have been removed and 11,117 remain:
 
 | Platform     | Reported |
 |--------------|---------:|
-| iOS          |    3,311 |
-| tvOS         |    2,055 |
-| Mac Catalyst |    3,087 |
-| macOS        |    2,731 |
+| iOS          |    3,285 |
+| tvOS         |    2,045 |
+| Mac Catalyst |    3,063 |
+| macOS        |    2,724 |
 
 The baseline is the authoritative per-type inventory. The categories below explain whether each constructor can reasonably be removed and provide representative source links. The exact platform/type membership remains in `StaticConstructors.KnownFailures.txt`.
 
@@ -34,7 +34,7 @@ The baseline is the authoritative per-type inventory. The categories below expla
 |---------------------|--------:|
 | `linker marker`     |   7,501 |
 | `protocol marker`   |   3,592 |
-| `other`             |      91 |
+| `other`             |      24 |
 
 ### `linker marker`
 
@@ -111,33 +111,20 @@ Representative types:
 
 ### `other`
 
-Hand-written or specialized generated initialization. All 35 distinct types are listed below; links point to the constructor source when sequence points are available.
+Hand-written or specialized generated initialization. All nine remaining distinct types are listed below; links point to the constructor source when sequence points are available.
 
 #### Field initializer candidates
 
-These 16 types can replace their explicit static constructors with field or property initializers. This retains the cached values and generated initialization method, but lets the compiler mark the type `beforefieldinit`, removing the stricter initialization checks that this inventory targets.
+These three types can replace their explicit static constructors with field or property initializers. This retains the cached values and generated initialization method, but lets the compiler mark the type `beforefieldinit`, removing the stricter initialization checks that this inventory targets.
 
-The following 15 constructors contain only assignments that can move directly to their field or property declarations:
+The following two constructors contain only assignments that can move directly to their field or property declarations:
 
-- [`AddressBook.ABAddressBook`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/AddressBook/ABAddressBook.cs#L231)
-- [`AddressBook.ABPersonSocialProfile`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/AddressBook/ABPerson.cs#L336)
-- [`AddressBook.ABPersonSocialProfileService`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/AddressBook/ABPerson.cs#L377)
-- [`CoreAnimation.CATransform3D`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreAnimation/CATransform3D.cs#L47)
 - [`CoreFoundation.CFDictionary`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreFoundation/CFDictionary.cs#L48)
-- [`CoreFoundation.CFErrorDomain`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreFoundation/CFException.cs#L53)
-- [`CoreFoundation.CFExceptionDataKey`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreFoundation/CFException.cs#L88)
-- [`CoreFoundation.CFPreferences`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreFoundation/CFPreferences.cs#L36)
-- [`CoreGraphics.CGFunction`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreGraphics/CGFunction.cs#L46)
-- [`CoreGraphics.CGPattern`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreGraphics/CGPattern.cs#L92)
 - [`CoreMedia.CMTime`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreMedia/CMTime.cs#L461)
-- [`CoreVideo.CVPixelFormatDescription`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreVideo/CVPixelFormatDescription.cs#L231)
-- [`OpenGLES.EAGLColorFormat`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/OpenGLES/EAGLConsts.cs#L47)
-- [`OpenGLES.EAGLDrawableProperty`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/OpenGLES/EAGLConsts.cs#L23)
-- [`UIKit.DraggingEventArgs`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/UIKit/UIScrollView.cs#L20)
 
 [`CoreMedia.CMTimeRange`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreMedia/CoreMedia.cs#L86) is also a candidate, but its conditional `kCMTimeMappingInvalid` lookup needs a small helper that returns the default value when the symbol is unavailable.
 
-The other 19 types are not candidates for this conversion. Twelve AddressBook types deliberately trigger the ordered initialization coordinated by `InitConstants`; `<Module>` performs required module startup; and the four generated AppKit delegates plus `Foundation.NSTimer` need explicit constructors to retain trimming attributes. Their selector and class-handle fields are already initialized inline.
+The other six types are not candidates for this conversion. `<Module>` performs required module startup, and the four generated AppKit delegates plus `Foundation.NSTimer` need explicit constructors to retain trimming attributes. Their selector and class-handle fields are already initialized inline.
 
 #### Required module initialization
 
@@ -145,9 +132,9 @@ Keep. This calls `RegistrarHelper.Initialize`, which is required module startup.
 
 - [`<Module>`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/ObjCRuntime/RegistrarHelper.cs#L56)
 
-#### AddressBook constants
+#### Migrated AddressBook constants
 
-Keep the 13-type `InitConstants` design for compatibility: 12 types invoke the coordinator, which initializes and shares the native AddressBook constants as an ordered unit. The three standalone assignment-only types are field-initializer candidates listed above.
+Removed by [#26290](https://github.com/dotnet/macios/pull/26290). These constants now use generated `[Field]` accessors. This eliminates the shared `InitConstants` coordinator and the strict constructors that called it while preserving the existing public property and readonly-field shapes. The historical source links document the replaced implementation.
 
 - [`AddressBook.ABAddressBook`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/AddressBook/ABAddressBook.cs#L233)
 - [`AddressBook.ABGroupProperty`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/AddressBook/ABGroup.cs#L53)
@@ -177,38 +164,47 @@ Keep unless the dispatcher implementation is redesigned. These cache selectors, 
 
 #### Canonical values and native constants
 
-Keep the cached values, but move their assignment to field initializers as described above.
+`CoreMedia.CMTime` and `CoreMedia.CMTimeRange` remain field-initializer candidates.
 
-- [`CoreAnimation.CATransform3D`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreAnimation/CATransform3D.cs#L49)
 - [`CoreMedia.CMTime`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreMedia/CMTime.cs#L47)
 - [`CoreMedia.CMTimeRange`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreMedia/CoreMedia.cs#L88)
-- [`OpenGLES.EAGLColorFormat`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/OpenGLES/EAGLConsts.cs#L49)
-- [`OpenGLES.EAGLDrawableProperty`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/OpenGLES/EAGLConsts.cs#L25)
 
 #### Native callbacks, symbols, and sentinels
 
-Keep the cached callbacks, symbols, dictionaries, and sentinel values, but move their assignment to field initializers as described above.
+`CoreFoundation.CFDictionary` remains a field-initializer candidate.
 
 - [`CoreFoundation.CFDictionary`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreFoundation/CFDictionary.cs#L50)
-- [`CoreFoundation.CFErrorDomain`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreFoundation/CFException.cs#L55)
-- [`CoreFoundation.CFExceptionDataKey`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreFoundation/CFException.cs#L90)
-- [`CoreFoundation.CFPreferences`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreFoundation/CFPreferences.cs#L38)
-- [`CoreGraphics.CGFunction`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreGraphics/CGFunction.cs#L48)
-- [`CoreGraphics.CGPattern`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreGraphics/CGPattern.cs#L95)
-- [`CoreVideo.CVPixelFormatDescription`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/CoreVideo/CVPixelFormatDescription.cs#L233)
+
+#### Remaining native constant-loader limitations
+
+The source-tree audit found the following native constant paths that cannot move to generated `[Field]` accessors without changing semantics or the shipped API:
+
+- `CoreFoundation.CFArray`, `CoreFoundation.CFDictionary`, and dispatch queue symbols require the address of a native symbol through `Dlfcn.GetIndirect`. bgen's pointer field support dereferences the symbol with `Dlfcn.GetIntPtr` instead. `CFDictionary` also exposes mutable public callback-pointer fields.
+- `CoreMedia.CMTime` and `CoreMedia.CMTimeRange` are partial structs, and bgen cannot add fields to them. `CMTimeRange` also conditionally handles an unavailable `kCMTimeMappingInvalid` symbol.
+- `CoreTelephony.CTCall` exposes the call-state constants as nullable instance `string` properties. Generated fields are static and use `NSString`, so migration would break the managed API.
+- `CoreAnimation.CAFrameRateRange`, `CoreGraphics.CGRect`, `CoreVideo.CVTime`, `UIKit.UIPointerAccessoryPosition`, and Nearby Interaction sentinel values require custom struct marshaling from symbol addresses, which generated fields do not support.
 
 #### Runtime and framework state
 
-`UIKit.DraggingEventArgs` is a direct field-initializer candidate. Keep the explicit `Foundation.NSTimer` constructor because it carries trimming metadata; its class handle is already initialized inline.
+Keep the explicit `Foundation.NSTimer` constructor because it carries trimming metadata; its class handle is already initialized inline.
 
 - [`Foundation.NSTimer`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/foundation.cs#L7365)
-- [`UIKit.DraggingEventArgs`](https://github.com/dotnet/macios/blob/d8946aa51f156632a75a2540eaa84a9c7b154f21/src/UIKit/UIScrollView.cs#L22)
 
-## Removed in this change
+## Removed
 
-| Type                           | Previous work                                     | Resolution |
-|--------------------------------|---------------------------------------------------|------------|
-| `Registrar.Registrar/ObjCType` | Allocated a fixed array of invalid selector chars | Use a constant string as a span, avoiding the array allocation and its generated constructor. |
-| `Registrar.SharedDynamic/<>c`  | Initialized the singleton for one lambda          | Use a named predicate; the compiler's lazy delegate cache does not require a constructor. |
+| Type                                               | Previous work                                           | Resolution |
+|----------------------------------------------------|---------------------------------------------------------|------------|
+| `Registrar.Registrar/ObjCType`                     | Allocated a fixed array of invalid selector chars       | Use a constant string as a span, avoiding the array allocation and its generated constructor. |
+| `Registrar.SharedDynamic/<>c`                      | Initialized the singleton for one lambda                | Use a named predicate; the compiler's lazy delegate cache does not require a constructor. |
+| `CoreAnimation.CATransform3D`                      | Initialized the identity transform                      | [#26264](https://github.com/dotnet/macios/pull/26264) initializes `Identity` directly at its declaration. |
+| `CoreGraphics.CGFunction`                          | Initialized native callback pointers                    | [#26264](https://github.com/dotnet/macios/pull/26264) initializes `cbacks` directly at its declaration. |
+| `CoreGraphics.CGPattern`                           | Initialized native callback pointers                    | [#26264](https://github.com/dotnet/macios/pull/26264) initializes `callbacks` directly at its declaration. |
+| `CoreVideo.CVPixelFormatDescription`               | Initialized obsolete aliases for pixel format keys      | [#26264](https://github.com/dotnet/macios/pull/26264) initializes each alias directly at its declaration. |
+| `UIKit.DraggingEventArgs`                          | Initialized shared Boolean event data                   | [#26264](https://github.com/dotnet/macios/pull/26264) initializes `True` and `False` directly at their declarations. |
+| AddressBook constant types and `InitConstants`     | Loaded and coordinated AddressBook constants by hand    | [#26290](https://github.com/dotnet/macios/pull/26290) generates `[Field]` accessors and removes the shared coordinator and strict constructors. |
+| `CoreFoundation.CFErrorDomain`                     | Loaded four `NSString` constants in a strict constructor | [#26290](https://github.com/dotnet/macios/pull/26290) generates `[Field]` accessors while retaining the public readonly fields. |
+| `CoreFoundation.CFExceptionDataKey`                | Loaded five `NSString` constants in a strict constructor | [#26290](https://github.com/dotnet/macios/pull/26290) generates `[Field]` accessors while retaining the public readonly fields. |
+| `CoreFoundation.CFPreferences`                     | Loaded `CurrentApplication` in a strict constructor     | [#26290](https://github.com/dotnet/macios/pull/26290) generates a `[Field]` accessor while retaining the public readonly field. |
+| `OpenGLES.EAGLColorFormat`, `EAGLDrawableProperty` | Loaded four `NSString` constants in strict constructors | [#26290](https://github.com/dotnet/macios/pull/26290) generates `[Field]` accessors while retaining the public readonly fields. |
 
 The next broad optimization should target the `linker marker` category with a post-mark or post-sweep cleanup.

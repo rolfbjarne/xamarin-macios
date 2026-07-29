@@ -161,12 +161,18 @@ namespace Xamarin.Linker {
 		}
 
 		// The types named by our type-map entries are only mentioned in the custom attribute blobs (as
-		// assembly-qualified names), which means the type map assembly typically ends up without a TypeRef row for
-		// them. crossgen2 can't resolve such a type back to a module token, and crashes with a
-		// NotImplementedException (in ModuleTokenResolver.GetModuleTokenForType) when it ReadyToRun-compiles the
-		// type map assembly. Work around that by emitting an unused method that loads the token of every externally
-		// defined type we name, which makes Cecil emit the corresponding TypeRef rows. The method is never called,
-		// so it's trimmed away again by ILC/ILLink.
+		// assembly-qualified names), which means the type map assembly ends up without a TypeRef row for them.
+		// That's valid metadata: ECMA-335 II.23.3 only requires the type to be stored as a SerString with its
+		// canonical name, and neither the CustomAttribute (II.22.10) nor the TypeRef (II.22.38) validity rules
+		// require a corresponding TypeRef row. The runtime agrees: it resolves these types by parsing the string,
+		// not by looking at the TypeRef table (and the type map design explicitly says the assembly name in
+		// TypeMapAssemblyTargetAttribute doesn't need a matching AssemblyRef row either).
+		//
+		// crossgen2 nonetheless assumes such a TypeRef row exists: it can't resolve the type back to a module
+		// token, and crashes with a NotImplementedException (in ModuleTokenResolver.GetModuleTokenForType) when it
+		// ReadyToRun-compiles the type map assembly. Work around that by emitting an unused method that loads the
+		// token of every externally defined type we name, which makes Cecil emit the corresponding TypeRef rows.
+		// The method is never called, so it's trimmed away again by ILLink.
 		void EmitTypeReferencesForTypeMaps (AssemblyDefinition typeMapAssembly)
 		{
 			// Only crossgen2 needs this, and the added metadata isn't free, so don't do it otherwise.

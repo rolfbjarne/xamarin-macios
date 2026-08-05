@@ -111,7 +111,7 @@ Representative types:
 
 ### `other`
 
-Hand-written or specialized generated initialization. All six remaining distinct types are required: `<Module>` performs module startup, and the four generated AppKit delegates plus `Foundation.NSTimer` retain trimming metadata. Their selector and class-handle fields are already initialized inline.
+Hand-written or specialized generated initialization. All six remaining distinct types are required: `<Module>` performs module startup, while `AppKit.NSApplication._NSApplicationDelegate`, `AppKit.NSPageController._NSPageControllerDelegate`, `AppKit.NSTableView._NSTableViewDelegate`, `AppKit.NSTextView._NSTextViewDelegate`, and `Foundation.NSTimer` retain trimming metadata. Their selector and class-handle fields are already initialized inline.
 
 #### Required module initialization
 

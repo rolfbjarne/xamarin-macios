@@ -36,8 +36,12 @@ namespace Xamarin.Bundler {
 			return resolver_cache;
 		}
 
-		public void Dispose ()
+		public virtual void Dispose ()
 		{
+			foreach (var assembly in cache.Values.Distinct ())
+				assembly.Dispose ();
+			cache.Clear ();
+			params_cache.Clear ();
 		}
 
 		public AssemblyDefinition Resolve (AssemblyNameReference name)
